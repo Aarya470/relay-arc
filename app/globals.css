@@ -34,8 +34,6 @@ body {
   color: var(--foreground);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
-  max-width: 430px;
-  margin: 0 auto;
 }
 
 ::-webkit-scrollbar { width: 0px; }

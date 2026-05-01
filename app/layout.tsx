@@ -18,8 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>
-        {children}
-        <Toaster position="top-center" richColors />
+        <div className="min-h-screen w-full max-w-[430px] mx-auto relative bg-[#09090C]">
+          {children}
+          <Toaster position="top-center" richColors />
+        </div>
       </body>
     </html>
   )
