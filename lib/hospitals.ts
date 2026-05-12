@@ -58,16 +58,6 @@ export async function findNearbyHospitals(
   const radius = radiusKm * 1000
   const capability = EMERGENCY_CAPABILITIES[emergencyType] || EMERGENCY_CAPABILITIES.other
 
-  const query = `
-    [out:json][timeout:25];
-    (
-      node["amenity"="hospital"](around:${radius},${lat},${lng});
-      way["amenity"="hospital"](around:${radius},${lat},${lng});
-      node["amenity"="clinic"](around:${radius},${lat},${lng});
-    );
-    out center;
-  `
-
   try {
     const res = await fetch('/api/hospitals', {
       method: 'POST',
@@ -76,8 +66,10 @@ export async function findNearbyHospitals(
     })
 
     const data = await res.json()
-
     const elements = data.elements || []
+
+    console.log('Hospital elements:', elements.length, elements[0])
+
     const hospitals: Hospital[] = elements
       .filter((el: any) => el.tags?.name)
       .map((el: any) => {
@@ -96,15 +88,15 @@ export async function findNearbyHospitals(
           ].filter(Boolean).join(', ') || 'Address unavailable',
           distance: haversine(lat, lng, elLat, elLng),
           capability: capability.label,
-          phone: el.tags.phone || el.tags['contact:phone'] || ''
+          phone: el.tags.phone || ''
         }
       })
-      .filter((h: Hospital) => h.lat && h.lng)
+      .filter((h: Hospital) => h.lat && h.lng && h.name)
       .sort((a: Hospital, b: Hospital) => (a.distance || 0) - (b.distance || 0))
 
     return hospitals.slice(0, 5)
   } catch (e) {
-    console.error('Overpass API error:', e)
+    console.error('Hospital search error:', e)
     return []
   }
 }
