@@ -100,9 +100,7 @@ export default function Dashboard() {
           whileTap={{ scale: 0.97 }}
           onClick={() => router.push('/emergency')}
           className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-600 to-red-700 p-5 flex items-center justify-between"
-          style={{ boxShadow: '0 8px 32px rgba(232, 50, 42, 0.35)' }}
         >
-          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10"/>
           <div>
             <p className="text-white text-2xl font-bold tracking-wide">SOS</p>
             <p className="text-red-200/80 text-xs mt-0.5">Tap to activate emergency routing</p>
