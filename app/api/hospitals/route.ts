@@ -3,33 +3,41 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   const { lat, lng, radius } = await req.json()
 
-  const query = `[out:json][timeout:25];(node["amenity"="hospital"](around:${radius},${lat},${lng});way["amenity"="hospital"](around:${radius},${lat},${lng}););out center;`
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?` +
+      `q=hospital&` +
+      `lat=${lat}&lon=${lng}&` +
+      `radius=${radius}&` +
+      `format=json&` +
+      `limit=10&` +
+      `addressdetails=1&` +
+      `extratags=1&` +
+      `viewbox=${lng - 1},${lat + 1},${lng + 1},${lat - 1}&` +
+      `bounded=1`
 
-  const servers = [
-    'https://overpass-api.de/api/interpreter',
-    'https://overpass.kumi.systems/api/interpreter',
-    'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
-  ]
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'RelayArc/1.0 emergency-routing-app' }
+    })
 
-  for (const server of servers) {
-    try {
-      const res = await fetch(server, {
-        method: 'POST',
-        body: `data=${encodeURIComponent(query)}`,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        signal: AbortSignal.timeout(8000)
-      })
+    const data = await res.json()
 
-      if (!res.ok) continue
+    // Convert Nominatim format to our format
+    const elements = data
+      .filter((item: any) => item.type !== 'administrative')
+      .map((item: any) => ({
+        id: String(item.place_id),
+        tags: {
+          name: item.display_name.split(',')[0],
+          'addr:city': item.address?.city || item.address?.town || '',
+          'addr:state': item.address?.state || '',
+        },
+        lat: parseFloat(item.lat),
+        lon: parseFloat(item.lon),
+      }))
 
-      const data = await res.json()
-      if (data.elements?.length > 0) {
-        return NextResponse.json(data)
-      }
-    } catch (e) {
-      continue
-    }
+    return NextResponse.json({ elements })
+  } catch (e) {
+    console.error('Nominatim error:', e)
+    return NextResponse.json({ elements: [] })
   }
-
-  return NextResponse.json({ elements: [] })
 }
