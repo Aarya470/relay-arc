@@ -1,174 +1,390 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
+import { useEffect, useState, useRef, useCallback } from 'react'
+import { MapContainer, TileLayer, Marker, Polyline, useMap, Circle } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
-const patientIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+// Icons
+const userIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width:20px;height:20px;
+    background:#4A9EF5;
+    border:3px solid white;
+    border-radius:50%;
+    box-shadow:0 0 0 4px rgba(74,158,245,0.3);
+  "></div>`,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
 })
 
-const hospitalIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+const hospitalIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width:36px;height:36px;
+    background:#80EF80;
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    box-shadow:0 4px 12px rgba(128,239,128,0.4);
+    border:2px solid white;
+  ">H</div>`,
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
 })
 
-function RoutingControl({ patientPos, hospitalPos, onStepsReady }: any) {
+// Haversine distance in meters
+function distanceBetween(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371000
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLon = (lon2 - lon1) * Math.PI / 180
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+}
+
+function formatDist(m: number) {
+  return m >= 1000 ? `${(m/1000).toFixed(1)} km` : `${Math.round(m)} m`
+}
+
+function formatTime(seconds: number) {
+  const mins = Math.round(seconds / 60)
+  return mins < 60 ? `${mins} min` : `${Math.floor(mins/60)}h ${mins%60}m`
+}
+
+// Turn direction icon
+function TurnIcon({ type }: { type: string }) {
+  const t = type?.toLowerCase() || ''
+  let arrow = '↑'
+  if (t.includes('left')) arrow = '←'
+  else if (t.includes('right')) arrow = '→'
+  else if (t.includes('slight left')) arrow = '↖'
+  else if (t.includes('slight right')) arrow = '↗'
+  else if (t.includes('sharp left')) arrow = '↙'
+  else if (t.includes('sharp right')) arrow = '↘'
+  else if (t.includes('u-turn')) arrow = '↩'
+  else if (t.includes('arrive') || t.includes('destination')) arrow = '🏥'
+  return <span style={{ fontSize: '28px', lineHeight: 1 }}>{arrow}</span>
+}
+
+// Auto-follow map
+function MapController({ position, heading }: { position: [number,number] | null, heading: number }) {
   const map = useMap()
-
   useEffect(() => {
-    if (!patientPos || !hospitalPos) return
-
-    const script = document.createElement('script')
-    script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js'
-    script.onload = () => {
-      const LR = (window as any).L.Routing
-      if (!LR) return
-
-      const control = LR.control({
-        waypoints: [
-          L.latLng(patientPos[0], patientPos[1]),
-          L.latLng(hospitalPos[0], hospitalPos[1])
-        ],
-        routeWhileDragging: false,
-        showAlternatives: false,
-        fitSelectedRoutes: true,
-        lineOptions: {
-          styles: [{ color: '#4A9EF5', weight: 5, opacity: 0.9 }]
-        },
-        createMarker: () => null,
-      }).addTo(map)
-
-      control.on('routesfound', (e: any) => {
-        const routes = e.routes[0]
-        const steps = routes.instructions.map((s: any) => ({
-          text: s.text,
-          distance: s.distance,
-          time: s.time
-        }))
-        onStepsReady(steps, Math.round(routes.summary.totalTime / 60))
-      })
-
-      const container = control.getContainer()
-      if (container) container.style.display = 'none'
+    if (position) {
+      map.setView(position, 16, { animate: true, duration: 0.8 })
     }
-
-    document.head.appendChild(script)
-
-    return () => {
-      if (document.head.contains(script)) document.head.removeChild(script)
-    }
-  }, [patientPos, hospitalPos])
-
+  }, [position])
   return null
 }
 
-export default function Navigation({ hospital }: { hospital: any }) {
-  const [patientPos, setPatientPos] = useState<[number, number] | null>(null)
-  const [steps, setSteps] = useState<any[]>([])
-  const [eta, setEta] = useState<number | null>(null)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [locationError, setLocationError] = useState('')
+interface Step {
+  instruction: string
+  distance: number
+  duration: number
+  type: string
+  coords: [number, number]
+}
 
+export default function Navigation({ hospital }: { hospital: any }) {
+  const [position, setPosition] = useState<[number, number] | null>(null)
+  const [heading, setHeading] = useState(0)
+  const [speed, setSpeed] = useState(0)
+  const [route, setRoute] = useState<[number, number][]>([])
+  const [steps, setSteps] = useState<Step[]>([])
+  const [currentStep, setCurrentStep] = useState(0)
+  const [eta, setEta] = useState<number | null>(null)
+  const [totalDist, setTotalDist] = useState<number | null>(null)
+  const [distToNext, setDistToNext] = useState<number | null>(null)
+  const [arrived, setArrived] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const watchId = useRef<number | null>(null)
+
+  const hospitalPos: [number, number] = [hospital.lat, hospital.lng]
+
+  // Fetch OSRM route
+  const fetchRoute = useCallback(async (from: [number, number]) => {
+    try {
+      const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${hospital.lng},${hospital.lat}?steps=true&geometries=geojson&overview=full`
+      const res = await fetch(url)
+      const data = await res.json()
+
+      if (data.code !== 'Ok') return
+
+      const leg = data.routes[0].legs[0]
+      setEta(data.routes[0].duration)
+      setTotalDist(data.routes[0].distance)
+
+      // Route polyline
+      const coords: [number, number][] = data.routes[0].geometry.coordinates.map(
+        ([lng, lat]: [number, number]) => [lat, lng]
+      )
+      setRoute(coords)
+
+      // Steps
+      const parsedSteps: Step[] = leg.steps.map((s: any) => ({
+        instruction: s.maneuver.instruction || s.name || 'Continue',
+        distance: s.distance,
+        duration: s.duration,
+        type: s.maneuver.type,
+        coords: [s.maneuver.location[1], s.maneuver.location[0]] as [number, number]
+      }))
+      setSteps(parsedSteps)
+      setLoading(false)
+    } catch (e) {
+      setError('Could not load route')
+      setLoading(false)
+    }
+  }, [hospital])
+
+  // GPS tracking
   useEffect(() => {
     if (!navigator.geolocation) {
-      setPatientPos([hospital.lat - 0.05, hospital.lng - 0.05])
+      const fallback: [number, number] = [hospital.lat - 0.05, hospital.lng - 0.05]
+      setPosition(fallback)
+      fetchRoute(fallback)
       return
     }
-    navigator.geolocation.getCurrentPosition(
-      pos => setPatientPos([pos.coords.latitude, pos.coords.longitude]),
-      () => {
-        setLocationError('Location access denied. Using demo location.')
-        setPatientPos([hospital.lat - 0.05, hospital.lng - 0.05])
-      }
-    )
-  }, [])
 
-  const handleStepsReady = (newSteps: any[], etaMin: number) => {
-    setSteps(newSteps)
-    setEta(etaMin)
-  }
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const p: [number, number] = [pos.coords.latitude, pos.coords.longitude]
+        setPosition(p)
+        fetchRoute(p)
+      },
+      () => {
+        const fallback: [number, number] = [hospital.lat - 0.05, hospital.lng - 0.05]
+        setPosition(fallback)
+        fetchRoute(fallback)
+        setError('Using demo location')
+      },
+      { enableHighAccuracy: true }
+    )
+
+    watchId.current = navigator.geolocation.watchPosition(
+      pos => {
+        const p: [number, number] = [pos.coords.latitude, pos.coords.longitude]
+        setPosition(p)
+        setHeading(pos.coords.heading || 0)
+        setSpeed(pos.coords.speed || 0)
+
+        // Check arrival
+        const distToHospital = distanceBetween(p[0], p[1], hospital.lat, hospital.lng)
+        if (distToHospital < 50) {
+          setArrived(true)
+          return
+        }
+
+        // Advance step
+        if (steps.length > 0 && currentStep < steps.length - 1) {
+          const nextStep = steps[currentStep + 1]
+          const dist = distanceBetween(p[0], p[1], nextStep.coords[0], nextStep.coords[1])
+          setDistToNext(dist)
+          if (dist < 30) setCurrentStep(prev => prev + 1)
+        }
+
+        // Recalculate remaining ETA roughly
+        if (steps.length > 0) {
+          const remaining = steps.slice(currentStep).reduce((acc, s) => acc + s.duration, 0)
+          setEta(remaining)
+        }
+      },
+      () => {},
+      { enableHighAccuracy: true, maximumAge: 2000, timeout: 5000 }
+    )
+
+    return () => {
+      if (watchId.current) navigator.geolocation.clearWatch(watchId.current)
+    }
+  }, [steps, currentStep])
+
+  const currentStepData = steps[currentStep]
+  const nextStepData = steps[currentStep + 1]
+
+  if (arrived) return (
+    <div style={{
+      height: '100%', background: '#09090C',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      padding: '24px', gap: '16px'
+    }}>
+      <div style={{ fontSize: '64px' }}>🏥</div>
+      <p style={{ color: '#80EF80', fontSize: '24px', fontWeight: 700 }}>You have arrived</p>
+      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', textAlign: 'center' }}>
+        {hospital.name} — the ER team is ready for you
+      </p>
+    </div>
+  )
 
   return (
-    <div className="flex flex-col h-full">
-      {locationError && (
-        <p className="text-yellow-400 text-xs px-4 py-2 bg-yellow-400/10">{locationError}</p>
-      )}
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#07070F' }}>
 
-      {/* Current instruction */}
-      {steps.length > 0 && (
-        <div className="bg-[#09090C] border-b border-white/10 px-4 py-3 flex items-center gap-4">
-          <p className="text-blue-400 text-3xl font-bold">→</p>
-          <div className="flex-1">
-            <p className="text-white text-sm font-semibold">{steps[currentStep]?.text}</p>
-            <p className="text-gray-400 font-mono text-xs">
-              {steps[currentStep]?.distance > 1000
-                ? `${(steps[currentStep].distance / 1000).toFixed(1)} km`
-                : `${Math.round(steps[currentStep]?.distance || 0)} m`}
+      {/* Current instruction bar */}
+      {currentStepData && !loading && (
+        <div style={{
+          background: '#111116',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          padding: '12px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '14px',
+          flexShrink: 0
+        }}>
+          <div style={{
+            width: '52px', height: '52px',
+            background: 'rgba(74,158,245,0.15)',
+            borderRadius: '12px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <TurnIcon type={currentStepData.type}/>
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ color: 'white', fontWeight: 600, fontSize: '15px', marginBottom: '2px', lineHeight: 1.3 }}>
+              {currentStepData.instruction}
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', fontFamily: 'monospace' }}>
+              {distToNext !== null ? formatDist(distToNext) : formatDist(currentStepData.distance)}
             </p>
           </div>
-          {eta && (
-            <div className="bg-red-500/20 border border-red-500/30 rounded-xl px-3 py-1.5 text-center">
-              <p className="text-red-400 font-bold text-lg font-mono">{eta}</p>
-              <p className="text-red-400 text-xs font-mono">min</p>
+          {eta !== null && (
+            <div style={{
+              background: 'rgba(232,50,42,0.15)',
+              border: '1px solid rgba(232,50,42,0.25)',
+              borderRadius: '12px',
+              padding: '8px 12px',
+              textAlign: 'center',
+              flexShrink: 0
+            }}>
+              <p style={{ color: '#FF4A42', fontWeight: 700, fontSize: '18px', fontFamily: 'monospace', lineHeight: 1 }}>
+                {formatTime(eta)}
+              </p>
+              <p style={{ color: 'rgba(255,74,66,0.5)', fontSize: '10px', fontFamily: 'monospace', marginTop: '2px' }}>ETA</p>
             </div>
           )}
         </div>
       )}
 
+      {/* Loading */}
+      {loading && (
+        <div style={{
+          background: '#111116',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          padding: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          flexShrink: 0
+        }}>
+          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fcb546', animation: 'pulse 1s infinite' }}/>
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>
+            {error || 'Calculating route...'}
+          </p>
+        </div>
+      )}
+
       {/* Map */}
-      <div className="flex-1" style={{ minHeight: '300px' }}>
-        {patientPos && (
+      <div style={{ flex: 1, minHeight: 0 }}>
+        {position && (
           <MapContainer
-            center={patientPos}
-            zoom={13}
+            center={position}
+            zoom={16}
             style={{ height: '100%', width: '100%' }}
+            zoomControl={false}
+            attributionControl={false}
           >
             <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; OpenStreetMap contributors'
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              attribution=""
             />
-            <Marker position={patientPos} icon={patientIcon}/>
-            <Marker position={[hospital.lat, hospital.lng]} icon={hospitalIcon}/>
-            <RoutingControl
-              patientPos={patientPos}
-              hospitalPos={[hospital.lat, hospital.lng]}
-              onStepsReady={handleStepsReady}
+
+            {/* Route line */}
+            {route.length > 0 && (
+              <>
+                {/* Shadow */}
+                <Polyline
+                  positions={route}
+                  pathOptions={{ color: '#4A9EF5', weight: 10, opacity: 0.2 }}
+                />
+                {/* Main route */}
+                <Polyline
+                  positions={route}
+                  pathOptions={{ color: '#4A9EF5', weight: 5, opacity: 1 }}
+                />
+              </>
+            )}
+
+            {/* User position */}
+            <Marker position={position} icon={userIcon}/>
+            <Circle
+              center={position}
+              radius={15}
+              pathOptions={{ color: '#4A9EF5', fillColor: '#4A9EF5', fillOpacity: 0.15, weight: 0 }}
             />
+
+            {/* Hospital */}
+            <Marker position={hospitalPos} icon={hospitalIcon}/>
+
+            {/* Auto follow */}
+            <MapController position={position} heading={heading}/>
           </MapContainer>
-        )}
-        {!patientPos && (
-          <div className="h-full flex items-center justify-center bg-[#0D0D18]">
-            <p className="text-gray-400 text-sm">Getting your location...</p>
-          </div>
         )}
       </div>
 
-      {/* All steps */}
-      {steps.length > 0 && (
-        <div className="max-h-40 overflow-y-auto bg-[#09090C] border-t border-white/10">
-          {steps.map((step, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentStep(i)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 border-b border-white/5 text-left transition ${
-                i === currentStep ? 'bg-blue-500/10' : 'hover:bg-white/5'
-              }`}
-            >
-              <span className="text-gray-500 font-mono text-xs w-4">{i + 1}</span>
-              <p className={`text-xs flex-1 ${i === currentStep ? 'text-white' : 'text-gray-400'}`}>{step.text}</p>
-              <span className="text-gray-600 font-mono text-xs">
-                {step.distance > 1000 ? `${(step.distance / 1000).toFixed(1)}km` : `${Math.round(step.distance)}m`}
-              </span>
-            </button>
-          ))}
+      {/* Bottom info strip */}
+      <div style={{
+        background: '#111116',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        padding: '12px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexShrink: 0
+      }}>
+        <div>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>
+            Destination
+          </p>
+          <p style={{ color: 'white', fontSize: '13px', fontWeight: 600 }}>{hospital.name}</p>
+        </div>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          {totalDist !== null && (
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Distance</p>
+              <p style={{ color: 'white', fontSize: '13px', fontWeight: 600, fontFamily: 'monospace' }}>{formatDist(totalDist)}</p>
+            </div>
+          )}
+          {speed > 0 && (
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Speed</p>
+              <p style={{ color: '#80EF80', fontSize: '13px', fontWeight: 600, fontFamily: 'monospace' }}>{Math.round(speed * 3.6)} km/h</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Next step preview */}
+      {nextStepData && (
+        <div style={{
+          background: '#09090C',
+          borderTop: '1px solid rgba(255,255,255,0.05)',
+          padding: '10px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          flexShrink: 0
+        }}>
+          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', flexShrink: 0 }}>
+            Then
+          </p>
+          <TurnIcon type={nextStepData.type}/>
+          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px' }}>{nextStepData.instruction}</p>
+          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', fontFamily: 'monospace', marginLeft: 'auto', flexShrink: 0 }}>
+            {formatDist(nextStepData.distance)}
+          </p>
         </div>
       )}
+
     </div>
   )
 }
