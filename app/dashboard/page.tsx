@@ -186,6 +186,28 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
+        {/* Community transport */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => router.push('/transport')}
+            style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}
+          >
+            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🚗</span>
+            <p style={{ color: 'white', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Need a ride</p>
+            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Request community transport</p>
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => router.push('/driver')}
+            style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}
+          >
+            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🤝</span>
+            <p style={{ color: 'white', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Help someone</p>
+            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Be a community driver</p>
+          </motion.button>
+        </div>
+
         {/* Recent check-in */}
         {checkins.length > 0 && (
           <div className="bg-[#111116] border border-white/8 rounded-3xl p-4">
