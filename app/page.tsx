@@ -1,11 +1,14 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false)
   const router = useRouter()
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     const check = async () => {
@@ -17,6 +20,8 @@ export default function Home() {
     }
     check()
   }, [])
+
+  if (!mounted) return null
 
   return (
     <div style={{
