@@ -69,10 +69,10 @@ export async function findNearbyHospitals(
   `
 
   try {
-    const res = await fetch('https://overpass-api.de/api/interpreter', {
+    const res = await fetch('/api/hospitals', {
       method: 'POST',
-      body: query,
-      headers: { 'Content-Type': 'text/plain' }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lat, lng, radius })
     })
 
     const data = await res.json()
