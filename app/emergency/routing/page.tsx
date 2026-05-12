@@ -92,7 +92,7 @@ function RoutingPage() {
       </div>
 
       {/* Map — takes most of screen */}
-      <div className="flex-1" style={{ minHeight: '55vh' }}>
+      <div style={{ height: '420px', flex: 1 }}>
         <Nav hospital={hospital}/>
       </div>
 

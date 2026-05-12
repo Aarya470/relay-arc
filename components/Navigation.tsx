@@ -217,7 +217,7 @@ export default function Navigation({ hospital }: { hospital: any }) {
   )
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#07070F' }}>
+    <div style={{ height: '420px', display: 'flex', flexDirection: 'column', background: '#07070F' }}>
 
       {/* Current instruction bar */}
       {currentStepData && !loading && (
