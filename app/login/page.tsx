@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { Loader2, Mail, Lock, ArrowRight } from 'lucide-react'
+import { Loader2, ArrowRight } from 'lucide-react'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -14,19 +14,12 @@ export default function Login() {
   const router = useRouter()
 
   const handleAuth = async () => {
-    if (!email || !password) {
-      toast.error('Please fill in all fields')
-      return
-    }
+    if (!email || !password) { toast.error('Fill in all fields'); return }
     setLoading(true)
-
     if (isSignUp) {
       const { error } = await supabase.auth.signUp({ email, password })
       if (error) toast.error(error.message)
-      else {
-        toast.success('Account created!')
-        router.push('/onboarding')
-      }
+      else { toast.success('Account created'); router.push('/onboarding') }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) toast.error(error.message)
@@ -35,109 +28,80 @@ export default function Login() {
     setLoading(false)
   }
 
+  const input: React.CSSProperties = {
+    width: '100%',
+    background: 'rgba(255,255,255,0.04)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '14px',
+    padding: '16px 18px',
+    color: '#EDEAE0',
+    fontSize: '15px',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+    WebkitAppearance: 'none'
+  }
+
   return (
-    <div className="min-h-screen bg-[#09090C] flex flex-col px-6 py-12">
+    <div style={{ minHeight: '100vh', background: '#07070E', display: 'flex', flexDirection: 'column', padding: '56px 24px 32px', position: 'relative', overflow: 'hidden' }}>
+
+      {/* Ambient */}
+      <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '280px', height: '280px', background: 'radial-gradient(circle, rgba(252,181,70,0.07) 0%, transparent 70%)', pointerEvents: 'none' }}/>
 
       {/* Logo */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-12"
-      >
-        <div className="flex items-center gap-2.5 mb-1">
-          <div className="flex gap-1">
-            <div className="w-4 h-4 rotate-45 rounded-sm bg-[#fcb546]"/>
-            <div className="w-4 h-4 rotate-45 rounded-sm border-2 border-[#80EF80] bg-transparent -ml-2"/>
-          </div>
-          <span className="text-white font-bold text-xl tracking-tight">Relay Arc</span>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '48px' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ width: '14px', height: '14px', background: '#fcb546', borderRadius: '3px', transform: 'rotate(45deg)' }}/>
+          <div style={{ width: '14px', height: '14px', border: '2px solid #80EF80', borderRadius: '3px', transform: 'rotate(45deg)', marginLeft: '-6px' }}/>
         </div>
-        <p className="text-white/40 text-xs tracking-widest uppercase font-mono ml-10">Cardiac Emergency Platform</p>
+        <span style={{ color: '#EDEAE0', fontWeight: 700, fontSize: '17px', letterSpacing: '-0.3px' }}>Relay Arc</span>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="flex-1"
-      >
-        <h1 className="text-3xl font-bold text-white mb-1">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ flex: 1 }}>
+        <h1 style={{ color: '#EDEAE0', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', marginBottom: '6px' }}>
           {isSignUp ? 'Create account' : 'Welcome back'}
         </h1>
-        <p className="text-white/40 text-sm mb-8">
-          {isSignUp ? 'Join Relay Arc today' : 'Sign in to continue'}
+        <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '15px', marginBottom: '32px' }}>
+          {isSignUp ? 'Start your Relay Arc profile' : 'Sign in to continue'}
         </p>
 
-        <div className="space-y-3">
-          {/* Email */}
-          <div className="relative">
-            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"/>
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAuth()}
-              className="w-full bg-[#18181F] border border-white/8 rounded-2xl pl-11 pr-4 py-4 text-white placeholder-white/25 outline-none focus:border-[#fcb546]/50 focus:bg-[#1C1C24] transition text-sm"
-            />
-          </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <input style={input} type="email" placeholder="Email address" value={email}
+            onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAuth()}/>
+          <input style={input} type="password" placeholder="Password" value={password}
+            onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAuth()}/>
 
-          {/* Password */}
-          <div className="relative">
-            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"/>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAuth()}
-              className="w-full bg-[#18181F] border border-white/8 rounded-2xl pl-11 pr-4 py-4 text-white placeholder-white/25 outline-none focus:border-[#fcb546]/50 focus:bg-[#1C1C24] transition text-sm"
-            />
-          </div>
-
-          {/* Submit */}
           <motion.button
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: 0.97 }}
             onClick={handleAuth}
             disabled={loading}
-            className="w-full bg-[#fcb546] text-black font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#f5a832] transition mt-2 disabled:opacity-50"
+            style={{
+              width: '100%',
+              background: 'linear-gradient(135deg, #fcb546 0%, #f09020 100%)',
+              color: '#07070E',
+              fontWeight: 700, fontSize: '16px',
+              padding: '18px', borderRadius: '14px',
+              border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              marginTop: '4px',
+              boxShadow: '0 8px 24px rgba(252,181,70,0.25)',
+              opacity: loading ? 0.7 : 1
+            }}
           >
-            {loading ? (
-              <Loader2 size={18} className="animate-spin"/>
-            ) : (
-              <>
-                {isSignUp ? 'Create account' : 'Sign in'}
-                <ArrowRight size={16}/>
-              </>
-            )}
+            {loading ? <Loader2 size={18} className="animate-spin"/> : <>{isSignUp ? 'Create account' : 'Sign in'} <ArrowRight size={16}/></>}
           </motion.button>
-        </div>
 
-        {/* Toggle */}
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="text-white/40 text-sm hover:text-white/70 transition"
-          >
+          <button onClick={() => setIsSignUp(!isSignUp)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(237,234,224,0.35)', fontSize: '14px', marginTop: '8px' }}>
             {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-            <span className="text-[#fcb546]">{isSignUp ? 'Sign in' : 'Sign up'}</span>
-          </button>
-        </div>
-
-        {/* Nurse login */}
-        <div className="mt-4 text-center">
-          <button
-            onClick={() => router.push('/nurse/login')}
-            className="text-white/25 text-xs hover:text-white/50 transition"
-          >
-            Care team login →
+            <span style={{ color: '#fcb546', fontWeight: 600 }}>{isSignUp ? 'Sign in' : 'Sign up'}</span>
           </button>
         </div>
       </motion.div>
 
-      {/* Bottom tagline */}
-      <p className="text-white/20 text-xs text-center font-mono tracking-wider">
-        WHEN EVERY MINUTE IS THE MARGIN
-      </p>
+      <button onClick={() => router.push('/care-team/login')}
+        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(237,234,224,0.2)', fontSize: '11px', fontFamily: 'monospace', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+        Care team portal →
+      </button>
     </div>
   )
 }

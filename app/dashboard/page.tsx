@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Bell, ChevronRight, AlertCircle } from 'lucide-react'
+import { ChevronRight, AlertCircle } from 'lucide-react'
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<any>(null)
@@ -18,24 +18,11 @@ export default function Dashboard() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
-
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-
+      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       if (!data) { router.push('/onboarding'); return }
-
-      const { data: checkinsData } = await supabase
-        .from('checkins')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(3)
-
+      const { data: c } = await supabase.from('checkins').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(3)
       setProfile(data)
-      setCheckins(checkinsData || [])
+      setCheckins(c || [])
       setLoading(false)
       registerPushNotifications(user.id)
     }
@@ -46,177 +33,210 @@ export default function Dashboard() {
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   if (loading) return (
-    <div className="min-h-screen bg-[#09090C] px-4 py-8 pb-24">
-      <div className="space-y-4">
-        <Skeleton className="h-20 w-full rounded-3xl bg-white/5"/>
-        <Skeleton className="h-32 w-full rounded-3xl bg-white/5"/>
-        <Skeleton className="h-48 w-full rounded-3xl bg-white/5"/>
+    <div style={{ minHeight: '100vh', background: '#07070E', padding: '80px 16px 100px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {[1,2,3].map(i => <Skeleton key={i} style={{ height: '80px', borderRadius: '20px', background: 'rgba(255,255,255,0.04)' }}/>)}
       </div>
     </div>
   )
 
+  const weeksSinceSurgery = profile?.surgery_date
+    ? Math.floor((Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7))
+    : null
+  const checkinToday = checkins.length > 0 && new Date(checkins[0].created_at).toDateString() === new Date().toDateString()
+
   return (
-    <div className="min-h-screen bg-[#09090C] pb-24">
+    <div style={{ minHeight: '100vh', background: '#07070E', paddingBottom: '100px', position: 'relative', overflow: 'hidden' }}>
+
+      {/* Ambient glow */}
+      <div style={{ position: 'absolute', top: 0, left: '-50px', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(252,181,70,0.05) 0%, transparent 70%)', pointerEvents: 'none' }}/>
 
       {/* Header */}
-      <div className="px-5 pt-14 pb-4">
-        <div className="flex items-start justify-between">
+      <div style={{ padding: '56px 20px 20px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div>
-            <p className="text-white/40 text-sm">{greeting}</p>
-            <h1 className="text-white text-2xl font-bold tracking-tight mt-0.5">
+            <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '13px', marginBottom: '2px' }}>{greeting}</p>
+            <h1 style={{ color: '#EDEAE0', fontSize: '26px', fontWeight: 800, letterSpacing: '-0.8px' }}>
               {profile?.full_name?.split(' ')[0]}
             </h1>
           </div>
-          <div className="flex items-center gap-2">
-            <motion.div
-              whileTap={{ scale: 0.9 }}
-              className="w-10 h-10 rounded-2xl bg-white/6 border border-white/8 flex items-center justify-center cursor-pointer"
-              onClick={() => router.push('/nurse')}
-            >
-              <Bell size={18} className="text-white/60"/>
-            </motion.div>
-            <div className="w-10 h-10 rounded-2xl bg-[#fcb546]/20 border border-[#fcb546]/30 flex items-center justify-center">
-              <span className="text-[#fcb546] font-bold text-sm">
-                {profile?.full_name?.[0]}
-              </span>
-            </div>
+          <div style={{
+            width: '42px', height: '42px', borderRadius: '14px',
+            background: 'linear-gradient(135deg, rgba(252,181,70,0.2), rgba(252,181,70,0.1))',
+            border: '1px solid rgba(252,181,70,0.25)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <span style={{ color: '#fcb546', fontWeight: 800, fontSize: '16px' }}>
+              {profile?.full_name?.[0]}
+            </span>
           </div>
         </div>
 
-        {/* Condition badge */}
-        <div className="flex gap-2 mt-3 flex-wrap">
+        {/* Condition tags */}
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {profile?.diagnosis?.split(',').map((d: string, i: number) => (
-            <span key={i} className="bg-[#80EF80]/10 border border-[#80EF80]/20 text-[#80EF80] text-xs px-3 py-1 rounded-full font-medium">
+            <span key={i} style={{
+              background: 'rgba(128,239,128,0.08)',
+              border: '1px solid rgba(128,239,128,0.18)',
+              color: '#80EF80',
+              fontSize: '11px', fontWeight: 600,
+              padding: '4px 10px', borderRadius: '99px',
+              letterSpacing: '0.2px'
+            }}>
               {d.trim()}
             </span>
           ))}
         </div>
       </div>
 
-      <div className="px-4 space-y-3">
+      <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-        {/* SOS Button */}
+        {/* SOS BUTTON */}
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => router.push('/emergency')}
-          className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-600 to-red-700 p-5 flex items-center justify-between"
+          style={{
+            width: '100%',
+            background: 'linear-gradient(135deg, #E8322A 0%, #C42020 100%)',
+            borderRadius: '22px',
+            padding: '20px',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            position: 'relative',
+            overflow: 'hidden',
+            boxShadow: '0 12px 40px rgba(232,50,42,0.35), 0 4px 12px rgba(232,50,42,0.2)'
+          }}
         >
+          {/* Shimmer */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%)', pointerEvents: 'none' }}/>
+
           <div>
-            <p className="text-white text-2xl font-bold tracking-wide">SOS</p>
-            <p className="text-red-200/80 text-xs mt-0.5">Tap to activate emergency routing</p>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '11px', fontFamily: 'monospace', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
+              Emergency routing
+            </p>
+            <p style={{ color: 'white', fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1 }}>SOS</p>
           </div>
-          <div className="relative">
-            <div className="w-14 h-14 rounded-full bg-white/15 flex items-center justify-center">
-              <AlertCircle size={28} className="text-white"/>
+
+          <div style={{ position: 'relative' }}>
+            <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <AlertCircle size={26} color="white"/>
             </div>
-            <div className="absolute inset-0 rounded-full bg-white/20 animate-ping"/>
+            <motion.div
+              animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0, 0.4] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)' }}
+            />
           </div>
         </motion.button>
 
-        {/* Stats row */}
-        <div className="grid grid-cols-2 gap-3">
-          <motion.div
+        {/* Stats grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+
+          {/* Check-in */}
+          <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/checkin')}
-            className="bg-[#111116] border border-white/8 rounded-3xl p-4 cursor-pointer"
+            style={{
+              background: checkinToday ? 'rgba(128,239,128,0.06)' : '#0F0F18',
+              border: `1px solid ${checkinToday ? 'rgba(128,239,128,0.18)' : 'rgba(255,255,255,0.07)'}`,
+              borderRadius: '20px', padding: '16px',
+              textAlign: 'left', cursor: 'pointer'
+            }}
           >
-            <p className="text-white/40 text-xs font-mono uppercase tracking-wider mb-2">Today's check-in</p>
-            <p className={`text-xl font-bold ${checkins.length > 0 ? 'text-[#80EF80]' : 'text-white/40'}`}>
-              {checkins.length > 0 ? 'Done ✓' : 'Pending'}
+            <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
+              Check-in
             </p>
-            <p className="text-white/30 text-xs mt-1">
+            <p style={{ color: checkinToday ? '#80EF80' : 'rgba(237,234,224,0.4)', fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '4px' }}>
+              {checkinToday ? 'Done ✓' : 'Pending'}
+            </p>
+            <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '11px' }}>
               {checkins[0] ? new Date(checkins[0].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Tap to check in'}
             </p>
-          </motion.div>
+          </motion.button>
 
-          <motion.div
+          {/* Recovery */}
+          <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/timeline')}
-            className="bg-[#111116] border border-white/8 rounded-3xl p-4 cursor-pointer"
+            style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer' }}
           >
-            <p className="text-white/40 text-xs font-mono uppercase tracking-wider mb-2">Recovery</p>
-            {profile?.surgery_date ? (
+            <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
+              Recovery
+            </p>
+            {weeksSinceSurgery !== null ? (
               <>
-                <p className="text-[#fcb546] text-xl font-bold">
-                  Week {Math.floor((Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7))}
+                <p style={{ color: '#fcb546', fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '6px' }}>
+                  Week {weeksSinceSurgery}
                 </p>
-                <div className="mt-2 h-1.5 bg-white/8 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#fcb546] rounded-full"
-                    style={{ width: `${Math.min((Math.floor((Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7)) / 12) * 100, 100)}%` }}
-                  />
+                <div style={{ height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${Math.min((weeksSinceSurgery / 12) * 100, 100)}%`, background: 'linear-gradient(90deg, #fcb546, #f09020)', borderRadius: '99px' }}/>
                 </div>
               </>
             ) : (
-              <p className="text-white/40 text-sm">View timeline</p>
+              <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '14px' }}>View timeline →</p>
             )}
-          </motion.div>
+          </motion.button>
         </div>
 
         {/* Medications */}
-        <motion.div
+        <motion.button
           whileTap={{ scale: 0.99 }}
           onClick={() => router.push('/medications')}
-          className="bg-[#111116] border border-white/8 rounded-3xl p-4 cursor-pointer"
+          style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer', width: '100%' }}
         >
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-white/40 text-xs font-mono uppercase tracking-wider">Medications</p>
-            <ChevronRight size={14} className="text-white/30"/>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>Today&apos;s medications</p>
+            <ChevronRight size={14} color="rgba(237,234,224,0.2)"/>
           </div>
-          <div className="space-y-2.5">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {profile?.medications?.slice(0, 3).map((med: any, i: number) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#fcb546]/10 border border-[#fcb546]/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-xs">💊</span>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(252,181,70,0.08)', border: '1px solid rgba(252,181,70,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: '14px' }}>💊</span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm font-medium truncate">{med.name}</p>
-                  <p className="text-white/30 text-xs">{med.dose} · {med.frequency}</p>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ color: '#EDEAE0', fontSize: '13px', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{med.name}</p>
+                  <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '11px' }}>{med.dose} · {med.times?.[0] || med.frequency}</p>
                 </div>
-                <span className="text-white/20 text-xs font-mono">
-                  {med.times?.[0] || 'Daily'}
-                </span>
               </div>
             ))}
             {(!profile?.medications || profile.medications.length === 0) && (
-              <p className="text-white/30 text-sm">No medications added</p>
+              <p style={{ color: 'rgba(237,234,224,0.25)', fontSize: '13px' }}>No medications added</p>
             )}
           </div>
-        </motion.div>
+        </motion.button>
 
-        {/* Community transport */}
+        {/* Community + Appointments */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={() => router.push('/transport')}
-            style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}
-          >
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🚗</span>
-            <p style={{ color: 'white', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Need a ride</p>
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Request community transport</p>
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/transport')}
+            style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}>
+            <span style={{ fontSize: '22px', display: 'block', marginBottom: '8px' }}>🚗</span>
+            <p style={{ color: '#EDEAE0', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Need a ride</p>
+            <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '11px' }}>Community transport</p>
           </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={() => router.push('/driver')}
-            style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}
-          >
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🤝</span>
-            <p style={{ color: 'white', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Help someone</p>
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Be a community driver</p>
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/appointments')}
+            style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}>
+            <span style={{ fontSize: '22px', display: 'block', marginBottom: '8px' }}>🩺</span>
+            <p style={{ color: '#EDEAE0', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Care team</p>
+            <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '11px' }}>Schedule a visit</p>
           </motion.button>
         </div>
 
-        {/* Recent check-in */}
+        {/* Last check-in preview */}
         {checkins.length > 0 && (
-          <div className="bg-[#111116] border border-white/8 rounded-3xl p-4">
-            <p className="text-white/40 text-xs font-mono uppercase tracking-wider mb-3">Last check-in</p>
-            <p className="text-white/70 text-sm leading-relaxed line-clamp-3">{checkins[0].summary}</p>
-            <p className="text-white/25 text-xs font-mono mt-2">
+          <div style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px' }}>
+            <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Last check-in</p>
+            <p style={{ color: 'rgba(237,234,224,0.6)', fontSize: '13px', lineHeight: 1.6, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+              {checkins[0].summary}
+            </p>
+            <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '10px', fontFamily: 'monospace', marginTop: '8px' }}>
               {new Date(checkins[0].created_at).toLocaleDateString()}
             </p>
           </div>
         )}
-
       </div>
 
       <BottomNav/>
