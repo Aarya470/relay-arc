@@ -9,10 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 import Groq from 'groq-sdk'
 
-const groq = new Groq({
-  apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!,
-  dangerouslyAllowBrowser: true
-})
+const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!, dangerouslyAllowBrowser: true })
 
 export default function AppointmentSummary() {
   const [profile, setProfile] = useState<any>(null)
@@ -27,16 +24,12 @@ export default function AppointmentSummary() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-
       const [{ data: p }, { data: c }, { data: e }] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         supabase.from('checkins').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10),
         supabase.from('emergencies').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
       ])
-
-      setProfile(p)
-      setCheckins(c || [])
-      setEmergencies(e || [])
+      setProfile(p); setCheckins(c || []); setEmergencies(e || [])
       setLoading(false)
     }
     load()
@@ -44,133 +37,85 @@ export default function AppointmentSummary() {
 
   const generateSummary = async () => {
     setGenerating(true)
-    const prompt = `Generate a concise medical appointment summary for a doctor visit.
+    const prompt = `Generate a concise medical appointment summary.
+Patient: ${profile?.full_name}, Conditions: ${profile?.diagnosis}, Meds: ${JSON.stringify(profile?.medications)}, Allergies: ${profile?.allergies}
+Recent check-ins: ${checkins.map(c => `${new Date(c.created_at).toLocaleDateString()}: ${c.summary}`).join(' | ')}
+Emergencies: ${emergencies.length > 0 ? emergencies.map(e => `${e.emergency_type}`).join(', ') : 'None'}
+Write a structured summary with: patient overview, symptom patterns, medication notes, suggested questions for doctor. Professional and concise.`
 
-Patient: ${profile?.full_name}
-Conditions: ${profile?.diagnosis}
-Medications: ${JSON.stringify(profile?.medications)}
-Allergies: ${profile?.allergies}
-Surgery date: ${profile?.surgery_date || 'N/A'}
-
-Recent check-ins:
-${checkins.map(c => `- ${new Date(c.created_at).toLocaleDateString()}: ${c.summary}`).join('\n')}
-
-Emergency events: ${emergencies.length > 0 ? emergencies.map(e => `${e.emergency_type} on ${new Date(e.created_at).toLocaleDateString()}`).join(', ') : 'None'}
-
-Write a structured summary a doctor can read in 60 seconds covering:
-1. Patient overview
-2. Key symptoms and patterns
-3. Emergency events if any
-4. Medication notes
-5. Suggested questions for the doctor
-
-Be professional and concise.`
-
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
-      messages: [{ role: 'user', content: prompt }]
-    })
-
+    const completion = await groq.chat.completions.create({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }] })
     setSummary(completion.choices[0].message.content || '')
     setGenerating(false)
     toast.success('Summary generated')
   }
 
   if (loading) return (
-    <div className="min-h-screen bg-[#09090C] px-4 py-8 pb-24 space-y-3">
-      {[1,2,3].map(i => <Skeleton key={i} className="h-24 w-full rounded-3xl bg-white/5"/>)}
+    <div style={{ minHeight: '100vh', background: '#07070E', padding: '80px 16px 100px' }}>
+      {[1,2,3].map(i => <Skeleton key={i} style={{ height: '80px', borderRadius: '16px', background: 'rgba(255,255,255,0.04)', marginBottom: '10px' }}/>)}
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[#09090C] pb-24">
-
-      {/* Header */}
-      <div className="px-5 pt-14 pb-4">
-        <div className="flex items-center gap-3">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => router.push('/dashboard')}
-            className="w-9 h-9 rounded-xl bg-white/6 flex items-center justify-center"
-          >
-            <ArrowLeft size={16} className="text-white/60"/>
+    <div style={{ minHeight: '100vh', background: '#07070E', paddingBottom: '100px' }}>
+      <div style={{ padding: '56px 20px 20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/dashboard')}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ArrowLeft size={15} color="rgba(237,234,224,0.5)"/>
           </motion.button>
           <div>
-            <h1 className="text-white text-xl font-bold">Appointment Summary</h1>
-            <p className="text-white/35 text-xs">AI-generated for your next visit</p>
+            <h1 style={{ color: '#EDEAE0', fontWeight: 800, fontSize: '20px', letterSpacing: '-0.5px' }}>Appointment Summary</h1>
+            <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '12px' }}>AI-generated for your next visit</p>
           </div>
         </div>
       </div>
 
-      <div className="px-4 space-y-3">
+      <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-2">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
           {[
-            { label: 'Check-ins', value: checkins.length, color: 'text-[#80EF80]' },
-            { label: 'Emergencies', value: emergencies.length, color: 'text-red-400' },
-            { label: 'Medications', value: profile?.medications?.length || 0, color: 'text-[#fcb546]' },
-          ].map((stat, i) => (
-            <div key={i} className="bg-[#111116] border border-white/8 rounded-2xl p-3 text-center">
-              <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-              <p className="text-white/30 font-mono text-xs mt-0.5">{stat.label}</p>
+            { label: 'Check-ins', value: checkins.length, color: '#80EF80' },
+            { label: 'Emergencies', value: emergencies.length, color: '#FF4A42' },
+            { label: 'Medications', value: profile?.medications?.length || 0, color: '#fcb546' },
+          ].map((s, i) => (
+            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '14px', textAlign: 'center' }}>
+              <p style={{ color: s.color, fontWeight: 800, fontSize: '24px', letterSpacing: '-1px' }}>{s.value}</p>
+              <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '4px' }}>{s.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Generate */}
         {!summary ? (
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={generateSummary}
-            disabled={generating}
-            className="w-full bg-gradient-to-r from-[#fcb546] to-[#f5a832] text-black font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 disabled:opacity-60"
-          >
-            {generating ? (
-              <>
-                <RefreshCw size={16} className="animate-spin"/>
-                Generating...
-              </>
-            ) : (
-              <>
-                <Sparkles size={16}/>
-                Generate AI Summary
-              </>
-            )}
+          <motion.button whileTap={{ scale: 0.97 }} onClick={generateSummary} disabled={generating}
+            style={{ background: 'linear-gradient(135deg, rgba(252,181,70,0.15), rgba(252,181,70,0.08))', border: '1px solid rgba(252,181,70,0.25)', color: '#fcb546', fontWeight: 700, fontSize: '15px', padding: '18px', borderRadius: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            {generating ? <><RefreshCw size={16} className="animate-spin"/> Generating...</> : <><Sparkles size={16}/> Generate AI Summary</>}
           </motion.button>
         ) : (
-          <div className="bg-[#111116] border border-white/8 rounded-3xl p-4">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Sparkles size={14} className="text-[#fcb546]"/>
-                <p className="text-white/50 font-mono text-xs uppercase tracking-wider">AI Summary</p>
+          <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '18px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Sparkles size={13} color="#fcb546"/>
+                <p style={{ color: 'rgba(237,234,224,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Summary</p>
               </div>
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={generateSummary}
-                className="w-7 h-7 rounded-lg bg-white/6 flex items-center justify-center"
-              >
-                <RefreshCw size={12} className="text-white/40"/>
+              <motion.button whileTap={{ scale: 0.9 }} onClick={generateSummary}
+                style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <RefreshCw size={12} color="rgba(237,234,224,0.3)"/>
               </motion.button>
             </div>
-            <p className="text-white/70 text-sm leading-relaxed whitespace-pre-wrap">{summary}</p>
+            <p style={{ color: 'rgba(237,234,224,0.7)', fontSize: '13px', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{summary}</p>
           </div>
         )}
 
-        {/* Recent check-ins */}
-        <div className="bg-[#111116] border border-white/8 rounded-3xl p-4">
-          <p className="text-white/35 font-mono text-xs uppercase tracking-wider mb-3">Recent check-ins</p>
-          {checkins.length === 0 && <p className="text-white/25 text-sm">No check-ins yet</p>}
-          <div className="space-y-3">
-            {checkins.slice(0, 5).map((c, i) => (
-              <div key={i} className="border-b border-white/6 pb-3 last:border-0 last:pb-0">
-                <p className="text-white/25 font-mono text-xs mb-1">{new Date(c.created_at).toLocaleDateString()}</p>
-                <p className="text-white/60 text-xs leading-relaxed">{c.summary}</p>
-              </div>
-            ))}
-          </div>
+        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '16px' }}>
+          <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px' }}>Recent check-ins</p>
+          {checkins.length === 0 && <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '13px' }}>No check-ins yet</p>}
+          {checkins.slice(0, 5).map((c, i) => (
+            <div key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px', marginBottom: '12px' }}>
+              <p style={{ color: 'rgba(237,234,224,0.25)', fontFamily: 'monospace', fontSize: '10px', marginBottom: '4px' }}>{new Date(c.created_at).toLocaleDateString()}</p>
+              <p style={{ color: 'rgba(237,234,224,0.55)', fontSize: '12px', lineHeight: 1.6 }}>{c.summary}</p>
+            </div>
+          ))}
         </div>
-
       </div>
 
       <BottomNav/>
