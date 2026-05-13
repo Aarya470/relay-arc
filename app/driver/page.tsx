@@ -26,6 +26,7 @@ export default function DriverDashboard() {
         .from('transport_requests')
         .select('*')
         .eq('status', 'pending')
+        .gt('expires_at', new Date().toISOString())
         .order('created_at', { ascending: false })
 
       setRequests(r || [])
@@ -84,13 +85,16 @@ export default function DriverDashboard() {
         <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
         <p style={{ color: 'white', fontWeight: 600, marginBottom: '4px' }}>{accepted.patient_name}</p>
         <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
-        <a
-          href={`https://maps.google.com/?q=${accepted.pickup_lat},${accepted.pickup_lng}`}
-          target="_blank"
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#fcb546', color: '#09090C', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', textDecoration: 'none' }}
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={() => {
+            const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.pickup_lat}&destlng=${accepted.pickup_lng}&destname=${encodeURIComponent(accepted.patient_name)}`
+            router.push(url)
+          }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#fcb546', color: '#09090C', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', width: '100%' }}
         >
           <Navigation size={16}/> Navigate to patient
-        </a>
+        </motion.button>
       </div>
 
       <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
@@ -99,13 +103,16 @@ export default function DriverDashboard() {
         <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginBottom: '12px' }}>
           Emergency: {accepted.emergency_type?.replace('_', ' ')}
         </p>
-        <a
-          href={`https://maps.google.com/?q=${accepted.hospital_lat},${accepted.hospital_lng}`}
-          target="_blank"
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#DC2626', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', textDecoration: 'none' }}
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={() => {
+            const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.hospital_lat}&destlng=${accepted.hospital_lng}&destname=${encodeURIComponent(accepted.hospital_name)}`
+            router.push(url)
+          }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#DC2626', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', width: '100%' }}
         >
           <Navigation size={16}/> Navigate to hospital
-        </a>
+        </motion.button>
       </div>
     </div>
   )

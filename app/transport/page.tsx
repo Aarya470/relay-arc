@@ -88,6 +88,8 @@ export default function TransportRequest() {
     if (!position || !selectedHospital || !profile) return
     setLoading(true)
 
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
+
     const { data, error } = await supabase.from('transport_requests').insert({
       user_id: profile.id,
       patient_name: profile.full_name,
@@ -98,7 +100,8 @@ export default function TransportRequest() {
       hospital_lat: selectedHospital.lat,
       hospital_lng: selectedHospital.lng,
       emergency_type: emergencyType,
-      status: 'pending'
+      status: 'pending',
+      expires_at: expiresAt
     }).select().single()
 
     if (error) {
@@ -259,6 +262,21 @@ export default function TransportRequest() {
                   <motion.div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fcb546' }} animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1, repeat: Infinity, delay }}/>
                 ))}
               </div>
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={async () => {
+                  if (!request?.id) return
+                  await supabase.from('transport_requests')
+                    .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+                    .eq('id', request.id)
+                  toast.success('Request cancelled')
+                  setStep('type')
+                  setRequest(null)
+                }}
+                style={{ marginTop: '24px', background: 'none', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 24px', color: 'rgba(255,255,255,0.35)', fontSize: '13px', cursor: 'pointer', width: '100%' }}
+              >
+                Cancel request
+              </motion.button>
             </motion.div>
           )}
 

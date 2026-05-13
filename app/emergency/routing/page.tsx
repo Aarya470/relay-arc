@@ -13,6 +13,9 @@ function RoutingPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const type = searchParams.get('type') || 'other'
+  const destLat = searchParams.get('destlat')
+  const destLng = searchParams.get('destlng')
+  const destName = searchParams.get('destname')
 
   const [hospital, setHospital] = useState<Hospital | null>(null)
   const [nearbyHospitals, setNearbyHospitals] = useState<Hospital[]>([])
@@ -28,6 +31,19 @@ function RoutingPage() {
       if (user) {
         const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
         setProfile(data)
+      }
+
+      if (destLat && destLng && destName) {
+        setHospital({
+          id: 'custom',
+          name: decodeURIComponent(destName),
+          lat: parseFloat(destLat),
+          lng: parseFloat(destLng),
+          address: '',
+          capability: 'Navigation'
+        })
+        setLoading(false)
+        return
       }
 
       // Get user location
