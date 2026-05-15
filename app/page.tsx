@@ -35,15 +35,21 @@ export default function Home() {
 
       {/* Ambient background glows */}
       <div style={{
-        position: 'absolute', top: '-100px', left: '-100px',
-        width: '400px', height: '400px',
-        background: 'radial-gradient(circle, rgba(252,181,70,0.08) 0%, transparent 70%)',
+        position: 'absolute', top: '-80px', left: '-80px',
+        width: '450px', height: '450px',
+        background: 'radial-gradient(circle, rgba(252,181,70,0.09) 0%, transparent 65%)',
         pointerEvents: 'none'
       }}/>
       <div style={{
-        position: 'absolute', bottom: '100px', right: '-80px',
-        width: '300px', height: '300px',
-        background: 'radial-gradient(circle, rgba(128,239,128,0.06) 0%, transparent 70%)',
+        position: 'absolute', bottom: '80px', right: '-100px',
+        width: '360px', height: '360px',
+        background: 'radial-gradient(circle, rgba(128,239,128,0.07) 0%, transparent 65%)',
+        pointerEvents: 'none'
+      }}/>
+      <div style={{
+        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+        width: '600px', height: '300px',
+        background: 'radial-gradient(ellipse, rgba(252,181,70,0.025) 0%, transparent 60%)',
         pointerEvents: 'none'
       }}/>
 
@@ -54,11 +60,12 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         style={{ padding: '56px 24px 0', display: 'flex', alignItems: 'center', gap: '10px' }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-          <div style={{ width: '14px', height: '14px', background: '#fcb546', borderRadius: '3px', transform: 'rotate(45deg)' }}/>
-          <div style={{ width: '14px', height: '14px', border: '2px solid #80EF80', borderRadius: '3px', transform: 'rotate(45deg)', marginLeft: '-6px', background: 'transparent' }}/>
+        <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'linear-gradient(135deg, #fcb546, #f09020)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(252,181,70,0.35)' }}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#07070E" strokeWidth="0"/>
+          </svg>
         </div>
-        <span style={{ color: '#EDEAE0', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>Relay Arc</span>
+        <span style={{ color: '#EDEAE0', fontWeight: 800, fontSize: '17px', letterSpacing: '-0.4px' }}>Relay Arc</span>
       </motion.div>
 
       {/* Hero */}

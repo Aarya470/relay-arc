@@ -7,10 +7,39 @@
 }
 
 body {
-  background: #09090C;
+  background: #07070E;
   color: #EDEAE0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'ss01' on, 'cv09' on, 'tnum' on;
 }
 
 ::-webkit-scrollbar { width: 0px; }
+
+::selection {
+  background: rgba(252,181,70,0.22);
+  color: #EDEAE0;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.25);
+  cursor: pointer;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(237,234,224,0.22);
+}
+
+/* Remove number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}

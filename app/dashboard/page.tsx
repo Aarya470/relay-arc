@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ChevronRight, AlertCircle } from 'lucide-react'
+import { ChevronRight, AlertCircle, Car, Stethoscope, Pill, Check } from 'lucide-react'
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<any>(null)
@@ -140,18 +140,22 @@ export default function Dashboard() {
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/checkin')}
             style={{
-              background: checkinToday ? 'rgba(128,239,128,0.06)' : '#0F0F18',
+              background: checkinToday ? 'rgba(128,239,128,0.05)' : '#0D0D1A',
               border: `1px solid ${checkinToday ? 'rgba(128,239,128,0.18)' : 'rgba(255,255,255,0.07)'}`,
               borderRadius: '20px', padding: '16px',
-              textAlign: 'left', cursor: 'pointer'
+              textAlign: 'left', cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)'
             }}
           >
             <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
               Check-in
             </p>
-            <p style={{ color: checkinToday ? '#80EF80' : 'rgba(237,234,224,0.4)', fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '4px' }}>
-              {checkinToday ? 'Done ✓' : 'Pending'}
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+              {checkinToday && <Check size={16} color="#80EF80" strokeWidth={2.5}/>}
+              <p style={{ color: checkinToday ? '#80EF80' : 'rgba(237,234,224,0.4)', fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+                {checkinToday ? 'Done' : 'Pending'}
+              </p>
+            </div>
             <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '11px' }}>
               {checkins[0] ? new Date(checkins[0].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Tap to check in'}
             </p>
@@ -161,7 +165,7 @@ export default function Dashboard() {
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/timeline')}
-            style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer' }}
+            style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)' }}
           >
             <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
               Recovery
@@ -185,7 +189,7 @@ export default function Dashboard() {
         <motion.button
           whileTap={{ scale: 0.99 }}
           onClick={() => router.push('/medications')}
-          style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer', width: '100%' }}
+          style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer', width: '100%', boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>Today&apos;s medications</p>
@@ -195,7 +199,7 @@ export default function Dashboard() {
             {profile?.medications?.slice(0, 3).map((med: any, i: number) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(252,181,70,0.08)', border: '1px solid rgba(252,181,70,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: '14px' }}>💊</span>
+                  <Pill size={14} color="#fcb546"/>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ color: '#EDEAE0', fontSize: '13px', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{med.name}</p>
@@ -212,22 +216,26 @@ export default function Dashboard() {
         {/* Community + Appointments */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/transport')}
-            style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}>
-            <span style={{ fontSize: '22px', display: 'block', marginBottom: '8px' }}>🚗</span>
-            <p style={{ color: '#EDEAE0', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Need a ride</p>
+            style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+              <Car size={18} color="rgba(237,234,224,0.5)"/>
+            </div>
+            <p style={{ color: '#EDEAE0', fontWeight: 600, fontSize: '13px', marginBottom: '3px' }}>Need a ride</p>
             <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '11px' }}>Community transport</p>
           </motion.button>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/appointments')}
-            style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left' }}>
-            <span style={{ fontSize: '22px', display: 'block', marginBottom: '8px' }}>🩺</span>
-            <p style={{ color: '#EDEAE0', fontWeight: 600, fontSize: '13px', marginBottom: '2px' }}>Care team</p>
+            style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+              <Stethoscope size={18} color="rgba(237,234,224,0.5)"/>
+            </div>
+            <p style={{ color: '#EDEAE0', fontWeight: 600, fontSize: '13px', marginBottom: '3px' }}>Care team</p>
             <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '11px' }}>Schedule a visit</p>
           </motion.button>
         </div>
 
         {/* Last check-in preview */}
         {checkins.length > 0 && (
-          <div style={{ background: '#0F0F18', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px' }}>
+          <div style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)' }}>
             <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Last check-in</p>
             <p style={{ color: 'rgba(237,234,224,0.6)', fontSize: '13px', lineHeight: 1.6, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {checkins[0].summary}

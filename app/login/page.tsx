@@ -49,11 +49,12 @@ export default function Login() {
 
       {/* Logo */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '48px' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ width: '14px', height: '14px', background: '#fcb546', borderRadius: '3px', transform: 'rotate(45deg)' }}/>
-          <div style={{ width: '14px', height: '14px', border: '2px solid #80EF80', borderRadius: '3px', transform: 'rotate(45deg)', marginLeft: '-6px' }}/>
+        <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'linear-gradient(135deg, #fcb546, #f09020)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(252,181,70,0.35)' }}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#07070E" strokeWidth="0"/>
+          </svg>
         </div>
-        <span style={{ color: '#EDEAE0', fontWeight: 700, fontSize: '17px', letterSpacing: '-0.3px' }}>Relay Arc</span>
+        <span style={{ color: '#EDEAE0', fontWeight: 800, fontSize: '17px', letterSpacing: '-0.4px' }}>Relay Arc</span>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ flex: 1 }}>

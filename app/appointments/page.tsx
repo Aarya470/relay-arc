@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, Phone, Calendar, X } from 'lucide-react'
+import { ArrowLeft, Plus, Phone, Calendar, X, Clock, CalendarCheck } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
 
 export default function Appointments() {
@@ -91,12 +91,24 @@ export default function Appointments() {
         )}
 
         {appointments.map((a, i) => (
-          <div key={i} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${a.status === 'confirmed' ? 'rgba(128,239,128,0.18)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '16px', padding: '14px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <span style={{ color: a.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '13px', fontWeight: 700 }}>
-                {a.type === 'immediate' ? '🚨 Immediate call' : '📅 Scheduled visit'}
-              </span>
-              <span style={{ color: a.status === 'confirmed' ? '#80EF80' : 'rgba(237,234,224,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase' }}>{a.status}</span>
+          <div key={i} style={{ background: '#0D0D1A', border: `1px solid ${a.status === 'confirmed' ? 'rgba(128,239,128,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '18px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {a.type === 'immediate'
+                  ? <Clock size={13} color="#FF4A42"/>
+                  : <CalendarCheck size={13} color="#4A9EF5"/>
+                }
+                <span style={{ color: a.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '12px', fontWeight: 700, letterSpacing: '0.1px' }}>
+                  {a.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
+                </span>
+              </div>
+              <span style={{
+                color: a.status === 'confirmed' ? '#80EF80' : 'rgba(237,234,224,0.35)',
+                fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px',
+                background: a.status === 'confirmed' ? 'rgba(128,239,128,0.08)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${a.status === 'confirmed' ? 'rgba(128,239,128,0.2)' : 'rgba(255,255,255,0.07)'}`,
+                padding: '2px 7px', borderRadius: '99px'
+              }}>{a.status}</span>
             </div>
             {a.scheduled_at && a.type === 'scheduled' && (
               <p style={{ color: 'rgba(237,234,224,0.4)', fontSize: '12px', marginBottom: '4px' }}>{new Date(a.scheduled_at).toLocaleString()}</p>
