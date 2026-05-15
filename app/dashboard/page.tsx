@@ -8,6 +8,11 @@ import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AlertCircle, Car, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video } from 'lucide-react'
 
+function parseTS(ts: string) {
+  if (!ts) return new Date()
+  return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
+}
+
 const spring = { type: 'spring', stiffness: 340, damping: 24 } as const
 const springFast = { type: 'spring', stiffness: 420, damping: 22 } as const
 
@@ -70,7 +75,7 @@ export default function Dashboard() {
       const now = Date.now()
       const upcoming = data.find(a => {
         if (!a.meeting_room_id) return false
-        const t = new Date(a.scheduled_at).getTime()
+        const t = parseTS(a.scheduled_at).getTime()
         return t > now - 5 * 60 * 1000 && t < now + 15 * 60 * 1000
       })
       setUpcomingMeeting(upcoming || null)

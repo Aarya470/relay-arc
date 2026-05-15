@@ -20,6 +20,11 @@ for (let h = 6; h <= 21; h++) {
   if (h < 21) ALL_TIMES.push(`${h12}:30 ${ampm}`)
 }
 
+function parseTS(ts: string) {
+  if (!ts) return new Date()
+  return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
+}
+
 function parseTime(label: string) {
   const [t, ampm] = label.split(' ')
   const [h, m] = t.split(':').map(Number)
@@ -169,12 +174,12 @@ export default function MeetingAlert() {
       if (!data) return
       const now = Date.now()
       const upcoming = data.filter(a => a.meeting_room_id).find(a => {
-        const t = new Date(a.scheduled_at).getTime()
+        const t = parseTS(a.scheduled_at).getTime()
         return t > now - 5*60*1000 && t < now + 30*60*1000
       })
       if (!upcoming) { setUpcomingAppt(null); return }
       setUpcomingAppt(upcoming)
-      const msUntil = new Date(upcoming.scheduled_at).getTime() - now
+      const msUntil = parseTS(upcoming.scheduled_at).getTime() - now
 
       // Show in-app modal at 10 minutes before (or if overdue by <5min)
       if (msUntil <= 10*60*1000) setShowModal(true)
@@ -250,9 +255,9 @@ export default function MeetingAlert() {
   if (skip) return null
 
   const scheduledStr = upcomingAppt
-    ? new Date(upcomingAppt.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+    ? parseTS(upcomingAppt.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
     : ''
-  const isNow = upcomingAppt && new Date(upcomingAppt.scheduled_at) <= new Date()
+  const isNow = upcomingAppt && parseTS(upcomingAppt.scheduled_at) <= new Date()
 
   return (
     <>

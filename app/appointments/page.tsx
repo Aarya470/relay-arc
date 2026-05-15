@@ -20,6 +20,12 @@ for (let h = 6; h <= 21; h++) {
   if (h < 21) ALL_TIMES.push(`${h12}:30 ${ampm}`)
 }
 
+// Supabase may return timestamps without tz suffix; treat bare datetimes as UTC
+function parseTS(ts: string) {
+  if (!ts) return new Date()
+  return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
+}
+
 function parseTimeTo24h(label: string) {
   const [timePart, ampm] = label.split(' ')
   const [hourStr, minStr] = timePart.split(':')
@@ -174,14 +180,14 @@ export default function Appointments() {
       const now = Date.now()
       const upcoming = data.find(a => {
         if (!a.meeting_room_id) return false
-        const t = new Date(a.scheduled_at).getTime()
+        const t = parseTS(a.scheduled_at).getTime()
         return t > now - 5 * 60 * 1000 && t < now + 15 * 60 * 1000
       })
       setUpcomingMeeting(upcoming || null)
       if (upcoming && !notifiedRef.current.has(upcoming.id)) {
         notifiedRef.current.add(upcoming.id)
         if ('Notification' in window && Notification.permission === 'granted') {
-          const t = new Date(upcoming.scheduled_at).getTime()
+          const t = parseTS(upcoming.scheduled_at).getTime()
           const min = Math.round((t - now) / 60000)
           new Notification('Meeting starting soon', {
             body: `Your care team call starts ${min > 0 ? `in ${min} min` : 'now'}. Tap to join.`,
@@ -206,7 +212,7 @@ export default function Appointments() {
 
   const isJoinable = (a: any) => {
     if (a.status !== 'confirmed' || !a.meeting_room_id) return false
-    const t = new Date(a.scheduled_at).getTime()
+    const t = parseTS(a.scheduled_at).getTime()
     const now = Date.now()
     return now >= t - 10 * 60 * 1000 && now <= t + 60 * 60 * 1000
   }
@@ -356,9 +362,9 @@ export default function Appointments() {
               </div>
               {a.scheduled_at && a.type === 'scheduled' && (
                 <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '12px', marginBottom: '4px' }}>
-                  {new Date(a.scheduled_at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                  {parseTS(a.scheduled_at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                   {' · '}
-                  {new Date(a.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                  {parseTS(a.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                 </p>
               )}
               {a.patient_concern && (

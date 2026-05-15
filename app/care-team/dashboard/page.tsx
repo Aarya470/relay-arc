@@ -14,6 +14,11 @@ const groq = new Groq({
   dangerouslyAllowBrowser: true
 })
 
+function parseTS(ts: string) {
+  if (!ts) return new Date()
+  return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
+}
+
 export default function CareTeamDashboard() {
   const [patients, setPatients] = useState<any[]>([])
   const [checkins, setCheckins] = useState<any[]>([])
@@ -39,14 +44,14 @@ export default function CareTeamDashboard() {
       const now = Date.now()
       const upcoming = data.find(a => {
         if (!a.meeting_room_id) return false
-        const t = new Date(a.scheduled_at).getTime()
+        const t = parseTS(a.scheduled_at).getTime()
         return t > now - 5 * 60 * 1000 && t < now + 15 * 60 * 1000
       })
       setUpcomingMeeting(upcoming || null)
       if (upcoming && !notifiedRef.current.has(upcoming.id)) {
         notifiedRef.current.add(upcoming.id)
         if ('Notification' in window && Notification.permission === 'granted') {
-          const t = new Date(upcoming.scheduled_at).getTime()
+          const t = parseTS(upcoming.scheduled_at).getTime()
           const min = Math.round((t - now) / 60000)
           const patient = patients.find(p => p.id === upcoming.patient_id)
           new Notification('Meeting starting soon', {
@@ -175,7 +180,7 @@ Score 1-4: stable, no major issues`
 
   const isJoinable = (a: any) => {
     if (a.status !== 'confirmed' || !a.meeting_room_id) return false
-    const t = new Date(a.scheduled_at).getTime()
+    const t = parseTS(a.scheduled_at).getTime()
     const now = Date.now()
     return now >= t - 10 * 60 * 1000 && now <= t + 60 * 60 * 1000
   }
@@ -294,7 +299,7 @@ Score 1-4: stable, no major issues`
         const pending = appointments.filter(a => a.status === 'pending')
         const upcoming = appointments.filter(a => {
           if (a.status !== 'confirmed') return false
-          const t = new Date(a.scheduled_at).getTime()
+          const t = parseTS(a.scheduled_at).getTime()
           return t > Date.now() - 60 * 60 * 1000 && t < Date.now() + 24 * 60 * 60 * 1000
         })
         if (pending.length === 0 && upcoming.length === 0) return null
@@ -316,7 +321,7 @@ Score 1-4: stable, no major issues`
                   </div>
                   {a.scheduled_at && (
                     <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', marginBottom: '10px' }}>
-                      {new Date(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                      {parseTS(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                     </p>
                   )}
                   {a.patient_concern && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '10px' }}>{a.patient_concern}</p>}
@@ -352,7 +357,7 @@ Score 1-4: stable, no major issues`
                     )}
                   </div>
                   <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', marginBottom: joinable ? '10px' : 0 }}>
-                    {new Date(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    {parseTS(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                   </p>
                   {joinable && (
                     <motion.button whileTap={{ scale: 0.97 }}

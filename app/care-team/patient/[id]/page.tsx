@@ -13,6 +13,11 @@ const groq = new Groq({
   dangerouslyAllowBrowser: true
 })
 
+function parseTS(ts: string) {
+  if (!ts) return new Date()
+  return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
+}
+
 export default function PatientDetail() {
   const params = useParams()
   const patientId = params.id as string
@@ -175,7 +180,7 @@ Keep everything simple and plain English. No medical jargon.`
 
   const isJoinable = (a: any) => {
     if (a.status !== 'confirmed' || !a.meeting_room_id) return false
-    const t = new Date(a.scheduled_at).getTime()
+    const t = parseTS(a.scheduled_at).getTime()
     const now = Date.now()
     return now >= t - 10 * 60 * 1000 && now <= t + 60 * 60 * 1000
   }
@@ -468,7 +473,7 @@ Keep everything simple and plain English. No medical jargon.`
                   </div>
                   {appt.scheduled_at && (
                     <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '4px' }}>
-                      {new Date(appt.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                      {parseTS(appt.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                     </p>
                   )}
                   {(appt.notes || appt.patient_concern) && (
