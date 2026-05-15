@@ -4,20 +4,146 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, Phone, Calendar, X, Clock, CalendarCheck } from 'lucide-react'
+import { ArrowLeft, Plus, Phone, Calendar, X, Clock, CalendarCheck, ChevronLeft, ChevronRight } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
 
 const spring = { type: 'spring', stiffness: 360, damping: 26 } as const
+
+const DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
+
+const TIME_SLOTS = [
+  { label: '9:00 AM', hour: 9 },
+  { label: '10:00 AM', hour: 10 },
+  { label: '11:00 AM', hour: 11 },
+  { label: '1:00 PM', hour: 13 },
+  { label: '2:00 PM', hour: 14 },
+  { label: '3:00 PM', hour: 15 },
+  { label: '4:00 PM', hour: 16 },
+]
+
+function CalendarPicker({
+  selectedDay, onSelect,
+}: {
+  selectedDay: Date | null
+  onSelect: (d: Date) => void
+}) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const [viewYear, setViewYear] = useState(today.getFullYear())
+  const [viewMonth, setViewMonth] = useState(today.getMonth())
+
+  const firstDayOfWeek = new Date(viewYear, viewMonth, 1).getDay()
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+
+  const prevMonth = () => {
+    if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11) }
+    else setViewMonth(m => m - 1)
+  }
+  const nextMonth = () => {
+    if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0) }
+    else setViewMonth(m => m + 1)
+  }
+
+  const isPast = (day: number) => new Date(viewYear, viewMonth, day) < today
+  const isSelected = (day: number) =>
+    selectedDay?.getFullYear() === viewYear &&
+    selectedDay?.getMonth() === viewMonth &&
+    selectedDay?.getDate() === day
+  const isToday = (day: number) =>
+    today.getFullYear() === viewYear &&
+    today.getMonth() === viewMonth &&
+    today.getDate() === day
+
+  const cells: (number | null)[] = [
+    ...Array(firstDayOfWeek).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ]
+
+  return (
+    <div>
+      {/* Month nav */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+        <motion.button
+          whileTap={{ scale: 0.88 }}
+          transition={spring}
+          onClick={prevMonth}
+          style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <ChevronLeft size={15} color="rgba(237,234,224,0.5)"/>
+        </motion.button>
+        <p style={{ color: '#EDEAE0', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>
+          {MONTHS[viewMonth]} {viewYear}
+        </p>
+        <motion.button
+          whileTap={{ scale: 0.88 }}
+          transition={spring}
+          onClick={nextMonth}
+          style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <ChevronRight size={15} color="rgba(237,234,224,0.5)"/>
+        </motion.button>
+      </div>
+
+      {/* Day-of-week headers */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '6px' }}>
+        {DAYS.map(d => (
+          <p key={d} style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: 'rgba(237,234,224,0.28)', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.3px' }}>{d}</p>
+        ))}
+      </div>
+
+      {/* Day grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '3px' }}>
+        {cells.map((day, i) => {
+          if (!day) return <div key={i}/>
+          const past = isPast(day)
+          const selected = isSelected(day)
+          const todayFlag = isToday(day)
+          return (
+            <motion.button
+              key={i}
+              whileTap={past ? {} : { scale: 0.88 }}
+              transition={spring}
+              onClick={() => !past && onSelect(new Date(viewYear, viewMonth, day))}
+              disabled={past}
+              style={{
+                height: '36px',
+                borderRadius: '9px',
+                border: todayFlag && !selected ? '1px solid rgba(252,181,70,0.3)' : 'none',
+                background: selected ? '#fcb546' : 'transparent',
+                color: past
+                  ? 'rgba(237,234,224,0.15)'
+                  : selected
+                    ? '#07070E'
+                    : todayFlag
+                      ? '#fcb546'
+                      : 'rgba(237,234,224,0.78)',
+                fontSize: '13px',
+                fontWeight: selected ? 800 : todayFlag ? 700 : 500,
+                cursor: past ? 'default' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              {day}
+            </motion.button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 export default function Appointments() {
   const [appointments, setAppointments] = useState<any[]>([])
   const [userId, setUserId] = useState('')
   const [showRequest, setShowRequest] = useState(false)
   const [type, setType] = useState<'immediate' | 'scheduled'>('scheduled')
-  const [date, setDate] = useState('')
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null)
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [concern, setConcern] = useState('')
   const [loading, setLoading] = useState(true)
-  const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [focused, setFocused] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -32,31 +158,45 @@ export default function Appointments() {
     load()
   }, [])
 
+  const buildScheduledAt = () => {
+    if (!selectedDay || !selectedTime) return new Date().toISOString()
+    const slot = TIME_SLOTS.find(t => t.label === selectedTime)
+    const d = new Date(selectedDay)
+    d.setHours(slot?.hour ?? 9, 0, 0, 0)
+    return d.toISOString()
+  }
+
+  const canSubmit = type === 'immediate' || (selectedDay !== null && selectedTime !== null)
+
   const request = async () => {
+    if (!canSubmit) return
     const { data, error } = await supabase.from('appointments').insert({
-      patient_id: userId, type, status: 'pending',
-      scheduled_at: type === 'scheduled' && date ? date : new Date().toISOString(),
-      patient_concern: concern
+      patient_id: userId,
+      type,
+      status: 'pending',
+      scheduled_at: buildScheduledAt(),
+      patient_concern: concern,
     }).select().single()
     if (!error && data) {
       setAppointments(prev => [data, ...prev])
-      setShowRequest(false); setConcern(''); setDate('')
+      setShowRequest(false)
+      setConcern('')
+      setSelectedDay(null)
+      setSelectedTime(null)
       toast.success(type === 'immediate' ? 'Care team notified — they will contact you shortly' : 'Appointment requested')
     }
   }
 
-  const fieldStyle = (field: string): React.CSSProperties => ({
-    width: '100%',
-    background: 'rgba(255,255,255,0.04)',
-    border: `1px solid ${focusedField === field ? 'rgba(252,181,70,0.3)' : 'rgba(255,255,255,0.08)'}`,
-    borderRadius: '14px',
-    padding: '14px 16px',
-    color: '#EDEAE0',
-    fontSize: '14px',
-    outline: 'none',
-    transition: 'border-color 0.18s ease',
-    fontFamily: 'inherit',
-  })
+  const close = () => {
+    setShowRequest(false)
+    setSelectedDay(null)
+    setSelectedTime(null)
+    setConcern('')
+  }
+
+  const summaryLabel = selectedDay && selectedTime
+    ? `${selectedDay.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at ${selectedTime}`
+    : null
 
   return (
     <div style={{ minHeight: '100dvh', background: '#07070E', paddingBottom: '100px' }}>
@@ -80,7 +220,7 @@ export default function Appointments() {
           <motion.button
             whileTap={{ scale: 0.9 }}
             transition={spring}
-            onClick={() => setShowRequest(true)}
+            onClick={() => { setType('scheduled'); setShowRequest(true) }}
             style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(252,181,70,0.1)', border: '1px solid rgba(252,181,70,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <Plus size={15} color="#fcb546"/>
@@ -134,11 +274,8 @@ export default function Appointments() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                {a.type === 'immediate'
-                  ? <Clock size={13} color="#FF4A42"/>
-                  : <CalendarCheck size={13} color="#4A9EF5"/>
-                }
-                <span style={{ color: a.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '12px', fontWeight: 700, letterSpacing: '0.05px' }}>
+                {a.type === 'immediate' ? <Clock size={13} color="#FF4A42"/> : <CalendarCheck size={13} color="#4A9EF5"/>}
+                <span style={{ color: a.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '12px', fontWeight: 700 }}>
                   {a.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
                 </span>
               </div>
@@ -151,83 +288,189 @@ export default function Appointments() {
               }}>{a.status}</span>
             </div>
             {a.scheduled_at && a.type === 'scheduled' && (
-              <p style={{ color: 'rgba(237,234,224,0.38)', fontSize: '12px', marginBottom: '4px' }}>{new Date(a.scheduled_at).toLocaleString()}</p>
+              <p style={{ color: 'rgba(237,234,224,0.38)', fontSize: '12px', marginBottom: '4px' }}>
+                {new Date(a.scheduled_at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                {' · '}
+                {new Date(a.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+              </p>
             )}
             {a.patient_concern && <p style={{ color: 'rgba(237,234,224,0.32)', fontSize: '12px' }}>{a.patient_concern}</p>}
           </motion.div>
         ))}
       </div>
 
+      {/* Request sheet */}
       <AnimatePresence>
         {showRequest && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
-            onClick={e => { if (e.target === e.currentTarget) setShowRequest(false) }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
+            onClick={e => { if (e.target === e.currentTarget) close() }}
           >
             <motion.div
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{ background: '#0F0F18', borderRadius: '24px 24px 0 0', padding: '24px 20px 48px', width: '100%', boxShadow: '0 -8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}
+              style={{
+                background: '#0F0F18',
+                borderRadius: '24px 24px 0 0',
+                width: '100%',
+                maxHeight: '92dvh',
+                overflowY: 'auto',
+                boxShadow: '0 -8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+              }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <p style={{ color: '#EDEAE0', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.4px' }}>
-                  {type === 'immediate' ? 'Request immediate call' : 'Schedule appointment'}
-                </p>
-                <button onClick={() => setShowRequest(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(237,234,224,0.4)' }}>
-                  <X size={20}/>
-                </button>
+              {/* Drag handle */}
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 0' }}>
+                <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.12)' }}/>
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                {(['immediate', 'scheduled'] as const).map(t => (
-                  <button key={t} onClick={() => setType(t)}
-                    style={{
-                      flex: 1, padding: '10px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700,
-                      background: type === t ? (t === 'immediate' ? 'rgba(232,50,42,0.18)' : 'rgba(74,158,245,0.18)') : 'rgba(255,255,255,0.05)',
-                      color: type === t ? (t === 'immediate' ? '#FF4A42' : '#4A9EF5') : 'rgba(237,234,224,0.32)',
-                      transition: 'background 0.15s ease, color 0.15s ease',
-                      fontFamily: 'inherit',
-                    }}>
-                    {t === 'immediate' ? 'Right now' : 'Schedule'}
+              <div style={{ padding: '16px 20px 48px' }}>
+                {/* Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <p style={{ color: '#EDEAE0', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.4px' }}>
+                    {type === 'immediate' ? 'Request immediate call' : 'Schedule appointment'}
+                  </p>
+                  <button onClick={close} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(237,234,224,0.4)' }}>
+                    <X size={20}/>
                   </button>
-                ))}
-              </div>
+                </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {/* Type toggle */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+                  {(['immediate', 'scheduled'] as const).map(t => (
+                    <button key={t} onClick={() => setType(t)}
+                      style={{
+                        flex: 1, padding: '10px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700,
+                        background: type === t ? (t === 'immediate' ? 'rgba(232,50,42,0.18)' : 'rgba(74,158,245,0.18)') : 'rgba(255,255,255,0.05)',
+                        color: type === t ? (t === 'immediate' ? '#FF4A42' : '#4A9EF5') : 'rgba(237,234,224,0.32)',
+                        transition: 'background 0.15s ease, color 0.15s ease',
+                        fontFamily: 'inherit',
+                      }}>
+                      {t === 'immediate' ? 'Right now' : 'Schedule'}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Calendar + time (scheduled only) */}
                 {type === 'scheduled' && (
-                  <input
-                    type="datetime-local"
-                    value={date}
-                    onChange={e => setDate(e.target.value)}
-                    onFocus={() => setFocusedField('date')}
-                    onBlur={() => setFocusedField(null)}
-                    style={fieldStyle('date')}
-                  />
+                  <div style={{ marginBottom: '20px' }}>
+                    {/* Calendar */}
+                    <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '16px', marginBottom: '12px' }}>
+                      <CalendarPicker selectedDay={selectedDay} onSelect={setSelectedDay}/>
+                    </div>
+
+                    {/* Time slots — only show once a day is picked */}
+                    <AnimatePresence>
+                      {selectedDay && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 4 }}
+                          transition={spring}
+                        >
+                          <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
+                            Select a time
+                          </p>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                            {TIME_SLOTS.map(slot => {
+                              const active = selectedTime === slot.label
+                              return (
+                                <motion.button
+                                  key={slot.label}
+                                  whileTap={{ scale: 0.93 }}
+                                  transition={spring}
+                                  onClick={() => setSelectedTime(slot.label)}
+                                  style={{
+                                    padding: '9px 16px',
+                                    borderRadius: '99px',
+                                    border: `1px solid ${active ? 'rgba(74,158,245,0.5)' : 'rgba(255,255,255,0.08)'}`,
+                                    background: active ? 'rgba(74,158,245,0.15)' : 'rgba(255,255,255,0.04)',
+                                    color: active ? '#4A9EF5' : 'rgba(237,234,224,0.6)',
+                                    fontSize: '13px',
+                                    fontWeight: active ? 700 : 500,
+                                    cursor: 'pointer',
+                                    transition: 'background 0.15s ease, border-color 0.15s ease, color 0.15s ease',
+                                    fontFamily: 'inherit',
+                                  }}
+                                >
+                                  {slot.label}
+                                </motion.button>
+                              )
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Summary pill */}
+                    <AnimatePresence>
+                      {summaryLabel && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={spring}
+                          style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(74,158,245,0.08)', border: '1px solid rgba(74,158,245,0.2)', borderRadius: '12px', padding: '10px 14px' }}
+                        >
+                          <CalendarCheck size={14} color="#4A9EF5" style={{ flexShrink: 0 }}/>
+                          <p style={{ color: '#4A9EF5', fontSize: '13px', fontWeight: 600 }}>{summaryLabel}</p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 )}
 
+                {/* Concern textarea */}
                 <textarea
                   value={concern}
                   onChange={e => setConcern(e.target.value)}
-                  onFocus={() => setFocusedField('concern')}
-                  onBlur={() => setFocusedField(null)}
-                  placeholder="What would you like to discuss?"
-                  style={{ ...fieldStyle('concern'), resize: 'none', minHeight: '80px' }}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setFocused(false)}
+                  placeholder="What would you like to discuss? (optional)"
+                  style={{
+                    width: '100%',
+                    background: 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${focused ? 'rgba(252,181,70,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                    borderRadius: '14px',
+                    padding: '14px 16px',
+                    color: '#EDEAE0',
+                    fontSize: '14px',
+                    outline: 'none',
+                    resize: 'none',
+                    minHeight: '80px',
+                    marginBottom: '14px',
+                    fontFamily: 'inherit',
+                    transition: 'border-color 0.18s ease',
+                  }}
                 />
 
                 <motion.button
-                  whileTap={{ scale: 0.97, y: 1 }}
+                  whileTap={canSubmit ? { scale: 0.97, y: 1 } : {}}
                   transition={spring}
                   onClick={request}
+                  disabled={!canSubmit}
                   style={{
                     width: '100%',
-                    background: type === 'immediate' ? 'linear-gradient(135deg, #E8322A, #C42020)' : 'linear-gradient(135deg, #4A9EF5, #2070D0)',
-                    color: 'white', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer',
-                    boxShadow: type === 'immediate' ? '0 8px 24px rgba(232,50,42,0.28)' : '0 8px 24px rgba(74,158,245,0.28)',
+                    background: !canSubmit
+                      ? 'rgba(255,255,255,0.06)'
+                      : type === 'immediate'
+                        ? 'linear-gradient(135deg, #E8322A, #C42020)'
+                        : 'linear-gradient(135deg, #4A9EF5, #2070D0)',
+                    color: !canSubmit ? 'rgba(237,234,224,0.25)' : 'white',
+                    fontWeight: 800,
+                    fontSize: '15px',
+                    padding: '16px',
+                    borderRadius: '14px',
+                    border: 'none',
+                    cursor: canSubmit ? 'pointer' : 'default',
+                    boxShadow: canSubmit
+                      ? type === 'immediate' ? '0 8px 24px rgba(232,50,42,0.28)' : '0 8px 24px rgba(74,158,245,0.28)'
+                      : 'none',
+                    transition: 'background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease',
                     letterSpacing: '-0.1px',
                   }}
                 >
