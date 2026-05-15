@@ -3,18 +3,20 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, MapPin, Loader2, Phone } from 'lucide-react'
+import { ArrowLeft, MapPin, Loader2, Phone, Heart, Brain, Zap, AlertCircle, Wind, Activity, Car, CheckCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { findNearbyHospitals, Hospital } from '@/lib/hospitals'
 
 const EMERGENCY_TYPES = [
-  { id: 'chest_pain', label: 'Chest pain', icon: '🫀' },
-  { id: 'stroke', label: 'Stroke signs', icon: '🧠' },
-  { id: 'pots', label: 'POTS episode', icon: '⚡' },
-  { id: 'unconscious', label: 'Unconscious', icon: '🔴' },
-  { id: 'breathing', label: "Can't breathe", icon: '🫁' },
-  { id: 'mecfs', label: 'Severe crash', icon: '😔' },
+  { id: 'chest_pain', label: 'Chest pain', Icon: Heart },
+  { id: 'stroke', label: 'Stroke signs', Icon: Brain },
+  { id: 'pots', label: 'POTS episode', Icon: Zap },
+  { id: 'unconscious', label: 'Unconscious', Icon: AlertCircle },
+  { id: 'breathing', label: "Can't breathe", Icon: Wind },
+  { id: 'mecfs', label: 'Severe crash', Icon: Activity },
 ]
+
+const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 export default function TransportRequest() {
   const [step, setStep] = useState<'type' | 'location' | 'hospital' | 'waiting' | 'accepted'>('type')
@@ -38,7 +40,6 @@ export default function TransportRequest() {
     load()
   }, [])
 
-  // Poll for driver acceptance
   useEffect(() => {
     if (!request?.id) return
     const interval = setInterval(async () => {
@@ -62,7 +63,6 @@ export default function TransportRequest() {
       async (pos) => {
         const { latitude, longitude } = pos.coords
         setPosition({ lat: latitude, lng: longitude })
-
         try {
           const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
           const data = await res.json()
@@ -70,7 +70,6 @@ export default function TransportRequest() {
         } catch {
           setAddress('Your current location')
         }
-
         const nearbyHospitals = await findNearbyHospitals(latitude, longitude, emergencyType)
         setHospitals(nearbyHospitals)
         setLoading(false)
@@ -87,9 +86,7 @@ export default function TransportRequest() {
   const submitRequest = async () => {
     if (!position || !selectedHospital || !profile) return
     setLoading(true)
-
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
-
     const { data, error } = await supabase.from('transport_requests').insert({
       user_id: profile.id,
       patient_name: profile.full_name,
@@ -103,33 +100,32 @@ export default function TransportRequest() {
       status: 'pending',
       expires_at: expiresAt
     }).select().single()
-
     if (error) {
       toast.error('Failed to submit request')
       setLoading(false)
       return
     }
-
     setRequest(data)
     setStep('waiting')
     setLoading(false)
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#09090C', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', flexDirection: 'column' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ padding: '56px 20px 14px', borderBottom: '1px solid rgba(26,40,32,0.08)', display: 'flex', alignItems: 'center', gap: '12px', background: '#FFFFFF', flexShrink: 0 }}>
         <motion.button
           whileTap={{ scale: 0.9 }}
+          transition={spring}
           onClick={() => router.push('/dashboard')}
-          style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F8F6F2', border: '1px solid rgba(26,40,32,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
         >
-          <ArrowLeft size={16} color="rgba(255,255,255,0.6)"/>
+          <ArrowLeft size={16} color="rgba(26,40,32,0.5)"/>
         </motion.button>
         <div>
-          <p style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'monospace', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: '20px' }}>Request a Ride</h1>
+          <p style={{ color: 'rgba(26,40,32,0.38)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
+          <h1 style={{ color: '#1A2820', fontWeight: 700, fontSize: '20px', letterSpacing: '-0.4px' }}>Request a Ride</h1>
         </div>
       </div>
 
@@ -139,19 +135,30 @@ export default function TransportRequest() {
           {/* Step 1 — Emergency type */}
           {step === 'type' && (
             <motion.div key="type" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', marginBottom: '20px' }}>
+              <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '13px', marginBottom: '20px', lineHeight: 1.5 }}>
                 What is the emergency? A nearby community member will drive you to the right hospital.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 {EMERGENCY_TYPES.map(type => (
                   <motion.button
                     key={type.id}
-                    whileTap={{ scale: 0.96 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={spring}
                     onClick={() => { setEmergencyType(type.id); setStep('location') }}
-                    style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px', textAlign: 'left', cursor: 'pointer' }}
+                    style={{
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(26,40,32,0.08)',
+                      borderRadius: '20px',
+                      padding: '18px 16px',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(26,40,32,0.06)',
+                    }}
                   >
-                    <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>{type.icon}</span>
-                    <p style={{ color: 'white', fontSize: '13px', fontWeight: 600 }}>{type.label}</p>
+                    <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                      <type.Icon size={17} color="#DC2626"/>
+                    </div>
+                    <p style={{ color: '#1A2820', fontSize: '13px', fontWeight: 700, letterSpacing: '-0.2px' }}>{type.label}</p>
                   </motion.button>
                 ))}
               </div>
@@ -161,17 +168,20 @@ export default function TransportRequest() {
           {/* Step 2 — Location */}
           {step === 'location' && (
             <motion.div key="location" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '20px', marginBottom: '16px', textAlign: 'center' }}>
-                <MapPin size={32} color="#fcb546" style={{ margin: '0 auto 12px' }}/>
-                <p style={{ color: 'white', fontWeight: 600, fontSize: '16px', marginBottom: '8px' }}>Share your location</p>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginBottom: '20px' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.08)', borderRadius: '20px', padding: '24px 20px', marginBottom: '16px', textAlign: 'center', boxShadow: '0 2px 12px rgba(26,40,32,0.06)' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                  <MapPin size={24} color="#5C8B74"/>
+                </div>
+                <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '16px', marginBottom: '8px', letterSpacing: '-0.3px' }}>Share your location</p>
+                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '13px', marginBottom: '20px', lineHeight: 1.5 }}>
                   Relay Arc will find the nearest community driver and the right hospital for your emergency.
                 </p>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
+                  transition={spring}
                   onClick={getLocation}
                   disabled={loading}
-                  style={{ width: '100%', background: '#fcb546', color: '#09090C', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                  style={{ width: '100%', background: '#5C8B74', color: 'white', fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(92,139,116,0.3)' }}
                 >
                   {loading ? <Loader2 size={18} className="animate-spin"/> : <><MapPin size={16}/> Use my location</>}
                 </motion.button>
@@ -182,12 +192,12 @@ export default function TransportRequest() {
           {/* Step 3 — Hospital selection */}
           {step === 'hospital' && (
             <motion.div key="hospital" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <div style={{ background: 'rgba(128,239,128,0.08)', border: '1px solid rgba(128,239,128,0.2)', borderRadius: '12px', padding: '12px 14px', marginBottom: '16px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <MapPin size={14} color="#80EF80"/>
-                <p style={{ color: '#80EF80', fontSize: '12px' }}>{address}</p>
+              <div style={{ background: 'rgba(92,139,116,0.08)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '12px', padding: '11px 14px', marginBottom: '16px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <MapPin size={13} color="#5C8B74" style={{ flexShrink: 0 }}/>
+                <p style={{ color: '#3D6B58', fontSize: '12px', fontWeight: 500 }}>{address}</p>
               </div>
 
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>
                 Select hospital
               </p>
 
@@ -196,23 +206,27 @@ export default function TransportRequest() {
                   <motion.button
                     key={i}
                     whileTap={{ scale: 0.98 }}
+                    transition={spring}
                     onClick={() => setSelectedHospital(h)}
                     style={{
-                      background: selectedHospital?.id === h.id ? 'rgba(252,181,70,0.08)' : '#111116',
-                      border: `1px solid ${selectedHospital?.id === h.id ? 'rgba(252,181,70,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                      background: selectedHospital?.id === h.id
+                        ? 'linear-gradient(135deg, rgba(92,139,116,0.1) 0%, #FFFFFF 70%)'
+                        : '#FFFFFF',
+                      border: `1px solid ${selectedHospital?.id === h.id ? 'rgba(92,139,116,0.3)' : 'rgba(26,40,32,0.08)'}`,
                       borderRadius: '14px', padding: '14px', textAlign: 'left', cursor: 'pointer',
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      boxShadow: selectedHospital?.id === h.id ? '0 2px 10px rgba(92,139,116,0.12)' : '0 1px 4px rgba(26,40,32,0.05)'
                     }}
                   >
                     <div>
-                      <p style={{ color: 'white', fontWeight: 600, fontSize: '14px', marginBottom: '2px' }}>{h.name}</p>
-                      <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>{h.address}</p>
+                      <p style={{ color: '#1A2820', fontWeight: 600, fontSize: '14px', marginBottom: '2px' }}>{h.name}</p>
+                      <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '11px' }}>{h.address}</p>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '12px' }}>
-                      <p style={{ color: '#fcb546', fontWeight: 700, fontSize: '14px', fontFamily: 'monospace' }}>
+                      <p style={{ color: '#5C8B74', fontWeight: 700, fontSize: '14px', fontFamily: 'var(--font-mono, monospace)' }}>
                         {Math.round((h.distance || 0) / 1000 / 50 * 60)} min
                       </p>
-                      <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', fontFamily: 'monospace' }}>
+                      <p style={{ color: 'rgba(26,40,32,0.28)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
                         {((h.distance || 0) / 1000).toFixed(1)} km
                       </p>
                     </div>
@@ -222,15 +236,17 @@ export default function TransportRequest() {
 
               <motion.button
                 whileTap={{ scale: 0.97 }}
+                transition={spring}
                 onClick={submitRequest}
                 disabled={!selectedHospital || loading}
                 style={{
                   width: '100%',
-                  background: selectedHospital ? '#DC2626' : 'rgba(255,255,255,0.08)',
-                  color: selectedHospital ? 'white' : 'rgba(255,255,255,0.3)',
-                  fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none',
+                  background: selectedHospital ? '#DC2626' : 'rgba(26,40,32,0.06)',
+                  color: selectedHospital ? 'white' : 'rgba(26,40,32,0.3)',
+                  fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none',
                   cursor: selectedHospital ? 'pointer' : 'not-allowed',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  boxShadow: selectedHospital ? '0 4px 14px rgba(220,38,38,0.3)' : 'none'
                 }}
               >
                 {loading ? <Loader2 size={18} className="animate-spin"/> : 'Request community driver'}
@@ -242,28 +258,29 @@ export default function TransportRequest() {
           {step === 'waiting' && (
             <motion.div key="waiting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', paddingTop: '40px' }}>
               <motion.div
-                animate={{ scale: [1, 1.1, 1] }}
+                animate={{ scale: [1, 1.08, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(252,181,70,0.15)', border: '2px solid rgba(252,181,70,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}
+                style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(92,139,116,0.12)', border: '2px solid rgba(92,139,116,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}
               >
-                <span style={{ fontSize: '36px' }}>🚗</span>
+                <Car size={32} color="#5C8B74"/>
               </motion.div>
-              <h2 style={{ color: 'white', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>Finding a driver</h2>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', marginBottom: '32px', lineHeight: 1.6 }}>
+              <h2 style={{ color: '#1A2820', fontWeight: 700, fontSize: '22px', marginBottom: '8px', letterSpacing: '-0.4px' }}>Finding a driver</h2>
+              <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '14px', marginBottom: '32px', lineHeight: 1.6 }}>
                 Nearby community members are being notified. Someone will accept your request shortly.
               </p>
-              <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px', textAlign: 'left', marginBottom: '24px' }}>
-                <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Request details</p>
-                <p style={{ color: 'white', fontSize: '14px', marginBottom: '4px' }}>{request?.hospital_name}</p>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>{request?.pickup_address}</p>
+              <div style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.08)', borderRadius: '16px', padding: '16px', textAlign: 'left', marginBottom: '24px', boxShadow: '0 2px 8px rgba(26,40,32,0.06)' }}>
+                <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Request details</p>
+                <p style={{ color: '#1A2820', fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>{request?.hospital_name}</p>
+                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '12px' }}>{request?.pickup_address}</p>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                 {[0, 0.3, 0.6].map((delay, i) => (
-                  <motion.div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fcb546' }} animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1, repeat: Infinity, delay }}/>
+                  <motion.div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#5C8B74' }} animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1, repeat: Infinity, delay }}/>
                 ))}
               </div>
               <motion.button
                 whileTap={{ scale: 0.97 }}
+                transition={spring}
                 onClick={async () => {
                   if (!request?.id) return
                   await supabase.from('transport_requests')
@@ -273,7 +290,7 @@ export default function TransportRequest() {
                   setStep('type')
                   setRequest(null)
                 }}
-                style={{ marginTop: '24px', background: 'none', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 24px', color: 'rgba(255,255,255,0.35)', fontSize: '13px', cursor: 'pointer', width: '100%' }}
+                style={{ marginTop: '24px', background: 'none', border: '1px solid rgba(26,40,32,0.1)', borderRadius: '12px', padding: '12px 24px', color: 'rgba(26,40,32,0.38)', fontSize: '13px', cursor: 'pointer', width: '100%' }}
               >
                 Cancel request
               </motion.button>
@@ -283,34 +300,36 @@ export default function TransportRequest() {
           {/* Step 5 — Accepted */}
           {step === 'accepted' && (
             <motion.div key="accepted" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-              <div style={{ background: 'rgba(128,239,128,0.08)', border: '1px solid rgba(128,239,128,0.2)', borderRadius: '20px', padding: '20px', textAlign: 'center', marginBottom: '16px' }}>
-                <span style={{ fontSize: '48px', display: 'block', marginBottom: '12px' }}>✓</span>
-                <p style={{ color: '#80EF80', fontWeight: 700, fontSize: '20px', marginBottom: '4px' }}>Driver found</p>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>They are on their way to you</p>
+              <div style={{ background: 'linear-gradient(145deg, rgba(92,139,116,0.1) 0%, #FFFFFF 65%)', border: '1px solid rgba(92,139,116,0.22)', borderRadius: '20px', padding: '24px 20px', textAlign: 'center', marginBottom: '14px', boxShadow: '0 2px 12px rgba(92,139,116,0.1)' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(92,139,116,0.12)', border: '1px solid rgba(92,139,116,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                  <CheckCircle size={26} color="#5C8B74"/>
+                </div>
+                <p style={{ color: '#3D6B58', fontWeight: 700, fontSize: '20px', marginBottom: '4px', letterSpacing: '-0.3px' }}>Driver found</p>
+                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '13px' }}>They are on their way to you</p>
               </div>
-              <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
-                <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Your driver</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(74,158,245,0.15)', border: '1px solid rgba(74,158,245,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A9EF5', fontWeight: 700, fontSize: '18px' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.08)', borderRadius: '16px', padding: '16px', marginBottom: '10px', boxShadow: '0 1px 4px rgba(26,40,32,0.05)' }}>
+                <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Your driver</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6', fontWeight: 700, fontSize: '18px', flexShrink: 0 }}>
                     {request?.driver_name?.[0]}
                   </div>
                   <div>
-                    <p style={{ color: 'white', fontWeight: 600, fontSize: '16px' }}>{request?.driver_name}</p>
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>Community driver</p>
+                    <p style={{ color: '#1A2820', fontWeight: 600, fontSize: '16px', letterSpacing: '-0.3px' }}>{request?.driver_name}</p>
+                    <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px' }}>Community driver</p>
                   </div>
                 </div>
                 {request?.driver_phone && (
                   <a
                     href={`tel:${request.driver_phone}`}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.2)', borderRadius: '12px', padding: '12px', color: '#4A9EF5', fontWeight: 600, fontSize: '14px', textDecoration: 'none' }}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.16)', borderRadius: '12px', padding: '12px', color: '#3B82F6', fontWeight: 600, fontSize: '14px', textDecoration: 'none' }}
                   >
-                    <Phone size={16}/> Call driver
+                    <Phone size={15}/> Call driver
                   </a>
                 )}
               </div>
-              <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
-                <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Heading to</p>
-                <p style={{ color: 'white', fontWeight: 600, fontSize: '14px' }}>{request?.hospital_name}</p>
+              <div style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.08)', borderRadius: '16px', padding: '16px', boxShadow: '0 1px 4px rgba(26,40,32,0.05)' }}>
+                <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Heading to</p>
+                <p style={{ color: '#1A2820', fontWeight: 600, fontSize: '14px' }}>{request?.hospital_name}</p>
               </div>
             </motion.div>
           )}
