@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, Car, Stethoscope, Pill, Heart, ChevronRight } from 'lucide-react'
+import { AlertCircle, Car, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2 } from 'lucide-react'
 
 const spring = { type: 'spring', stiffness: 340, damping: 24 } as const
 const springFast = { type: 'spring', stiffness: 420, damping: 22 } as const
@@ -18,6 +18,24 @@ const staggerContainer = {
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: spring },
+}
+
+function ArcProgress({ pct, color }: { pct: number; color: string }) {
+  const r = 22
+  const circ = 2 * Math.PI * r
+  const dash = (pct / 100) * circ
+  return (
+    <svg width="56" height="56" viewBox="0 0 56 56" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+      <circle cx="28" cy="28" r={r} fill="none" stroke="rgba(26,40,32,0.07)" strokeWidth="5"/>
+      <motion.circle
+        cx="28" cy="28" r={r} fill="none" stroke={color} strokeWidth="5"
+        strokeLinecap="round"
+        initial={{ strokeDasharray: `0 ${circ}` }}
+        animate={{ strokeDasharray: `${dash} ${circ}` }}
+        transition={{ duration: 1.2, delay: 0.4, ease: [0.25, 1, 0.5, 1] }}
+      />
+    </svg>
+  )
 }
 
 export default function Dashboard() {
@@ -62,9 +80,12 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Ambient blobs */}
-      <div style={{ position: 'absolute', top: '-60px', right: '-60px', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(255,211,172,0.45) 0%, transparent 65%)', pointerEvents: 'none' }}/>
-      <div style={{ position: 'absolute', bottom: '200px', left: '-60px', width: '240px', height: '240px', background: 'radial-gradient(circle, rgba(92,139,116,0.12) 0%, transparent 65%)', pointerEvents: 'none' }}/>
+      {/* Decorative background shapes */}
+      <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '320px', height: '320px', background: 'radial-gradient(circle, rgba(255,211,172,0.5) 0%, transparent 65%)', pointerEvents: 'none' }}/>
+      <div style={{ position: 'absolute', bottom: '200px', left: '-70px', width: '260px', height: '260px', background: 'radial-gradient(circle, rgba(92,139,116,0.13) 0%, transparent 65%)', pointerEvents: 'none' }}/>
+      {/* Large decorative ring */}
+      <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '220px', height: '220px', borderRadius: '50%', border: '1.5px solid rgba(255,211,172,0.35)', pointerEvents: 'none' }}/>
+      <div style={{ position: 'absolute', top: '10px', right: '10px', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(255,211,172,0.2)', pointerEvents: 'none' }}/>
 
       {/* Header */}
       <motion.div
@@ -80,19 +101,24 @@ export default function Dashboard() {
               {profile?.full_name?.split(' ')[0]}
             </h1>
           </div>
-          <div style={{
-            width: '48px', height: '48px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #5C8B74 0%, #3D6B58 100%)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 0 3px rgba(92,139,116,0.18), 0 4px 16px rgba(92,139,116,0.22)',
-          }}>
-            <span style={{ color: '#FFFFFF', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px' }}>
-              {profile?.full_name?.[0]}
-            </span>
+          {/* Avatar — circle with double ring */}
+          <div style={{ position: 'relative', flexShrink: 0 }}>
+            <div style={{ position: 'absolute', inset: '-5px', borderRadius: '50%', border: '1.5px solid rgba(92,139,116,0.2)' }}/>
+            <div style={{ position: 'absolute', inset: '-10px', borderRadius: '50%', border: '1px solid rgba(92,139,116,0.1)' }}/>
+            <div style={{
+              width: '48px', height: '48px', borderRadius: '50%',
+              background: 'linear-gradient(135deg, #5C8B74 0%, #3D6B58 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 16px rgba(92,139,116,0.28)',
+            }}>
+              <span style={{ color: '#FFFFFF', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px' }}>
+                {profile?.full_name?.[0]}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Condition tags */}
+        {/* Condition tags — pill shaped */}
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {profile?.diagnosis?.split(',').map((d: string, i: number) => {
             const colorSet = [
@@ -117,7 +143,7 @@ export default function Dashboard() {
         style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '12px' }}
       >
 
-        {/* SOS — dramatic, pill-shaped */}
+        {/* SOS — pill with concentric pulse rings */}
         <motion.div variants={fadeUp}>
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
@@ -133,27 +159,36 @@ export default function Dashboard() {
             }}
           >
             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%)', pointerEvents: 'none' }}/>
+            {/* Decorative diagonal arc inside card */}
+            <div style={{ position: 'absolute', right: '-20px', bottom: '-40px', width: '160px', height: '160px', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.07)', pointerEvents: 'none' }}/>
+            <div style={{ position: 'absolute', right: '30px', bottom: '-60px', width: '200px', height: '200px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.05)', pointerEvents: 'none' }}/>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '6px' }}>Emergency routing</p>
               <p style={{ color: 'white', fontSize: '36px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1 }}>SOS</p>
             </div>
+            {/* Triple ring circle icon */}
             <div style={{ position: 'relative', flexShrink: 0 }}>
-              <div style={{ width: '58px', height: '58px', borderRadius: '50%', background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <AlertCircle size={28} color="white"/>
-              </div>
               <motion.div
-                animate={{ scale: [1, 1.8, 1], opacity: [0.45, 0, 0.45] }}
+                animate={{ scale: [1, 2.2, 1], opacity: [0.3, 0, 0.3] }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+                style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.3)' }}
+              />
+              <motion.div
+                animate={{ scale: [1, 1.7, 1], opacity: [0.45, 0, 0.45] }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
                 style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.38)' }}
               />
+              <div style={{ width: '58px', height: '58px', borderRadius: '50%', background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <AlertCircle size={28} color="white"/>
+              </div>
             </div>
           </motion.button>
         </motion.div>
 
-        {/* Check-in + Recovery — gradient cards */}
+        {/* Check-in + Recovery */}
         <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
 
-          {/* Check-in card */}
+          {/* Check-in — circle icon */}
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
             transition={spring}
@@ -164,13 +199,18 @@ export default function Dashboard() {
                 : '#FFFFFF',
               border: `1.5px solid ${checkinToday ? 'rgba(92,139,116,0.28)' : 'rgba(26,40,32,0.08)'}`,
               borderRadius: '24px', padding: '18px 16px', textAlign: 'left', cursor: 'pointer',
-              boxShadow: checkinToday
-                ? '0 4px 18px rgba(92,139,116,0.14)'
-                : '0 2px 10px rgba(26,40,32,0.06)',
+              boxShadow: checkinToday ? '0 4px 18px rgba(92,139,116,0.14)' : '0 2px 10px rgba(26,40,32,0.06)',
+              position: 'relative', overflow: 'hidden',
             }}
           >
-            <div style={{ width: '34px', height: '34px', borderRadius: '11px', background: checkinToday ? 'rgba(92,139,116,0.16)' : 'rgba(26,40,32,0.05)', border: `1px solid ${checkinToday ? 'rgba(92,139,116,0.28)' : 'rgba(26,40,32,0.08)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-              <Heart size={15} color={checkinToday ? '#5C8B74' : 'rgba(26,40,32,0.32)'} fill={checkinToday ? 'rgba(92,139,116,0.4)' : 'none'}/>
+            {/* Decorative circle in corner */}
+            <div style={{ position: 'absolute', bottom: '-20px', right: '-20px', width: '80px', height: '80px', borderRadius: '50%', background: checkinToday ? 'rgba(92,139,116,0.07)' : 'rgba(26,40,32,0.03)', pointerEvents: 'none' }}/>
+            {/* Circle icon container */}
+            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: checkinToday ? 'rgba(92,139,116,0.16)' : 'rgba(26,40,32,0.05)', border: `1.5px solid ${checkinToday ? 'rgba(92,139,116,0.28)' : 'rgba(26,40,32,0.08)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px' }}>
+              {checkinToday
+                ? <CheckCircle2 size={16} color="#5C8B74"/>
+                : <Heart size={15} color="rgba(26,40,32,0.32)"/>
+              }
             </div>
             <p style={{ color: checkinToday ? '#5C8B74' : '#1A2820', fontSize: '26px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px' }}>
               {checkinToday ? 'Done' : 'Today'}
@@ -178,7 +218,7 @@ export default function Dashboard() {
             <p style={{ color: 'rgba(26,40,32,0.32)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Check-in</p>
           </motion.button>
 
-          {/* Recovery card — peach gradient */}
+          {/* Recovery — circular arc progress */}
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
             transition={spring}
@@ -189,33 +229,38 @@ export default function Dashboard() {
                 : '#FFFFFF',
               border: `1.5px solid ${weeksSinceSurgery !== null ? 'rgba(196,107,48,0.2)' : 'rgba(26,40,32,0.08)'}`,
               borderRadius: '24px', padding: '18px 16px', textAlign: 'left', cursor: 'pointer',
-              boxShadow: weeksSinceSurgery !== null
-                ? '0 4px 18px rgba(196,107,48,0.1)'
-                : '0 2px 10px rgba(26,40,32,0.06)',
+              boxShadow: weeksSinceSurgery !== null ? '0 4px 18px rgba(196,107,48,0.1)' : '0 2px 10px rgba(26,40,32,0.06)',
+              position: 'relative', overflow: 'hidden',
             }}
           >
-            <p style={{ color: 'rgba(26,40,32,0.32)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '20px' }}>Recovery</p>
+            <p style={{ color: 'rgba(26,40,32,0.32)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '14px' }}>Recovery</p>
             {weeksSinceSurgery !== null ? (
-              <>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px', marginBottom: '10px' }}>
-                  <p style={{ color: '#C46B30', fontSize: '36px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1 }}>{weeksSinceSurgery}</p>
-                  <p style={{ color: 'rgba(26,40,32,0.3)', fontSize: '12px' }}>/ 12</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {/* Circular arc progress */}
+                <div style={{ position: 'relative', flexShrink: 0 }}>
+                  <ArcProgress pct={recoveryPct} color="#C46B30"/>
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ color: '#C46B30', fontWeight: 900, fontSize: '13px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '-0.5px' }}>
+                      {weeksSinceSurgery}
+                    </span>
+                  </div>
                 </div>
-                <div style={{ height: '4px', background: 'rgba(26,40,32,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <motion.div
-                    initial={{ scaleX: 0 }} animate={{ scaleX: recoveryPct / 100 }}
-                    transition={{ duration: 1, delay: 0.5, ease: [0.25, 1, 0.5, 1] }}
-                    style={{ height: '100%', width: '100%', background: 'linear-gradient(90deg, #C46B30, #E8944A)', borderRadius: '99px', transformOrigin: 'left' }}
-                  />
+                <div>
+                  <p style={{ color: 'rgba(26,40,32,0.3)', fontSize: '10px', lineHeight: 1.4 }}>
+                    wk of 12
+                  </p>
+                  <p style={{ color: '#C46B30', fontSize: '12px', fontWeight: 700, marginTop: '2px' }}>
+                    {Math.round(recoveryPct)}%
+                  </p>
                 </div>
-              </>
+              </div>
             ) : (
               <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '13px' }}>View timeline</p>
             )}
           </motion.button>
         </motion.div>
 
-        {/* Medications — eucalyptus-tinted gradient */}
+        {/* Medications */}
         <motion.div variants={fadeUp}>
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
@@ -232,8 +277,9 @@ export default function Dashboard() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Pill size={14} color="#5C8B74"/>
+                {/* Diamond-style icon container (rotated square) */}
+                <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'rotate(45deg)' }}>
+                  <Pill size={13} color="#5C8B74" style={{ transform: 'rotate(-45deg)' }}/>
                 </div>
                 <p style={{ color: 'rgba(26,40,32,0.5)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px', fontWeight: 600 }}>Today&apos;s medications</p>
               </div>
@@ -249,7 +295,8 @@ export default function Dashboard() {
                     <p style={{ color: '#1A2820', fontSize: '13px', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{med.name}</p>
                     <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px', marginTop: '2px' }}>{med.dose} · {med.times?.[0] || med.frequency}</p>
                   </div>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(92,139,116,0.65)', flexShrink: 0 }}/>
+                  {/* Diamond dot accent */}
+                  <div style={{ width: '7px', height: '7px', background: 'rgba(92,139,116,0.65)', transform: 'rotate(45deg)', borderRadius: '1px', flexShrink: 0 }}/>
                 </div>
               ))}
               {meds.length === 0 && <p style={{ color: 'rgba(26,40,32,0.28)', fontSize: '13px' }}>No medications added</p>}
@@ -257,7 +304,7 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
-        {/* Transport + Care — stacked horizontal, elongated */}
+        {/* Transport + Care */}
         <motion.div variants={fadeUp} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
@@ -271,7 +318,8 @@ export default function Dashboard() {
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
             }}
           >
-            <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            {/* Circle icon */}
+            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Car size={20} color="#3B82F6"/>
             </div>
             <div style={{ flex: 1 }}>
@@ -293,6 +341,7 @@ export default function Dashboard() {
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
             }}
           >
+            {/* Rounded-square icon — contrast with circle above */}
             <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Stethoscope size={20} color="#5C8B74"/>
             </div>
@@ -304,7 +353,7 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
-        {/* Last check-in — soft gradient */}
+        {/* Last check-in */}
         {checkins.length > 0 && (
           <motion.div
             variants={fadeUp}
@@ -313,8 +362,11 @@ export default function Dashboard() {
               border: '1.5px solid rgba(196,107,48,0.12)',
               borderRadius: '20px', padding: '16px 18px',
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
+              position: 'relative', overflow: 'hidden',
             }}
           >
+            {/* Decorative half-circle */}
+            <div style={{ position: 'absolute', right: '-24px', top: '-24px', width: '80px', height: '80px', borderRadius: '50%', border: '1.5px solid rgba(196,107,48,0.1)', pointerEvents: 'none' }}/>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
               <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px' }}>Last check-in</p>
               <p style={{ color: 'rgba(26,40,32,0.22)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>{new Date(checkins[0].created_at).toLocaleDateString()}</p>

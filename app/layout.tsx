@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { Pacifico, JetBrains_Mono } from 'next/font/google'
+import { Fredoka, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
 
-const pacifico = Pacifico({
+const fredoka = Fredoka({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
-  weight: '400',
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 const mono = JetBrains_Mono({
@@ -30,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${pacifico.variable} ${mono.variable} ${pacifico.className}`}>
+      <body className={`${fredoka.variable} ${mono.variable} ${fredoka.className}`}>
         <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#F2EFE9]">
           {children}
           <Toaster position="top-center" richColors />

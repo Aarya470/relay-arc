@@ -117,9 +117,9 @@ export default function Emergency() {
                 }}
               >
                 <div style={{
-                  width: '40px', height: '40px', borderRadius: '12px', marginBottom: '12px',
+                  width: '40px', height: '40px', borderRadius: '50%', marginBottom: '12px',
                   background: isSelected ? 'rgba(220,38,38,0.12)' : 'rgba(26,40,32,0.05)',
-                  border: `1px solid ${isSelected ? 'rgba(220,38,38,0.22)' : 'rgba(26,40,32,0.07)'}`,
+                  border: `1.5px solid ${isSelected ? 'rgba(220,38,38,0.3)' : 'rgba(26,40,32,0.07)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <type.Icon size={18} color={isSelected ? '#DC2626' : 'rgba(26,40,32,0.5)'}/>
