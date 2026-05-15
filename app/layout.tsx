@@ -29,9 +29,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${outfit.variable} ${mono.variable} ${outfit.className}`}>
-        <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#09090C]">
+        <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#F2EFE9]">
           {children}
           <Toaster position="top-center" richColors />
         </div>

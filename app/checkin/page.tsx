@@ -82,39 +82,39 @@ Rules:
   const AIAvatar = ({ size = 30 }: { size?: number }) => (
     <div style={{
       width: size, height: size, borderRadius: '50%', flexShrink: 0,
-      background: 'linear-gradient(135deg, rgba(252,181,70,0.28), rgba(240,144,32,0.12))',
-      border: '1px solid rgba(252,181,70,0.28)',
+      background: 'linear-gradient(135deg, rgba(92,139,116,0.22), rgba(61,107,88,0.1))',
+      border: '1.5px solid rgba(92,139,116,0.3)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      boxShadow: '0 2px 8px rgba(252,181,70,0.12)',
+      boxShadow: '0 2px 8px rgba(92,139,116,0.1)',
     }}>
-      <Heart size={size * 0.42} color="#fcb546" fill="rgba(252,181,70,0.35)"/>
+      <Heart size={size * 0.42} color="#5C8B74" fill="rgba(92,139,116,0.3)"/>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#07070E', display: 'flex', flexDirection: 'column', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', flexDirection: 'column', paddingBottom: '80px' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(26,40,32,0.07)', display: 'flex', alignItems: 'center', gap: '12px', background: '#F2EFE9' }}>
         <motion.button
           whileTap={{ scale: 0.9 }}
           transition={spring}
           onClick={() => router.push('/dashboard')}
-          style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+          style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.09)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 1px 4px rgba(26,40,32,0.06)' }}
         >
-          <ArrowLeft size={15} color="rgba(237,234,224,0.5)"/>
+          <ArrowLeft size={15} color="rgba(26,40,32,0.5)"/>
         </motion.button>
         <div style={{ flex: 1 }}>
-          <h1 style={{ color: '#EDEAE0', fontWeight: 800, fontSize: '17px', letterSpacing: '-0.5px' }}>Daily Check-in</h1>
-          <p style={{ color: 'rgba(237,234,224,0.28)', fontSize: '12px', marginTop: '1px' }}>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+          <h1 style={{ color: '#1A2820', fontWeight: 800, fontSize: '17px', letterSpacing: '-0.5px' }}>Daily Check-in</h1>
+          <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px', marginTop: '1px' }}>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(128,239,128,0.07)', border: '1px solid rgba(128,239,128,0.16)', borderRadius: '99px', padding: '5px 10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '99px', padding: '5px 10px' }}>
           <motion.div
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#80EF80' }}
+            style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#5C8B74' }}
           />
-          <span style={{ color: '#80EF80', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600 }}>Live</span>
+          <span style={{ color: '#5C8B74', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600 }}>Live</span>
         </div>
       </div>
 
@@ -134,13 +134,13 @@ Rules:
                 maxWidth: '78%', padding: '12px 16px',
                 borderRadius: m.role === 'user' ? '20px 20px 5px 20px' : '5px 20px 20px 20px',
                 background: m.role === 'user'
-                  ? 'linear-gradient(135deg, #fcb546 0%, #f09020 100%)'
-                  : 'rgba(255,255,255,0.06)',
-                border: m.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                  ? '#FFD3AC'
+                  : '#FFFFFF',
+                border: m.role === 'user' ? 'none' : '1px solid rgba(26,40,32,0.08)',
                 boxShadow: m.role === 'user'
-                  ? '0 4px 16px rgba(252,181,70,0.2), inset 0 1px 0 rgba(255,255,255,0.15)'
-                  : '0 2px 10px rgba(0,0,0,0.3)',
-                color: m.role === 'user' ? '#07070E' : 'rgba(237,234,224,0.88)',
+                  ? '0 3px 12px rgba(196,107,48,0.15)'
+                  : '0 2px 8px rgba(26,40,32,0.06)',
+                color: m.role === 'user' ? '#6B2E00' : 'rgba(26,40,32,0.82)',
                 fontSize: '14px', lineHeight: 1.6,
                 fontWeight: m.role === 'user' ? 600 : 400,
               }}>
@@ -158,11 +158,11 @@ Rules:
             style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}
           >
             <AIAvatar/>
-            <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', padding: '14px 18px', borderRadius: '5px 20px 20px 20px', display: 'flex', gap: '5px', alignItems: 'center', boxShadow: '0 2px 10px rgba(0,0,0,0.28)' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.08)', padding: '14px 18px', borderRadius: '5px 20px 20px 20px', display: 'flex', gap: '5px', alignItems: 'center', boxShadow: '0 2px 8px rgba(26,40,32,0.06)' }}>
               {[0,1,2].map(i => (
                 <motion.div
                   key={i}
-                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(237,234,224,0.3)' }}
+                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(26,40,32,0.22)' }}
                   animate={{ opacity: [0.25, 1, 0.25], y: [0, -3, 0] }}
                   transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
                 />
@@ -176,18 +176,18 @@ Rules:
             initial={{ opacity: 0, scale: 0.92, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ ...spring, bounce: 0.3 }}
-            style={{ background: 'rgba(128,239,128,0.04)', border: '1px solid rgba(128,239,128,0.18)', borderRadius: '20px', padding: '24px 20px', textAlign: 'center', margin: '8px 0', boxShadow: '0 8px 32px rgba(128,239,128,0.06)' }}
+            style={{ background: 'rgba(92,139,116,0.06)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '20px', padding: '24px 20px', textAlign: 'center', margin: '8px 0', boxShadow: '0 4px 20px rgba(92,139,116,0.08)' }}
           >
-            <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(128,239,128,0.1)', border: '1px solid rgba(128,239,128,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-              <Check size={24} color="#80EF80" strokeWidth={2.5}/>
+            <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(92,139,116,0.12)', border: '1px solid rgba(92,139,116,0.24)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+              <Check size={24} color="#5C8B74" strokeWidth={2.5}/>
             </div>
-            <p style={{ color: '#80EF80', fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
-            <p style={{ color: 'rgba(237,234,224,0.28)', fontSize: '12px', marginBottom: '18px' }}>Your responses have been saved</p>
+            <p style={{ color: '#3D6B58', fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
+            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px', marginBottom: '18px' }}>Your responses have been saved</p>
             <motion.button
               whileTap={{ scale: 0.97, y: 1 }}
               transition={spring}
               onClick={() => router.push('/dashboard')}
-              style={{ background: 'linear-gradient(135deg, #fcb546, #f09020)', color: '#07070E', fontWeight: 800, fontSize: '14px', padding: '14px 24px', borderRadius: '14px', border: 'none', cursor: 'pointer', width: '100%', boxShadow: '0 6px 20px rgba(252,181,70,0.22), inset 0 1px 0 rgba(255,255,255,0.18)' }}
+              style={{ background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 800, fontSize: '14px', padding: '14px 24px', borderRadius: '14px', border: 'none', cursor: 'pointer', width: '100%', boxShadow: '0 6px 20px rgba(92,139,116,0.22)' }}
             >
               Back to dashboard
             </motion.button>
@@ -206,7 +206,7 @@ Rules:
               whileTap={{ scale: 0.95 }}
               transition={spring}
               onClick={() => setInput(r)}
-              style={{ flexShrink: 0, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '99px', padding: '9px 16px', color: 'rgba(237,234,224,0.6)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ flexShrink: 0, background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.1)', borderRadius: '99px', padding: '9px 16px', color: 'rgba(26,40,32,0.6)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(26,40,32,0.05)' }}
             >
               {r}
             </motion.button>
@@ -218,9 +218,9 @@ Rules:
       {!done && (
         <div style={{
           padding: '8px 16px 14px',
-          borderTop: `1px solid ${focused ? 'rgba(252,181,70,0.15)' : 'rgba(255,255,255,0.05)'}`,
+          borderTop: `1px solid ${focused ? 'rgba(92,139,116,0.2)' : 'rgba(26,40,32,0.07)'}`,
           display: 'flex', gap: '8px', alignItems: 'center',
-          background: 'rgba(7,7,14,0.7)',
+          background: 'rgba(242,239,233,0.9)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
           transition: 'border-color 0.18s ease',
@@ -234,15 +234,16 @@ Rules:
             placeholder="How are you feeling..."
             style={{
               flex: 1,
-              background: 'rgba(255,255,255,0.05)',
-              border: `1px solid ${focused ? 'rgba(252,181,70,0.28)' : 'rgba(255,255,255,0.08)'}`,
+              background: '#FFFFFF',
+              border: `1.5px solid ${focused ? 'rgba(92,139,116,0.4)' : 'rgba(26,40,32,0.09)'}`,
               borderRadius: '14px',
               padding: '13px 16px',
-              color: '#EDEAE0',
+              color: '#1A2820',
               fontSize: '14px',
               outline: 'none',
-              transition: 'border-color 0.18s ease',
+              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
               fontFamily: 'inherit',
+              boxShadow: focused ? '0 0 0 3px rgba(92,139,116,0.1)' : '0 1px 3px rgba(26,40,32,0.04)',
             }}
           />
           <motion.button
@@ -252,17 +253,17 @@ Rules:
             disabled={loading || !input.trim()}
             style={{
               width: '46px', height: '46px',
-              background: input.trim() ? 'linear-gradient(135deg, #fcb546, #f09020)' : 'rgba(255,255,255,0.05)',
+              background: input.trim() ? 'linear-gradient(135deg, #5C8B74, #3D6B58)' : 'rgba(26,40,32,0.06)',
               borderRadius: '14px', border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: input.trim() ? '0 4px 14px rgba(252,181,70,0.28)' : 'none',
+              boxShadow: input.trim() ? '0 4px 14px rgba(92,139,116,0.25)' : 'none',
               transition: 'background 0.2s ease, box-shadow 0.2s ease',
             }}
           >
             {loading
-              ? <Loader2 size={16} color={input.trim() ? '#07070E' : 'rgba(237,234,224,0.3)'} className="animate-spin"/>
-              : <Send size={16} color={input.trim() ? '#07070E' : 'rgba(237,234,224,0.3)'}/>
+              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : 'rgba(26,40,32,0.3)'} className="animate-spin"/>
+              : <Send size={16} color={input.trim() ? '#FFFFFF' : 'rgba(26,40,32,0.3)'}/>
             }
           </motion.button>
         </div>

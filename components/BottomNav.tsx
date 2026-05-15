@@ -21,15 +21,20 @@ export default function BottomNav() {
 
   return (
     <nav style={{
-      position: 'fixed', bottom: 0,
-      left: '50%', transform: 'translateX(-50%)',
-      width: '100%', maxWidth: '430px',
-      background: 'rgba(7,7,14,0.88)',
-      backdropFilter: 'blur(24px)',
-      WebkitBackdropFilter: 'blur(24px)',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
-      padding: '8px 4px 24px',
-      zIndex: 50
+      position: 'fixed',
+      bottom: '16px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: 'calc(100% - 32px)',
+      maxWidth: '380px',
+      background: 'rgba(255,255,255,0.88)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      borderRadius: '24px',
+      border: '1px solid rgba(26,40,32,0.08)',
+      padding: '8px 6px',
+      zIndex: 50,
+      boxShadow: '0 4px 24px rgba(26,40,32,0.1), 0 1px 4px rgba(26,40,32,0.06)',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
         {tabs.map(tab => {
@@ -40,17 +45,17 @@ export default function BottomNav() {
               whileTap={{ scale: 0.88 }}
               transition={spring}
               onClick={() => router.push(tab.href)}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', position: 'relative', minWidth: '60px' }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', padding: '7px 14px', background: 'none', border: 'none', cursor: 'pointer', position: 'relative', minWidth: '56px' }}
             >
               {active && (
                 <motion.div
                   layoutId="nav-active"
-                  style={{ position: 'absolute', inset: 0, background: 'rgba(252,181,70,0.07)', borderRadius: '12px', border: '1px solid rgba(252,181,70,0.14)' }}
+                  style={{ position: 'absolute', inset: 0, background: 'rgba(92,139,116,0.1)', borderRadius: '14px', border: '1px solid rgba(92,139,116,0.18)' }}
                   transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                 />
               )}
-              <tab.icon size={20} color={active ? '#fcb546' : 'rgba(237,234,224,0.28)'}/>
-              <span style={{ fontSize: '10px', fontWeight: 700, color: active ? '#fcb546' : 'rgba(237,234,224,0.28)', letterSpacing: '0.1px', fontFamily: 'inherit' }}>
+              <tab.icon size={20} color={active ? '#5C8B74' : 'rgba(26,40,32,0.28)'}/>
+              <span style={{ fontSize: '10px', fontWeight: 700, color: active ? '#5C8B74' : 'rgba(26,40,32,0.28)', letterSpacing: '0.1px', fontFamily: 'inherit', position: 'relative', zIndex: 1 }}>
                 {tab.label}
               </span>
             </motion.button>
