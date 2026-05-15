@@ -165,10 +165,10 @@ Rules:
       {messages.length === 1 && !done && (
         <div style={{ padding: '8px 16px 4px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
           {QUICK_REPLIES.map(r => (
-            <button key={r} onClick={() => setInput(r)}
-              style={{ flexShrink: 0, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '99px', padding: '9px 16px', color: 'rgba(237,234,224,0.6)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+            <motion.button key={r} whileTap={{ scale: 0.95 }} onClick={() => setInput(r)}
+              style={{ flexShrink: 0, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '99px', padding: '9px 16px', color: 'rgba(237,234,224,0.6)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap' }}>
               {r}
-            </button>
+            </motion.button>
           ))}
         </div>
       )}

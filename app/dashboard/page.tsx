@@ -131,7 +131,7 @@ export default function Dashboard() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
 
           {/* Check-in card */}
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/checkin')} style={{
+          <motion.button whileTap={{ scale: 0.97 }} whileHover={{ y: -1 }} onClick={() => router.push('/checkin')} style={{
             background: checkinToday ? 'rgba(128,239,128,0.05)' : '#0D0D1A',
             border: `1px solid ${checkinToday ? 'rgba(128,239,128,0.2)' : 'rgba(255,255,255,0.07)'}`,
             borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer',
@@ -152,7 +152,7 @@ export default function Dashboard() {
           </motion.button>
 
           {/* Recovery card */}
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/timeline')} style={{
+          <motion.button whileTap={{ scale: 0.97 }} whileHover={{ y: -1 }} onClick={() => router.push('/timeline')} style={{
             background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)',
             borderRadius: '20px', padding: '16px', textAlign: 'left', cursor: 'pointer',
             boxShadow: '0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
@@ -165,8 +165,10 @@ export default function Dashboard() {
                   <p style={{ color: 'rgba(237,234,224,0.25)', fontSize: '11px', fontWeight: 500 }}>/ 12 wks</p>
                 </div>
                 <div style={{ height: '5px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <motion.div initial={{ width: 0 }} animate={{ width: `${recoveryPct}%` }} transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}
-                    style={{ height: '100%', background: 'linear-gradient(90deg, #fcb546, #f09020)', borderRadius: '99px' }}/>
+                  <motion.div
+                    initial={{ scaleX: 0 }} animate={{ scaleX: recoveryPct / 100 }}
+                    transition={{ duration: 1, delay: 0.4, ease: [0.25, 1, 0.5, 1] }}
+                    style={{ height: '100%', width: '100%', background: 'linear-gradient(90deg, #fcb546, #f09020)', borderRadius: '99px', transformOrigin: 'left' }}/>
                 </div>
               </>
             ) : (
@@ -176,7 +178,7 @@ export default function Dashboard() {
         </div>
 
         {/* Medications */}
-        <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/medications')} style={{
+        <motion.button whileTap={{ scale: 0.97 }} whileHover={{ y: -1 }} onClick={() => router.push('/medications')} style={{
           background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)',
           borderRadius: '20px', padding: '16px 18px', textAlign: 'left', cursor: 'pointer', width: '100%',
           boxShadow: '0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
@@ -212,7 +214,7 @@ export default function Dashboard() {
 
         {/* Transport + Care team */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/transport')} style={{
+          <motion.button whileTap={{ scale: 0.97 }} whileHover={{ y: -1 }} onClick={() => router.push('/transport')} style={{
             background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)',
             borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left',
             boxShadow: '0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
@@ -224,7 +226,7 @@ export default function Dashboard() {
             <p style={{ color: 'rgba(237,234,224,0.28)', fontSize: '11px' }}>Community transport</p>
           </motion.button>
 
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/appointments')} style={{
+          <motion.button whileTap={{ scale: 0.97 }} whileHover={{ y: -1 }} onClick={() => router.push('/appointments')} style={{
             background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)',
             borderRadius: '20px', padding: '16px', cursor: 'pointer', textAlign: 'left',
             boxShadow: '0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
