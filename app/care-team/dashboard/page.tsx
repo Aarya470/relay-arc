@@ -1,12 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { RefreshCw, LogOut, ChevronRight } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar } from 'lucide-react'
 import { toast } from 'sonner'
 import { Skeleton } from '@/components/ui/skeleton'
 import Groq from 'groq-sdk'
+import JitsiMeeting from '@/components/JitsiMeeting'
 
 const groq = new Groq({
   apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!,
@@ -19,12 +20,45 @@ export default function CareTeamDashboard() {
   const [emergencies, setEmergencies] = useState<any[]>([])
   const [medLogs, setMedLogs] = useState<any[]>([])
   const [summaries, setSummaries] = useState<Record<string, any>>({})
+  const [appointments, setAppointments] = useState<any[]>([])
   const [careTeamMember, setCareTeamMember] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
+  const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
+  const [activeCall, setActiveCall] = useState<any>(null)
+  const notifiedRef = useRef<Set<string>>(new Set())
   const router = useRouter()
 
   useEffect(() => { load() }, [])
+
+  useEffect(() => {
+    if (!careTeamMember) return
+    const check = async () => {
+      const { data } = await supabase.from('appointments').select('*').eq('status', 'confirmed')
+      if (!data) return
+      const now = Date.now()
+      const upcoming = data.find(a => {
+        if (!a.meeting_room_id) return false
+        const t = new Date(a.scheduled_at).getTime()
+        return t > now - 5 * 60 * 1000 && t < now + 15 * 60 * 1000
+      })
+      setUpcomingMeeting(upcoming || null)
+      if (upcoming && !notifiedRef.current.has(upcoming.id)) {
+        notifiedRef.current.add(upcoming.id)
+        if ('Notification' in window && Notification.permission === 'granted') {
+          const t = new Date(upcoming.scheduled_at).getTime()
+          const min = Math.round((t - now) / 60000)
+          const patient = patients.find(p => p.id === upcoming.patient_id)
+          new Notification('Meeting starting soon', {
+            body: `Call with ${patient?.full_name || 'patient'} starts ${min > 0 ? `in ${min} min` : 'now'}.`,
+          })
+        }
+      }
+    }
+    check()
+    const id = setInterval(check, 30000)
+    return () => clearInterval(id)
+  }, [careTeamMember, patients])
 
   const load = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -34,18 +68,20 @@ export default function CareTeamDashboard() {
     if (!member) { router.push('/care-team/login'); return }
     setCareTeamMember(member)
 
-    const [{ data: p }, { data: c }, { data: e }, { data: ml }, { data: s }] = await Promise.all([
+    const [{ data: p }, { data: c }, { data: e }, { data: ml }, { data: s }, { data: appts }] = await Promise.all([
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
       supabase.from('checkins').select('*').order('created_at', { ascending: false }),
       supabase.from('emergencies').select('*').order('created_at', { ascending: false }),
       supabase.from('medication_logs').select('*').order('taken_at', { ascending: false }),
       supabase.from('patient_summaries').select('*'),
+      supabase.from('appointments').select('*').order('scheduled_at', { ascending: true }),
     ])
 
     setPatients(p || [])
     setCheckins(c || [])
     setEmergencies(e || [])
     setMedLogs(ml || [])
+    setAppointments(appts || [])
 
     const map: Record<string, any> = {}
     s?.forEach(sum => { map[sum.patient_id] = sum })
@@ -117,6 +153,33 @@ Score 1-4: stable, no major issues`
     toast.success('All patients analyzed')
   }
 
+  const handleMeetingEnd = async (appointmentId: string) => {
+    await supabase.from('appointments').update({ status: 'completed' }).eq('id', appointmentId)
+    setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
+    setActiveCall(null)
+    setUpcomingMeeting(null)
+    toast.success('Call ended — appointment marked complete')
+  }
+
+  const confirmAppointment = async (id: string) => {
+    await supabase.from('appointments').update({ status: 'confirmed' }).eq('id', id)
+    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'confirmed' } : a))
+    toast.success('Appointment confirmed')
+  }
+
+  const declineAppointment = async (id: string) => {
+    await supabase.from('appointments').update({ status: 'declined' }).eq('id', id)
+    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'declined' } : a))
+    toast('Appointment declined')
+  }
+
+  const isJoinable = (a: any) => {
+    if (a.status !== 'confirmed' || !a.meeting_room_id) return false
+    const t = new Date(a.scheduled_at).getTime()
+    const now = Date.now()
+    return now >= t - 10 * 60 * 1000 && now <= t + 60 * 60 * 1000
+  }
+
   const getStatusColor = (score: number) => {
     if (score >= 8) return '#FF4A42'
     if (score >= 5) return '#fcb546'
@@ -141,6 +204,43 @@ Score 1-4: stable, no major issues`
 
   return (
     <div style={{ minHeight: '100vh', background: '#060610', paddingBottom: '32px' }}>
+
+      {/* Meeting notification banner */}
+      <AnimatePresence>
+        {upcomingMeeting && !activeCall && (
+          <motion.div
+            initial={{ y: -80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -80, opacity: 0 }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #1a3a6e, #4A9EF5)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(74,158,245,0.3)' }}
+          >
+            <div>
+              <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
+                {new Date(upcomingMeeting.scheduled_at) <= new Date() ? 'Live now' : 'Starting soon'}
+              </p>
+              <p style={{ color: 'white', fontWeight: 700, fontSize: '14px' }}>
+                Patient call with {patients.find(p => p.id === upcomingMeeting.patient_id)?.full_name?.split(' ')[0] || 'patient'}
+              </p>
+            </div>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => setActiveCall(upcomingMeeting)}
+              style={{ background: 'white', color: '#1a3a6e', fontWeight: 700, fontSize: '12px', padding: '10px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+              <Video size={13} />
+              Join now
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Jitsi overlay */}
+      <AnimatePresence>
+        {activeCall && (
+          <JitsiMeeting
+            roomId={activeCall.meeting_room_id}
+            displayName={careTeamMember?.full_name || 'Care Team'}
+            onEnd={() => handleMeetingEnd(activeCall.id)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -188,6 +288,87 @@ Score 1-4: stable, no major issues`
           </motion.button>
         )}
       </div>
+
+      {/* Appointments section */}
+      {(() => {
+        const pending = appointments.filter(a => a.status === 'pending')
+        const upcoming = appointments.filter(a => {
+          if (a.status !== 'confirmed') return false
+          const t = new Date(a.scheduled_at).getTime()
+          return t > Date.now() - 60 * 60 * 1000 && t < Date.now() + 24 * 60 * 60 * 1000
+        })
+        if (pending.length === 0 && upcoming.length === 0) return null
+        return (
+          <div style={{ padding: '12px 16px 0' }}>
+            <p style={{ color: 'rgba(74,158,245,0.6)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>
+              Appointments
+            </p>
+
+            {pending.map(a => {
+              const patient = patients.find(p => p.id === a.patient_id)
+              return (
+                <div key={a.id} style={{ background: 'rgba(252,181,70,0.06)', border: '1px solid rgba(252,181,70,0.2)', borderRadius: '14px', padding: '14px', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <Clock size={13} color="#fcb546"/>
+                    <p style={{ color: 'white', fontWeight: 600, fontSize: '13px', flex: 1 }}>
+                      {patient?.full_name || 'Patient'} — <span style={{ color: '#fcb546' }}>Pending</span>
+                    </p>
+                  </div>
+                  {a.scheduled_at && (
+                    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', marginBottom: '10px' }}>
+                      {new Date(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    </p>
+                  )}
+                  {a.patient_concern && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '10px' }}>{a.patient_concern}</p>}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <motion.button whileTap={{ scale: 0.95 }} onClick={() => confirmAppointment(a.id)}
+                      style={{ flex: 1, background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.25)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}>
+                      <Check size={13} color="#80EF80"/>
+                      <span style={{ color: '#80EF80', fontSize: '12px', fontWeight: 600 }}>Confirm</span>
+                    </motion.button>
+                    <motion.button whileTap={{ scale: 0.95 }} onClick={() => declineAppointment(a.id)}
+                      style={{ flex: 1, background: 'rgba(255,74,66,0.08)', border: '1px solid rgba(255,74,66,0.2)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                      <span style={{ color: '#FF4A42', fontSize: '12px', fontWeight: 600 }}>Decline</span>
+                    </motion.button>
+                  </div>
+                </div>
+              )
+            })}
+
+            {upcoming.map(a => {
+              const patient = patients.find(p => p.id === a.patient_id)
+              const joinable = isJoinable(a)
+              return (
+                <div key={a.id} style={{ background: joinable ? 'rgba(74,158,245,0.08)' : '#111116', border: `1px solid ${joinable ? 'rgba(74,158,245,0.3)' : 'rgba(128,239,128,0.15)'}`, borderRadius: '14px', padding: '14px', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Calendar size={13} color="#80EF80"/>
+                      <p style={{ color: 'white', fontWeight: 600, fontSize: '13px' }}>{patient?.full_name || 'Patient'}</p>
+                    </div>
+                    {joinable && (
+                      <span style={{ background: 'rgba(74,158,245,0.15)', border: '1px solid rgba(74,158,245,0.3)', color: '#4A9EF5', fontSize: '9px', fontFamily: 'monospace', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        Now
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', marginBottom: joinable ? '10px' : 0 }}>
+                    {new Date(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                  </p>
+                  {joinable && (
+                    <motion.button whileTap={{ scale: 0.97 }}
+                      onClick={() => setActiveCall(a)}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#4A9EF5', borderRadius: '10px', padding: '10px', color: 'white', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer' }}
+                    >
+                      <Video size={14}/>
+                      Join call with {patient?.full_name?.split(' ')[0]}
+                    </motion.button>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )
+      })()}
 
       {/* Patient list */}
       <div style={{ padding: '16px' }}>
@@ -237,7 +418,12 @@ Score 1-4: stable, no major issues`
               {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <p style={{ color: 'white', fontWeight: 600, fontSize: '14px' }}>{patient.full_name}</p>
+                  <p style={{ color: appointments.some(a => a.patient_id === patient.id && a.status === 'pending') ? '#fcb546' : 'white', fontWeight: 600, fontSize: '14px' }}>{patient.full_name}</p>
+                  {appointments.some(a => a.patient_id === patient.id && a.status === 'pending') && (
+                    <span style={{ background: 'rgba(252,181,70,0.15)', color: '#fcb546', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
+                      APPT REQUEST
+                    </span>
+                  )}
                   {hasActiveEmergency && (
                     <span style={{ background: 'rgba(255,74,66,0.2)', color: '#FF4A42', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
                       SOS ACTIVE

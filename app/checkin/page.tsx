@@ -176,7 +176,7 @@ Rules:
             initial={{ opacity: 0, scale: 0.92, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ ...spring, bounce: 0.3 }}
-            style={{ background: 'rgba(92,139,116,0.06)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '20px', padding: '24px 20px', textAlign: 'center', margin: '8px 0', boxShadow: '0 4px 20px rgba(92,139,116,0.08)' }}
+            style={{ background: 'rgba(92,139,116,0.06)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '4px 20px 20px 20px', padding: '24px 20px', textAlign: 'center', margin: '8px 0', boxShadow: '0 4px 20px rgba(92,139,116,0.08)' }}
           >
             <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(92,139,116,0.12)', border: '1px solid rgba(92,139,116,0.24)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
               <Check size={24} color="#5C8B74" strokeWidth={2.5}/>

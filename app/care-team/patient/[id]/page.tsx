@@ -4,7 +4,8 @@ import { supabase } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Phone, Calendar, Send, X, Check, AlertTriangle } from 'lucide-react'
+import { ArrowLeft, Phone, Calendar, Send, X, Check, AlertTriangle, Video, ChevronLeft, ChevronRight } from 'lucide-react'
+import JitsiMeeting from '@/components/JitsiMeeting'
 import Groq from 'groq-sdk'
 
 const groq = new Groq({
@@ -34,6 +35,10 @@ export default function PatientDetail() {
   const [loading, setLoading] = useState(true)
   const [aiSummary, setAiSummary] = useState('')
   const [generatingSummary, setGeneratingSummary] = useState(false)
+  const [activeCall, setActiveCall] = useState<any>(null)
+  const [reschedulingAppt, setReschedulingAppt] = useState<any>(null)
+  const [rescheduleDate, setRescheduleDate] = useState('')
+  const [rescheduleTime, setRescheduleTime] = useState('09:00')
 
   // Calendar state must be declared before any conditional returns
   const today = new Date()
@@ -121,13 +126,15 @@ Keep everything simple and plain English. No medical jargon.`
       ? new Date(`${selectedDate}T${selectedTime}`).toISOString()
       : new Date().toISOString()
 
+    const meetingRoomId = crypto.randomUUID().replace(/-/g, '')
     const { data, error } = await supabase.from('appointments').insert({
       patient_id: patientId,
       care_team_id: careTeamMember?.id,
       type: appointmentType,
       status: 'confirmed',
       scheduled_at: scheduledAt,
-      notes: appointmentConcern
+      notes: appointmentConcern,
+      meeting_room_id: meetingRoomId,
     }).select().single()
 
     if (!error && data) {
@@ -135,6 +142,42 @@ Keep everything simple and plain English. No medical jargon.`
       setShowSchedule(false)
       toast.success(appointmentType === 'immediate' ? 'Immediate call scheduled' : 'Appointment confirmed')
     }
+  }
+
+  const confirmAppointment = async (id: string) => {
+    await supabase.from('appointments').update({ status: 'confirmed' }).eq('id', id)
+    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'confirmed' } : a))
+    toast.success('Appointment confirmed')
+  }
+
+  const declineAppointment = async (id: string) => {
+    await supabase.from('appointments').update({ status: 'declined' }).eq('id', id)
+    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'declined' } : a))
+    toast('Appointment declined')
+  }
+
+  const rescheduleAppointment = async () => {
+    if (!reschedulingAppt || !rescheduleDate) return
+    const newDate = new Date(`${rescheduleDate}T${rescheduleTime}`).toISOString()
+    await supabase.from('appointments').update({ scheduled_at: newDate, status: 'confirmed' }).eq('id', reschedulingAppt.id)
+    setAppointments(prev => prev.map(a => a.id === reschedulingAppt.id ? { ...a, scheduled_at: newDate, status: 'confirmed' } : a))
+    setReschedulingAppt(null)
+    setRescheduleDate('')
+    toast.success('Appointment rescheduled and confirmed')
+  }
+
+  const handleMeetingEnd = async (appointmentId: string) => {
+    await supabase.from('appointments').update({ status: 'completed' }).eq('id', appointmentId)
+    setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
+    setActiveCall(null)
+    toast.success('Call ended — appointment marked complete')
+  }
+
+  const isJoinable = (a: any) => {
+    if (a.status !== 'confirmed' || !a.meeting_room_id) return false
+    const t = new Date(a.scheduled_at).getTime()
+    const now = Date.now()
+    return now >= t - 10 * 60 * 1000 && now <= t + 60 * 60 * 1000
   }
 
   const times: string[] = []
@@ -154,6 +197,48 @@ Keep everything simple and plain English. No medical jargon.`
 
   return (
     <div style={{ minHeight: '100vh', background: '#060610', paddingBottom: '40px' }}>
+
+      {/* Jitsi overlay */}
+      <AnimatePresence>
+        {activeCall && (
+          <JitsiMeeting
+            roomId={activeCall.meeting_room_id}
+            displayName={careTeamMember?.full_name || 'Care Team'}
+            onEnd={() => handleMeetingEnd(activeCall.id)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Reschedule sheet */}
+      <AnimatePresence>
+        {reschedulingAppt && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 150, display: 'flex', alignItems: 'flex-end' }}
+            onClick={e => { if (e.target === e.currentTarget) setReschedulingAppt(null) }}>
+            <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', stiffness: 340, damping: 28 }}
+              style={{ background: '#111116', borderRadius: '24px 24px 0 0', padding: '24px 20px 48px', width: '100%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <p style={{ color: 'white', fontWeight: 700, fontSize: '18px' }}>Reschedule appointment</p>
+                <button onClick={() => setReschedulingAppt(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                  <X size={20} color="rgba(255,255,255,0.4)" />
+                </button>
+              </div>
+              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>New date</p>
+              <input type="date" value={rescheduleDate} onChange={e => setRescheduleDate(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+                style={{ width: '100%', background: '#18181F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '13px 16px', color: 'white', fontSize: '14px', outline: 'none', marginBottom: '12px' }} />
+              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>New time</p>
+              <input type="time" value={rescheduleTime} onChange={e => setRescheduleTime(e.target.value)}
+                style={{ width: '100%', background: '#18181F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '13px 16px', color: 'white', fontSize: '14px', outline: 'none', marginBottom: '20px' }} />
+              <motion.button whileTap={{ scale: 0.97 }} onClick={rescheduleAppointment}
+                disabled={!rescheduleDate}
+                style={{ width: '100%', background: rescheduleDate ? '#4A9EF5' : 'rgba(255,255,255,0.08)', color: rescheduleDate ? 'white' : 'rgba(255,255,255,0.3)', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: rescheduleDate ? 'pointer' : 'default' }}>
+                Confirm reschedule
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -366,24 +451,64 @@ Keep everything simple and plain English. No medical jargon.`
                 <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13px' }}>No appointments yet</p>
               </div>
             )}
-            {appointments.map((appt, i) => (
-              <div key={i} style={{ background: '#111116', border: `1px solid ${appt.status === 'confirmed' ? 'rgba(128,239,128,0.2)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '14px', padding: '14px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <span style={{ color: appt.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '13px', fontWeight: 600 }}>
-                    {appt.type === 'immediate' ? '🚨 Immediate call' : '📅 Scheduled visit'}
-                  </span>
-                  <span style={{ color: appt.status === 'confirmed' ? '#80EF80' : '#fcb546', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase' }}>
-                    {appt.status}
-                  </span>
+            {appointments.map((appt, i) => {
+              const joinable = isJoinable(appt)
+              return (
+                <div key={i} style={{ background: joinable ? 'rgba(74,158,245,0.06)' : '#111116', border: `1px solid ${joinable ? 'rgba(74,158,245,0.25)' : appt.status === 'confirmed' ? 'rgba(128,239,128,0.2)' : appt.status === 'declined' ? 'rgba(255,74,66,0.15)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '14px', padding: '14px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <span style={{ color: appt.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '13px', fontWeight: 600 }}>
+                      {appt.type === 'immediate' ? '🚨 Immediate call' : '📅 Scheduled visit'}
+                    </span>
+                    <span style={{
+                      color: appt.status === 'confirmed' ? '#80EF80' : appt.status === 'declined' ? '#FF4A42' : '#fcb546',
+                      fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase'
+                    }}>
+                      {appt.status}
+                    </span>
+                  </div>
+                  {appt.scheduled_at && (
+                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '4px' }}>
+                      {new Date(appt.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    </p>
+                  )}
+                  {(appt.notes || appt.patient_concern) && (
+                    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', marginBottom: '10px' }}>
+                      {appt.notes || appt.patient_concern}
+                    </p>
+                  )}
+                  {appt.status === 'pending' && (
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => confirmAppointment(appt.id)}
+                        style={{ flex: 1, background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.25)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}>
+                        <Check size={13} color="#80EF80"/>
+                        <span style={{ color: '#80EF80', fontSize: '12px', fontWeight: 600 }}>Confirm</span>
+                      </motion.button>
+                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setReschedulingAppt(appt); setRescheduleDate(''); setRescheduleTime('09:00') }}
+                        style={{ flex: 1, background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.2)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        <span style={{ color: '#4A9EF5', fontSize: '12px', fontWeight: 600 }}>Reschedule</span>
+                      </motion.button>
+                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => declineAppointment(appt.id)}
+                        style={{ width: '40px', background: 'rgba(255,74,66,0.08)', border: '1px solid rgba(255,74,66,0.2)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
+                        <X size={13} color="#FF4A42"/>
+                      </motion.button>
+                    </div>
+                  )}
+                  {appt.status === 'confirmed' && !joinable && (
+                    <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setReschedulingAppt(appt); setRescheduleDate(''); setRescheduleTime('09:00') }}
+                      style={{ marginTop: '10px', background: 'rgba(74,158,245,0.08)', border: '1px solid rgba(74,158,245,0.18)', borderRadius: '10px', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                      <span style={{ color: '#4A9EF5', fontSize: '12px', fontWeight: 600 }}>Reschedule</span>
+                    </motion.button>
+                  )}
+                  {joinable && (
+                    <motion.button whileTap={{ scale: 0.97 }} onClick={() => setActiveCall(appt)}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#4A9EF5', borderRadius: '10px', padding: '11px', color: 'white', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer', marginTop: '10px' }}>
+                      <Video size={14}/>
+                      Join call
+                    </motion.button>
+                  )}
                 </div>
-                {appt.scheduled_at && (
-                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '4px' }}>
-                    {new Date(appt.scheduled_at).toLocaleString()}
-                  </p>
-                )}
-                {appt.notes && <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>{appt.notes}</p>}
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>

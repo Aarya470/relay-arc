@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, Car, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2 } from 'lucide-react'
+import { AlertCircle, Car, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video } from 'lucide-react'
 
 const spring = { type: 'spring', stiffness: 340, damping: 24 } as const
 const springFast = { type: 'spring', stiffness: 420, damping: 22 } as const
@@ -42,12 +42,15 @@ export default function Dashboard() {
   const [profile, setProfile] = useState<any>(null)
   const [checkins, setCheckins] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState('')
+  const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
+      setUserId(user.id)
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       if (!data) { router.push('/onboarding'); return }
       const { data: c } = await supabase.from('checkins').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(3)
@@ -58,6 +61,24 @@ export default function Dashboard() {
     }
     load()
   }, [])
+
+  useEffect(() => {
+    if (!userId) return
+    const check = async () => {
+      const { data } = await supabase.from('appointments').select('*').eq('patient_id', userId).eq('status', 'confirmed')
+      if (!data) return
+      const now = Date.now()
+      const upcoming = data.find(a => {
+        if (!a.meeting_room_id) return false
+        const t = new Date(a.scheduled_at).getTime()
+        return t > now - 5 * 60 * 1000 && t < now + 15 * 60 * 1000
+      })
+      setUpcomingMeeting(upcoming || null)
+    }
+    check()
+    const id = setInterval(check, 30000)
+    return () => clearInterval(id)
+  }, [userId])
 
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
@@ -79,6 +100,31 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px', position: 'relative', overflow: 'hidden' }}>
+
+      {/* Meeting notification banner */}
+      <AnimatePresence>
+        {upcomingMeeting && (
+          <motion.div
+            initial={{ y: -80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -80, opacity: 0 }}
+            transition={spring}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #3D6B58, #5C8B74)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(92,139,116,0.35)' }}
+          >
+            <div>
+              <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
+                {new Date(upcomingMeeting.scheduled_at) <= new Date() ? 'Live now' : 'Starting soon'}
+              </p>
+              <p style={{ color: 'white', fontWeight: 700, fontSize: '14px' }}>Your care team call is ready</p>
+            </div>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => router.push('/appointments')}
+              style={{ background: 'white', color: '#3D6B58', fontWeight: 700, fontSize: '12px', padding: '10px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+              <Video size={13} />
+              Join now
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Decorative background shapes */}
       <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '320px', height: '320px', background: 'radial-gradient(circle, rgba(255,211,172,0.5) 0%, transparent 65%)', pointerEvents: 'none' }}/>
@@ -152,10 +198,11 @@ export default function Dashboard() {
             style={{
               width: '100%',
               background: 'linear-gradient(135deg, #E8322A 0%, #B01C1C 100%)',
-              borderRadius: '28px', padding: '22px 24px', border: 'none', cursor: 'pointer',
+              clipPath: 'polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)',
+              padding: '22px 24px', border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               position: 'relative', overflow: 'hidden',
-              boxShadow: '0 14px 40px rgba(232,50,42,0.3), 0 4px 12px rgba(232,50,42,0.18), inset 0 1px 0 rgba(255,255,255,0.14)',
+              filter: 'drop-shadow(0 14px 40px rgba(232,50,42,0.3)) drop-shadow(0 4px 12px rgba(232,50,42,0.18))',
             }}
           >
             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%)', pointerEvents: 'none' }}/>
@@ -198,7 +245,7 @@ export default function Dashboard() {
                 ? 'linear-gradient(145deg, #E0F0E8 0%, #FFFFFF 100%)'
                 : '#FFFFFF',
               border: `1.5px solid ${checkinToday ? 'rgba(92,139,116,0.28)' : 'rgba(26,40,32,0.08)'}`,
-              borderRadius: '24px', padding: '18px 16px', textAlign: 'left', cursor: 'pointer',
+              borderRadius: '28px 6px 28px 28px', padding: '18px 16px', textAlign: 'left', cursor: 'pointer',
               boxShadow: checkinToday ? '0 4px 18px rgba(92,139,116,0.14)' : '0 2px 10px rgba(26,40,32,0.06)',
               position: 'relative', overflow: 'hidden',
             }}
@@ -228,7 +275,7 @@ export default function Dashboard() {
                 ? 'linear-gradient(145deg, #FFECD8 0%, #FFFFFF 100%)'
                 : '#FFFFFF',
               border: `1.5px solid ${weeksSinceSurgery !== null ? 'rgba(196,107,48,0.2)' : 'rgba(26,40,32,0.08)'}`,
-              borderRadius: '24px', padding: '18px 16px', textAlign: 'left', cursor: 'pointer',
+              borderRadius: '6px 28px 28px 28px', padding: '18px 16px', textAlign: 'left', cursor: 'pointer',
               boxShadow: weeksSinceSurgery !== null ? '0 4px 18px rgba(196,107,48,0.1)' : '0 2px 10px rgba(26,40,32,0.06)',
               position: 'relative', overflow: 'hidden',
             }}
@@ -271,7 +318,7 @@ export default function Dashboard() {
                 ? 'linear-gradient(145deg, rgba(92,139,116,0.07) 0%, #FFFFFF 55%)'
                 : '#FFFFFF',
               border: '1.5px solid rgba(26,40,32,0.07)',
-              borderRadius: '22px', padding: '18px', textAlign: 'left', cursor: 'pointer', width: '100%',
+              borderRadius: '6px 6px 24px 24px', padding: '18px', textAlign: 'left', cursor: 'pointer', width: '100%',
               boxShadow: '0 2px 12px rgba(26,40,32,0.06)',
             }}
           >
@@ -313,7 +360,7 @@ export default function Dashboard() {
             style={{
               background: 'linear-gradient(135deg, rgba(59,130,246,0.08) 0%, #FFFFFF 70%)',
               border: '1.5px solid rgba(59,130,246,0.16)',
-              borderRadius: '22px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
+              borderRadius: '24px 24px 24px 6px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
               display: 'flex', alignItems: 'center', gap: '16px',
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
             }}
@@ -336,7 +383,7 @@ export default function Dashboard() {
             style={{
               background: 'linear-gradient(135deg, rgba(92,139,116,0.09) 0%, #FFFFFF 70%)',
               border: '1.5px solid rgba(92,139,116,0.18)',
-              borderRadius: '22px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
+              borderRadius: '24px 24px 6px 24px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
               display: 'flex', alignItems: 'center', gap: '16px',
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
             }}
@@ -360,7 +407,7 @@ export default function Dashboard() {
             style={{
               background: 'linear-gradient(145deg, rgba(255,211,172,0.14) 0%, #FFFFFF 60%)',
               border: '1.5px solid rgba(196,107,48,0.12)',
-              borderRadius: '20px', padding: '16px 18px',
+              borderRadius: '4px 24px 24px 24px', padding: '16px 18px',
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
               position: 'relative', overflow: 'hidden',
             }}

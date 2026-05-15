@@ -160,7 +160,7 @@ export default function Medications() {
         </div>
 
         {/* Progress */}
-        <div style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.07)', borderRadius: '16px', padding: '14px 16px', boxShadow: '0 1px 6px rgba(26,40,32,0.05)' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.07)', borderRadius: '4px 20px 20px 20px', padding: '14px 16px', boxShadow: '0 1px 6px rgba(26,40,32,0.05)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
             <p style={{ color: '#1A2820', fontSize: '13px', fontWeight: 600 }}>{takenCount} of {totalDoses} doses taken</p>
             <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)' }}>{Math.round(progress)}%</p>
@@ -298,7 +298,7 @@ export default function Medications() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: medIndex * 0.05, ...spring }}
-            style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.07)', borderRadius: '20px', marginBottom: '12px', overflow: 'hidden', boxShadow: '0 2px 10px rgba(26,40,32,0.05)' }}
+            style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.07)', borderRadius: medIndex % 2 === 0 ? '20px 4px 20px 20px' : '4px 20px 20px 20px', marginBottom: '12px', overflow: 'hidden', boxShadow: '0 2px 10px rgba(26,40,32,0.05)' }}
           >
             {/* Med header */}
             <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
