@@ -9,11 +9,16 @@
 body {
   background: #07070E;
   color: #EDEAE0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-sans), 'Outfit', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: 'ss01' on, 'cv09' on, 'tnum' on;
+  font-feature-settings: 'ss01' on, 'tnum' on;
+}
+
+.font-mono,
+code, kbd, pre {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
 }
 
 ::-webkit-scrollbar { width: 0px; }

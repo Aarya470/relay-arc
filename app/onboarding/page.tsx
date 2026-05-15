@@ -4,15 +4,15 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, ArrowRight, Plus, X, Loader2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Plus, X, Loader2, Heart, Zap, Brain, Activity, HeartPulse } from 'lucide-react'
 
 const CONDITIONS = [
-  { id: 'Post-cardiac surgery', icon: '🫀', desc: 'Bypass, valve, ablation, device' },
-  { id: 'POTS', icon: '⚡', desc: 'Postural orthostatic tachycardia' },
-  { id: 'Dysautonomia', icon: '🧠', desc: 'Autonomic nervous system disorder' },
-  { id: 'ME/CFS', icon: '😔', desc: 'Myalgic encephalomyelitis' },
-  { id: 'General cardiac', icon: '💓', desc: 'Arrhythmia, CHF, other' },
-  { id: 'Other', icon: '＋', desc: 'Other condition' },
+  { id: 'Post-cardiac surgery', Icon: Heart, desc: 'Bypass, valve, ablation, device' },
+  { id: 'POTS', Icon: Zap, desc: 'Postural orthostatic tachycardia' },
+  { id: 'Dysautonomia', Icon: Brain, desc: 'Autonomic nervous system disorder' },
+  { id: 'ME/CFS', Icon: Activity, desc: 'Myalgic encephalomyelitis' },
+  { id: 'General cardiac', Icon: HeartPulse, desc: 'Arrhythmia, CHF, other' },
+  { id: 'Other', Icon: Plus, desc: 'Other condition' },
 ]
 
 export default function Onboarding() {
@@ -151,24 +151,30 @@ export default function Onboarding() {
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
-                {CONDITIONS.map(c => (
-                  <motion.button
-                    key={c.id}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => toggleCondition(c.id)}
-                    className={`p-4 rounded-2xl text-left border transition-all ${
-                      form.diagnosis.includes(c.id)
-                        ? 'bg-[#fcb546]/8 border-[#fcb546]/40'
-                        : 'bg-[#18181F] border-white/8 hover:border-white/15'
-                    }`}
-                  >
-                    <span className="text-2xl block mb-2">{c.icon}</span>
-                    <p className={`font-semibold text-sm mb-0.5 ${form.diagnosis.includes(c.id) ? 'text-[#fcb546]' : 'text-white'}`}>
-                      {c.id}
-                    </p>
-                    <p className="text-white/30 text-xs">{c.desc}</p>
-                  </motion.button>
-                ))}
+                {CONDITIONS.map(c => {
+                  const active = form.diagnosis.includes(c.id)
+                  return (
+                    <motion.button
+                      key={c.id}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                      onClick={() => toggleCondition(c.id)}
+                      className={`p-4 rounded-2xl text-left border transition-all ${
+                        active
+                          ? 'bg-[#fcb546]/8 border-[#fcb546]/40'
+                          : 'bg-[#18181F] border-white/8 hover:border-white/15'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-2.5 ${active ? 'bg-[#fcb546]/15' : 'bg-white/6'}`}>
+                        <c.Icon size={16} color={active ? '#fcb546' : 'rgba(237,234,224,0.4)'}/>
+                      </div>
+                      <p className={`font-semibold text-sm mb-0.5 tracking-tight ${active ? 'text-[#fcb546]' : 'text-white'}`}>
+                        {c.id}
+                      </p>
+                      <p className="text-white/30 text-xs leading-relaxed">{c.desc}</p>
+                    </motion.button>
+                  )
+                })}
               </div>
 
               <input className={inputClass} placeholder="Surgery date if applicable (YYYY-MM-DD)" value={form.surgery_date} onChange={e => update('surgery_date', e.target.value)}/>

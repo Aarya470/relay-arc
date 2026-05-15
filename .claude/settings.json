@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(not exist *)",
+      "Bash(mkdir -p \"/mnt/c/Users/aarya/.claude/skills/emil-design-eng\")",
+      "Edit(~/.claude/skills/emil-design-eng/**)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "PowerShell($raw = gh api repos/Leonxlnx/taste-skill/contents/skills/taste-skill/SKILL.md --jq '.content'; [System.Text.Encoding]::UTF8.GetString\\([Convert]::FromBase64String\\($raw -replace \"`n\",\"\"\\)\\))",
+      "Bash(gh api *)",
+      "Bash(curl -s \"https://api.github.com/repos/Leonxlnx/taste-skill/contents/skills/taste-skill/SKILL.md\")",
+      "Bash(python3 -c \"import sys,json,base64; d=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(d['content']\\).decode\\(\\)\\)\")",
+      "Bash(mkdir -p \"/mnt/c/Users/aarya/.claude/skills/taste-skill\")",
+      "Bash(mkdir -p \"/mnt/c/Users/aarya/.claude/skills/redesign-skill\")",
+      "Edit(~/.claude/skills/taste-skill/**)",
+      "Edit(~/.claude/skills/redesign-skill/**)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\aarya\\\\relay-arc\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(npx next *)"
+    ],
+    "additionalDirectories": [
+      "\\mnt\\c\\Users\\aarya\\.claude\\skills",
+      "C:\\Users\\aarya\\.claude\\skills"
+    ]
+  }
+}

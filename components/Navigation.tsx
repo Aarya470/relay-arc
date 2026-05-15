@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Polyline, useMap, Circle } from 'react
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
-// Icons
+// note: leaflet icons use HTML strings so we keep SVG inline rather than React components
 const userIcon = L.divIcon({
   className: '',
   html: `<div style="
@@ -25,10 +25,10 @@ const hospitalIcon = L.divIcon({
     background:#80EF80;
     border-radius:8px;
     display:flex;align-items:center;justify-content:center;
-    font-size:18px;
+    font-size:13px;font-weight:700;color:#07070E;letter-spacing:-0.5px;
     box-shadow:0 4px 12px rgba(128,239,128,0.4);
     border:2px solid white;
-  ">H</div>`,
+  ">ER</div>`,
   iconSize: [36, 36],
   iconAnchor: [18, 36],
 })
@@ -62,8 +62,8 @@ function TurnIcon({ type }: { type: string }) {
   else if (t.includes('sharp left')) arrow = '↙'
   else if (t.includes('sharp right')) arrow = '↘'
   else if (t.includes('u-turn')) arrow = '↩'
-  else if (t.includes('arrive') || t.includes('destination')) arrow = '🏥'
-  return <span style={{ fontSize: '28px', lineHeight: 1 }}>{arrow}</span>
+  else if (t.includes('arrive') || t.includes('destination')) arrow = '+'
+  return <span style={{ fontSize: '24px', lineHeight: 1, fontFamily: 'monospace', fontWeight: 700 }}>{arrow}</span>
 }
 
 // Auto-follow map
@@ -208,9 +208,13 @@ export default function Navigation({ hospital }: { hospital: any }) {
       alignItems: 'center', justifyContent: 'center',
       padding: '24px', gap: '16px'
     }}>
-      <div style={{ fontSize: '64px' }}>🏥</div>
-      <p style={{ color: '#80EF80', fontSize: '24px', fontWeight: 700 }}>You have arrived</p>
-      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', textAlign: 'center' }}>
+      <div style={{ width: '72px', height: '72px', borderRadius: '20px', background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#80EF80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+      </div>
+      <p style={{ color: '#80EF80', fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px' }}>You have arrived</p>
+      <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px', textAlign: 'center', lineHeight: 1.55 }}>
         {hospital.name} — the ER team is ready for you
       </p>
     </div>
