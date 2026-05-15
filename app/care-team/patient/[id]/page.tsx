@@ -126,7 +126,7 @@ Keep everything simple and plain English. No medical jargon.`
       ? new Date(`${selectedDate}T${selectedTime}`).toISOString()
       : new Date().toISOString()
 
-    const meetingRoomId = crypto.randomUUID().replace(/-/g, '')
+    const meetingRoomId = ([1e7]as any+(-1e3)+(-4e3)+(-8e3)+(-1e11)).replace(/[018]/g,(c:any)=>(c^(Math.random()*16>>c/4)).toString(16))
     const { data, error } = await supabase.from('appointments').insert({
       patient_id: patientId,
       care_team_id: careTeamMember?.id,

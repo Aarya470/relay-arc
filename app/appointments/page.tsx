@@ -199,8 +199,8 @@ export default function Appointments() {
   }
 
   const request = async () => {
-    if (!canSubmit) return
-    const meetingRoomId = crypto.randomUUID().replace(/-/g, '')
+    if (!canSubmit || !userId) return
+    const meetingRoomId = ([1e7]as any+(-1e3)+(-4e3)+(-8e3)+(-1e11)).replace(/[018]/g,(c:any)=>(c^(Math.random()*16>>c/4)).toString(16))
     const { data, error } = await supabase.from('appointments').insert({
       patient_id: userId,
       type,
@@ -209,7 +209,8 @@ export default function Appointments() {
       patient_concern: concern,
       meeting_room_id: meetingRoomId,
     }).select().single()
-    if (!error && data) {
+    if (error) { toast.error(error.message); return }
+    if (data) {
       setAppointments(prev => [data, ...prev])
       setShowRequest(false)
       setConcern('')
