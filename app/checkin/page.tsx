@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import Groq from 'groq-sdk'
-import { ArrowLeft, Send, Loader2 } from 'lucide-react'
+import { ArrowLeft, Send, Loader2, Heart, Check } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
 
 const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!, dangerouslyAllowBrowser: true })
@@ -72,44 +72,58 @@ Rules:
 
   const QUICK_REPLIES = ['Feeling good!', 'A bit tired', 'Not great today', 'Some discomfort']
 
+  const AIAvatar = ({ size = 30 }: { size?: number }) => (
+    <div style={{
+      width: size, height: size, borderRadius: '50%', flexShrink: 0,
+      background: 'linear-gradient(135deg, rgba(252,181,70,0.3), rgba(240,144,32,0.15))',
+      border: '1px solid rgba(252,181,70,0.3)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      boxShadow: '0 2px 8px rgba(252,181,70,0.15)'
+    }}>
+      <Heart size={size * 0.42} color="#fcb546" fill="rgba(252,181,70,0.4)"/>
+    </div>
+  )
+
   return (
     <div style={{ minHeight: '100vh', background: '#07070E', display: 'flex', flexDirection: 'column', paddingBottom: '80px' }}>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/dashboard')}
-          style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <ArrowLeft size={15} color="rgba(237,234,224,0.5)"/>
         </motion.button>
         <div style={{ flex: 1 }}>
-          <h1 style={{ color: '#EDEAE0', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px' }}>Daily Check-in</h1>
-          <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '12px' }}>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+          <h1 style={{ color: '#EDEAE0', fontWeight: 700, fontSize: '17px', letterSpacing: '-0.4px' }}>Daily Check-in</h1>
+          <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '12px', marginTop: '1px' }}>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(128,239,128,0.08)', border: '1px solid rgba(128,239,128,0.18)', borderRadius: '99px', padding: '4px 10px' }}>
-          <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(128,239,128,0.07)', border: '1px solid rgba(128,239,128,0.18)', borderRadius: '99px', padding: '5px 10px' }}>
+          <motion.div animate={{ opacity: [1, 0.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }}
             style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#80EF80' }}/>
-          <span style={{ color: '#80EF80', fontSize: '10px', fontFamily: 'monospace' }}>Live</span>
+          <span style={{ color: '#80EF80', fontSize: '10px', fontFamily: 'monospace', fontWeight: 600 }}>Live</span>
         </div>
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 8px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 16px 8px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <AnimatePresence initial={false}>
           {messages.map((m, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
+            <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, type: 'spring', stiffness: 300, damping: 28 }}
               style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '8px', alignItems: 'flex-end' }}>
-              {m.role === 'ai' && (
-                <div style={{ width: '28px', height: '28px', borderRadius: '10px', background: 'rgba(252,181,70,0.12)', border: '1px solid rgba(252,181,70,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: '12px' }}>♥</span>
-                </div>
-              )}
+              {m.role === 'ai' && <AIAvatar/>}
               <div style={{
-                maxWidth: '78%', padding: '12px 14px', borderRadius: m.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                background: m.role === 'user' ? 'linear-gradient(135deg, #fcb546, #f09020)' : 'rgba(255,255,255,0.05)',
-                border: m.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.07)',
-                color: m.role === 'user' ? '#07070E' : 'rgba(237,234,224,0.85)',
-                fontSize: '14px', lineHeight: 1.55,
-                fontWeight: m.role === 'user' ? 600 : 400
+                maxWidth: '78%', padding: '12px 16px',
+                borderRadius: m.role === 'user' ? '20px 20px 5px 20px' : '5px 20px 20px 20px',
+                background: m.role === 'user'
+                  ? 'linear-gradient(135deg, #fcb546 0%, #f09020 100%)'
+                  : 'rgba(255,255,255,0.06)',
+                border: m.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.09)',
+                color: m.role === 'user' ? '#07070E' : 'rgba(237,234,224,0.88)',
+                fontSize: '14px', lineHeight: 1.6,
+                fontWeight: m.role === 'user' ? 600 : 400,
+                boxShadow: m.role === 'user'
+                  ? '0 4px 16px rgba(252,181,70,0.22)'
+                  : '0 2px 10px rgba(0,0,0,0.35)'
               }}>
                 {m.text}
               </div>
@@ -118,29 +132,27 @@ Rules:
         </AnimatePresence>
 
         {loading && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '10px', background: 'rgba(252,181,70,0.12)', border: '1px solid rgba(252,181,70,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: '12px' }}>♥</span>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', padding: '12px 16px', borderRadius: '18px 18px 18px 4px', display: 'flex', gap: '4px', alignItems: 'center' }}>
+          <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}>
+            <AIAvatar/>
+            <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)', padding: '14px 18px', borderRadius: '5px 20px 20px 20px', display: 'flex', gap: '5px', alignItems: 'center', boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
               {[0,1,2].map(i => (
-                <motion.div key={i} style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(237,234,224,0.4)' }}
-                  animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}/>
+                <motion.div key={i} style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(237,234,224,0.35)' }}
+                  animate={{ opacity: [0.25, 1, 0.25], y: [0, -2, 0] }} transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.18 }}/>
               ))}
             </div>
           </motion.div>
         )}
 
         {done && (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-            style={{ background: 'rgba(128,239,128,0.06)', border: '1px solid rgba(128,239,128,0.18)', borderRadius: '18px', padding: '20px', textAlign: 'center', margin: '8px 0' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(128,239,128,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
-              <span style={{ fontSize: '18px' }}>✓</span>
+          <motion.div initial={{ opacity: 0, scale: 0.92, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ type: 'spring', bounce: 0.3 }}
+            style={{ background: 'rgba(128,239,128,0.05)', border: '1px solid rgba(128,239,128,0.2)', borderRadius: '20px', padding: '24px 20px', textAlign: 'center', margin: '8px 0', boxShadow: '0 8px 32px rgba(128,239,128,0.08)' }}>
+            <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+              <Check size={24} color="#80EF80" strokeWidth={2.5}/>
             </div>
-            <p style={{ color: '#80EF80', fontWeight: 700, fontSize: '15px', marginBottom: '4px' }}>Check-in complete</p>
-            <p style={{ color: 'rgba(237,234,224,0.35)', fontSize: '12px', marginBottom: '14px' }}>Your responses have been saved</p>
+            <p style={{ color: '#80EF80', fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
+            <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '12px', marginBottom: '18px' }}>Your responses have been saved</p>
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/dashboard')}
-              style={{ background: 'linear-gradient(135deg, #fcb546, #f09020)', color: '#07070E', fontWeight: 700, fontSize: '14px', padding: '12px 24px', borderRadius: '12px', border: 'none', cursor: 'pointer', width: '100%' }}>
+              style={{ background: 'linear-gradient(135deg, #fcb546, #f09020)', color: '#07070E', fontWeight: 700, fontSize: '14px', padding: '14px 24px', borderRadius: '14px', border: 'none', cursor: 'pointer', width: '100%', boxShadow: '0 6px 20px rgba(252,181,70,0.25)' }}>
               Back to dashboard
             </motion.button>
           </motion.div>
@@ -151,10 +163,10 @@ Rules:
 
       {/* Quick replies */}
       {messages.length === 1 && !done && (
-        <div style={{ padding: '8px 16px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
+        <div style={{ padding: '8px 16px 4px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
           {QUICK_REPLIES.map(r => (
             <button key={r} onClick={() => setInput(r)}
-              style={{ flexShrink: 0, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '99px', padding: '8px 14px', color: 'rgba(237,234,224,0.55)', fontSize: '12px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              style={{ flexShrink: 0, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '99px', padding: '9px 16px', color: 'rgba(237,234,224,0.6)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
               {r}
             </button>
           ))}
@@ -163,13 +175,13 @@ Rules:
 
       {/* Input */}
       {!done && (
-        <div style={{ padding: '8px 16px 12px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '8px', alignItems: 'flex-end' }}>
+        <div style={{ padding: '8px 16px 14px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '8px', alignItems: 'center', background: 'rgba(7,7,14,0.6)', backdropFilter: 'blur(12px)' }}>
           <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()}
             placeholder="How are you feeling..."
-            style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '14px 16px', color: '#EDEAE0', fontSize: '14px', outline: 'none' }}/>
+            style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '14px', padding: '13px 16px', color: '#EDEAE0', fontSize: '14px', outline: 'none', transition: 'border-color 0.2s' }}/>
           <motion.button whileTap={{ scale: 0.9 }} onClick={sendMessage} disabled={loading || !input.trim()}
-            style={{ width: '46px', height: '46px', background: input.trim() ? 'linear-gradient(135deg, #fcb546, #f09020)' : 'rgba(255,255,255,0.05)', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            {loading ? <Loader2 size={16} color="#07070E" className="animate-spin"/> : <Send size={16} color={input.trim() ? '#07070E' : 'rgba(237,234,224,0.3)'}/>}
+            style={{ width: '46px', height: '46px', background: input.trim() ? 'linear-gradient(135deg, #fcb546, #f09020)' : 'rgba(255,255,255,0.05)', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: input.trim() ? '0 4px 14px rgba(252,181,70,0.3)' : 'none', transition: 'all 0.2s' }}>
+            {loading ? <Loader2 size={16} color={input.trim() ? '#07070E' : 'rgba(237,234,224,0.3)'} className="animate-spin"/> : <Send size={16} color={input.trim() ? '#07070E' : 'rgba(237,234,224,0.3)'}/>}
           </motion.button>
         </div>
       )}
