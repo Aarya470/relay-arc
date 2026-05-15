@@ -3,6 +3,7 @@ import { Fredoka, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
+import MeetingAlert from '@/components/MeetingAlert'
 
 const fredoka = Fredoka({
   subsets: ['latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className={`${fredoka.variable} ${mono.variable} ${fredoka.className}`}>
         <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#F2EFE9]">
           {children}
+          <MeetingAlert />
           <Toaster position="top-center" richColors />
         </div>
       </body>

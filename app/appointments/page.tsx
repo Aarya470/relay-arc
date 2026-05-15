@@ -149,6 +149,19 @@ export default function Appointments() {
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission()
       }
+      // Handle ?join=ROOM_ID deep-link from push notification
+      const params = new URLSearchParams(window.location.search)
+      const joinId = params.get('join')
+      if (joinId) {
+        window.history.replaceState({}, '', window.location.pathname)
+        const { data: appt } = await supabase
+          .from('appointments')
+          .select('*')
+          .eq('meeting_room_id', joinId)
+          .eq('patient_id', user.id)
+          .single()
+        if (appt) setActiveCall(appt)
+      }
     }
     load()
   }, [])
