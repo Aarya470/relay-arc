@@ -139,18 +139,14 @@ function RoutingPage() {
 
   const cancelEmergency = async () => {
     setCancelling(true)
-    const id = activeEmergencyId.current
-    if (id) {
-      await supabase.from('emergencies').update({ status: 'resolved' }).eq('id', id)
-    } else {
-      // fallback: resolve by user
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await supabase.from('emergencies')
-          .update({ status: 'resolved' })
-          .eq('user_id', user.id)
-          .eq('status', 'active')
-      }
+    // Always cancel ALL active emergencies for this user — not just one by ID.
+    // This prevents an infinite loop if multiple rows were created accidentally.
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      await supabase.from('emergencies')
+        .update({ status: 'resolved' })
+        .eq('user_id', user.id)
+        .eq('status', 'active')
     }
     lockedRef.current = false
     router.push('/dashboard')

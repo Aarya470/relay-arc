@@ -37,6 +37,13 @@ export default function Emergency() {
     const { data: { user } } = await supabase.auth.getUser()
     let emergencyId = ''
     if (user) {
+      // Resolve any lingering active emergencies before creating a new one
+      // so there is always at most 1 active emergency per user.
+      await supabase.from('emergencies')
+        .update({ status: 'resolved' })
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+
       const { data } = await supabase
         .from('emergencies')
         .insert({ user_id: user.id, emergency_type: type, status: 'active' })
