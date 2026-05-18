@@ -131,6 +131,11 @@ Keep everything simple and plain English. No medical jargon.`
       ? new Date(`${selectedDate}T${selectedTime}`).toISOString()
       : new Date().toISOString()
 
+    if (appointmentType === 'scheduled' && new Date(scheduledAt) <= new Date()) {
+      toast.error('Please pick a future date and time')
+      return
+    }
+
     const meetingRoomId = ([1e7]as any+(-1e3)+(-4e3)+(-8e3)+(-1e11)).replace(/[018]/g,(c:any)=>(c^(Math.random()*16>>c/4)).toString(16))
     const { data, error } = await supabase.from('appointments').insert({
       patient_id: patientId,
@@ -164,6 +169,10 @@ Keep everything simple and plain English. No medical jargon.`
   const rescheduleAppointment = async () => {
     if (!reschedulingAppt || !rescheduleDate) return
     const newDate = new Date(`${rescheduleDate}T${rescheduleTime}`).toISOString()
+    if (new Date(newDate) <= new Date()) {
+      toast.error('Please pick a future date and time')
+      return
+    }
     await supabase.from('appointments').update({ scheduled_at: newDate, status: 'confirmed' }).eq('id', reschedulingAppt.id)
     setAppointments(prev => prev.map(a => a.id === reschedulingAppt.id ? { ...a, scheduled_at: newDate, status: 'confirmed' } : a))
     setReschedulingAppt(null)

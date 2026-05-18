@@ -19,6 +19,20 @@ function parseTS(ts: string) {
   return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
 }
 
+// Mark confirmed appointments as missed if they're >30 min overdue.
+// Returns the transformed array and fires a DB update (fire-and-forget).
+function processAndMarkMissed(appts: any[]): any[] {
+  const now = Date.now()
+  const missedIds = appts
+    .filter(a => a.status === 'confirmed' && parseTS(a.scheduled_at).getTime() < now - 30 * 60 * 1000)
+    .map(a => a.id)
+  if (missedIds.length > 0) {
+    supabase.from('appointments').update({ status: 'missed' }).in('id', missedIds)
+    return appts.map(a => missedIds.includes(a.id) ? { ...a, status: 'missed' } : a)
+  }
+  return appts
+}
+
 export default function CareTeamDashboard() {
   const [patients, setPatients] = useState<any[]>([])
   const [checkins, setCheckins] = useState<any[]>([])
@@ -93,7 +107,7 @@ export default function CareTeamDashboard() {
         supabase.from('emergencies').select('*').order('created_at', { ascending: false }),
       ])
       if (p) setPatients(p)
-      if (appts) setAppointments(appts)
+      if (appts) setAppointments(processAndMarkMissed(appts))
       if (em) setEmergencies(em)
     }
     const id = setInterval(silentRefresh, 25000)
@@ -122,7 +136,7 @@ export default function CareTeamDashboard() {
     setCheckins(c || [])
     setEmergencies(e || [])
     setMedLogs(ml || [])
-    setAppointments(appts || [])
+    setAppointments(processAndMarkMissed(appts || []))
     setActiveEmergencies(activeEm || [])
 
     const map: Record<string, any> = {}

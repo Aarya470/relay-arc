@@ -20,10 +20,21 @@ for (let h = 6; h <= 21; h++) {
   if (h < 21) ALL_TIMES.push(`${h12}:30 ${ampm}`)
 }
 
-// Supabase may return timestamps without tz suffix; treat bare datetimes as UTC
 function parseTS(ts: string) {
   if (!ts) return new Date()
   return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
+}
+
+function processAndMarkMissed(appts: any[]): any[] {
+  const now = Date.now()
+  const missedIds = appts
+    .filter(a => a.status === 'confirmed' && parseTS(a.scheduled_at).getTime() < now - 30 * 60 * 1000)
+    .map(a => a.id)
+  if (missedIds.length > 0) {
+    supabase.from('appointments').update({ status: 'missed' }).in('id', missedIds)
+    return appts.map(a => missedIds.includes(a.id) ? { ...a, status: 'missed' } : a)
+  }
+  return appts
 }
 
 function parseTimeTo24h(label: string) {
@@ -150,7 +161,7 @@ export default function Appointments() {
         supabase.from('appointments').select('*').eq('patient_id', user.id).order('scheduled_at', { ascending: false }),
       ])
       setProfile(p)
-      setAppointments(a || [])
+      setAppointments(processAndMarkMissed(a || []))
       setLoading(false)
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission()
@@ -208,7 +219,23 @@ export default function Appointments() {
     return d.toISOString()
   }
 
-  const canSubmit = type === 'immediate' || selectedDay !== null
+  const scheduledInPast = (() => {
+    if (!selectedDay) return false
+    const { hour, min } = parseTimeTo24h(selectedTime)
+    const d = new Date(selectedDay)
+    d.setHours(hour, min, 0, 0)
+    return d <= new Date()
+  })()
+
+  const canSubmit = type === 'immediate' || (selectedDay !== null && !scheduledInPast)
+
+  const requestAgain = (appt: any) => {
+    supabase.from('appointments').update({ status: 'cancelled' }).eq('id', appt.id)
+    setAppointments(prev => prev.filter(a => a.id !== appt.id))
+    setConcern(appt.patient_concern || '')
+    setType('scheduled')
+    setShowRequest(true)
+  }
 
   const isJoinable = (a: any) => {
     if (a.status !== 'confirmed' || !a.meeting_room_id) return false
@@ -254,9 +281,9 @@ export default function Appointments() {
     : null
 
   const statusStyle = (status: string) => ({
-    color: status === 'confirmed' ? '#3D6B58' : status === 'completed' ? 'rgba(26,40,32,0.4)' : status === 'declined' ? '#E8322A' : 'rgba(26,40,32,0.4)',
-    background: status === 'confirmed' ? 'rgba(92,139,116,0.1)' : status === 'declined' ? 'rgba(232,50,42,0.08)' : 'rgba(26,40,32,0.05)',
-    border: `1px solid ${status === 'confirmed' ? 'rgba(92,139,116,0.22)' : status === 'declined' ? 'rgba(232,50,42,0.15)' : 'rgba(26,40,32,0.1)'}`,
+    color: status === 'confirmed' ? '#3D6B58' : status === 'completed' ? 'rgba(26,40,32,0.4)' : (status === 'declined' || status === 'missed') ? '#E8322A' : 'rgba(26,40,32,0.4)',
+    background: status === 'confirmed' ? 'rgba(92,139,116,0.1)' : (status === 'declined' || status === 'missed') ? 'rgba(232,50,42,0.08)' : 'rgba(26,40,32,0.05)',
+    border: `1px solid ${status === 'confirmed' ? 'rgba(92,139,116,0.22)' : (status === 'declined' || status === 'missed') ? 'rgba(232,50,42,0.15)' : 'rgba(26,40,32,0.1)'}`,
     fontSize: '9px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase' as const, letterSpacing: '1px',
     padding: '2px 7px', borderRadius: '99px',
   })
@@ -377,6 +404,12 @@ export default function Appointments() {
                   Join video call
                 </motion.button>
               )}
+              {a.status === 'missed' && (
+                <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => requestAgain(a)}
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(92,139,116,0.07)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '12px', padding: '12px', color: '#3D6B58', fontWeight: 700, fontSize: '13px', cursor: 'pointer', marginTop: '8px' }}>
+                  Request a new time
+                </motion.button>
+              )}
             </motion.div>
           )
         })}
@@ -423,6 +456,11 @@ export default function Appointments() {
                         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} transition={spring}>
                           <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Select a time</p>
                           <TimeScrollPicker value={selectedTime} onChange={setSelectedTime} />
+                          {scheduledInPast && (
+                            <p style={{ color: '#E8322A', fontSize: '12px', marginTop: '8px', textAlign: 'center' }}>
+                              This time has already passed — pick a future time
+                            </p>
+                          )}
                         </motion.div>
                       )}
                     </AnimatePresence>
