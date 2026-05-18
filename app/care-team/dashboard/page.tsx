@@ -66,7 +66,7 @@ export default function CareTeamDashboard() {
     return () => clearInterval(id)
   }, [careTeamMember, patients])
 
-  // Poll for active patient emergencies every 15 seconds
+  // Poll active emergencies every 8 seconds — fast enough to feel real-time
   useEffect(() => {
     if (!careTeamMember) return
     const checkEmergencies = async () => {
@@ -76,13 +76,29 @@ export default function CareTeamDashboard() {
         .eq('status', 'active')
         .order('created_at', { ascending: false })
       setActiveEmergencies(data || [])
-      if (!data) return
-      // No toast/notification spam — red card highlight handles the alert
     }
     checkEmergencies()
-    const id = setInterval(checkEmergencies, 15000)
+    const id = setInterval(checkEmergencies, 8000)
     return () => clearInterval(id)
-  }, [careTeamMember, patients])
+  }, [careTeamMember])
+
+  // Silent background refresh — updates appointments + patient list every 25 seconds
+  // without showing the loading spinner so the UI doesn't flash
+  useEffect(() => {
+    if (!careTeamMember) return
+    const silentRefresh = async () => {
+      const [{ data: p }, { data: appts }, { data: em }] = await Promise.all([
+        supabase.from('profiles').select('*').order('created_at', { ascending: false }),
+        supabase.from('appointments').select('*').order('scheduled_at', { ascending: true }),
+        supabase.from('emergencies').select('*').order('created_at', { ascending: false }),
+      ])
+      if (p) setPatients(p)
+      if (appts) setAppointments(appts)
+      if (em) setEmergencies(em)
+    }
+    const id = setInterval(silentRefresh, 25000)
+    return () => clearInterval(id)
+  }, [careTeamMember])
 
   const load = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -475,9 +491,19 @@ Score 1-4: stable, no major issues`
 
               {/* Status badge + chevron */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                <span style={{ background: `${color}15`, border: `1px solid ${color}25`, color, fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 600 }}>
-                  {sum ? getStatusLabel(score) : '—'}
-                </span>
+                {hasActiveEmergency ? (
+                  <motion.span
+                    animate={{ opacity: [1, 0.55, 1] }}
+                    transition={{ duration: 0.9, repeat: Infinity }}
+                    style={{ background: 'rgba(255,74,66,0.2)', border: '1px solid rgba(255,74,66,0.45)', color: '#FF4A42', fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700 }}
+                  >
+                    SOS
+                  </motion.span>
+                ) : (
+                  <span style={{ background: `${color}15`, border: `1px solid ${color}25`, color, fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 600 }}>
+                    {sum ? getStatusLabel(score) : '—'}
+                  </span>
+                )}
                 <ChevronRight size={14} color="rgba(255,255,255,0.2)"/>
               </div>
             </motion.button>

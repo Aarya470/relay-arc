@@ -56,6 +56,21 @@ export default function Dashboard() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       setUserId(user.id)
+
+      // If there's an active emergency, send patient back to the map page
+      const { data: activeEm } = await supabase
+        .from('emergencies')
+        .select('id, emergency_type')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+      if (activeEm) {
+        router.push(`/emergency/routing?type=${activeEm.emergency_type}&id=${activeEm.id}`)
+        return
+      }
+
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       if (!data) { router.push('/onboarding'); return }
       const { data: c } = await supabase.from('checkins').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(3)
