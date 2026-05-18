@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar, AlertTriangle } from 'lucide-react'
+import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar } from 'lucide-react'
 import { toast } from 'sonner'
 import { Skeleton } from '@/components/ui/skeleton'
 import Groq from 'groq-sdk'
@@ -33,7 +33,6 @@ export default function CareTeamDashboard() {
   const [activeCall, setActiveCall] = useState<any>(null)
   const [activeEmergencies, setActiveEmergencies] = useState<any[]>([])
   const notifiedRef = useRef<Set<string>>(new Set())
-  const emergencyNotifiedRef = useRef<Set<string>>(new Set())
   const router = useRouter()
 
   useEffect(() => { load() }, [])
@@ -78,19 +77,7 @@ export default function CareTeamDashboard() {
         .order('created_at', { ascending: false })
       setActiveEmergencies(data || [])
       if (!data) return
-      for (const em of data) {
-        if (!emergencyNotifiedRef.current.has(em.id)) {
-          emergencyNotifiedRef.current.add(em.id)
-          if ('Notification' in window && Notification.permission === 'granted') {
-            const patient = patients.find((p: any) => p.id === em.user_id)
-            new Notification('⚠️ Patient Emergency', {
-              body: `${patient?.full_name || 'A patient'} triggered an emergency: ${em.emergency_type?.replace('_', ' ')}`,
-              requireInteraction: true,
-            })
-          }
-          toast.error(`Emergency: ${patients.find((p: any) => p.id === em.user_id)?.full_name || 'Patient'} needs help`, { duration: 10000 })
-        }
-      }
+      // No toast/notification spam — red card highlight handles the alert
     }
     checkEmergencies()
     const id = setInterval(checkEmergencies, 15000)
@@ -231,9 +218,12 @@ Score 1-4: stable, no major issues`
     return 'Stable'
   }
 
-  const sortedPatients = [...patients].sort((a, b) =>
-    (summaries[b.id]?.priority_score || 0) - (summaries[a.id]?.priority_score || 0)
-  )
+  const sortedPatients = [...patients].sort((a, b) => {
+    const aEm = activeEmergencies.some(e => e.user_id === a.id) ? 1 : 0
+    const bEm = activeEmergencies.some(e => e.user_id === b.id) ? 1 : 0
+    if (bEm !== aEm) return bEm - aEm
+    return (summaries[b.id]?.priority_score || 0) - (summaries[a.id]?.priority_score || 0)
+  })
 
   if (loading) return (
     <div style={{ minHeight: '100vh', background: '#060610', padding: '80px 16px' }}>
@@ -279,54 +269,6 @@ Score 1-4: stable, no major issues`
             onEnd={() => handleMeetingEnd(activeCall.id)}
           />
         )}
-      </AnimatePresence>
-
-      {/* Active emergency alert banners */}
-      <AnimatePresence>
-        {activeEmergencies.map((em, i) => {
-          const patient = patients.find(p => p.id === em.user_id)
-          const typeLabel = (em.emergency_type || 'emergency').replace(/_/g, ' ')
-          const since = Math.round((Date.now() - new Date(em.created_at).getTime()) / 60000)
-          return (
-            <motion.div
-              key={em.id}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              style={{ overflow: 'hidden', position: 'relative', zIndex: 90 }}
-            >
-              <motion.button
-                whileTap={{ scale: 0.995 }}
-                onClick={() => router.push(`/care-team/patient/${em.user_id}`)}
-                style={{ width: '100%', background: 'linear-gradient(135deg, #8B0000, #C42020)', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '14px', border: 'none', cursor: 'pointer', textAlign: 'left' }}
-              >
-                <motion.div
-                  animate={{ scale: [1, 1.15, 1] }}
-                  transition={{ duration: 1.2, repeat: Infinity }}
-                  style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-                >
-                  <AlertTriangle size={18} color="white"/>
-                </motion.div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                    <motion.div animate={{ opacity: [1, 0.2, 1] }} transition={{ duration: 0.8, repeat: Infinity }}
-                      style={{ width: 6, height: 6, borderRadius: '50%', background: 'white' }}/>
-                    <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '2px' }}>
-                      Active Emergency · {since < 1 ? 'just now' : `${since}m ago`}
-                    </span>
-                  </div>
-                  <p style={{ color: 'white', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.3px' }}>
-                    {patient?.full_name || 'Patient'} — {typeLabel}
-                  </p>
-                  <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '12px', marginTop: '2px' }}>
-                    Tap to view patient profile
-                  </p>
-                </div>
-                <ChevronRight size={18} color="rgba(255,255,255,0.5)"/>
-              </motion.button>
-            </motion.div>
-          )
-        })}
       </AnimatePresence>
 
       {/* Header */}
@@ -469,10 +411,7 @@ Score 1-4: stable, no major issues`
           const sum = summaries[patient.id]
           const score = sum?.priority_score || 0
           const color = getStatusColor(score)
-          const hasActiveEmergency = emergencies.some(e =>
-            e.user_id === patient.id &&
-            Date.now() - new Date(e.created_at).getTime() < 60 * 60 * 1000
-          )
+          const hasActiveEmergency = activeEmergencies.some(e => e.user_id === patient.id)
           const lastCheckin = checkins.find(c => c.user_id === patient.id)
 
           return (
@@ -505,16 +444,21 @@ Score 1-4: stable, no major issues`
               {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <p style={{ color: appointments.some(a => a.patient_id === patient.id && a.status === 'pending') ? '#fcb546' : 'white', fontWeight: 600, fontSize: '14px' }}>{patient.full_name}</p>
+                  <p style={{ color: hasActiveEmergency ? '#FF4A42' : appointments.some(a => a.patient_id === patient.id && a.status === 'pending') ? '#fcb546' : 'white', fontWeight: hasActiveEmergency ? 800 : 600, fontSize: '14px' }}>{patient.full_name}</p>
                   {appointments.some(a => a.patient_id === patient.id && a.status === 'pending') && (
                     <span style={{ background: 'rgba(252,181,70,0.15)', color: '#fcb546', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
                       APPT REQUEST
                     </span>
                   )}
                   {hasActiveEmergency && (
-                    <span style={{ background: 'rgba(255,74,66,0.2)', color: '#FF4A42', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
-                      SOS ACTIVE
-                    </span>
+                    <motion.span
+                      animate={{ opacity: [1, 0.5, 1] }}
+                      transition={{ duration: 0.9, repeat: Infinity }}
+                      style={{ background: 'rgba(255,74,66,0.25)', color: '#FF4A42', fontSize: '9px', padding: '2px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '4px', border: '1px solid rgba(255,74,66,0.4)' }}
+                    >
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#FF4A42', display: 'inline-block' }}/>
+                      SOS
+                    </motion.span>
                   )}
                 </div>
 
