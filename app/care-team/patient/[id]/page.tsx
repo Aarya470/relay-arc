@@ -262,6 +262,27 @@ Keep everything simple and plain English. No medical jargon.`
           </div>
         </div>
 
+        {/* Active emergency banner */}
+        {emergencies.find(e => e.status === 'active') && (() => {
+          const em = emergencies.find(e => e.status === 'active')!
+          const typeLabel = (em.emergency_type || 'emergency').replace(/_/g, ' ')
+          return (
+            <motion.div
+              animate={{ opacity: [1, 0.75, 1] }}
+              transition={{ duration: 1.4, repeat: Infinity }}
+              style={{ background: 'linear-gradient(135deg, rgba(196,32,32,0.2), rgba(220,38,38,0.1))', border: '1.5px solid rgba(220,38,38,0.4)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}
+            >
+              <AlertTriangle size={20} color="#FF4A42" style={{ flexShrink: 0 }}/>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: '#FF4A42', fontWeight: 800, fontSize: '14px', letterSpacing: '-0.2px' }}>Active Emergency</p>
+                <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '12px', marginTop: '2px' }}>{typeLabel} · {new Date(em.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+              </div>
+              <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.8, repeat: Infinity }}
+                style={{ width: 10, height: 10, borderRadius: '50%', background: '#FF4A42', flexShrink: 0 }}/>
+            </motion.div>
+          )
+        })()}
+
         {/* Call + Schedule buttons */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           <motion.button whileTap={{ scale: 0.97 }}

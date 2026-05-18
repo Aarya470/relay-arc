@@ -7,6 +7,7 @@ import { Phone, ArrowLeft, CheckCircle, Navigation } from 'lucide-react'
 
 export default function EmergencyStatus() {
   const [profile, setProfile] = useState<any>(null)
+  const [activeEmergency, setActiveEmergency] = useState<any>(null)
   const [time] = useState(new Date().toLocaleTimeString())
   const router = useRouter()
 
@@ -16,6 +17,16 @@ export default function EmergencyStatus() {
       if (!user) return
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(data)
+      // Check if there's still an active emergency
+      const { data: em } = await supabase
+        .from('emergencies')
+        .select('id, emergency_type')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+      setActiveEmergency(em || null)
     }
     load()
   }, [])
@@ -52,7 +63,7 @@ export default function EmergencyStatus() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push(activeEmergency ? `/emergency/routing?type=${activeEmergency.emergency_type}&id=${activeEmergency.id}` : '/dashboard')}
             style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F8F6F2', border: '1px solid rgba(26,40,32,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <ArrowLeft size={16} color="rgba(26,40,32,0.5)"/>

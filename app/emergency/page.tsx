@@ -35,8 +35,16 @@ export default function Emergency() {
     setSelected(type)
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
-    if (user) await supabase.from('emergencies').insert({ user_id: user.id, emergency_type: type, status: 'active' })
-    setTimeout(() => router.push(`/emergency/routing?type=${type}`), 500)
+    let emergencyId = ''
+    if (user) {
+      const { data } = await supabase
+        .from('emergencies')
+        .insert({ user_id: user.id, emergency_type: type, status: 'active' })
+        .select()
+        .single()
+      emergencyId = data?.id || ''
+    }
+    setTimeout(() => router.push(`/emergency/routing?type=${type}&id=${emergencyId}`), 500)
   }
 
   return (

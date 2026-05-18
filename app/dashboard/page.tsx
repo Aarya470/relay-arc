@@ -118,7 +118,7 @@ export default function Dashboard() {
           >
             <div>
               <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
-                {new Date(upcomingMeeting.scheduled_at) <= new Date() ? 'Live now' : 'Starting soon'}
+                {parseTS(upcomingMeeting.scheduled_at) <= new Date() ? 'Live now' : 'Starting soon'}
               </p>
               <p style={{ color: 'white', fontWeight: 700, fontSize: '14px' }}>Your care team call is ready</p>
             </div>

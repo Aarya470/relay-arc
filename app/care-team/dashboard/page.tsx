@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar } from 'lucide-react'
+import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar, AlertTriangle } from 'lucide-react'
 import { toast } from 'sonner'
 import { Skeleton } from '@/components/ui/skeleton'
 import Groq from 'groq-sdk'
@@ -31,7 +31,9 @@ export default function CareTeamDashboard() {
   const [generating, setGenerating] = useState(false)
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
   const [activeCall, setActiveCall] = useState<any>(null)
+  const [activeEmergencies, setActiveEmergencies] = useState<any[]>([])
   const notifiedRef = useRef<Set<string>>(new Set())
+  const emergencyNotifiedRef = useRef<Set<string>>(new Set())
   const router = useRouter()
 
   useEffect(() => { load() }, [])
@@ -65,6 +67,36 @@ export default function CareTeamDashboard() {
     return () => clearInterval(id)
   }, [careTeamMember, patients])
 
+  // Poll for active patient emergencies every 15 seconds
+  useEffect(() => {
+    if (!careTeamMember) return
+    const checkEmergencies = async () => {
+      const { data } = await supabase
+        .from('emergencies')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+      setActiveEmergencies(data || [])
+      if (!data) return
+      for (const em of data) {
+        if (!emergencyNotifiedRef.current.has(em.id)) {
+          emergencyNotifiedRef.current.add(em.id)
+          if ('Notification' in window && Notification.permission === 'granted') {
+            const patient = patients.find((p: any) => p.id === em.user_id)
+            new Notification('⚠️ Patient Emergency', {
+              body: `${patient?.full_name || 'A patient'} triggered an emergency: ${em.emergency_type?.replace('_', ' ')}`,
+              requireInteraction: true,
+            })
+          }
+          toast.error(`Emergency: ${patients.find((p: any) => p.id === em.user_id)?.full_name || 'Patient'} needs help`, { duration: 10000 })
+        }
+      }
+    }
+    checkEmergencies()
+    const id = setInterval(checkEmergencies, 15000)
+    return () => clearInterval(id)
+  }, [careTeamMember, patients])
+
   const load = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/care-team/login'); return }
@@ -73,13 +105,14 @@ export default function CareTeamDashboard() {
     if (!member) { router.push('/care-team/login'); return }
     setCareTeamMember(member)
 
-    const [{ data: p }, { data: c }, { data: e }, { data: ml }, { data: s }, { data: appts }] = await Promise.all([
+    const [{ data: p }, { data: c }, { data: e }, { data: ml }, { data: s }, { data: appts }, { data: activeEm }] = await Promise.all([
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
       supabase.from('checkins').select('*').order('created_at', { ascending: false }),
       supabase.from('emergencies').select('*').order('created_at', { ascending: false }),
       supabase.from('medication_logs').select('*').order('taken_at', { ascending: false }),
       supabase.from('patient_summaries').select('*'),
       supabase.from('appointments').select('*').order('scheduled_at', { ascending: true }),
+      supabase.from('emergencies').select('*').eq('status', 'active').order('created_at', { ascending: false }),
     ])
 
     setPatients(p || [])
@@ -87,6 +120,7 @@ export default function CareTeamDashboard() {
     setEmergencies(e || [])
     setMedLogs(ml || [])
     setAppointments(appts || [])
+    setActiveEmergencies(activeEm || [])
 
     const map: Record<string, any> = {}
     s?.forEach(sum => { map[sum.patient_id] = sum })
@@ -221,7 +255,7 @@ Score 1-4: stable, no major issues`
           >
             <div>
               <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
-                {new Date(upcomingMeeting.scheduled_at) <= new Date() ? 'Live now' : 'Starting soon'}
+                {parseTS(upcomingMeeting.scheduled_at) <= new Date() ? 'Live now' : 'Starting soon'}
               </p>
               <p style={{ color: 'white', fontWeight: 700, fontSize: '14px' }}>
                 Patient call with {patients.find(p => p.id === upcomingMeeting.patient_id)?.full_name?.split(' ')[0] || 'patient'}
@@ -245,6 +279,54 @@ Score 1-4: stable, no major issues`
             onEnd={() => handleMeetingEnd(activeCall.id)}
           />
         )}
+      </AnimatePresence>
+
+      {/* Active emergency alert banners */}
+      <AnimatePresence>
+        {activeEmergencies.map((em, i) => {
+          const patient = patients.find(p => p.id === em.user_id)
+          const typeLabel = (em.emergency_type || 'emergency').replace(/_/g, ' ')
+          const since = Math.round((Date.now() - new Date(em.created_at).getTime()) / 60000)
+          return (
+            <motion.div
+              key={em.id}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              style={{ overflow: 'hidden', position: 'relative', zIndex: 90 }}
+            >
+              <motion.button
+                whileTap={{ scale: 0.995 }}
+                onClick={() => router.push(`/care-team/patient/${em.user_id}`)}
+                style={{ width: '100%', background: 'linear-gradient(135deg, #8B0000, #C42020)', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '14px', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.15, 1] }}
+                  transition={{ duration: 1.2, repeat: Infinity }}
+                  style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                >
+                  <AlertTriangle size={18} color="white"/>
+                </motion.div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+                    <motion.div animate={{ opacity: [1, 0.2, 1] }} transition={{ duration: 0.8, repeat: Infinity }}
+                      style={{ width: 6, height: 6, borderRadius: '50%', background: 'white' }}/>
+                    <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '2px' }}>
+                      Active Emergency · {since < 1 ? 'just now' : `${since}m ago`}
+                    </span>
+                  </div>
+                  <p style={{ color: 'white', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.3px' }}>
+                    {patient?.full_name || 'Patient'} — {typeLabel}
+                  </p>
+                  <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '12px', marginTop: '2px' }}>
+                    Tap to view patient profile
+                  </p>
+                </div>
+                <ChevronRight size={18} color="rgba(255,255,255,0.5)"/>
+              </motion.button>
+            </motion.div>
+          )
+        })}
       </AnimatePresence>
 
       {/* Header */}
