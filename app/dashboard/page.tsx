@@ -57,18 +57,29 @@ export default function Dashboard() {
       if (!user) { router.push('/login'); return }
       setUserId(user.id)
 
-      // If there's an active emergency, send patient back to the map page
-      const { data: activeEm } = await supabase
+      // If there's an active emergency created in the last 15 minutes, route back to it.
+      // Resolve everything else (duplicates, stale test rows, anything older than 15 min).
+      const { data: allActiveEms } = await supabase
         .from('emergencies')
-        .select('id, emergency_type')
+        .select('id, emergency_type, created_at')
         .eq('user_id', user.id)
         .eq('status', 'active')
         .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-      if (activeEm) {
-        router.push(`/emergency/routing?type=${activeEm.emergency_type}&id=${activeEm.id}`)
-        return
+      if (allActiveEms && allActiveEms.length > 0) {
+        const fifteenMinAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString()
+        const recentEm = allActiveEms[0].created_at >= fifteenMinAgo ? allActiveEms[0] : null
+        // Resolve everything that won't be routed to
+        const resolveIds = allActiveEms
+          .slice(recentEm ? 1 : 0)
+          .map(e => e.id)
+        if (!recentEm) resolveIds.push(allActiveEms[0].id)
+        if (resolveIds.length > 0) {
+          await supabase.from('emergencies').update({ status: 'resolved' }).in('id', resolveIds)
+        }
+        if (recentEm) {
+          router.push(`/emergency/routing?type=${recentEm.emergency_type}&id=${recentEm.id}`)
+          return
+        }
       }
 
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()

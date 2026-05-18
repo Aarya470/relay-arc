@@ -39,6 +39,7 @@ function RoutingPage() {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const lockedRef = useRef(true)
   const activeEmergencyId = useRef(emergencyId)
+  const userIdRef = useRef('')
 
   // Lock the page — prevent back navigation
   useEffect(() => {
@@ -85,6 +86,7 @@ function RoutingPage() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
+        userIdRef.current = user.id
         const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
         setProfile(data)
       }
@@ -139,13 +141,11 @@ function RoutingPage() {
 
   const cancelEmergency = async () => {
     setCancelling(true)
-    // Always cancel ALL active emergencies for this user — not just one by ID.
-    // This prevents an infinite loop if multiple rows were created accidentally.
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
+    const uid = userIdRef.current
+    if (uid) {
       await supabase.from('emergencies')
         .update({ status: 'resolved' })
-        .eq('user_id', user.id)
+        .eq('user_id', uid)
         .eq('status', 'active')
     }
     lockedRef.current = false
