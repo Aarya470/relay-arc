@@ -233,7 +233,6 @@ export default function Appointments() {
     supabase.from('appointments').update({ status: 'cancelled' }).eq('id', appt.id)
     setAppointments(prev => prev.filter(a => a.id !== appt.id))
     setConcern(appt.patient_concern || '')
-    setType('scheduled')
     setShowRequest(true)
   }
 
@@ -339,7 +338,7 @@ export default function Appointments() {
               <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px' }}>Talk to a professional</p>
             </div>
           </div>
-          <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => { setType('scheduled'); setShowRequest(true) }}
+          <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => { setShowRequest(true) }}
             style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.22)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Plus size={15} color="#5C8B74" />
           </motion.button>
