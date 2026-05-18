@@ -102,7 +102,9 @@ export default function CareTeamDashboard() {
     return () => clearInterval(id)
   }, [careTeamMember, patients])
 
-  // Poll active emergencies every 8 seconds — fast enough to feel real-time
+  // Poll active emergencies every 8 seconds — fast enough to feel real-time.
+  // Also auto-resolves anything older than 2 hours so stale test rows don't
+  // keep patients stuck in SOS forever.
   useEffect(() => {
     if (!careTeamMember) return
     const checkEmergencies = async () => {
@@ -111,7 +113,13 @@ export default function CareTeamDashboard() {
         .select('*')
         .eq('status', 'active')
         .order('created_at', { ascending: false })
-      setActiveEmergencies(data || [])
+      if (!data || data.length === 0) { setActiveEmergencies([]); return }
+      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+      const staleIds = data.filter(e => e.created_at < twoHoursAgo).map(e => e.id)
+      if (staleIds.length > 0) {
+        await supabase.from('emergencies').update({ status: 'resolved' }).in('id', staleIds)
+      }
+      setActiveEmergencies(data.filter(e => e.created_at >= twoHoursAgo))
     }
     checkEmergencies()
     const id = setInterval(checkEmergencies, 8000)
@@ -159,7 +167,15 @@ export default function CareTeamDashboard() {
     setEmergencies(e || [])
     setMedLogs(ml || [])
     setAppointments(processAndMarkMissed(appts || []))
-    setActiveEmergencies(activeEm || [])
+
+    // Filter out stale active emergencies (>2 hours old) on initial load
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    const freshEms = (activeEm || []).filter((e: any) => e.created_at >= twoHoursAgo)
+    const staleIds = (activeEm || []).filter((e: any) => e.created_at < twoHoursAgo).map((e: any) => e.id)
+    if (staleIds.length > 0) {
+      supabase.from('emergencies').update({ status: 'resolved' }).in('id', staleIds)
+    }
+    setActiveEmergencies(freshEms)
 
     const map: Record<string, any> = {}
     s?.forEach(sum => { map[sum.patient_id] = sum })
