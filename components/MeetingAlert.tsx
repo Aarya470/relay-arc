@@ -25,6 +25,17 @@ function parseTS(ts: string) {
   return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
 }
 
+function parseSpecificMedTime(timeStr: string): Date | null {
+  const m = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+  if (!m) return null
+  let h = parseInt(m[1]), min = parseInt(m[2])
+  const ap = m[3].toUpperCase()
+  if (ap === 'PM' && h !== 12) h += 12
+  if (ap === 'AM' && h === 12) h = 0
+  const d = new Date(); d.setHours(h, min, 0, 0)
+  return d
+}
+
 function parseTime(label: string) {
   const [t, ampm] = label.split(' ')
   const [h, m] = t.split(':').map(Number)
@@ -125,6 +136,7 @@ export default function MeetingAlert() {
   const [rescheduleTime, setRescheduleTime] = useState('9:00 AM')
   const [submitting, setSubmitting] = useState(false)
   const timers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
+  const medNotifiedRef = useRef<Set<string>>(new Set())
   const pathname = usePathname()
 
   // Don't run on care-team/nurse routes or appointments page (has its own UI)
@@ -140,7 +152,7 @@ export default function MeetingAlert() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
       setUserId(user.id)
-      const { data: p } = await supabase.from('profiles').select('full_name').eq('id', user.id).single()
+      const { data: p } = await supabase.from('profiles').select('full_name, medications').eq('id', user.id).single()
       setProfile(p)
       await registerServiceWorker()
       if ('Notification' in window && Notification.permission === 'default') {
@@ -166,45 +178,99 @@ export default function MeetingAlert() {
   useEffect(() => {
     if (!userId || skip) return
     const check = async () => {
+      // --- Meeting alert ---
       const { data } = await supabase
         .from('appointments')
         .select('*')
         .eq('patient_id', userId)
         .eq('status', 'confirmed')
-      if (!data) return
-      const now = Date.now()
-      const upcoming = data.filter(a => a.meeting_room_id).find(a => {
-        const t = parseTS(a.scheduled_at).getTime()
-        return t > now - 5*60*1000 && t < now + 30*60*1000
-      })
-      if (!upcoming) { setUpcomingAppt(null); return }
-      setUpcomingAppt(upcoming)
-      const msUntil = parseTS(upcoming.scheduled_at).getTime() - now
+      if (data) {
+        const now = Date.now()
+        const upcoming = data.filter(a => a.meeting_room_id).find(a => {
+          const t = parseTS(a.scheduled_at).getTime()
+          return t > now - 5*60*1000 && t < now + 30*60*1000
+        })
+        if (!upcoming) {
+          setUpcomingAppt(null)
+        } else {
+          setUpcomingAppt(upcoming)
+          const msUntil = parseTS(upcoming.scheduled_at).getTime() - now
+          if (msUntil <= 10*60*1000) setShowModal(true)
+          if (!timers.current.has(upcoming.id)) {
+            const delay = Math.max(0, msUntil - 2*60*1000)
+            if (delay < 29*60*1000) {
+              const timer = setTimeout(async () => {
+                if (Notification.permission !== 'granted') return
+                const url = `/appointments?join=${upcoming.meeting_room_id}`
+                try {
+                  const reg = await navigator.serviceWorker?.ready
+                  reg?.showNotification('Meeting in 2 minutes', {
+                    body: 'Your care team call is about to start. Tap to join.',
+                    icon: '/icon.png', badge: '/icon.png',
+                    data: { url }, requireInteraction: true,
+                  } as any)
+                } catch {
+                  new Notification('Meeting in 2 minutes', { body: 'Your care team call is about to start.' })
+                }
+              }, delay)
+              timers.current.set(upcoming.id, timer)
+            }
+          }
+        }
+      }
 
-      // Show in-app modal at 10 minutes before (or if overdue by <5min)
-      if (msUntil <= 10*60*1000) setShowModal(true)
+      // --- Medication time notifications ---
+      if (profile?.medications && Notification.permission === 'granted') {
+        const now = Date.now()
+        for (const med of profile.medications) {
+          for (const timeStr of (med.times || [])) {
+            const due = parseSpecificMedTime(timeStr)
+            if (!due) continue
+            const diff = now - due.getTime()
+            if (diff >= 0 && diff <= 5 * 60 * 1000) {
+              const key = `med-${med.name}-${due.toDateString()}-${timeStr}`
+              if (!medNotifiedRef.current.has(key)) {
+                medNotifiedRef.current.add(key)
+                try {
+                  const reg = await navigator.serviceWorker?.ready
+                  reg?.showNotification(`Time to take ${med.name}`, {
+                    body: `${med.dose} — tap to confirm on the Medications page.`,
+                    icon: '/icon.png',
+                    data: { url: '/medications' },
+                  } as any)
+                } catch {
+                  new Notification(`Time to take ${med.name}`, { body: `${med.dose}. Open the app to confirm.` })
+                }
+              }
+            }
+          }
+        }
+      }
 
-      // Schedule push notification at exactly 2 minutes before
-      if (!timers.current.has(upcoming.id)) {
-        const delay = Math.max(0, msUntil - 2*60*1000)
-        if (delay < 29*60*1000) {
-          const timer = setTimeout(async () => {
-            if (Notification.permission !== 'granted') return
-            const url = `/appointments?join=${upcoming.meeting_room_id}`
+      // --- Nurse medication nudges ---
+      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString()
+      const { data: nudges } = await supabase
+        .from('patient_notes')
+        .select('id, content')
+        .eq('patient_id', userId)
+        .eq('note_type', 'med_reminder')
+        .gte('created_at', fiveMinAgo)
+      if (nudges && Notification.permission === 'granted') {
+        for (const nudge of nudges) {
+          const key = `nudge-${nudge.id}`
+          if (!medNotifiedRef.current.has(key)) {
+            medNotifiedRef.current.add(key)
             try {
               const reg = await navigator.serviceWorker?.ready
-              reg?.showNotification('Meeting in 2 minutes', {
-                body: 'Your care team call is about to start. Tap to join.',
+              reg?.showNotification('Medication reminder from your care team', {
+                body: `Please take your ${nudge.content}. Tap to confirm.`,
                 icon: '/icon.png',
-                badge: '/icon.png',
-                data: { url },
-                requireInteraction: true,
+                data: { url: '/medications' },
               } as any)
             } catch {
-              new Notification('Meeting in 2 minutes', { body: 'Your care team call is about to start.' })
+              new Notification('Medication reminder from your care team', { body: `Please take your ${nudge.content}.` })
             }
-          }, delay)
-          timers.current.set(upcoming.id, timer)
+          }
         }
       }
     }
@@ -214,7 +280,7 @@ export default function MeetingAlert() {
       clearInterval(id)
       timers.current.forEach(t => clearTimeout(t))
     }
-  }, [userId, skip])
+  }, [userId, skip, profile])
 
   const handleMeetingEnd = async (apptId: string) => {
     await supabase.from('appointments').update({ status: 'completed' }).eq('id', apptId)

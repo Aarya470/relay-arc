@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Phone, Calendar, Send, X, Check, AlertTriangle, Video, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Calendar, Send, X, Check, AlertTriangle, Video, ChevronLeft, ChevronRight, Bell, Pill } from 'lucide-react'
 import JitsiMeeting from '@/components/JitsiMeeting'
 import Groq from 'groq-sdk'
 
@@ -44,6 +44,8 @@ export default function PatientDetail() {
   const [reschedulingAppt, setReschedulingAppt] = useState<any>(null)
   const [rescheduleDate, setRescheduleDate] = useState('')
   const [rescheduleTime, setRescheduleTime] = useState('09:00')
+  const [todayMedLogs, setTodayMedLogs] = useState<any[]>([])
+  const [reminderSent, setReminderSent] = useState<Record<string, boolean>>({})
 
   // Calendar state must be declared before any conditional returns
   const today = new Date()
@@ -62,13 +64,15 @@ export default function PatientDetail() {
       const { data: member } = await supabase.from('care_team_members').select('*').eq('id', user.id).single()
       setCareTeamMember(member)
 
-      const [{ data: p }, { data: c }, { data: e }, { data: n }, { data: a }, { data: s }] = await Promise.all([
+      const todayMidnight = new Date(); todayMidnight.setHours(0, 0, 0, 0)
+      const [{ data: p }, { data: c }, { data: e }, { data: n }, { data: a }, { data: s }, { data: ml }] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', patientId).single(),
         supabase.from('checkins').select('*').eq('user_id', patientId).order('created_at', { ascending: false }),
         supabase.from('emergencies').select('*').eq('user_id', patientId).order('created_at', { ascending: false }),
         supabase.from('patient_notes').select('*').eq('patient_id', patientId).order('created_at', { ascending: false }),
         supabase.from('appointments').select('*').eq('patient_id', patientId).order('created_at', { ascending: false }),
-        supabase.from('patient_summaries').select('*').eq('patient_id', patientId).single()
+        supabase.from('patient_summaries').select('*').eq('patient_id', patientId).single(),
+        supabase.from('medication_logs').select('*').eq('user_id', patientId).gte('taken_at', todayMidnight.toISOString()),
       ])
 
       setPatient(p)
@@ -77,6 +81,7 @@ export default function PatientDetail() {
       setNotes(n || [])
       setAppointments(a || [])
       setSummary(s)
+      setTodayMedLogs(ml || [])
       setLoading(false)
 
       // Auto generate summary
@@ -109,6 +114,34 @@ Keep everything simple and plain English. No medical jargon.`
     })
     setAiSummary(completion.choices[0].message.content || '')
     setGeneratingSummary(false)
+  }
+
+  const isOverdueMed = (med: any): boolean => {
+    const now = Date.now()
+    for (const timeStr of (med.times || [])) {
+      const m = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+      if (!m) continue
+      let h = parseInt(m[1]), min = parseInt(m[2])
+      const ap = m[3].toUpperCase()
+      if (ap === 'PM' && h !== 12) h += 12
+      if (ap === 'AM' && h === 12) h = 0
+      const due = new Date(); due.setHours(h, min, 0, 0)
+      if (due.getTime() > now) continue
+      if (now - due.getTime() < 60 * 60 * 1000) continue
+      if (!todayMedLogs.some(l => l.medication_name === med.name)) return true
+    }
+    return false
+  }
+
+  const sendMedReminder = async (medName: string) => {
+    await supabase.from('patient_notes').insert({
+      patient_id: patientId,
+      care_team_id: careTeamMember?.id,
+      note_type: 'med_reminder',
+      content: medName,
+    })
+    setReminderSent(prev => ({ ...prev, [medName]: true }))
+    toast.success(`Reminder sent for ${medName}`)
   }
 
   const addNote = async () => {
@@ -292,21 +325,13 @@ Keep everything simple and plain English. No medical jargon.`
           )
         })()}
 
-        {/* Call + Schedule buttons */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-          <motion.button whileTap={{ scale: 0.97 }}
-            onClick={() => { setAppointmentType('immediate'); setShowSchedule(true) }}
-            style={{ background: 'rgba(232,50,42,0.12)', border: '1px solid rgba(232,50,42,0.25)', borderRadius: '14px', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
-            <Phone size={14} color="#FF4A42"/>
-            <span style={{ color: '#FF4A42', fontWeight: 600, fontSize: '13px' }}>Call now</span>
-          </motion.button>
-          <motion.button whileTap={{ scale: 0.97 }}
-            onClick={() => { setAppointmentType('scheduled'); setShowSchedule(true) }}
-            style={{ background: 'rgba(74,158,245,0.12)', border: '1px solid rgba(74,158,245,0.25)', borderRadius: '14px', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
-            <Calendar size={14} color="#4A9EF5"/>
-            <span style={{ color: '#4A9EF5', fontWeight: 600, fontSize: '13px' }}>Schedule</span>
-          </motion.button>
-        </div>
+        {/* Schedule button */}
+        <motion.button whileTap={{ scale: 0.97 }}
+          onClick={() => { setAppointmentType('scheduled'); setShowSchedule(true) }}
+          style={{ width: '100%', background: 'rgba(74,158,245,0.12)', border: '1px solid rgba(74,158,245,0.25)', borderRadius: '14px', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
+          <Calendar size={14} color="#4A9EF5"/>
+          <span style={{ color: '#4A9EF5', fontWeight: 600, fontSize: '13px' }}>Schedule appointment</span>
+        </motion.button>
 
         {/* Tabs */}
         <div style={{ display: 'flex', gap: '6px', marginTop: '14px', overflowX: 'auto', paddingBottom: '2px' }}>
@@ -353,13 +378,36 @@ Keep everything simple and plain English. No medical jargon.`
 
             {/* Medications */}
             <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Medications</p>
-              {patient.medications?.map((m: any, i: number) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', marginBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px' }}>{m.name}</p>
-                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', fontFamily: 'monospace' }}>{m.dose} · {m.frequency}</span>
-                </div>
-              ))}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <Pill size={12} color="rgba(255,255,255,0.3)"/>
+                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>Medications</p>
+              </div>
+              {patient.medications?.map((m: any, i: number) => {
+                const overdue = isOverdueMed(m)
+                return (
+                  <div key={i} style={{ paddingBottom: '10px', marginBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: overdue ? '6px' : 0 }}>
+                      <p style={{ color: overdue ? '#FF4A42' : 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: overdue ? 600 : 400 }}>{m.name}</p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', fontFamily: 'monospace' }}>{m.dose} · {m.frequency}</span>
+                        {overdue && (
+                          <span style={{ background: 'rgba(255,74,66,0.15)', border: '1px solid rgba(255,74,66,0.3)', color: '#FF4A42', fontSize: '8px', padding: '1px 5px', borderRadius: '4px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.5px' }}>OVERDUE</span>
+                        )}
+                      </div>
+                    </div>
+                    {overdue && (
+                      <motion.button whileTap={{ scale: 0.95 }}
+                        onClick={() => !reminderSent[m.name] && sendMedReminder(m.name)}
+                        style={{ display: 'flex', alignItems: 'center', gap: '5px', background: reminderSent[m.name] ? 'rgba(128,239,128,0.08)' : 'rgba(252,181,70,0.1)', border: `1px solid ${reminderSent[m.name] ? 'rgba(128,239,128,0.2)' : 'rgba(252,181,70,0.25)'}`, borderRadius: '8px', padding: '5px 10px', cursor: reminderSent[m.name] ? 'default' : 'pointer' }}>
+                        <Bell size={11} color={reminderSent[m.name] ? '#80EF80' : '#fcb546'}/>
+                        <span style={{ color: reminderSent[m.name] ? '#80EF80' : '#fcb546', fontSize: '11px', fontWeight: 600 }}>
+                          {reminderSent[m.name] ? 'Reminder sent' : 'Send notification'}
+                        </span>
+                      </motion.button>
+                    )}
+                  </div>
+                )
+              })}
               {(!patient.medications || patient.medications.length === 0) && (
                 <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '13px' }}>No medications</p>
               )}
@@ -437,13 +485,13 @@ Keep everything simple and plain English. No medical jargon.`
                   </div>
                 </div>
 
-                {/* Bullet points from summary */}
+                {/* Structured clinical summary */}
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '10px' }}>
-                  <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>What was discussed</p>
-                  {c.summary?.split(/[.!?]/).filter((s: string) => s.trim().length > 10).slice(0, 4).map((sentence: string, j: number) => (
+                  <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Clinical summary</p>
+                  {c.summary?.split('\n').filter((s: string) => s.trim().length > 5).slice(0, 7).map((line: string, j: number) => (
                     <div key={j} style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
                       <span style={{ color: '#4A9EF5', fontSize: '12px', flexShrink: 0, marginTop: '1px' }}>•</span>
-                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', lineHeight: 1.5 }}>{sentence.trim()}</p>
+                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', lineHeight: 1.5 }}>{line.trim().replace(/^[•\-\*]\s*/, '')}</p>
                     </div>
                   ))}
                 </div>
@@ -558,28 +606,13 @@ Keep everything simple and plain English. No medical jargon.`
               style={{ background: '#111116', borderRadius: '24px 24px 0 0', padding: '24px 20px 48px', width: '100%', maxHeight: '85vh', overflowY: 'auto' }}>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <p style={{ color: 'white', fontWeight: 700, fontSize: '18px' }}>
-                  {appointmentType === 'immediate' ? 'Schedule immediate call' : 'Schedule appointment'}
-                </p>
+                <p style={{ color: 'white', fontWeight: 700, fontSize: '18px' }}>Schedule appointment</p>
                 <button onClick={() => setShowSchedule(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
                   <X size={20}/>
                 </button>
               </div>
 
-              {/* Type toggle */}
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-                {(['immediate', 'scheduled'] as const).map(t => (
-                  <button key={t} onClick={() => setAppointmentType(t)}
-                    style={{ flex: 1, padding: '10px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
-                      background: appointmentType === t ? (t === 'immediate' ? 'rgba(232,50,42,0.2)' : 'rgba(74,158,245,0.2)') : 'rgba(255,255,255,0.06)',
-                      color: appointmentType === t ? (t === 'immediate' ? '#FF4A42' : '#4A9EF5') : 'rgba(255,255,255,0.4)'
-                    }}>
-                    {t === 'immediate' ? '🚨 Right now' : '📅 Schedule'}
-                  </button>
-                ))}
-              </div>
-
-              {appointmentType === 'scheduled' && (
+              {(
                 <>
                   {/* Calendar */}
                   <div style={{ background: '#18181F', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
@@ -645,9 +678,9 @@ Keep everything simple and plain English. No medical jargon.`
                 style={{ width: '100%', background: '#18181F', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '14px 16px', color: 'white', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '70px', marginBottom: '12px' }}/>
 
               <motion.button whileTap={{ scale: 0.97 }} onClick={scheduleAppointment}
-                disabled={appointmentType === 'scheduled' && !selectedDate}
-                style={{ width: '100%', background: appointmentType === 'immediate' ? '#DC2626' : '#4A9EF5', color: 'white', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', opacity: appointmentType === 'scheduled' && !selectedDate ? 0.5 : 1 }}>
-                {appointmentType === 'immediate' ? 'Schedule immediate call' : `Confirm for ${selectedDate ? `${selectedDate} at ${selectedTime}` : '...'}`}
+                disabled={!selectedDate}
+                style={{ width: '100%', background: '#4A9EF5', color: 'white', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', opacity: !selectedDate ? 0.5 : 1 }}>
+                {`Confirm for ${selectedDate ? `${selectedDate} at ${selectedTime}` : '...'}`}
               </motion.button>
             </motion.div>
           </motion.div>

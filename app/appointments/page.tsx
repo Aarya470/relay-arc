@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, Phone, Calendar, X, Clock, CalendarCheck, ChevronLeft, ChevronRight, Video } from 'lucide-react'
+import { ArrowLeft, Plus, Calendar, X, Clock, CalendarCheck, ChevronLeft, ChevronRight, Video } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
 import JitsiMeeting from '@/components/JitsiMeeting'
 
@@ -140,7 +140,7 @@ export default function Appointments() {
   const [userId, setUserId] = useState('')
   const [profile, setProfile] = useState<any>(null)
   const [showRequest, setShowRequest] = useState(false)
-  const [type, setType] = useState<'immediate' | 'scheduled'>('scheduled')
+  const type = 'scheduled' as const
   const [selectedDay, setSelectedDay] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState('9:00 AM')
   const [concern, setConcern] = useState('')
@@ -227,7 +227,7 @@ export default function Appointments() {
     return d <= new Date()
   })()
 
-  const canSubmit = type === 'immediate' || (selectedDay !== null && !scheduledInPast)
+  const canSubmit = selectedDay !== null && !scheduledInPast
 
   const requestAgain = (appt: any) => {
     supabase.from('appointments').update({ status: 'cancelled' }).eq('id', appt.id)
@@ -262,7 +262,7 @@ export default function Appointments() {
       setConcern('')
       setSelectedDay(null)
       setSelectedTime('9:00 AM')
-      toast.success(type === 'immediate' ? 'Care team notified — they will contact you shortly' : 'Appointment requested')
+      toast.success('Appointment requested')
     }
   }
 
@@ -347,20 +347,16 @@ export default function Appointments() {
       </div>
 
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => { setType('immediate'); setShowRequest(true) }}
-            style={{ background: '#FFFFFF', border: '1px solid rgba(232,50,42,0.18)', borderRadius: '18px', padding: '18px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 10px rgba(26,40,32,0.06)' }}>
-            <Phone size={22} color="#E8322A" style={{ marginBottom: '10px' }} />
-            <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', marginBottom: '4px', letterSpacing: '-0.2px' }}>Talk now</p>
-            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px' }}>Request immediate call</p>
-          </motion.button>
-          <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => { setType('scheduled'); setShowRequest(true) }}
-            style={{ background: '#FFFFFF', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '18px', padding: '18px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 10px rgba(26,40,32,0.06)' }}>
-            <Calendar size={22} color="#5C8B74" style={{ marginBottom: '10px' }} />
-            <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', marginBottom: '4px', letterSpacing: '-0.2px' }}>Schedule</p>
-            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px' }}>Book a future visit</p>
-          </motion.button>
-        </div>
+        <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setShowRequest(true)}
+          style={{ width: '100%', background: '#FFFFFF', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '18px', padding: '18px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 10px rgba(26,40,32,0.06)', display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Calendar size={20} color="#5C8B74" />
+          </div>
+          <div>
+            <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', marginBottom: '3px', letterSpacing: '-0.2px' }}>Request appointment</p>
+            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px' }}>Schedule a visit with your care team</p>
+          </div>
+        </motion.button>
 
         <p style={{ color: 'rgba(26,40,32,0.32)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Your appointments</p>
 
@@ -429,24 +425,14 @@ export default function Appointments() {
               <div style={{ padding: '16px 20px 48px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                   <p style={{ color: '#1A2820', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.4px' }}>
-                    {type === 'immediate' ? 'Request immediate call' : 'Schedule appointment'}
+                    Schedule appointment
                   </p>
                   <button onClick={close} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(26,40,32,0.35)' }}>
                     <X size={20} />
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', background: 'rgba(26,40,32,0.05)', borderRadius: '14px', padding: '4px' }}>
-                  {(['immediate', 'scheduled'] as const).map(t => (
-                    <button key={t} onClick={() => setType(t)}
-                      style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, background: type === t ? '#FFFFFF' : 'transparent', color: type === t ? '#1A2820' : 'rgba(26,40,32,0.42)', boxShadow: type === t ? '0 1px 4px rgba(26,40,32,0.08)' : 'none', transition: 'all 0.15s ease', fontFamily: 'inherit' }}>
-                      {t === 'immediate' ? 'Right now' : 'Schedule'}
-                    </button>
-                  ))}
-                </div>
-
-                {type === 'scheduled' && (
-                  <div style={{ marginBottom: '20px' }}>
+                <div style={{ marginBottom: '20px' }}>
                     <div style={{ background: '#F8F6F2', border: '1px solid rgba(26,40,32,0.07)', borderRadius: '18px', padding: '16px', marginBottom: '12px' }}>
                       <CalendarPicker selectedDay={selectedDay} onSelect={setSelectedDay} />
                     </div>
@@ -475,15 +461,14 @@ export default function Appointments() {
                       )}
                     </AnimatePresence>
                   </div>
-                )}
 
                 <textarea value={concern} onChange={e => setConcern(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
                   placeholder="What would you like to discuss? (optional)"
                   style={{ width: '100%', background: '#F8F6F2', border: `1.5px solid ${focused ? 'rgba(92,139,116,0.4)' : 'rgba(26,40,32,0.1)'}`, borderRadius: '14px', padding: '14px 16px', color: '#1A2820', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '80px', marginBottom: '14px', fontFamily: 'inherit', transition: 'border-color 0.18s ease' }} />
 
                 <motion.button whileTap={canSubmit ? { scale: 0.97, y: 1 } : {}} transition={spring} onClick={request} disabled={!canSubmit}
-                  style={{ width: '100%', background: !canSubmit ? 'rgba(26,40,32,0.07)' : type === 'immediate' ? 'linear-gradient(135deg, #E8322A, #C42020)' : 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: !canSubmit ? 'rgba(26,40,32,0.3)' : '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: canSubmit ? 'pointer' : 'default', boxShadow: canSubmit ? (type === 'immediate' ? '0 8px 24px rgba(232,50,42,0.24)' : '0 8px 24px rgba(92,139,116,0.24)') : 'none', transition: 'all 0.2s ease', letterSpacing: '-0.1px' }}>
-                  {type === 'immediate' ? 'Request immediate call' : 'Request appointment'}
+                  style={{ width: '100%', background: !canSubmit ? 'rgba(26,40,32,0.07)' : 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: !canSubmit ? 'rgba(26,40,32,0.3)' : '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: canSubmit ? 'pointer' : 'default', boxShadow: canSubmit ? '0 8px 24px rgba(92,139,116,0.24)' : 'none', transition: 'all 0.2s ease', letterSpacing: '-0.1px' }}>
+                  Request appointment
                 </motion.button>
               </div>
             </motion.div>

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, Car, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video } from 'lucide-react'
+import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video } from 'lucide-react'
 
 function parseTS(ts: string) {
   if (!ts) return new Date()
@@ -382,31 +382,8 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
-        {/* Transport + Care */}
-        <motion.div variants={fadeUp} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <motion.button
-            whileTap={{ scale: 0.97, y: 1 }}
-            transition={spring}
-            onClick={() => router.push('/transport')}
-            style={{
-              background: 'linear-gradient(135deg, rgba(59,130,246,0.08) 0%, #FFFFFF 70%)',
-              border: '1.5px solid rgba(59,130,246,0.16)',
-              borderRadius: '24px 24px 24px 6px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
-              display: 'flex', alignItems: 'center', gap: '16px',
-              boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
-            }}
-          >
-            {/* Circle icon */}
-            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Car size={20} color="#3B82F6"/>
-            </div>
-            <div style={{ flex: 1 }}>
-              <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.2px' }}>Need a ride</p>
-              <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '12px', marginTop: '2px' }}>Community transport to hospital</p>
-            </div>
-            <ChevronRight size={15} color="rgba(26,40,32,0.22)"/>
-          </motion.button>
-
+        {/* Care team */}
+        <motion.div variants={fadeUp}>
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
             transition={spring}
@@ -432,6 +409,7 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Last check-in */}
+
         {checkins.length > 0 && (
           <motion.div
             variants={fadeUp}

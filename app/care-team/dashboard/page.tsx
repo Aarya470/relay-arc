@@ -19,6 +19,28 @@ function parseTS(ts: string) {
   return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
 }
 
+function hasOverdueMeds(patient: any, allLogs: any[]): boolean {
+  if (!patient.medications?.length) return false
+  const now = Date.now()
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const todayLogs = allLogs.filter(l => l.user_id === patient.id && new Date(l.taken_at) >= today)
+  for (const med of patient.medications) {
+    for (const timeStr of (med.times || [])) {
+      const m = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+      if (!m) continue
+      let h = parseInt(m[1]), min = parseInt(m[2])
+      const ap = m[3].toUpperCase()
+      if (ap === 'PM' && h !== 12) h += 12
+      if (ap === 'AM' && h === 12) h = 0
+      const due = new Date(); due.setHours(h, min, 0, 0)
+      if (due.getTime() > now) continue
+      if (now - due.getTime() < 60 * 60 * 1000) continue
+      if (!todayLogs.some((l: any) => l.medication_name === med.name)) return true
+    }
+  }
+  return false
+}
+
 // Mark confirmed appointments as missed if they're >30 min overdue.
 // Returns the transformed array and fires a DB update (fire-and-forget).
 function processAndMarkMissed(appts: any[]): any[] {
@@ -330,8 +352,8 @@ Score 1-4: stable, no major issues`
           {[
             { label: 'Total', value: patients.length, color: 'white' },
             { label: 'Urgent', value: sortedPatients.filter(p => activeEmergencies.some(e => e.user_id === p.id) || (summaries[p.id]?.priority_score || 0) >= 8).length, color: '#FF4A42' },
-            { label: 'Monitor', value: sortedPatients.filter(p => !activeEmergencies.some(e => e.user_id === p.id) && (summaries[p.id]?.priority_score || 0) >= 5 && (summaries[p.id]?.priority_score || 0) < 8).length, color: '#fcb546' },
-            { label: 'Stable', value: sortedPatients.filter(p => !activeEmergencies.some(e => e.user_id === p.id) && (summaries[p.id]?.priority_score || 0) < 5).length, color: '#80EF80' },
+            { label: 'Monitor', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 8 && (sc >= 5 || hasOverdueMeds(p, medLogs)) }).length, color: '#fcb546' },
+            { label: 'Stable', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 5 && !hasOverdueMeds(p, medLogs) }).length, color: '#80EF80' },
           ].map((stat, i) => (
             <div key={i} style={{ flex: 1, background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
               <p style={{ color: stat.color, fontWeight: 700, fontSize: '18px' }}>{stat.value}</p>
@@ -440,8 +462,10 @@ Score 1-4: stable, no major issues`
         {sortedPatients.map((patient, i) => {
           const sum = summaries[patient.id]
           const score = sum?.priority_score || 0
-          const color = getStatusColor(score)
           const hasActiveEmergency = activeEmergencies.some(e => e.user_id === patient.id)
+          const overdueM = !hasActiveEmergency && hasOverdueMeds(patient, medLogs)
+          const effectiveScore = overdueM && score < 5 ? 5 : score
+          const color = getStatusColor(effectiveScore)
           const lastCheckin = checkins.find(c => c.user_id === patient.id)
 
           return (
@@ -515,7 +539,7 @@ Score 1-4: stable, no major issues`
                   </motion.span>
                 ) : (
                   <span style={{ background: `${color}15`, border: `1px solid ${color}25`, color, fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 600 }}>
-                    {sum ? getStatusLabel(score) : '—'}
+                    {overdueM ? 'Monitor' : sum ? getStatusLabel(score) : '—'}
                   </span>
                 )}
                 <ChevronRight size={14} color="rgba(255,255,255,0.2)"/>

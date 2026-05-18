@@ -67,9 +67,20 @@ Rules:
     setMessages(prev => [...prev, { role: 'ai', text: clean }])
 
     if (response.includes('[CHECKIN_COMPLETE]')) {
+      const fullConvo = [...newMessages, { role: 'ai', text: clean }]
+        .map(m => `${m.role === 'user' ? 'Patient' : 'AI'}: ${m.text}`)
+        .join('\n')
+      let clinicalSummary = clean
+      try {
+        const sc = await groq.chat.completions.create({
+          model: 'llama-3.1-8b-instant',
+          messages: [{ role: 'user', content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual.\n\nConversation:\n${fullConvo}` }]
+        })
+        clinicalSummary = sc.choices[0].message.content?.trim() || clean
+      } catch { /* fallback to AI message */ }
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        await supabase.from('checkins').insert({ user_id: user.id, summary: clean, flags: 'none' })
+        await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
         toast.success('Check-in saved')
       }
       setDone(true)
