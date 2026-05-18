@@ -315,9 +315,9 @@ Score 1-4: stable, no major issues`
         <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
           {[
             { label: 'Total', value: patients.length, color: 'white' },
-            { label: 'Urgent', value: sortedPatients.filter(p => (summaries[p.id]?.priority_score || 0) >= 8).length, color: '#FF4A42' },
-            { label: 'Monitor', value: sortedPatients.filter(p => { const s = summaries[p.id]?.priority_score || 0; return s >= 5 && s < 8 }).length, color: '#fcb546' },
-            { label: 'Stable', value: sortedPatients.filter(p => (summaries[p.id]?.priority_score || 0) < 5).length, color: '#80EF80' },
+            { label: 'Urgent', value: sortedPatients.filter(p => activeEmergencies.some(e => e.user_id === p.id) || (summaries[p.id]?.priority_score || 0) >= 8).length, color: '#FF4A42' },
+            { label: 'Monitor', value: sortedPatients.filter(p => !activeEmergencies.some(e => e.user_id === p.id) && (summaries[p.id]?.priority_score || 0) >= 5 && (summaries[p.id]?.priority_score || 0) < 8).length, color: '#fcb546' },
+            { label: 'Stable', value: sortedPatients.filter(p => !activeEmergencies.some(e => e.user_id === p.id) && (summaries[p.id]?.priority_score || 0) < 5).length, color: '#80EF80' },
           ].map((stat, i) => (
             <div key={i} style={{ flex: 1, background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
               <p style={{ color: stat.color, fontWeight: 700, fontSize: '18px' }}>{stat.value}</p>
