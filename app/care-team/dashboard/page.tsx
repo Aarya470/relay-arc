@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -71,7 +71,23 @@ export default function CareTeamDashboard() {
   const notifiedRef = useRef<Set<string>>(new Set())
   const router = useRouter()
 
-  useEffect(() => { load() }, [])
+  const checkEmergencies = useCallback(async () => {
+    const { data } = await supabase
+      .from('emergencies')
+      .select('*')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+    if (!data || data.length === 0) { setActiveEmergencies([]); return }
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    const staleIds = data.filter((e: any) => e.created_at < twoHoursAgo).map((e: any) => e.id)
+    if (staleIds.length > 0) {
+      await supabase.from('emergencies').update({ status: 'resolved' }).in('id', staleIds)
+    }
+    setActiveEmergencies(data.filter((e: any) => e.created_at >= twoHoursAgo))
+  }, [])
+
+  // Call both on mount so emergencies show immediately without waiting for careTeamMember
+  useEffect(() => { load(); checkEmergencies() }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!careTeamMember) return
@@ -102,29 +118,13 @@ export default function CareTeamDashboard() {
     return () => clearInterval(id)
   }, [careTeamMember, patients])
 
-  // Poll active emergencies every 8 seconds — fast enough to feel real-time.
-  // Also auto-resolves anything older than 2 hours so stale test rows don't
-  // keep patients stuck in SOS forever.
+  // Poll active emergencies every 8 seconds. The initial call is already fired
+  // at mount above; here we just maintain the interval once auth is confirmed.
   useEffect(() => {
     if (!careTeamMember) return
-    const checkEmergencies = async () => {
-      const { data } = await supabase
-        .from('emergencies')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false })
-      if (!data || data.length === 0) { setActiveEmergencies([]); return }
-      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-      const staleIds = data.filter(e => e.created_at < twoHoursAgo).map(e => e.id)
-      if (staleIds.length > 0) {
-        await supabase.from('emergencies').update({ status: 'resolved' }).in('id', staleIds)
-      }
-      setActiveEmergencies(data.filter(e => e.created_at >= twoHoursAgo))
-    }
-    checkEmergencies()
     const id = setInterval(checkEmergencies, 8000)
     return () => clearInterval(id)
-  }, [careTeamMember])
+  }, [careTeamMember, checkEmergencies])
 
   // Silent background refresh — updates appointments + patient list every 25 seconds
   // without showing the loading spinner so the UI doesn't flash
@@ -152,14 +152,13 @@ export default function CareTeamDashboard() {
     if (!member) { router.push('/care-team/login'); return }
     setCareTeamMember(member)
 
-    const [{ data: p }, { data: c }, { data: e }, { data: ml }, { data: s }, { data: appts }, { data: activeEm }] = await Promise.all([
+    const [{ data: p }, { data: c }, { data: e }, { data: ml }, { data: s }, { data: appts }] = await Promise.all([
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
       supabase.from('checkins').select('*').order('created_at', { ascending: false }),
       supabase.from('emergencies').select('*').order('created_at', { ascending: false }),
       supabase.from('medication_logs').select('*').order('taken_at', { ascending: false }),
       supabase.from('patient_summaries').select('*'),
       supabase.from('appointments').select('*').order('scheduled_at', { ascending: true }),
-      supabase.from('emergencies').select('*').eq('status', 'active').order('created_at', { ascending: false }),
     ])
 
     setPatients(p || [])
@@ -167,15 +166,7 @@ export default function CareTeamDashboard() {
     setEmergencies(e || [])
     setMedLogs(ml || [])
     setAppointments(processAndMarkMissed(appts || []))
-
-    // Filter out stale active emergencies (>2 hours old) on initial load
-    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-    const freshEms = (activeEm || []).filter((e: any) => e.created_at >= twoHoursAgo)
-    const staleIds = (activeEm || []).filter((e: any) => e.created_at < twoHoursAgo).map((e: any) => e.id)
-    if (staleIds.length > 0) {
-      supabase.from('emergencies').update({ status: 'resolved' }).in('id', staleIds)
-    }
-    setActiveEmergencies(freshEms)
+    // Active emergencies are managed solely by checkEmergencies() to avoid race conditions
 
     const map: Record<string, any> = {}
     s?.forEach(sum => { map[sum.patient_id] = sum })
@@ -265,6 +256,12 @@ Score 1-4: stable, no major issues`
     await supabase.from('appointments').update({ status: 'declined' }).eq('id', id)
     setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'declined' } : a))
     toast('Appointment declined')
+  }
+
+  const dismissEmergency = async (patientId: string) => {
+    await supabase.from('emergencies').update({ status: 'resolved' }).eq('user_id', patientId).eq('status', 'active')
+    setActiveEmergencies(prev => prev.filter(e => e.user_id !== patientId))
+    toast('Emergency resolved')
   }
 
   const isJoinable = (a: any) => {
@@ -546,13 +543,22 @@ Score 1-4: stable, no major issues`
               {/* Status badge + chevron */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                 {hasActiveEmergency ? (
-                  <motion.span
-                    animate={{ opacity: [1, 0.55, 1] }}
-                    transition={{ duration: 0.9, repeat: Infinity }}
-                    style={{ background: 'rgba(255,74,66,0.2)', border: '1px solid rgba(255,74,66,0.45)', color: '#FF4A42', fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700 }}
-                  >
-                    SOS
-                  </motion.span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <motion.span
+                      animate={{ opacity: [1, 0.55, 1] }}
+                      transition={{ duration: 0.9, repeat: Infinity }}
+                      style={{ background: 'rgba(255,74,66,0.2)', border: '1px solid rgba(255,74,66,0.45)', color: '#FF4A42', fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700 }}
+                    >
+                      SOS
+                    </motion.span>
+                    <motion.div
+                      whileTap={{ scale: 0.9 }}
+                      onClick={(e) => { e.stopPropagation(); dismissEmergency(patient.id) }}
+                      style={{ background: 'rgba(255,74,66,0.12)', border: '1px solid rgba(255,74,66,0.3)', borderRadius: '6px', padding: '2px 7px', color: '#FF4A42', fontSize: '9px', cursor: 'pointer', fontWeight: 700, fontFamily: 'monospace' }}
+                    >
+                      Resolve
+                    </motion.div>
+                  </div>
                 ) : (
                   <span style={{ background: `${color}15`, border: `1px solid ${color}25`, color, fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 600 }}>
                     {overdueM ? 'Monitor' : sum ? getStatusLabel(score) : '—'}
