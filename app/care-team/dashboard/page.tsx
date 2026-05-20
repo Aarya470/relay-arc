@@ -78,16 +78,27 @@ export default function CareTeamDashboard() {
       .eq('status', 'active')
       .order('created_at', { ascending: false })
     if (!data || data.length === 0) { setActiveEmergencies([]); return }
-    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-    const staleIds = data.filter((e: any) => e.created_at < twoHoursAgo).map((e: any) => e.id)
+    // Auto-resolve anything older than 30 minutes — matches the patient-side stale threshold
+    const thirtyMinAgo = new Date(Date.now() - 30 * 60 * 1000).toISOString()
+    const staleIds = data.filter((e: any) => e.created_at < thirtyMinAgo).map((e: any) => e.id)
     if (staleIds.length > 0) {
       await supabase.from('emergencies').update({ status: 'resolved' }).in('id', staleIds)
     }
-    setActiveEmergencies(data.filter((e: any) => e.created_at >= twoHoursAgo))
+    setActiveEmergencies(data.filter((e: any) => e.created_at >= thirtyMinAgo))
   }, [])
 
-  // Call both on mount so emergencies show immediately without waiting for careTeamMember
-  useEffect(() => { load(); checkEmergencies() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // On mount: initial fetch + Supabase Realtime subscription for instant updates
+  useEffect(() => {
+    load()
+    checkEmergencies()
+    const channel = supabase
+      .channel('emergencies-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'emergencies' }, () => {
+        checkEmergencies()
+      })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [checkEmergencies]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!careTeamMember) return
@@ -118,8 +129,7 @@ export default function CareTeamDashboard() {
     return () => clearInterval(id)
   }, [careTeamMember, patients])
 
-  // Poll active emergencies every 8 seconds. The initial call is already fired
-  // at mount above; here we just maintain the interval once auth is confirmed.
+  // 8-second poll as fallback if Supabase Realtime is not enabled
   useEffect(() => {
     if (!careTeamMember) return
     const id = setInterval(checkEmergencies, 8000)
