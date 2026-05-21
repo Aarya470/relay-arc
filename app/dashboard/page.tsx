@@ -50,7 +50,14 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [userId, setUserId] = useState('')
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
+  const [installPrompt, setInstallPrompt] = useState<any>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    const handler = (e: any) => { e.preventDefault(); setInstallPrompt(e) }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
 
   useEffect(() => {
     const load = async () => {
@@ -213,6 +220,34 @@ export default function Dashboard() {
           })}
         </div>
       </motion.div>
+
+      {/* Install app banner — only shows in Chrome when not already installed */}
+      {installPrompt && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{ margin: '0 16px 4px', background: 'rgba(92,139,116,0.08)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '14px', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
+        >
+          <div style={{ flex: 1 }}>
+            <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '13px' }}>Add to Home Screen</p>
+            <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '11px', marginTop: '2px' }}>Install Relay Arc for quick access</p>
+          </div>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={async () => { installPrompt.prompt(); const { outcome } = await installPrompt.userChoice; if (outcome === 'accepted') setInstallPrompt(null) }}
+            style={{ background: '#5C8B74', color: '#FFFFFF', fontWeight: 700, fontSize: '12px', padding: '8px 14px', borderRadius: '10px', border: 'none', cursor: 'pointer', flexShrink: 0 }}
+          >
+            Install
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setInstallPrompt(null)}
+            style={{ background: 'none', border: 'none', color: 'rgba(26,40,32,0.3)', fontSize: '18px', cursor: 'pointer', padding: '0 2px', lineHeight: 1, flexShrink: 0 }}
+          >
+            ×
+          </motion.button>
+        </motion.div>
+      )}
 
       <motion.div
         variants={staggerContainer}
