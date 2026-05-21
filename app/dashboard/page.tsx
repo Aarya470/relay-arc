@@ -7,6 +7,7 @@ import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video } from 'lucide-react'
+import { toast } from 'sonner'
 
 function parseTS(ts: string) {
   if (!ts) return new Date()
@@ -387,24 +388,24 @@ export default function Dashboard() {
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
             transition={spring}
-            onClick={() => router.push('/appointments')}
+            onClick={() => toast('Coming soon — your care team will be available here shortly.')}
             style={{
-              background: 'linear-gradient(135deg, rgba(92,139,116,0.09) 0%, #FFFFFF 70%)',
-              border: '1.5px solid rgba(92,139,116,0.18)',
+              background: 'linear-gradient(135deg, rgba(92,139,116,0.05) 0%, #FFFFFF 70%)',
+              border: '1.5px solid rgba(92,139,116,0.12)',
               borderRadius: '24px 24px 6px 24px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
               display: 'flex', alignItems: 'center', gap: '16px',
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
+              opacity: 0.7,
             }}
           >
-            {/* Rounded-square icon — contrast with circle above */}
-            <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(92,139,116,0.08)', border: '1px solid rgba(92,139,116,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Stethoscope size={20} color="#5C8B74"/>
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.2px' }}>Care team</p>
-              <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '12px', marginTop: '2px' }}>Schedule a visit or call</p>
+              <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '12px', marginTop: '2px' }}>Coming soon</p>
             </div>
-            <ChevronRight size={15} color="rgba(26,40,32,0.22)"/>
+            <span style={{ background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', color: '#5C8B74', fontSize: '9px', fontWeight: 700, padding: '3px 8px', borderRadius: '99px', fontFamily: 'monospace', letterSpacing: '0.5px', flexShrink: 0 }}>SOON</span>
           </motion.button>
         </motion.div>
 
