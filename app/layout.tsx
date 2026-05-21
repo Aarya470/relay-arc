@@ -22,6 +22,15 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'Relay Arc',
   description: 'Cardiac Emergency Platform',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Relay Arc',
+  },
+  icons: {
+    apple: '/icon-192.png',
+  },
 }
 
 export default function RootLayout({
@@ -31,6 +40,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#5C8B74" />
+        <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
+      </head>
       <body className={`${fredoka.variable} ${mono.variable} ${fredoka.className}`}>
         <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#F2EFE9]">
           {children}
