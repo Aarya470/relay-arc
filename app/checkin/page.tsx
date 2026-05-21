@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import Groq from 'groq-sdk'
 import { ArrowLeft, Send, Loader2, Heart, Check } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
+import { sendPushNotification } from '@/lib/notifications'
 
 const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!, dangerouslyAllowBrowser: true })
 
@@ -82,6 +83,7 @@ Rules:
       if (user) {
         await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
         toast.success('Check-in saved')
+        sendPushNotification(user.id, 'Check-in complete ✓', 'Your daily check-in has been saved. Your care team has been notified.')
       }
       setDone(true)
     }

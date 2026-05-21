@@ -51,12 +51,19 @@ export default function Dashboard() {
   const [userId, setUserId] = useState('')
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
+  const [showIosHint, setShowIosHint] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
     const handler = (e: any) => { e.preventDefault(); setInstallPrompt(e) }
     window.addEventListener('beforeinstallprompt', handler)
     return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  useEffect(() => {
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    setShowIosHint(isIos && !isStandalone)
   }, [])
 
   useEffect(() => {
@@ -469,6 +476,18 @@ export default function Dashboard() {
           </motion.div>
         )}
       </motion.div>
+
+      {/* iOS install hint — only shown on iPhone/iPad when not already installed */}
+      {showIosHint && (
+        <div style={{ margin: '8px 16px 16px', background: 'rgba(92,139,116,0.06)', border: '1px solid rgba(92,139,116,0.18)', borderRadius: '16px', padding: '14px 16px' }}>
+          <p style={{ color: '#3D6B58', fontWeight: 700, fontSize: '13px', marginBottom: '6px' }}>Add Relay Arc to your Home Screen</p>
+          <p style={{ color: 'rgba(26,40,32,0.55)', fontSize: '12px', lineHeight: 1.6 }}>
+            1. Open this page in <strong>Safari</strong><br/>
+            2. Tap the <strong>Share</strong> button <strong>↑</strong> at the bottom<br/>
+            3. Tap <strong>"Add to Home Screen"</strong>
+          </p>
+        </div>
+      )}
 
       <BottomNav/>
     </div>

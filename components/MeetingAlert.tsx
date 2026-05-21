@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { Video, ChevronLeft, ChevronRight } from 'lucide-react'
 import JitsiMeeting from './JitsiMeeting'
-import { registerServiceWorker } from '@/lib/notifications'
+import { registerPushNotifications } from '@/lib/notifications'
 
 const spring = { type: 'spring', stiffness: 380, damping: 28 } as const
 const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa']
@@ -154,9 +154,9 @@ export default function MeetingAlert() {
       setUserId(user.id)
       const { data: p } = await supabase.from('profiles').select('full_name, medications').eq('id', user.id).single()
       setProfile(p)
-      await registerServiceWorker()
-      if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission()
+      if ('Notification' in window) {
+        if (Notification.permission === 'default') await Notification.requestPermission()
+        if (Notification.permission === 'granted') await registerPushNotifications(user.id)
       }
       // Handle ?join=ROOM_ID from push notification click
       const params = new URLSearchParams(window.location.search)
