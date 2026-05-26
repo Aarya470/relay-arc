@@ -1,3 +1,5 @@
+import { supabase } from '@/lib/supabase'
+
 export async function registerServiceWorker() {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return
   try {
@@ -10,7 +12,6 @@ export async function registerPushNotifications(userId: string) {
   try {
     const reg = await navigator.serviceWorker.ready
 
-    // Check for existing subscription first
     let sub = await reg.pushManager.getSubscription()
     if (!sub) {
       sub = await reg.pushManager.subscribe({
@@ -19,9 +20,13 @@ export async function registerPushNotifications(userId: string) {
       })
     }
 
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    if (!token) return
+
     await fetch('/api/push/subscribe', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ subscription: sub, userId }),
     })
   } catch (e) {
@@ -31,9 +36,13 @@ export async function registerPushNotifications(userId: string) {
 
 export async function sendPushNotification(userId: string, title: string, body: string) {
   try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    if (!token) return
+
     await fetch('/api/push/send', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ userId, title, body }),
     })
   } catch {}

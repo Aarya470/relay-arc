@@ -14,19 +14,62 @@ const supabase = createClient(
 )
 
 export async function POST(req: NextRequest) {
-  const { userId, title, body } = await req.json()
+  try {
+    // Verify caller is authenticated
+    const authHeader = req.headers.get('authorization')
+    const token = authHeader?.replace('Bearer ', '')
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  const { data } = await supabase
-    .from('push_subscriptions')
-    .select('subscription')
-    .eq('user_id', userId)
-    .single()
+    const body = await req.json()
+    const { userId, title, body: msgBody } = body
 
-  if (!data) return NextResponse.json({ error: 'No subscription found' }, { status: 404 })
+    // Validate inputs
+    if (!userId || !title || !msgBody) {
+      return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
+    }
+    if (typeof userId !== 'string' || userId.length > 100) {
+      return NextResponse.json({ error: 'Invalid userId' }, { status: 400 })
+    }
+    if (typeof title !== 'string' || title.length > 200) {
+      return NextResponse.json({ error: 'Invalid title' }, { status: 400 })
+    }
+    if (typeof msgBody !== 'string' || msgBody.length > 500) {
+      return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
+    }
 
-  const subscription = JSON.parse(data.subscription)
+    // Caller must be sending to themselves OR be a care team member
+    const isSelf = user.id === userId
+    if (!isSelf) {
+      const { data: member } = await supabase
+        .from('care_team_members')
+        .select('id')
+        .eq('id', user.id)
+        .single()
+      if (!member) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      }
+    }
 
-  await webpush.sendNotification(subscription, JSON.stringify({ title, body }))
+    const { data } = await supabase
+      .from('push_subscriptions')
+      .select('subscription')
+      .eq('user_id', userId)
+      .single()
 
-  return NextResponse.json({ success: true })
+    if (!data) return NextResponse.json({ error: 'No subscription found' }, { status: 404 })
+
+    const subscription = JSON.parse(data.subscription)
+    await webpush.sendNotification(subscription, JSON.stringify({ title, body: msgBody }))
+
+    return NextResponse.json({ success: true })
+  } catch (e) {
+    console.error('Push send error:', e)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+  }
 }
