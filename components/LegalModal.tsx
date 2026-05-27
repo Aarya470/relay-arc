@@ -134,46 +134,52 @@ We reserve the right to modify these Terms at any time. Your continued use of th
 For questions about these Terms: 5satadruroy@gmail.com`
 
 export default function LegalModal() {
-  const [show, setShow] = useState(false)
-  const [tab, setTab] = useState<'privacy' | 'terms'>('privacy')
-  const [privacyRead, setPrivacyRead] = useState(false)
-  const [termsRead, setTermsRead] = useState(false)
+  // step 1 = privacy policy, step 2 = terms of service, done = hidden
+  const [step, setStep] = useState<1 | 2 | 'done'>('done')
+  const [canAccept, setCanAccept] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     try {
-      const accepted = localStorage.getItem(STORAGE_KEY)
-      if (!accepted) setShow(true)
-    } catch { setShow(true) }
+      if (!localStorage.getItem(STORAGE_KEY)) setStep(1)
+    } catch { setStep(1) }
   }, [])
+
+  // Reset "read" flag and scroll to top whenever the step changes
+  useEffect(() => {
+    setCanAccept(false)
+    setTimeout(() => { scrollRef.current?.scrollTo({ top: 0 }) }, 50)
+  }, [step])
 
   const handleScroll = () => {
     const el = scrollRef.current
     if (!el) return
-    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 40
-    if (!atBottom) return
-    if (tab === 'privacy') setPrivacyRead(true)
-    else setTermsRead(true)
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 40) setCanAccept(true)
   }
 
-  const handleTab = (t: 'privacy' | 'terms') => {
-    setTab(t)
-    // Reset scroll position when switching tabs
-    setTimeout(() => { scrollRef.current?.scrollTo({ top: 0 }) }, 0)
+  const handleAccept = () => {
+    if (step === 1) {
+      setStep(2)
+    } else {
+      try { localStorage.setItem(STORAGE_KEY, new Date().toISOString()) } catch {}
+      setStep('done')
+    }
   }
 
-  const accept = () => {
-    try { localStorage.setItem(STORAGE_KEY, new Date().toISOString()) } catch {}
-    setShow(false)
-  }
+  if (step === 'done') return null
 
-  const canAccept = privacyRead && termsRead
-
-  if (!show) return null
+  const isPrivacy = step === 1
+  const content = isPrivacy ? PRIVACY_POLICY : TERMS_OF_SERVICE
+  const title = isPrivacy ? 'Privacy Policy' : 'Terms of Service'
+  const subtitle = isPrivacy
+    ? 'Step 1 of 2 — read our Privacy Policy then tap Accept.'
+    : 'Step 2 of 2 — read our Terms of Service then tap Accept.'
+  const buttonLabel = isPrivacy ? 'I accept the Privacy Policy' : 'I accept the Terms of Service — Continue'
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
+        key="backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         style={{
@@ -185,8 +191,10 @@ export default function LegalModal() {
         }}
       >
         <motion.div
+          key={step}
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
+          exit={{ y: '100%' }}
           transition={{ type: 'spring', stiffness: 320, damping: 30 }}
           style={{
             width: '100%', maxWidth: '430px',
@@ -198,34 +206,22 @@ export default function LegalModal() {
           }}
         >
           {/* Header */}
-          <div style={{ padding: '20px 20px 0', flexShrink: 0 }}>
+          <div style={{ padding: '20px 20px 12px', flexShrink: 0 }}>
             <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(26,40,32,0.1)', margin: '0 auto 18px' }} />
-            <h2 style={{ color: '#1A2820', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px', marginBottom: '4px' }}>Before you continue</h2>
-            <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '13px', marginBottom: '16px' }}>
-              Please read and scroll through both documents, then accept to use Relay Arc.
-            </p>
 
-            {/* Tabs */}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-              {(['privacy', 'terms'] as const).map(t => (
-                <button
-                  key={t}
-                  onClick={() => handleTab(t)}
-                  style={{
-                    flex: 1, padding: '9px', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                    background: tab === t ? '#1A2820' : 'rgba(26,40,32,0.06)',
-                    color: tab === t ? '#FFFFFF' : 'rgba(26,40,32,0.5)',
-                    fontWeight: 700, fontSize: '12px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                  }}
-                >
-                  {t === 'privacy' ? 'Privacy Policy' : 'Terms of Service'}
-                  {(t === 'privacy' ? privacyRead : termsRead) && (
-                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5C8B74', display: 'inline-block' }} />
-                  )}
-                </button>
+            {/* Step indicator */}
+            <div style={{ display: 'flex', gap: '6px', marginBottom: '14px' }}>
+              {[1, 2].map(n => (
+                <div key={n} style={{
+                  flex: 1, height: '3px', borderRadius: '99px',
+                  background: n <= step ? '#5C8B74' : 'rgba(26,40,32,0.1)',
+                  transition: 'background 0.3s ease',
+                }} />
               ))}
             </div>
+
+            <h2 style={{ color: '#1A2820', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px', marginBottom: '4px' }}>{title}</h2>
+            <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '13px' }}>{subtitle}</p>
           </div>
 
           {/* Scrollable content */}
@@ -239,7 +235,7 @@ export default function LegalModal() {
               color: 'rgba(26,40,32,0.7)', fontSize: '11px', lineHeight: 1.7,
               fontFamily: 'inherit', margin: 0, paddingBottom: '24px',
             }}>
-              {tab === 'privacy' ? PRIVACY_POLICY : TERMS_OF_SERVICE}
+              {content}
             </pre>
           </div>
 
@@ -247,16 +243,12 @@ export default function LegalModal() {
           <div style={{ padding: '12px 20px 40px', flexShrink: 0, borderTop: '1px solid rgba(26,40,32,0.07)', background: '#FAFAF8' }}>
             {!canAccept && (
               <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px', textAlign: 'center', marginBottom: '10px' }}>
-                {!privacyRead && !termsRead
-                  ? 'Scroll through both documents to continue'
-                  : !privacyRead
-                  ? 'Scroll through the Privacy Policy to continue'
-                  : 'Scroll through the Terms of Service to continue'}
+                Scroll to the bottom to continue
               </p>
             )}
             <motion.button
               whileTap={canAccept ? { scale: 0.97, y: 1 } : {}}
-              onClick={canAccept ? accept : undefined}
+              onClick={canAccept ? handleAccept : undefined}
               style={{
                 width: '100%',
                 background: canAccept ? 'linear-gradient(135deg, #5C8B74, #3D6B58)' : 'rgba(26,40,32,0.08)',
@@ -268,10 +260,12 @@ export default function LegalModal() {
                 transition: 'all 0.2s ease',
               }}
             >
-              {canAccept ? 'I agree — Continue to Relay Arc' : 'Read both documents to continue'}
+              {canAccept ? buttonLabel : `Read the ${title} to continue`}
             </motion.button>
             <p style={{ color: 'rgba(26,40,32,0.28)', fontSize: '10px', textAlign: 'center', marginTop: '10px', lineHeight: 1.5 }}>
-              By tapping above you confirm you are 18+ and agree to our Privacy Policy and Terms of Service.
+              {isPrivacy
+                ? 'You will also need to accept the Terms of Service on the next screen.'
+                : 'By tapping above you confirm you are 18+ and agree to all terms.'}
             </p>
           </div>
         </motion.div>
