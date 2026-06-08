@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Calendar, Send, X, Check, AlertTriangle, Video, ChevronLeft, ChevronRight, Bell, Pill } from 'lucide-react'
 import JitsiMeeting from '@/components/JitsiMeeting'
 import Groq from 'groq-sdk'
+import { sendPushNotification } from '@/lib/notifications'
 
 const groq = new Groq({
   apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!,
@@ -140,6 +141,12 @@ Keep everything simple and plain English. No medical jargon.`
       note_type: 'med_reminder',
       content: medName,
     })
+    // Also fire a real background push so patient is notified even if app is closed
+    await sendPushNotification(
+      patientId,
+      'Medication reminder from your care team',
+      `Please take your ${medName}. Tap to open the app.`
+    )
     setReminderSent(prev => ({ ...prev, [medName]: true }))
     toast.success(`Reminder sent for ${medName}`)
   }

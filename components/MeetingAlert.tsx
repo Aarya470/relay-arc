@@ -206,7 +206,7 @@ export default function MeetingAlert() {
                   const reg = await navigator.serviceWorker?.ready
                   reg?.showNotification('Meeting in 2 minutes', {
                     body: 'Your care team call is about to start. Tap to join.',
-                    icon: '/icon.png', badge: '/icon.png',
+                    icon: '/icon-192.png', badge: '/icon-192.png',
                     data: { url }, requireInteraction: true,
                   } as any)
                 } catch {
@@ -235,7 +235,7 @@ export default function MeetingAlert() {
                   const reg = await navigator.serviceWorker?.ready
                   reg?.showNotification(`Time to take ${med.name}`, {
                     body: `${med.dose} — tap to confirm on the Medications page.`,
-                    icon: '/icon.png',
+                    icon: '/icon-192.png',
                     data: { url: '/medications' },
                   } as any)
                 } catch {
@@ -264,7 +264,7 @@ export default function MeetingAlert() {
               const reg = await navigator.serviceWorker?.ready
               reg?.showNotification('Medication reminder from your care team', {
                 body: `Please take your ${nudge.content}. Tap to confirm.`,
-                icon: '/icon.png',
+                icon: '/icon-192.png',
                 data: { url: '/medications' },
               } as any)
             } catch {
