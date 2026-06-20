@@ -183,7 +183,7 @@ export default function Medications() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(26,40,32,0.4)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(26,40,32,0.4)', zIndex: 200, display: 'flex', alignItems: 'flex-end' }}
             onClick={e => { if (e.target === e.currentTarget) setShowAdd(false) }}
           >
             <motion.div
@@ -196,6 +196,8 @@ export default function Medications() {
                 borderRadius: '24px 24px 0 0',
                 padding: '24px 20px 40px',
                 width: '100%',
+                maxHeight: '85dvh',
+                overflowY: 'auto',
                 boxShadow: '0 -8px 40px rgba(26,40,32,0.14), inset 0 1px 0 rgba(255,255,255,0.8)',
               }}
             >
@@ -219,48 +221,69 @@ export default function Medications() {
                   style={sheetInputStyle}/>
 
                 {/* Frequency dropdown */}
-                <div style={{ position: 'relative' }}>
-                  <button onClick={() => setShowFreqDropdown(!showFreqDropdown)}
+                <div>
+                  <button onClick={() => { setShowFreqDropdown(!showFreqDropdown); setShowTimeDropdown(false) }}
                     style={{ ...sheetInputStyle, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     {newMed.frequency}
-                    <ChevronDown size={16} color="rgba(26,40,32,0.4)"/>
+                    <motion.div animate={{ rotate: showFreqDropdown ? 180 : 0 }} transition={{ duration: 0.18 }}>
+                      <ChevronDown size={16} color="rgba(26,40,32,0.4)"/>
+                    </motion.div>
                   </button>
-                  {showFreqDropdown && (
-                    <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.1)', borderRadius: '14px', marginTop: '4px', zIndex: 100, maxHeight: '200px', overflowY: 'auto', boxShadow: '0 4px 20px rgba(26,40,32,0.1)' }}>
-                      {FREQUENCY_OPTIONS.map(f => (
-                        <button key={f} onClick={() => { setNewMed(prev => ({ ...prev, frequency: f })); setShowFreqDropdown(false) }}
-                          style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.frequency === f ? '#5C8B74' : 'rgba(26,40,32,0.7)', fontSize: '14px', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', fontWeight: newMed.frequency === f ? 700 : 400 }}>
-                          {f}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {showFreqDropdown && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                        style={{ overflow: 'hidden', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.1)', borderRadius: '14px', marginTop: '4px', boxShadow: '0 4px 20px rgba(26,40,32,0.1)' }}
+                      >
+                        {FREQUENCY_OPTIONS.map(f => (
+                          <button key={f} onClick={() => { setNewMed(prev => ({ ...prev, frequency: f })); setShowFreqDropdown(false) }}
+                            style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.frequency === f ? '#5C8B74' : 'rgba(26,40,32,0.7)', fontSize: '14px', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', fontWeight: newMed.frequency === f ? 700 : 400, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            {f}
+                            {newMed.frequency === f && <Check size={14} color="#5C8B74"/>}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 {/* Time dropdown */}
-                <div style={{ position: 'relative' }}>
-                  <button onClick={() => setShowTimeDropdown(!showTimeDropdown)}
+                <div>
+                  <button onClick={() => { setShowTimeDropdown(!showTimeDropdown); setShowFreqDropdown(false) }}
                     style={{ ...sheetInputStyle, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     {newMed.times.join(', ')}
-                    <ChevronDown size={16} color="rgba(26,40,32,0.4)"/>
+                    <motion.div animate={{ rotate: showTimeDropdown ? 180 : 0 }} transition={{ duration: 0.18 }}>
+                      <ChevronDown size={16} color="rgba(26,40,32,0.4)"/>
+                    </motion.div>
                   </button>
-                  {showTimeDropdown && (
-                    <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.1)', borderRadius: '14px', marginTop: '4px', zIndex: 100, maxHeight: '200px', overflowY: 'auto', boxShadow: '0 4px 20px rgba(26,40,32,0.1)' }}>
-                      {TIME_OPTIONS.map(t => (
-                        <button key={t}
-                          onClick={() => {
-                            const times = newMed.times.includes(t)
-                              ? newMed.times.filter(x => x !== t)
-                              : [...newMed.times, t]
-                            setNewMed(prev => ({ ...prev, times: times.length > 0 ? times : ['Morning'] }))
-                          }}
-                          style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.times.includes(t) ? '#5C8B74' : 'rgba(26,40,32,0.7)', fontSize: '14px', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'inherit' }}>
-                          {t}
-                          {newMed.times.includes(t) && <Check size={14} color="#5C8B74"/>}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {showTimeDropdown && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                        style={{ overflow: 'hidden', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.1)', borderRadius: '14px', marginTop: '4px', boxShadow: '0 4px 20px rgba(26,40,32,0.1)' }}
+                      >
+                        {TIME_OPTIONS.map(t => (
+                          <button key={t}
+                            onClick={() => {
+                              const times = newMed.times.includes(t)
+                                ? newMed.times.filter(x => x !== t)
+                                : [...newMed.times, t]
+                              setNewMed(prev => ({ ...prev, times: times.length > 0 ? times : ['Morning'] }))
+                            }}
+                            style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.times.includes(t) ? '#5C8B74' : 'rgba(26,40,32,0.7)', fontSize: '14px', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'inherit' }}>
+                            {t}
+                            {newMed.times.includes(t) && <Check size={14} color="#5C8B74"/>}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 <motion.button
