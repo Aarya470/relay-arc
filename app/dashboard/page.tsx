@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video, Settings, Activity } from 'lucide-react'
+import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video, Settings, Activity, LogOut } from 'lucide-react'
 import { toast } from 'sonner'
 
 // Returns a cleanup function — store and call on unmount to cancel pending timers
@@ -247,30 +247,17 @@ export default function Dashboard() {
               {profile?.full_name?.split(' ')[0]}
             </h1>
           </div>
-          {/* Avatar + Settings */}
+          {/* Avatar + Logout */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
             <motion.button
               whileTap={{ scale: 0.88 }}
               transition={spring}
-              onClick={() => router.push('/settings')}
-              aria-label="Settings"
-              style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(26,40,32,0.06)', border: '1px solid rgba(26,40,32,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+              onClick={async () => { await supabase.auth.signOut(); router.push('/login') }}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '10px', background: 'rgba(232,50,42,0.07)', border: '1px solid rgba(232,50,42,0.15)', cursor: 'pointer' }}
             >
-              <Settings size={15} color="rgba(26,40,32,0.45)"/>
+              <LogOut size={14} color="#E8322A"/>
+              <span style={{ color: '#E8322A', fontSize: '13px', fontWeight: 700 }}>Log out</span>
             </motion.button>
-            <div style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', inset: '-5px', borderRadius: '50%', border: '1.5px solid rgba(92,139,116,0.2)' }}/>
-              <div style={{ position: 'absolute', inset: '-10px', borderRadius: '50%', border: '1px solid rgba(92,139,116,0.1)' }}/>
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => router.push('/settings')}
-                style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #5C8B74 0%, #3D6B58 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(92,139,116,0.28)', border: 'none', cursor: 'pointer' }}
-              >
-                <span style={{ color: '#FFFFFF', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px' }}>
-                  {profile?.full_name?.[0] || '?'}
-                </span>
-              </motion.button>
-            </div>
           </div>
         </div>
 
