@@ -23,7 +23,8 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://*.supabase.co https://*.openstreetmap.org https://*.tile.openstreetmap.org https://*.jit.si",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.groq.com https://*.jit.si wss://*.jit.si https://8x8.vc",
+      // api.groq.com removed — all Groq calls are now server-side (API routes), not from the browser
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.jit.si wss://*.jit.si https://8x8.vc https://nominatim.openstreetmap.org",
       "frame-src 'self' https://*.jit.si https://8x8.vc",
       "media-src 'self' blob: https://*.jit.si",
       "worker-src 'self' blob:",

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { Loader2, ArrowRight } from 'lucide-react'
+import { Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react'
 
 const spring = { type: 'spring', stiffness: 380, damping: 22 } as const
 
@@ -14,10 +14,12 @@ export default function Login() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [loading, setLoading] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
   const handleAuth = async () => {
     if (!email || !password) { toast.error('Fill in all fields'); return }
+    if (isSignUp && password.length < 8) { toast.error('Password must be at least 8 characters'); return }
     setLoading(true)
     if (isSignUp) {
       const { error } = await supabase.auth.signUp({ email, password })
@@ -114,16 +116,29 @@ export default function Login() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
             <label style={{ color: 'rgba(26,40,32,0.5)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.3px', marginBottom: '4px' }}>Password</label>
-            <input
-              style={inputStyle('password')}
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onFocus={() => setFocusedField('password')}
-              onBlur={() => setFocusedField(null)}
-              onChange={e => setPassword(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAuth()}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                style={{ ...inputStyle('password'), paddingRight: '48px' }}
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={password}
+                onFocus={() => setFocusedField('password')}
+                onBlur={() => setFocusedField(null)}
+                onChange={e => setPassword(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleAuth()}
+              />
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPassword(p => !p)}
+                style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: 'rgba(26,40,32,0.35)' }}
+              >
+                {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
+              </button>
+            </div>
+            {isSignUp && password.length > 0 && password.length < 8 && (
+              <p style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>At least 8 characters required</p>
+            )}
           </div>
 
           <motion.button

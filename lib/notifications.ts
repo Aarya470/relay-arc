@@ -40,12 +40,18 @@ export async function sendPushNotification(userId: string, title: string, body: 
     const token = session?.access_token
     if (!token) return
 
-    await fetch('/api/push/send', {
+    const res = await fetch('/api/push/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ userId, title, body }),
     })
-  } catch {}
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      console.error('Push notification failed:', res.status, err)
+    }
+  } catch (e) {
+    console.error('sendPushNotification error:', e)
+  }
 }
 
 function urlBase64ToUint8Array(base64String: string) {

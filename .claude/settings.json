@@ -19,7 +19,9 @@
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\aarya\\\\relay-arc\" -Recurse -Directory)",
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(Sort-Object)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(gh run *)"
     ],
     "additionalDirectories": [
       "\\mnt\\c\\Users\\aarya\\.claude\\skills",

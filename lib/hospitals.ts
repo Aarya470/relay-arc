@@ -68,7 +68,6 @@ export async function findNearbyHospitals(
     const data = await res.json()
     const elements = data.elements || []
 
-    console.log('Hospital elements:', elements.length, elements[0])
 
     const hospitals: Hospital[] = elements
       .filter((el: any) => el.tags?.name)

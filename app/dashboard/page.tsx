@@ -6,8 +6,55 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video } from 'lucide-react'
+import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video, Settings, Activity } from 'lucide-react'
 import { toast } from 'sonner'
+
+// Returns a cleanup function — store and call on unmount to cancel pending timers
+function scheduleCheckinReminders(userId: string, checkins: any[]): () => void {
+  let timerId: ReturnType<typeof setTimeout> | null = null
+  let cancelled = false
+
+  const schedule = (existingCheckins: any[]) => {
+    if (cancelled) return
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return
+    if (Notification.permission !== 'granted') return
+
+    const today = new Date().toDateString()
+    const checkedInToday = existingCheckins.some(c => new Date(c.created_at).toDateString() === today)
+    if (checkedInToday) return
+
+    const now = new Date()
+    const hour = now.getHours()
+    if (hour < 8 || hour >= 20) return
+
+    const nextHour = new Date(now)
+    nextHour.setHours(hour + 1, 0, 0, 0)
+    const ms = nextHour.getTime() - now.getTime()
+
+    timerId = setTimeout(async () => {
+      if (cancelled) return
+      try {
+        const { supabase: sb } = await import('@/lib/supabase')
+        const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0)
+        const { data } = await sb.from('checkins').select('id').eq('user_id', userId).gte('created_at', startOfDay.toISOString()).limit(1)
+        if (data?.length) return
+
+        const reg = await navigator.serviceWorker.ready
+        await reg.showNotification('Daily check-in reminder', {
+          body: "You haven't completed your check-in yet. Tap to do it now.",
+          icon: '/icon-192.png',
+          badge: '/icon-192.png',
+          data: { url: '/checkin' },
+        } as any)
+        // Schedule the next reminder
+        schedule([])
+      } catch {}
+    }, ms)
+  }
+
+  schedule(checkins)
+  return () => { cancelled = true; if (timerId) clearTimeout(timerId) }
+}
 
 function parseTS(ts: string) {
   if (!ts) return new Date()
@@ -104,6 +151,8 @@ export default function Dashboard() {
       setCheckins(c || [])
       setLoading(false)
       registerPushNotifications(user.id)
+      const cancelReminders = scheduleCheckinReminders(user.id, c || [])
+      return cancelReminders
     }
     load()
   }, [])
@@ -140,7 +189,12 @@ export default function Dashboard() {
   const weeksSinceSurgery = profile?.surgery_date
     ? Math.floor((Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7))
     : null
-  const checkinToday = checkins.length > 0 && new Date(checkins[0].created_at).toDateString() === new Date().toDateString()
+  // Compare dates in local time (not UTC) to avoid off-by-one day across midnight
+  const checkinToday = checkins.length > 0 && (() => {
+    const ts = checkins[0].created_at
+    const checkinDate = new Date(/[Z+]/.test(ts) ? ts : ts + 'Z')
+    return checkinDate.toLocaleDateString() === new Date().toLocaleDateString()
+  })()
   const recoveryPct = weeksSinceSurgery !== null ? Math.min((weeksSinceSurgery / 12) * 100, 100) : 0
   const meds = profile?.medications?.slice(0, 3) || []
 
@@ -193,19 +247,29 @@ export default function Dashboard() {
               {profile?.full_name?.split(' ')[0]}
             </h1>
           </div>
-          {/* Avatar — circle with double ring */}
-          <div style={{ position: 'relative', flexShrink: 0 }}>
-            <div style={{ position: 'absolute', inset: '-5px', borderRadius: '50%', border: '1.5px solid rgba(92,139,116,0.2)' }}/>
-            <div style={{ position: 'absolute', inset: '-10px', borderRadius: '50%', border: '1px solid rgba(92,139,116,0.1)' }}/>
-            <div style={{
-              width: '48px', height: '48px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, #5C8B74 0%, #3D6B58 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 4px 16px rgba(92,139,116,0.28)',
-            }}>
-              <span style={{ color: '#FFFFFF', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px' }}>
-                {profile?.full_name?.[0]}
-              </span>
+          {/* Avatar + Settings */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+            <motion.button
+              whileTap={{ scale: 0.88 }}
+              transition={spring}
+              onClick={() => router.push('/settings')}
+              aria-label="Settings"
+              style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(26,40,32,0.06)', border: '1px solid rgba(26,40,32,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+            >
+              <Settings size={15} color="rgba(26,40,32,0.45)"/>
+            </motion.button>
+            <div style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', inset: '-5px', borderRadius: '50%', border: '1.5px solid rgba(92,139,116,0.2)' }}/>
+              <div style={{ position: 'absolute', inset: '-10px', borderRadius: '50%', border: '1px solid rgba(92,139,116,0.1)' }}/>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => router.push('/settings')}
+                style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #5C8B74 0%, #3D6B58 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(92,139,116,0.28)', border: 'none', cursor: 'pointer' }}
+              >
+                <span style={{ color: '#FFFFFF', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px' }}>
+                  {profile?.full_name?.[0] || '?'}
+                </span>
+              </motion.button>
             </div>
           </div>
         </div>
@@ -425,55 +489,85 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
+        {/* Vitals quick log */}
+        <motion.div variants={fadeUp}>
+          <motion.button
+            whileTap={{ scale: 0.97, y: 1 }}
+            transition={spring}
+            onClick={() => router.push('/vitals')}
+            style={{
+              background: '#FFFFFF',
+              border: '1.5px solid rgba(26,40,32,0.07)',
+              borderRadius: '6px 6px 6px 6px', padding: '14px 18px', cursor: 'pointer', textAlign: 'left', width: '100%',
+              display: 'flex', alignItems: 'center', gap: '14px',
+              boxShadow: '0 2px 8px rgba(26,40,32,0.05)',
+            }}
+          >
+            <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: 'rgba(232,50,42,0.08)', border: '1px solid rgba(232,50,42,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Activity size={17} color="#E8322A"/>
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '13px' }}>Log vitals</p>
+              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px', marginTop: '1px' }}>HR · BP · O₂ · Resp rate</p>
+            </div>
+            <ChevronRight size={14} color="rgba(26,40,32,0.25)"/>
+          </motion.button>
+        </motion.div>
+
         {/* Care team */}
         <motion.div variants={fadeUp}>
           <motion.button
             whileTap={{ scale: 0.97, y: 1 }}
             transition={spring}
-            onClick={() => toast('Coming soon — your care team will be available here shortly.')}
+            onClick={() => router.push('/appointments')}
             style={{
               background: 'linear-gradient(135deg, rgba(92,139,116,0.05) 0%, #FFFFFF 70%)',
-              border: '1.5px solid rgba(92,139,116,0.12)',
+              border: '1.5px solid rgba(92,139,116,0.18)',
               borderRadius: '24px 24px 6px 24px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
               display: 'flex', alignItems: 'center', gap: '16px',
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
-              opacity: 0.7,
             }}
           >
-            <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(92,139,116,0.08)', border: '1px solid rgba(92,139,116,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Stethoscope size={20} color="#5C8B74"/>
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.2px' }}>Care team</p>
-              <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '12px', marginTop: '2px' }}>Coming soon</p>
+              <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '12px', marginTop: '2px' }}>Schedule or join a call</p>
             </div>
-            <span style={{ background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', color: '#5C8B74', fontSize: '9px', fontWeight: 700, padding: '3px 8px', borderRadius: '99px', fontFamily: 'monospace', letterSpacing: '0.5px', flexShrink: 0 }}>SOON</span>
+            <ChevronRight size={16} color="rgba(26,40,32,0.28)"/>
           </motion.button>
         </motion.div>
 
         {/* Last check-in */}
 
         {checkins.length > 0 && (
-          <motion.div
+          <motion.button
             variants={fadeUp}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => router.push('/history')}
             style={{
               background: 'linear-gradient(145deg, rgba(255,211,172,0.14) 0%, #FFFFFF 60%)',
               border: '1.5px solid rgba(196,107,48,0.12)',
               borderRadius: '4px 24px 24px 24px', padding: '16px 18px',
               boxShadow: '0 2px 10px rgba(26,40,32,0.05)',
               position: 'relative', overflow: 'hidden',
+              width: '100%', textAlign: 'left', cursor: 'pointer',
             }}
           >
             {/* Decorative half-circle */}
             <div style={{ position: 'absolute', right: '-24px', top: '-24px', width: '80px', height: '80px', borderRadius: '50%', border: '1.5px solid rgba(196,107,48,0.1)', pointerEvents: 'none' }}/>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
               <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px' }}>Last check-in</p>
-              <p style={{ color: 'rgba(26,40,32,0.22)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>{new Date(checkins[0].created_at).toLocaleDateString()}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <p style={{ color: 'rgba(26,40,32,0.22)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>{new Date(checkins[0].created_at).toLocaleDateString()}</p>
+                <ChevronRight size={11} color="rgba(26,40,32,0.22)"/>
+              </div>
             </div>
             <p style={{ color: 'rgba(26,40,32,0.6)', fontSize: '13px', lineHeight: 1.65, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {checkins[0].summary}
             </p>
-          </motion.div>
+          </motion.button>
         )}
       </motion.div>
 

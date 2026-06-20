@@ -31,7 +31,9 @@ function processAndMarkMissed(appts: any[]): any[] {
     .filter(a => a.status === 'confirmed' && parseTS(a.scheduled_at).getTime() < now - 30 * 60 * 1000)
     .map(a => a.id)
   if (missedIds.length > 0) {
+    // Fire-and-await the DB update; errors are non-critical for UI
     supabase.from('appointments').update({ status: 'missed' }).in('id', missedIds)
+      .then(({ error }) => { if (error) console.error('processAndMarkMissed:', error) })
     return appts.map(a => missedIds.includes(a.id) ? { ...a, status: 'missed' } : a)
   }
   return appts
@@ -229,8 +231,8 @@ export default function Appointments() {
 
   const canSubmit = selectedDay !== null && !scheduledInPast
 
-  const requestAgain = (appt: any) => {
-    supabase.from('appointments').update({ status: 'cancelled' }).eq('id', appt.id)
+  const requestAgain = async (appt: any) => {
+    await supabase.from('appointments').update({ status: 'cancelled' }).eq('id', appt.id)
     setAppointments(prev => prev.filter(a => a.id !== appt.id))
     setConcern(appt.patient_concern || '')
     setShowRequest(true)
@@ -245,7 +247,7 @@ export default function Appointments() {
 
   const request = async () => {
     if (!canSubmit || !userId) return
-    const meetingRoomId = ([1e7]as any+(-1e3)+(-4e3)+(-8e3)+(-1e11)).replace(/[018]/g,(c:any)=>(c^(Math.random()*16>>c/4)).toString(16))
+    const meetingRoomId = crypto.randomUUID()
     const { data, error } = await supabase.from('appointments').insert({
       patient_id: userId,
       type,
@@ -380,7 +382,9 @@ export default function Appointments() {
                     {a.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
                   </span>
                 </div>
-                <span style={statusStyle(a.status)}>{a.status}</span>
+                <span style={statusStyle(a.status)}>
+                  {a.status === 'pending' ? 'Awaiting review' : a.status}
+                </span>
               </div>
               {a.scheduled_at && a.type === 'scheduled' && (
                 <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '12px', marginBottom: '4px' }}>

@@ -42,12 +42,32 @@ export default function Medications() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
       setUserId(user.id)
-      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-      const meds = (data?.medications || []).map((m: any) => ({
+
+      const [{ data: profile }, { data: logs }] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', user.id).single(),
+        supabase.from('medication_logs').select('*').eq('user_id', user.id).gte(
+          'taken_at',
+          (() => { const d = new Date(); d.setHours(0,0,0,0); return d.toISOString() })()
+        )
+      ])
+
+      const meds = (profile?.medications || []).map((m: any) => ({
         ...m,
         times: m.times || ['Morning']
       }))
       setMedications(meds)
+
+      // Restore today's taken state from medication_logs
+      const initialTaken: Record<string, boolean> = {}
+      meds.forEach((med: any, medIndex: number) => {
+        const wasTaken = (logs || []).some((log: any) => log.medication_name === med.name)
+        if (wasTaken) {
+          med.times.forEach((_: string, timeIndex: number) => {
+            initialTaken[`${medIndex}-${timeIndex}`] = true
+          })
+        }
+      })
+      setTaken(initialTaken)
       setLoading(false)
     }
     load()
@@ -84,10 +104,13 @@ export default function Medications() {
   }
 
   const removeMedication = async (index: number) => {
+    const med = medications[index]
+    const confirmed = window.confirm(`Remove ${med.name}? This cannot be undone.`)
+    if (!confirmed) return
     const updated = medications.filter((_, i) => i !== index)
     await supabase.from('profiles').update({ medications: updated }).eq('id', userId)
     setMedications(updated)
-    toast.success('Medication removed')
+    toast.success(`${med.name} removed`)
   }
 
   const addTime = async (medIndex: number, time: string) => {

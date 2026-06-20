@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
           lon: parseFloat(item.lon),
         }))
 
-        console.log(`Found ${elements.length} hospitals at box ${box}`)
         return NextResponse.json({ elements })
       }
     } catch (e) {

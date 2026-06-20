@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
-import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Radio } from 'lucide-react'
+import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone } from 'lucide-react'
+import { toast } from 'sonner'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
@@ -34,24 +35,37 @@ export default function Emergency() {
   const handleSelect = async (type: string) => {
     setSelected(type)
     setLoading(true)
-    const { data: { user } } = await supabase.auth.getUser()
-    let emergencyId = ''
-    if (user) {
-      // Resolve any lingering active emergencies before creating a new one
-      // so there is always at most 1 active emergency per user.
-      await supabase.from('emergencies')
-        .update({ status: 'resolved' })
-        .eq('user_id', user.id)
-        .eq('status', 'active')
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      let emergencyId = ''
+      if (user) {
+        // Resolve any lingering active emergencies before creating a new one
+        await supabase.from('emergencies')
+          .update({ status: 'resolved' })
+          .eq('user_id', user.id)
+          .eq('status', 'active')
 
-      const { data } = await supabase
-        .from('emergencies')
-        .insert({ user_id: user.id, emergency_type: type, status: 'active' })
-        .select()
-        .single()
-      emergencyId = data?.id || ''
+        const { data, error } = await supabase
+          .from('emergencies')
+          .insert({ user_id: user.id, emergency_type: type, status: 'active' })
+          .select()
+          .single()
+
+        if (error) {
+          console.error('Emergency insert failed:', error)
+          toast.error('Could not log emergency — please call 911 now')
+          // Still navigate so the user can get routing info
+        } else {
+          emergencyId = data?.id || ''
+        }
+      }
+      router.push(`/emergency/routing?type=${type}&id=${emergencyId}`)
+    } catch (err) {
+      console.error('Emergency select error:', err)
+      toast.error('Something went wrong — please call 911 now')
+      setLoading(false)
+      setSelected('')
     }
-    setTimeout(() => router.push(`/emergency/routing?type=${type}&id=${emergencyId}`), 500)
   }
 
   return (
@@ -82,7 +96,7 @@ export default function Emergency() {
       <div style={{ flex: 1, padding: '24px 20px 20px', display: 'flex', flexDirection: 'column' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
           <div>
             <h1 style={{ color: '#1A2820', fontSize: '26px', fontWeight: 900, letterSpacing: '-1px', marginBottom: '4px', lineHeight: 1.1 }}>
               What is happening?
@@ -98,6 +112,24 @@ export default function Emergency() {
             <X size={15} color="rgba(26,40,32,0.5)"/>
           </motion.button>
         </div>
+
+        {/* Call 911 button — always visible and prominent */}
+        <motion.a
+          href="tel:911"
+          whileTap={{ scale: 0.97 }}
+          transition={spring}
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+            background: '#DC2626', color: 'white',
+            padding: '16px', borderRadius: '18px',
+            fontWeight: 900, fontSize: '17px', letterSpacing: '-0.3px',
+            textDecoration: 'none', marginBottom: '16px',
+            boxShadow: '0 6px 24px rgba(220,38,38,0.38)',
+          }}
+        >
+          <Phone size={20}/>
+          Call 911 now
+        </motion.a>
 
         {/* Type grid */}
         <motion.div
@@ -129,6 +161,7 @@ export default function Emergency() {
                     ? '0 6px 20px rgba(220,38,38,0.14)'
                     : '0 2px 8px rgba(26,40,32,0.06)',
                   transition: 'border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease',
+                  opacity: loading && !isSelected ? 0.6 : 1,
                 }}
               >
                 <div style={{
@@ -146,11 +179,10 @@ export default function Emergency() {
           })}
         </motion.div>
 
-        {/* Status bar */}
-        <div style={{ marginTop: '16px', background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.14)', borderRadius: '14px', padding: '12px 16px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <Radio size={13} color="rgba(220,38,38,0.5)" style={{ flexShrink: 0 }}/>
-          <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '12px' }}>Relay Arc is scanning nearby hospitals in real time</p>
-        </div>
+        {/* Info strip */}
+        <p style={{ marginTop: '16px', color: 'rgba(26,40,32,0.35)', fontSize: '11px', textAlign: 'center', lineHeight: 1.5 }}>
+          Select a symptom above to alert your care team and find the nearest hospital
+        </p>
       </div>
     </div>
   )

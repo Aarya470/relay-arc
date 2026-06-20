@@ -6,13 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar } from 'lucide-react'
 import { toast } from 'sonner'
 import { Skeleton } from '@/components/ui/skeleton'
-import Groq from 'groq-sdk'
 import JitsiMeeting from '@/components/JitsiMeeting'
-
-const groq = new Groq({
-  apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!,
-  dangerouslyAllowBrowser: true
-})
 
 function parseTS(ts: string) {
   if (!ts) return new Date()
@@ -188,6 +182,10 @@ export default function CareTeamDashboard() {
     setGenerating(true)
     toast('Analyzing all patients...')
 
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    if (!token) { toast.error('Please sign in again'); setGenerating(false); return }
+
     for (const patient of patients) {
       const patientCheckins = checkins.filter(c => c.user_id === patient.id).slice(0, 5)
       const patientEmergencies = emergencies.filter(e => e.user_id === patient.id)
@@ -200,35 +198,14 @@ export default function CareTeamDashboard() {
       }).length
       const adherence = expectedDoses > 0 ? Math.round((actualDoses / expectedDoses) * 100) : null
 
-      const prompt = `You are a clinical AI. Analyze this cardiac patient and return JSON only.
-
-Patient: ${patient.full_name}, ${patient.diagnosis}
-Medications: ${JSON.stringify(patient.medications)}
-Recent check-ins: ${patientCheckins.map(c => c.summary).join(' | ') || 'None'}
-Emergency events: ${patientEmergencies.length} total. Most recent: ${patientEmergencies[0]?.emergency_type || 'none'} on ${patientEmergencies[0] ? new Date(patientEmergencies[0].created_at).toLocaleDateString() : 'N/A'}
-Medication adherence: ${adherence !== null ? `${adherence}% this week` : 'No data'}
-
-Return JSON:
-{
-  "priority_score": number 1-10,
-  "short_note": "one short sentence — what the care team needs to know right now",
-  "status": "stable" | "monitor" | "urgent",
-  "summary": "2-3 sentence clinical summary"
-}
-
-Score 8-10: active emergency, worsening symptoms, missed meds + bad check-ins
-Score 5-7: some concerns, monitor closely
-Score 1-4: stable, no major issues`
-
       try {
-        const completion = await groq.chat.completions.create({
-          model: 'llama-3.1-8b-instant',
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.2
+        const res = await fetch('/api/groq/care-summary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ patient, checkins: patientCheckins, emergencies: patientEmergencies, adherence }),
         })
-        const text = completion.choices[0].message.content || '{}'
-        const clean = text.replace(/```json|```/g, '').trim()
-        const data = JSON.parse(clean)
+        if (!res.ok) throw new Error('API error')
+        const { summary: data } = await res.json()
 
         await supabase.from('patient_summaries').upsert({
           patient_id: patient.id,
@@ -240,7 +217,7 @@ Score 1-4: stable, no major issues`
 
         setSummaries(prev => ({ ...prev, [patient.id]: { ...data, priority_reason: data.short_note } }))
       } catch (e) {
-        console.error('Error for', patient.full_name)
+        console.error('Summary error for patient:', patient.id)
       }
     }
 

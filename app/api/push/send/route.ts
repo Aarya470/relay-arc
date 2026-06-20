@@ -8,9 +8,14 @@ webpush.setVapidDetails(
   process.env.VAPID_PRIVATE_KEY!
 )
 
+// Auth checks use the anon client with user JWT; data reads use service role to bypass RLS
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
 export async function POST(req: NextRequest) {
@@ -56,7 +61,8 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const { data } = await supabase
+    // Use admin client to read push subscriptions regardless of RLS policies
+    const { data } = await supabaseAdmin
       .from('push_subscriptions')
       .select('subscription')
       .eq('user_id', userId)

@@ -4,12 +4,9 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import Groq from 'groq-sdk'
 import { ArrowLeft, Send, Loader2, Heart, Check } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
-
-const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!, dangerouslyAllowBrowser: true })
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 const bubbleSpring = { type: 'spring', stiffness: 320, damping: 28 } as const
@@ -37,6 +34,30 @@ export default function Checkin() {
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
+  const callGroq = async (msgs: { role: string; text: string }[], mode?: string): Promise<string> => {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    if (!token) throw new Error('Not authenticated')
+
+    const res = await fetch('/api/groq/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({
+        messages: msgs,
+        profile: { diagnosis: profile?.diagnosis, medications: profile?.medications },
+        mode,
+      }),
+    })
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      throw new Error(err.error || 'AI unavailable')
+    }
+
+    const data = await res.json()
+    return data.content || ''
+  }
+
   const sendMessage = async () => {
     if (!input.trim() || loading) return
     const userMsg = input.trim()
@@ -45,48 +66,34 @@ export default function Checkin() {
     const newMessages = [...messages, { role: 'user', text: userMsg }]
     setMessages(newMessages)
 
-    const systemPrompt = `You are a warm, caring health companion for Relay Arc. Talk like a kind friend texting, not a doctor.
-Patient: ${profile?.full_name}. Conditions: ${profile?.diagnosis}. Meds: ${JSON.stringify(profile?.medications)}.
-Rules:
-- Simple everyday words only, no medical jargon
-- Max 2 short sentences per message
-- Warm and encouraging — like texting a caring friend
-- Ask one simple question at a time
-- If they mention chest pain, feeling faint, or trouble breathing say: "That sounds serious — please tap the SOS button right now."
-- After 4-5 exchanges, wrap up warmly and end with [CHECKIN_COMPLETE]`
+    try {
+      const response = await callGroq(newMessages)
+      const clean = response.replace('[CHECKIN_COMPLETE]', '').trim()
+      setMessages(prev => [...prev, { role: 'ai', text: clean }])
 
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...newMessages.map(m => ({ role: m.role === 'ai' ? 'assistant' : 'user' as any, content: m.text }))
-      ]
-    })
+      if (response.includes('[CHECKIN_COMPLETE]')) {
+        const fullConvo = [...newMessages, { role: 'ai', text: clean }]
+        let clinicalSummary = clean
+        try {
+          clinicalSummary = await callGroq(fullConvo, 'summary') || clean
+        } catch { /* fallback to AI message */ }
 
-    const response = completion.choices[0].message.content || ''
-    const clean = response.replace('[CHECKIN_COMPLETE]', '').trim()
-    setMessages(prev => [...prev, { role: 'ai', text: clean }])
-
-    if (response.includes('[CHECKIN_COMPLETE]')) {
-      const fullConvo = [...newMessages, { role: 'ai', text: clean }]
-        .map(m => `${m.role === 'user' ? 'Patient' : 'AI'}: ${m.text}`)
-        .join('\n')
-      let clinicalSummary = clean
-      try {
-        const sc = await groq.chat.completions.create({
-          model: 'llama-3.1-8b-instant',
-          messages: [{ role: 'user', content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual.\n\nConversation:\n${fullConvo}` }]
-        })
-        clinicalSummary = sc.choices[0].message.content?.trim() || clean
-      } catch { /* fallback to AI message */ }
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
-        toast.success('Check-in saved')
-        sendPushNotification(user.id, 'Check-in complete ✓', 'Your daily check-in has been saved. Your care team has been notified.')
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
+          toast.success('Check-in saved')
+          sendPushNotification(user.id, 'Check-in complete ✓', 'Your daily check-in has been saved. Your care team has been notified.')
+        }
+        setDone(true)
       }
-      setDone(true)
+    } catch (err: any) {
+      console.error('Checkin AI error:', err)
+      toast.error('Could not reach the AI right now — please try again')
+      // Remove the user message to allow retry
+      setMessages(prev => prev.slice(0, -1))
+      setInput(userMsg)
     }
+
     setLoading(false)
   }
 
@@ -195,22 +202,32 @@ Rules:
               <Check size={24} color="#5C8B74" strokeWidth={2.5}/>
             </div>
             <p style={{ color: '#3D6B58', fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
-            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px', marginBottom: '18px' }}>Your responses have been saved</p>
-            <motion.button
-              whileTap={{ scale: 0.97, y: 1 }}
-              transition={spring}
-              onClick={() => router.push('/dashboard')}
-              style={{ background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 800, fontSize: '14px', padding: '14px 24px', borderRadius: '14px', border: 'none', cursor: 'pointer', width: '100%', boxShadow: '0 6px 20px rgba(92,139,116,0.22)' }}
-            >
-              Back to dashboard
-            </motion.button>
+            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px', marginBottom: '18px' }}>Your responses have been saved and your care team has been notified</p>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <motion.button
+                whileTap={{ scale: 0.97, y: 1 }}
+                transition={spring}
+                onClick={() => router.push('/history')}
+                style={{ flex: 1, background: 'rgba(92,139,116,0.1)', color: '#3D6B58', fontWeight: 700, fontSize: '13px', padding: '13px 16px', borderRadius: '14px', border: '1px solid rgba(92,139,116,0.2)', cursor: 'pointer' }}
+              >
+                View history
+              </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.97, y: 1 }}
+                transition={spring}
+                onClick={() => router.push('/dashboard')}
+                style={{ flex: 1, background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 800, fontSize: '13px', padding: '13px 16px', borderRadius: '14px', border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(92,139,116,0.22)' }}
+              >
+                Dashboard
+              </motion.button>
+            </div>
           </motion.div>
         )}
 
         <div ref={bottomRef}/>
       </div>
 
-      {/* Quick replies */}
+      {/* Quick replies — shown on first message only */}
       {messages.length === 1 && !done && (
         <div style={{ padding: '8px 16px 4px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
           {QUICK_REPLIES.map(r => (

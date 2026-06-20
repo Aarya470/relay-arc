@@ -65,9 +65,13 @@ export default function Onboarding() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/login'); return }
 
+    // Filter out empty medication entries before saving
+    const filteredMeds = form.medications.filter(m => m.name.trim())
+
     const { error } = await supabase.from('profiles').insert({
       id: user.id,
       ...form,
+      medications: filteredMeds,
       diagnosis: form.diagnosis.join(', ')
     })
 
@@ -138,8 +142,8 @@ export default function Onboarding() {
               </div>
 
               <input style={inputStyle} placeholder="Full name" value={form.full_name} onChange={e => update('full_name', e.target.value)}/>
-              <input style={inputStyle} placeholder="Date of birth (YYYY-MM-DD)" value={form.date_of_birth} onChange={e => update('date_of_birth', e.target.value)}/>
-              <input style={inputStyle} placeholder="Phone number" value={form.phone} onChange={e => update('phone', e.target.value)}/>
+              <input type="date" style={inputStyle} placeholder="Date of birth" value={form.date_of_birth} onChange={e => update('date_of_birth', e.target.value)}/>
+              <input type="tel" style={inputStyle} placeholder="Phone number" value={form.phone} onChange={e => update('phone', e.target.value)}/>
               <input style={inputStyle} placeholder="Cardiologist or specialist name" value={form.cardiologist} onChange={e => update('cardiologist', e.target.value)}/>
 
               <motion.button
@@ -200,7 +204,7 @@ export default function Onboarding() {
                 })}
               </div>
 
-              <input style={inputStyle} placeholder="Surgery date if applicable (YYYY-MM-DD)" value={form.surgery_date} onChange={e => update('surgery_date', e.target.value)}/>
+              <input type="date" style={inputStyle} placeholder="Surgery date (if applicable)" value={form.surgery_date} onChange={e => update('surgery_date', e.target.value)}/>
               <input style={inputStyle} placeholder="Known allergies" value={form.allergies} onChange={e => update('allergies', e.target.value)}/>
 
               <div style={{ display: 'flex', gap: '10px' }}>
@@ -208,7 +212,10 @@ export default function Onboarding() {
                   style={{ flex: 1, background: '#FFFFFF', border: '1.5px solid rgba(26,40,32,0.1)', color: '#1A2820', fontWeight: 600, padding: '16px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
                   <ArrowLeft size={16}/> Back
                 </motion.button>
-                <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => setStep(3)}
+                <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => {
+                  if (form.diagnosis.length === 0) { toast.error('Please select at least one condition'); return }
+                  setStep(3)
+                }}
                   style={{ flex: 1, background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px', boxShadow: '0 6px 20px rgba(92,139,116,0.22)' }}>
                   Continue <ArrowRight size={16}/>
                 </motion.button>

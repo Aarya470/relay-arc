@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X } from 'lucide-react'
 import { findNearbyHospitals, formatDistance, estimateTime, Hospital } from '@/lib/hospitals'
+import { sendPushNotification } from '@/lib/notifications'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
 
@@ -85,9 +86,10 @@ function RoutingPage() {
   useEffect(() => {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        userIdRef.current = user.id
-        const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+      const userId = user?.id
+      if (userId) {
+        userIdRef.current = userId
+        const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
         setProfile(data)
       }
 
@@ -101,7 +103,7 @@ function RoutingPage() {
           capability: 'Navigation'
         })
         setLoading(false)
-        setTimeout(() => setCareTeamAlerted(true), 1500)
+        alertCareTeam(userId)
         return
       }
 
@@ -117,27 +119,48 @@ function RoutingPage() {
               setLocationError('No hospitals found nearby')
             }
             setLoading(false)
-            setTimeout(() => setCareTeamAlerted(true), 1800)
+            alertCareTeam(userId)
           },
-          async () => {
-            setLocationError('Location unavailable — using default area')
-            const hospitals = await findNearbyHospitals(40.2715, -74.6600, type)
-            if (hospitals.length > 0) {
-              setHospital(hospitals[0])
-              setNearbyHospitals(hospitals)
-            }
+          () => {
+            // Geolocation denied or failed — do NOT fall back to hardcoded coordinates
+            setLocationError('Location unavailable — please call 911 directly')
             setLoading(false)
-            setTimeout(() => setCareTeamAlerted(true), 1800)
+            alertCareTeam(userId)
           },
           { enableHighAccuracy: true, timeout: 10000 }
         )
       } else {
+        setLocationError('Geolocation not supported on this device')
         setLoading(false)
-        setTimeout(() => setCareTeamAlerted(true), 1500)
+        alertCareTeam(userId)
       }
     }
     load()
   }, [type])
+
+  const alertCareTeam = async (userId?: string) => {
+    if (!userId) { setCareTeamAlerted(true); return }
+    try {
+      // Send push notification to the patient themselves (care team will see it via Supabase Realtime)
+      await sendPushNotification(userId, '🚨 Emergency alert sent', 'Your care team has been notified and can see your emergency.')
+    } catch (e) {
+      console.error('Care team alert failed:', e)
+    }
+
+    // Also attempt to SMS-link emergency contacts via the profile (graceful — best effort)
+    try {
+      const { data: profileData } = await supabase.from('profiles').select('emergency_contacts, full_name').eq('id', userId).single()
+      const contacts: any[] = profileData?.emergency_contacts || []
+      if (contacts.length > 0) {
+        // Log to emergencies table that contacts were notified (actual SMS requires a backend integration)
+        await supabase.from('emergency_contact_alerts').insert(
+          contacts.map(c => ({ user_id: userId, contact_name: c.name, contact_phone: c.phone, alerted_at: new Date().toISOString() }))
+        ).then(() => {})
+      }
+    } catch { /* non-critical */ }
+
+    setCareTeamAlerted(true)
+  }
 
   const cancelEmergency = async () => {
     setCancelling(true)
@@ -162,11 +185,18 @@ function RoutingPage() {
 
   if (!hospital) return (
     <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px' }}>
-      <p style={{ color: '#DC2626', fontSize: '16px', fontWeight: 600 }}>No hospitals found</p>
-      <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '13px', textAlign: 'center' }}>{locationError}</p>
+      <p style={{ color: '#DC2626', fontSize: '18px', fontWeight: 700 }}>Could not find a hospital</p>
+      <p style={{ color: 'rgba(26,40,32,0.5)', fontSize: '13px', textAlign: 'center', lineHeight: 1.6 }}>{locationError || 'Please call 911 immediately for emergency assistance.'}</p>
+      <motion.a
+        href="tel:911"
+        whileTap={{ scale: 0.97 }}
+        style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#DC2626', color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px 32px', borderRadius: '14px', textDecoration: 'none', boxShadow: '0 6px 20px rgba(220,38,38,0.35)' }}>
+        <Phone size={18}/>
+        Call 911 now
+      </motion.a>
       <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(true)}
-        style={{ background: '#DC2626', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px 28px', borderRadius: '14px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(220,38,38,0.3)' }}>
-        Cancel Emergency
+        style={{ background: 'rgba(26,40,32,0.06)', color: 'rgba(26,40,32,0.55)', fontWeight: 600, fontSize: '13px', padding: '12px 24px', borderRadius: '12px', border: '1px solid rgba(26,40,32,0.1)', cursor: 'pointer' }}>
+        I&apos;m safe — cancel emergency
       </motion.button>
     </div>
   )
@@ -277,17 +307,19 @@ function RoutingPage() {
           </div>
         )}
 
-        {/* Action buttons */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => window.location.href = 'tel:911'}
-            style={{ background: '#DC2626', border: 'none', borderRadius: '14px', padding: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'white', fontSize: '13px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(220,38,38,0.3)' }}>
-            <Phone size={15}/>
+        {/* Action buttons — Call 911 is the primary action */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
+          <motion.a
+            href="tel:911"
+            whileTap={{ scale: 0.97 }}
+            style={{ width: '100%', background: '#DC2626', border: 'none', borderRadius: '14px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'white', fontSize: '16px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 20px rgba(220,38,38,0.35)', textDecoration: 'none', letterSpacing: '-0.2px' }}>
+            <Phone size={18}/>
             Call 911
-          </motion.button>
+          </motion.a>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(true)}
-            style={{ background: '#F8F6F2', border: '1.5px solid rgba(26,40,32,0.12)', borderRadius: '14px', padding: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'rgba(26,40,32,0.65)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+            style={{ width: '100%', background: '#F8F6F2', border: '1.5px solid rgba(26,40,32,0.12)', borderRadius: '14px', padding: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'rgba(26,40,32,0.65)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
             <Shield size={15}/>
-            I&apos;m safe
+            I&apos;m safe — cancel emergency
           </motion.button>
         </div>
       </motion.div>

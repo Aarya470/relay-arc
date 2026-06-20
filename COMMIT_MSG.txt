@@ -1,0 +1,56 @@
+feat: marketing homepage + comprehensive security fixes, UX improvements, and new features
+
+Marketing homepage (app/page.tsx):
+- Full multi-section landing page: sticky nav, hero, mission, features, how-it-works, roadmap, CTA, footer
+- All content ported from relay-arc.org (mission text, features, RE·ACT/ROUTE/COVER)
+- Auth-aware: logged-in users skip to /dashboard instantly (no flash)
+- Responsive design with mobile hamburger menu
+- Smooth scroll between sections, parallax fade on hero
+- App mockup image, animated eyebrow badge, scroll cue
+
+Security fixes:
+- Move all Groq API calls server-side (remove dangerouslyAllowBrowser)
+- Create /api/groq/checkin, /api/groq/timeline, /api/groq/care-summary routes
+- Move care team code verification server-side (/api/care-team/verify-code)
+- Remove hardcoded care team access code from client bundle
+- Replace Math.random() UUID with crypto.randomUUID() in appointments
+- Add SUPABASE_SERVICE_ROLE_KEY to push notification API for RLS bypass
+- Remove api.groq.com from CSP connect-src (no longer called from browser)
+- Add nominatim.openstreetmap.org to CSP connect-src
+
+Safety/UX fixes:
+- Emergency: add prominent "Call 911" button at top of symptom list
+- Emergency: remove fake "scanning" status bar
+- Emergency: navigate immediately after DB write (remove 500ms setTimeout)
+- Emergency routing: remove hardcoded NJ fallback coordinates
+- Emergency routing: replace fake setTimeout care team alert with real push notification
+- Emergency routing: redesign buttons — Call 911 full-width primary, I'm safe secondary
+- Medications: load taken state from medication_logs on mount
+- Medications: confirm before delete
+- Appointments: fix 'pending' label → 'Awaiting review'
+- Appointments: await requestAgain Supabase update
+- Dashboard: fix care team card (was toast 'Coming soon' → routes to /appointments)
+- Dashboard: fix recursive setTimeout memory leak → proper cleanup
+- Dashboard: fix UTC timezone bug in checkinToday check
+- BottomNav: SOS center button with pulsing ring, haptic feedback
+- BottomNav: fix path matching, safe area insets, aria labels
+- Service worker: fix null data check, add offline fallback page
+- Notifications: check res.ok, non-empty catch blocks
+- lib/hospitals: remove console.log that leaked patient location
+- Onboarding: date fields now type=date, step 2 requires condition selection
+- Onboarding: filter empty medications before submit
+- Login: password visibility toggle, min 8 char validation for signup
+- Care team dashboard: await processAndMarkMissed
+
+New features:
+- /history page: check-in and emergency history with date grouping
+- /settings page: edit profile fields inline, links to history/vitals/contacts
+- /vitals page: log HR, BP, O2 sat, resp rate with normal range indicators
+- /emergency-contacts page: add/remove contacts with relationship labels
+- /not-found page: on-brand 404 with back/dashboard buttons
+- /api/vitals/log route: server-side vitals insert with critical threshold detection
+- Dashboard: Settings gear icon, clickable last check-in → history
+- Dashboard: Vitals quick-access card
+- Check-in complete: "View history" button alongside Dashboard button
+- Emergency routing: log emergency contact alert attempts to DB
+- Offline page: on-brand styled offline fallback in service worker

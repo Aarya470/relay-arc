@@ -6,8 +6,6 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowLeft, Loader2, Mail, Lock, User } from 'lucide-react'
 
-const CARE_TEAM_CODE = 'relay-care-2026'
-
 export default function CareTeamLogin() {
   const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [email, setEmail] = useState('')
@@ -19,7 +17,15 @@ export default function CareTeamLogin() {
   const router = useRouter()
 
   const handleLogin = async () => {
-    if (code !== CARE_TEAM_CODE) { toast.error('Invalid care team code'); return }
+    if (!code.trim()) { toast.error('Enter care team access code'); return }
+    // Validate code server-side so the secret never lives in the bundle
+    const res = await fetch('/api/care-team/verify-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    })
+    const { valid } = await res.json()
+    if (!valid) { toast.error('Invalid care team code'); return }
     setLoading(true)
 
     if (mode === 'signup') {
@@ -108,7 +114,7 @@ export default function CareTeamLogin() {
       </div>
 
       <p style={{ color: 'rgba(255,255,255,0.15)', fontSize: '11px', textAlign: 'center', fontFamily: 'monospace', marginTop: 'auto', paddingTop: '24px' }}>
-        Access code: relay-care-2026
+        Contact your administrator for access
       </p>
     </div>
   )

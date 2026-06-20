@@ -6,9 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ChevronDown, RefreshCw, CheckCircle2, Circle } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
-import Groq from 'groq-sdk'
-
-const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!, dangerouslyAllowBrowser: true })
+import { toast } from 'sonner'
 
 const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
 
@@ -33,26 +31,40 @@ export default function Timeline() {
   }, [])
 
   const generateTimeline = async (p: any) => {
+    if (!p) return
     setGenerating(true)
     setExpanded(null)
-    const weeks = p?.surgery_date ? Math.floor((Date.now() - new Date(p.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7)) : null
-    const prompt = `Generate a personalized recovery timeline as JSON only.
-Patient: ${p?.full_name}, Conditions: ${p?.diagnosis}, Meds: ${JSON.stringify(p?.medications)}, Surgery: ${p?.surgery_date || 'N/A'}, Weeks since surgery: ${weeks || 'N/A'}.
-Return JSON array of 4-6 phases. Each: { "week": string, "title": string, "normal": string[], "watchout": string[], "todo": string[], "isCurrent": boolean }
-Make it specific to their conditions. JSON only, no other text.`
 
     try {
-      const completion = await groq.chat.completions.create({
-        model: 'llama-3.1-8b-instant',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.3
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+      if (!token) { toast.error('Please sign in again'); return }
+
+      const res = await fetch('/api/groq/timeline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ profile: {
+          diagnosis: p.diagnosis,
+          medications: p.medications,
+          surgery_date: p.surgery_date,
+        }}),
       })
-      const text = completion.choices[0].message.content || '[]'
-      const parsed = JSON.parse(text.replace(/```json|```/g, '').trim())
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || 'Failed to generate timeline')
+      }
+
+      const data = await res.json()
+      const parsed: any[] = data.timeline || []
       setTimeline(parsed)
-      const idx = parsed.findIndex((p: any) => p.isCurrent)
+      const idx = parsed.findIndex((phase: any) => phase.isCurrent)
       if (idx !== -1) setExpanded(idx)
-    } catch (e) { console.error(e) }
+    } catch (e: any) {
+      console.error('Timeline error:', e)
+      toast.error(e.message || 'Could not generate timeline — try again')
+    }
+
     setGenerating(false)
   }
 
