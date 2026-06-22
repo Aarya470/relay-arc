@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video, Settings, Activity, LogOut } from 'lucide-react'
+import { AlertCircle, Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video, Settings, Activity } from 'lucide-react'
 import { toast } from 'sonner'
 
 // Returns a cleanup function — store and call on unmount to cancel pending timers
@@ -247,18 +247,16 @@ export default function Dashboard() {
               {profile?.full_name?.split(' ')[0]}
             </h1>
           </div>
-          {/* Avatar + Logout */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-            <motion.button
-              whileTap={{ scale: 0.88 }}
-              transition={spring}
-              onClick={async () => { await supabase.auth.signOut(); router.push('/login') }}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '10px', background: 'rgba(232,50,42,0.07)', border: '1px solid rgba(232,50,42,0.15)', cursor: 'pointer' }}
-            >
-              <LogOut size={14} color="#E8322A"/>
-              <span style={{ color: '#E8322A', fontSize: '13px', fontWeight: 700 }}>Log out</span>
-            </motion.button>
-          </div>
+          {/* Settings shortcut */}
+          <motion.button
+            whileTap={{ scale: 0.88 }}
+            transition={spring}
+            onClick={() => router.push('/settings')}
+            style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(26,40,32,0.06)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+            aria-label="Settings"
+          >
+            <Settings size={18} color="#1A2820"/>
+          </motion.button>
         </div>
 
         {/* Condition tags — pill shaped */}

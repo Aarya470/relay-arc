@@ -52,7 +52,7 @@ export default function Settings() {
 
   const signOut = async () => {
     await supabase.auth.signOut()
-    router.push('/login')
+    router.push('/')
   }
 
   if (loading) return (
