@@ -1,6 +1,6 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, Heart, Pill, FileText, Phone } from 'lucide-react'
+import { Home, Heart, Pill, Settings, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const spring = { type: 'spring', stiffness: 420, damping: 26 } as const
@@ -10,7 +10,7 @@ const tabs = [
   { href: '/checkin', icon: Heart, label: 'Check-in' },
   // SOS button is the center item (rendered separately)
   { href: '/medications', icon: Pill, label: 'Meds' },
-  { href: '/appointments', icon: FileText, label: 'Care' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ]
 
 const HIDE_ON = ['/login', '/onboarding', '/emergency', '/care-team']
