@@ -82,7 +82,7 @@ export default function Checkin() {
         if (user) {
           await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
           toast.success('Check-in saved')
-          sendPushNotification(user.id, 'Check-in complete ✓', 'Your daily check-in has been saved. Your care team has been notified.')
+          sendPushNotification(user.id, 'Check-in complete', 'Your daily check-in has been saved. Your care team has been notified.')
         }
         setDone(true)
       }

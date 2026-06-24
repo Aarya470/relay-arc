@@ -47,7 +47,7 @@ export default function NurseLogin() {
         className="flex-1"
       >
         <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/25 flex items-center justify-center mb-6">
-          <span className="text-2xl">🩺</span>
+          
         </div>
 
         <h1 className="text-white text-3xl font-bold mb-1">Care team login</h1>

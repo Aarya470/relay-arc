@@ -142,7 +142,7 @@ function RoutingPage() {
     if (!userId) { setCareTeamAlerted(true); return }
     try {
       // Send push notification to the patient themselves (care team will see it via Supabase Realtime)
-      await sendPushNotification(userId, '🚨 Emergency alert sent', 'Your care team has been notified and can see your emergency.')
+      await sendPushNotification(userId, 'Emergency alert sent', 'Your care team has been notified and can see your emergency.')
     } catch (e) {
       console.error('Care team alert failed:', e)
     }

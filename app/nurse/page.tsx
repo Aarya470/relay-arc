@@ -65,7 +65,7 @@ export default function NurseDashboard() {
           <div className="flex gap-2">
             {emergencies.length > 0 && (
               <span className="bg-red-500/15 border border-red-500/25 text-red-400 text-xs px-2.5 py-1 rounded-full font-mono">
-                {emergencies.length} 🚨
+                {emergencies.length}
               </span>
             )}
             {!selected && (

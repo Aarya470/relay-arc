@@ -497,7 +497,7 @@ Keep everything simple and plain English. No medical jargon.`
                   <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Clinical summary</p>
                   {c.summary?.split('\n').filter((s: string) => s.trim().length > 5).slice(0, 7).map((line: string, j: number) => (
                     <div key={j} style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-                      <span style={{ color: '#4A9EF5', fontSize: '12px', flexShrink: 0, marginTop: '1px' }}>•</span>
+                      <span style={{ color: '#4A9EF5', fontSize: '12px', flexShrink: 0, marginTop: '1px' }}>–</span>
                       <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', lineHeight: 1.5 }}>{line.trim().replace(/^[•\-\*]\s*/, '')}</p>
                     </div>
                   ))}
@@ -547,7 +547,7 @@ Keep everything simple and plain English. No medical jargon.`
                 <div key={i} style={{ background: joinable ? 'rgba(74,158,245,0.06)' : '#111116', border: `1px solid ${joinable ? 'rgba(74,158,245,0.25)' : appt.status === 'confirmed' ? 'rgba(128,239,128,0.2)' : appt.status === 'declined' ? 'rgba(255,74,66,0.15)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '14px', padding: '14px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                     <span style={{ color: appt.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '13px', fontWeight: 600 }}>
-                      {appt.type === 'immediate' ? '🚨 Immediate call' : '📅 Scheduled visit'}
+                      {appt.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
                     </span>
                     <span style={{
                       color: appt.status === 'confirmed' ? '#80EF80' : appt.status === 'declined' ? '#FF4A42' : '#fcb546',

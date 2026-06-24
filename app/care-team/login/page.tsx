@@ -58,7 +58,7 @@ export default function CareTeamLogin() {
       </motion.button>
 
       <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(74,158,245,0.15)', border: '1px solid rgba(74,158,245,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-        <span style={{ fontSize: '24px' }}>🩺</span>
+        
       </div>
 
       <h1 style={{ color: 'white', fontWeight: 700, fontSize: '28px', marginBottom: '4px' }}>Care team portal</h1>

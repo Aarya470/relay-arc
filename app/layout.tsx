@@ -1,16 +1,15 @@
 import type { Metadata } from 'next'
-import { Fredoka, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
 import MeetingAlert from '@/components/MeetingAlert'
 import LegalModal from '@/components/LegalModal'
 
-const fredoka = Fredoka({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
 })
 
 const mono = JetBrains_Mono({
@@ -45,7 +44,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#5C8B74" />
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
-      <body className={`${fredoka.variable} ${mono.variable} ${fredoka.className}`}>
+      <body className={`${inter.variable} ${mono.variable} ${inter.className}`}>
         <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#F2EFE9]">
           {children}
           <LegalModal />

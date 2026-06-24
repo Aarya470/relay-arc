@@ -425,7 +425,7 @@ export default function Home() {
           {/* Care team link */}
           <button onClick={() => router.push('/care-team/login')}
             style={{ display: 'block', margin: '24px auto 0', background: 'none', border: 'none', color: 'rgba(26,40,32,0.22)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '1.5px', textTransform: 'uppercase', cursor: 'pointer' }}>
-            Care team portal →
+            Care team portal
           </button>
         </motion.div>
       </section>
@@ -478,7 +478,7 @@ export default function Home() {
             </p>
             <button onClick={() => router.push('/care-team/login')}
               style={{ background: 'none', border: 'none', color: 'rgba(242,239,233,0.18)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '1px', cursor: 'pointer' }}>
-              Care team →
+              Care team
             </button>
           </div>
         </div>

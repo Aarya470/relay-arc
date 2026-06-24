@@ -109,7 +109,7 @@ export default function VitalsPage() {
       if (!res.ok) {
         toast.error(data.error || 'Could not save vitals')
       } else if (data.critical) {
-        toast.error(`⚠️ ${data.alerts[0]} — care team notified`)
+        toast.error(`${data.alerts[0]} — care team notified`)
         await refreshHistory()
         setVitals({ heart_rate: '', systolic: '', diastolic: '', oxygen_sat: '', resp_rate: '' })
       } else {
@@ -271,7 +271,7 @@ export default function VitalsPage() {
                   const r = VITAL_RANGES[key as keyof typeof VITAL_RANGES]
                   return (
                     <span key={key} style={{ background: s.bg, border: `1px solid ${s.border}`, color: s.text, fontSize: '11px', fontWeight: 700, padding: '5px 10px', borderRadius: '99px' }}>
-                      {r?.label}: {val} {r?.unit} {status === 'high' ? '↑' : status === 'low' ? '↓' : '✓'}
+                      {r?.label}: {val} {r?.unit} {status === 'high' ? 'H' : status === 'low' ? 'L' : ''}
                     </span>
                   )
                 })}
@@ -308,7 +308,7 @@ export default function VitalsPage() {
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {log.heart_rate && (
                       <span style={{ ...STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)], fontSize: '11px', fontWeight: 700, padding: '4px 9px', borderRadius: '99px', border: '1px solid', background: STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)].bg, borderColor: STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)].border, color: STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)].text }}>
-                        ♥ {log.heart_rate}
+                        {log.heart_rate} bpm
                       </span>
                     )}
                     {log.systolic && log.diastolic && (
