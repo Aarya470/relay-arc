@@ -1,4 +1,5 @@
 'use client'
+// v2 — Settings tab replaces Care
 import { usePathname, useRouter } from 'next/navigation'
 import { Home, Heart, Pill, Settings, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
