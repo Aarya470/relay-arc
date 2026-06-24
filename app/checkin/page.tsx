@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Send, Loader2, Heart, Check } from 'lucide-react'
+import { ArrowLeft, Send, Loader2, Check } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
@@ -102,11 +102,10 @@ export default function Checkin() {
   const AIAvatar = ({ size = 30 }: { size?: number }) => (
     <div style={{
       width: size, height: size, borderRadius: '50%', flexShrink: 0,
-      background: 'rgba(92,139,116,0.1)',
-      border: '1px solid rgba(92,139,116,0.2)',
+      background: '#1A2820',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <Heart size={size * 0.42} color="#5C8B74" fill="rgba(92,139,116,0.3)"/>
+      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: Math.round(size * 0.36) + 'px', fontWeight: 700, letterSpacing: '-0.5px' }}>R</span>
     </div>
   )
 

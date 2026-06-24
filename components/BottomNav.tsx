@@ -1,16 +1,16 @@
 'use client'
 // v2 — Settings tab replaces Care
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, Heart, Pill, Settings, Phone } from 'lucide-react'
+import { Home, MessageCircle, LayoutList, Settings, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const spring = { type: 'spring', stiffness: 420, damping: 26 } as const
 
 const tabs = [
   { href: '/dashboard', icon: Home, label: 'Home' },
-  { href: '/checkin', icon: Heart, label: 'Check-in' },
+  { href: '/checkin', icon: MessageCircle, label: 'Check-in' },
   // SOS button is the center item (rendered separately)
-  { href: '/medications', icon: Pill, label: 'Meds' },
+  { href: '/medications', icon: LayoutList, label: 'Meds' },
   { href: '/settings', icon: Settings, label: 'Settings' },
 ]
 

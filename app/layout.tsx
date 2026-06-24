@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
 import MeetingAlert from '@/components/MeetingAlert'
 import LegalModal from '@/components/LegalModal'
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
 })
 
 const mono = JetBrains_Mono({
@@ -44,7 +45,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#5C8B74" />
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
-      <body className={`${inter.variable} ${mono.variable} ${inter.className}`}>
+      <body className={`${jakarta.variable} ${mono.variable} ${jakarta.className}`}>
         <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#F2EFE9]">
           {children}
           <LegalModal />

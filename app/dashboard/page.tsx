@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Stethoscope, Pill, Heart, ChevronRight, CheckCircle2, Video, Settings, Activity, Phone } from 'lucide-react'
+import { ChevronRight, CheckCircle2, Video, Settings, Phone } from 'lucide-react'
 import { toast } from 'sonner'
 
 function scheduleCheckinReminders(userId: string, checkins: any[]): () => void {
@@ -312,39 +312,52 @@ export default function Dashboard() {
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/checkin')}
-            style={{ ...card, padding: '16px', textAlign: 'left', cursor: 'pointer', border: checkinToday ? '1px solid rgba(92,139,116,0.25)' : '1px solid rgba(0,0,0,0.07)' }}
+            style={{
+              background: '#FFFFFF',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+              borderRadius: '14px',
+              borderTop: 'none',
+              borderRight: 'none',
+              borderBottom: 'none',
+              borderLeft: checkinToday ? '4px solid #5C8B74' : '4px solid rgba(0,0,0,0.1)',
+              padding: '18px 16px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
           >
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: checkinToday ? 'rgba(92,139,116,0.1)' : 'rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-              {checkinToday
-                ? <CheckCircle2 size={16} color="#5C8B74"/>
-                : <Heart size={15} color="rgba(0,0,0,0.3)"/>
-              }
-            </div>
-            <p style={{ color: checkinToday ? '#3D6B58' : '#111', fontSize: '22px', fontWeight: 700, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: '4px' }}>
+            <p style={{ color: 'rgba(0,0,0,0.35)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '10px' }}>Daily check-in</p>
+            <p style={{ color: checkinToday ? '#3D6B58' : '#111', fontSize: '24px', fontWeight: 800, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: '5px' }}>
               {checkinToday ? 'Done' : 'Check in'}
             </p>
-            <p style={{ color: 'rgba(0,0,0,0.35)', fontSize: '11px', fontWeight: 500 }}>Daily check-in</p>
+            <p style={{ color: checkinToday ? '#5C8B74' : 'rgba(0,0,0,0.3)', fontSize: '11px', fontWeight: 500 }}>
+              {checkinToday ? 'Completed today' : 'Tap to start'}
+            </p>
           </motion.button>
 
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/timeline')}
-            style={{ ...card, padding: '16px', textAlign: 'left', cursor: 'pointer' }}
+            style={{
+              background: '#1A2820',
+              borderRadius: '14px',
+              border: 'none',
+              padding: '18px 16px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
           >
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-              <Activity size={15} color="rgba(0,0,0,0.3)"/>
-            </div>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '10px' }}>Recovery</p>
             {weeksSinceSurgery !== null ? (
               <>
-                <p style={{ color: '#111', fontSize: '22px', fontWeight: 700, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: '4px' }}>
+                <p style={{ color: '#FFFFFF', fontSize: '24px', fontWeight: 800, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: '5px' }}>
                   Wk {weeksSinceSurgery}
                 </p>
-                <p style={{ color: 'rgba(0,0,0,0.35)', fontSize: '11px', fontWeight: 500 }}>{Math.round(recoveryPct)}% recovery</p>
+                <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontWeight: 500 }}>{Math.round(recoveryPct)}% complete</p>
               </>
             ) : (
               <>
-                <p style={{ color: '#111', fontSize: '18px', fontWeight: 700, letterSpacing: '-0.3px', lineHeight: 1, marginBottom: '4px' }}>Timeline</p>
-                <p style={{ color: 'rgba(0,0,0,0.35)', fontSize: '11px', fontWeight: 500 }}>Recovery plan</p>
+                <p style={{ color: '#FFFFFF', fontSize: '20px', fontWeight: 700, letterSpacing: '-0.3px', lineHeight: 1, marginBottom: '5px' }}>Timeline</p>
+                <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontWeight: 500 }}>Recovery plan</p>
               </>
             )}
           </motion.button>
@@ -357,15 +370,14 @@ export default function Dashboard() {
             onClick={() => router.push('/medications')}
             style={{ ...card, padding: '16px', textAlign: 'left', cursor: 'pointer', width: '100%' }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: meds.length > 0 ? '14px' : '0' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(92,139,116,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Pill size={15} color="#5C8B74"/>
-                </div>
-                <span style={{ color: '#111', fontSize: '14px', fontWeight: 600 }}>Medications</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                {meds.length > 0 && <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: '12px' }}>{meds.length}</span>}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: meds.length > 0 ? '12px' : '0' }}>
+              <span style={{ color: '#111', fontSize: '14px', fontWeight: 700, letterSpacing: '-0.2px' }}>Medications</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {meds.length > 0 && (
+                  <span style={{ background: 'rgba(0,0,0,0.06)', color: 'rgba(0,0,0,0.45)', fontSize: '11px', fontWeight: 600, padding: '2px 7px', borderRadius: '99px' }}>
+                    {meds.length}
+                  </span>
+                )}
                 <ChevronRight size={14} color="rgba(0,0,0,0.25)"/>
               </div>
             </div>
@@ -388,39 +400,30 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
-        {/* Vitals */}
-        <motion.div variants={fadeUp}>
-          <motion.button
-            whileTap={{ scale: 0.99 }}
-            onClick={() => router.push('/vitals')}
-            style={{ ...card, padding: '14px 16px', cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center', gap: '12px' }}
-          >
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(200,55,45,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Activity size={15} color="#C8372D"/>
-            </div>
-            <div style={{ flex: 1, textAlign: 'left' }}>
-              <p style={{ color: '#111', fontWeight: 600, fontSize: '14px' }}>Log vitals</p>
-              <p style={{ color: 'rgba(0,0,0,0.35)', fontSize: '12px', marginTop: '1px' }}>HR · BP · O₂ · Resp rate</p>
-            </div>
-            <ChevronRight size={14} color="rgba(0,0,0,0.25)"/>
-          </motion.button>
-        </motion.div>
+
 
         {/* Care team */}
         <motion.div variants={fadeUp}>
           <motion.button
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push('/appointments')}
-            style={{ ...card, padding: '14px 16px', cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center', gap: '12px' }}
+            style={{
+              background: '#1A2820',
+              borderRadius: '14px',
+              border: 'none',
+              padding: '16px 18px',
+              cursor: 'pointer',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
           >
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(92,139,116,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Stethoscope size={15} color="#5C8B74"/>
+            <div style={{ textAlign: 'left' }}>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Care team</p>
+              <p style={{ color: '#FFFFFF', fontWeight: 600, fontSize: '15px' }}>Schedule or join a call</p>
             </div>
-            <div style={{ flex: 1, textAlign: 'left' }}>
-              <p style={{ color: '#111', fontWeight: 600, fontSize: '14px' }}>Care team</p>
-              <p style={{ color: 'rgba(0,0,0,0.35)', fontSize: '12px', marginTop: '1px' }}>Schedule or join a call</p>
-            </div>
-            <ChevronRight size={14} color="rgba(0,0,0,0.25)"/>
+            <ChevronRight size={16} color="rgba(255,255,255,0.3)"/>
           </motion.button>
         </motion.div>
 
@@ -462,5 +465,3 @@ export default function Dashboard() {
 
       <BottomNav/>
     </div>
-  )
-}
