@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
+export const dynamic = 'force-dynamic'
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
 export async function POST(req: NextRequest) {
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
   try {
     // Auth check — must be a care team member
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
