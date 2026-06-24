@@ -96,12 +96,12 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
         <div style={{ maxWidth: '1100px', margin: '0 auto', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-            <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(92,139,116,0.3)' }}>
+            <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: '#1A2820', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
                 <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#F2EFE9"/>
               </svg>
             </div>
-            <span style={{ color: '#1A2820', fontWeight: 800, fontSize: '16px', letterSpacing: '-0.4px' }}>Relay Arc</span>
+            <span style={{ color: '#1A2820', fontWeight: 700, fontSize: '16px', letterSpacing: '-0.3px' }}>Relay Arc</span>
           </div>
 
           {/* Desktop nav links */}
@@ -121,7 +121,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
               Sign in
             </motion.button>
             <motion.button whileTap={{ scale: 0.97 }} onClick={onGetStarted}
-              style={{ background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: 'white', fontSize: '13px', fontWeight: 700, padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', border: 'none', fontFamily: 'inherit', boxShadow: '0 4px 12px rgba(92,139,116,0.25)' }}>
+              style={{ background: '#1A2820', color: 'white', fontSize: '13px', fontWeight: 600, padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
               Get started
             </motion.button>
             {/* Mobile menu toggle */}
@@ -201,10 +201,8 @@ export default function Home() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section ref={heroRef} style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden', maxWidth: '100%' }}>
 
-        {/* Background blobs */}
-        <div style={{ position: 'absolute', top: '-100px', right: '-80px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(92,139,116,0.1) 0%, transparent 65%)', pointerEvents: 'none' }}/>
-        <div style={{ position: 'absolute', bottom: '80px', left: '-80px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(255,211,172,0.32) 0%, transparent 65%)', pointerEvents: 'none' }}/>
-        <div style={{ position: 'absolute', top: '30%', right: '5%', width: '200px', height: '200px', borderRadius: '50%', border: '1.5px solid rgba(92,139,116,0.1)', pointerEvents: 'none' }}/>
+        {/* Subtle background texture */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(92,139,116,0.06) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none', maskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%)' }}/>
 
         <motion.div style={{ opacity: heroOpacity, y: heroY }}>
           <div style={{ maxWidth: '600px', margin: '0 auto', width: '100%' }}>
@@ -253,7 +251,7 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.34, ...spring }}
               style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: 'white', fontWeight: 800, fontSize: '15px', padding: '16px 28px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 8px 28px rgba(92,139,116,0.28), inset 0 1px 0 rgba(255,255,255,0.15)' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#1A2820', color: 'white', fontWeight: 700, fontSize: '15px', padding: '16px 28px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 16px rgba(26,40,32,0.2)' }}>
                 Get started free <ArrowRight size={15}/>
               </motion.button>
               <motion.button whileTap={{ scale: 0.97 }} onClick={() => scrollTo('how')}
@@ -405,8 +403,8 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={spring}
           style={{ maxWidth: '520px', margin: '0 auto', textAlign: 'center' }}>
           {/* Shield icon */}
-          <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', boxShadow: '0 12px 32px rgba(92,139,116,0.25)' }}>
-            <Shield size={28} color="white"/>
+          <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: '#1A2820', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+            <Shield size={24} color="white"/>
           </div>
           <h2 style={{ color: '#1A2820', fontSize: 'clamp(28px, 6vw, 42px)', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 1.1, marginBottom: '16px' }}>
             Your profile could save your life.
@@ -416,7 +414,7 @@ export default function Home() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '360px', margin: '0 auto' }}>
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/login?signup=1')}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: 'white', fontWeight: 800, fontSize: '16px', padding: '18px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 8px 28px rgba(92,139,116,0.28)' }}>
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#1A2820', color: 'white', fontWeight: 700, fontSize: '16px', padding: '18px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 16px rgba(26,40,32,0.2)' }}>
               Create your free profile <ArrowRight size={16}/>
             </motion.button>
             <button onClick={() => router.push('/login')}
@@ -440,7 +438,7 @@ export default function Home() {
             {/* Brand */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '14px' }}>
-                <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
                     <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#F2EFE9"/>
                   </svg>

@@ -102,10 +102,9 @@ export default function Checkin() {
   const AIAvatar = ({ size = 30 }: { size?: number }) => (
     <div style={{
       width: size, height: size, borderRadius: '50%', flexShrink: 0,
-      background: 'linear-gradient(135deg, rgba(92,139,116,0.22), rgba(61,107,88,0.1))',
-      border: '1.5px solid rgba(92,139,116,0.3)',
+      background: 'rgba(92,139,116,0.1)',
+      border: '1px solid rgba(92,139,116,0.2)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      boxShadow: '0 2px 8px rgba(92,139,116,0.1)',
     }}>
       <Heart size={size * 0.42} color="#5C8B74" fill="rgba(92,139,116,0.3)"/>
     </div>
@@ -216,7 +215,7 @@ export default function Checkin() {
                 whileTap={{ scale: 0.97, y: 1 }}
                 transition={spring}
                 onClick={() => router.push('/dashboard')}
-                style={{ flex: 1, background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 800, fontSize: '13px', padding: '13px 16px', borderRadius: '14px', border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(92,139,116,0.22)' }}
+                style={{ flex: 1, background: '#1A2820', color: '#FFFFFF', fontWeight: 600, fontSize: '13px', padding: '13px 16px', borderRadius: '14px', border: 'none', cursor: 'pointer' }}
               >
                 Dashboard
               </motion.button>
@@ -283,12 +282,11 @@ export default function Checkin() {
             disabled={loading || !input.trim()}
             style={{
               width: '46px', height: '46px',
-              background: input.trim() ? 'linear-gradient(135deg, #5C8B74, #3D6B58)' : 'rgba(26,40,32,0.06)',
+              background: input.trim() ? '#1A2820' : 'rgba(26,40,32,0.06)',
               borderRadius: '14px', border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: input.trim() ? '0 4px 14px rgba(92,139,116,0.25)' : 'none',
-              transition: 'background 0.2s ease, box-shadow 0.2s ease',
+              transition: 'background 0.15s ease',
             }}
           >
             {loading

@@ -1,4 +1,19 @@
 @echo off
-del /f "C:\Users\aarya\relay-arc\.git\index.lock"
-echo Lock removed. Press any key...
+echo Killing git processes...
+taskkill /f /im git.exe 2>NUL
+taskkill /f /im git-remote-https.exe 2>NUL
+ping -n 2 127.0.0.1 > NUL
+echo.
+echo Deleting lock file...
+if exist "C:\Users\aarya\relay-arc\.git\index.lock" (
+    del /f /q "C:\Users\aarya\relay-arc\.git\index.lock"
+    if exist "C:\Users\aarya\relay-arc\.git\index.lock" (
+        echo FAILED - file still locked
+    ) else (
+        echo SUCCESS - index.lock deleted!
+    )
+) else (
+    echo Lock file not found - already gone!
+)
+echo.
 pause
