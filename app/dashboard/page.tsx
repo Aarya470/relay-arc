@@ -465,3 +465,5 @@ export default function Dashboard() {
 
       <BottomNav/>
     </div>
+  )
+}
