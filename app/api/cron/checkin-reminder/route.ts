@@ -10,7 +10,6 @@ webpush.setVapidDetails(
 
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
-  // If CRON_SECRET is configured, validate it. If not set, allow (Vercel cron can't send it).
   if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
@@ -40,7 +39,7 @@ export async function GET(req: NextRequest) {
     .select('user_id')
     .gte('created_at', startOfDay.toISOString())
 
-  const checkedInUserIds = new Set(todayCheckins?.map(c => c.user_id) || [])
+  const checkedInUserIds = new Set(todayCheckins?.map((c) => c.user_id) || [])
 
   const hour = new Date().getHours()
   const isMorning = hour === 8

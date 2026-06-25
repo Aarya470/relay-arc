@@ -32,19 +32,22 @@ Weeks post-surgery: ${weeks !== null ? weeks : 'unknown'}
 
 Return a JSON object with key "timeline" containing an array of 4-6 recovery phases.
 Each phase must have exactly these fields:
-- "week": string (e.g. "Week 1-2" or "Month 2-3")
-- "title": string (short phase name)
-- "normal": array of 3-4 strings (what to expect)
-- "watchout": array of 2-3 strings (warning signs)
-- "todo": array of 3-4 strings (recommended actions)
-- "isCurrent": boolean (true for exactly one phase matching the current week)
+- "week": string
+- "title": string
+- "normal": array of 3-4 strings
+- "watchout": array of 2-3 strings
+- "todo": array of 3-4 strings
+- "isCurrent": boolean (true for exactly one phase)
 
-Be specific to their cardiac condition. Return only valid JSON.`
+Be specific to their cardiac condition.`
 
     const completion = await groq.chat.completions.create({
       model: 'llama-3.1-8b-instant',
       messages: [
-        { role: 'system', content: 'You are a cardiac recovery assistant. Respond with valid JSON only — no markdown, no explanation, no extra text.' },
+        {
+          role: 'system',
+          content: 'You are a cardiac recovery assistant. Respond with valid JSON only containing a "timeline" array. No markdown, no explanation.',
+        },
         { role: 'user', content: prompt },
       ],
       temperature: 0.2,
@@ -53,21 +56,57 @@ Be specific to their cardiac condition. Return only valid JSON.`
 
     const text = completion.choices[0].message.content || '{}'
 
-    // Extract timeline array from the JSON object
     let parsed: any[]
     try {
       const obj = JSON.parse(text)
-      const arr = Array.isArray(obj)
-        ? obj
-        : Array.isArray(obj.timeline)
-          ? obj.timeline
-          : Array.isArray(obj.phases)
-            ? obj.phases
-            : (Object.values(obj).find(v => Array.isArray(v)) as any[]) || []
-      parsed = arr
+      if (Array.isArray(obj)) {
+        parsed = obj
+      } else if (Array.isArray(obj.timeline)) {
+        parsed = obj.timeline
+      } else if (Array.isArray(obj.phases)) {
+        parsed = obj.phases
+      } else {
+        const found = Object.values(obj).find((v) => Array.isArray(v))
+        parsed = (found as any[]) || []
+      }
     } catch {
-      // Last resort: scan for JSON array in raw text
       const start = text.indexOf('[')
       const end = text.lastIndexOf(']')
       if (start === -1 || end < start) {
-        return NextResponse.j
+        return NextResponse.json({ error: 'Invalid AI response' }, { status: 502 })
+      }
+      try {
+        parsed = JSON.parse(text.slice(start, end + 1))
+      } catch {
+        return NextResponse.json({ error: 'Could not parse AI response' }, { status: 502 })
+      }
+    }
+
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return NextResponse.json({ error: 'Empty timeline' }, { status: 502 })
+    }
+
+    const valid = parsed.every(
+      (item: any) =>
+        typeof item === 'object' &&
+        item !== null &&
+        typeof item.week === 'string' &&
+        typeof item.title === 'string' &&
+        Array.isArray(item.normal) &&
+        Array.isArray(item.watchout) &&
+        Array.isArray(item.todo)
+    )
+    if (!valid) {
+      return NextResponse.json({ error: 'Invalid timeline shape' }, { status: 502 })
+    }
+
+    if (!parsed.some((p) => p.isCurrent === true)) {
+      parsed[0].isCurrent = true
+    }
+
+    return NextResponse.json({ timeline: parsed })
+  } catch (e) {
+    console.error('Groq timeline error:', e)
+    return NextResponse.json({ error: 'AI unavailable' }, { status: 503 })
+  }
+}
