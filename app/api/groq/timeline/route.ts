@@ -42,8 +42,11 @@ Each phase must have exactly these fields:
 Be specific to their cardiac condition. Return only valid JSON.`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [{ role: 'user', content: prompt }],
+      model: 'llama-3.1-8b-instant',
+      messages: [
+        { role: 'system', content: 'You are a cardiac recovery assistant. Respond with valid JSON only — no markdown, no explanation, no extra text.' },
+        { role: 'user', content: prompt },
+      ],
       temperature: 0.2,
       response_format: { type: 'json_object' },
     })
@@ -67,43 +70,4 @@ Be specific to their cardiac condition. Return only valid JSON.`
       const start = text.indexOf('[')
       const end = text.lastIndexOf(']')
       if (start === -1 || end < start) {
-        return NextResponse.json({ error: 'Invalid AI response format' }, { status: 502 })
-      }
-      try {
-        parsed = JSON.parse(text.slice(start, end + 1))
-      } catch {
-        return NextResponse.json({ error: 'Could not parse AI response' }, { status: 502 })
-      }
-    }
-
-    if (!Array.isArray(parsed) || parsed.length === 0) {
-      return NextResponse.json({ error: 'Empty timeline returned' }, { status: 502 })
-    }
-
-    // Validate shape
-    const valid = parsed.every((item: any) =>
-      typeof item === 'object' &&
-      item !== null &&
-      typeof item.week === 'string' &&
-      typeof item.title === 'string' &&
-      Array.isArray(item.normal) &&
-      Array.isArray(item.watchout) &&
-      Array.isArray(item.todo)
-    )
-
-    if (!valid) {
-      return NextResponse.json({ error: 'Invalid timeline shape from AI' }, { status: 502 })
-    }
-
-    // Ensure exactly one isCurrent
-    const hasCurrentSet = parsed.some(p => p.isCurrent === true)
-    if (!hasCurrentSet) {
-      parsed[0].isCurrent = true
-    }
-
-    return NextResponse.json({ timeline: parsed })
-  } catch (e) {
-    console.error('Groq timeline error:', e)
-    return NextResponse.json({ error: 'AI unavailable' }, { status: 503 })
-  }
-}
+        return NextResponse.j
