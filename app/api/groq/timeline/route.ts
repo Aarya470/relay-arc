@@ -12,7 +12,6 @@ const supabase = createClient(
 export async function POST(req: NextRequest) {
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
   try {
-    // Auth check
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const { data: { user }, error: authError } = await supabase.auth.getUser(token)
@@ -25,34 +24,63 @@ export async function POST(req: NextRequest) {
       ? Math.floor((Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7))
       : null
 
-    // Omit full name from prompt — use "the patient" to reduce PHI exposure
-    const prompt = `Generate a personalized recovery timeline as JSON only.
-Conditions: ${profile.diagnosis}, Meds: ${JSON.stringify(profile.medications)}, Surgery: ${profile.surgery_date || 'N/A'}, Weeks since surgery: ${weeks !== null ? weeks : 'N/A'}.
-Return JSON array of 4-6 phases. Each: { "week": string, "title": string, "normal": string[], "watchout": string[], "todo": string[], "isCurrent": boolean }
-Make it specific to their conditions. JSON only, no other text.`
+    const prompt = `Generate a personalized cardiac recovery timeline for a patient.
+Conditions: ${profile.diagnosis}
+Medications: ${JSON.stringify(profile.medications)}
+Surgery date: ${profile.surgery_date || 'unknown'}
+Weeks post-surgery: ${weeks !== null ? weeks : 'unknown'}
+
+Return a JSON object with key "timeline" containing an array of 4-6 recovery phases.
+Each phase must have exactly these fields:
+- "week": string (e.g. "Week 1-2" or "Month 2-3")
+- "title": string (short phase name)
+- "normal": array of 3-4 strings (what to expect)
+- "watchout": array of 2-3 strings (warning signs)
+- "todo": array of 3-4 strings (recommended actions)
+- "isCurrent": boolean (true for exactly one phase matching the current week)
+
+Be specific to their cardiac condition. Return only valid JSON.`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
-      temperature: 0.3
+      temperature: 0.2,
+      response_format: { type: 'json_object' },
     })
 
-    const text = completion.choices[0].message.content || '[]'
-    const clean = text.replace(/```json|```/g, '').trim()
+    const text = completion.choices[0].message.content || '{}'
 
-    // Validate the response is a JSON array
-    let parsed: unknown
+    // Extract timeline array from the JSON object
+    let parsed: any[]
     try {
-      parsed = JSON.parse(clean)
+      const obj = JSON.parse(text)
+      const arr = Array.isArray(obj)
+        ? obj
+        : Array.isArray(obj.timeline)
+          ? obj.timeline
+          : Array.isArray(obj.phases)
+            ? obj.phases
+            : (Object.values(obj).find(v => Array.isArray(v)) as any[]) || []
+      parsed = arr
     } catch {
-      return NextResponse.json({ error: 'Invalid AI response' }, { status: 502 })
+      // Last resort: scan for JSON array in raw text
+      const start = text.indexOf('[')
+      const end = text.lastIndexOf(']')
+      if (start === -1 || end < start) {
+        return NextResponse.json({ error: 'Invalid AI response format' }, { status: 502 })
+      }
+      try {
+        parsed = JSON.parse(text.slice(start, end + 1))
+      } catch {
+        return NextResponse.json({ error: 'Could not parse AI response' }, { status: 502 })
+      }
     }
 
-    if (!Array.isArray(parsed)) {
-      return NextResponse.json({ error: 'Unexpected AI response shape' }, { status: 502 })
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return NextResponse.json({ error: 'Empty timeline returned' }, { status: 502 })
     }
 
-    // Validate each item has required fields
+    // Validate shape
     const valid = parsed.every((item: any) =>
       typeof item === 'object' &&
       item !== null &&
@@ -64,7 +92,13 @@ Make it specific to their conditions. JSON only, no other text.`
     )
 
     if (!valid) {
-      return NextResponse.json({ error: 'Invalid timeline shape' }, { status: 502 })
+      return NextResponse.json({ error: 'Invalid timeline shape from AI' }, { status: 502 })
+    }
+
+    // Ensure exactly one isCurrent
+    const hasCurrentSet = parsed.some(p => p.isCurrent === true)
+    if (!hasCurrentSet) {
+      parsed[0].isCurrent = true
     }
 
     return NextResponse.json({ timeline: parsed })

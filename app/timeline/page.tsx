@@ -10,35 +10,60 @@ import { toast } from 'sonner'
 
 const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
 
+const todayKey = (uid: string) => `timeline_${uid}_${new Date().toDateString()}`
+
 export default function Timeline() {
   const [profile, setProfile] = useState<any>(null)
+  const [userId, setUserId] = useState<string>('')
   const [timeline, setTimeline] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [expanded, setExpanded] = useState<number | null>(null)
+  const [cachedDate, setCachedDate] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
+      setUserId(user.id)
+
+      // Check localStorage cache for today
+      const key = todayKey(user.id)
+      const cached = localStorage.getItem(key)
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached)
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setTimeline(parsed)
+            setCachedDate(new Date().toDateString())
+            const idx = parsed.findIndex((p: any) => p.isCurrent)
+            if (idx !== -1) setExpanded(idx)
+            setLoading(false)
+            return
+          }
+        } catch {}
+      }
+
+      // No cache — load profile and generate
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(data)
       setLoading(false)
-      generateTimeline(data)
+      generateTimeline(data, user.id)
     }
     load()
   }, [])
 
-  const generateTimeline = async (p: any) => {
+  const generateTimeline = async (p: any, uid?: string) => {
     if (!p) return
+    const effectiveUid = uid || userId
     setGenerating(true)
     setExpanded(null)
 
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const token = session?.access_token
-      if (!token) { toast.error('Please sign in again'); return }
+      if (!token) { toast.error('Please sign in again'); setGenerating(false); return }
 
       const res = await fetch('/api/groq/timeline', {
         method: 'POST',
@@ -58,8 +83,14 @@ export default function Timeline() {
       const data = await res.json()
       const parsed: any[] = data.timeline || []
       setTimeline(parsed)
+      setCachedDate(new Date().toDateString())
       const idx = parsed.findIndex((phase: any) => phase.isCurrent)
       if (idx !== -1) setExpanded(idx)
+
+      // Cache for today
+      if (effectiveUid && parsed.length > 0) {
+        localStorage.setItem(todayKey(effectiveUid), JSON.stringify(parsed))
+      }
     } catch (e: any) {
       console.error('Timeline error:', e)
       toast.error(e.message || 'Could not generate timeline — try again')
@@ -68,16 +99,23 @@ export default function Timeline() {
     setGenerating(false)
   }
 
+  // Manual refresh — clears cache and regenerates
+  const forceRefresh = () => {
+    if (userId) localStorage.removeItem(todayKey(userId))
+    setCachedDate(null)
+    generateTimeline(profile, userId)
+  }
+
   const currentIdx = timeline.findIndex(p => p.isCurrent)
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', padding: '80px 16px 100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F2EFE9', padding: '80px 16px 100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
       {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '64px', borderRadius: '16px', background: 'rgba(26,40,32,0.06)', marginBottom: '8px' }}/>)}
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
 
       <div style={{ padding: '56px 20px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -92,14 +130,17 @@ export default function Timeline() {
             </motion.button>
             <div>
               <h1 style={{ color: '#1A2820', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Recovery Timeline</h1>
-              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px' }}>Personalized for you</p>
+              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px' }}>
+                {cachedDate ? `Generated today` : 'Personalized for you'}
+              </p>
             </div>
           </div>
           <motion.button
             whileTap={{ scale: 0.9 }}
             transition={spring}
-            onClick={() => generateTimeline(profile)}
+            onClick={forceRefresh}
             disabled={generating}
+            title="Regenerate timeline"
             style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.09)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(26,40,32,0.06)' }}
           >
             <motion.div
@@ -133,7 +174,6 @@ export default function Timeline() {
       {/* Timeline */}
       <div style={{ padding: '0 20px', position: 'relative' }}>
 
-        {/* Vertical connector line */}
         {timeline.length > 0 && (
           <div style={{ position: 'absolute', left: '34px', top: '15px', bottom: '15px', width: '2px', background: 'linear-gradient(to bottom, rgba(92,139,116,0.5) 0%, rgba(196,107,48,0.2) 50%, rgba(26,40,32,0.06) 100%)', borderRadius: '99px', zIndex: 0, pointerEvents: 'none' }}/>
         )}
@@ -154,9 +194,8 @@ export default function Timeline() {
                 transition={{ delay: index * 0.07, ...spring }}
                 style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}
               >
-                {/* Node */}
                 <div style={{ paddingTop: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#F2EFE9', border: `2px solid ${dotBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isCurrent ? '0 0 14px rgba(92,139,116,0.28)' : 'none', transition: 'box-shadow 0.3s ease' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#F2EFE9', border: `2px solid ${dotBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isCurrent ? '0 0 14px rgba(92,139,116,0.28)' : 'none' }}>
                     {isPast
                       ? <CheckCircle2 size={14} color="#5C8B74"/>
                       : isCurrent
@@ -170,7 +209,6 @@ export default function Timeline() {
                   </div>
                 </div>
 
-                {/* Card */}
                 <div style={{ flex: 1, background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '18px', overflow: 'hidden', boxShadow: isCurrent ? '0 6px 24px rgba(92,139,116,0.1)' : '0 2px 8px rgba(26,40,32,0.05)' }}>
                   <motion.button
                     whileTap={{ scale: 0.99 }}
@@ -235,7 +273,7 @@ export default function Timeline() {
           <div style={{ textAlign: 'center', padding: '56px 0' }}>
             <p style={{ color: 'rgba(26,40,32,0.3)', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
             <button
-              onClick={() => generateTimeline(profile)}
+              onClick={forceRefresh}
               style={{ color: '#5C8B74', fontSize: '13px', fontWeight: 700, background: 'none', border: '1px solid rgba(92,139,116,0.3)', borderRadius: '10px', padding: '8px 16px', cursor: 'pointer' }}
             >
               Try again

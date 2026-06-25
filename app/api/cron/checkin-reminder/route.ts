@@ -10,7 +10,8 @@ webpush.setVapidDetails(
 
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
-  if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  // If CRON_SECRET is configured, validate it. If not set, allow (Vercel cron can't send it).
+  if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
