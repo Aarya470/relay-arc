@@ -24,80 +24,56 @@ export async function POST(req: NextRequest) {
       ? Math.floor((Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7))
       : null
 
-    const prompt = `Generate a personalized cardiac recovery timeline for a patient.
-Conditions: ${profile.diagnosis}
-Medications: ${JSON.stringify(profile.medications)}
-Surgery date: ${profile.surgery_date || 'unknown'}
-Weeks post-surgery: ${weeks !== null ? weeks : 'unknown'}
+    const prompt = `You are a cardiac recovery assistant. Return ONLY a JSON object with a "timeline" key containing an array of 4-6 recovery phases. No other text.
 
-Return a JSON object with key "timeline" containing an array of 4-6 recovery phases.
-Each phase must have exactly these fields:
-- "week": string
-- "title": string
-- "normal": array of 3-4 strings
-- "watchout": array of 2-3 strings
-- "todo": array of 3-4 strings
-- "isCurrent": boolean (true for exactly one phase)
+Patient: Conditions: ${profile.diagnosis || 'cardiac condition'}, Surgery: ${profile.surgery_date || 'unknown'}, Weeks post-surgery: ${weeks ?? 'unknown'}
 
-Be specific to their cardiac condition.`
+Each phase object must have: "week" (string), "title" (string), "normal" (string array), "watchout" (string array), "todo" (string array), "isCurrent" (boolean, true for the phase matching current week).
+
+Example format:
+{"timeline":[{"week":"Week 1-2","title":"Initial Recovery","normal":["Rest is normal"],"watchout":["Chest pain"],"todo":["Walk 5 min daily"],"isCurrent":false}]}`
 
     const completion = await groq.chat.completions.create({
       model: 'llama-3.1-8b-instant',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a cardiac recovery assistant. Respond with valid JSON only containing a "timeline" array. No markdown, no explanation.',
-        },
-        { role: 'user', content: prompt },
-      ],
-      temperature: 0.2,
-      response_format: { type: 'json_object' },
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.1,
+      max_tokens: 2000,
     })
 
-    const text = completion.choices[0].message.content || '{}'
+    const text = completion.choices[0].message.content || ''
+    console.log('Groq raw response (first 200):', text.slice(0, 200))
 
+    // Extract JSON object
     let parsed: any[]
     try {
-      const obj = JSON.parse(text)
+      // Strip markdown if present
+      const stripped = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+      const obj = JSON.parse(stripped)
       if (Array.isArray(obj)) {
         parsed = obj
       } else if (Array.isArray(obj.timeline)) {
         parsed = obj.timeline
-      } else if (Array.isArray(obj.phases)) {
-        parsed = obj.phases
       } else {
         const found = Object.values(obj).find((v) => Array.isArray(v))
         parsed = (found as any[]) || []
       }
     } catch {
-      const start = text.indexOf('[')
-      const end = text.lastIndexOf(']')
+      // Find JSON object boundaries
+      const start = text.indexOf('{')
+      const end = text.lastIndexOf('}')
       if (start === -1 || end < start) {
-        return NextResponse.json({ error: 'Invalid AI response' }, { status: 502 })
+        return NextResponse.json({ error: `No JSON found in response: ${text.slice(0, 100)}` }, { status: 502 })
       }
       try {
-        parsed = JSON.parse(text.slice(start, end + 1))
-      } catch {
-        return NextResponse.json({ error: 'Could not parse AI response' }, { status: 502 })
+        const obj = JSON.parse(text.slice(start, end + 1))
+        parsed = Array.isArray(obj.timeline) ? obj.timeline : []
+      } catch (e2) {
+        return NextResponse.json({ error: `Parse failed: ${text.slice(0, 100)}` }, { status: 502 })
       }
     }
 
     if (!Array.isArray(parsed) || parsed.length === 0) {
-      return NextResponse.json({ error: 'Empty timeline' }, { status: 502 })
-    }
-
-    const valid = parsed.every(
-      (item: any) =>
-        typeof item === 'object' &&
-        item !== null &&
-        typeof item.week === 'string' &&
-        typeof item.title === 'string' &&
-        Array.isArray(item.normal) &&
-        Array.isArray(item.watchout) &&
-        Array.isArray(item.todo)
-    )
-    if (!valid) {
-      return NextResponse.json({ error: 'Invalid timeline shape' }, { status: 502 })
+      return NextResponse.json({ error: 'Empty timeline from AI' }, { status: 502 })
     }
 
     if (!parsed.some((p) => p.isCurrent === true)) {
@@ -105,8 +81,8 @@ Be specific to their cardiac condition.`
     }
 
     return NextResponse.json({ timeline: parsed })
-  } catch (e) {
+  } catch (e: any) {
     console.error('Groq timeline error:', e)
-    return NextResponse.json({ error: 'AI unavailable' }, { status: 503 })
+    return NextResponse.json({ error: e?.message || 'AI unavailable' }, { status: 503 })
   }
 }
