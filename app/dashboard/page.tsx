@@ -201,7 +201,7 @@ export default function Dashboard() {
             </div>
             <motion.button
               whileTap={{ scale: 0.96 }}
-              onClick={() => router.push('/appointments')}
+              onClick={() => toast('Care team — coming soon', { description: 'This feature is launching shortly.' })}
               style={{ background: '#5C8B74', color: 'white', fontWeight: 600, fontSize: '13px', padding: '9px 16px', borderRadius: '9px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}
             >
               <Video size={13}/>
@@ -216,7 +216,7 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={ease}
-        style={{ padding: '56px 20px 20px' }}
+        style={{ padding: '56px 20px 20px', maxWidth: '720px', margin: '0 auto', width: '100%' }}
       >
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
@@ -257,7 +257,7 @@ export default function Dashboard() {
 
       {/* Install banner */}
       {installPrompt && (
-        <div style={{ margin: '0 20px 10px', ...card, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ margin: '0 auto 10px', maxWidth: '680px', width: 'calc(100% - 40px)', ...card, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ flex: 1 }}>
             <p style={{ color: '#111', fontWeight: 600, fontSize: '13px' }}>Add to Home Screen</p>
             <p style={{ color: 'rgba(0,0,0,0.4)', fontSize: '12px', marginTop: '1px' }}>Install for quick access</p>
@@ -274,7 +274,7 @@ export default function Dashboard() {
         variants={stagger}
         initial="hidden"
         animate="show"
-        style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}
+        style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '720px', margin: '0 auto', width: '100%' }}
       >
 
         {/* SOS */}
@@ -406,7 +406,7 @@ export default function Dashboard() {
         <motion.div variants={fadeUp}>
           <motion.button
             whileTap={{ scale: 0.99 }}
-            onClick={() => router.push('/appointments')}
+            onClick={() => toast('Care team — coming soon', { description: 'This feature is launching shortly.' })}
             style={{
               background: '#1A2820',
               borderRadius: '14px',
@@ -455,7 +455,7 @@ export default function Dashboard() {
 
       {/* iOS install hint */}
       {showIosHint && (
-        <div style={{ margin: '10px 20px 0', ...card, padding: '14px 16px' }}>
+        <div style={{ margin: '10px auto 0', maxWidth: '680px', width: 'calc(100% - 40px)', ...card, padding: '14px 16px' }}>
           <p style={{ color: '#111', fontWeight: 600, fontSize: '13px', marginBottom: '6px' }}>Add to Home Screen</p>
           <p style={{ color: 'rgba(0,0,0,0.45)', fontSize: '12px', lineHeight: 1.6 }}>
             Open in <strong>Safari</strong> · tap the Share button · tap <strong>Add to Home Screen</strong>

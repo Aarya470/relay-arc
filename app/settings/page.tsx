@@ -76,7 +76,7 @@ export default function Settings() {
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F5F3EF', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F5F3EF', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>

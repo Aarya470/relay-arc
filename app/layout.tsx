@@ -46,7 +46,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
       <body className={`${jakarta.variable} ${mono.variable} ${jakarta.className}`}>
-        <div className="min-h-[100dvh] w-full max-w-[430px] mx-auto relative bg-[#F2EFE9]">
+        <div className="min-h-[100dvh] w-full relative bg-[#F2EFE9]">
           {children}
           <LegalModal />
           <MeetingAlert />

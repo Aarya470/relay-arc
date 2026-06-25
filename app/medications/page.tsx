@@ -153,7 +153,7 @@ export default function Medications() {
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(26,40,32,0.07)' }}>
