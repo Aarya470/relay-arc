@@ -10,8 +10,12 @@ const supabase = createClient(
 )
 
 export async function POST(req: NextRequest) {
-  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
   try {
+    if (!process.env.NEXT_PUBLIC_GROQ_API_KEY) {
+      return NextResponse.json({ error: 'GROQ_API_KEY not configured' }, { status: 503 })
+    }
+    const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY })
+
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const { data: { user }, error: authError } = await supabase.auth.getUser(token)
@@ -46,7 +50,6 @@ Example format:
     // Extract JSON object
     let parsed: any[]
     try {
-      // Strip markdown if present
       const stripped = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
       const obj = JSON.parse(stripped)
       if (Array.isArray(obj)) {
@@ -58,7 +61,6 @@ Example format:
         parsed = (found as any[]) || []
       }
     } catch {
-      // Find JSON object boundaries
       const start = text.indexOf('{')
       const end = text.lastIndexOf('}')
       if (start === -1 || end < start) {
