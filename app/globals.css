@@ -2,30 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #F0EDE5;
+  --surface: #FFFFFF;
+  --border: rgba(16,22,14,0.08);
+  --border-mid: rgba(16,22,14,0.12);
+  --text: #0F1A0E;
+  --text-2: #566253;
+  --text-3: #96A092;
+  --green: #1C3D28;
+  --green-accent: #2C7A50;
+  --red: #B91C1C;
+  --red-soft: rgba(185,28,28,0.07);
+  --amber: #B45309;
+}
+
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: #F2EFE9;
-  color: #1A2820;
-  font-family: var(--font-sans), 'Outfit', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: 'ss01' on, 'tnum' on;
+  font-feature-settings: 'tnum' on, 'ss01' on;
 }
 
-.font-mono,
-code, kbd, pre {
+.font-mono, code, kbd, pre {
   font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
 }
 
-::-webkit-scrollbar { width: 0px; }
+::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
 
 ::selection {
-  background: rgba(92,139,116,0.2);
-  color: #1A2820;
+  background: rgba(44,122,80,0.16);
+  color: var(--text);
 }
 
 button, input, textarea, select {
@@ -35,11 +56,26 @@ button, input, textarea, select {
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(26,40,32,0.28);
+  color: var(--text-3);
 }
 
-/* Remove number input spinners */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
+}
+
+/* Utility classes */
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.label {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-3);
 }

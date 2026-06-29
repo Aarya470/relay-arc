@@ -86,36 +86,36 @@ export default function Onboarding() {
   const inputStyle: React.CSSProperties = {
     width: '100%',
     background: '#FFFFFF',
-    border: '1.5px solid rgba(26,40,32,0.1)',
+    border: '1.5px solid rgba(16,22,14,0.1)',
     borderRadius: '14px',
     padding: '14px 16px',
-    color: '#1A2820',
+    color: '#0F1A0E',
     fontSize: '14px',
     outline: 'none',
     fontFamily: 'inherit',
-    boxShadow: '0 1px 3px rgba(26,40,32,0.04)',
+    boxShadow: '0 1px 3px rgba(16,22,14,0.04)',
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', padding: '48px 20px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F0EDE5', padding: '48px 20px' }}>
       <div style={{ maxWidth: '430px', margin: '0 auto' }}>
 
         {/* Logo row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '32px' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '9px', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px rgba(92,139,116,0.28)' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '9px', background: 'linear-gradient(135deg, #2C7A50, #1C3D28)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px rgba(44,122,80,0.28)' }}>
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-              <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#F2EFE9" strokeWidth="0"/>
+              <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#F0EDE5" strokeWidth="0"/>
             </svg>
           </div>
-          <span style={{ color: '#1A2820', fontWeight: 800, fontSize: '16px', letterSpacing: '-0.4px' }}>Relay Arc</span>
+          <span style={{ color: '#0F1A0E', fontWeight: 800, fontSize: '16px', letterSpacing: '-0.4px' }}>Relay Arc</span>
         </div>
 
         {/* Progress bars */}
         <div style={{ display: 'flex', gap: '6px', marginBottom: '32px' }}>
           {[1,2,3].map(s => (
-            <div key={s} style={{ height: '3px', flex: 1, borderRadius: '99px', overflow: 'hidden', background: 'rgba(26,40,32,0.1)' }}>
+            <div key={s} style={{ height: '3px', flex: 1, borderRadius: '99px', overflow: 'hidden', background: 'rgba(16,22,14,0.1)' }}>
               <motion.div
-                style={{ height: '100%', borderRadius: '99px', background: 'linear-gradient(90deg, #5C8B74, #3D6B58)' }}
+                style={{ height: '100%', borderRadius: '99px', background: 'linear-gradient(90deg, #2C7A50, #1C3D28)' }}
                 initial={{ width: 0 }}
                 animate={{ width: step >= s ? '100%' : '0%' }}
                 transition={{ duration: 0.3 }}
@@ -136,9 +136,9 @@ export default function Onboarding() {
               style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
             >
               <div style={{ marginBottom: '8px' }}>
-                <p style={{ color: '#5C8B74', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px', fontWeight: 600 }}>Step 1 of 3</p>
-                <h1 style={{ color: '#1A2820', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>About you</h1>
-                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '14px', marginTop: '4px' }}>Your basic information</p>
+                <p style={{ color: '#2C7A50', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px', fontWeight: 600 }}>Step 1 of 3</p>
+                <h1 style={{ color: '#0F1A0E', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>About you</h1>
+                <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '14px', marginTop: '4px' }}>Your basic information</p>
               </div>
 
               <input style={inputStyle} placeholder="Full name" value={form.full_name} onChange={e => update('full_name', e.target.value)}/>
@@ -153,7 +153,7 @@ export default function Onboarding() {
                   if (!form.full_name) { toast.error('Please enter your name'); return }
                   setStep(2)
                 }}
-                style={{ width: '100%', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '4px', boxShadow: '0 6px 20px rgba(92,139,116,0.24)', fontSize: '15px' }}
+                style={{ width: '100%', background: 'linear-gradient(135deg, #2C7A50, #1C3D28)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '4px', boxShadow: '0 6px 20px rgba(44,122,80,0.24)', fontSize: '15px' }}
               >
                 Continue <ArrowRight size={16}/>
               </motion.button>
@@ -170,9 +170,9 @@ export default function Onboarding() {
               style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
             >
               <div style={{ marginBottom: '8px' }}>
-                <p style={{ color: '#5C8B74', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px', fontWeight: 600 }}>Step 2 of 3</p>
-                <h1 style={{ color: '#1A2820', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>Your condition</h1>
-                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '14px', marginTop: '4px' }}>Select all that apply</p>
+                <p style={{ color: '#2C7A50', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px', fontWeight: 600 }}>Step 2 of 3</p>
+                <h1 style={{ color: '#0F1A0E', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>Your condition</h1>
+                <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '14px', marginTop: '4px' }}>Select all that apply</p>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -186,19 +186,19 @@ export default function Onboarding() {
                       onClick={() => toggleCondition(c.id)}
                       style={{
                         padding: '16px', borderRadius: '18px', textAlign: 'left', cursor: 'pointer',
-                        background: active ? 'rgba(92,139,116,0.08)' : '#FFFFFF',
-                        border: `1.5px solid ${active ? 'rgba(92,139,116,0.35)' : 'rgba(26,40,32,0.09)'}`,
-                        boxShadow: active ? '0 4px 16px rgba(92,139,116,0.12)' : '0 1px 4px rgba(26,40,32,0.05)',
+                        background: active ? 'rgba(44,122,80,0.08)' : '#FFFFFF',
+                        border: `1.5px solid ${active ? 'rgba(44,122,80,0.35)' : 'rgba(16,22,14,0.09)'}`,
+                        boxShadow: active ? '0 4px 16px rgba(44,122,80,0.12)' : '0 1px 4px rgba(16,22,14,0.05)',
                         transition: 'border-color 0.15s ease, background 0.15s ease',
                       }}
                     >
-                      <div style={{ width: '32px', height: '32px', borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', background: active ? 'rgba(92,139,116,0.14)' : 'rgba(26,40,32,0.05)' }}>
-                        <c.Icon size={16} color={active ? '#5C8B74' : 'rgba(26,40,32,0.42)'}/>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', background: active ? 'rgba(44,122,80,0.14)' : 'rgba(16,22,14,0.05)' }}>
+                        <c.Icon size={16} color={active ? '#2C7A50' : 'rgba(16,22,14,0.42)'}/>
                       </div>
-                      <p style={{ fontWeight: 700, fontSize: '13px', marginBottom: '3px', letterSpacing: '-0.2px', color: active ? '#3D6B58' : '#1A2820' }}>
+                      <p style={{ fontWeight: 700, fontSize: '13px', marginBottom: '3px', letterSpacing: '-0.2px', color: active ? '#1C3D28' : '#0F1A0E' }}>
                         {c.id}
                       </p>
-                      <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '11px', lineHeight: 1.4 }}>{c.desc}</p>
+                      <p style={{ color: 'rgba(16,22,14,0.35)', fontSize: '11px', lineHeight: 1.4 }}>{c.desc}</p>
                     </motion.button>
                   )
                 })}
@@ -209,14 +209,14 @@ export default function Onboarding() {
 
               <div style={{ display: 'flex', gap: '10px' }}>
                 <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => setStep(1)}
-                  style={{ flex: 1, background: '#FFFFFF', border: '1.5px solid rgba(26,40,32,0.1)', color: '#1A2820', fontWeight: 600, padding: '16px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
+                  style={{ flex: 1, background: '#FFFFFF', border: '1.5px solid rgba(16,22,14,0.1)', color: '#0F1A0E', fontWeight: 600, padding: '16px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
                   <ArrowLeft size={16}/> Back
                 </motion.button>
                 <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => {
                   if (form.diagnosis.length === 0) { toast.error('Please select at least one condition'); return }
                   setStep(3)
                 }}
-                  style={{ flex: 1, background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px', boxShadow: '0 6px 20px rgba(92,139,116,0.22)' }}>
+                  style={{ flex: 1, background: 'linear-gradient(135deg, #2C7A50, #1C3D28)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px', boxShadow: '0 6px 20px rgba(44,122,80,0.22)' }}>
                   Continue <ArrowRight size={16}/>
                 </motion.button>
               </div>
@@ -233,17 +233,17 @@ export default function Onboarding() {
               style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
             >
               <div style={{ marginBottom: '4px' }}>
-                <p style={{ color: '#5C8B74', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px', fontWeight: 600 }}>Step 3 of 3</p>
-                <h1 style={{ color: '#1A2820', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>Contacts & meds</h1>
-                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '14px', marginTop: '4px' }}>Who to alert in an emergency</p>
+                <p style={{ color: '#2C7A50', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px', fontWeight: 600 }}>Step 3 of 3</p>
+                <h1 style={{ color: '#0F1A0E', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>Contacts & meds</h1>
+                <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '14px', marginTop: '4px' }}>Who to alert in an emergency</p>
               </div>
 
               {/* Contacts */}
               <div>
-                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', fontWeight: 600 }}>Emergency contacts</p>
+                <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', fontWeight: 600 }}>Emergency contacts</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {form.emergency_contacts.map((c, i) => (
-                    <div key={i} style={{ background: '#FFFFFF', border: '1.5px solid rgba(26,40,32,0.09)', borderRadius: '18px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', boxShadow: '0 1px 4px rgba(26,40,32,0.04)' }}>
+                    <div key={i} style={{ background: '#FFFFFF', border: '1.5px solid rgba(16,22,14,0.09)', borderRadius: '18px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', boxShadow: '0 1px 4px rgba(16,22,14,0.04)' }}>
                       <input style={inputStyle} placeholder="Name" value={c.name} onChange={e => updateContact(i, 'name', e.target.value)}/>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                         <input style={inputStyle} placeholder="Relationship" value={c.relationship} onChange={e => updateContact(i, 'relationship', e.target.value)}/>
@@ -253,7 +253,7 @@ export default function Onboarding() {
                   ))}
                   <button
                     onClick={() => update('emergency_contacts', [...form.emergency_contacts, { name: '', relationship: '', phone: '' }])}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#5C8B74', fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#2C7A50', fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }}
                   >
                     <Plus size={14}/> Add contact
                   </button>
@@ -262,10 +262,10 @@ export default function Onboarding() {
 
               {/* Medications */}
               <div>
-                <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', fontWeight: 600 }}>Current medications</p>
+                <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', fontWeight: 600 }}>Current medications</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {form.medications.map((m, i) => (
-                    <div key={i} style={{ background: '#FFFFFF', border: '1.5px solid rgba(26,40,32,0.09)', borderRadius: '18px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', boxShadow: '0 1px 4px rgba(26,40,32,0.04)' }}>
+                    <div key={i} style={{ background: '#FFFFFF', border: '1.5px solid rgba(16,22,14,0.09)', borderRadius: '18px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', boxShadow: '0 1px 4px rgba(16,22,14,0.04)' }}>
                       <input style={inputStyle} placeholder="Medication name" value={m.name} onChange={e => updateMed(i, 'name', e.target.value)}/>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                         <input style={inputStyle} placeholder="Dose (e.g. 50mg)" value={m.dose} onChange={e => updateMed(i, 'dose', e.target.value)}/>
@@ -275,7 +275,7 @@ export default function Onboarding() {
                   ))}
                   <button
                     onClick={() => update('medications', [...form.medications, { name: '', dose: '', frequency: '', times: ['Morning'] }])}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#5C8B74', fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#2C7A50', fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }}
                   >
                     <Plus size={14}/> Add medication
                   </button>
@@ -284,14 +284,14 @@ export default function Onboarding() {
 
               <div style={{ display: 'flex', gap: '10px', paddingBottom: '24px' }}>
                 <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => setStep(2)}
-                  style={{ flex: 1, background: '#FFFFFF', border: '1.5px solid rgba(26,40,32,0.1)', color: '#1A2820', fontWeight: 600, padding: '16px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
+                  style={{ flex: 1, background: '#FFFFFF', border: '1.5px solid rgba(16,22,14,0.1)', color: '#0F1A0E', fontWeight: 600, padding: '16px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
                   <ArrowLeft size={16}/> Back
                 </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.97 }} transition={spring}
                   onClick={handleSubmit}
                   disabled={loading}
-                  style={{ flex: 1, background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: loading ? 0.7 : 1, fontSize: '15px', boxShadow: '0 6px 20px rgba(92,139,116,0.22)' }}
+                  style={{ flex: 1, background: 'linear-gradient(135deg, #2C7A50, #1C3D28)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: loading ? 0.7 : 1, fontSize: '15px', boxShadow: '0 6px 20px rgba(44,122,80,0.22)' }}
                 >
                   {loading ? <Loader2 size={16} className="animate-spin"/> : <>Complete <ArrowRight size={16}/></>}
                 </motion.button>

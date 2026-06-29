@@ -179,36 +179,36 @@ function RoutingPage() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-      <Loader2 size={32} color="#DC2626" className="animate-spin"/>
-      <p style={{ color: 'rgba(26,40,32,0.55)', fontSize: '14px', fontWeight: 500 }}>Finding nearest hospital...</p>
-      <p style={{ color: 'rgba(26,40,32,0.3)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)' }}>Alerting care team...</p>
+    <div style={{ minHeight: '100dvh', background: '#F0EDE5', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+      <Loader2 size={32} color="#B91C1C" className="animate-spin"/>
+      <p style={{ color: 'rgba(16,22,14,0.55)', fontSize: '14px', fontWeight: 500 }}>Finding nearest hospital...</p>
+      <p style={{ color: 'rgba(16,22,14,0.3)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)' }}>Alerting care team...</p>
     </div>
   )
 
   if (!hospital) return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px' }}>
-      <p style={{ color: '#DC2626', fontSize: '18px', fontWeight: 700 }}>Could not find a hospital</p>
-      <p style={{ color: 'rgba(26,40,32,0.5)', fontSize: '13px', textAlign: 'center', lineHeight: 1.6 }}>{locationError || 'Please call 911 immediately for emergency assistance.'}</p>
+    <div style={{ minHeight: '100dvh', background: '#F0EDE5', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px' }}>
+      <p style={{ color: '#B91C1C', fontSize: '18px', fontWeight: 700 }}>Could not find a hospital</p>
+      <p style={{ color: 'rgba(16,22,14,0.5)', fontSize: '13px', textAlign: 'center', lineHeight: 1.6 }}>{locationError || 'Please call 911 immediately for emergency assistance.'}</p>
       <motion.a
         href="tel:911"
         whileTap={{ scale: 0.97 }}
-        style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#DC2626', color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px 32px', borderRadius: '14px', textDecoration: 'none', boxShadow: '0 6px 20px rgba(220,38,38,0.35)' }}>
+        style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#B91C1C', color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px 32px', borderRadius: '14px', textDecoration: 'none', boxShadow: '0 6px 20px rgba(185,28,28,0.35)' }}>
         <Phone size={18}/>
         Call 911 now
       </motion.a>
       <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(true)}
-        style={{ background: 'rgba(26,40,32,0.06)', color: 'rgba(26,40,32,0.55)', fontWeight: 600, fontSize: '13px', padding: '12px 24px', borderRadius: '12px', border: '1px solid rgba(26,40,32,0.1)', cursor: 'pointer' }}>
+        style={{ background: 'rgba(16,22,14,0.06)', color: 'rgba(16,22,14,0.55)', fontWeight: 600, fontSize: '13px', padding: '12px 24px', borderRadius: '12px', border: '1px solid rgba(16,22,14,0.1)', cursor: 'pointer' }}>
         I&apos;m safe — cancel emergency
       </motion.button>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#F0EDE5', display: 'flex', flexDirection: 'column' }}>
 
       {/* Alert bar */}
-      <div style={{ background: 'linear-gradient(90deg, #C42020, #E8322A)', padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, boxShadow: '0 2px 12px rgba(196,32,32,0.3)' }}>
+      <div style={{ background: 'linear-gradient(90deg, #B91C1C, #B91C1C)', padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, boxShadow: '0 2px 12px rgba(196,32,32,0.3)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <motion.div
             style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'white' }}
@@ -234,28 +234,28 @@ function RoutingPage() {
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, type: 'spring', bounce: 0.2 }}
-        style={{ flex: 1, background: '#FFFFFF', borderRadius: '24px 24px 0 0', borderTop: '1px solid rgba(26,40,32,0.08)', padding: '20px 16px', overflowY: 'auto', boxShadow: '0 -4px 20px rgba(26,40,32,0.08)' }}
+        style={{ flex: 1, background: '#FFFFFF', borderRadius: '24px 24px 0 0', borderTop: '1px solid rgba(16,22,14,0.08)', padding: '20px 16px', overflowY: 'auto', boxShadow: '0 -4px 20px rgba(16,22,14,0.08)' }}
       >
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px', marginTop: '-4px' }}>
-          <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(26,40,32,0.1)' }}/>
+          <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(16,22,14,0.1)' }}/>
         </div>
 
         {/* Selected hospital */}
         <div style={{ marginBottom: '12px' }}>
-          <p style={{ color: 'rgba(26,40,32,0.38)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '6px' }}>
+          <p style={{ color: 'rgba(16,22,14,0.38)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '6px' }}>
             Routing to
           </p>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
             <div style={{ flex: 1 }}>
-              <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '16px', marginBottom: '3px' }}>{hospital.name}</p>
-              <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '12px', marginBottom: '4px' }}>{hospital.address}</p>
-              <p style={{ color: 'rgba(26,40,32,0.28)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{hospital.capability}</p>
+              <p style={{ color: '#0F1A0E', fontWeight: 700, fontSize: '16px', marginBottom: '3px' }}>{hospital.name}</p>
+              <p style={{ color: 'rgba(16,22,14,0.4)', fontSize: '12px', marginBottom: '4px' }}>{hospital.address}</p>
+              <p style={{ color: 'rgba(16,22,14,0.28)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{hospital.capability}</p>
             </div>
-            <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', borderRadius: '14px', padding: '10px 14px', textAlign: 'center', flexShrink: 0 }}>
-              <p style={{ color: '#DC2626', fontWeight: 800, fontSize: '22px', fontFamily: 'var(--font-mono, monospace)', lineHeight: 1, letterSpacing: '-0.5px' }}>
+            <div style={{ background: 'rgba(185,28,28,0.08)', border: '1px solid rgba(185,28,28,0.2)', borderRadius: '14px', padding: '10px 14px', textAlign: 'center', flexShrink: 0 }}>
+              <p style={{ color: '#B91C1C', fontWeight: 800, fontSize: '22px', fontFamily: 'var(--font-mono, monospace)', lineHeight: 1, letterSpacing: '-0.5px' }}>
                 {estimateTime(hospital.distance || 0)}
               </p>
-              <p style={{ color: 'rgba(220,38,38,0.5)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', marginTop: '2px' }}>
+              <p style={{ color: 'rgba(185,28,28,0.5)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', marginTop: '2px' }}>
                 {formatDistance(hospital.distance || 0)}
               </p>
             </div>
@@ -265,21 +265,21 @@ function RoutingPage() {
         {/* Care team alert status */}
         <motion.div
           animate={{
-            borderColor: careTeamAlerted ? 'rgba(92,139,116,0.28)' : 'rgba(26,40,32,0.08)',
-            backgroundColor: careTeamAlerted ? 'rgba(92,139,116,0.06)' : 'rgba(26,40,32,0.03)'
+            borderColor: careTeamAlerted ? 'rgba(44,122,80,0.28)' : 'rgba(16,22,14,0.08)',
+            backgroundColor: careTeamAlerted ? 'rgba(44,122,80,0.06)' : 'rgba(16,22,14,0.03)'
           }}
           style={{ borderRadius: '16px', padding: '12px 14px', border: '1px solid', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}
         >
           {careTeamAlerted
-            ? <CheckCircle size={16} color="#5C8B74" style={{ flexShrink: 0 }}/>
-            : <Loader2 size={16} color="rgba(26,40,32,0.3)" className="animate-spin" style={{ flexShrink: 0 }}/>
+            ? <CheckCircle size={16} color="#2C7A50" style={{ flexShrink: 0 }}/>
+            : <Loader2 size={16} color="rgba(16,22,14,0.3)" className="animate-spin" style={{ flexShrink: 0 }}/>
           }
           <div>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: careTeamAlerted ? '#3D6B58' : 'rgba(26,40,32,0.45)' }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: careTeamAlerted ? '#1C3D28' : 'rgba(16,22,14,0.45)' }}>
               {careTeamAlerted ? 'Care team alerted — they can see your emergency' : 'Alerting your care team...'}
             </p>
             {careTeamAlerted && profile && (
-              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px', marginTop: '2px' }}>
+              <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '11px', marginTop: '2px' }}>
                 {profile.full_name} · {EMERGENCY_LABELS[type]}
               </p>
             )}
@@ -289,20 +289,20 @@ function RoutingPage() {
         {/* Notified contacts list */}
         {notifiedContacts.length > 0 && careTeamAlerted && (
           <div style={{ marginBottom: '12px' }}>
-            <p style={{ color: 'rgba(26,40,32,0.38)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
+            <p style={{ color: 'rgba(16,22,14,0.38)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
               Contacts notified
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {notifiedContacts.map((c: any, i: number) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(26,40,32,0.03)', borderRadius: '10px', padding: '8px 12px', border: '1px solid rgba(26,40,32,0.06)' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(16,22,14,0.03)', borderRadius: '10px', padding: '8px 12px', border: '1px solid rgba(16,22,14,0.06)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#5C8B74' }}/>
-                    <span style={{ color: '#1A2820', fontSize: '13px', fontWeight: 500 }}>{c.name}</span>
-                    <span style={{ color: 'rgba(26,40,32,0.3)', fontSize: '12px' }}>{c.relationship}</span>
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2C7A50' }}/>
+                    <span style={{ color: '#0F1A0E', fontSize: '13px', fontWeight: 500 }}>{c.name}</span>
+                    <span style={{ color: 'rgba(16,22,14,0.3)', fontSize: '12px' }}>{c.relationship}</span>
                   </div>
                   <motion.a href={`tel:${c.phone}`} whileTap={{ scale: 0.95 }}
-                    style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#DC2626', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
-                    <Phone size={11} color="#DC2626"/>
+                    style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#B91C1C', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
+                    <Phone size={11} color="#B91C1C"/>
                     Call
                   </motion.a>
                 </div>
@@ -313,41 +313,41 @@ function RoutingPage() {
 
         {/* First responder card */}
         {profile && (profile.blood_type || profile.allergies || (profile.medications?.length > 0)) && (
-          <div style={{ marginBottom: '12px', border: '1px solid rgba(220,38,38,0.2)', borderRadius: '14px', overflow: 'hidden' }}>
+          <div style={{ marginBottom: '12px', border: '1px solid rgba(185,28,28,0.2)', borderRadius: '14px', overflow: 'hidden' }}>
             <button
               onClick={() => setShowMedCard(!showMedCard)}
-              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: showMedCard ? 'rgba(220,38,38,0.06)' : 'rgba(220,38,38,0.03)', border: 'none', cursor: 'pointer' }}>
+              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: showMedCard ? 'rgba(185,28,28,0.06)' : 'rgba(185,28,28,0.03)', border: 'none', cursor: 'pointer' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#DC2626' }}/>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#B91C1C' }}/>
                 <span style={{ color: '#B91C1C', fontSize: '12px', fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                   First Responder Info
                 </span>
               </div>
-              <span style={{ color: 'rgba(26,40,32,0.4)', fontSize: '11px' }}>{showMedCard ? 'Hide' : 'Show to paramedic'}</span>
+              <span style={{ color: 'rgba(16,22,14,0.4)', fontSize: '11px' }}>{showMedCard ? 'Hide' : 'Show to paramedic'}</span>
             </button>
             {showMedCard && (
               <div style={{ padding: '12px 14px', background: '#FFFBFB', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {profile.blood_type && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ color: 'rgba(26,40,32,0.45)', fontSize: '11px', width: '80px', flexShrink: 0 }}>Blood type</span>
-                    <span style={{ color: '#DC2626', fontWeight: 800, fontSize: '18px', fontFamily: 'var(--font-mono, monospace)' }}>{profile.blood_type}</span>
+                    <span style={{ color: 'rgba(16,22,14,0.45)', fontSize: '11px', width: '80px', flexShrink: 0 }}>Blood type</span>
+                    <span style={{ color: '#B91C1C', fontWeight: 800, fontSize: '18px', fontFamily: 'var(--font-mono, monospace)' }}>{profile.blood_type}</span>
                   </div>
                 )}
                 {profile.allergies && (
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <span style={{ color: 'rgba(26,40,32,0.45)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Allergies</span>
+                    <span style={{ color: 'rgba(16,22,14,0.45)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Allergies</span>
                     <span style={{ color: '#B91C1C', fontWeight: 700, fontSize: '13px', lineHeight: 1.5 }}>{profile.allergies}</span>
                   </div>
                 )}
                 {profile.medications?.length > 0 && (
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <span style={{ color: 'rgba(26,40,32,0.45)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Medications</span>
-                    <span style={{ color: '#1A2820', fontSize: '12px', lineHeight: 1.6 }}>
+                    <span style={{ color: 'rgba(16,22,14,0.45)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Medications</span>
+                    <span style={{ color: '#0F1A0E', fontSize: '12px', lineHeight: 1.6 }}>
                       {profile.medications.slice(0, 4).map((m: any) => m.name || m).join(', ')}
                     </span>
                   </div>
                 )}
-                <p style={{ color: 'rgba(220,38,38,0.5)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', marginTop: '4px' }}>
+                <p style={{ color: 'rgba(185,28,28,0.5)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', marginTop: '4px' }}>
                   SHOW THIS SCREEN TO PARAMEDICS
                 </p>
               </div>
@@ -360,7 +360,7 @@ function RoutingPage() {
           <div style={{ marginBottom: '12px' }}>
             <button
               onClick={() => setShowAll(!showAll)}
-              style={{ color: 'rgba(26,40,32,0.4)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', background: 'none', border: 'none', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}
+              style={{ color: 'rgba(16,22,14,0.4)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', background: 'none', border: 'none', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}
             >
               {showAll ? 'Hide' : `${nearbyHospitals.length - 1} other hospitals nearby`}
               <ChevronRight size={12} style={{ transform: showAll ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}/>
@@ -368,105 +368,5 @@ function RoutingPage() {
             {showAll && nearbyHospitals.slice(1).map((h, i) => (
               <motion.button key={i} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                 onClick={() => { setHospital(h); setShowAll(false) }}
-                style={{ width: '100%', background: '#F8F6F2', border: '1px solid rgba(26,40,32,0.08)', borderRadius: '12px', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', cursor: 'pointer' }}>
-                <div style={{ textAlign: 'left' }}>
-                  <p style={{ color: '#1A2820', fontSize: '13px', fontWeight: 500 }}>{h.name}</p>
-                  <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '11px', marginTop: '2px' }}>{formatDistance(h.distance || 0)}</p>
-                </div>
-                <p style={{ color: '#5C8B74', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700 }}>{estimateTime(h.distance || 0)}</p>
-              </motion.button>
-            ))}
-          </div>
-        )}
-
-        {/* Action buttons — Call 911 is the primary action */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
-          <motion.a
-            href="tel:911"
-            whileTap={{ scale: 0.97 }}
-            style={{ width: '100%', background: '#DC2626', border: 'none', borderRadius: '14px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'white', fontSize: '16px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 20px rgba(220,38,38,0.35)', textDecoration: 'none', letterSpacing: '-0.2px' }}>
-            <Phone size={18}/>
-            Call 911
-          </motion.a>
-          {/* Secondary actions row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-            <motion.button whileTap={{ scale: 0.97 }}
-              onClick={() => router.push(`/emergency/brief?type=${type}`)}
-              style={{ background: '#F8F6F2', border: '1.5px solid rgba(220,38,38,0.2)', borderRadius: '12px', padding: '11px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: '#B91C1C', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
-              <FileText size={14} color="#B91C1C"/>
-              ER Brief
-            </motion.button>
-            <motion.button whileTap={{ scale: 0.97 }}
-              onClick={() => {
-                const url = `${window.location.origin}/emergency/live/${activeEmergencyId.current || emergencyId}`
-                navigator.clipboard.writeText(url).catch(() => {})
-              }}
-              style={{ background: '#F8F6F2', border: '1.5px solid rgba(92,139,116,0.25)', borderRadius: '12px', padding: '11px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: '#3D6B58', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
-              <Share2 size={14} color="#3D6B58"/>
-              Share with family
-            </motion.button>
-          </div>
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(true)}
-            style={{ width: '100%', background: '#F8F6F2', border: '1.5px solid rgba(26,40,32,0.12)', borderRadius: '14px', padding: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'rgba(26,40,32,0.65)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
-            <Shield size={15}/>
-            I&apos;m safe — cancel emergency
-          </motion.button>
-        </div>
-      </motion.div>
-
-      {/* Cancel confirmation overlay */}
-      <AnimatePresence>
-        {showCancelConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(26,40,32,0.5)', zIndex: 200, display: 'flex', alignItems: 'flex-end' }}
-          >
-            <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{ background: '#FFFFFF', borderRadius: '28px 28px 0 0', width: '100%', padding: '24px 20px 48px' }}
-            >
-              <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(26,40,32,0.1)', margin: '0 auto 24px' }} />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(92,139,116,0.1)', border: '2px solid rgba(92,139,116,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Shield size={22} color="#5C8B74"/>
-                </div>
-                <div>
-                  <p style={{ color: '#1A2820', fontWeight: 800, fontSize: '20px', letterSpacing: '-0.5px' }}>Are you safe?</p>
-                  <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '13px', marginTop: '2px' }}>This will cancel the emergency alert</p>
-                </div>
-              </div>
-              <p style={{ color: 'rgba(26,40,32,0.5)', fontSize: '13px', lineHeight: 1.6, marginBottom: '24px' }}>
-                Cancelling will notify your care team that the emergency has ended. Only cancel if you are genuinely safe.
-              </p>
-              <motion.button whileTap={{ scale: 0.97, y: 1 }} onClick={cancelEmergency} disabled={cancelling}
-                style={{ width: '100%', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: 'white', fontWeight: 800, fontSize: '16px', padding: '18px', borderRadius: '16px', border: 'none', cursor: 'pointer', boxShadow: '0 8px 28px rgba(92,139,116,0.3)', marginBottom: '10px' }}>
-                {cancelling ? 'Cancelling...' : 'Yes, cancel emergency'}
-              </motion.button>
-              <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(false)}
-                style={{ width: '100%', background: 'rgba(26,40,32,0.04)', color: 'rgba(26,40,32,0.55)', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: '1.5px solid rgba(26,40,32,0.08)', cursor: 'pointer' }}>
-                Stay on emergency
-              </motion.button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={
-      <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Loader2 size={32} color="#DC2626" className="animate-spin"/>
-      </div>
-    }>
-      <RoutingPage/>
-    </Suspense>
-  )
-}
+                style={{ width: '100%', background: '#F0EDE5', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', cursor: 'pointer' }}>
+                <div style={{ textAlign: '

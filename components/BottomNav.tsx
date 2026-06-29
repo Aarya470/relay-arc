@@ -1,15 +1,11 @@
 'use client'
-// v2 — Settings tab replaces Care
 import { usePathname, useRouter } from 'next/navigation'
 import { Home, MessageCircle, LayoutList, Settings, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-const spring = { type: 'spring', stiffness: 420, damping: 26 } as const
-
 const tabs = [
   { href: '/dashboard', icon: Home, label: 'Home' },
   { href: '/checkin', icon: MessageCircle, label: 'Check-in' },
-  // SOS button is the center item (rendered separately)
   { href: '/medications', icon: LayoutList, label: 'Meds' },
   { href: '/settings', icon: Settings, label: 'Settings' },
 ]
@@ -32,109 +28,162 @@ export default function BottomNav() {
       aria-label="Main navigation"
       style={{
         position: 'fixed',
-        bottom: '16px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: 'calc(100% - 32px)',
-        maxWidth: '680px',
-        background: 'rgba(255,255,255,0.88)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderRadius: '24px',
-        border: '1px solid rgba(26,40,32,0.08)',
-        padding: '8px 6px',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: 'rgba(255,255,255,0.97)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderTop: '1px solid rgba(16,22,14,0.07)',
         zIndex: 50,
-        boxShadow: '0 4px 24px rgba(26,40,32,0.1), 0 1px 4px rgba(26,40,32,0.06)',
-        // Safe area for notched phones
-        paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-        {/* Home & Check-in */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'stretch',
+        maxWidth: '600px',
+        margin: '0 auto',
+        height: '60px',
+      }}>
         {tabs.slice(0, 2).map(tab => {
           const active = isActive(tab.href)
           return (
             <motion.button
               key={tab.href}
-              whileTap={{ scale: 0.88 }}
-              transition={spring}
+              whileTap={{ scale: 0.9 }}
               onClick={() => router.push(tab.href)}
               aria-label={tab.label}
               aria-current={active ? 'page' : undefined}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', padding: '7px 14px', background: 'none', border: 'none', cursor: 'pointer', position: 'relative', minWidth: '56px' }}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '3px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '8px 4px',
+                position: 'relative',
+              }}
             >
               {active && (
                 <motion.div
-                  layoutId="nav-active"
-                  style={{ position: 'absolute', inset: 0, background: 'rgba(92,139,116,0.1)', borderRadius: '14px', border: '1px solid rgba(92,139,116,0.18)' }}
-                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  layoutId="tab-bar"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '22%',
+                    right: '22%',
+                    height: '2px',
+                    background: '#1C3D28',
+                    borderRadius: '0 0 2px 2px',
+                  }}
+                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                 />
               )}
-              <tab.icon size={20} color={active ? '#5C8B74' : 'rgba(26,40,32,0.28)'} style={{ position: 'relative', zIndex: 1 }}/>
-              <span style={{ fontSize: '10px', fontWeight: 700, color: active ? '#5C8B74' : 'rgba(26,40,32,0.28)', letterSpacing: '0.1px', fontFamily: 'inherit', position: 'relative', zIndex: 1 }}>
+              <tab.icon size={20} color={active ? '#1C3D28' : 'rgba(16,22,14,0.22)'} strokeWidth={active ? 2.2 : 1.8}/>
+              <span style={{
+                fontSize: '10px',
+                fontWeight: active ? 700 : 500,
+                color: active ? '#1C3D28' : 'rgba(16,22,14,0.32)',
+                letterSpacing: '0.1px',
+              }}>
                 {tab.label}
               </span>
             </motion.button>
           )
         })}
 
-        {/* SOS button — center */}
+        {/* SOS — center */}
         <motion.a
           href="/emergency"
           whileTap={{ scale: 0.92 }}
-          transition={spring}
           aria-label="Emergency SOS"
           onClick={() => {
-            // Haptic feedback on mobile devices
             if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-              navigator.vibrate([100, 50, 100])
+              navigator.vibrate([80, 40, 80])
             }
           }}
           style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
-            padding: '7px 10px', cursor: 'pointer', textDecoration: 'none',
-            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '3px',
+            padding: '0 18px',
+            cursor: 'pointer',
+            textDecoration: 'none',
+            flexShrink: 0,
           }}
         >
           <div style={{
-            width: '44px', height: '44px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #E8322A, #B01C1C)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(232,50,42,0.35)',
-            position: 'relative',
+            width: '46px',
+            height: '46px',
+            borderRadius: '50%',
+            background: '#B91C1C',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
-            <motion.div
-              animate={{ scale: [1, 1.6, 1], opacity: [0.5, 0, 0.5] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ position: 'absolute', inset: -4, borderRadius: '50%', border: '1.5px solid rgba(232,50,42,0.4)' }}
-            />
-            <Phone size={18} color="white"/>
+            <Phone size={19} color="white" strokeWidth={2.2}/>
           </div>
-          <span style={{ fontSize: '10px', fontWeight: 800, color: '#DC2626', letterSpacing: '0.5px' }}>SOS</span>
+          <span style={{
+            fontSize: '10px',
+            fontWeight: 800,
+            color: '#B91C1C',
+            letterSpacing: '0.5px',
+            fontFamily: 'var(--font-mono, monospace)',
+          }}>SOS</span>
         </motion.a>
 
-        {/* Meds & Care */}
         {tabs.slice(2).map(tab => {
           const active = isActive(tab.href)
           return (
             <motion.button
               key={tab.href}
-              whileTap={{ scale: 0.88 }}
-              transition={spring}
+              whileTap={{ scale: 0.9 }}
               onClick={() => router.push(tab.href)}
               aria-label={tab.label}
               aria-current={active ? 'page' : undefined}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', padding: '7px 14px', background: 'none', border: 'none', cursor: 'pointer', position: 'relative', minWidth: '56px' }}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '3px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '8px 4px',
+                position: 'relative',
+              }}
             >
               {active && (
                 <motion.div
-                  layoutId="nav-active"
-                  style={{ position: 'absolute', inset: 0, background: 'rgba(92,139,116,0.1)', borderRadius: '14px', border: '1px solid rgba(92,139,116,0.18)' }}
-                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  layoutId="tab-bar"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '22%',
+                    right: '22%',
+                    height: '2px',
+                    background: '#1C3D28',
+                    borderRadius: '0 0 2px 2px',
+                  }}
+                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                 />
               )}
-              <tab.icon size={20} color={active ? '#5C8B74' : 'rgba(26,40,32,0.28)'} style={{ position: 'relative', zIndex: 1 }}/>
-              <span style={{ fontSize: '10px', fontWeight: 700, color: active ? '#5C8B74' : 'rgba(26,40,32,0.28)', letterSpacing: '0.1px', fontFamily: 'inherit', position: 'relative', zIndex: 1 }}>
+              <tab.icon size={20} color={active ? '#1C3D28' : 'rgba(16,22,14,0.22)'} strokeWidth={active ? 2.2 : 1.8}/>
+              <span style={{
+                fontSize: '10px',
+                fontWeight: active ? 700 : 500,
+                color: active ? '#1C3D28' : 'rgba(16,22,14,0.32)',
+                letterSpacing: '0.1px',
+              }}>
                 {tab.label}
               </span>
             </motion.button>

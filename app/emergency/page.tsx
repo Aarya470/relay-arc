@@ -2,20 +2,14 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { motion } from 'framer-motion'
-import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, ChevronRight } from 'lucide-react'
 import { toast } from 'sonner'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.045 } },
-}
-const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: spring },
-}
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } }
+const fadeUp = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: spring } }
 
 const TYPES = [
   { id: 'chest_pain', label: 'Chest pain', desc: 'Pressure, tightness, pain in chest or jaw', Icon: Heart },
@@ -39,95 +33,74 @@ export default function Emergency() {
       const { data: { user } } = await supabase.auth.getUser()
       let emergencyId = ''
       if (user) {
-        // Resolve any lingering active emergencies before creating a new one
-        await supabase.from('emergencies')
-          .update({ status: 'resolved' })
-          .eq('user_id', user.id)
-          .eq('status', 'active')
-
-        const { data, error } = await supabase
-          .from('emergencies')
-          .insert({ user_id: user.id, emergency_type: type, status: 'active' })
-          .select()
-          .single()
-
+        await supabase.from('emergencies').update({ status: 'resolved' }).eq('user_id', user.id).eq('status', 'active')
+        const { data, error } = await supabase.from('emergencies').insert({ user_id: user.id, emergency_type: type, status: 'active' }).select().single()
         if (error) {
-          console.error('Emergency insert failed:', error)
-          toast.error('Could not log emergency — please call 911 now')
-          // Still navigate so the user can get routing info
+          toast.error('Could not log emergency — call 911 now')
         } else {
           emergencyId = data?.id || ''
         }
       }
       router.push(`/emergency/routing?type=${type}&id=${emergencyId}`)
-    } catch (err) {
-      console.error('Emergency select error:', err)
-      toast.error('Something went wrong — please call 911 now')
+    } catch {
+      toast.error('Something went wrong — call 911 now')
       setLoading(false)
       setSelected('')
     }
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#0A0F0A', display: 'flex', flexDirection: 'column' }}>
 
-      {/* Alert bar */}
-      <div style={{
-        background: 'linear-gradient(90deg, #C42020, #E8322A)',
-        padding: '13px 20px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        boxShadow: '0 2px 16px rgba(196,32,32,0.35)',
-      }}>
+      {/* Status bar area */}
+      <div style={{ padding: '16px 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <motion.div
             animate={{ opacity: [1, 0.2, 1] }}
-            transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'white' }}
+            transition={{ duration: 1.2, repeat: Infinity }}
+            style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#B91C1C' }}
           />
-          <span style={{ color: 'white', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: 700 }}>
-            Relay Arc Emergency
+          <span style={{ color: 'rgba(240,237,229,0.5)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 600 }}>
+            Emergency Mode
           </span>
         </div>
-        <span style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
+        <span style={{ color: 'rgba(240,237,229,0.28)', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
           {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
       </div>
 
-      <div style={{ flex: 1, padding: '24px 20px 20px', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, padding: '20px 20px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <h1 style={{ color: '#1A2820', fontSize: '26px', fontWeight: 900, letterSpacing: '-1px', marginBottom: '4px', lineHeight: 1.1 }}>
-              What is happening?
+            <h1 style={{ color: '#F0EDE5', fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.1 }}>
+              What's happening?
             </h1>
-            <p style={{ color: 'rgba(26,40,32,0.42)', fontSize: '13px' }}>Select the closest description</p>
+            <p style={{ color: 'rgba(240,237,229,0.36)', fontSize: '13px', marginTop: '4px' }}>Select to activate emergency response</p>
           </div>
           <motion.button
             whileTap={{ scale: 0.9 }}
-            transition={spring}
             onClick={() => router.push('/dashboard')}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 1px 4px rgba(26,40,32,0.07)' }}
+            style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(240,237,229,0.07)', border: '1px solid rgba(240,237,229,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
           >
-            <X size={15} color="rgba(26,40,32,0.5)"/>
+            <X size={15} color="rgba(240,237,229,0.5)"/>
           </motion.button>
         </div>
 
-        {/* Call 911 button — always visible and prominent */}
+        {/* Call 911 */}
         <motion.a
           href="tel:911"
           whileTap={{ scale: 0.97 }}
-          transition={spring}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-            background: '#DC2626', color: 'white',
-            padding: '16px', borderRadius: '18px',
+            background: '#B91C1C', color: 'white',
+            padding: '16px', borderRadius: '12px',
             fontWeight: 900, fontSize: '17px', letterSpacing: '-0.3px',
-            textDecoration: 'none', marginBottom: '16px',
-            boxShadow: '0 6px 24px rgba(220,38,38,0.38)',
+            textDecoration: 'none',
           }}
         >
-          <Phone size={20}/>
+          <Phone size={19} strokeWidth={2.2}/>
           Call 911 now
         </motion.a>
 
@@ -136,7 +109,7 @@ export default function Emergency() {
           variants={stagger}
           initial="hidden"
           animate="show"
-          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', flex: 1 }}
+          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', flex: 1 }}
         >
           {TYPES.map(type => {
             const isSelected = selected === type.id
@@ -144,49 +117,39 @@ export default function Emergency() {
               <motion.button
                 key={type.id}
                 variants={fadeUp}
-                whileTap={{ scale: 0.95 }}
-                transition={spring}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => handleSelect(type.id)}
                 disabled={loading}
                 style={{
-                  background: isSelected
-                    ? 'linear-gradient(145deg, rgba(220,38,38,0.1) 0%, #FFFFFF 100%)'
-                    : '#FFFFFF',
-                  border: `1.5px solid ${isSelected ? 'rgba(220,38,38,0.4)' : 'rgba(26,40,32,0.08)'}`,
-                  borderRadius: '20px',
-                  padding: '18px 16px',
+                  background: isSelected ? 'rgba(185,28,28,0.15)' : 'rgba(240,237,229,0.04)',
+                  border: `1px solid ${isSelected ? 'rgba(185,28,28,0.5)' : 'rgba(240,237,229,0.08)'}`,
+                  borderRadius: '12px',
+                  padding: '16px 14px',
                   textAlign: 'left',
                   cursor: 'pointer',
-                  boxShadow: isSelected
-                    ? '0 6px 20px rgba(220,38,38,0.14)'
-                    : '0 2px 8px rgba(26,40,32,0.06)',
-                  transition: 'border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease',
-                  opacity: loading && !isSelected ? 0.6 : 1,
+                  transition: 'border-color 0.15s, background 0.15s',
+                  opacity: loading && !isSelected ? 0.5 : 1,
                 }}
               >
                 <div style={{
-                  width: '40px', height: '40px', borderRadius: '50%', marginBottom: '12px',
-                  background: isSelected ? 'rgba(220,38,38,0.12)' : 'rgba(26,40,32,0.05)',
-                  border: `1.5px solid ${isSelected ? 'rgba(220,38,38,0.3)' : 'rgba(26,40,32,0.07)'}`,
+                  width: '36px', height: '36px', borderRadius: '8px', marginBottom: '10px',
+                  background: isSelected ? 'rgba(185,28,28,0.2)' : 'rgba(240,237,229,0.07)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <type.Icon size={18} color={isSelected ? '#DC2626' : 'rgba(26,40,32,0.5)'}/>
+                  <type.Icon size={17} color={isSelected ? '#EF4444' : 'rgba(240,237,229,0.45)'} strokeWidth={2}/>
                 </div>
-                <p style={{ color: isSelected ? '#B91C1C' : '#1A2820', fontWeight: 700, fontSize: '13px', marginBottom: '4px', letterSpacing: '-0.2px' }}>{type.label}</p>
-                <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px', lineHeight: 1.45 }}>{type.desc}</p>
+                <p style={{ color: isSelected ? '#FCA5A5' : '#F0EDE5', fontWeight: 700, fontSize: '13px', marginBottom: '3px', letterSpacing: '-0.1px' }}>{type.label}</p>
+                <p style={{ color: 'rgba(240,237,229,0.32)', fontSize: '11px', lineHeight: 1.4 }}>{type.desc}</p>
               </motion.button>
             )
           })}
         </motion.div>
 
-        {/* Info strip */}
-        <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-          <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '11px', textAlign: 'center', lineHeight: 1.5 }}>
-            Select a symptom above to alert your care team and find the nearest hospital
-          </p>
+        {/* Triage link */}
+        <div style={{ textAlign: 'center' }}>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/emergency/triage')}
-            style={{ color: '#5C8B74', fontSize: '12px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textDecorationColor: 'rgba(92,139,116,0.4)' }}>
-            Not sure how serious? Assess severity →
+            style={{ color: 'rgba(240,237,229,0.38)', fontSize: '12px', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>
+            Not sure how serious? <span style={{ color: '#4A9E6B', fontWeight: 600 }}>Assess severity →</span>
           </motion.button>
         </div>
       </div>

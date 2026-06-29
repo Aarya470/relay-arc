@@ -151,8 +151,8 @@ function BriefContent() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F2EFE9' }}>
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5C8B74' }} />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F0EDE5' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#2C7A50' }} />
       </div>
     )
   }
@@ -162,9 +162,9 @@ function BriefContent() {
   const primaryContact = contacts[0]
 
   return (
-    <div className="min-h-screen" style={{ background: '#F2EFE9' }}>
+    <div className="min-h-screen" style={{ background: '#F0EDE5' }}>
       {/* Red alert header */}
-      <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3" style={{ background: '#DC2626' }}>
+      <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3" style={{ background: '#B91C1C' }}>
         <button
           onClick={() => router.back()}
           className="p-1 rounded-full"
@@ -188,7 +188,7 @@ function BriefContent() {
       {/* SHOW TO HOSPITAL STAFF banner */}
       <div
         className="w-full text-center py-4 px-4"
-        style={{ background: '#DC2626' }}
+        style={{ background: '#B91C1C' }}
       >
         <p
           className="font-black tracking-widest uppercase text-white"
@@ -202,16 +202,16 @@ function BriefContent() {
         {/* Patient */}
         <Section>
           <SectionLabel>PATIENT</SectionLabel>
-          <p className="text-xl font-bold" style={{ color: '#1A2820' }}>
+          <p className="text-xl font-bold" style={{ color: '#0F1A0E' }}>
             {profile?.full_name || <span className="opacity-40">Unknown</span>}
           </p>
           {profile?.date_of_birth && (
-            <p className="text-sm mt-0.5" style={{ color: '#1A2820', opacity: 0.6 }}>
+            <p className="text-sm mt-0.5" style={{ color: '#0F1A0E', opacity: 0.6 }}>
               DOB: {profile.date_of_birth}
             </p>
           )}
           {profile?.diagnosis && (
-            <p className="text-sm mt-1" style={{ color: '#1A2820', opacity: 0.75 }}>
+            <p className="text-sm mt-1" style={{ color: '#0F1A0E', opacity: 0.75 }}>
               {profile.diagnosis}
             </p>
           )}
@@ -222,7 +222,7 @@ function BriefContent() {
           <SectionLabel>BLOOD TYPE</SectionLabel>
           <p
             className="text-4xl font-black tracking-tight"
-            style={{ color: '#DC2626', lineHeight: 1.1 }}
+            style={{ color: '#B91C1C', lineHeight: 1.1 }}
           >
             {profile?.blood_type || '?'}
           </p>
@@ -232,11 +232,11 @@ function BriefContent() {
         <Section highlight={!!profile?.allergies}>
           <SectionLabel>⚠️ ALLERGIES</SectionLabel>
           {profile?.allergies ? (
-            <p className="font-semibold text-base" style={{ color: '#DC2626' }}>
+            <p className="font-semibold text-base" style={{ color: '#B91C1C' }}>
               {profile.allergies}
             </p>
           ) : (
-            <p className="text-base" style={{ color: '#1A2820', opacity: 0.5 }}>
+            <p className="text-base" style={{ color: '#0F1A0E', opacity: 0.5 }}>
               None known
             </p>
           )}
@@ -251,9 +251,9 @@ function BriefContent() {
                 <li key={i} className="flex items-start gap-2">
                   <span
                     className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: '#5C8B74' }}
+                    style={{ background: '#2C7A50' }}
                   />
-                  <span className="text-sm" style={{ color: '#1A2820' }}>
+                  <span className="text-sm" style={{ color: '#0F1A0E' }}>
                     <span className="font-semibold">{m.name}</span>
                     {m.dose && ` — ${m.dose}`}
                     {m.frequency && (
@@ -264,7 +264,7 @@ function BriefContent() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm" style={{ color: '#1A2820', opacity: 0.5 }}>
+            <p className="text-sm" style={{ color: '#0F1A0E', opacity: 0.5 }}>
               None on file
             </p>
           )}
@@ -274,8 +274,8 @@ function BriefContent() {
         <Section>
           <SectionLabel>EMERGENCY</SectionLabel>
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#DC2626' }} />
-            <p className="text-lg font-bold" style={{ color: '#DC2626' }}>
+            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#B91C1C' }} />
+            <p className="text-lg font-bold" style={{ color: '#B91C1C' }}>
               {emergencyLabel}
             </p>
           </div>
@@ -286,7 +286,7 @@ function BriefContent() {
           <SectionLabel>EMERGENCY CONTACT</SectionLabel>
           {primaryContact ? (
             <div>
-              <p className="font-semibold" style={{ color: '#1A2820' }}>
+              <p className="font-semibold" style={{ color: '#0F1A0E' }}>
                 {primaryContact.name}
                 {primaryContact.relationship && (
                   <span className="font-normal text-sm" style={{ opacity: 0.6 }}>
@@ -294,12 +294,12 @@ function BriefContent() {
                   </span>
                 )}
               </p>
-              <p className="text-lg font-bold mt-0.5" style={{ color: '#5C8B74' }}>
+              <p className="text-lg font-bold mt-0.5" style={{ color: '#2C7A50' }}>
                 {primaryContact.phone}
               </p>
             </div>
           ) : (
-            <p className="text-sm" style={{ color: '#1A2820', opacity: 0.5 }}>
+            <p className="text-sm" style={{ color: '#0F1A0E', opacity: 0.5 }}>
               None on file
             </p>
           )}
@@ -309,20 +309,20 @@ function BriefContent() {
         <Section>
           <SectionLabel>AI CLINICAL NOTE</SectionLabel>
           {noteLoading ? (
-            <div className="flex items-center gap-2 mt-1" style={{ color: '#5C8B74' }}>
+            <div className="flex items-center gap-2 mt-1" style={{ color: '#2C7A50' }}>
               <Loader2 className="w-4 h-4 animate-spin" />
               <span className="text-sm">Generating note…</span>
             </div>
           ) : clinicalNote ? (
-            <p className="text-sm leading-relaxed" style={{ color: '#1A2820', opacity: 0.85 }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#0F1A0E', opacity: 0.85 }}>
               {clinicalNote}
             </p>
           ) : (
-            <p className="text-sm" style={{ color: '#1A2820', opacity: 0.45 }}>
+            <p className="text-sm" style={{ color: '#0F1A0E', opacity: 0.45 }}>
               Note unavailable — use profile data above.
             </p>
           )}
-          <p className="text-xs mt-2" style={{ color: '#1A2820', opacity: 0.35 }}>
+          <p className="text-xs mt-2" style={{ color: '#0F1A0E', opacity: 0.35 }}>
             AI-generated · verify with patient or records
           </p>
         </Section>
@@ -332,14 +332,14 @@ function BriefContent() {
           <button
             onClick={() => router.back()}
             className="flex-1 py-3 rounded-xl border text-sm font-semibold transition-opacity hover:opacity-70"
-            style={{ borderColor: 'rgba(26,40,32,0.18)', color: '#1A2820', background: 'transparent' }}
+            style={{ borderColor: 'rgba(16,22,14,0.14)', color: '#0F1A0E', background: 'transparent' }}
           >
             Back
           </button>
           <button
             onClick={handleCopy}
             className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
-            style={{ background: copied ? '#5C8B74' : '#1A2820', color: '#fff' }}
+            style={{ background: copied ? '#2C7A50' : '#0F1A0E', color: '#fff' }}
           >
             {copied ? (
               <>
@@ -373,8 +373,8 @@ function Section({
       transition={{ type: 'spring', stiffness: 340, damping: 26 }}
       className="rounded-2xl p-4"
       style={{
-        background: highlight ? 'rgba(220,38,38,0.06)' : 'rgba(255,255,255,0.72)',
-        border: highlight ? '1.5px solid rgba(220,38,38,0.22)' : '1px solid rgba(26,40,32,0.07)',
+        background: highlight ? 'rgba(185,28,28,0.06)' : 'rgba(255,255,255,0.72)',
+        border: highlight ? '1.5px solid rgba(185,28,28,0.22)' : '1px solid rgba(16,22,14,0.08)',
         backdropFilter: 'blur(8px)',
       }}
     >
@@ -387,7 +387,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="text-xs font-bold uppercase tracking-widest mb-1.5"
-      style={{ color: '#1A2820', opacity: 0.38, letterSpacing: '0.13em' }}
+      style={{ color: '#0F1A0E', opacity: 0.38, letterSpacing: '0.13em' }}
     >
       {children}
     </p>
@@ -398,8 +398,8 @@ export default function BriefPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center" style={{ background: '#F2EFE9' }}>
-          <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5C8B74' }} />
+        <div className="min-h-screen flex items-center justify-center" style={{ background: '#F0EDE5' }}>
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#2C7A50' }} />
         </div>
       }
     >
