@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Heart, Navigation, Pill, TrendingUp, Phone, Shield, Activity, ChevronDown, Menu, X, Clock, Users, Zap, CheckCircle, MapPin, Bell } from 'lucide-react'
+import { ArrowRight, Heart, Navigation, Pill, TrendingUp, Phone, Shield, Activity, ChevronDown, Menu, X, Clock, Users, Zap, CheckCircle, MapPin, Bell, Brain, Eye, FileText, RotateCcw } from 'lucide-react'
 
 const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
 
@@ -264,7 +264,7 @@ export default function Home() {
               style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.22)', borderRadius: '99px', padding: '5px 14px', marginBottom: '28px' }}>
               <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                 style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#5C8B74' }}/>
-              <span style={{ color: '#5C8B74', fontSize: '11px', fontWeight: 700, letterSpacing: '1px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase' }}>Cardiac Emergency Platform</span>
+              <span style={{ color: '#5C8B74', fontSize: '11px', fontWeight: 700, letterSpacing: '1px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase' }}>Stage 2 — Now Live</span>
             </motion.div>
 
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, ...spring }}
@@ -478,6 +478,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── STAGE 2 ──────────────────────────────────────────────────── */}
+      <section style={{ padding: '100px 24px', background: '#1A2820', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(92,139,116,0.12) 1px, transparent 1px)', backgroundSize: '28px 28px', pointerEvents: 'none' }}/>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative' }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-80px' }} transition={spring}
+            style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, color: '#5C8B74', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', background: 'rgba(92,139,116,0.12)', border: '1px solid rgba(92,139,116,0.28)', padding: '5px 14px', borderRadius: '99px' }}>
+              <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#5C8B74' }}/>
+              Stage 2 — Shipped
+            </span>
+            <h2 style={{ color: '#F2EFE9', fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '14px' }}>
+              A major update is here.
+            </h2>
+            <p style={{ color: 'rgba(242,239,233,0.45)', fontSize: '16px', maxWidth: '540px', margin: '0 auto', lineHeight: 1.7 }}>
+              Relay Stage 2 brings AI crash prediction, severity triage, caregiver live view, and clinical ER briefings — the system now works harder before, during, and after the emergency.
+            </p>
+          </motion.div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2px', background: 'rgba(242,239,233,0.03)', borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(242,239,233,0.07)' }}>
+            {[
+              { icon: Brain, color: '#F59E0B', tag: 'PRE · DICT', title: 'Crash Risk Prediction', body: 'AI scans your last 7 check-ins to flag a crash before it arrives — giving you time to rest, adjust, or alert your care team.' },
+              { icon: Zap, color: '#F87171', tag: 'TRI · AGE', title: 'Severity Triage Wizard', body: 'Not sure how serious? A 3-step assessment tells you whether to call 911, go to urgent care, or monitor at home.' },
+              { icon: Eye, color: '#38BDF8', tag: 'LIVE · VIEW', title: 'Caregiver Live View', body: 'Share a link and your family watches the emergency in real-time — what type, how long, and when it resolves.' },
+              { icon: FileText, color: '#A78BFA', tag: 'ER · BRIEF', title: 'ER Handoff Brief', body: 'One tap generates a clinical AI note — blood type, allergies, meds, chief complaint — formatted for ER intake. Copy or show on screen.' },
+              { icon: RotateCcw, color: '#34D399', tag: 'RE · COVER', title: 'Recovery Protocol', body: 'After the emergency ends, Relay generates a 7-day recovery plan — hydration, rest, medications, and warning signs to watch for.' },
+              { icon: Clock, color: '#94A3B8', tag: 'HIS · TORY', title: 'Emergency History', body: 'Every past SOS event logged by month — what happened, when, and how it was resolved. A timeline your doctor can actually use.' },
+            ].map((item, i) => (
+              <motion.div key={i}
+                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }}
+                transition={{ ...spring, delay: i * 0.07 }}
+                style={{ padding: '30px 26px', borderRight: (i % 3 < 2) ? '1px solid rgba(242,239,233,0.05)' : 'none', borderBottom: i < 3 ? '1px solid rgba(242,239,233,0.05)' : 'none' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: `${item.color}18`, border: `1px solid ${item.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                  <item.icon size={18} color={item.color}/>
+                </div>
+                <p style={{ color: item.color, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>{item.tag}</p>
+                <h3 style={{ color: '#F2EFE9', fontSize: '16px', fontWeight: 800, letterSpacing: '-0.4px', marginBottom: '10px' }}>{item.title}</h3>
+                <p style={{ color: 'rgba(242,239,233,0.42)', fontSize: '14px', lineHeight: 1.7 }}>{item.body}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── WHY RELAY IS DIFFERENT ───────────────────────────────────── */}
       <section style={{ padding: '100px 24px', background: 'rgba(92,139,116,0.05)', borderTop: '1px solid rgba(92,139,116,0.1)', borderBottom: '1px solid rgba(92,139,116,0.1)' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -518,23 +562,42 @@ export default function Home() {
         <div style={{ maxWidth: '780px', margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={spring}>
             <p style={{ color: 'rgba(26,40,32,0.35)', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '14px' }}>Roadmap</p>
-            <h3 style={{ color: '#1A2820', fontSize: '24px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '8px' }}>Building what comes next</h3>
-            <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px', maxWidth: '500px' }}>
-              Relay is live and growing. Here is what the next phase looks like.
+            <h3 style={{ color: '#1A2820', fontSize: '24px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '8px' }}>What shipped. What's next.</h3>
+            <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '14px', lineHeight: 1.6, marginBottom: '28px', maxWidth: '500px' }}>
+              Stage 2 is live. Stage 3 is in progress.
             </p>
+            <p style={{ color: 'rgba(26,40,32,0.35)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px' }}>✓ Shipped — Stage 2</p>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '24px' }}>
+              {[
+                'Crash risk prediction',
+                'Severity triage wizard',
+                'Caregiver live view',
+                'ER handoff brief',
+                'Recovery protocol',
+                'Emergency history log',
+              ].map((item, i) => (
+                <motion.span key={i}
+                  initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
+                  transition={{ ...spring, delay: i * 0.04 }}
+                  style={{ background: 'rgba(92,139,116,0.08)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '99px', padding: '7px 14px', color: '#3D6B58', fontSize: '13px', fontWeight: 600 }}>
+                  {item}
+                </motion.span>
+              ))}
+            </div>
+            <p style={{ color: 'rgba(26,40,32,0.35)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px' }}>→ Coming — Stage 3</p>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {[
-                'Community transport for patients without a vehicle',
+                'Community transport network',
                 'Wearable integration — Apple Watch, Fitbit',
-                'Voice-first mode for hands-free SOS',
-                'Direct connection to Epic and Cerner hospital systems',
-                'Vitals trend analysis and AI alerts',
-                'Multilingual support — Hindi, Bengali, Tamil',
+                'Voice-first SOS mode',
+                'Epic and Cerner hospital integration',
+                'Vitals trend AI alerts',
+                'Multilingual — Hindi, Bengali, Tamil',
               ].map((item, i) => (
                 <motion.span key={i}
                   initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
                   transition={{ ...spring, delay: i * 0.05 }}
-                  style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.09)', borderRadius: '99px', padding: '8px 14px', color: 'rgba(26,40,32,0.6)', fontSize: '13px', fontWeight: 500, boxShadow: '0 1px 4px rgba(26,40,32,0.04)' }}>
+                  style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.09)', borderRadius: '99px', padding: '7px 14px', color: 'rgba(26,40,32,0.6)', fontSize: '13px', fontWeight: 500, boxShadow: '0 1px 4px rgba(26,40,32,0.04)' }}>
                   {item}
                 </motion.span>
               ))}
