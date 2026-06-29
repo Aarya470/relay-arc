@@ -9,14 +9,24 @@ export async function registerServiceWorker() {
 
 export async function registerPushNotifications(userId: string) {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator) || !('PushManager' in window)) return
+
   try {
+    // Explicitly request notification permission before trying to subscribe
+    const permission = await Notification.requestPermission()
+    if (permission !== 'granted') return
+
     const reg = await navigator.serviceWorker.ready
 
     let sub = await reg.pushManager.getSubscription()
     if (!sub) {
+      const vapidKey = process.env.NEXT_PUBLIC_VAPID_KEY
+      if (!vapidKey) {
+        console.warn('NEXT_PUBLIC_VAPID_KEY not set — push notifications disabled')
+        return
+      }
       sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_KEY!),
+        applicationServerKey: urlBase64ToUint8Array(vapidKey),
       })
     }
 

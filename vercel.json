@@ -3,6 +3,18 @@
     {
       "path": "/api/cron/checkin-reminder",
       "schedule": "30 2 * * *"
+    },
+    {
+      "path": "/api/cron/medication-reminder",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/medication-reminder",
+      "schedule": "30 7 * * *"
+    },
+    {
+      "path": "/api/cron/medication-reminder",
+      "schedule": "30 14 * * *"
     }
   ]
 }

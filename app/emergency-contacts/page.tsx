@@ -89,7 +89,7 @@ export default function EmergencyContacts() {
           <motion.button
             whileTap={{ scale: 0.9 }}
             transition={spring}
-            onClick={() => router.push('/settings')}
+            onClick={() => router.back()}
             style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.09)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(26,40,32,0.06)' }}
           >
             <ArrowLeft size={15} color="rgba(26,40,32,0.5)"/>

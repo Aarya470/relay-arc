@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Activity, Heart, Droplets } from 'lucide-react'
+import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users } from 'lucide-react'
 import { toast } from 'sonner'
 
 function scheduleCheckinReminders(userId: string, checkins: any[]): () => void {
@@ -88,7 +88,6 @@ export default function Dashboard() {
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
   const [showIosHint, setShowIosHint] = useState(false)
-  const [lastVitals, setLastVitals] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -124,13 +123,9 @@ export default function Dashboard() {
 
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       if (!data) { router.push('/onboarding'); return }
-      const [{ data: c }, { data: v }] = await Promise.all([
-        supabase.from('checkins').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(30),
-        supabase.from('vitals_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1),
-      ])
+      const { data: c } = await supabase.from('checkins').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(30)
       setProfile(data)
       setCheckins(c || [])
-      setLastVitals(v?.[0] || null)
       setLoading(false)
       registerPushNotifications(user.id)
       const cancelReminders = scheduleCheckinReminders(user.id, c || [])
@@ -177,6 +172,7 @@ export default function Dashboard() {
   const recoveryPct = weeksSinceSurgery !== null ? Math.min((weeksSinceSurgery / 12) * 100, 100) : 0
   const meds = profile?.medications?.slice(0, 3) || []
   const streak = calcStreak(checkins)
+  const emergencyContacts: any[] = profile?.emergency_contacts || []
 
   return (
     <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px' }}>
@@ -304,34 +300,36 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
-        {/* Vitals card */}
+        {/* Emergency contacts */}
         <motion.div variants={fadeUp}>
-          <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/vitals')}
-            style={{ ...card, padding: '16px', textAlign: 'left', cursor: 'pointer', width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <span style={{ color: '#1A2820', fontSize: '14px', fontWeight: 700, letterSpacing: '-0.2px' }}>Vitals</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                {lastVitals && <span style={{ color: 'rgba(26,40,32,0.3)', fontSize: '11px' }}>{parseTS(lastVitals.created_at).toLocaleDateString()}</span>}
-                <ChevronRight size={14} color="rgba(26,40,32,0.25)"/>
+          <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/emergency-contacts')}
+            style={{ ...card, padding: '16px 18px', cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Users size={16} color="#DC2626"/>
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <p style={{ color: '#1A2820', fontWeight: 600, fontSize: '14px' }}>Emergency contacts</p>
+                <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px', marginTop: '1px' }}>
+                  {emergencyContacts.length > 0
+                    ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''} — notified on SOS`
+                    : 'No contacts added yet'}
+                </p>
               </div>
             </div>
-            {lastVitals ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-                {[
-                  { icon: Heart, color: '#E8322A', label: 'HR', value: lastVitals.heart_rate, unit: 'bpm' },
-                  { icon: Activity, color: '#5C8B74', label: 'BP', value: lastVitals.systolic && lastVitals.diastolic ? `${lastVitals.systolic}/${lastVitals.diastolic}` : null, unit: '' },
-                  { icon: Droplets, color: '#2563EB', label: 'O₂', value: lastVitals.oxygen_sat, unit: '%' },
-                ].map((v, i) => (
-                  <div key={i} style={{ textAlign: 'center' }}>
-                    <v.icon size={14} color={v.color} style={{ marginBottom: '4px' }}/>
-                    <p style={{ color: '#1A2820', fontSize: '16px', fontWeight: 800, letterSpacing: '-0.5px', lineHeight: 1 }}>{v.value ?? '—'}{v.unit && v.value ? <span style={{ fontSize: '10px', fontWeight: 500, color: 'rgba(26,40,32,0.4)' }}>{v.unit}</span> : ''}</p>
-                    <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '10px', marginTop: '2px' }}>{v.label}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p style={{ color: 'rgba(26,40,32,0.3)', fontSize: '13px' }}>No vitals logged yet — tap to add</p>
-            )}
+            <ChevronRight size={14} color="rgba(26,40,32,0.25)"/>
+          </motion.button>
+        </motion.div>
+
+        {/* Medical profile */}
+        <motion.div variants={fadeUp}>
+          <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/medical-profile')}
+            style={{ ...card, padding: '16px 18px', cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ textAlign: 'left' }}>
+              <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Medical profile</p>
+              <p style={{ color: '#1A2820', fontWeight: 600, fontSize: '15px' }}>Your conditions, meds & allergies</p>
+            </div>
+            <ChevronRight size={14} color="rgba(26,40,32,0.25)"/>
           </motion.button>
         </motion.div>
 
