@@ -8,6 +8,7 @@ import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock } from 'lucide-react'
 import { toast } from 'sonner'
+import { analyzeCrashRisk, CrashRisk } from '@/lib/crash-risk'
 
 function scheduleCheckinReminders(userId: string, checkins: any[]): () => void {
   let timerId: ReturnType<typeof setTimeout> | null = null
@@ -88,6 +89,7 @@ export default function Dashboard() {
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
   const [showIosHint, setShowIosHint] = useState(false)
+  const [crashRisk, setCrashRisk] = useState<CrashRisk | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -127,6 +129,10 @@ export default function Dashboard() {
       setProfile(data)
       setCheckins(c || [])
       setLoading(false)
+      // Analyze crash risk in background — non-blocking
+      analyzeCrashRisk(c || []).then(risk => {
+        if (risk && risk.level !== 'low') setCrashRisk(risk)
+      }).catch(() => {})
       registerPushNotifications(user.id)
       const cancelReminders = scheduleCheckinReminders(user.id, c || [])
       return cancelReminders
@@ -266,6 +272,40 @@ export default function Dashboard() {
             </div>
           </motion.button>
         </motion.div>
+
+        {/* Crash risk warning */}
+        {crashRisk && (
+          <motion.div variants={fadeUp}
+            style={{
+              background: crashRisk.level === 'high' ? 'rgba(220,38,38,0.06)' : 'rgba(196,107,48,0.06)',
+              border: `1px solid ${crashRisk.level === 'high' ? 'rgba(220,38,38,0.2)' : 'rgba(196,107,48,0.2)'}`,
+              borderRadius: '14px', padding: '14px 16px',
+              display: 'flex', alignItems: 'flex-start', gap: '12px'
+            }}>
+            <div style={{
+              width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, marginTop: '5px',
+              background: crashRisk.level === 'high' ? '#DC2626' : '#C46B30'
+            }}/>
+            <div style={{ flex: 1 }}>
+              <p style={{
+                color: crashRisk.level === 'high' ? '#B91C1C' : '#92400E',
+                fontWeight: 700, fontSize: '13px', marginBottom: '3px'
+              }}>
+                {crashRisk.level === 'high' ? 'High crash risk detected' : 'Potential flare pattern detected'}
+              </p>
+              <p style={{ color: 'rgba(26,40,32,0.55)', fontSize: '12px', lineHeight: 1.55, marginBottom: '4px' }}>
+                {crashRisk.reason}
+              </p>
+              <p style={{ color: crashRisk.level === 'high' ? '#DC2626' : '#C46B30', fontSize: '12px', fontWeight: 600 }}>
+                {crashRisk.advice}
+              </p>
+            </div>
+            <button onClick={() => setCrashRisk(null)}
+              style={{ background: 'none', border: 'none', color: 'rgba(26,40,32,0.25)', fontSize: '18px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>
+              ×
+            </button>
+          </motion.div>
+        )}
 
         {/* Check-in + Recovery */}
         <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>

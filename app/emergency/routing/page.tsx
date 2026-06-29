@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X } from 'lucide-react'
+import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText } from 'lucide-react'
 import { findNearbyHospitals, formatDistance, estimateTime, Hospital } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 
@@ -175,7 +175,7 @@ function RoutingPage() {
         .eq('status', 'active')
     }
     lockedRef.current = false
-    router.push('/dashboard')
+    router.push(`/emergency/recovery?type=${type}`)
   }
 
   if (loading) return (
@@ -388,6 +388,24 @@ function RoutingPage() {
             <Phone size={18}/>
             Call 911
           </motion.a>
+          {/* Secondary actions row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+            <motion.button whileTap={{ scale: 0.97 }}
+              onClick={() => router.push(`/emergency/brief?type=${type}`)}
+              style={{ background: '#F8F6F2', border: '1.5px solid rgba(220,38,38,0.2)', borderRadius: '12px', padding: '11px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: '#B91C1C', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+              <FileText size={14} color="#B91C1C"/>
+              ER Brief
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                const url = `${window.location.origin}/emergency/live/${activeEmergencyId.current || emergencyId}`
+                navigator.clipboard.writeText(url).catch(() => {})
+              }}
+              style={{ background: '#F8F6F2', border: '1.5px solid rgba(92,139,116,0.25)', borderRadius: '12px', padding: '11px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: '#3D6B58', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+              <Share2 size={14} color="#3D6B58"/>
+              Share with family
+            </motion.button>
+          </div>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(true)}
             style={{ width: '100%', background: '#F8F6F2', border: '1.5px solid rgba(26,40,32,0.12)', borderRadius: '14px', padding: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'rgba(26,40,32,0.65)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
             <Shield size={15}/>

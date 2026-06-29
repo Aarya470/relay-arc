@@ -1,0 +1,409 @@
+'use client'
+
+import { useEffect, useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
+import Groq from 'groq-sdk'
+import { motion } from 'framer-motion'
+import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck } from 'lucide-react'
+import { toast } from 'sonner'
+
+const EMERGENCY_LABELS: Record<string, string> = {
+  chest_pain: 'Chest pain',
+  stroke: 'Stroke signs',
+  pots: 'POTS episode',
+  mecfs: 'ME/CFS crash',
+  breathing: 'Breathing difficulty',
+  unconscious: 'Unconscious / collapsed',
+  other: 'Emergency',
+}
+
+interface Profile {
+  full_name?: string
+  blood_type?: string
+  allergies?: string
+  medications?: { name: string; dose: string; frequency: string }[]
+  diagnosis?: string
+  emergency_contacts?: { name: string; phone: string; relationship?: string }[]
+  surgery_date?: string
+  date_of_birth?: string
+}
+
+function BriefContent() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const type = searchParams.get('type') || 'other'
+  const hospitalName = searchParams.get('name') || ''
+
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [clinicalNote, setClinicalNote] = useState('')
+  const [noteLoading, setNoteLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
+  const [authChecked, setAuthChecked] = useState(false)
+
+  const emergencyLabel = EMERGENCY_LABELS[type] || 'Emergency'
+
+  useEffect(() => {
+    const init = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.replace('/login')
+        return
+      }
+      setAuthChecked(true)
+
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name, blood_type, allergies, medications, diagnosis, emergency_contacts, surgery_date, date_of_birth')
+        .eq('id', user.id)
+        .single()
+
+      if (data) {
+        setProfile(data)
+        generateClinicalNote(data)
+      } else {
+        setNoteLoading(false)
+      }
+    }
+    init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const generateClinicalNote = async (p: Profile) => {
+    try {
+      const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY, dangerouslyAllowBrowser: true })
+      const medNames = (p.medications || []).map(m => `${m.name} ${m.dose}`).join(', ') || 'none'
+      const completion = await groq.chat.completions.create({
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You are an emergency medicine assistant. Write a 2-3 sentence clinical handoff note for ER staff. Be specific, clinical, and actionable. Focus on the condition and emergency type.',
+          },
+          {
+            role: 'user',
+            content: `Patient has ${p.diagnosis || 'no known diagnosis on file'}. Current emergency: ${emergencyLabel}. Allergies: ${p.allergies || 'none known'}. Current medications: ${medNames}.`,
+          },
+        ],
+        max_tokens: 180,
+        temperature: 0.3,
+      })
+      setClinicalNote(completion.choices[0]?.message?.content?.trim() || '')
+    } catch (err) {
+      console.error('Groq error:', err)
+      setClinicalNote('')
+    } finally {
+      setNoteLoading(false)
+    }
+  }
+
+  const buildPlainText = () => {
+    const meds = (profile?.medications || [])
+      .map(m => `  • ${m.name} ${m.dose} — ${m.frequency}`)
+      .join('\n') || '  • None on file'
+    const contact = profile?.emergency_contacts?.[0]
+    const contactLine = contact
+      ? `${contact.name}${contact.relationship ? ` (${contact.relationship})` : ''}: ${contact.phone}`
+      : 'None on file'
+
+    return [
+      '═══════════════════════════════',
+      'ER MEDICAL BRIEF — SHOW TO STAFF',
+      '═══════════════════════════════',
+      '',
+      `PATIENT: ${profile?.full_name || 'Unknown'}`,
+      profile?.date_of_birth ? `DOB: ${profile.date_of_birth}` : '',
+      profile?.diagnosis ? `CONDITIONS: ${profile.diagnosis}` : '',
+      '',
+      `BLOOD TYPE: ${profile?.blood_type || 'Unknown'}`,
+      '',
+      `ALLERGIES: ${profile?.allergies || 'None known'}`,
+      '',
+      'CURRENT MEDICATIONS:',
+      meds,
+      '',
+      `EMERGENCY TYPE: ${emergencyLabel}`,
+      hospitalName ? `DESTINATION: ${hospitalName}` : '',
+      '',
+      `EMERGENCY CONTACT: ${contactLine}`,
+      '',
+      clinicalNote ? `AI CLINICAL NOTE:\n${clinicalNote}` : '',
+      '',
+      '═══════════════════════════════',
+    ]
+      .filter(l => l !== null && l !== undefined)
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
+  }
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(buildPlainText())
+      setCopied(true)
+      toast.success('Brief copied to clipboard')
+      setTimeout(() => setCopied(false), 2500)
+    } catch {
+      toast.error('Copy failed — please screenshot this screen')
+    }
+  }
+
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F2EFE9' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5C8B74' }} />
+      </div>
+    )
+  }
+
+  const meds = profile?.medications || []
+  const contacts = profile?.emergency_contacts || []
+  const primaryContact = contacts[0]
+
+  return (
+    <div className="min-h-screen" style={{ background: '#F2EFE9' }}>
+      {/* Red alert header */}
+      <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3" style={{ background: '#DC2626' }}>
+        <button
+          onClick={() => router.back()}
+          className="p-1 rounded-full"
+          style={{ color: '#fff' }}
+          aria-label="Go back"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <span className="flex items-center gap-2 font-bold text-white text-lg tracking-tight">
+          <span
+            className="w-2.5 h-2.5 rounded-full bg-white animate-pulse"
+            style={{ boxShadow: '0 0 0 3px rgba(255,255,255,0.35)' }}
+          />
+          ER Medical Brief
+        </span>
+        {hospitalName && (
+          <span className="ml-auto text-red-100 text-sm truncate max-w-[120px]">{hospitalName}</span>
+        )}
+      </div>
+
+      {/* SHOW TO HOSPITAL STAFF banner */}
+      <div
+        className="w-full text-center py-4 px-4"
+        style={{ background: '#DC2626' }}
+      >
+        <p
+          className="font-black tracking-widest uppercase text-white"
+          style={{ fontSize: '1.05rem', letterSpacing: '0.18em', textShadow: '0 1px 4px rgba(0,0,0,0.25)' }}
+        >
+          SHOW TO HOSPITAL STAFF
+        </p>
+      </div>
+
+      <div className="max-w-lg mx-auto px-4 pb-10 pt-5 space-y-4">
+        {/* Patient */}
+        <Section>
+          <SectionLabel>PATIENT</SectionLabel>
+          <p className="text-xl font-bold" style={{ color: '#1A2820' }}>
+            {profile?.full_name || <span className="opacity-40">Unknown</span>}
+          </p>
+          {profile?.date_of_birth && (
+            <p className="text-sm mt-0.5" style={{ color: '#1A2820', opacity: 0.6 }}>
+              DOB: {profile.date_of_birth}
+            </p>
+          )}
+          {profile?.diagnosis && (
+            <p className="text-sm mt-1" style={{ color: '#1A2820', opacity: 0.75 }}>
+              {profile.diagnosis}
+            </p>
+          )}
+        </Section>
+
+        {/* Blood type */}
+        <Section>
+          <SectionLabel>BLOOD TYPE</SectionLabel>
+          <p
+            className="text-4xl font-black tracking-tight"
+            style={{ color: '#DC2626', lineHeight: 1.1 }}
+          >
+            {profile?.blood_type || '?'}
+          </p>
+        </Section>
+
+        {/* Allergies */}
+        <Section highlight={!!profile?.allergies}>
+          <SectionLabel>⚠️ ALLERGIES</SectionLabel>
+          {profile?.allergies ? (
+            <p className="font-semibold text-base" style={{ color: '#DC2626' }}>
+              {profile.allergies}
+            </p>
+          ) : (
+            <p className="text-base" style={{ color: '#1A2820', opacity: 0.5 }}>
+              None known
+            </p>
+          )}
+        </Section>
+
+        {/* Medications */}
+        <Section>
+          <SectionLabel>CURRENT MEDICATIONS</SectionLabel>
+          {meds.length > 0 ? (
+            <ul className="space-y-1.5 mt-1">
+              {meds.map((m, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span
+                    className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                    style={{ background: '#5C8B74' }}
+                  />
+                  <span className="text-sm" style={{ color: '#1A2820' }}>
+                    <span className="font-semibold">{m.name}</span>
+                    {m.dose && ` — ${m.dose}`}
+                    {m.frequency && (
+                      <span style={{ opacity: 0.55 }}> · {m.frequency}</span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm" style={{ color: '#1A2820', opacity: 0.5 }}>
+              None on file
+            </p>
+          )}
+        </Section>
+
+        {/* Emergency type */}
+        <Section>
+          <SectionLabel>EMERGENCY</SectionLabel>
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#DC2626' }} />
+            <p className="text-lg font-bold" style={{ color: '#DC2626' }}>
+              {emergencyLabel}
+            </p>
+          </div>
+        </Section>
+
+        {/* Emergency contacts */}
+        <Section>
+          <SectionLabel>EMERGENCY CONTACT</SectionLabel>
+          {primaryContact ? (
+            <div>
+              <p className="font-semibold" style={{ color: '#1A2820' }}>
+                {primaryContact.name}
+                {primaryContact.relationship && (
+                  <span className="font-normal text-sm" style={{ opacity: 0.6 }}>
+                    {' '}({primaryContact.relationship})
+                  </span>
+                )}
+              </p>
+              <p className="text-lg font-bold mt-0.5" style={{ color: '#5C8B74' }}>
+                {primaryContact.phone}
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm" style={{ color: '#1A2820', opacity: 0.5 }}>
+              None on file
+            </p>
+          )}
+        </Section>
+
+        {/* AI Clinical Note */}
+        <Section>
+          <SectionLabel>AI CLINICAL NOTE</SectionLabel>
+          {noteLoading ? (
+            <div className="flex items-center gap-2 mt-1" style={{ color: '#5C8B74' }}>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-sm">Generating note…</span>
+            </div>
+          ) : clinicalNote ? (
+            <p className="text-sm leading-relaxed" style={{ color: '#1A2820', opacity: 0.85 }}>
+              {clinicalNote}
+            </p>
+          ) : (
+            <p className="text-sm" style={{ color: '#1A2820', opacity: 0.45 }}>
+              Note unavailable — use profile data above.
+            </p>
+          )}
+          <p className="text-xs mt-2" style={{ color: '#1A2820', opacity: 0.35 }}>
+            AI-generated · verify with patient or records
+          </p>
+        </Section>
+
+        {/* Actions */}
+        <div className="flex gap-3 pt-2">
+          <button
+            onClick={() => router.back()}
+            className="flex-1 py-3 rounded-xl border text-sm font-semibold transition-opacity hover:opacity-70"
+            style={{ borderColor: 'rgba(26,40,32,0.18)', color: '#1A2820', background: 'transparent' }}
+          >
+            Back
+          </button>
+          <button
+            onClick={handleCopy}
+            className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
+            style={{ background: copied ? '#5C8B74' : '#1A2820', color: '#fff' }}
+          >
+            {copied ? (
+              <>
+                <CheckCheck className="w-4 h-4" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4" />
+                Copy brief
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Section({
+  children,
+  highlight = false,
+}: {
+  children: React.ReactNode
+  highlight?: boolean
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 340, damping: 26 }}
+      className="rounded-2xl p-4"
+      style={{
+        background: highlight ? 'rgba(220,38,38,0.06)' : 'rgba(255,255,255,0.72)',
+        border: highlight ? '1.5px solid rgba(220,38,38,0.22)' : '1px solid rgba(26,40,32,0.07)',
+        backdropFilter: 'blur(8px)',
+      }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className="text-xs font-bold uppercase tracking-widest mb-1.5"
+      style={{ color: '#1A2820', opacity: 0.38, letterSpacing: '0.13em' }}
+    >
+      {children}
+    </p>
+  )
+}
+
+export default function BriefPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center" style={{ background: '#F2EFE9' }}>
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5C8B74' }} />
+        </div>
+      }
+    >
+      <BriefContent />
+    </Suspense>
+  )
+}
