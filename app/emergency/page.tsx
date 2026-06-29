@@ -180,9 +180,15 @@ export default function Emergency() {
         </motion.div>
 
         {/* Info strip */}
-        <p style={{ marginTop: '16px', color: 'rgba(26,40,32,0.35)', fontSize: '11px', textAlign: 'center', lineHeight: 1.5 }}>
-          Select a symptom above to alert your care team and find the nearest hospital
-        </p>
+        <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+          <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '11px', textAlign: 'center', lineHeight: 1.5 }}>
+            Select a symptom above to alert your care team and find the nearest hospital
+          </p>
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/emergency/triage')}
+            style={{ color: '#5C8B74', fontSize: '12px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textDecorationColor: 'rgba(92,139,116,0.4)' }}>
+            Not sure how serious? Assess severity →
+          </motion.button>
+        </div>
       </div>
     </div>
   )

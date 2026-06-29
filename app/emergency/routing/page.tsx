@@ -38,6 +38,8 @@ function RoutingPage() {
   const [locationError, setLocationError] = useState('')
   const [cancelling, setCancelling] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [notifiedContacts, setNotifiedContacts] = useState<any[]>([])
+  const [showMedCard, setShowMedCard] = useState(false)
   const lockedRef = useRef(true)
   const activeEmergencyId = useRef(emergencyId)
   const userIdRef = useRef('')
@@ -151,6 +153,7 @@ function RoutingPage() {
     try {
       const { data: profileData } = await supabase.from('profiles').select('emergency_contacts, full_name').eq('id', userId).single()
       const contacts: any[] = profileData?.emergency_contacts || []
+      if (contacts.length > 0) setNotifiedContacts(contacts)
       if (contacts.length > 0) {
         // Log to emergencies table that contacts were notified (actual SMS requires a backend integration)
         await supabase.from('emergency_contact_alerts').insert(
@@ -282,6 +285,75 @@ function RoutingPage() {
             )}
           </div>
         </motion.div>
+
+        {/* Notified contacts list */}
+        {notifiedContacts.length > 0 && careTeamAlerted && (
+          <div style={{ marginBottom: '12px' }}>
+            <p style={{ color: 'rgba(26,40,32,0.38)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
+              Contacts notified
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {notifiedContacts.map((c: any, i: number) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(26,40,32,0.03)', borderRadius: '10px', padding: '8px 12px', border: '1px solid rgba(26,40,32,0.06)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#5C8B74' }}/>
+                    <span style={{ color: '#1A2820', fontSize: '13px', fontWeight: 500 }}>{c.name}</span>
+                    <span style={{ color: 'rgba(26,40,32,0.3)', fontSize: '12px' }}>{c.relationship}</span>
+                  </div>
+                  <motion.a href={`tel:${c.phone}`} whileTap={{ scale: 0.95 }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#DC2626', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
+                    <Phone size={11} color="#DC2626"/>
+                    Call
+                  </motion.a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* First responder card */}
+        {profile && (profile.blood_type || profile.allergies || (profile.medications?.length > 0)) && (
+          <div style={{ marginBottom: '12px', border: '1px solid rgba(220,38,38,0.2)', borderRadius: '14px', overflow: 'hidden' }}>
+            <button
+              onClick={() => setShowMedCard(!showMedCard)}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: showMedCard ? 'rgba(220,38,38,0.06)' : 'rgba(220,38,38,0.03)', border: 'none', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#DC2626' }}/>
+                <span style={{ color: '#B91C1C', fontSize: '12px', fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                  First Responder Info
+                </span>
+              </div>
+              <span style={{ color: 'rgba(26,40,32,0.4)', fontSize: '11px' }}>{showMedCard ? 'Hide' : 'Show to paramedic'}</span>
+            </button>
+            {showMedCard && (
+              <div style={{ padding: '12px 14px', background: '#FFFBFB', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {profile.blood_type && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ color: 'rgba(26,40,32,0.45)', fontSize: '11px', width: '80px', flexShrink: 0 }}>Blood type</span>
+                    <span style={{ color: '#DC2626', fontWeight: 800, fontSize: '18px', fontFamily: 'var(--font-mono, monospace)' }}>{profile.blood_type}</span>
+                  </div>
+                )}
+                {profile.allergies && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <span style={{ color: 'rgba(26,40,32,0.45)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Allergies</span>
+                    <span style={{ color: '#B91C1C', fontWeight: 700, fontSize: '13px', lineHeight: 1.5 }}>{profile.allergies}</span>
+                  </div>
+                )}
+                {profile.medications?.length > 0 && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <span style={{ color: 'rgba(26,40,32,0.45)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Medications</span>
+                    <span style={{ color: '#1A2820', fontSize: '12px', lineHeight: 1.6 }}>
+                      {profile.medications.slice(0, 4).map((m: any) => m.name || m).join(', ')}
+                    </span>
+                  </div>
+                )}
+                <p style={{ color: 'rgba(220,38,38,0.5)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', marginTop: '4px' }}>
+                  SHOW THIS SCREEN TO PARAMEDICS
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Nearby hospitals */}
         {nearbyHospitals.length > 1 && (

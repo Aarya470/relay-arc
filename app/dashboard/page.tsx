@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users } from 'lucide-react'
+import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock } from 'lucide-react'
 import { toast } from 'sonner'
 
 function scheduleCheckinReminders(userId: string, checkins: any[]): () => void {
@@ -332,6 +332,21 @@ export default function Dashboard() {
             <ChevronRight size={14} color="rgba(26,40,32,0.25)"/>
           </motion.button>
         </motion.div>
+
+        {/* Emergency history */}
+        <motion.button variants={fadeUp} onClick={() => router.push('/emergency/history')}
+          style={{ ...card, padding: '14px 16px', textAlign: 'left', cursor: 'pointer', border: 'none', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(220,38,38,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Clock size={15} color="#DC2626"/>
+            </div>
+            <div>
+              <p style={{ color: '#1A2820', fontWeight: 600, fontSize: '14px' }}>Emergency history</p>
+              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px', marginTop: '2px' }}>View past SOS events</p>
+            </div>
+          </div>
+          <ChevronRight size={16} color="rgba(26,40,32,0.25)"/>
+        </motion.button>
 
         {/* Medications */}
         <motion.div variants={fadeUp}>
