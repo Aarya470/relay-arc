@@ -369,4 +369,77 @@ function RoutingPage() {
               <motion.button key={i} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                 onClick={() => { setHospital(h); setShowAll(false) }}
                 style={{ width: '100%', background: '#F0EDE5', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', cursor: 'pointer' }}>
-                <div style={{ textAlign: '
+                <div style={{ textAlign: 'left' }}>
+                  <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '13px' }}>{h.name}</p>
+                  <p style={{ color: 'rgba(16,22,14,0.4)', fontSize: '11px' }}>{h.address}</p>
+                </div>
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                  <p style={{ color: '#B91C1C', fontWeight: 700, fontSize: '13px', fontFamily: 'var(--font-mono, monospace)' }}>{estimateTime(h.distance || 0)}</p>
+                  <p style={{ color: 'rgba(16,22,14,0.32)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{formatDistance(h.distance || 0)}</p>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <motion.a
+            href={`https://maps.google.com/?q=${encodeURIComponent(hospital.name + ' ' + hospital.address)}&travelmode=driving`}
+            target="_blank" rel="noopener noreferrer"
+            whileTap={{ scale: 0.97 }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#B91C1C', color: 'white', padding: '14px', borderRadius: '12px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}
+          >
+            <Phone size={16} strokeWidth={2.2}/>
+            Open in Maps
+          </motion.a>
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => router.push(`/emergency/brief?type=${type}&name=${encodeURIComponent(hospital.name)}`)}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(16,22,14,0.06)', color: '#0F1A0E', padding: '14px', borderRadius: '12px', fontWeight: 600, fontSize: '14px', border: '1px solid rgba(16,22,14,0.1)', cursor: 'pointer' }}
+          >
+            <FileText size={15}/>
+            ER handoff brief
+          </motion.button>
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(true)}
+            style={{ background: 'rgba(16,22,14,0.06)', color: 'rgba(16,22,14,0.55)', fontWeight: 600, fontSize: '13px', padding: '12px 24px', borderRadius: '12px', border: '1px solid rgba(16,22,14,0.1)', cursor: 'pointer' }}>
+            I&apos;m safe — cancel emergency
+          </motion.button>
+        </div>
+
+      </motion.div>
+
+      <AnimatePresence>
+        {showCancelConfirm && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(16,22,14,0.5)', zIndex: 200, display: 'flex', alignItems: 'flex-end' }}
+            onClick={e => { if (e.target === e.currentTarget) setShowCancelConfirm(false) }}>
+            <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 340, damping: 28 }}
+              style={{ background: '#FFFFFF', borderRadius: '20px 20px 0 0', padding: '24px 20px 40px', width: '100%' }}>
+              <p style={{ color: '#0F1A0E', fontWeight: 800, fontSize: '18px', marginBottom: '6px' }}>Cancel emergency?</p>
+              <p style={{ color: 'rgba(16,22,14,0.5)', fontSize: '14px', marginBottom: '24px' }}>Only cancel if you are safe and do not need help.</p>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCancelConfirm(false)}
+                  style={{ flex: 1, padding: '13px', background: 'rgba(16,22,14,0.06)', borderRadius: '10px', border: 'none', cursor: 'pointer', fontWeight: 600, color: '#0F1A0E', fontSize: '14px' }}>
+                  Stay in emergency
+                </motion.button>
+                <motion.button whileTap={{ scale: 0.97 }} onClick={cancelEmergency} disabled={cancelling}
+                  style={{ flex: 1, padding: '13px', background: '#B91C1C', borderRadius: '10px', border: 'none', cursor: 'pointer', fontWeight: 700, color: 'white', fontSize: '14px' }}>
+                  {cancelling ? 'Cancelling...' : "I'm safe"}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export default function RoutingPageWrapper() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#F0EDE5' }}/>}>
+      <RoutingPage/>
+    </Suspense>
+  )
+}

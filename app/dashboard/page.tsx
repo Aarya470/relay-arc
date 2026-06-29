@@ -398,33 +398,22 @@ export default function Dashboard() {
         {/* Last check-in */}
         {checkins.length > 0 && (
           <motion.div variants={fadeUp}>
-            <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/history')}
+            <motion.button whileTap={{ scale: 0.99 }} onClick={() =>  router.push('/history')}
               style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '14px 16px', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
                 <p style={{ color: 'rgba(16,22,14,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>Last check-in</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  <span style={{ color: 'rgba(16,22,14,0.25)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
-                    {parseTS(checkins[0].created_at).toLocaleDateString('en', { month: 'short', day: 'numeric' })}
-                  </span>
-                  <ChevronRight size={11} color="rgba(16,22,14,0.2)"/>
-                </div>
+                <ChevronRight size={14} color="rgba(16,22,14,0.2)" strokeWidth={2}/>
               </div>
-              <p style={{ color: 'rgba(16,22,14,0.52)', fontSize: '13px', lineHeight: 1.65, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                {checkins[0].summary}
+              <p style={{ color: '#0F1A0E', fontSize: '13px', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                {checkins[0]?.summary || 'No summary available'}
+              </p>
+              <p style={{ color: 'rgba(16,22,14,0.3)', fontSize: '11px', marginTop: '6px', fontFamily: 'var(--font-mono, monospace)' }}>
+                {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </p>
             </motion.button>
           </motion.div>
         )}
 
-        {/* iOS install hint */}
-        {showIosHint && (
-          <div style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '14px 16px' }}>
-            <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '13px', marginBottom: '4px' }}>Add to Home Screen</p>
-            <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '12px', lineHeight: 1.55 }}>
-              Open in <strong>Safari</strong> · tap Share · tap <strong>Add to Home Screen</strong>
-            </p>
-          </div>
-        )}
       </motion.div>
 
       <BottomNav/>

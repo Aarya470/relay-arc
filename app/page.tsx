@@ -615,91 +615,17 @@ export default function Home() {
           </div>
           <h2 style={{ color: '#1A2820', fontSize: 'clamp(28px, 6vw, 42px)', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 1.1, marginBottom: '16px' }}>
             Your profile could save your life.
+      
           </h2>
-          <p style={{ color: 'rgba(26,40,32,0.48)', fontSize: '16px', lineHeight: 1.7, marginBottom: '12px' }}>
-            Setup takes two minutes. Your medications, conditions, emergency contacts, and care team — all in one place, ready when you need them.
+          <p style={{ color: 'rgba(26,40,32,0.55)', fontSize: '17px', lineHeight: 1.65, marginBottom: '36px' }}>
+            Blood type, allergies, medications — all ready for paramedics in seconds. No unlocking required.
           </p>
-          <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '14px', lineHeight: 1.6, marginBottom: '36px' }}>
-            Free for patients. No subscription. No credit card.
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '360px', margin: '0 auto' }}>
-            <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/login?signup=1')}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#1A2820', color: 'white', fontWeight: 700, fontSize: '16px', padding: '18px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 16px rgba(26,40,32,0.2)' }}>
-              Create your free profile <ArrowRight size={16}/>
-            </motion.button>
-            <button onClick={() => router.push('/login')}
-              style={{ background: 'none', border: 'none', color: 'rgba(26,40,32,0.4)', fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit', padding: '8px' }}>
-              Already have an account? <span style={{ color: '#5C8B74', fontWeight: 700 }}>Sign in</span>
-            </button>
-          </div>
-          <button onClick={() => router.push('/care-team/login')}
-            style={{ display: 'block', margin: '28px auto 0', background: 'none', border: 'none', color: 'rgba(26,40,32,0.22)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '1.5px', textTransform: 'uppercase', cursor: 'pointer' }}>
-            Care team portal →
-          </button>
+          <motion.a href="/login" whileTap={{ scale: 0.97 }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#1C3D28', color: '#F0EDE5', padding: '16px 32px', borderRadius: '12px', fontWeight: 700, fontSize: '16px', textDecoration: 'none' }}>
+            Set up your profile free
+          </motion.a>
         </motion.div>
       </section>
-
-      {/* ── FOOTER ───────────────────────────────────────────────────── */}
-      <footer style={{ background: '#1A2820', padding: '56px 24px 40px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', marginBottom: '48px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '14px' }}>
-                <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#F2EFE9"/>
-                  </svg>
-                </div>
-                <span style={{ color: '#F2EFE9', fontWeight: 800, fontSize: '16px', letterSpacing: '-0.4px' }}>Relay Arc</span>
-              </div>
-              <p style={{ color: 'rgba(242,239,233,0.38)', fontSize: '13px', lineHeight: 1.7, maxWidth: '240px' }}>
-                The cardiac emergency platform for patients, families, and care teams. Built for the places the system forgot.
-              </p>
-            </div>
-
-            <div>
-              <p style={{ color: 'rgba(242,239,233,0.5)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>Platform</p>
-              {[['#features', 'Features'], ['#for-whom', "Who it's for"], ['#how', 'How It Works'], ['#mission', 'Mission']].map(([href, label]) => (
-                <button key={label}
-                  onClick={() => href.startsWith('#') ? document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }) : router.push(href)}
-                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(242,239,233,0.45)', fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit', padding: '4px 0', textAlign: 'left' }}>
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            <div>
-              <p style={{ color: 'rgba(242,239,233,0.5)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>Get started</p>
-              {[['/login?signup=1', 'Create free account'], ['/login', 'Sign in'], ['/care-team/login', 'Care team portal']].map(([href, label]) => (
-                <button key={label} onClick={() => router.push(href)}
-                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(242,239,233,0.45)', fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit', padding: '4px 0', textAlign: 'left' }}>
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            <div>
-              <p style={{ color: 'rgba(242,239,233,0.5)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>Contact</p>
-              <a href="mailto:aaryan10cityzen@gmail.com"
-                style={{ color: 'rgba(242,239,233,0.45)', fontSize: '14px', textDecoration: 'none' }}>
-                aaryan10cityzen@gmail.com
-              </a>
-              <p style={{ color: 'rgba(242,239,233,0.2)', fontSize: '12px', marginTop: '12px', lineHeight: 1.5 }}>
-                Built in India.<br/>For everyone who needs it.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ borderTop: '1px solid rgba(242,239,233,0.07)', paddingTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-            <p style={{ color: 'rgba(242,239,233,0.2)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)' }}>
-              RELAY ARC © 2026 — All rights reserved
-            </p>
-            <p style={{ color: 'rgba(242,239,233,0.15)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
-              RE · ACT · RE · ROUTE · RE · COVER
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

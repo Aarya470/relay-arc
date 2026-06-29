@@ -162,6 +162,7 @@ export default function Login() {
                   style={{
                     position: 'absolute', right: '13px', top: '50%', transform: 'translateY(-50%)',
                     background: 'none', border: 'none', cursor: 'pointer',
+                 
                     color: 'rgba(16,22,14,0.28)', padding: '4px', display: 'flex',
                   }}
                 >
