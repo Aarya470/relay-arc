@@ -1,14 +1,159 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock, AlertTriangle, TrendingDown } from 'lucide-react'
+import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock, AlertTriangle, TrendingDown, Sparkles, RefreshCw, Heart, TrendingUp, Pill, Star } from 'lucide-react'
 import { toast } from 'sonner'
 import { analyzeCrashRisk, CrashRisk } from '@/lib/crash-risk'
+
+// ── Weekly Insights types ────────────────────────────────────────────────────
+interface Insight {
+  type: 'positive' | 'warning' | 'tip'
+  icon: 'heart' | 'trend' | 'pill' | 'star' | 'alert'
+  text: string
+}
+
+function getWeekNumber(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7))
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1))
+  return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7)
+}
+
+function insightCacheKey(userId: string): string {
+  const week = getWeekNumber(new Date())
+  const year = new Date().getFullYear()
+  return `relay_insights_${userId}_${year}_${week}`
+}
+
+function InsightIcon({ name, size = 13 }: { name: Insight['icon']; size?: number }) {
+  const color = 'currentColor'
+  if (name === 'heart') return <Heart size={size} color={color} strokeWidth={2}/>
+  if (name === 'trend') return <TrendingUp size={size} color={color} strokeWidth={2}/>
+  if (name === 'pill') return <Pill size={size} color={color} strokeWidth={2}/>
+  if (name === 'alert') return <AlertTriangle size={size} color={color} strokeWidth={2}/>
+  return <Star size={size} color={color} strokeWidth={2}/>
+}
+
+const insightAccent: Record<Insight['type'], { border: string; dot: string; iconColor: string }> = {
+  positive: { border: '#2C7A50', dot: '#2C7A50', iconColor: '#2C7A50' },
+  tip:      { border: '#B45309', dot: '#D97706', iconColor: '#B45309' },
+  warning:  { border: '#B91C1C', dot: '#DC2626', iconColor: '#B91C1C' },
+}
+
+function WeeklyInsightsCard({ userId }: { userId: string }) {
+  const [insights, setInsights] = useState<Insight[] | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [spinning, setSpinning] = useState(false)
+  const [hidden, setHidden] = useState(false)
+
+  const fetchInsights = useCallback(async (force = false) => {
+    if (!userId) return
+    if (!force) {
+      try {
+        const cached = sessionStorage.getItem(insightCacheKey(userId))
+        if (cached) {
+          setInsights(JSON.parse(cached))
+          setLoading(false)
+          return
+        }
+      } catch {}
+    }
+
+    setSpinning(true)
+    try {
+      const since7d = new Date(Date.now() - 7 * 86400000).toISOString()
+
+      const [{ data: checkinData }, { data: vitalsData }, { data: medData }] = await Promise.all([
+        supabase.from('checkins').select('summary, mood, created_at').eq('user_id', userId).gte('created_at', since7d).order('created_at', { ascending: false }).limit(7),
+        supabase.from('vitals_logs').select('heart_rate, blood_pressure_systolic, blood_pressure_diastolic, weight_kg, created_at').eq('user_id', userId).gte('created_at', since7d).order('created_at', { ascending: false }).limit(7),
+        supabase.from('medication_logs').select('taken, created_at').eq('user_id', userId).gte('created_at', since7d).limit(30),
+      ])
+
+      const taken = medData?.filter((m: any) => m.taken).length ?? 0
+      const total = medData?.length ?? 0
+      const adherencePct = total > 0 ? Math.round((taken / total) * 100) : 0
+
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+      if (!token) { setHidden(true); return }
+
+      const res = await fetch('/api/groq/insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ checkins: checkinData || [], vitals: vitalsData || [], medicationAdherence: adherencePct }),
+      })
+
+      if (!res.ok) { setHidden(true); return }
+      const { insights: fresh } = await res.json()
+      if (!Array.isArray(fresh) || fresh.length === 0) { setHidden(true); return }
+
+      try { sessionStorage.setItem(insightCacheKey(userId), JSON.stringify(fresh)) } catch {}
+      setInsights(fresh)
+    } catch {
+      if (!insights) setHidden(true)
+    } finally {
+      setLoading(false)
+      setSpinning(false)
+    }
+  }, [userId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { fetchInsights() }, [fetchInsights])
+
+  if (hidden) return null
+
+  return (
+    <motion.div variants={fadeUp}
+      style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', overflow: 'hidden' }}>
+      {/* Card header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 14px 0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Sparkles size={13} color="#2C7A50" strokeWidth={2}/>
+          <span style={{ color: 'rgba(16,22,14,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+            Weekly Insights
+          </span>
+        </div>
+        <button
+          onClick={() => { fetchInsights(true); toast('Refreshing insights…') }}
+          disabled={spinning}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px', display: 'flex', alignItems: 'center', gap: '4px', color: 'rgba(16,22,14,0.32)', fontSize: '11px', fontWeight: 600 }}>
+          <RefreshCw size={11} style={{ transition: 'transform 0.6s', transform: spinning ? 'rotate(360deg)' : 'none' }}/>
+          Refresh
+        </button>
+      </div>
+
+      {/* Content */}
+      <div style={{ padding: '10px 14px 14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {loading ? (
+          [1, 2, 3].map(i => (
+            <div key={i} style={{ height: '38px', borderRadius: '8px', background: 'rgba(16,22,14,0.04)', animation: 'pulse 1.4s ease-in-out infinite' }}/>
+          ))
+        ) : (
+          (insights || []).map((ins, i) => {
+            const accent = insightAccent[ins.type] ?? insightAccent.tip
+            return (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                padding: '9px 10px', borderRadius: '8px',
+                background: 'rgba(16,22,14,0.02)',
+                borderLeft: `3px solid ${accent.border}`,
+              }}>
+                <span style={{ color: accent.iconColor, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                  <InsightIcon name={ins.icon} size={13}/>
+                </span>
+                <p style={{ color: '#0F1A0E', fontSize: '13px', lineHeight: 1.45, margin: 0 }}>{ins.text}</p>
+              </div>
+            )
+          })
+        )}
+      </div>
+    </motion.div>
+  )
+}
 
 function scheduleCheckinReminders(userId: string, checkins: any[]): () => void {
   let timerId: ReturnType<typeof setTimeout> | null = null
@@ -310,6 +455,9 @@ export default function Dashboard() {
             )}
           </motion.button>
         </motion.div>
+
+        {/* Weekly AI Insights */}
+        {userId && <WeeklyInsightsCard userId={userId}/>}
 
         {/* Grouped list: Contacts · Profile · History */}
         <motion.div variants={fadeUp}

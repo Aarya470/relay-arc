@@ -24,6 +24,14 @@ const FREQUENCY_OPTIONS = [
   'Weekly', 'As needed', 'With meals'
 ]
 
+// Returns "YYYY-MM-DD" in local time for a given Date
+function toDateStr(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
 export default function Medications() {
   const [medications, setMedications] = useState<any[]>([])
   const [taken, setTaken] = useState<Record<string, boolean>>({})
@@ -34,6 +42,7 @@ export default function Medications() {
   const [showTimeDropdown, setShowTimeDropdown] = useState(false)
   const [showFreqDropdown, setShowFreqDropdown] = useState(false)
   const [newMed, setNewMed] = useState({ name: '', dose: '', frequency: 'Once daily', times: ['Morning'] })
+  const [allLogs, setAllLogs] = useState<any[]>([])
   const [saving, setSaving] = useState(false)
   const router = useRouter()
 
@@ -43,12 +52,21 @@ export default function Medications() {
       if (!user) return
       setUserId(user.id)
 
-      const [{ data: profile }, { data: logs }] = await Promise.all([
+      const todayMidnight = new Date()
+      todayMidnight.setHours(0, 0, 0, 0)
+
+      const twentyEightDaysAgo = new Date()
+      twentyEightDaysAgo.setDate(twentyEightDaysAgo.getDate() - 28)
+
+      const [{ data: profile }, { data: logs }, { data: fetchedAllLogs }] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         supabase.from('medication_logs').select('*').eq('user_id', user.id).gte(
           'taken_at',
-          (() => { const d = new Date(); d.setHours(0,0,0,0); return d.toISOString() })()
-        )
+          todayMidnight.toISOString()
+        ),
+        supabase.from('medication_logs').select('*').eq('user_id', user.id)
+          .gte('taken_at', twentyEightDaysAgo.toISOString())
+          .order('taken_at', { ascending: true })
       ])
 
       const meds = (profile?.medications || []).map((m: any) => ({
@@ -56,6 +74,7 @@ export default function Medications() {
         times: m.times || ['Morning']
       }))
       setMedications(meds)
+      setAllLogs(fetchedAllLogs || [])
 
       // Restore today's taken state from medication_logs
       const initialTaken: Record<string, boolean> = {}
@@ -80,12 +99,15 @@ export default function Medications() {
     setTaken(newTaken)
     if (!taken[key]) {
       toast.success(`${med.name} marked as taken`)
+      const nowIso = new Date().toISOString()
       await supabase.from('medication_logs').insert({
         user_id: userId,
         medication_name: med.name,
         dose: med.dose,
-        taken_at: new Date().toISOString()
+        taken_at: nowIso
       })
+      // Optimistically add to allLogs so the analytics update without a reload
+      setAllLogs(prev => [...prev, { medication_name: med.name, dose: med.dose, taken_at: nowIso, user_id: userId }])
     }
   }
 
@@ -134,6 +156,72 @@ export default function Medications() {
   const takenCount = Object.values(taken).filter(Boolean).length
   const progress = totalDoses > 0 ? (takenCount / totalDoses) * 100 : 0
 
+  // ── Analytics derived values ──────────────────────────────────────────────
+
+  // Set of date strings (YYYY-MM-DD) that have at least one log
+  const activeDaysSet = new Set(
+    allLogs.map(log => toDateStr(new Date(log.taken_at)))
+  )
+
+  // 28-day adherence rate
+  const adherenceRate = Math.round((activeDaysSet.size / 28) * 100)
+
+  // Current week dots: Mon → Sun of the current local week
+  const today = new Date()
+  const dayOfWeek = today.getDay() // 0 = Sun
+  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+  const weekDots = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today)
+    d.setDate(today.getDate() + mondayOffset + i)
+    return {
+      dateStr: toDateStr(d),
+      label: d.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2),
+      isFuture: d > today,
+    }
+  })
+  const weekTakenDays = weekDots.filter(dot => !dot.isFuture && activeDaysSet.has(dot.dateStr)).length
+  const weekPossibleDays = weekDots.filter(dot => !dot.isFuture).length
+  const weekPct = weekPossibleDays > 0 ? Math.round((weekTakenDays / weekPossibleDays) * 100) : 0
+
+  // Current streak: consecutive days ending today or yesterday
+  let streak = 0
+  const todayStr = toDateStr(today)
+  const yesterdayDate = new Date(today)
+  yesterdayDate.setDate(today.getDate() - 1)
+  const yesterdayStr = toDateStr(yesterdayDate)
+
+  // Start from today; if today not active, try from yesterday
+  const startStr = activeDaysSet.has(todayStr) ? todayStr : (activeDaysSet.has(yesterdayStr) ? yesterdayStr : null)
+  if (startStr) {
+    const cursor = new Date(startStr)
+    while (activeDaysSet.has(toDateStr(cursor))) {
+      streak++
+      cursor.setDate(cursor.getDate() - 1)
+    }
+  }
+
+  // Best streak over 28 days
+  let bestStreak = 0
+  let tempStreak = 0
+  const sortedDays = Array.from(activeDaysSet).sort()
+  for (let i = 0; i < sortedDays.length; i++) {
+    if (i === 0) {
+      tempStreak = 1
+    } else {
+      const prev = new Date(sortedDays[i - 1])
+      const curr = new Date(sortedDays[i])
+      const diffDays = Math.round((curr.getTime() - prev.getTime()) / 86400000)
+      if (diffDays === 1) {
+        tempStreak++
+      } else {
+        tempStreak = 1
+      }
+    }
+    if (tempStreak > bestStreak) bestStreak = tempStreak
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+
   const sheetInputStyle: React.CSSProperties = {
     background: '#F0EDE5',
     border: '1.5px solid rgba(16,22,14,0.1)',
@@ -169,7 +257,10 @@ export default function Medications() {
             </motion.button>
             <div>
               <h1 style={{ color: '#0F1A0E', fontWeight: 800, fontSize: '20px', letterSpacing: '-0.6px' }}>Medications</h1>
-              <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px' }}>{new Date().toLocaleDateString('en-US', { weekday: 'long' })}</p>
+              <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px' }}>
+                {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+                {totalDoses > 0 && ` · ${takenCount}/${totalDoses} doses taken`}
+              </p>
             </div>
           </div>
           <motion.button
@@ -326,6 +417,122 @@ export default function Medications() {
 
       {/* Medication list */}
       <div style={{ padding: '16px' }}>
+
+        {/* Adherence Analytics Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08, ...spring }}
+          style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.07)', borderRadius: '20px 4px 20px 20px', marginBottom: '16px', overflow: 'hidden', boxShadow: '0 2px 10px rgba(16,22,14,0.05)' }}
+        >
+          {/* Card header */}
+          <div style={{ padding: '14px 16px 10px', borderBottom: '1px solid rgba(16,22,14,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <p style={{ color: '#0F1A0E', fontSize: '13px', fontWeight: 700, letterSpacing: '-0.2px' }}>Adherence</p>
+            <span style={{ color: 'rgba(16,22,14,0.35)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>28 days</span>
+          </div>
+
+          <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+            {/* This week row */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <p style={{ color: 'rgba(16,22,14,0.5)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>This week</p>
+                <span style={{ color: weekPct >= 80 ? '#2C7A50' : 'rgba(16,22,14,0.38)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600 }}>{weekPct}%</span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px', justifyContent: 'space-between' }}>
+                {weekDots.map((dot, i) => {
+                  const isActive = activeDaysSet.has(dot.dateStr)
+                  const isToday = dot.dateStr === todayStr
+                  return (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', flex: 1 }}>
+                      <motion.div
+                        initial={{ scale: 0.6, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.1 + i * 0.04, type: 'spring', stiffness: 400, damping: 22 }}
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '50%',
+                          background: dot.isFuture
+                            ? 'transparent'
+                            : isActive
+                              ? 'linear-gradient(135deg, #2C7A50, #1C3D28)'
+                              : 'rgba(16,22,14,0.07)',
+                          border: isToday
+                            ? `2px solid ${isActive ? '#2C7A50' : 'rgba(16,22,14,0.22)'}`
+                            : dot.isFuture
+                              ? '1.5px dashed rgba(16,22,14,0.12)'
+                              : '2px solid transparent',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: isActive ? '0 2px 8px rgba(44,122,80,0.22)' : 'none',
+                        }}
+                      >
+                        {isActive && <Check size={12} color="white" strokeWidth={3}/>}
+                      </motion.div>
+                      <span style={{
+                        color: isToday ? '#2C7A50' : 'rgba(16,22,14,0.35)',
+                        fontSize: '10px',
+                        fontFamily: 'var(--font-mono, monospace)',
+                        fontWeight: isToday ? 700 : 400,
+                        letterSpacing: '0.2px',
+                      }}>{dot.label}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Streak + 28-day bar row */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+
+              {/* Streak pill */}
+              <div style={{ flex: '0 0 auto', background: '#F0EDE5', borderRadius: '14px', padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '90px' }}>
+                <p style={{ color: '#0F1A0E', fontSize: '16px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '-0.5px', lineHeight: 1 }}>
+                  {streak >= 2 ? `${streak}d` : '—'}
+                </p>
+                <p style={{ color: 'rgba(16,22,14,0.4)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+                  {streak >= 2 ? 'streak' : 'no streak'}
+                </p>
+                {bestStreak > 0 && (
+                  <p style={{ color: 'rgba(16,22,14,0.3)', fontSize: '10px', marginTop: '4px' }}>
+                    Best: <span style={{ fontFamily: 'var(--font-mono, monospace)', fontWeight: 600 }}>{bestStreak}d</span>
+                  </p>
+                )}
+              </div>
+
+              {/* 28-day adherence bar */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+                  <p style={{ color: 'rgba(16,22,14,0.5)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>28-day rate</p>
+                  <span style={{ color: adherenceRate >= 80 ? '#2C7A50' : adherenceRate >= 50 ? '#0F1A0E' : 'rgba(16,22,14,0.5)', fontSize: '14px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700 }}>{adherenceRate}%</span>
+                </div>
+                <div style={{ height: '6px', background: 'rgba(16,22,14,0.07)', borderRadius: '99px', overflow: 'hidden' }}>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${adherenceRate}%` }}
+                    transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1], delay: 0.15 }}
+                    style={{
+                      height: '100%',
+                      background: adherenceRate >= 80
+                        ? 'linear-gradient(90deg, #2C7A50, #1C3D28)'
+                        : adherenceRate >= 50
+                          ? 'linear-gradient(90deg, #7A6C2C, #3D3218)'
+                          : 'rgba(16,22,14,0.25)',
+                      borderRadius: '99px',
+                    }}
+                  />
+                </div>
+                <p style={{ color: 'rgba(16,22,14,0.3)', fontSize: '10px' }}>
+                  {activeDaysSet.size} of 28 days
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </motion.div>
+
         {medications.length === 0 && (
           <div style={{ textAlign: 'center', padding: '56px 0' }}>
             <div style={{ width: '52px', height: '52px', borderRadius: '16px', background: 'rgba(44,122,80,0.1)', border: '1px solid rgba(44,122,80,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>

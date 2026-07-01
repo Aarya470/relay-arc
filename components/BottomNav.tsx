@@ -1,13 +1,13 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, MessageCircle, LayoutList, Settings, Phone } from 'lucide-react'
+import { Home, MessageCircle, LayoutList, Activity, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const tabs = [
   { href: '/dashboard', icon: Home, label: 'Home' },
   { href: '/checkin', icon: MessageCircle, label: 'Check-in' },
   { href: '/medications', icon: LayoutList, label: 'Meds' },
-  { href: '/settings', icon: Settings, label: 'Settings' },
+  { href: '/symptoms', icon: Activity, label: 'Symptoms' },
 ]
 
 const HIDE_ON = ['/login', '/onboarding', '/care-team', '/nurse', '/driver', '/transport']

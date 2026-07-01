@@ -1,10 +1,10 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useId } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Activity, Save, ChevronRight, Heart, Droplets, Wind } from 'lucide-react'
+import { ArrowLeft, Activity, Save, Heart, Droplets, Wind } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
@@ -23,16 +23,19 @@ function parseTS(ts: string) {
 }
 
 const VITAL_RANGES = {
-  heart_rate: { low: 40, high: 120, normal: [60, 100], unit: 'bpm', label: 'Heart rate', icon: Heart, color: '#E8322A' },
-  systolic: { low: 70, high: 200, normal: [90, 140], unit: 'mmHg', label: 'Systolic BP', icon: Activity, color: '#5C8B74' },
-  diastolic: { low: 40, high: 130, normal: [60, 90], unit: 'mmHg', label: 'Diastolic BP', icon: Activity, color: '#5C8B74' },
-  oxygen_sat: { low: 85, high: 100, normal: [95, 100], unit: '%', label: 'O₂ sat', icon: Droplets, color: '#2563EB' },
-  resp_rate: { low: 8, high: 40, normal: [12, 20], unit: '/min', label: 'Resp. rate', icon: Wind, color: '#7C3AED' },
+  heart_rate: { low: 40, high: 120, normal: [60, 100] as [number,number], unit: 'bpm',  label: 'Heart Rate',   icon: Heart,    color: '#E8322A' },
+  systolic:   { low: 70, high: 200, normal: [90, 140] as [number,number], unit: 'mmHg', label: 'Systolic BP',  icon: Activity, color: '#5C8B74' },
+  diastolic:  { low: 40, high: 130, normal: [60, 90]  as [number,number], unit: 'mmHg', label: 'Diastolic BP', icon: Activity, color: '#5C8B74' },
+  oxygen_sat: { low: 85, high: 100, normal: [95, 100] as [number,number], unit: '%',    label: 'O₂ Sat',       icon: Droplets, color: '#2563EB' },
+  resp_rate:  { low: 8,  high: 40,  normal: [12, 20]  as [number,number], unit: '/min', label: 'Resp. Rate',   icon: Wind,     color: '#7C3AED' },
 }
+
+type VitalKey = keyof typeof VITAL_RANGES
+const VITAL_KEYS: VitalKey[] = ['heart_rate', 'systolic', 'diastolic', 'oxygen_sat', 'resp_rate']
 
 function statusForValue(key: string, val: number | null) {
   if (val === null) return 'empty'
-  const range = VITAL_RANGES[key as keyof typeof VITAL_RANGES]
+  const range = VITAL_RANGES[key as VitalKey]
   if (!range) return 'ok'
   if (val < range.normal[0]) return 'low'
   if (val > range.normal[1]) return 'high'
@@ -40,19 +43,254 @@ function statusForValue(key: string, val: number | null) {
 }
 
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
-  ok: { bg: 'rgba(92,139,116,0.06)', border: 'rgba(92,139,116,0.2)', text: '#3D6B58' },
-  high: { bg: 'rgba(220,38,38,0.05)', border: 'rgba(220,38,38,0.22)', text: '#DC2626' },
-  low: { bg: 'rgba(245,158,11,0.07)', border: 'rgba(245,158,11,0.25)', text: '#B45309' },
-  empty: { bg: 'rgba(26,40,32,0.03)', border: 'rgba(26,40,32,0.08)', text: 'rgba(26,40,32,0.5)' },
+  ok:    { bg: 'rgba(92,139,116,0.06)',  border: 'rgba(92,139,116,0.2)',  text: '#3D6B58' },
+  high:  { bg: 'rgba(220,38,38,0.05)',   border: 'rgba(220,38,38,0.22)',  text: '#DC2626' },
+  low:   { bg: 'rgba(245,158,11,0.07)',  border: 'rgba(245,158,11,0.25)', text: '#B45309' },
+  empty: { bg: 'rgba(26,40,32,0.03)',    border: 'rgba(26,40,32,0.08)',   text: 'rgba(26,40,32,0.5)' },
 }
+
+// ─── SparklineInner ───────────────────────────────────────────────────────────
+// Renders SVG children (no wrapper <svg>) — embed inside a parent <svg>.
+
+interface SparklineInnerProps {
+  data: number[]
+  color: string
+  width: number
+  height: number
+  normalRange?: [number, number]
+}
+
+function SparklineInner({ data, color, width, height, normalRange }: SparklineInnerProps) {
+  const uid = useId().replace(/:/g, '')
+  const gradId = `sgi-${uid}`
+  const clipId = `sci-${uid}`
+
+  if (data.length < 2) return null
+
+  const padX = 4
+  const padY = 6
+  const innerW = width - padX * 2
+  const innerH = height - padY * 2
+
+  // Expand domain to include normal range so the band always renders
+  const dataMin = Math.min(...data)
+  const dataMax = Math.max(...data)
+  const domMin = normalRange ? Math.min(dataMin, normalRange[0]) : dataMin
+  const domMax = normalRange ? Math.max(dataMax, normalRange[1]) : dataMax
+  const domRange = domMax - domMin || 1
+
+  const toX = (i: number) => padX + (i / (data.length - 1)) * innerW
+  const toY = (v: number) => padY + innerH - ((v - domMin) / domRange) * innerH
+
+  const pts = data.map((v, i) => [toX(i), toY(v)] as [number, number])
+  const polyline = pts.map(([x, y]) => `${x},${y}`).join(' ')
+
+  const areaPath =
+    `M ${pts[0][0]},${pts[0][1]} ` +
+    pts.slice(1).map(([x, y]) => `L ${x},${y}`).join(' ') +
+    ` L ${pts[pts.length - 1][0]},${height} L ${pts[0][0]},${height} Z`
+
+  let bandTop = 0, bandBot = 0, showBand = false
+  if (normalRange) {
+    bandTop = Math.max(padY, Math.min(padY + innerH, toY(normalRange[1])))
+    bandBot = Math.max(padY, Math.min(padY + innerH, toY(normalRange[0])))
+    showBand = bandBot > bandTop
+  }
+
+  const last = pts[pts.length - 1]
+
+  return (
+    <>
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.22"/>
+          <stop offset="100%" stopColor={color} stopOpacity="0.02"/>
+        </linearGradient>
+        <clipPath id={clipId}>
+          <rect x={0} y={0} width={width} height={height}/>
+        </clipPath>
+      </defs>
+
+      {showBand && (
+        <rect
+          x={padX} y={bandTop}
+          width={innerW} height={Math.max(0, bandBot - bandTop)}
+          fill={color} opacity="0.08" rx="2"
+        />
+      )}
+
+      <path d={areaPath} fill={`url(#${gradId})`} clipPath={`url(#${clipId})`}/>
+
+      <polyline
+        points={polyline}
+        fill="none" stroke={color}
+        strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"
+      />
+
+      <circle cx={last[0]} cy={last[1]} r="5" fill={color} opacity="0.18"/>
+      <circle cx={last[0]} cy={last[1]} r="3" fill={color}/>
+    </>
+  )
+}
+
+// ─── Trend arrow ──────────────────────────────────────────────────────────────
+
+function trendArrow(vals: number[]): { symbol: string; color: string } {
+  if (vals.length < 4) return { symbol: '→', color: 'rgba(26,40,32,0.35)' }
+  const recent = vals.slice(-3)
+  const prior  = vals.slice(-6, -3)
+  if (prior.length === 0) return { symbol: '→', color: 'rgba(26,40,32,0.35)' }
+  const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length
+  const delta = ((avg(recent) - avg(prior)) / avg(prior)) * 100
+  if (delta > 2)  return { symbol: '↑', color: '#E8322A' }
+  if (delta < -2) return { symbol: '↓', color: '#3D6B58' }
+  return { symbol: '→', color: 'rgba(26,40,32,0.35)' }
+}
+
+// ─── TrendCard ────────────────────────────────────────────────────────────────
+
+function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
+  const meta = VITAL_RANGES[vitalKey]
+  const Icon = meta.icon
+
+  // DB returns DESC; reverse for chronological chart order
+  const chronoVals: number[] = [...logs]
+    .reverse()
+    .map(l => l[vitalKey])
+    .filter((v): v is number => v !== null && v !== undefined)
+
+  if (chronoVals.length < 2) return null
+
+  const latest = chronoVals[chronoVals.length - 1]
+  const avg    = chronoVals.reduce((a, b) => a + b, 0) / chronoVals.length
+  const status = statusForValue(vitalKey, latest)
+  const ss     = STATUS_STYLES[status]
+  const { symbol: arrow, color: arrowColor } = trendArrow(chronoVals)
+  const statusLabel = status === 'ok' ? 'Normal' : status === 'high' ? 'High' : 'Low'
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+      style={{
+        background: '#FFFFFF',
+        border: '1px solid rgba(26,40,32,0.07)',
+        borderRadius: '16px',
+        padding: '14px',
+        boxShadow: '0 2px 8px rgba(26,40,32,0.05)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+      }}
+    >
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{
+            width: '28px', height: '28px', borderRadius: '8px',
+            background: `${meta.color}18`, border: `1px solid ${meta.color}30`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Icon size={13} color={meta.color}/>
+          </div>
+          <span style={{ color: '#1A2820', fontWeight: 700, fontSize: '13px' }}>{meta.label}</span>
+        </div>
+        <span style={{
+          background: ss.bg, border: `1px solid ${ss.border}`, color: ss.text,
+          fontSize: '10px', fontWeight: 800, padding: '3px 8px', borderRadius: '99px',
+          fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.5px',
+        }}>
+          {statusLabel}
+        </span>
+      </div>
+
+      {/* Sparkline — stretches to container width */}
+      <div style={{ width: '100%', lineHeight: 0 }}>
+        <svg
+          width="100%" height="56"
+          viewBox="0 0 280 56"
+          preserveAspectRatio="none"
+          style={{ display: 'block', overflow: 'visible' }}
+        >
+          <SparklineInner
+            data={chronoVals} color={meta.color}
+            width={280} height={56} normalRange={meta.normal}
+          />
+        </svg>
+      </div>
+
+      {/* Footer: value + trend */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <div style={{ lineHeight: 1 }}>
+          <span style={{
+            color: '#1A2820', fontWeight: 900, fontSize: '28px', letterSpacing: '-1.2px',
+            fontFamily: 'var(--font-mono, monospace)',
+          }}>
+            {Number.isInteger(latest) ? latest : latest.toFixed(1)}
+          </span>
+          <span style={{
+            color: 'rgba(26,40,32,0.38)', fontSize: '11px', marginLeft: '4px',
+            fontFamily: 'var(--font-mono, monospace)',
+          }}>
+            {meta.unit}
+          </span>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ color: arrowColor, fontSize: '18px', fontWeight: 700, lineHeight: 1 }}>{arrow}</div>
+          <div style={{
+            color: 'rgba(26,40,32,0.35)', fontSize: '10px',
+            fontFamily: 'var(--font-mono, monospace)', marginTop: '3px',
+          }}>
+            avg {avg.toFixed(1)} {meta.unit}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// ─── Time range selector ──────────────────────────────────────────────────────
+
+type TimeRange = '7d' | '14d' | '30d'
+
+function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v: TimeRange) => void }) {
+  const opts: TimeRange[] = ['7d', '14d', '30d']
+  return (
+    <div style={{
+      display: 'flex', gap: '3px',
+      background: 'rgba(26,40,32,0.06)', borderRadius: '11px', padding: '3px',
+    }}>
+      {opts.map(opt => (
+        <button
+          key={opt}
+          onClick={() => onChange(opt)}
+          style={{
+            flex: 1, padding: '5px 0', borderRadius: '8px', border: 'none', cursor: 'pointer',
+            fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700,
+            background: value === opt ? '#FFFFFF' : 'transparent',
+            color: value === opt ? '#1A2820' : 'rgba(26,40,32,0.4)',
+            boxShadow: value === opt ? '0 1px 4px rgba(26,40,32,0.1)' : 'none',
+            transition: 'background 0.15s, color 0.15s, box-shadow 0.15s',
+          }}
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function VitalsPage() {
   const [vitals, setVitals] = useState<Record<string, string>>({
-    heart_rate: '', systolic: '', diastolic: '', oxygen_sat: '', resp_rate: ''
+    heart_rate: '', systolic: '', diastolic: '', oxygen_sat: '', resp_rate: '',
   })
   const [saving, setSaving] = useState(false)
   const [recentLogs, setRecentLogs] = useState<any[]>([])
   const [loadingHistory, setLoadingHistory] = useState(true)
+  const [timeRange, setTimeRange] = useState<TimeRange>('7d')
   const router = useRouter()
 
   useEffect(() => {
@@ -64,7 +302,7 @@ export default function VitalsPage() {
         .select('*')
         .eq('user_id', user.id)
         .order('logged_at', { ascending: false })
-        .limit(7)
+        .limit(30)
       setRecentLogs(data || [])
       setLoadingHistory(false)
     }
@@ -79,7 +317,7 @@ export default function VitalsPage() {
       .select('*')
       .eq('user_id', user.id)
       .order('logged_at', { ascending: false })
-      .limit(7)
+      .limit(30)
     setRecentLogs(data || [])
   }
 
@@ -103,9 +341,7 @@ export default function VitalsPage() {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
         body: JSON.stringify(payload),
       })
-
       const data = await res.json()
-
       if (!res.ok) {
         toast.error(data.error || 'Could not save vitals')
       } else if (data.critical) {
@@ -123,6 +359,15 @@ export default function VitalsPage() {
     setSaving(false)
   }
 
+  // Filter to selected time window
+  const windowMs = { '7d': 7, '14d': 14, '30d': 30 }[timeRange] * 24 * 60 * 60 * 1000
+  const now = Date.now()
+  const filteredLogs = recentLogs.filter(l => now - parseTS(l.logged_at).getTime() <= windowMs)
+
+  const hasAnyChart = VITAL_KEYS.some(k =>
+    filteredLogs.filter(l => l[k] !== null && l[k] !== undefined).length >= 2
+  )
+
   return (
     <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px' }}>
 
@@ -133,7 +378,12 @@ export default function VitalsPage() {
             whileTap={{ scale: 0.9 }}
             transition={spring}
             onClick={() => router.push('/dashboard')}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.09)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(26,40,32,0.06)' }}
+            style={{
+              width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF',
+              border: '1px solid rgba(26,40,32,0.09)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 1px 4px rgba(26,40,32,0.06)',
+            }}
           >
             <ArrowLeft size={15} color="rgba(26,40,32,0.5)"/>
           </motion.button>
@@ -163,11 +413,9 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number"
-                min="20" max="250"
+                type="number" min="20" max="250"
                 style={{ ...inputStyle, borderColor: vitals.heart_rate ? 'rgba(232,50,42,0.35)' : 'rgba(26,40,32,0.12)' }}
-                placeholder="—"
-                value={vitals.heart_rate}
+                placeholder="—" value={vitals.heart_rate}
                 onChange={e => setVitals(p => ({ ...p, heart_rate: e.target.value }))}
               />
               <span style={{ color: 'rgba(26,40,32,0.3)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>bpm</span>
@@ -187,20 +435,16 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <input
-                type="number"
-                min="50" max="260"
+                type="number" min="50" max="260"
                 style={{ ...inputStyle, borderColor: vitals.systolic ? 'rgba(92,139,116,0.35)' : 'rgba(26,40,32,0.12)', width: '62px', fontSize: '18px' }}
-                placeholder="—"
-                value={vitals.systolic}
+                placeholder="—" value={vitals.systolic}
                 onChange={e => setVitals(p => ({ ...p, systolic: e.target.value }))}
               />
               <span style={{ color: 'rgba(26,40,32,0.25)', fontSize: '16px', fontWeight: 300 }}>/</span>
               <input
-                type="number"
-                min="30" max="160"
+                type="number" min="30" max="160"
                 style={{ ...inputStyle, borderColor: vitals.diastolic ? 'rgba(92,139,116,0.35)' : 'rgba(26,40,32,0.12)', width: '62px', fontSize: '18px' }}
-                placeholder="—"
-                value={vitals.diastolic}
+                placeholder="—" value={vitals.diastolic}
                 onChange={e => setVitals(p => ({ ...p, diastolic: e.target.value }))}
               />
             </div>
@@ -219,11 +463,9 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number"
-                min="50" max="100"
+                type="number" min="50" max="100"
                 style={{ ...inputStyle, borderColor: vitals.oxygen_sat ? 'rgba(37,99,235,0.35)' : 'rgba(26,40,32,0.12)' }}
-                placeholder="—"
-                value={vitals.oxygen_sat}
+                placeholder="—" value={vitals.oxygen_sat}
                 onChange={e => setVitals(p => ({ ...p, oxygen_sat: e.target.value }))}
               />
               <span style={{ color: 'rgba(26,40,32,0.3)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>%</span>
@@ -243,11 +485,9 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number"
-                min="4" max="60"
+                type="number" min="4" max="60"
                 style={{ ...inputStyle, borderColor: vitals.resp_rate ? 'rgba(124,58,237,0.35)' : 'rgba(26,40,32,0.12)' }}
-                placeholder="—"
-                value={vitals.resp_rate}
+                placeholder="—" value={vitals.resp_rate}
                 onChange={e => setVitals(p => ({ ...p, resp_rate: e.target.value }))}
               />
               <span style={{ color: 'rgba(26,40,32,0.3)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>/min</span>
@@ -268,9 +508,12 @@ export default function VitalsPage() {
                 .map(([key, val]) => {
                   const status = statusForValue(key, parseFloat(val))
                   const s = STATUS_STYLES[status]
-                  const r = VITAL_RANGES[key as keyof typeof VITAL_RANGES]
+                  const r = VITAL_RANGES[key as VitalKey]
                   return (
-                    <span key={key} style={{ background: s.bg, border: `1px solid ${s.border}`, color: s.text, fontSize: '11px', fontWeight: 700, padding: '5px 10px', borderRadius: '99px' }}>
+                    <span key={key} style={{
+                      background: s.bg, border: `1px solid ${s.border}`, color: s.text,
+                      fontSize: '11px', fontWeight: 700, padding: '5px 10px', borderRadius: '99px',
+                    }}>
                       {r?.label}: {val} {r?.unit} {status === 'high' ? 'H' : status === 'low' ? 'L' : ''}
                     </span>
                   )
@@ -284,57 +527,65 @@ export default function VitalsPage() {
           whileTap={{ scale: 0.97 }}
           onClick={handleSave}
           disabled={saving}
-          style={{ background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: 'white', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '16px', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 6px 20px rgba(92,139,116,0.22)', opacity: saving ? 0.7 : 1 }}
+          style={{
+            background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: 'white',
+            fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '16px',
+            border: 'none', cursor: saving ? 'not-allowed' : 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            boxShadow: '0 6px 20px rgba(92,139,116,0.22)', opacity: saving ? 0.7 : 1,
+          }}
         >
           <Save size={16}/>
           {saving ? 'Saving…' : 'Save vitals'}
         </motion.button>
 
-        {/* Recent history */}
-        {!loadingHistory && recentLogs.length > 0 && (
+        {/* ── Trends ─────────────────────────────────────────────────────── */}
+        {loadingHistory ? (
           <div>
-            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Recent readings</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {recentLogs.map(log => (
-                <div key={log.id} style={{ background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.07)', borderRadius: '14px', padding: '12px 14px', boxShadow: '0 1px 4px rgba(26,40,32,0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                      {parseTS(log.logged_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                    </p>
-                    <p style={{ color: 'rgba(26,40,32,0.25)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>
-                      {parseTS(log.logged_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {log.heart_rate && (
-                      <span style={{ ...STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)], fontSize: '11px', fontWeight: 700, padding: '4px 9px', borderRadius: '99px', border: '1px solid', background: STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)].bg, borderColor: STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)].border, color: STATUS_STYLES[statusForValue('heart_rate', log.heart_rate)].text }}>
-                        {log.heart_rate} bpm
-                      </span>
-                    )}
-                    {log.systolic && log.diastolic && (
-                      <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 9px', borderRadius: '99px', background: STATUS_STYLES[statusForValue('systolic', log.systolic)].bg, border: `1px solid ${STATUS_STYLES[statusForValue('systolic', log.systolic)].border}`, color: STATUS_STYLES[statusForValue('systolic', log.systolic)].text }}>
-                        {log.systolic}/{log.diastolic}
-                      </span>
-                    )}
-                    {log.oxygen_sat && (
-                      <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 9px', borderRadius: '99px', background: STATUS_STYLES[statusForValue('oxygen_sat', log.oxygen_sat)].bg, border: `1px solid ${STATUS_STYLES[statusForValue('oxygen_sat', log.oxygen_sat)].border}`, color: STATUS_STYLES[statusForValue('oxygen_sat', log.oxygen_sat)].text }}>
-                        O₂ {log.oxygen_sat}%
-                      </span>
-                    )}
-                    {log.resp_rate && (
-                      <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 9px', borderRadius: '99px', background: STATUS_STYLES[statusForValue('resp_rate', log.resp_rate)].bg, border: `1px solid ${STATUS_STYLES[statusForValue('resp_rate', log.resp_rate)].border}`, color: STATUS_STYLES[statusForValue('resp_rate', log.resp_rate)].text }}>
-                        Resp {log.resp_rate}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p style={{
+              color: 'rgba(26,40,32,0.38)', fontSize: '10px',
+              fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase',
+              letterSpacing: '1px', marginBottom: '10px',
+            }}>Trends</p>
+            {[1, 2, 3].map(i => (
+              <Skeleton key={i} style={{
+                height: '130px', borderRadius: '16px',
+                background: 'rgba(26,40,32,0.06)', marginBottom: '10px',
+              }}/>
+            ))}
           </div>
-        )}
-        {loadingHistory && (
+        ) : (
           <div>
-            {[1,2,3].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '14px', background: 'rgba(26,40,32,0.06)', marginBottom: '6px' }}/>)}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <p style={{
+                color: 'rgba(26,40,32,0.38)', fontSize: '10px',
+                fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px',
+              }}>Trends</p>
+              <div style={{ width: '144px' }}>
+                <TimeRangeSelector value={timeRange} onChange={setTimeRange}/>
+              </div>
+            </div>
+
+            {hasAnyChart ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {VITAL_KEYS.map(key => (
+                  <TrendCard key={key} vitalKey={key} logs={filteredLogs}/>
+                ))}
+              </div>
+            ) : (
+              <div style={{
+                background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.07)',
+                borderRadius: '16px', padding: '32px 16px', textAlign: 'center',
+                boxShadow: '0 2px 8px rgba(26,40,32,0.04)',
+              }}>
+                <p style={{ color: 'rgba(26,40,32,0.35)', fontSize: '13px', fontWeight: 600 }}>
+                  No data for {timeRange} view
+                </p>
+                <p style={{ color: 'rgba(26,40,32,0.25)', fontSize: '11px', marginTop: '4px' }}>
+                  Log at least 2 readings to see trends
+                </p>
+              </div>
+            )}
           </div>
         )}
 
