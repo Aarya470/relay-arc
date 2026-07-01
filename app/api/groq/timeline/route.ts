@@ -11,10 +11,10 @@ const supabase = createClient(
 
 export async function POST(req: NextRequest) {
   try {
-    if (!process.env.NEXT_PUBLIC_GROQ_API_KEY) {
+    if (!process.env.GROQ_API_KEY) {
       return NextResponse.json({ error: 'GROQ_API_KEY not configured' }, { status: 503 })
     }
-    const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY })
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -45,8 +45,6 @@ Example format:
     })
 
     const text = completion.choices[0].message.content || ''
-    console.log('Groq raw response (first 200):', text.slice(0, 200))
-
     // Extract JSON object
     let parsed: any[]
     try {

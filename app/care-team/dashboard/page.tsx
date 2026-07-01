@@ -44,6 +44,7 @@ function processAndMarkMissed(appts: any[]): any[] {
     .map(a => a.id)
   if (missedIds.length > 0) {
     supabase.from('appointments').update({ status: 'missed' }).in('id', missedIds)
+      .then(({ error }) => { if (error) console.error('Failed to mark appointments missed:', error) })
     return appts.map(a => missedIds.includes(a.id) ? { ...a, status: 'missed' } : a)
   }
   return appts
@@ -245,9 +246,9 @@ export default function CareTeamDashboard() {
     toast('Appointment declined')
   }
 
-  const dismissEmergency = async (patientId: string) => {
-    await supabase.from('emergencies').update({ status: 'resolved' }).eq('user_id', patientId).eq('status', 'active')
-    setActiveEmergencies(prev => prev.filter(e => e.user_id !== patientId))
+  const dismissEmergency = async (emergencyId: string) => {
+    await supabase.from('emergencies').update({ status: 'resolved' }).eq('id', emergencyId)
+    setActiveEmergencies(prev => prev.filter(e => e.id !== emergencyId))
     toast('Emergency resolved')
   }
 
@@ -540,7 +541,7 @@ export default function CareTeamDashboard() {
                     </motion.span>
                     <motion.div
                       whileTap={{ scale: 0.9 }}
-                      onClick={(e) => { e.stopPropagation(); dismissEmergency(patient.id) }}
+                      onClick={(e) => { e.stopPropagation(); const em = activeEmergencies.find(e => e.user_id === patient.id); if (em) dismissEmergency(em.id) }}
                       style={{ background: 'rgba(255,74,66,0.12)', border: '1px solid rgba(255,74,66,0.3)', borderRadius: '6px', padding: '2px 7px', color: '#FF4A42', fontSize: '9px', cursor: 'pointer', fontWeight: 700, fontFamily: 'monospace' }}
                     >
                       Resolve

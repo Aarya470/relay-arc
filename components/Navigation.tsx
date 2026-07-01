@@ -67,7 +67,7 @@ function TurnIcon({ type }: { type: string }) {
 }
 
 // Auto-follow map
-function MapController({ position, heading }: { position: [number,number] | null, heading: number }) {
+function MapController({ position }: { position: [number,number] | null }) {
   const map = useMap()
   useEffect(() => {
     if (position) {
@@ -87,7 +87,6 @@ interface Step {
 
 export default function Navigation({ hospital }: { hospital: any }) {
   const [position, setPosition] = useState<[number, number] | null>(null)
-  const [heading, setHeading] = useState(0)
   const [speed, setSpeed] = useState(0)
   const [route, setRoute] = useState<[number, number][]>([])
   const [steps, setSteps] = useState<Step[]>([])
@@ -165,7 +164,6 @@ export default function Navigation({ hospital }: { hospital: any }) {
       pos => {
         const p: [number, number] = [pos.coords.latitude, pos.coords.longitude]
         setPosition(p)
-        setHeading(pos.coords.heading || 0)
         setSpeed(pos.coords.speed || 0)
 
         // Check arrival
@@ -330,7 +328,7 @@ export default function Navigation({ hospital }: { hospital: any }) {
             <Marker position={hospitalPos} icon={hospitalIcon}/>
 
             {/* Auto follow */}
-            <MapController position={position} heading={heading}/>
+            <MapController position={position}/>
           </MapContainer>
         )}
       </div>

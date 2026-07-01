@@ -10,13 +10,13 @@ const tabs = [
   { href: '/settings', icon: Settings, label: 'Settings' },
 ]
 
-const HIDE_ON = ['/login', '/onboarding', '/emergency', '/care-team']
+const HIDE_ON = ['/login', '/onboarding', '/care-team', '/nurse', '/driver', '/transport']
 
 export default function BottomNav() {
   const pathname = usePathname()
   const router = useRouter()
 
-  if (HIDE_ON.some(p => pathname === p || pathname.startsWith(p + '/'))) return null
+  if (pathname === '/emergency' || pathname.startsWith('/emergency/') || HIDE_ON.some(p => pathname === p || pathname.startsWith(p + '/'))) return null
 
   const isActive = (href: string) =>
     href === '/dashboard'

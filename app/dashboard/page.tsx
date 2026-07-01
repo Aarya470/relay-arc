@@ -91,6 +91,7 @@ export default function Dashboard() {
   }, [])
 
   useEffect(() => {
+    let cleanupReminders: (() => void) | undefined
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
@@ -117,9 +118,10 @@ export default function Dashboard() {
       setLoading(false)
       analyzeCrashRisk(c || []).then(risk => { if (risk && risk.level !== 'low') setCrashRisk(risk) }).catch(() => {})
       registerPushNotifications(user.id)
-      return scheduleCheckinReminders(user.id, c || [])
+      cleanupReminders = scheduleCheckinReminders(user.id, c || [])
     }
     load()
+    return () => { cleanupReminders?.() }
   }, [])
 
   useEffect(() => {
