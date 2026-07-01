@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar } from 'lucide-react'
+import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar, MapPin, Phone, AlertTriangle, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
 import { Skeleton } from '@/components/ui/skeleton'
 import JitsiMeeting from '@/components/JitsiMeeting'
@@ -63,6 +63,8 @@ export default function CareTeamDashboard() {
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
   const [activeCall, setActiveCall] = useState<any>(null)
   const [activeEmergencies, setActiveEmergencies] = useState<any[]>([])
+  const [tick, setTick] = useState(0)
+  const [expandedMedCard, setExpandedMedCard] = useState<Record<string, boolean>>({})
   const notifiedRef = useRef<Set<string>>(new Set())
   const router = useRouter()
 
@@ -130,6 +132,12 @@ export default function CareTeamDashboard() {
     const id = setInterval(checkEmergencies, 8000)
     return () => clearInterval(id)
   }, [careTeamMember, checkEmergencies])
+
+  // 1-second tick to keep elapsed time display live
+  useEffect(() => {
+    const id = setInterval(() => setTick(t => t + 1), 1000)
+    return () => clearInterval(id)
+  }, [])
 
   // Silent background refresh — updates appointments + patient list every 25 seconds
   // without showing the loading spinner so the UI doesn't flash
@@ -451,6 +459,253 @@ export default function CareTeamDashboard() {
           </div>
         )
       })()}
+
+      {/* Active emergency alert panels */}
+      {activeEmergencies.length > 0 && (
+        <div style={{ padding: '12px 16px 0' }}>
+          {activeEmergencies.map((emergency) => {
+            const patient = patients.find(p => p.id === emergency.user_id)
+            const elapsedMs = Date.now() - new Date(emergency.created_at).getTime()
+            const elapsedMin = Math.floor(elapsedMs / 60000)
+            const elapsedSec = Math.floor((elapsedMs % 60000) / 1000)
+            const elapsedLabel = elapsedMin > 0
+              ? `${elapsedMin}m ${elapsedSec}s ago`
+              : `${elapsedSec}s ago`
+            const typeLabels: Record<string, string> = {
+              chest_pain: 'Chest Pain', unconscious: 'Unconscious', breathing: "Can't Breathe",
+              pots: 'POTS Episode', stroke: 'Stroke Signs', mecfs: 'Severe ME/CFS Crash', other: 'Emergency',
+            }
+            const typeLabel = typeLabels[emergency.type] || emergency.type || 'Emergency'
+            const isMedExpanded = expandedMedCard[emergency.id]
+            const hasMedInfo = patient?.blood_type || patient?.allergies || patient?.medications?.length > 0
+            const hasHospital = !!(emergency.hospital_name)
+            const hasLocation = !!(emergency.patient_lat && emergency.patient_lng)
+            const hasHospitalCoords = !!(emergency.hospital_lat && emergency.hospital_lng)
+
+            // Suppress unused tick warning — tick is read here to force re-render every second
+            void tick
+
+            return (
+              <motion.div
+                key={emergency.id}
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                style={{
+                  background: 'rgba(255,28,28,0.05)',
+                  border: '2px solid rgba(255,74,66,0.55)',
+                  borderRadius: '20px',
+                  marginBottom: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 0 0 1px rgba(255,74,66,0.15), 0 8px 32px rgba(255,74,66,0.18)',
+                }}
+              >
+                {/* Header row */}
+                <div style={{
+                  background: 'linear-gradient(135deg, rgba(185,28,28,0.85), rgba(220,38,38,0.75))',
+                  padding: '12px 16px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <motion.div
+                      animate={{ opacity: [1, 0.25, 1], scale: [1, 1.15, 1] }}
+                      transition={{ duration: 0.8, repeat: Infinity }}
+                      style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#fff', flexShrink: 0, boxShadow: '0 0 8px rgba(255,255,255,0.6)' }}
+                    />
+                    <span style={{ color: 'white', fontFamily: 'monospace', fontSize: '11px', letterSpacing: '2.5px', textTransform: 'uppercase', fontWeight: 800 }}>
+                      Active Emergency
+                    </span>
+                  </div>
+                  <span style={{ color: 'rgba(255,255,255,0.75)', fontFamily: 'monospace', fontSize: '11px', fontWeight: 600 }}>
+                    {elapsedLabel}
+                  </span>
+                </div>
+
+                <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+                  {/* Patient info row */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <p style={{ color: '#FF4A42', fontWeight: 800, fontSize: '17px', marginBottom: '3px' }}>
+                        {patient?.full_name || 'Unknown patient'}
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <span style={{
+                          background: 'rgba(255,74,66,0.15)', border: '1px solid rgba(255,74,66,0.35)',
+                          color: '#FF4A42', fontSize: '10px', padding: '2px 8px', borderRadius: '20px',
+                          fontFamily: 'monospace', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px',
+                        }}>
+                          {typeLabel}
+                        </span>
+                        {patient?.blood_type && (
+                          <span style={{
+                            background: 'rgba(255,74,66,0.1)', border: '1px solid rgba(255,74,66,0.25)',
+                            color: '#FF6B63', fontSize: '10px', padding: '2px 8px', borderRadius: '20px',
+                            fontFamily: 'monospace', fontWeight: 700,
+                          }}>
+                            {patient.blood_type}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <AlertTriangle size={22} color="#FF4A42" style={{ flexShrink: 0, opacity: 0.8 }}/>
+                  </div>
+
+                  {/* Medical card — expandable */}
+                  {hasMedInfo && (
+                    <div style={{ border: '1px solid rgba(255,74,66,0.2)', borderRadius: '12px', overflow: 'hidden' }}>
+                      <button
+                        onClick={() => setExpandedMedCard(prev => ({ ...prev, [emergency.id]: !prev[emergency.id] }))}
+                        style={{
+                          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                          padding: '10px 14px', background: isMedExpanded ? 'rgba(255,74,66,0.08)' : 'rgba(255,74,66,0.04)',
+                          border: 'none', cursor: 'pointer',
+                        }}
+                      >
+                        <span style={{ color: '#FF6B63', fontSize: '11px', fontWeight: 700, fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                          Medical Card
+                        </span>
+                        <span style={{ color: 'rgba(255,74,66,0.5)', fontSize: '10px' }}>
+                          {isMedExpanded ? 'Hide' : 'Show'}
+                        </span>
+                      </button>
+                      {isMedExpanded && (
+                        <div style={{ padding: '10px 14px', background: 'rgba(20,4,4,0.4)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {patient?.blood_type && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', width: '80px', flexShrink: 0 }}>Blood type</span>
+                              <span style={{ color: '#FF4A42', fontWeight: 800, fontSize: '18px', fontFamily: 'monospace' }}>{patient.blood_type}</span>
+                            </div>
+                          )}
+                          {patient?.allergies && (
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                              <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Allergies</span>
+                              <span style={{ color: '#FF8A85', fontWeight: 600, fontSize: '12px', lineHeight: 1.5 }}>{patient.allergies}</span>
+                            </div>
+                          )}
+                          {patient?.medications?.length > 0 && (
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                              <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Medications</span>
+                              <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '11px', lineHeight: 1.6 }}>
+                                {patient.medications.slice(0, 3).map((m: any) => m.name || m).join(', ')}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Hospital destination */}
+                  {hasHospital && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,74,66,0.06)', border: '1px solid rgba(255,74,66,0.15)', borderRadius: '10px', padding: '10px 14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
+                        <MapPin size={13} color="#FF6B63" style={{ flexShrink: 0 }}/>
+                        <div style={{ minWidth: 0 }}>
+                          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1px' }}>Routing to</p>
+                          <p style={{ color: 'white', fontWeight: 600, fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{emergency.hospital_name}</p>
+                        </div>
+                      </div>
+                      <a
+                        href={`https://maps.google.com/?q=${encodeURIComponent(emergency.hospital_name)}`}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#4A9EF5', fontSize: '11px', fontWeight: 600, textDecoration: 'none', flexShrink: 0, marginLeft: '8px' }}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        Maps <ExternalLink size={10}/>
+                      </a>
+                    </div>
+                  )}
+
+                  {/* Last known location */}
+                  {hasLocation && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(74,158,245,0.05)', border: '1px solid rgba(74,158,245,0.15)', borderRadius: '10px', padding: '10px 14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <MapPin size={13} color="#4A9EF5" style={{ flexShrink: 0 }}/>
+                        <div>
+                          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1px' }}>Last known location</p>
+                          <p style={{ color: 'rgba(255,255,255,0.55)', fontFamily: 'monospace', fontSize: '11px' }}>
+                            {Number(emergency.patient_lat).toFixed(5)}, {Number(emergency.patient_lng).toFixed(5)}
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href={`https://maps.google.com/?q=${emergency.patient_lat},${emergency.patient_lng}`}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#4A9EF5', fontSize: '11px', fontWeight: 600, textDecoration: 'none', flexShrink: 0 }}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        View <ExternalLink size={10}/>
+                      </a>
+                    </div>
+                  )}
+
+                  {/* Action buttons */}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {(hasHospitalCoords || hasHospital) && (
+                      <a
+                        href={hasHospitalCoords
+                          ? `https://maps.google.com/?q=${emergency.hospital_lat},${emergency.hospital_lng}`
+                          : `https://maps.google.com/?q=${encodeURIComponent(emergency.hospital_name)}`}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{
+                          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                          background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.25)',
+                          color: '#4A9EF5', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
+                          borderRadius: '10px', textDecoration: 'none',
+                        }}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <MapPin size={13}/>
+                        View on map
+                      </a>
+                    )}
+                    {patient?.phone ? (
+                      <a
+                        href={`tel:${patient.phone}`}
+                        style={{
+                          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                          background: 'rgba(128,239,128,0.08)', border: '1px solid rgba(128,239,128,0.2)',
+                          color: '#80EF80', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
+                          borderRadius: '10px', textDecoration: 'none',
+                        }}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <Phone size={13}/>
+                        Call patient
+                      </a>
+                    ) : (
+                      <div style={{
+                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                        color: 'rgba(255,255,255,0.25)', fontWeight: 600, fontSize: '12px', padding: '10px 8px',
+                        borderRadius: '10px',
+                      }}>
+                        <Phone size={13}/>
+                        No phone on file
+                      </div>
+                    )}
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => dismissEmergency(emergency.id)}
+                      style={{
+                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        background: 'rgba(255,74,66,0.12)', border: '1px solid rgba(255,74,66,0.3)',
+                        color: '#FF4A42', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
+                        borderRadius: '10px', cursor: 'pointer',
+                      }}
+                    >
+                      <Check size={13}/>
+                      Resolve
+                    </motion.button>
+                  </div>
+
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      )}
 
       {/* Patient list */}
       <div style={{ padding: '16px' }}>

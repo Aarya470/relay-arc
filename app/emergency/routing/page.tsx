@@ -4,11 +4,31 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText } from 'lucide-react'
+import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText, MessageSquare } from 'lucide-react'
 import { findNearbyHospitals, formatDistance, estimateTime, Hospital } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
+
+function buildSmsHref(contacts: any[], hospital: Hospital | null, emergencyType: string) {
+  const phones = contacts.map((c: any) => c.phone).filter(Boolean).join(',')
+  if (!phones) return '#'
+  const typeLabels: Record<string, string> = {
+    chest_pain: 'a chest pain emergency',
+    unconscious: 'an emergency (unconscious)',
+    breathing: 'a breathing emergency',
+    pots: 'a POTS episode',
+    stroke: 'possible stroke symptoms',
+    mecfs: 'a severe ME/CFS crash',
+    other: 'a medical emergency',
+  }
+  const typeLabel = typeLabels[emergencyType] || 'a medical emergency'
+  const hospitalText = hospital
+    ? `They are being routed to ${hospital.name}. Maps: https://maps.google.com/?q=${encodeURIComponent(hospital.name + ' ' + hospital.address)}`
+    : 'They are getting emergency help now.'
+  const msg = `URGENT: I am having ${typeLabel} and need emergency help. ${hospitalText} Please call 911 or come to the hospital.`
+  return `sms:${phones}?body=${encodeURIComponent(msg)}`
+}
 
 const EMERGENCY_LABELS: Record<string, string> = {
   chest_pain: 'Chest pain',
@@ -286,28 +306,45 @@ function RoutingPage() {
           </div>
         </motion.div>
 
-        {/* Notified contacts list */}
-        {notifiedContacts.length > 0 && careTeamAlerted && (
+        {/* Notified contacts list + one-tap SMS */}
+        {careTeamAlerted && (
           <div style={{ marginBottom: '12px' }}>
             <p style={{ color: 'rgba(16,22,14,0.38)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
-              Contacts notified
+              Emergency contacts
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {notifiedContacts.map((c: any, i: number) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(16,22,14,0.03)', borderRadius: '10px', padding: '8px 12px', border: '1px solid rgba(16,22,14,0.06)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2C7A50' }}/>
-                    <span style={{ color: '#0F1A0E', fontSize: '13px', fontWeight: 500 }}>{c.name}</span>
-                    <span style={{ color: 'rgba(16,22,14,0.3)', fontSize: '12px' }}>{c.relationship}</span>
-                  </div>
-                  <motion.a href={`tel:${c.phone}`} whileTap={{ scale: 0.95 }}
-                    style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#B91C1C', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
-                    <Phone size={11} color="#B91C1C"/>
-                    Call
-                  </motion.a>
+            {notifiedContacts.length > 0 ? (
+              <>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {notifiedContacts.map((c: any, i: number) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(16,22,14,0.03)', borderRadius: '10px', padding: '8px 12px', border: '1px solid rgba(16,22,14,0.06)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2C7A50' }}/>
+                        <span style={{ color: '#0F1A0E', fontSize: '13px', fontWeight: 500 }}>{c.name}</span>
+                        <span style={{ color: 'rgba(16,22,14,0.3)', fontSize: '12px' }}>{c.relationship}</span>
+                      </div>
+                      <motion.a href={`tel:${c.phone}`} whileTap={{ scale: 0.95 }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#B91C1C', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
+                        <Phone size={11} color="#B91C1C"/>
+                        Call
+                      </motion.a>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+                <motion.a
+                  href={buildSmsHref(notifiedContacts, hospital, type)}
+                  whileTap={{ scale: 0.97 }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(37,99,235,0.1)', border: '1px solid rgba(37,99,235,0.25)', color: '#1D4ED8', fontWeight: 700, fontSize: '13px', padding: '12px 16px', borderRadius: '12px', textDecoration: 'none', marginTop: '8px' }}
+                >
+                  <MessageSquare size={15}/>
+                  Text all my emergency contacts
+                </motion.a>
+              </>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(16,22,14,0.04)', border: '1px solid rgba(16,22,14,0.1)', color: 'rgba(16,22,14,0.35)', fontWeight: 600, fontSize: '13px', padding: '12px 16px', borderRadius: '12px' }}>
+                <MessageSquare size={15}/>
+                Add emergency contacts to enable quick SMS
+              </div>
+            )}
           </div>
         )}
 
