@@ -11,10 +11,22 @@ import BottomNav from '@/components/BottomNav'
 const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 
 const card: React.CSSProperties = {
-  background: '#FFFFFF',
-  border: '1px solid rgba(16,22,14,0.07)',
+  background: '#121220',
+  border: '1px solid rgba(255,255,255,0.06)',
+  borderRadius: '16px',
+}
+
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  background: '#1A1A2E',
+  border: '1px solid rgba(255,255,255,0.10)',
   borderRadius: '12px',
-  boxShadow: '0 1px 3px rgba(16,22,14,0.05)',
+  padding: '14px 16px',
+  color: '#EEEEF8',
+  fontSize: '14px',
+  outline: 'none',
+  fontFamily: 'inherit',
+  boxSizing: 'border-box',
 }
 
 export default function Settings() {
@@ -63,8 +75,8 @@ export default function Settings() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', padding: '80px 20px 100px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '12px', background: 'rgba(16,22,14,0.06)' }}/>)}
+    <div style={{ minHeight: '100dvh', background: '#070710', padding: '80px 20px 100px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)' }}/>)}
     </div>
   )
 
@@ -76,21 +88,21 @@ export default function Settings() {
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '80px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid rgba(16,22,14,0.07)' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => router.push('/dashboard')}
-            style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(16,22,14,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <ArrowLeft size={15} color="rgba(0,0,0,0.45)"/>
+            <ArrowLeft size={15} color="#8888A8"/>
           </motion.button>
           <div>
-            <h1 style={{ color: '#0F1A0E', fontWeight: 700, fontSize: '20px', letterSpacing: '-0.4px' }}>Settings</h1>
-            <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '13px' }}>Manage your profile</p>
+            <h1 style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '20px', letterSpacing: '-0.4px' }}>Settings</h1>
+            <p style={{ color: '#8888A8', fontSize: '13px' }}>Manage your profile</p>
           </div>
         </div>
       </div>
@@ -99,39 +111,39 @@ export default function Settings() {
 
         {/* Avatar */}
         <div style={{ ...card, padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '4px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#0F1A0E', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ color: 'white', fontWeight: 700, fontSize: '20px' }}>{profile?.full_name?.[0] || '?'}</span>
+          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(79,142,247,0.15)', border: '1.5px solid rgba(79,142,247,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ color: '#4F8EF7', fontWeight: 700, fontSize: '20px' }}>{profile?.full_name?.[0] || '?'}</span>
           </div>
           <div>
-            <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '16px', letterSpacing: '-0.2px' }}>{profile?.full_name || 'Your name'}</p>
-            <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px', marginTop: '2px' }}>{profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}</p>
+            <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '16px', letterSpacing: '-0.2px' }}>{profile?.full_name || 'Your name'}</p>
+            <p style={{ color: '#505068', fontSize: '12px', marginTop: '2px' }}>{profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}</p>
           </div>
         </div>
 
-        <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px', padding: '4px 2px' }}>Profile</p>
+        <p style={{ color: '#505068', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.6px', fontFamily: 'var(--font-mono, monospace)', padding: '4px 2px' }}>Profile</p>
 
         {/* Fields */}
         <div style={{ ...card, overflow: 'hidden' }}>
           {fields.map((f, idx) => (
-            <div key={f.key} style={{ borderBottom: idx < fields.length - 1 ? '1px solid rgba(16,22,14,0.06)' : 'none' }}>
+            <div key={f.key} style={{ borderBottom: idx < fields.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
               {editing === f.key ? (
                 <div style={{ padding: '14px 16px' }}>
-                  <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '11px', fontWeight: 500, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{f.label}</p>
+                  <p style={{ color: '#505068', fontSize: '11px', fontWeight: 500, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.4px', fontFamily: 'var(--font-mono, monospace)' }}>{f.label}</p>
                   <input
                     type={f.inputType}
                     autoFocus
                     value={editValue}
                     onChange={e => setEditValue(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && saveEdit()}
-                    style={{ width: '100%', background: '#F0EDE5', border: '1.5px solid rgba(44,122,80,0.4)', borderRadius: '9px', padding: '10px 12px', color: '#0F1A0E', fontSize: '14px', outline: 'none', fontFamily: 'inherit', marginBottom: '10px' }}
+                    style={{ ...inputStyle, marginBottom: '10px' }}
                   />
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <motion.button whileTap={{ scale: 0.97 }} onClick={saveEdit} disabled={saving}
-                      style={{ flex: 1, background: '#0F1A0E', color: 'white', fontWeight: 600, fontSize: '13px', padding: '10px', borderRadius: '9px', border: 'none', cursor: 'pointer' }}>
+                      style={{ flex: 1, background: '#4F8EF7', color: 'white', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer', height: '44px' }}>
                       {saving ? 'Saving…' : 'Save'}
                     </motion.button>
                     <motion.button whileTap={{ scale: 0.97 }} onClick={() => setEditing(null)}
-                      style={{ flex: 1, background: 'rgba(16,22,14,0.06)', color: 'rgba(0,0,0,0.5)', fontWeight: 500, fontSize: '13px', padding: '10px', borderRadius: '9px', border: 'none', cursor: 'pointer' }}>
+                      style={{ flex: 1, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', color: '#8888A8', fontWeight: 500, fontSize: '13px', padding: '12px', borderRadius: '12px', cursor: 'pointer', height: '44px' }}>
                       Cancel
                     </motion.button>
                   </div>
@@ -142,21 +154,21 @@ export default function Settings() {
                   onClick={() => startEdit(f.key, f.value)}
                   style={{ width: '100%', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(16,22,14,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <f.icon size={14} color="rgba(16,22,14,0.42)"/>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <f.icon size={14} color="#505068"/>
                   </div>
                   <div style={{ flex: 1, textAlign: 'left' }}>
-                    <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '2px' }}>{f.label}</p>
-                    <p style={{ color: f.value ? '#0F1A0E' : 'rgba(16,22,14,0.28)', fontSize: '14px', fontWeight: f.value ? 500 : 400 }}>{f.value || 'Tap to add'}</p>
+                    <p style={{ color: '#505068', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.4px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '2px' }}>{f.label}</p>
+                    <p style={{ color: f.value ? '#EEEEF8' : '#505068', fontSize: '14px', fontWeight: f.value ? 500 : 400 }}>{f.value || 'Tap to add'}</p>
                   </div>
-                  <ChevronRight size={14} color="rgba(16,22,14,0.22)"/>
+                  <ChevronRight size={14} color="#505068"/>
                 </motion.button>
               )}
             </div>
           ))}
         </div>
 
-        <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px', padding: '4px 2px', marginTop: '4px' }}>Data</p>
+        <p style={{ color: '#505068', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.6px', fontFamily: 'var(--font-mono, monospace)', padding: '4px 2px', marginTop: '4px' }}>Data</p>
 
         <div style={{ ...card, overflow: 'hidden' }}>
           {[
@@ -167,16 +179,16 @@ export default function Settings() {
               key={item.path}
               whileTap={{ scale: 0.99 }}
               onClick={() => router.push(item.path)}
-              style={{ width: '100%', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', background: 'none', border: 'none', cursor: 'pointer', borderBottom: idx === 0 ? '1px solid rgba(16,22,14,0.06)' : 'none', textAlign: 'left' }}
+              style={{ width: '100%', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', background: 'none', border: 'none', cursor: 'pointer', borderBottom: idx === 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', textAlign: 'left' }}
             >
-              <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(16,22,14,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <item.icon size={14} color="rgba(16,22,14,0.42)"/>
+              <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <item.icon size={14} color="#505068"/>
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ color: '#0F1A0E', fontWeight: 500, fontSize: '14px' }}>{item.label}</p>
-                <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px', marginTop: '1px' }}>{item.sub}</p>
+                <p style={{ color: '#EEEEF8', fontWeight: 500, fontSize: '14px' }}>{item.label}</p>
+                <p style={{ color: '#8888A8', fontSize: '12px', marginTop: '1px' }}>{item.sub}</p>
               </div>
-              <ChevronRight size={14} color="rgba(16,22,14,0.22)"/>
+              <ChevronRight size={14} color="#505068"/>
             </motion.button>
           ))}
         </div>
@@ -184,29 +196,27 @@ export default function Settings() {
         <motion.button
           whileTap={{ scale: 0.99 }}
           onClick={() => router.push('/emergency-contacts')}
-          style={{ ...card, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', width: '100%', textAlign: 'left', border: '1px solid rgba(185,28,28,0.15)' }}
+          style={{ ...card, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', width: '100%', textAlign: 'left', border: '1px solid rgba(255,55,55,0.18)' }}
         >
-          <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(185,28,28,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Shield size={14} color="#B91C1C"/>
+          <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(255,55,55,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Shield size={14} color="#FF3737"/>
           </div>
           <div style={{ flex: 1 }}>
-            <p style={{ color: '#B91C1C', fontWeight: 500, fontSize: '14px' }}>Emergency contacts</p>
-            <p style={{ color: 'rgba(185,28,28,0.5)', fontSize: '12px', marginTop: '1px' }}>Who to alert in an emergency</p>
+            <p style={{ color: '#FF3737', fontWeight: 500, fontSize: '14px' }}>Emergency contacts</p>
+            <p style={{ color: 'rgba(255,55,55,0.5)', fontSize: '12px', marginTop: '1px' }}>Who to alert in an emergency</p>
           </div>
-          <ChevronRight size={14} color="rgba(185,28,28,0.3)"/>
+          <ChevronRight size={14} color="rgba(255,55,55,0.35)"/>
         </motion.button>
 
-        <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px', padding: '4px 2px', marginTop: '4px' }}>Account</p>
+        <p style={{ color: '#505068', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.6px', fontFamily: 'var(--font-mono, monospace)', padding: '4px 2px', marginTop: '4px' }}>Account</p>
 
         <motion.button
           whileTap={{ scale: 0.99 }}
           onClick={signOut}
-          style={{ ...card, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', width: '100%', textAlign: 'left' }}
+          style={{ width: '100%', background: '#FF3737', color: 'white', fontWeight: 700, fontSize: '15px', padding: '0 20px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '52px' }}
         >
-          <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(16,22,14,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <LogOut size={14} color="rgba(16,22,14,0.42)"/>
-          </div>
-          <p style={{ color: '#0F1A0E', fontWeight: 500, fontSize: '14px' }}>Sign out</p>
+          <LogOut size={16} color="white"/>
+          Sign out
         </motion.button>
 
       </div>

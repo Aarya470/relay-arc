@@ -93,28 +93,33 @@ export default function EmergencyHistoryPage() {
   const groups = groupByMonth(emergencies)
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', padding: '80px 20px 40px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div style={{ minHeight: '100dvh', background: '#070710', padding: '80px 20px 40px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {[1, 2, 3].map(i => (
-        <div key={i} style={{ height: '72px', borderRadius: '16px', background: 'rgba(16,22,14,0.07)', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: '72px', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
-      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }`}</style>
+      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', paddingBottom: '40px' }}>
+    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '40px' }}>
       {/* Header */}
       <div style={{ padding: '56px 20px 16px', maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => router.back()}
-          style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(16,22,14,0.06)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, marginTop: '2px' }}
+          style={{
+            width: '36px', height: '36px', borderRadius: '10px',
+            background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', flexShrink: 0, marginTop: '2px',
+          }}
         >
-          <ArrowLeft size={16} color="#0F1A0E"/>
+          <ArrowLeft size={16} color="#8888A8"/>
         </motion.button>
         <div>
-          <h1 style={{ color: '#0F1A0E', fontSize: '26px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.1 }}>Emergency History</h1>
-          <p style={{ color: 'rgba(16,22,14,0.4)', fontSize: '13px', marginTop: '4px' }}>Your past SOS events</p>
+          <h1 style={{ color: '#EEEEF8', fontSize: '26px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.1 }}>Emergency History</h1>
+          <p style={{ color: '#505068', fontSize: '13px', marginTop: '4px' }}>Your past SOS events</p>
         </div>
       </div>
 
@@ -125,15 +130,24 @@ export default function EmergencyHistoryPage() {
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={ease}
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 20px', textAlign: 'center' }}
           >
-            <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: 'rgba(185,28,28,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-              <AlertCircle size={28} color="#B91C1C"/>
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '20px',
+              background: 'rgba(255,55,55,0.10)', border: '1px solid rgba(255,55,55,0.18)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px',
+            }}>
+              <AlertCircle size={28} color="#FF3737"/>
             </div>
-            <p style={{ color: '#0F1A0E', fontWeight: 700, fontSize: '18px', marginBottom: '8px' }}>No emergency history</p>
-            <p style={{ color: 'rgba(16,22,14,0.4)', fontSize: '14px', lineHeight: 1.6, maxWidth: '260px' }}>Your past SOS events will appear here</p>
+            <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '18px', marginBottom: '8px' }}>No emergency history</p>
+            <p style={{ color: '#505068', fontSize: '14px', lineHeight: 1.6, maxWidth: '260px' }}>Your past SOS events will appear here</p>
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => router.push('/dashboard')}
-              style={{ marginTop: '28px', background: '#2C7A50', color: 'white', fontWeight: 600, fontSize: '14px', padding: '12px 24px', borderRadius: '12px', border: 'none', cursor: 'pointer' }}
+              style={{
+                marginTop: '28px', background: '#4F8EF7', color: 'white',
+                fontWeight: 600, fontSize: '14px', padding: '12px 24px',
+                borderRadius: '14px', border: 'none', cursor: 'pointer',
+                boxShadow: '0 4px 20px rgba(79,142,247,0.28)',
+              }}
             >
               Go to dashboard
             </motion.button>
@@ -142,7 +156,15 @@ export default function EmergencyHistoryPage() {
           <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {groups.map(({ month, items }) => (
               <motion.div key={month} variants={fadeUp}>
-                <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '10px' }}>{month}</p>
+                {/* Month chip */}
+                <p style={{
+                  color: '#505068', fontSize: '11px', fontWeight: 700,
+                  letterSpacing: '1.2px', textTransform: 'uppercase',
+                  fontFamily: 'var(--font-mono, monospace)',
+                  marginBottom: '10px',
+                }}>
+                  {month}
+                </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {items.map(em => {
                     const { label, Icon } = getTypeMeta(em.emergency_type)
@@ -152,10 +174,10 @@ export default function EmergencyHistoryPage() {
                         key={em.id}
                         whileTap={{ scale: 0.99 }}
                         style={{
-                          background: '#FFFFFF',
-                          border: '1px solid rgba(16,22,14,0.07)',
+                          background: '#121220',
+                          border: `1px solid ${resolved ? 'rgba(255,255,255,0.06)' : 'rgba(255,55,55,0.20)'}`,
                           borderRadius: '16px',
-                          boxShadow: '0 1px 4px rgba(16,22,14,0.05)',
+                          boxShadow: resolved ? 'none' : '0 2px 16px rgba(255,55,55,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
                           alignItems: 'center',
@@ -163,33 +185,50 @@ export default function EmergencyHistoryPage() {
                         }}
                       >
                         {/* Icon */}
-                        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(185,28,28,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Icon size={18} color="#B91C1C"/>
+                        <div style={{
+                          width: '40px', height: '40px', borderRadius: '12px',
+                          background: resolved ? 'rgba(255,255,255,0.05)' : 'rgba(255,55,55,0.12)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                        }}>
+                          <Icon size={18} color={resolved ? '#505068' : '#FF3737'}/>
                         </div>
 
                         {/* Details */}
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '14px' }}>{label}</p>
-                          <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px', marginTop: '2px' }}>{formatDateTime(em.created_at)}</p>
+                          <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '14px' }}>{label}</p>
+                          <p style={{
+                            color: '#505068', fontSize: '12px', marginTop: '2px',
+                            fontFamily: 'var(--font-mono, monospace)',
+                          }}>
+                            {formatDateTime(em.created_at)}
+                          </p>
                         </div>
 
                         {/* Status badge */}
                         <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
                           {resolved ? (
-                            <span style={{ background: 'rgba(44,122,80,0.12)', color: '#1C3D28', fontSize: '11px', fontWeight: 600, padding: '3px 9px', borderRadius: '99px' }}>
+                            <span style={{
+                              background: 'rgba(0,214,143,0.12)',
+                              color: '#00D68F',
+                              fontSize: '11px', fontWeight: 600,
+                              padding: '3px 9px', borderRadius: '99px',
+                              border: '1px solid rgba(0,214,143,0.20)',
+                            }}>
                               Resolved
                             </span>
                           ) : (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                               <span style={{ position: 'relative', display: 'inline-flex', width: '8px', height: '8px' }}>
-                                <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#B91C1C', opacity: 0.4, animation: 'ping 1.2s cubic-bezier(0,0,0.2,1) infinite' }}/>
-                                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#B91C1C', display: 'block' }}/>
+                                <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#FF3737', opacity: 0.4, animation: 'ping 1.2s cubic-bezier(0,0,0.2,1) infinite' }}/>
+                                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FF3737', display: 'block' }}/>
                               </span>
-                              <span style={{ color: '#B91C1C', fontSize: '11px', fontWeight: 600 }}>Active</span>
+                              <span style={{ color: '#FF3737', fontSize: '11px', fontWeight: 600 }}>Active</span>
                             </div>
                           )}
                           {resolved && (
-                            <span style={{ color: 'rgba(16,22,14,0.3)', fontSize: '11px' }}>{durationHint(em.created_at)}</span>
+                            <span style={{ color: '#505068', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
+                              {durationHint(em.created_at)}
+                            </span>
                           )}
                         </div>
                       </motion.div>

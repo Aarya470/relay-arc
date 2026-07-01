@@ -241,16 +241,30 @@ Keep everything simple and plain English. No medical jargon.`
   }
 
   const score = summary?.priority_score || 0
-  const priorityColor = score >= 8 ? '#FF4A42' : score >= 5 ? '#fcb546' : '#80EF80'
+  const priorityColor = score >= 8 ? '#FF3737' : score >= 5 ? '#F59E0B' : '#00D68F'
+  const priorityBg = score >= 8 ? 'rgba(255,55,55,0.12)' : score >= 5 ? 'rgba(245,158,11,0.12)' : 'rgba(0,214,143,0.12)'
+  const priorityBorder = score >= 8 ? 'rgba(255,55,55,0.28)' : score >= 5 ? 'rgba(245,158,11,0.28)' : 'rgba(0,214,143,0.28)'
 
   if (loading || !patient) return (
-    <div style={{ minHeight: '100vh', background: '#060610', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>Loading...</p>
+    <div style={{ minHeight: '100vh', background: '#070710', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          {[0, 1, 2].map(i => (
+            <motion.div
+              key={i}
+              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4F8EF7' }}
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+            />
+          ))}
+        </div>
+        <p style={{ color: '#505068', fontSize: '13px', letterSpacing: '0.02em' }}>Loading patient data…</p>
+      </div>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#060610', paddingBottom: '40px' }}>
+    <div style={{ minHeight: '100vh', background: '#070710', paddingBottom: '48px' }}>
 
       {/* Jitsi overlay */}
       <AnimatePresence>
@@ -266,27 +280,53 @@ Keep everything simple and plain English. No medical jargon.`
       {/* Reschedule sheet */}
       <AnimatePresence>
         {reschedulingAppt && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 150, display: 'flex', alignItems: 'flex-end' }}
-            onClick={e => { if (e.target === e.currentTarget) setReschedulingAppt(null) }}>
-            <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{ background: '#111116', borderRadius: '24px 24px 0 0', padding: '24px 20px 48px', width: '100%' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <p style={{ color: 'white', fontWeight: 700, fontSize: '18px' }}>Reschedule appointment</p>
-                <button onClick={() => setReschedulingAppt(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                  <X size={20} color="rgba(255,255,255,0.4)" />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 150, display: 'flex', alignItems: 'flex-end' }}
+            onClick={e => { if (e.target === e.currentTarget) setReschedulingAppt(null) }}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 340, damping: 28 }}
+              style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '24px 24px 0 0', padding: '28px 20px 52px', width: '100%' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>Reschedule appointment</p>
+                <button
+                  onClick={() => setReschedulingAppt(null)}
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <X size={15} color="#8888A8" />
                 </button>
               </div>
-              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>New date</p>
-              <input type="date" value={rescheduleDate} onChange={e => setRescheduleDate(e.target.value)}
+
+              <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>New date</p>
+              <input
+                type="date"
+                value={rescheduleDate}
+                onChange={e => setRescheduleDate(e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                style={{ width: '100%', background: '#18181F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '13px 16px', color: 'white', fontSize: '14px', outline: 'none', marginBottom: '12px' }} />
-              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>New time</p>
-              <input type="time" value={rescheduleTime} onChange={e => setRescheduleTime(e.target.value)}
-                style={{ width: '100%', background: '#18181F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '13px 16px', color: 'white', fontSize: '14px', outline: 'none', marginBottom: '20px' }} />
-              <motion.button whileTap={{ scale: 0.97 }} onClick={rescheduleAppointment}
+                style={{ width: '100%', background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '12px', padding: '13px 16px', color: '#EEEEF8', fontSize: '14px', outline: 'none', marginBottom: '14px', boxSizing: 'border-box' }}
+              />
+
+              <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>New time</p>
+              <input
+                type="time"
+                value={rescheduleTime}
+                onChange={e => setRescheduleTime(e.target.value)}
+                style={{ width: '100%', background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '12px', padding: '13px 16px', color: '#EEEEF8', fontSize: '14px', outline: 'none', marginBottom: '22px', boxSizing: 'border-box' }}
+              />
+
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={rescheduleAppointment}
                 disabled={!rescheduleDate}
-                style={{ width: '100%', background: rescheduleDate ? '#4A9EF5' : 'rgba(255,255,255,0.08)', color: rescheduleDate ? 'white' : 'rgba(255,255,255,0.3)', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: rescheduleDate ? 'pointer' : 'default' }}>
+                style={{ width: '100%', background: rescheduleDate ? '#4F8EF7' : 'rgba(255,255,255,0.06)', color: rescheduleDate ? '#ffffff' : '#505068', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '12px', border: 'none', cursor: rescheduleDate ? 'pointer' : 'default', transition: 'background 0.15s' }}
+              >
                 Confirm reschedule
               </motion.button>
             </motion.div>
@@ -295,19 +335,30 @@ Keep everything simple and plain English. No medical jargon.`
       </AnimatePresence>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/care-team/dashboard')}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <ArrowLeft size={16} color="rgba(255,255,255,0.6)"/>
+      <div style={{ background: '#121220', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '56px 20px 0' }}>
+        {/* Back + name row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+          <motion.button
+            whileTap={{ scale: 0.90 }}
+            onClick={() => router.push('/care-team/dashboard')}
+            style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+          >
+            <ArrowLeft size={16} color="#8888A8" />
           </motion.button>
-          <div style={{ flex: 1 }}>
-            <h1 style={{ color: 'white', fontWeight: 700, fontSize: '20px' }}>{patient.full_name}</h1>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>{patient.diagnosis}</p>
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <h1 style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.5px', lineHeight: 1.15, margin: 0 }}>{patient.full_name}</h1>
+            <div style={{ marginTop: '5px' }}>
+              <span style={{ display: 'inline-block', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.25)', borderRadius: '6px', padding: '2px 9px', color: '#4F8EF7', fontSize: '11px', fontWeight: 600 }}>
+                {patient.diagnosis}
+              </span>
+            </div>
           </div>
-          <div style={{ background: `${priorityColor}15`, border: `1px solid ${priorityColor}30`, borderRadius: '12px', padding: '6px 12px', textAlign: 'center' }}>
-            <p style={{ color: priorityColor, fontWeight: 800, fontSize: '20px', lineHeight: 1 }}>{score || '—'}</p>
-            <p style={{ color: `${priorityColor}70`, fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>Priority</p>
+
+          {/* Priority badge */}
+          <div style={{ background: priorityBg, border: `1px solid ${priorityBorder}`, borderRadius: '14px', padding: '8px 14px', textAlign: 'center', flexShrink: 0 }}>
+            <p style={{ color: priorityColor, fontWeight: 900, fontSize: '22px', lineHeight: 1, margin: 0 }}>{score || '—'}</p>
+            <p style={{ color: priorityColor, opacity: 0.6, fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', margin: 0, marginTop: '2px' }}>Priority</p>
           </div>
         </div>
 
@@ -317,188 +368,304 @@ Keep everything simple and plain English. No medical jargon.`
           const typeLabel = (em.emergency_type || 'emergency').replace(/_/g, ' ')
           return (
             <motion.div
-              animate={{ opacity: [1, 0.75, 1] }}
+              animate={{ opacity: [1, 0.72, 1] }}
               transition={{ duration: 1.4, repeat: Infinity }}
-              style={{ background: 'linear-gradient(135deg, rgba(196,32,32,0.2), rgba(220,38,38,0.1))', border: '1.5px solid rgba(220,38,38,0.4)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}
+              style={{ background: 'rgba(255,55,55,0.10)', border: '1.5px solid rgba(255,55,55,0.35)', borderRadius: '14px', padding: '13px 16px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}
             >
-              <AlertTriangle size={20} color="#FF4A42" style={{ flexShrink: 0 }}/>
+              <AlertTriangle size={18} color="#FF3737" style={{ flexShrink: 0 }} />
               <div style={{ flex: 1 }}>
-                <p style={{ color: '#FF4A42', fontWeight: 800, fontSize: '14px', letterSpacing: '-0.2px' }}>Active Emergency</p>
-                <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '12px', marginTop: '2px' }}>{typeLabel} · {new Date(em.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                <p style={{ color: '#FF3737', fontWeight: 800, fontSize: '13px', letterSpacing: '-0.2px', margin: 0 }}>Active Emergency</p>
+                <p style={{ color: '#8888A8', fontSize: '11px', marginTop: '2px', margin: 0 }}>
+                  {typeLabel} · {new Date(em.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
               </div>
-              <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.8, repeat: Infinity }}
-                style={{ width: 10, height: 10, borderRadius: '50%', background: '#FF4A42', flexShrink: 0 }}/>
+              <motion.div
+                animate={{ scale: [1, 1.25, 1] }}
+                transition={{ duration: 0.8, repeat: Infinity }}
+                style={{ width: 9, height: 9, borderRadius: '50%', background: '#FF3737', flexShrink: 0 }}
+              />
             </motion.div>
           )
         })()}
 
-        {/* Schedule button */}
-        <motion.button whileTap={{ scale: 0.97 }}
+        {/* Schedule appointment button */}
+        <motion.button
+          whileTap={{ scale: 0.97 }}
           onClick={() => { setAppointmentType('scheduled'); setShowSchedule(true) }}
-          style={{ width: '100%', background: 'rgba(74,158,245,0.12)', border: '1px solid rgba(74,158,245,0.25)', borderRadius: '14px', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
-          <Calendar size={14} color="#4A9EF5"/>
-          <span style={{ color: '#4A9EF5', fontWeight: 600, fontSize: '13px' }}>Schedule appointment</span>
+          style={{ width: '100%', background: 'rgba(79,142,247,0.10)', border: '1px solid rgba(79,142,247,0.22)', borderRadius: '12px', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginBottom: '18px' }}
+        >
+          <Calendar size={14} color="#4F8EF7" />
+          <span style={{ color: '#4F8EF7', fontWeight: 600, fontSize: '13px' }}>Schedule appointment</span>
         </motion.button>
 
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: '6px', marginTop: '14px', overflowX: 'auto', paddingBottom: '2px' }}>
+        {/* Tab bar */}
+        <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', paddingBottom: '0', scrollbarWidth: 'none' }}>
           {[
             { id: 'overview', label: 'Overview' },
             { id: 'checkins', label: 'Check-ins' },
             { id: 'notes', label: 'Notes' },
             { id: 'appointments', label: 'Appointments' },
           ].map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)}
-              style={{ padding: '8px 16px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap',
-                background: tab === t.id ? 'rgba(74,158,245,0.15)' : 'rgba(255,255,255,0.06)',
-                color: tab === t.id ? '#4A9EF5' : 'rgba(255,255,255,0.4)'
-              }}>
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              style={{
+                position: 'relative',
+                padding: '10px 18px 12px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: tab === t.id ? 700 : 500,
+                whiteSpace: 'nowrap',
+                color: tab === t.id ? '#4F8EF7' : '#505068',
+                transition: 'color 0.15s',
+              }}
+            >
               {t.label}
+              {tab === t.id && (
+                <motion.div
+                  layoutId="tab-underline"
+                  style={{ position: 'absolute', bottom: 0, left: '10px', right: '10px', height: '2px', background: '#4F8EF7', borderRadius: '2px' }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                />
+              )}
             </button>
           ))}
         </div>
       </div>
 
-      <div style={{ padding: '16px' }}>
+      {/* Content */}
+      <div style={{ padding: '18px 16px' }}>
 
-        {/* OVERVIEW */}
+        {/* OVERVIEW TAB */}
         {tab === 'overview' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-            {/* Patient info */}
-            <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Patient info</p>
+            {/* Patient info card */}
+            <div style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '18px' }}>
+              <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>Patient info</p>
               {[
                 { label: 'Phone', value: patient.phone },
                 { label: 'Date of birth', value: patient.date_of_birth },
                 { label: 'Cardiologist', value: patient.cardiologist },
                 { label: 'Surgery date', value: patient.surgery_date },
-                { label: 'Allergies', value: patient.allergies, red: true },
+                { label: 'Blood type', value: patient.blood_type, red: true },
+                { label: 'Allergies', value: patient.allergies, amber: true },
                 { label: 'Conditions', value: patient.diagnosis },
-              ].filter(i => i.value).map((item, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', marginBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '12px' }}>{item.label}</span>
-                  <span style={{ color: (item as any).red ? '#FF4A42' : 'rgba(255,255,255,0.7)', fontSize: '12px', fontWeight: 500, maxWidth: '60%', textAlign: 'right' }}>{item.value}</span>
+              ].filter(i => i.value).map((item, i, arr) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    gap: '12px',
+                    paddingBottom: i < arr.length - 1 ? '10px' : 0,
+                    marginBottom: i < arr.length - 1 ? '10px' : 0,
+                    borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  }}
+                >
+                  <span style={{ color: '#505068', fontSize: '12px', flexShrink: 0 }}>{item.label}</span>
+                  <span style={{
+                    color: (item as any).red ? '#FF3737' : (item as any).amber ? '#F59E0B' : '#EEEEF8',
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    maxWidth: '60%',
+                    textAlign: 'right',
+                  }}>
+                    {item.value}
+                  </span>
                 </div>
               ))}
             </div>
 
-            {/* Medications */}
-            <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <Pill size={12} color="rgba(255,255,255,0.3)"/>
-                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>Medications</p>
+            {/* Medications card */}
+            <div style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                <Pill size={12} color="#4F8EF7" />
+                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px' }}>Medications</p>
               </div>
+
               {patient.medications?.map((m: any, i: number) => {
                 const overdue = isOverdueMed(m)
                 return (
-                  <div key={i} style={{ paddingBottom: '10px', marginBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: overdue ? '6px' : 0 }}>
-                      <p style={{ color: overdue ? '#FF4A42' : 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: overdue ? 600 : 400 }}>{m.name}</p>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', fontFamily: 'monospace' }}>{m.dose} · {m.frequency}</span>
+                  <div
+                    key={i}
+                    style={{
+                      paddingBottom: '12px',
+                      marginBottom: '12px',
+                      borderBottom: '1px solid rgba(255,255,255,0.04)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: overdue ? '8px' : 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ display: 'inline-block', background: 'rgba(79,142,247,0.10)', border: '1px solid rgba(79,142,247,0.20)', borderRadius: '6px', padding: '2px 8px', color: overdue ? '#FF3737' : '#4F8EF7', fontSize: '12px', fontWeight: 600 }}>
+                          {m.name}
+                        </span>
                         {overdue && (
-                          <span style={{ background: 'rgba(255,74,66,0.15)', border: '1px solid rgba(255,74,66,0.3)', color: '#FF4A42', fontSize: '8px', padding: '1px 5px', borderRadius: '4px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.5px' }}>OVERDUE</span>
+                          <span style={{ background: 'rgba(255,55,55,0.12)', border: '1px solid rgba(255,55,55,0.30)', color: '#FF3737', fontSize: '8px', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 700 }}>
+                            OVERDUE
+                          </span>
                         )}
                       </div>
+                      <span style={{ color: '#505068', fontSize: '11px', fontFamily: 'monospace' }}>{m.dose} · {m.frequency}</span>
                     </div>
+
                     {overdue && (
-                      <motion.button whileTap={{ scale: 0.95 }}
+                      <motion.button
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => !reminderSent[m.name] && sendMedReminder(m.name)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '5px', background: reminderSent[m.name] ? 'rgba(128,239,128,0.08)' : 'rgba(252,181,70,0.1)', border: `1px solid ${reminderSent[m.name] ? 'rgba(128,239,128,0.2)' : 'rgba(252,181,70,0.25)'}`, borderRadius: '8px', padding: '5px 10px', cursor: reminderSent[m.name] ? 'default' : 'pointer' }}>
-                        <Bell size={11} color={reminderSent[m.name] ? '#80EF80' : '#fcb546'}/>
-                        <span style={{ color: reminderSent[m.name] ? '#80EF80' : '#fcb546', fontSize: '11px', fontWeight: 600 }}>
-                          {reminderSent[m.name] ? 'Reminder sent' : 'Send notification'}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: reminderSent[m.name] ? 'rgba(0,214,143,0.10)' : 'rgba(255,255,255,0.06)',
+                          border: `1px solid ${reminderSent[m.name] ? 'rgba(0,214,143,0.25)' : 'rgba(255,255,255,0.10)'}`,
+                          borderRadius: '8px',
+                          padding: '6px 12px',
+                          cursor: reminderSent[m.name] ? 'default' : 'pointer',
+                        }}
+                      >
+                        <Bell size={11} color={reminderSent[m.name] ? '#00D68F' : '#8888A8'} />
+                        <span style={{ color: reminderSent[m.name] ? '#00D68F' : '#8888A8', fontSize: '11px', fontWeight: 600 }}>
+                          {reminderSent[m.name] ? 'Reminder sent' : 'Send reminder'}
                         </span>
                       </motion.button>
                     )}
                   </div>
                 )
               })}
+
               {(!patient.medications || patient.medications.length === 0) && (
-                <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '13px' }}>No medications</p>
+                <p style={{ color: '#505068', fontSize: '13px' }}>No medications on file</p>
               )}
             </div>
 
-            {/* Emergency history */}
+            {/* Emergency history card */}
             {emergencies.length > 0 && (
-              <div style={{ background: '#111116', border: '1px solid rgba(255,74,66,0.15)', borderRadius: '16px', padding: '16px' }}>
-                <p style={{ color: 'rgba(255,74,66,0.7)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+              <div style={{ background: '#121220', border: '1px solid rgba(255,55,55,0.18)', borderRadius: '16px', padding: '18px' }}>
+                <p style={{ color: 'rgba(255,55,55,0.7)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>
                   Emergency history — {emergencies.length} events
                 </p>
                 {emergencies.slice(0, 5).map((e, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', marginBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px' }}>{e.emergency_type?.replace('_', ' ')}</span>
-                    <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', fontFamily: 'monospace' }}>{new Date(e.created_at).toLocaleDateString()}</span>
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingBottom: '9px',
+                      marginBottom: '9px',
+                      borderBottom: i < Math.min(emergencies.length, 5) - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#FF3737', flexShrink: 0 }} />
+                      <span style={{ color: '#8888A8', fontSize: '12px' }}>{e.emergency_type?.replace('_', ' ')}</span>
+                    </div>
+                    <span style={{ color: '#505068', fontSize: '11px', fontFamily: 'monospace' }}>
+                      {new Date(e.created_at).toLocaleDateString()}
+                    </span>
                   </div>
                 ))}
               </div>
             )}
 
-            {/* AI Summary */}
-            <div style={{ background: '#111116', border: '1px solid rgba(74,158,245,0.2)', borderRadius: '16px', padding: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <span style={{ fontSize: '14px' }}>🤖</span>
-                <p style={{ color: '#4A9EF5', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Summary</p>
+            {/* AI Summary card */}
+            <div style={{ background: '#121220', border: '1px solid rgba(0,214,143,0.18)', borderRadius: '16px', padding: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                <span style={{ fontSize: '16px' }}>✦</span>
+                <p style={{ color: '#00D68F', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px' }}>AI Summary</p>
               </div>
+
               {generatingSummary ? (
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                  {[0,1,2].map(i => (
-                    <motion.div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4A9EF5' }}
-                      animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}/>
+                  {[0, 1, 2].map(i => (
+                    <motion.div
+                      key={i}
+                      style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00D68F' }}
+                      animate={{ opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                    />
                   ))}
-                  <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '12px', marginLeft: '4px' }}>Generating...</p>
+                  <p style={{ color: '#505068', fontSize: '12px', marginLeft: '4px' }}>Generating summary…</p>
                 </div>
               ) : (
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{aiSummary}</p>
+                <p style={{ color: '#EEEEF8', fontSize: '13px', lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{aiSummary}</p>
+              )}
+
+              {!generatingSummary && !aiSummary && (
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => generateSummary(patient, checkins, emergencies)}
+                  style={{ marginTop: '8px', background: '#4F8EF7', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '10px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
+                >
+                  Generate summary
+                </motion.button>
               )}
             </div>
 
-            {/* Emergency contacts */}
-            <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Emergency contacts</p>
-              {patient.emergency_contacts?.map((c: any, i: number) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingBottom: '10px', marginBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(74,158,245,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A9EF5', fontWeight: 700, fontSize: '13px' }}>
-                    {c.name?.[0]}
+            {/* Emergency contacts card */}
+            {patient.emergency_contacts?.length > 0 && (
+              <div style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '18px' }}>
+                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>Emergency contacts</p>
+                {patient.emergency_contacts.map((c: any, i: number) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      paddingBottom: '12px',
+                      marginBottom: '12px',
+                      borderBottom: i < patient.emergency_contacts.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    }}
+                  >
+                    <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4F8EF7', fontWeight: 700, fontSize: '14px', flexShrink: 0 }}>
+                      {c.name?.[0]}
+                    </div>
+                    <div>
+                      <p style={{ color: '#EEEEF8', fontSize: '13px', fontWeight: 600, margin: 0 }}>{c.name}</p>
+                      <p style={{ color: '#505068', fontSize: '11px', margin: 0, marginTop: '2px' }}>{c.relationship} · {c.phone}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p style={{ color: 'white', fontSize: '13px', fontWeight: 500 }}>{c.name}</p>
-                    <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>{c.relationship} · {c.phone}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
-        {/* CHECK-INS */}
+        {/* CHECK-INS TAB */}
         {tab === 'checkins' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {checkins.length === 0 && (
-              <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13px', textAlign: 'center', padding: '32px 0' }}>No check-ins yet</p>
+              <p style={{ color: '#505068', fontSize: '13px', textAlign: 'center', padding: '40px 0' }}>No check-ins yet</p>
             )}
             {checkins.map((c, i) => (
-              <div key={i} style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', padding: '14px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Check size={14} color="#80EF80"/>
+              <div
+                key={i}
+                style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '16px' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Check size={14} color="#00D68F" />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ color: 'white', fontSize: '12px', fontWeight: 600 }}>Check-in completed</p>
-                    <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace' }}>
+                    <p style={{ color: '#EEEEF8', fontSize: '12px', fontWeight: 700, margin: 0 }}>Check-in completed</p>
+                    <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', margin: 0, marginTop: '2px' }}>
                       {new Date(c.created_at).toLocaleString()}
                     </p>
                   </div>
                 </div>
 
-                {/* Structured clinical summary */}
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '10px' }}>
-                  <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Clinical summary</p>
+                {/* Clinical summary lines */}
+                <div style={{ background: '#1A1A2E', borderRadius: '10px', padding: '12px', marginTop: '4px' }}>
+                  <p style={{ color: '#505068', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>Clinical summary</p>
                   {c.summary?.split('\n').filter((s: string) => s.trim().length > 5).slice(0, 7).map((line: string, j: number) => (
-                    <div key={j} style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-                      <span style={{ color: '#4A9EF5', fontSize: '12px', flexShrink: 0, marginTop: '1px' }}>–</span>
-                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', lineHeight: 1.5 }}>{line.trim().replace(/^[•\-\*]\s*/, '')}</p>
+                    <div key={j} style={{ display: 'flex', gap: '8px', marginBottom: '5px' }}>
+                      <span style={{ color: '#4F8EF7', fontSize: '12px', flexShrink: 0, marginTop: '1px' }}>–</span>
+                      <p style={{ color: '#8888A8', fontSize: '12px', lineHeight: 1.6, margin: 0 }}>{line.trim().replace(/^[•\-\*]\s*/, '')}</p>
                     </div>
                   ))}
                 </div>
@@ -507,93 +674,154 @@ Keep everything simple and plain English. No medical jargon.`
           </div>
         )}
 
-        {/* NOTES */}
+        {/* NOTES TAB */}
         {tab === 'notes' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Add note</p>
-              <textarea value={newNote} onChange={e => setNewNote(e.target.value)}
-                placeholder="Write a clinical note..."
-                style={{ width: '100%', background: '#18181F', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '12px 14px', color: 'white', fontSize: '13px', outline: 'none', resize: 'none', minHeight: '80px', lineHeight: 1.6, marginBottom: '10px' }}/>
-              <motion.button whileTap={{ scale: 0.97 }} onClick={addNote}
-                style={{ width: '100%', background: '#4A9EF5', color: 'white', fontWeight: 600, fontSize: '14px', padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <Send size={14}/> Save note
+            {/* Add note input */}
+            <div style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '16px' }}>
+              <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '12px' }}>Add note</p>
+              <textarea
+                value={newNote}
+                onChange={e => setNewNote(e.target.value)}
+                placeholder="Write a clinical note…"
+                style={{ width: '100%', background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '12px', padding: '13px 14px', color: '#EEEEF8', fontSize: '13px', outline: 'none', resize: 'none', minHeight: '88px', lineHeight: 1.65, marginBottom: '12px', boxSizing: 'border-box', fontFamily: 'inherit' }}
+              />
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={addNote}
+                style={{ width: '100%', background: '#4F8EF7', color: '#ffffff', fontWeight: 700, fontSize: '14px', padding: '13px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              >
+                <Send size={14} />
+                Save note
               </motion.button>
             </div>
 
+            {/* Existing notes */}
             {notes.map((note, i) => (
-              <div key={i} style={{ background: '#111116', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', padding: '14px' }}>
-                <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '10px', fontFamily: 'monospace', marginBottom: '6px' }}>
+              <div
+                key={i}
+                style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '14px 16px' }}
+              >
+                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', marginBottom: '8px' }}>
                   {new Date(note.created_at).toLocaleString()}
                 </p>
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.6 }}>{note.content}</p>
+                <p style={{ color: '#EEEEF8', fontSize: '13px', lineHeight: 1.65 }}>{note.content}</p>
               </div>
             ))}
           </div>
         )}
 
-        {/* APPOINTMENTS */}
+        {/* APPOINTMENTS TAB */}
         {tab === 'appointments' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {appointments.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '32px 0' }}>
-                <Calendar size={32} color="rgba(255,255,255,0.1)" style={{ margin: '0 auto 12px' }}/>
-                <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13px' }}>No appointments yet</p>
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <Calendar size={32} color="#505068" style={{ margin: '0 auto 12px' }} />
+                <p style={{ color: '#505068', fontSize: '13px' }}>No appointments yet</p>
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => { setAppointmentType('scheduled'); setShowSchedule(true) }}
+                  style={{ marginTop: '16px', background: '#4F8EF7', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '11px 22px', borderRadius: '12px', border: 'none', cursor: 'pointer' }}
+                >
+                  Schedule first appointment
+                </motion.button>
               </div>
             )}
+
             {appointments.map((appt, i) => {
               const joinable = isJoinable(appt)
+              const statusColor = appt.status === 'confirmed' ? '#00D68F'
+                : appt.status === 'declined' ? '#FF3737'
+                : appt.status === 'completed' ? '#4F8EF7'
+                : '#F59E0B'
+              const statusBg = appt.status === 'confirmed' ? 'rgba(0,214,143,0.08)'
+                : appt.status === 'declined' ? 'rgba(255,55,55,0.08)'
+                : appt.status === 'completed' ? 'rgba(79,142,247,0.08)'
+                : 'rgba(245,158,11,0.08)'
+              const borderColor = appt.status === 'confirmed' ? 'rgba(0,214,143,0.20)'
+                : appt.status === 'declined' ? 'rgba(255,55,55,0.18)'
+                : appt.status === 'completed' ? 'rgba(79,142,247,0.18)'
+                : 'rgba(245,158,11,0.20)'
+
               return (
-                <div key={i} style={{ background: joinable ? 'rgba(74,158,245,0.06)' : '#111116', border: `1px solid ${joinable ? 'rgba(74,158,245,0.25)' : appt.status === 'confirmed' ? 'rgba(128,239,128,0.2)' : appt.status === 'declined' ? 'rgba(255,74,66,0.15)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '14px', padding: '14px' }}>
+                <div
+                  key={i}
+                  style={{
+                    background: joinable ? 'rgba(79,142,247,0.07)' : statusBg,
+                    border: `1px solid ${joinable ? 'rgba(79,142,247,0.30)' : borderColor}`,
+                    borderRadius: '16px',
+                    padding: '16px',
+                  }}
+                >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                    <span style={{ color: appt.type === 'immediate' ? '#FF4A42' : '#4A9EF5', fontSize: '13px', fontWeight: 600 }}>
+                    <span style={{ color: appt.type === 'immediate' ? '#FF3737' : '#4F8EF7', fontSize: '13px', fontWeight: 700 }}>
                       {appt.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
                     </span>
-                    <span style={{
-                      color: appt.status === 'confirmed' ? '#80EF80' : appt.status === 'declined' ? '#FF4A42' : '#fcb546',
-                      fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase'
-                    }}>
+                    <span style={{ color: statusColor, fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', fontWeight: 600 }}>
                       {appt.status}
                     </span>
                   </div>
+
                   {appt.scheduled_at && (
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '4px' }}>
+                    <p style={{ color: '#8888A8', fontSize: '12px', marginBottom: '4px' }}>
                       {parseTS(appt.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                     </p>
                   )}
+
                   {(appt.notes || appt.patient_concern) && (
-                    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', marginBottom: '10px' }}>
+                    <p style={{ color: '#505068', fontSize: '12px', marginBottom: '12px', lineHeight: 1.5 }}>
                       {appt.notes || appt.patient_concern}
                     </p>
                   )}
+
+                  {/* Pending actions */}
                   {appt.status === 'pending' && (
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => confirmAppointment(appt.id)}
-                        style={{ flex: 1, background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.25)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}>
-                        <Check size={13} color="#80EF80"/>
-                        <span style={{ color: '#80EF80', fontSize: '12px', fontWeight: 600 }}>Confirm</span>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                      <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => confirmAppointment(appt.id)}
+                        style={{ flex: 1, background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.22)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
+                      >
+                        <Check size={13} color="#00D68F" />
+                        <span style={{ color: '#00D68F', fontSize: '12px', fontWeight: 700 }}>Confirm</span>
                       </motion.button>
-                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setReschedulingAppt(appt); setRescheduleDate(''); setRescheduleTime('09:00') }}
-                        style={{ flex: 1, background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.2)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                        <span style={{ color: '#4A9EF5', fontSize: '12px', fontWeight: 600 }}>Reschedule</span>
+                      <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => { setReschedulingAppt(appt); setRescheduleDate(''); setRescheduleTime('09:00') }}
+                        style={{ flex: 1, background: 'rgba(79,142,247,0.08)', border: '1px solid rgba(79,142,247,0.18)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                      >
+                        <span style={{ color: '#4F8EF7', fontSize: '12px', fontWeight: 700 }}>Reschedule</span>
                       </motion.button>
-                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => declineAppointment(appt.id)}
-                        style={{ width: '40px', background: 'rgba(255,74,66,0.08)', border: '1px solid rgba(255,74,66,0.2)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-                        <X size={13} color="#FF4A42"/>
+                      <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => declineAppointment(appt.id)}
+                        style={{ width: '40px', background: 'rgba(255,55,55,0.08)', border: '1px solid rgba(255,55,55,0.18)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+                      >
+                        <X size={13} color="#FF3737" />
                       </motion.button>
                     </div>
                   )}
+
+                  {/* Confirmed but not yet joinable — show reschedule option */}
                   {appt.status === 'confirmed' && !joinable && (
-                    <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setReschedulingAppt(appt); setRescheduleDate(''); setRescheduleTime('09:00') }}
-                      style={{ marginTop: '10px', background: 'rgba(74,158,245,0.08)', border: '1px solid rgba(74,158,245,0.18)', borderRadius: '10px', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-                      <span style={{ color: '#4A9EF5', fontSize: '12px', fontWeight: 600 }}>Reschedule</span>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => { setReschedulingAppt(appt); setRescheduleDate(''); setRescheduleTime('09:00') }}
+                      style={{ marginTop: '12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                    >
+                      <span style={{ color: '#8888A8', fontSize: '12px', fontWeight: 600 }}>Reschedule</span>
                     </motion.button>
                   )}
+
+                  {/* Joinable — show video call button */}
                   {joinable && (
-                    <motion.button whileTap={{ scale: 0.97 }} onClick={() => setActiveCall(appt)}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#4A9EF5', borderRadius: '10px', padding: '11px', color: 'white', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer', marginTop: '10px' }}>
-                      <Video size={14}/>
-                      Join call
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setActiveCall(appt)}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#4F8EF7', borderRadius: '10px', padding: '12px', color: '#ffffff', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer', marginTop: '12px' }}
+                    >
+                      <Video size={15} />
+                      Join video call
                     </motion.button>
                   )}
                 </div>
@@ -606,88 +834,130 @@ Keep everything simple and plain English. No medical jargon.`
       {/* Schedule sheet */}
       <AnimatePresence>
         {showSchedule && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
-            onClick={e => { if (e.target === e.currentTarget) setShowSchedule(false) }}>
-            <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', bounce: 0.1 }}
-              style={{ background: '#111116', borderRadius: '24px 24px 0 0', padding: '24px 20px 48px', width: '100%', maxHeight: '85vh', overflowY: 'auto' }}>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <p style={{ color: 'white', fontWeight: 700, fontSize: '18px' }}>Schedule appointment</p>
-                <button onClick={() => setShowSchedule(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
-                  <X size={20}/>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.80)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
+            onClick={e => { if (e.target === e.currentTarget) setShowSchedule(false) }}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', bounce: 0.1 }}
+              style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '24px 24px 0 0', padding: '24px 20px 52px', width: '100%', maxHeight: '88vh', overflowY: 'auto' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
+                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>Schedule appointment</p>
+                <button
+                  onClick={() => setShowSchedule(false)}
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <X size={15} color="#8888A8" />
                 </button>
               </div>
 
-              {(
-                <>
-                  {/* Calendar */}
-                  <div style={{ background: '#18181F', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                      <button onClick={() => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y-1) } else setCalMonth(m => m-1) }}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', fontSize: '18px', padding: '4px 8px' }}>‹</button>
-                      <p style={{ color: 'white', fontWeight: 600, fontSize: '14px' }}>{monthName}</p>
-                      <button onClick={() => { if (calMonth === 11) { setCalMonth(0); setCalYear(y => y+1) } else setCalMonth(m => m+1) }}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', fontSize: '18px', padding: '4px 8px' }}>›</button>
-                    </div>
+              {/* Calendar picker */}
+              <div style={{ background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                  <button
+                    onClick={() => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y - 1) } else setCalMonth(m => m - 1) }}
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '8px', cursor: 'pointer', color: '#8888A8', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <ChevronLeft size={15} />
+                  </button>
+                  <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '14px' }}>{monthName}</p>
+                  <button
+                    onClick={() => { if (calMonth === 11) { setCalMonth(0); setCalYear(y => y + 1) } else setCalMonth(m => m + 1) }}
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '8px', cursor: 'pointer', color: '#8888A8', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <ChevronRight size={15} />
+                  </button>
+                </div>
 
-                    {/* Day headers */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '8px' }}>
-                      {['S','M','T','W','T','F','S'].map((d, i) => (
-                        <p key={i} style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', textAlign: 'center', fontFamily: 'monospace' }}>{d}</p>
-                      ))}
-                    </div>
+                {/* Day headers */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '8px' }}>
+                  {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
+                    <p key={i} style={{ color: '#505068', fontSize: '11px', textAlign: 'center', fontFamily: 'monospace', margin: 0 }}>{d}</p>
+                  ))}
+                </div>
 
-                    {/* Days grid */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
-                      {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`}/>)}
-                      {Array.from({ length: daysInMonth }).map((_, i) => {
-                        const day = i + 1
-                        const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`
-                        const isSelected = selectedDate === dateStr
-                        const isPast = new Date(dateStr) < new Date(today.toDateString())
-                        return (
-                          <button key={day} onClick={() => !isPast && setSelectedDate(dateStr)} disabled={isPast}
-                            style={{ padding: '8px 0', borderRadius: '8px', border: 'none', cursor: isPast ? 'default' : 'pointer', fontSize: '13px',
-                              background: isSelected ? '#4A9EF5' : 'transparent',
-                              color: isSelected ? 'white' : isPast ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.7)',
-                              fontWeight: isSelected ? 700 : 400
-                            }}>
-                            {day}
-                          </button>
-                        )
-                      })}
-                    </div>
+                {/* Day grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '3px' }}>
+                  {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
+                  {Array.from({ length: daysInMonth }).map((_, i) => {
+                    const day = i + 1
+                    const dateStr = `${calYear}-${String(calMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+                    const isSelected = selectedDate === dateStr
+                    const isPast = new Date(dateStr) < new Date(today.toDateString())
+                    return (
+                      <button
+                        key={day}
+                        onClick={() => !isPast && setSelectedDate(dateStr)}
+                        disabled={isPast}
+                        style={{
+                          padding: '8px 0',
+                          borderRadius: '8px',
+                          border: 'none',
+                          cursor: isPast ? 'default' : 'pointer',
+                          fontSize: '13px',
+                          background: isSelected ? '#4F8EF7' : 'transparent',
+                          color: isSelected ? '#ffffff' : isPast ? '#505068' : '#EEEEF8',
+                          fontWeight: isSelected ? 700 : 400,
+                        }}
+                      >
+                        {day}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Time picker */}
+              {selectedDate && (
+                <div style={{ background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '14px', marginBottom: '12px' }}>
+                  <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '10px' }}>Select time</p>
+                  <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none' }}>
+                    {times.map(t => (
+                      <button
+                        key={t}
+                        onClick={() => setSelectedTime(t)}
+                        style={{
+                          padding: '8px 14px',
+                          borderRadius: '20px',
+                          border: selectedTime === t ? '1px solid rgba(79,142,247,0.40)' : '1px solid rgba(255,255,255,0.08)',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          whiteSpace: 'nowrap',
+                          flexShrink: 0,
+                          background: selectedTime === t ? 'rgba(79,142,247,0.18)' : 'rgba(255,255,255,0.04)',
+                          color: selectedTime === t ? '#4F8EF7' : '#8888A8',
+                        }}
+                      >
+                        {t}
+                      </button>
+                    ))}
                   </div>
-
-                  {/* Time scroll */}
-                  {selectedDate && (
-                    <div style={{ background: '#18181F', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '14px', marginBottom: '12px' }}>
-                      <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Select time</p>
-                      <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
-                        {times.map(t => (
-                          <button key={t} onClick={() => setSelectedTime(t)}
-                            style={{ padding: '8px 14px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0,
-                              background: selectedTime === t ? '#4A9EF5' : 'rgba(255,255,255,0.06)',
-                              color: selectedTime === t ? 'white' : 'rgba(255,255,255,0.5)'
-                            }}>
-                            {t}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
+                </div>
               )}
 
-              <textarea value={appointmentConcern} onChange={e => setAppointmentConcern(e.target.value)}
-                placeholder="Reason for appointment..."
-                style={{ width: '100%', background: '#18181F', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '14px 16px', color: 'white', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '70px', marginBottom: '12px' }}/>
+              {/* Reason textarea */}
+              <textarea
+                value={appointmentConcern}
+                onChange={e => setAppointmentConcern(e.target.value)}
+                placeholder="Reason for appointment…"
+                style={{ width: '100%', background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '12px', padding: '14px 16px', color: '#EEEEF8', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '72px', marginBottom: '14px', boxSizing: 'border-box', fontFamily: 'inherit', lineHeight: 1.55 }}
+              />
 
-              <motion.button whileTap={{ scale: 0.97 }} onClick={scheduleAppointment}
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={scheduleAppointment}
                 disabled={!selectedDate}
-                style={{ width: '100%', background: '#4A9EF5', color: 'white', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', opacity: !selectedDate ? 0.5 : 1 }}>
-                {`Confirm for ${selectedDate ? `${selectedDate} at ${selectedTime}` : '...'}`}
+                style={{ width: '100%', background: selectedDate ? '#4F8EF7' : 'rgba(255,255,255,0.06)', color: selectedDate ? '#ffffff' : '#505068', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '12px', border: 'none', cursor: selectedDate ? 'pointer' : 'default', transition: 'background 0.15s' }}
+              >
+                {selectedDate ? `Confirm for ${selectedDate} at ${selectedTime}` : 'Select a date to continue'}
               </motion.button>
             </motion.div>
           </motion.div>

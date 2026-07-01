@@ -61,8 +61,10 @@ export default function HistoryPage() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', padding: '80px 16px 100px' }}>
-      {[1,2,3,4,5].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '14px', background: 'rgba(16,22,14,0.06)', marginBottom: '8px' }}/>)}
+    <div style={{ minHeight: '100dvh', background: '#070710', padding: '80px 16px 100px' }}>
+      {[1,2,3,4,5].map(i => (
+        <Skeleton key={i} style={{ height: '56px', borderRadius: '14px', background: 'rgba(255,255,255,0.06)', marginBottom: '8px' }}/>
+      ))}
     </div>
   )
 
@@ -70,27 +72,38 @@ export default function HistoryPage() {
   const emergencyGroups = groupByDate(emergencies)
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '100px' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(16,22,14,0.07)' }}>
+      <div style={{
+        padding: '56px 20px 16px',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             transition={spring}
             onClick={() => router.push('/dashboard')}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.09)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(16,22,14,0.06)' }}
+            style={{
+              width: '36px', height: '36px', borderRadius: '10px',
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
           >
-            <ArrowLeft size={15} color="rgba(16,22,14,0.5)"/>
+            <ArrowLeft size={15} color="#8888A8"/>
           </motion.button>
           <div>
-            <h1 style={{ color: '#0F1A0E', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Health History</h1>
-            <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px' }}>Your check-ins and emergencies</p>
+            <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Health History</h1>
+            <p style={{ color: '#505068', fontSize: '12px' }}>Your check-ins and emergencies</p>
           </div>
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '6px', background: 'rgba(16,22,14,0.05)', borderRadius: '14px', padding: '4px' }}>
+        <div style={{
+          display: 'flex', gap: '6px',
+          background: 'rgba(255,255,255,0.04)',
+          borderRadius: '14px', padding: '4px',
+        }}>
           {([['checkins', 'Check-ins', Heart, checkins.length], ['emergencies', 'Emergencies', AlertTriangle, emergencies.length]] as const).map(([key, label, Icon, count]) => (
             <motion.button
               key={key}
@@ -99,14 +112,32 @@ export default function HistoryPage() {
               style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 padding: '9px', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                background: tab === key ? '#FFFFFF' : 'transparent',
-                boxShadow: tab === key ? '0 1px 4px rgba(16,22,14,0.1)' : 'none',
+                background: tab === key ? '#121220' : 'transparent',
+                boxShadow: tab === key ? '0 1px 4px rgba(0,0,0,0.30)' : 'none',
                 transition: 'background 0.15s ease, box-shadow 0.15s ease',
               }}
             >
-              <Icon size={13} color={tab === key ? '#0F1A0E' : 'rgba(16,22,14,0.38)'}/>
-              <span style={{ color: tab === key ? '#0F1A0E' : 'rgba(16,22,14,0.38)', fontSize: '13px', fontWeight: tab === key ? 700 : 500 }}>{label}</span>
-              <span style={{ background: tab === key ? 'rgba(44,122,80,0.12)' : 'transparent', color: tab === key ? '#2C7A50' : 'rgba(16,22,14,0.3)', fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '99px', fontFamily: 'monospace' }}>{count}</span>
+              <Icon size={13} color={tab === key ? '#EEEEF8' : '#505068'}/>
+              <span style={{
+                color: tab === key ? '#EEEEF8' : '#505068',
+                fontSize: '13px',
+                fontWeight: tab === key ? 700 : 500,
+              }}>
+                {label}
+              </span>
+              <span style={{
+                background: tab === key
+                  ? (key === 'emergencies' ? 'rgba(255,55,55,0.12)' : 'rgba(0,214,143,0.12)')
+                  : 'transparent',
+                color: tab === key
+                  ? (key === 'emergencies' ? '#FF3737' : '#00D68F')
+                  : '#505068',
+                fontSize: '10px', fontWeight: 700,
+                padding: '2px 6px', borderRadius: '99px',
+                fontFamily: 'monospace',
+              }}>
+                {count}
+              </span>
             </motion.button>
           ))}
         </div>
@@ -118,47 +149,82 @@ export default function HistoryPage() {
             <motion.div key="checkins" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 8 }}>
               {checkins.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '56px 0' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(44,122,80,0.1)', border: '1px solid rgba(44,122,80,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-                    <Heart size={20} color="rgba(44,122,80,0.5)"/>
+                  <div style={{
+                    width: '48px', height: '48px', borderRadius: '50%',
+                    background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.18)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    margin: '0 auto 12px',
+                  }}>
+                    <Heart size={20} color="rgba(0,214,143,0.60)"/>
                   </div>
-                  <p style={{ color: 'rgba(16,22,14,0.3)', fontSize: '14px' }}>No check-ins yet</p>
-                  <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/checkin')}
-                    style={{ marginTop: '12px', background: 'rgba(44,122,80,0.1)', border: '1px solid rgba(44,122,80,0.24)', color: '#2C7A50', fontSize: '13px', fontWeight: 700, padding: '10px 20px', borderRadius: '12px', cursor: 'pointer' }}>
+                  <p style={{ color: '#505068', fontSize: '14px' }}>No check-ins yet</p>
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => router.push('/checkin')}
+                    style={{
+                      marginTop: '12px',
+                      background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.24)',
+                      color: '#00D68F', fontSize: '13px', fontWeight: 700,
+                      padding: '10px 20px', borderRadius: '12px', cursor: 'pointer',
+                    }}
+                  >
                     Start a check-in
                   </motion.button>
                 </div>
               ) : (
                 Object.entries(checkinGroups).map(([date, items]) => (
                   <div key={date} style={{ marginBottom: '20px' }}>
+                    {/* Date chip */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                      <Calendar size={12} color="rgba(16,22,14,0.3)"/>
-                      <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px' }}>{date}</p>
+                      <Calendar size={12} color="#505068"/>
+                      <p style={{
+                        color: '#505068', fontSize: '11px',
+                        fontFamily: 'var(--font-mono, monospace)',
+                        textTransform: 'uppercase', letterSpacing: '1px',
+                      }}>
+                        {date}
+                      </p>
                     </div>
                     {(items as Checkin[]).map((c: Checkin) => (
                       <motion.div
                         key={c.id}
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
-                        style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.07)', borderRadius: '16px', marginBottom: '8px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(16,22,14,0.05)' }}
+                        style={{
+                          background: '#121220',
+                          border: '1px solid rgba(255,255,255,0.06)',
+                          borderRadius: '16px', marginBottom: '8px', overflow: 'hidden',
+                        }}
                       >
                         <motion.button
                           whileTap={{ scale: 0.99 }}
                           onClick={() => setExpanded(expanded === c.id ? null : c.id)}
-                          style={{ width: '100%', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+                          style={{
+                            width: '100%', padding: '14px 16px',
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                          }}
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(44,122,80,0.1)', border: '1px solid rgba(44,122,80,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                              <Heart size={14} color="#2C7A50"/>
+                            <div style={{
+                              width: '32px', height: '32px', borderRadius: '10px',
+                              background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.18)',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                            }}>
+                              <Heart size={14} color="#00D68F"/>
                             </div>
                             <div>
-                              <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '13px' }}>Check-in</p>
-                              <p style={{ color: 'rgba(16,22,14,0.35)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
+                              <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '13px' }}>Check-in</p>
+                              <p style={{
+                                color: '#505068', fontSize: '11px',
+                                fontFamily: 'var(--font-mono, monospace)',
+                              }}>
                                 {parseTS(c.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                               </p>
                             </div>
                           </div>
                           <motion.div animate={{ rotate: expanded === c.id ? 180 : 0 }} transition={{ duration: 0.18 }}>
-                            <ChevronDown size={14} color="rgba(16,22,14,0.3)"/>
+                            <ChevronDown size={14} color="#505068"/>
                           </motion.div>
                         </motion.button>
                         <AnimatePresence>
@@ -170,8 +236,13 @@ export default function HistoryPage() {
                               transition={{ duration: 0.2 }}
                               style={{ overflow: 'hidden' }}
                             >
-                              <div style={{ padding: '0 16px 16px', borderTop: '1px solid rgba(16,22,14,0.06)', paddingTop: '12px' }}>
-                                <p style={{ color: 'rgba(16,22,14,0.58)', fontSize: '13px', lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>{c.summary}</p>
+                              <div style={{
+                                padding: '12px 16px 16px',
+                                borderTop: '1px solid rgba(255,255,255,0.06)',
+                              }}>
+                                <p style={{ color: '#8888A8', fontSize: '13px', lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>
+                                  {c.summary}
+                                </p>
                               </div>
                             </motion.div>
                           )}
@@ -188,35 +259,61 @@ export default function HistoryPage() {
             <motion.div key="emergencies" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }}>
               {emergencies.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '56px 0' }}>
-                  <p style={{ color: 'rgba(16,22,14,0.3)', fontSize: '14px' }}>No emergency events</p>
+                  <p style={{ color: '#505068', fontSize: '14px' }}>No emergency events</p>
                 </div>
               ) : (
                 Object.entries(emergencyGroups).map(([date, items]) => (
                   <div key={date} style={{ marginBottom: '20px' }}>
+                    {/* Date chip */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                      <Calendar size={12} color="rgba(16,22,14,0.3)"/>
-                      <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px' }}>{date}</p>
+                      <Calendar size={12} color="#505068"/>
+                      <p style={{
+                        color: '#505068', fontSize: '11px',
+                        fontFamily: 'var(--font-mono, monospace)',
+                        textTransform: 'uppercase', letterSpacing: '1px',
+                      }}>
+                        {date}
+                      </p>
                     </div>
                     {(items as Emergency[]).map((e: Emergency) => (
                       <div
                         key={e.id}
-                        style={{ background: e.status === 'active' ? 'rgba(185,28,28,0.04)' : '#FFFFFF', border: `1px solid ${e.status === 'active' ? 'rgba(185,28,28,0.2)' : 'rgba(16,22,14,0.07)'}`, borderRadius: '16px', padding: '14px 16px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 2px 8px rgba(16,22,14,0.04)' }}
+                        style={{
+                          background: e.status === 'active' ? 'rgba(255,55,55,0.06)' : '#121220',
+                          border: `1px solid ${e.status === 'active' ? 'rgba(255,55,55,0.22)' : 'rgba(255,255,255,0.06)'}`,
+                          borderRadius: '16px', padding: '14px 16px', marginBottom: '8px',
+                          display: 'flex', alignItems: 'center', gap: '12px',
+                          boxShadow: e.status === 'active' ? '0 2px 16px rgba(255,55,55,0.08)' : 'none',
+                        }}
                       >
-                        <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: e.status === 'resolved' ? 'rgba(16,22,14,0.05)' : 'rgba(185,28,28,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <AlertTriangle size={14} color={e.status === 'resolved' ? 'rgba(16,22,14,0.35)' : '#B91C1C'}/>
+                        <div style={{
+                          width: '32px', height: '32px', borderRadius: '10px',
+                          background: e.status === 'resolved' ? 'rgba(255,255,255,0.05)' : 'rgba(255,55,55,0.12)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                        }}>
+                          <AlertTriangle size={14} color={e.status === 'resolved' ? '#505068' : '#FF3737'}/>
                         </div>
                         <div style={{ flex: 1 }}>
-                          <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '13px' }}>{EMERGENCY_LABELS[e.emergency_type] || e.emergency_type}</p>
-                          <p style={{ color: 'rgba(16,22,14,0.35)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
+                          <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '13px' }}>
+                            {EMERGENCY_LABELS[e.emergency_type] || e.emergency_type}
+                          </p>
+                          <p style={{
+                            color: '#505068', fontSize: '11px',
+                            fontFamily: 'var(--font-mono, monospace)',
+                          }}>
                             {parseTS(e.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                           </p>
                         </div>
+                        {/* Event type badge */}
                         <span style={{
-                          fontSize: '9px', fontFamily: 'monospace', fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase' as const,
+                          fontSize: '9px', fontFamily: 'monospace', fontWeight: 700,
+                          letterSpacing: '0.5px', textTransform: 'uppercase' as const,
                           padding: '3px 8px', borderRadius: '99px',
-                          background: e.status === 'resolved' ? 'rgba(16,22,14,0.06)' : 'rgba(185,28,28,0.1)',
-                          color: e.status === 'resolved' ? 'rgba(16,22,14,0.45)' : '#B91C1C',
-                          border: `1px solid ${e.status === 'resolved' ? 'rgba(16,22,14,0.08)' : 'rgba(185,28,28,0.2)'}`,
+                          background: e.status === 'resolved'
+                            ? 'rgba(0,214,143,0.12)'
+                            : 'rgba(255,55,55,0.12)',
+                          color: e.status === 'resolved' ? '#00D68F' : '#FF3737',
+                          border: `1px solid ${e.status === 'resolved' ? 'rgba(0,214,143,0.20)' : 'rgba(255,55,55,0.22)'}`,
                         }}>
                           {e.status}
                         </span>

@@ -42,11 +42,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#5C8B74" />
+        <meta name="theme-color" content="#070710" />
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
       <body className={`${jakarta.variable} ${mono.variable} ${jakarta.className}`}>
-        <div className="min-h-[100dvh] w-full relative bg-[#F2EFE9]">
+        <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
           {children}
           <LegalModal />
           <MeetingAlert />

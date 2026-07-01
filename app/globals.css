@@ -3,27 +3,54 @@
 @tailwind utilities;
 
 :root {
-  --bg: #F0EDE5;
-  --surface: #FFFFFF;
-  --border: rgba(16,22,14,0.08);
-  --border-mid: rgba(16,22,14,0.12);
-  --text: #0F1A0E;
-  --text-2: #566253;
-  --text-3: #96A092;
-  --green: #1C3D28;
-  --green-accent: #2C7A50;
-  --red: #B91C1C;
-  --red-soft: rgba(185,28,28,0.07);
-  --amber: #B45309;
+  /* Backgrounds */
+  --bg:        #070710;
+  --bg-2:      #0D0D1A;
+  --surface:   #121220;
+  --surface-2: #1A1A2E;
+  --surface-3: #22223A;
+
+  /* Borders */
+  --border:        rgba(255,255,255,0.06);
+  --border-mid:    rgba(255,255,255,0.10);
+  --border-strong: rgba(255,255,255,0.18);
+
+  /* Text */
+  --text:   #EEEEF8;
+  --text-2: #8888A8;
+  --text-3: #505068;
+
+  /* Emergency red */
+  --red:      #FF3737;
+  --red-dim:  #CC2222;
+  --red-soft: rgba(255,55,55,0.12);
+  --red-glow: 0 0 40px rgba(255,55,55,0.4);
+
+  /* Health green */
+  --green:      #00D68F;
+  --green-dim:  #00A86B;
+  --green-soft: rgba(0,214,143,0.12);
+
+  /* Navigation blue */
+  --blue:      #4F8EF7;
+  --blue-dim:  #2B6EE0;
+  --blue-soft: rgba(79,142,247,0.12);
+
+  /* Amber warning */
+  --amber:      #F59E0B;
+  --amber-soft: rgba(245,158,11,0.12);
+
+  /* Radius scale */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r:    16px;
+  --r-lg: 22px;
+  --r-xl: 32px;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
@@ -32,20 +59,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: 'tnum' on, 'ss01' on;
+  font-feature-settings: 'ss01' on;
+  min-height: 100dvh;
 }
 
 .font-mono, code, kbd, pre {
   font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
 }
 
-::-webkit-scrollbar {
-  width: 0px;
-  display: none;
-}
+::-webkit-scrollbar { width: 0; display: none; }
 
 ::selection {
-  background: rgba(44,122,80,0.16);
+  background: rgba(79,142,247,0.25);
   color: var(--text);
 }
 
@@ -54,28 +79,62 @@ button, input, textarea, select {
   -webkit-tap-highlight-color: transparent;
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: var(--text-3);
-}
+input::placeholder, textarea::placeholder { color: var(--text-3); }
 
 input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+/* ── Design tokens ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
 }
 
-/* Utility classes */
-.card {
-  background: #fff;
+.card-2 {
+  background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--r);
 }
 
 .label {
   font-family: var(--font-mono), monospace;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text-3);
 }
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-2) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: var(--r-sm);
+}
+
+/* ── Pulse ring for live indicators ── */
+@keyframes pulse-ring {
+  0%   { transform: scale(0.85); opacity: 1; }
+  70%  { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ── Page fade-in ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter { animation: fadeIn 0.3s ease both; }

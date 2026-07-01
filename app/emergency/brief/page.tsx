@@ -151,8 +151,8 @@ function BriefContent() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F0EDE5' }}>
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#2C7A50' }} />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#070710' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#4F8EF7' }} />
       </div>
     )
   }
@@ -162,37 +162,42 @@ function BriefContent() {
   const primaryContact = contacts[0]
 
   return (
-    <div className="min-h-screen" style={{ background: '#F0EDE5' }}>
+    <div className="min-h-screen" style={{ background: '#070710' }}>
       {/* Red alert header */}
-      <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3" style={{ background: '#B91C1C' }}>
+      <div
+        className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3"
+        style={{ background: 'linear-gradient(135deg, #FF3737, #CC1A1A)', boxShadow: '0 2px 20px rgba(255,55,55,0.30)' }}
+      >
         <button
           onClick={() => router.back()}
           className="p-1 rounded-full"
-          style={{ color: '#fff' }}
+          style={{ color: 'rgba(255,255,255,0.80)' }}
           aria-label="Go back"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         <span className="flex items-center gap-2 font-bold text-white text-lg tracking-tight">
-          <span
-            className="w-2.5 h-2.5 rounded-full bg-white animate-pulse"
-            style={{ boxShadow: '0 0 0 3px rgba(255,255,255,0.35)' }}
+          <motion.span
+            animate={{ opacity: [1, 0.2, 1] }}
+            transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-2.5 h-2.5 rounded-full bg-white inline-block"
+            style={{ boxShadow: '0 0 0 3px rgba(255,255,255,0.25)' }}
           />
           ER Medical Brief
         </span>
         {hospitalName && (
-          <span className="ml-auto text-red-100 text-sm truncate max-w-[120px]">{hospitalName}</span>
+          <span className="ml-auto text-sm truncate max-w-[120px]" style={{ color: 'rgba(255,255,255,0.70)' }}>{hospitalName}</span>
         )}
       </div>
 
       {/* SHOW TO HOSPITAL STAFF banner */}
       <div
-        className="w-full text-center py-4 px-4"
-        style={{ background: '#B91C1C' }}
+        className="w-full text-center py-3 px-4"
+        style={{ background: 'rgba(255,55,55,0.10)', borderBottom: '1px solid rgba(255,55,55,0.18)' }}
       >
         <p
-          className="font-black tracking-widest uppercase text-white"
-          style={{ fontSize: '1.05rem', letterSpacing: '0.18em', textShadow: '0 1px 4px rgba(0,0,0,0.25)' }}
+          className="font-black tracking-widest uppercase"
+          style={{ fontSize: '0.85rem', letterSpacing: '0.20em', color: '#FF3737' }}
         >
           SHOW TO HOSPITAL STAFF
         </p>
@@ -202,16 +207,16 @@ function BriefContent() {
         {/* Patient */}
         <Section>
           <SectionLabel>PATIENT</SectionLabel>
-          <p className="text-xl font-bold" style={{ color: '#0F1A0E' }}>
-            {profile?.full_name || <span className="opacity-40">Unknown</span>}
+          <p className="text-xl font-bold" style={{ color: '#EEEEF8' }}>
+            {profile?.full_name || <span style={{ color: '#505068' }}>Unknown</span>}
           </p>
           {profile?.date_of_birth && (
-            <p className="text-sm mt-0.5" style={{ color: '#0F1A0E', opacity: 0.6 }}>
+            <p className="text-sm mt-0.5" style={{ color: '#8888A8' }}>
               DOB: {profile.date_of_birth}
             </p>
           )}
           {profile?.diagnosis && (
-            <p className="text-sm mt-1" style={{ color: '#0F1A0E', opacity: 0.75 }}>
+            <p className="text-sm mt-1" style={{ color: '#8888A8' }}>
               {profile.diagnosis}
             </p>
           )}
@@ -221,8 +226,8 @@ function BriefContent() {
         <Section>
           <SectionLabel>BLOOD TYPE</SectionLabel>
           <p
-            className="text-4xl font-black tracking-tight"
-            style={{ color: '#B91C1C', lineHeight: 1.1 }}
+            className="font-black tracking-tight"
+            style={{ color: '#FF3737', lineHeight: 1.1, fontSize: '3rem', fontFamily: 'var(--font-mono, monospace)' }}
           >
             {profile?.blood_type || '?'}
           </p>
@@ -230,13 +235,13 @@ function BriefContent() {
 
         {/* Allergies */}
         <Section highlight={!!profile?.allergies}>
-          <SectionLabel>⚠️ ALLERGIES</SectionLabel>
+          <SectionLabel>ALLERGIES</SectionLabel>
           {profile?.allergies ? (
-            <p className="font-semibold text-base" style={{ color: '#B91C1C' }}>
+            <p className="font-semibold text-base" style={{ color: '#FF3737' }}>
               {profile.allergies}
             </p>
           ) : (
-            <p className="text-base" style={{ color: '#0F1A0E', opacity: 0.5 }}>
+            <p className="text-base" style={{ color: '#505068' }}>
               None known
             </p>
           )}
@@ -251,20 +256,20 @@ function BriefContent() {
                 <li key={i} className="flex items-start gap-2">
                   <span
                     className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: '#2C7A50' }}
+                    style={{ background: '#00D68F' }}
                   />
-                  <span className="text-sm" style={{ color: '#0F1A0E' }}>
+                  <span className="text-sm" style={{ color: '#EEEEF8' }}>
                     <span className="font-semibold">{m.name}</span>
                     {m.dose && ` — ${m.dose}`}
                     {m.frequency && (
-                      <span style={{ opacity: 0.55 }}> · {m.frequency}</span>
+                      <span style={{ color: '#8888A8' }}> · {m.frequency}</span>
                     )}
                   </span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm" style={{ color: '#0F1A0E', opacity: 0.5 }}>
+            <p className="text-sm" style={{ color: '#505068' }}>
               None on file
             </p>
           )}
@@ -274,8 +279,8 @@ function BriefContent() {
         <Section>
           <SectionLabel>EMERGENCY</SectionLabel>
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#B91C1C' }} />
-            <p className="text-lg font-bold" style={{ color: '#B91C1C' }}>
+            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#FF3737' }} />
+            <p className="text-lg font-bold" style={{ color: '#FF3737' }}>
               {emergencyLabel}
             </p>
           </div>
@@ -286,20 +291,20 @@ function BriefContent() {
           <SectionLabel>EMERGENCY CONTACT</SectionLabel>
           {primaryContact ? (
             <div>
-              <p className="font-semibold" style={{ color: '#0F1A0E' }}>
+              <p className="font-semibold" style={{ color: '#EEEEF8' }}>
                 {primaryContact.name}
                 {primaryContact.relationship && (
-                  <span className="font-normal text-sm" style={{ opacity: 0.6 }}>
+                  <span className="font-normal text-sm" style={{ color: '#8888A8' }}>
                     {' '}({primaryContact.relationship})
                   </span>
                 )}
               </p>
-              <p className="text-lg font-bold mt-0.5" style={{ color: '#2C7A50' }}>
+              <p className="text-lg font-bold mt-0.5" style={{ color: '#4F8EF7' }}>
                 {primaryContact.phone}
               </p>
             </div>
           ) : (
-            <p className="text-sm" style={{ color: '#0F1A0E', opacity: 0.5 }}>
+            <p className="text-sm" style={{ color: '#505068' }}>
               None on file
             </p>
           )}
@@ -309,20 +314,20 @@ function BriefContent() {
         <Section>
           <SectionLabel>AI CLINICAL NOTE</SectionLabel>
           {noteLoading ? (
-            <div className="flex items-center gap-2 mt-1" style={{ color: '#2C7A50' }}>
+            <div className="flex items-center gap-2 mt-1" style={{ color: '#4F8EF7' }}>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span className="text-sm">Generating note…</span>
+              <span className="text-sm" style={{ color: '#8888A8' }}>Generating note…</span>
             </div>
           ) : clinicalNote ? (
-            <p className="text-sm leading-relaxed" style={{ color: '#0F1A0E', opacity: 0.85 }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#EEEEF8' }}>
               {clinicalNote}
             </p>
           ) : (
-            <p className="text-sm" style={{ color: '#0F1A0E', opacity: 0.45 }}>
+            <p className="text-sm" style={{ color: '#505068' }}>
               Note unavailable — use profile data above.
             </p>
           )}
-          <p className="text-xs mt-2" style={{ color: '#0F1A0E', opacity: 0.35 }}>
+          <p className="text-xs mt-2" style={{ color: '#505068' }}>
             AI-generated · verify with patient or records
           </p>
         </Section>
@@ -331,15 +336,26 @@ function BriefContent() {
         <div className="flex gap-3 pt-2">
           <button
             onClick={() => router.back()}
-            className="flex-1 py-3 rounded-xl border text-sm font-semibold transition-opacity hover:opacity-70"
-            style={{ borderColor: 'rgba(16,22,14,0.14)', color: '#0F1A0E', background: 'transparent' }}
+            className="flex-1 py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-70"
+            style={{
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              color: '#8888A8',
+              borderRadius: '14px',
+            }}
           >
             Back
           </button>
           <button
             onClick={handleCopy}
             className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
-            style={{ background: copied ? '#2C7A50' : '#0F1A0E', color: '#fff' }}
+            style={{
+              background: copied ? '#00D68F' : '#4F8EF7',
+              color: copied ? '#070710' : '#fff',
+              borderRadius: '14px',
+              border: 'none',
+              boxShadow: copied ? '0 4px 20px rgba(0,214,143,0.28)' : '0 4px 20px rgba(79,142,247,0.28)',
+            }}
           >
             {copied ? (
               <>
@@ -373,9 +389,11 @@ function Section({
       transition={{ type: 'spring', stiffness: 340, damping: 26 }}
       className="rounded-2xl p-4"
       style={{
-        background: highlight ? 'rgba(185,28,28,0.06)' : 'rgba(255,255,255,0.72)',
-        border: highlight ? '1.5px solid rgba(185,28,28,0.22)' : '1px solid rgba(16,22,14,0.08)',
-        backdropFilter: 'blur(8px)',
+        background: highlight ? 'rgba(255,55,55,0.08)' : '#121220',
+        border: highlight
+          ? '1px solid rgba(255,55,55,0.22)'
+          : '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '16px',
       }}
     >
       {children}
@@ -387,7 +405,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="text-xs font-bold uppercase tracking-widest mb-1.5"
-      style={{ color: '#0F1A0E', opacity: 0.38, letterSpacing: '0.13em' }}
+      style={{ color: '#505068', letterSpacing: '0.13em' }}
     >
       {children}
     </p>
@@ -398,8 +416,8 @@ export default function BriefPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center" style={{ background: '#F0EDE5' }}>
-          <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#2C7A50' }} />
+        <div className="min-h-screen flex items-center justify-center" style={{ background: '#070710' }}>
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#4F8EF7' }} />
         </div>
       }
     >

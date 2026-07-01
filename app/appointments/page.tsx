@@ -31,7 +31,6 @@ function processAndMarkMissed(appts: any[]): any[] {
     .filter(a => a.status === 'confirmed' && parseTS(a.scheduled_at).getTime() < now - 30 * 60 * 1000)
     .map(a => a.id)
   if (missedIds.length > 0) {
-    // Fire-and-await the DB update; errors are non-critical for UI
     supabase.from('appointments').update({ status: 'missed' }).in('id', missedIds)
       .then(({ error }) => { if (error) console.error('processAndMarkMissed:', error) })
     return appts.map(a => missedIds.includes(a.id) ? { ...a, status: 'missed' } : a)
@@ -66,10 +65,10 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
   }
 
   return (
-    <div style={{ position: 'relative', height: ITEM_H * 3, borderRadius: '14px', background: '#F8F6F2', border: '1px solid rgba(26,40,32,0.08)', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: ITEM_H, left: 12, right: 12, height: ITEM_H, background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.22)', borderRadius: '10px', pointerEvents: 'none', zIndex: 1 }} />
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: ITEM_H * 1.1, background: 'linear-gradient(to bottom, #F8F6F2 25%, transparent)', pointerEvents: 'none', zIndex: 2 }} />
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: ITEM_H * 1.1, background: 'linear-gradient(to top, #F8F6F2 25%, transparent)', pointerEvents: 'none', zIndex: 2 }} />
+    <div style={{ position: 'relative', height: ITEM_H * 3, borderRadius: '14px', background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.10)', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', top: ITEM_H, left: 12, right: 12, height: ITEM_H, background: 'rgba(79,142,247,0.10)', border: '1px solid rgba(79,142,247,0.22)', borderRadius: '10px', pointerEvents: 'none', zIndex: 1 }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: ITEM_H * 1.1, background: 'linear-gradient(to bottom, #1A1A2E 25%, transparent)', pointerEvents: 'none', zIndex: 2 }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: ITEM_H * 1.1, background: 'linear-gradient(to top, #1A1A2E 25%, transparent)', pointerEvents: 'none', zIndex: 2 }} />
       <div
         ref={ref}
         onScroll={handleScroll}
@@ -83,7 +82,7 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
               style={{ height: ITEM_H, scrollSnapAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
               onClick={() => { onChange(t); ref.current?.scrollTo({ top: i * ITEM_H, behavior: 'smooth' }) }}
             >
-              <span style={{ fontSize: sel ? '18px' : '14px', fontWeight: sel ? 800 : 400, color: sel ? '#3D6B58' : 'rgba(26,40,32,0.3)', letterSpacing: sel ? '-0.4px' : 0, transition: 'all 0.15s ease', fontFamily: 'inherit' }}>
+              <span style={{ fontSize: sel ? '18px' : '14px', fontWeight: sel ? 800 : 400, color: sel ? '#4F8EF7' : '#505068', letterSpacing: sel ? '-0.4px' : 0, transition: 'all 0.15s ease', fontFamily: 'inherit' }}>
                 {t}
               </span>
             </div>
@@ -110,16 +109,16 @@ function CalendarPicker({ selectedDay, onSelect }: { selectedDay: Date | null; o
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={prevMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(26,40,32,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <ChevronLeft size={15} color="rgba(26,40,32,0.5)" />
+        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={prevMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <ChevronLeft size={15} color="#8888A8" />
         </motion.button>
-        <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>{MONTHS[viewMonth]} {viewYear}</p>
-        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={nextMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(26,40,32,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <ChevronRight size={15} color="rgba(26,40,32,0.5)" />
+        <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>{MONTHS[viewMonth]} {viewYear}</p>
+        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={nextMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <ChevronRight size={15} color="#8888A8" />
         </motion.button>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '6px' }}>
-        {DAYS.map(d => <p key={d} style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: 'rgba(26,40,32,0.32)', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.3px' }}>{d}</p>)}
+        {DAYS.map(d => <p key={d} style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: '#505068', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.3px' }}>{d}</p>)}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '3px' }}>
         {cells.map((day, i) => {
@@ -127,7 +126,7 @@ function CalendarPicker({ selectedDay, onSelect }: { selectedDay: Date | null; o
           const past = isPast(day), selected = isSelected(day), todayFlag = isToday(day)
           return (
             <motion.button key={i} whileTap={past ? {} : { scale: 0.88 }} transition={spring} onClick={() => !past && onSelect(new Date(viewYear, viewMonth, day))} disabled={past}
-              style={{ height: '36px', borderRadius: '9px', border: todayFlag && !selected ? '1.5px solid rgba(92,139,116,0.4)' : 'none', background: selected ? '#5C8B74' : 'transparent', color: past ? 'rgba(26,40,32,0.2)' : selected ? '#FFFFFF' : todayFlag ? '#5C8B74' : 'rgba(26,40,32,0.72)', fontSize: '13px', fontWeight: selected ? 800 : todayFlag ? 700 : 500, cursor: past ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ height: '36px', borderRadius: '9px', border: todayFlag && !selected ? '1.5px solid rgba(79,142,247,0.4)' : 'none', background: selected ? '#4F8EF7' : 'transparent', color: past ? '#505068' : selected ? '#FFFFFF' : todayFlag ? '#4F8EF7' : '#EEEEF8', fontSize: '13px', fontWeight: selected ? 800 : todayFlag ? 700 : 500, cursor: past ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {day}
             </motion.button>
           )
@@ -168,7 +167,6 @@ export default function Appointments() {
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission()
       }
-      // Handle ?join=ROOM_ID deep-link from push notification
       const params = new URLSearchParams(window.location.search)
       const joinId = params.get('join')
       if (joinId) {
@@ -282,15 +280,22 @@ export default function Appointments() {
     : null
 
   const statusStyle = (status: string) => ({
-    color: status === 'confirmed' ? '#3D6B58' : status === 'completed' ? 'rgba(26,40,32,0.4)' : (status === 'declined' || status === 'missed') ? '#E8322A' : 'rgba(26,40,32,0.4)',
-    background: status === 'confirmed' ? 'rgba(92,139,116,0.1)' : (status === 'declined' || status === 'missed') ? 'rgba(232,50,42,0.08)' : 'rgba(26,40,32,0.05)',
-    border: `1px solid ${status === 'confirmed' ? 'rgba(92,139,116,0.22)' : (status === 'declined' || status === 'missed') ? 'rgba(232,50,42,0.15)' : 'rgba(26,40,32,0.1)'}`,
+    color: status === 'confirmed' ? '#00D68F' : status === 'completed' ? '#505068' : (status === 'declined' || status === 'missed') ? '#FF3737' : '#8888A8',
+    background: status === 'confirmed' ? 'rgba(0,214,143,0.12)' : (status === 'declined' || status === 'missed') ? 'rgba(255,55,55,0.12)' : 'rgba(255,255,255,0.06)',
+    border: `1px solid ${status === 'confirmed' ? 'rgba(0,214,143,0.28)' : (status === 'declined' || status === 'missed') ? 'rgba(255,55,55,0.22)' : 'rgba(255,255,255,0.10)'}`,
     fontSize: '9px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase' as const, letterSpacing: '1px',
     padding: '2px 7px', borderRadius: '99px',
   })
 
+  const cardBorderColor = (status: string) => {
+    if (status === 'confirmed') return 'rgba(0,214,143,0.25)'
+    if (status === 'pending') return 'rgba(245,158,11,0.25)'
+    if (status === 'missed' || status === 'declined') return 'rgba(255,55,55,0.20)'
+    return 'rgba(255,255,255,0.06)'
+  }
+
   return (
-    <div style={{ minHeight: '100dvh', background: '#F2EFE9', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '100px' }}>
 
       {/* Meeting notification banner */}
       <AnimatePresence>
@@ -300,16 +305,16 @@ export default function Appointments() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -80, opacity: 0 }}
             transition={spring}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #3D6B58, #5C8B74)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(92,139,116,0.35)' }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #2563EB, #4F8EF7)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(79,142,247,0.30)' }}
           >
             <div>
-              <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
+              <p style={{ color: 'rgba(255,255,255,0.60)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
                 {new Date(upcomingMeeting.scheduled_at) <= new Date() ? 'Live now' : 'Starting soon'}
               </p>
               <p style={{ color: 'white', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.2px' }}>Your care team call is ready</p>
             </div>
             <motion.button whileTap={{ scale: 0.95 }} onClick={() => setActiveCall(upcomingMeeting)}
-              style={{ background: 'white', color: '#3D6B58', fontWeight: 700, fontSize: '12px', padding: '10px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+              style={{ background: 'white', color: '#4F8EF7', fontWeight: 700, fontSize: '12px', padding: '10px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
               <Video size={13} />
               Join now
             </motion.button>
@@ -332,41 +337,41 @@ export default function Appointments() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => router.push('/dashboard')}
-              style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid rgba(26,40,32,0.09)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(26,40,32,0.06)' }}>
-              <ArrowLeft size={15} color="rgba(26,40,32,0.5)" />
+              style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ArrowLeft size={15} color="#8888A8" />
             </motion.button>
             <div>
-              <h1 style={{ color: '#1A2820', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Care Team</h1>
-              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '12px' }}>Talk to a professional</p>
+              <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Care Team</h1>
+              <p style={{ color: '#505068', fontSize: '12px' }}>Talk to a professional</p>
             </div>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => { setShowRequest(true) }}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.22)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Plus size={15} color="#5C8B74" />
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.22)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Plus size={15} color="#4F8EF7" />
           </motion.button>
         </div>
       </div>
 
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setShowRequest(true)}
-          style={{ width: '100%', background: '#FFFFFF', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '18px', padding: '18px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 10px rgba(26,40,32,0.06)', display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(92,139,116,0.1)', border: '1px solid rgba(92,139,116,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Calendar size={20} color="#5C8B74" />
+          style={{ width: '100%', background: '#4F8EF7', border: 'none', borderRadius: '16px', padding: '18px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '14px', boxShadow: '0 4px 20px rgba(79,142,247,0.25)' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Calendar size={20} color="white" />
           </div>
           <div>
-            <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '14px', marginBottom: '3px', letterSpacing: '-0.2px' }}>Request appointment</p>
-            <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px' }}>Schedule a visit with your care team</p>
+            <p style={{ color: 'white', fontWeight: 700, fontSize: '14px', marginBottom: '3px', letterSpacing: '-0.2px' }}>Book appointment</p>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '11px' }}>Schedule a visit with your care team</p>
           </div>
         </motion.button>
 
-        <p style={{ color: 'rgba(26,40,32,0.32)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Your appointments</p>
+        <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Your appointments</p>
 
         {appointments.length === 0 && !loading && (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(26,40,32,0.04)', border: '1px solid rgba(26,40,32,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-              <Calendar size={20} color="rgba(26,40,32,0.22)" />
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+              <Calendar size={20} color="#505068" />
             </div>
-            <p style={{ color: 'rgba(26,40,32,0.28)', fontSize: '13px' }}>No appointments yet</p>
+            <p style={{ color: '#505068', fontSize: '13px' }}>No appointments yet</p>
           </div>
         )}
 
@@ -374,11 +379,11 @@ export default function Appointments() {
           const joinable = isJoinable(a)
           return (
             <motion.div key={a.id || i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05, ...spring }}
-              style={{ background: joinable ? 'rgba(92,139,116,0.05)' : '#FFFFFF', border: `1px solid ${joinable ? 'rgba(92,139,116,0.28)' : 'rgba(26,40,32,0.07)'}`, borderRadius: '18px', padding: '16px', boxShadow: joinable ? '0 4px 16px rgba(92,139,116,0.12)' : '0 2px 8px rgba(26,40,32,0.05)' }}>
+              style={{ background: '#121220', border: `1px solid ${joinable ? 'rgba(79,142,247,0.30)' : cardBorderColor(a.status)}`, borderRadius: '16px', padding: '16px', boxShadow: joinable ? '0 4px 20px rgba(79,142,247,0.14)' : '0 2px 8px rgba(0,0,0,0.20)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  {a.type === 'immediate' ? <Clock size={13} color="#E8322A" /> : <CalendarCheck size={13} color="#5C8B74" />}
-                  <span style={{ color: a.type === 'immediate' ? '#E8322A' : '#5C8B74', fontSize: '12px', fontWeight: 700 }}>
+                  {a.type === 'immediate' ? <Clock size={13} color="#FF3737" /> : <CalendarCheck size={13} color="#4F8EF7" />}
+                  <span style={{ color: a.type === 'immediate' ? '#FF3737' : '#4F8EF7', fontSize: '12px', fontWeight: 700 }}>
                     {a.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
                   </span>
                 </div>
@@ -387,25 +392,25 @@ export default function Appointments() {
                 </span>
               </div>
               {a.scheduled_at && a.type === 'scheduled' && (
-                <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '12px', marginBottom: '4px' }}>
+                <p style={{ color: '#8888A8', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                   {parseTS(a.scheduled_at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                   {' · '}
                   {parseTS(a.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                 </p>
               )}
               {a.patient_concern && (
-                <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '12px', marginBottom: joinable ? '12px' : 0 }}>{a.patient_concern}</p>
+                <p style={{ color: '#8888A8', fontSize: '12px', marginBottom: joinable ? '12px' : 0 }}>{a.patient_concern}</p>
               )}
               {joinable && (
                 <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setActiveCall(a)}
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(135deg, #5C8B74, #3D6B58)', borderRadius: '12px', padding: '13px', color: 'white', fontWeight: 700, fontSize: '14px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(92,139,116,0.28)', marginTop: '4px' }}>
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#4F8EF7', borderRadius: '12px', padding: '13px', color: 'white', fontWeight: 700, fontSize: '14px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(79,142,247,0.30)', marginTop: '4px' }}>
                   <Video size={15} />
                   Join video call
                 </motion.button>
               )}
               {a.status === 'missed' && (
                 <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => requestAgain(a)}
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(92,139,116,0.07)', border: '1px solid rgba(92,139,116,0.2)', borderRadius: '12px', padding: '12px', color: '#3D6B58', fontWeight: 700, fontSize: '13px', cursor: 'pointer', marginTop: '8px' }}>
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '12px', padding: '12px', color: '#8888A8', fontWeight: 700, fontSize: '13px', cursor: 'pointer', marginTop: '8px' }}>
                   Request a new time
                 </motion.button>
               )}
@@ -418,35 +423,35 @@ export default function Appointments() {
       <AnimatePresence>
         {showRequest && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(26,40,32,0.4)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
             onClick={e => { if (e.target === e.currentTarget) close() }}>
             <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{ background: '#FFFFFF', borderRadius: '24px 24px 0 0', width: '100%', maxHeight: '92dvh', overflowY: 'auto', boxShadow: '0 -8px 40px rgba(26,40,32,0.14)' }}>
+              style={{ background: '#121220', borderRadius: '24px 24px 0 0', width: '100%', maxHeight: '92dvh', overflowY: 'auto', boxShadow: '0 -8px 40px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.06)', borderBottom: 'none' }}>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 0' }}>
-                <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(26,40,32,0.1)' }} />
+                <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.10)' }} />
               </div>
               <div style={{ padding: '16px 20px 48px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <p style={{ color: '#1A2820', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.4px' }}>
+                  <p style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.4px' }}>
                     Schedule appointment
                   </p>
-                  <button onClick={close} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(26,40,32,0.35)' }}>
-                    <X size={20} />
+                  <button onClick={close} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '8px', width: '32px', height: '32px', cursor: 'pointer', color: '#8888A8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <X size={16} />
                   </button>
                 </div>
 
                 <div style={{ marginBottom: '20px' }}>
-                    <div style={{ background: '#F8F6F2', border: '1px solid rgba(26,40,32,0.07)', borderRadius: '18px', padding: '16px', marginBottom: '12px' }}>
+                    <div style={{ background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', padding: '16px', marginBottom: '12px' }}>
                       <CalendarPicker selectedDay={selectedDay} onSelect={setSelectedDay} />
                     </div>
 
                     <AnimatePresence>
                       {selectedDay && (
                         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} transition={spring}>
-                          <p style={{ color: 'rgba(26,40,32,0.4)', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Select a time</p>
+                          <p style={{ color: '#505068', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Select a time</p>
                           <TimeScrollPicker value={selectedTime} onChange={setSelectedTime} />
                           {scheduledInPast && (
-                            <p style={{ color: '#E8322A', fontSize: '12px', marginTop: '8px', textAlign: 'center' }}>
+                            <p style={{ color: '#FF3737', fontSize: '12px', marginTop: '8px', textAlign: 'center' }}>
                               This time has already passed — pick a future time
                             </p>
                           )}
@@ -457,9 +462,9 @@ export default function Appointments() {
                     <AnimatePresence>
                       {summaryLabel && (
                         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={spring}
-                          style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(92,139,116,0.08)', border: '1px solid rgba(92,139,116,0.22)', borderRadius: '12px', padding: '10px 14px' }}>
-                          <CalendarCheck size={14} color="#5C8B74" style={{ flexShrink: 0 }} />
-                          <p style={{ color: '#3D6B58', fontSize: '13px', fontWeight: 600 }}>{summaryLabel}</p>
+                          style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(79,142,247,0.10)', border: '1px solid rgba(79,142,247,0.22)', borderRadius: '12px', padding: '10px 14px' }}>
+                          <CalendarCheck size={14} color="#4F8EF7" style={{ flexShrink: 0 }} />
+                          <p style={{ color: '#4F8EF7', fontSize: '13px', fontWeight: 600 }}>{summaryLabel}</p>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -467,11 +472,11 @@ export default function Appointments() {
 
                 <textarea value={concern} onChange={e => setConcern(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
                   placeholder="What would you like to discuss? (optional)"
-                  style={{ width: '100%', background: '#F8F6F2', border: `1.5px solid ${focused ? 'rgba(92,139,116,0.4)' : 'rgba(26,40,32,0.1)'}`, borderRadius: '14px', padding: '14px 16px', color: '#1A2820', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '80px', marginBottom: '14px', fontFamily: 'inherit', transition: 'border-color 0.18s ease' }} />
+                  style={{ width: '100%', background: '#1A1A2E', border: `1.5px solid ${focused ? 'rgba(79,142,247,0.50)' : 'rgba(255,255,255,0.10)'}`, borderRadius: '14px', padding: '14px 16px', color: '#EEEEF8', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '80px', marginBottom: '14px', fontFamily: 'inherit', transition: 'border-color 0.18s ease' }} />
 
                 <motion.button whileTap={canSubmit ? { scale: 0.97, y: 1 } : {}} transition={spring} onClick={request} disabled={!canSubmit}
-                  style={{ width: '100%', background: !canSubmit ? 'rgba(26,40,32,0.07)' : 'linear-gradient(135deg, #5C8B74, #3D6B58)', color: !canSubmit ? 'rgba(26,40,32,0.3)' : '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: canSubmit ? 'pointer' : 'default', boxShadow: canSubmit ? '0 8px 24px rgba(92,139,116,0.24)' : 'none', transition: 'all 0.2s ease', letterSpacing: '-0.1px' }}>
-                  Request appointment
+                  style={{ width: '100%', background: !canSubmit ? 'rgba(255,255,255,0.06)' : '#4F8EF7', color: !canSubmit ? '#505068' : '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: canSubmit ? 'pointer' : 'default', boxShadow: canSubmit ? '0 8px 24px rgba(79,142,247,0.28)' : 'none', transition: 'all 0.2s ease', letterSpacing: '-0.1px' }}>
+                  Book appointment
                 </motion.button>
               </div>
             </motion.div>

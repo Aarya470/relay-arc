@@ -179,37 +179,50 @@ function RecoveryContent() {
   const protocol = PROTOCOLS[type] || PROTOCOLS.other
 
   return (
-    <div className="min-h-screen" style={{ background: '#F0EDE5' }}>
-      {/* Green header */}
+    <div style={{ minHeight: '100dvh', background: '#070710' }}>
+      {/* Green "You're safe" header */}
       <div
-        className="sticky top-0 z-20 flex items-center gap-3 px-4 py-4"
-        style={{ background: '#2C7A50' }}
+        style={{
+          position: 'sticky', top: 0, zIndex: 20,
+          display: 'flex', alignItems: 'center', gap: '12px',
+          padding: '16px',
+          background: '#00D68F',
+          boxShadow: '0 2px 20px rgba(0,214,143,0.30)',
+        }}
       >
         <button
           onClick={() => router.push('/dashboard')}
-          className="p-1 rounded-full"
-          style={{ color: '#fff' }}
+          style={{
+            padding: '4px', borderRadius: '50%', background: 'none',
+            border: 'none', cursor: 'pointer', color: '#070710',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
           aria-label="Back to dashboard"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft style={{ width: '20px', height: '20px' }} />
         </button>
-        <div className="flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 text-white" />
-          <span className="font-bold text-white text-lg tracking-tight">You&apos;re safe</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CheckCircle style={{ width: '20px', height: '20px', color: '#070710' }} />
+          <span style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#070710' }}>
+            You&apos;re safe
+          </span>
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-4 pb-12 pt-6 space-y-5">
+      <div style={{ maxWidth: '512px', margin: '0 auto', padding: '24px 16px 48px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Subtitle */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={spring}
         >
-          <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#2C7A50', letterSpacing: '0.12em' }}>
+          <p style={{
+            fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
+            letterSpacing: '0.12em', color: '#00D68F', marginBottom: '4px',
+          }}>
             Recovery protocol
           </p>
-          <h1 className="text-2xl font-black" style={{ color: '#0F1A0E' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#EEEEF8', letterSpacing: '-0.5px' }}>
             {label}
           </h1>
         </motion.div>
@@ -217,27 +230,31 @@ function RecoveryContent() {
         {/* What happened */}
         <Card delay={0.05}>
           <CardLabel>What happened</CardLabel>
-          <p className="text-sm leading-relaxed" style={{ color: '#0F1A0E', opacity: 0.8 }}>
+          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#8888A8' }}>
             {protocol.description}
           </p>
         </Card>
 
         {/* Next 24-48 hours */}
         <Card delay={0.1}>
-          <div className="flex items-center gap-2 mb-3">
-            <Clock className="w-4 h-4 flex-shrink-0" style={{ color: '#2C7A50' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <Clock style={{ width: '16px', height: '16px', flexShrink: 0, color: '#4F8EF7' }} />
             <CardLabel noMargin>Next 24–48 hours</CardLabel>
           </div>
-          <ul className="space-y-2">
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {protocol.steps.map((step, i) => (
-              <li key={i} className="flex items-start gap-3">
+              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <span
-                  className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold mt-0.5"
-                  style={{ background: 'rgba(44,122,80,0.15)', color: '#2C7A50' }}
+                  style={{
+                    flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '11px', fontWeight: 700, marginTop: '2px',
+                    background: 'rgba(0,214,143,0.15)', color: '#00D68F',
+                  }}
                 >
                   {i + 1}
                 </span>
-                <span className="text-sm leading-snug" style={{ color: '#0F1A0E' }}>
+                <span style={{ fontSize: '14px', lineHeight: 1.5, color: '#EEEEF8' }}>
                   {step}
                 </span>
               </li>
@@ -245,28 +262,34 @@ function RecoveryContent() {
           </ul>
         </Card>
 
-        {/* Watch out for */}
+        {/* Watch out for — amber-tinted warning card */}
         <Card delay={0.15} highlight>
-          <div className="flex items-center gap-2 mb-3">
-            <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: '#B91C1C' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <AlertTriangle style={{ width: '16px', height: '16px', flexShrink: 0, color: '#FF3737' }} />
             <CardLabel noMargin danger>Watch out for</CardLabel>
           </div>
-          <ul className="space-y-2">
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {protocol.warnings.map((w, i) => (
-              <li key={i} className="flex items-start gap-2.5">
+              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                 <span
-                  className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full"
-                  style={{ background: '#B91C1C' }}
+                  style={{
+                    flexShrink: 0, marginTop: '6px',
+                    width: '6px', height: '6px', borderRadius: '50%',
+                    background: '#FF3737',
+                  }}
                 />
-                <span className="text-sm leading-snug" style={{ color: '#B91C1C', opacity: 0.88 }}>
+                <span style={{ fontSize: '14px', lineHeight: 1.5, color: '#FF3737', opacity: 0.88 }}>
                   {w}
                 </span>
               </li>
             ))}
           </ul>
           <div
-            className="mt-4 pt-3 border-t text-sm font-semibold"
-            style={{ borderColor: 'rgba(185,28,28,0.18)', color: '#B91C1C' }}
+            style={{
+              marginTop: '16px', paddingTop: '12px',
+              borderTop: '1px solid rgba(255,55,55,0.20)',
+              fontSize: '14px', fontWeight: 600, color: '#FF3737',
+            }}
           >
             Call 911 immediately if any of these occur.
           </div>
@@ -275,37 +298,45 @@ function RecoveryContent() {
         {/* Follow-up note */}
         <Card delay={0.2}>
           <CardLabel>Schedule a follow-up</CardLabel>
-          <p className="text-sm leading-relaxed mb-4" style={{ color: '#0F1A0E', opacity: 0.8 }}>
+          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#8888A8', marginBottom: '16px' }}>
             {protocol.followUpNote}
           </p>
           <a
             href="tel:"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-85"
-            style={{ background: '#2C7A50', color: '#fff' }}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              width: '100%', padding: '12px', borderRadius: '12px',
+              fontSize: '14px', fontWeight: 600, textDecoration: 'none',
+              background: '#00D68F', color: '#070710',
+            }}
           >
-            <Phone className="w-4 h-4" />
+            <Phone style={{ width: '16px', height: '16px' }} />
             Call your doctor
           </a>
         </Card>
 
         {/* Footer actions */}
-        <div className="flex gap-3 pt-1">
+        <div style={{ display: 'flex', gap: '12px', paddingTop: '4px' }}>
           <button
             onClick={() => router.push('/emergency/history')}
-            className="flex items-center justify-center gap-2 flex-1 py-3 rounded-xl border text-sm font-semibold transition-opacity hover:opacity-70"
             style={{
-              borderColor: 'rgba(16,22,14,0.15)',
-              color: '#0F1A0E',
-              background: 'transparent',
+              flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              padding: '12px', borderRadius: '12px',
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)',
+              color: '#8888A8', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
             }}
           >
-            <History className="w-4 h-4" />
+            <History style={{ width: '16px', height: '16px' }} />
             View history
           </button>
           <button
             onClick={() => router.push('/dashboard')}
-            className="flex-1 py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-85"
-            style={{ background: '#0F1A0E', color: '#fff' }}
+            style={{
+              flex: 1, padding: '12px', borderRadius: '12px',
+              background: '#4F8EF7', border: 'none',
+              color: '#fff', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+              boxShadow: '0 4px 20px rgba(79,142,247,0.28)',
+            }}
           >
             Back to dashboard
           </button>
@@ -329,13 +360,13 @@ function Card({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 340, damping: 26, delay }}
-      className="rounded-2xl p-4"
       style={{
-        background: highlight ? 'rgba(185,28,28,0.05)' : 'rgba(255,255,255,0.72)',
+        background: highlight ? 'rgba(255,55,55,0.08)' : '#121220',
         border: highlight
-          ? '1.5px solid rgba(185,28,28,0.18)'
-          : '1px solid rgba(16,22,14,0.07)',
-        backdropFilter: 'blur(8px)',
+          ? '1px solid rgba(255,55,55,0.22)'
+          : '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '16px',
+        padding: '16px',
       }}
     >
       {children}
@@ -354,11 +385,10 @@ function CardLabel({
 }) {
   return (
     <p
-      className={`text-xs font-bold uppercase tracking-widest${noMargin ? '' : ' mb-2'}`}
       style={{
-        color: danger ? '#B91C1C' : '#0F1A0E',
-        opacity: danger ? 0.7 : 0.38,
-        letterSpacing: '0.13em',
+        fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
+        letterSpacing: '0.13em', marginBottom: noMargin ? '0' : '8px',
+        color: danger ? '#FF3737' : '#505068',
       }}
     >
       {children}
@@ -371,13 +401,16 @@ export default function RecoveryPage() {
     <Suspense
       fallback={
         <div
-          className="min-h-screen flex items-center justify-center"
-          style={{ background: '#F0EDE5' }}
+          style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#070710' }}
         >
           <div
-            className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-            style={{ borderColor: '#2C7A50', borderTopColor: 'transparent' }}
+            style={{
+              width: '32px', height: '32px', borderRadius: '50%',
+              border: '2px solid #00D68F', borderTopColor: 'transparent',
+              animation: 'spin 0.8s linear infinite',
+            }}
           />
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       }
     >

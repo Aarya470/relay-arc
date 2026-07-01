@@ -50,41 +50,41 @@ export default function Emergency() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#0A0F0A', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#070710', display: 'flex', flexDirection: 'column' }}>
 
-      {/* Status bar area */}
-      <div style={{ padding: '16px 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Status bar */}
+      <div style={{ padding: '18px 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <motion.div
-            animate={{ opacity: [1, 0.2, 1] }}
-            transition={{ duration: 1.2, repeat: Infinity }}
-            style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#B91C1C' }}
+            animate={{ opacity: [1, 0.15, 1] }}
+            transition={{ duration: 1.0, repeat: Infinity }}
+            style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#FF3737' }}
           />
-          <span style={{ color: 'rgba(240,237,229,0.5)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 600 }}>
+          <span style={{ color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', letterSpacing: '1.8px', textTransform: 'uppercase', fontWeight: 600 }}>
             Emergency Mode
           </span>
         </div>
-        <span style={{ color: 'rgba(240,237,229,0.28)', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
+        <span style={{ color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
           {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
       </div>
 
-      <div style={{ flex: 1, padding: '20px 20px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ flex: 1, padding: '20px 20px 28px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <h1 style={{ color: '#F0EDE5', fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.1 }}>
-              What's happening?
+            <h1 style={{ color: '#EEEEF8', fontSize: '30px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.05 }}>
+              What&apos;s happening?
             </h1>
-            <p style={{ color: 'rgba(240,237,229,0.36)', fontSize: '13px', marginTop: '4px' }}>Select to activate emergency response</p>
+            <p style={{ color: '#505068', fontSize: '13px', marginTop: '5px', fontWeight: 500 }}>Select to activate emergency response</p>
           </div>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => router.push('/dashboard')}
-            style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(240,237,229,0.07)', border: '1px solid rgba(240,237,229,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
           >
-            <X size={15} color="rgba(240,237,229,0.5)"/>
+            <X size={15} color="rgba(255,255,255,0.45)"/>
           </motion.button>
         </div>
 
@@ -94,13 +94,15 @@ export default function Emergency() {
           whileTap={{ scale: 0.97 }}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-            background: '#B91C1C', color: 'white',
-            padding: '16px', borderRadius: '12px',
-            fontWeight: 900, fontSize: '17px', letterSpacing: '-0.3px',
+            background: 'linear-gradient(135deg, #FF3737 0%, #CC1A1A 100%)',
+            color: 'white',
+            padding: '18px', borderRadius: '18px',
+            fontWeight: 900, fontSize: '18px', letterSpacing: '-0.3px',
             textDecoration: 'none',
+            boxShadow: '0 8px 32px rgba(255,55,55,0.55)',
           }}
         >
-          <Phone size={19} strokeWidth={2.2}/>
+          <Phone size={20} strokeWidth={2.5}/>
           Call 911 now
         </motion.a>
 
@@ -109,7 +111,7 @@ export default function Emergency() {
           variants={stagger}
           initial="hidden"
           animate="show"
-          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', flex: 1 }}
+          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', flex: 1 }}
         >
           {TYPES.map(type => {
             const isSelected = selected === type.id
@@ -117,29 +119,30 @@ export default function Emergency() {
               <motion.button
                 key={type.id}
                 variants={fadeUp}
-                whileTap={{ scale: 0.96 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => handleSelect(type.id)}
                 disabled={loading}
                 style={{
-                  background: isSelected ? 'rgba(185,28,28,0.15)' : 'rgba(240,237,229,0.04)',
-                  border: `1px solid ${isSelected ? 'rgba(185,28,28,0.5)' : 'rgba(240,237,229,0.08)'}`,
-                  borderRadius: '12px',
-                  padding: '16px 14px',
+                  background: isSelected ? 'rgba(255,55,55,0.12)' : 'rgba(255,255,255,0.04)',
+                  border: `1px solid ${isSelected ? 'rgba(255,55,55,0.40)' : 'rgba(255,255,255,0.07)'}`,
+                  borderRadius: '16px',
+                  padding: '18px 14px',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'border-color 0.15s, background 0.15s',
-                  opacity: loading && !isSelected ? 0.5 : 1,
+                  opacity: loading && !isSelected ? 0.45 : 1,
+                  boxShadow: isSelected ? '0 0 0 1px rgba(255,55,55,0.20) inset' : 'none',
                 }}
               >
                 <div style={{
-                  width: '36px', height: '36px', borderRadius: '8px', marginBottom: '10px',
-                  background: isSelected ? 'rgba(185,28,28,0.2)' : 'rgba(240,237,229,0.07)',
+                  width: '38px', height: '38px', borderRadius: '10px', marginBottom: '12px',
+                  background: isSelected ? 'rgba(255,55,55,0.18)' : 'rgba(255,255,255,0.07)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <type.Icon size={17} color={isSelected ? '#EF4444' : 'rgba(240,237,229,0.45)'} strokeWidth={2}/>
+                  <type.Icon size={18} color={isSelected ? '#FF6666' : 'rgba(255,255,255,0.40)'} strokeWidth={2}/>
                 </div>
-                <p style={{ color: isSelected ? '#FCA5A5' : '#F0EDE5', fontWeight: 700, fontSize: '13px', marginBottom: '3px', letterSpacing: '-0.1px' }}>{type.label}</p>
-                <p style={{ color: 'rgba(240,237,229,0.32)', fontSize: '11px', lineHeight: 1.4 }}>{type.desc}</p>
+                <p style={{ color: isSelected ? '#FF9999' : '#EEEEF8', fontWeight: 700, fontSize: '13px', marginBottom: '4px', letterSpacing: '-0.1px' }}>{type.label}</p>
+                <p style={{ color: '#505068', fontSize: '11px', lineHeight: 1.45 }}>{type.desc}</p>
               </motion.button>
             )
           })}
@@ -148,8 +151,8 @@ export default function Emergency() {
         {/* Triage link */}
         <div style={{ textAlign: 'center' }}>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/emergency/triage')}
-            style={{ color: 'rgba(240,237,229,0.38)', fontSize: '12px', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>
-            Not sure how serious? <span style={{ color: '#4A9E6B', fontWeight: 600 }}>Assess severity →</span>
+            style={{ color: 'rgba(255,255,255,0.30)', fontSize: '12px', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>
+            Not sure how serious? <span style={{ color: '#00D68F', fontWeight: 600 }}>Assess severity →</span>
           </motion.button>
         </div>
       </div>

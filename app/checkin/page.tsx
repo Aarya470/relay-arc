@@ -102,38 +102,70 @@ export default function Checkin() {
   const AIAvatar = ({ size = 28 }: { size?: number }) => (
     <div style={{
       width: size, height: size, borderRadius: '8px', flexShrink: 0,
-      background: '#0F1A0E',
+      background: 'linear-gradient(135deg, #1A1A2E 0%, #121220 100%)',
+      border: '1px solid rgba(79,142,247,0.3)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: Math.round(size * 0.36) + 'px', fontWeight: 800, letterSpacing: '-0.5px', fontFamily: 'var(--font-mono, monospace)' }}>R</span>
+      <span style={{ color: '#4F8EF7', fontSize: Math.round(size * 0.36) + 'px', fontWeight: 800, letterSpacing: '-0.5px', fontFamily: 'var(--font-mono, monospace)' }}>R</span>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', display: 'flex', flexDirection: 'column', paddingBottom: '80px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
+    <div style={{
+      minHeight: '100dvh',
+      background: '#070710',
+      display: 'flex',
+      flexDirection: 'column',
+      paddingBottom: '80px',
+      maxWidth: '720px',
+      margin: '0 auto',
+      width: '100%',
+    }}>
 
       {/* Header */}
-      <div style={{ padding: '52px 20px 14px', borderBottom: '1px solid rgba(16,22,14,0.07)', display: 'flex', alignItems: 'center', gap: '12px', background: '#F0EDE5' }}>
+      <div style={{
+        padding: '52px 20px 14px',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        background: 'rgba(7,7,16,0.95)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }}>
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => router.push('/dashboard')}
-          style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(16,22,14,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+          style={{
+            width: '34px', height: '34px', borderRadius: '10px',
+            background: '#121220',
+            border: '1px solid rgba(255,255,255,0.06)',
+            cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}
         >
-          <ArrowLeft size={15} color="rgba(16,22,14,0.45)"/>
+          <ArrowLeft size={15} color="#8888A8" />
         </motion.button>
         <div style={{ flex: 1 }}>
-          <h1 style={{ color: '#0F1A0E', fontWeight: 900, fontSize: '17px', letterSpacing: '-0.5px' }}>Daily Check-in</h1>
-          <p style={{ color: 'rgba(16,22,14,0.36)', fontSize: '11px', marginTop: '1px', fontFamily: 'var(--font-mono, monospace)' }}>
+          <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '17px', letterSpacing: '-0.5px', margin: 0 }}>Daily Check-in</h1>
+          <p style={{ color: '#505068', fontSize: '11px', marginTop: '2px', fontFamily: 'var(--font-mono, monospace)', margin: '2px 0 0' }}>
             {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
           </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(44,122,80,0.08)', border: '1px solid rgba(44,122,80,0.18)', borderRadius: '99px', padding: '4px 10px' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '5px',
+          background: 'rgba(0,214,143,0.12)',
+          border: '1px solid rgba(0,214,143,0.25)',
+          borderRadius: '99px',
+          padding: '4px 10px',
+        }}>
           <motion.div
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2C7A50' }}
+            style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00D68F' }}
           />
-          <span style={{ color: '#2C7A50', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600, letterSpacing: '0.5px' }}>LIVE</span>
+          <span style={{ color: '#00D68F', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600, letterSpacing: '0.5px' }}>LIVE</span>
         </div>
       </div>
 
@@ -148,20 +180,19 @@ export default function Checkin() {
               transition={{ ...bubbleSpring }}
               style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '8px', alignItems: 'flex-end' }}
             >
-              {m.role === 'ai' && <AIAvatar/>}
+              {m.role === 'ai' && <AIAvatar />}
               <div style={{
                 maxWidth: '78%', padding: '12px 16px',
                 borderRadius: m.role === 'user' ? '20px 20px 5px 20px' : '5px 20px 20px 20px',
                 background: m.role === 'user'
-                  ? '#E8F5EE'
-                  : '#FFFFFF',
-                border: m.role === 'user' ? 'none' : '1px solid rgba(16,22,14,0.08)',
-                boxShadow: m.role === 'user'
-                  ? '0 3px 12px rgba(196,107,48,0.15)'
-                  : '0 2px 8px rgba(16,22,14,0.06)',
-                color: m.role === 'user' ? '#6B2E00' : 'rgba(16,22,14,0.82)',
+                  ? 'rgba(79,142,247,0.15)'
+                  : '#121220',
+                border: m.role === 'user'
+                  ? '1px solid rgba(79,142,247,0.25)'
+                  : '1px solid rgba(255,255,255,0.06)',
+                color: m.role === 'user' ? '#EEEEF8' : '#EEEEF8',
                 fontSize: '14px', lineHeight: 1.6,
-                fontWeight: m.role === 'user' ? 600 : 400,
+                fontWeight: m.role === 'user' ? 500 : 400,
               }}>
                 {m.text}
               </div>
@@ -176,12 +207,18 @@ export default function Checkin() {
             transition={spring}
             style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}
           >
-            <AIAvatar/>
-            <div style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', padding: '14px 18px', borderRadius: '5px 20px 20px 20px', display: 'flex', gap: '5px', alignItems: 'center', boxShadow: '0 2px 8px rgba(16,22,14,0.06)' }}>
-              {[0,1,2].map(i => (
+            <AIAvatar />
+            <div style={{
+              background: '#121220',
+              border: '1px solid rgba(255,255,255,0.06)',
+              padding: '14px 18px',
+              borderRadius: '5px 20px 20px 20px',
+              display: 'flex', gap: '5px', alignItems: 'center',
+            }}>
+              {[0, 1, 2].map(i => (
                 <motion.div
                   key={i}
-                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(16,22,14,0.22)' }}
+                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#505068' }}
                   animate={{ opacity: [0.25, 1, 0.25], y: [0, -3, 0] }}
                   transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
                 />
@@ -195,19 +232,42 @@ export default function Checkin() {
             initial={{ opacity: 0, scale: 0.92, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ ...spring, bounce: 0.3 }}
-            style={{ background: 'rgba(44,122,80,0.06)', border: '1px solid rgba(44,122,80,0.2)', borderRadius: '4px 20px 20px 20px', padding: '24px 20px', textAlign: 'center', margin: '8px 0', boxShadow: '0 4px 20px rgba(44,122,80,0.08)' }}
+            style={{
+              background: 'rgba(0,214,143,0.08)',
+              border: '1px solid rgba(0,214,143,0.2)',
+              borderRadius: '16px',
+              padding: '28px 20px',
+              textAlign: 'center',
+              margin: '8px 0',
+            }}
           >
-            <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(44,122,80,0.12)', border: '1px solid rgba(44,122,80,0.24)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-              <Check size={24} color="#2C7A50" strokeWidth={2.5}/>
+            <div style={{
+              width: '52px', height: '52px', borderRadius: '50%',
+              background: 'rgba(0,214,143,0.15)',
+              border: '1px solid rgba(0,214,143,0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 14px',
+            }}>
+              <Check size={24} color="#00D68F" strokeWidth={2.5} />
             </div>
-            <p style={{ color: '#1C3D28', fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
-            <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px', marginBottom: '18px' }}>Your responses have been saved and your care team has been notified</p>
+            <p style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
+            <p style={{ color: '#8888A8', fontSize: '12px', marginBottom: '20px' }}>Your responses have been saved and your care team has been notified</p>
             <div style={{ display: 'flex', gap: '8px' }}>
               <motion.button
                 whileTap={{ scale: 0.97, y: 1 }}
                 transition={spring}
                 onClick={() => router.push('/history')}
-                style={{ flex: 1, background: 'rgba(44,122,80,0.1)', color: '#1C3D28', fontWeight: 700, fontSize: '13px', padding: '13px 16px', borderRadius: '14px', border: '1px solid rgba(44,122,80,0.2)', cursor: 'pointer' }}
+                style={{
+                  flex: 1,
+                  background: '#1A1A2E',
+                  color: '#EEEEF8',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  padding: '13px 16px',
+                  borderRadius: '14px',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  cursor: 'pointer',
+                }}
               >
                 View history
               </motion.button>
@@ -215,7 +275,17 @@ export default function Checkin() {
                 whileTap={{ scale: 0.97, y: 1 }}
                 transition={spring}
                 onClick={() => router.push('/dashboard')}
-                style={{ flex: 1, background: '#0F1A0E', color: '#FFFFFF', fontWeight: 600, fontSize: '13px', padding: '13px 16px', borderRadius: '14px', border: 'none', cursor: 'pointer' }}
+                style={{
+                  flex: 1,
+                  background: '#4F8EF7',
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  padding: '13px 16px',
+                  borderRadius: '14px',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
               >
                 Dashboard
               </motion.button>
@@ -223,7 +293,7 @@ export default function Checkin() {
           </motion.div>
         )}
 
-        <div ref={bottomRef}/>
+        <div ref={bottomRef} />
       </div>
 
       {/* Quick replies — shown on first message only */}
@@ -235,7 +305,18 @@ export default function Checkin() {
               whileTap={{ scale: 0.95 }}
               transition={spring}
               onClick={() => setInput(r)}
-              style={{ flexShrink: 0, background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.1)', borderRadius: '99px', padding: '9px 16px', color: 'rgba(16,22,14,0.6)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(16,22,14,0.05)' }}
+              style={{
+                flexShrink: 0,
+                background: '#121220',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '99px',
+                padding: '9px 16px',
+                color: '#8888A8',
+                fontSize: '12px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
             >
               {r}
             </motion.button>
@@ -247,9 +328,9 @@ export default function Checkin() {
       {!done && (
         <div style={{
           padding: '8px 16px 14px',
-          borderTop: `1px solid ${focused ? 'rgba(44,122,80,0.2)' : 'rgba(16,22,14,0.07)'}`,
+          borderTop: `1px solid ${focused ? 'rgba(79,142,247,0.3)' : 'rgba(255,255,255,0.06)'}`,
           display: 'flex', gap: '8px', alignItems: 'center',
-          background: 'rgba(240,237,229,0.95)',
+          background: 'rgba(7,7,16,0.95)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
           transition: 'border-color 0.18s ease',
@@ -263,16 +344,16 @@ export default function Checkin() {
             placeholder="How are you feeling..."
             style={{
               flex: 1,
-              background: '#FFFFFF',
-              border: `1.5px solid ${focused ? 'rgba(44,122,80,0.4)' : 'rgba(16,22,14,0.09)'}`,
+              background: '#121220',
+              border: `1.5px solid ${focused ? 'rgba(79,142,247,0.5)' : 'rgba(255,255,255,0.06)'}`,
               borderRadius: '14px',
               padding: '13px 16px',
-              color: '#0F1A0E',
+              color: '#EEEEF8',
               fontSize: '14px',
               outline: 'none',
               transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
               fontFamily: 'inherit',
-              boxShadow: focused ? '0 0 0 3px rgba(44,122,80,0.1)' : '0 1px 3px rgba(16,22,14,0.04)',
+              boxShadow: focused ? '0 0 0 3px rgba(79,142,247,0.1)' : 'none',
             }}
           />
           <motion.button
@@ -282,22 +363,24 @@ export default function Checkin() {
             disabled={loading || !input.trim()}
             style={{
               width: '46px', height: '46px',
-              background: input.trim() ? '#0F1A0E' : 'rgba(16,22,14,0.06)',
-              borderRadius: '14px', border: 'none', cursor: 'pointer',
+              background: input.trim() ? '#4F8EF7' : '#121220',
+              borderRadius: '14px',
+              border: '1px solid rgba(255,255,255,0.06)',
+              cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
               transition: 'background 0.15s ease',
             }}
           >
             {loading
-              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : 'rgba(16,22,14,0.3)'} className="animate-spin"/>
-              : <Send size={16} color={input.trim() ? '#FFFFFF' : 'rgba(16,22,14,0.3)'}/>
+              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : '#505068'} className="animate-spin" />
+              : <Send size={16} color={input.trim() ? '#FFFFFF' : '#505068'} />
             }
           </motion.button>
         </div>
       )}
 
-      <BottomNav/>
+      <BottomNav />
     </div>
   )
 }

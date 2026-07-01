@@ -36,184 +36,203 @@ export default function Login() {
   return (
     <div style={{
       minHeight: '100dvh',
-      background: '#F0EDE5',
+      background: '#070710',
       display: 'flex',
       flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '24px',
     }}>
 
-      {/* Top bar */}
-      <div style={{ padding: '24px 24px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+      {/* Centered card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={ease}
+        style={{
+          width: '100%',
+          maxWidth: '400px',
+          background: '#121220',
+          border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: '24px',
+          padding: '32px 28px',
+        }}
+      >
+
+        {/* Logo / wordmark */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '32px' }}>
           <div style={{
-            width: '28px', height: '28px', borderRadius: '8px',
-            background: '#1C3D28',
+            width: '48px', height: '48px', borderRadius: '14px',
+            background: 'rgba(79,142,247,0.15)',
+            border: '1.5px solid rgba(79,142,247,0.3)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
+            marginBottom: '14px',
           }}>
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-              <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#F0EDE5"/>
+            <svg width="22" height="22" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#4F8EF7"/>
             </svg>
           </div>
-          <span style={{ color: '#0F1A0E', fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}>Relay Arc</span>
+          <span style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.5px' }}>Relay Arc</span>
+          <p style={{ color: '#505068', fontSize: '13px', marginTop: '4px' }}>Cardiac emergency companion</p>
         </div>
-        <button
-          onClick={() => router.push('/care-team/login')}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(16,22,14,0.32)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}
-        >
-          care team →
-        </button>
-      </div>
 
-      {/* Main */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '40px 24px 48px' }}>
+        {/* Toggle headline */}
+        <div style={{ marginBottom: '24px', textAlign: 'center' }}>
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={isSignUp ? 'signup' : 'signin'}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18 }}
+              style={{
+                color: '#EEEEF8',
+                fontSize: '22px',
+                fontWeight: 800,
+                letterSpacing: '-0.6px',
+                lineHeight: 1.2,
+                marginBottom: '6px',
+              }}
+            >
+              {isSignUp ? 'Create your profile' : 'Welcome back'}
+            </motion.h1>
+          </AnimatePresence>
+          <p style={{ color: '#8888A8', fontSize: '13px', lineHeight: 1.5 }}>
+            {isSignUp
+              ? 'Your medical profile is stored securely.'
+              : 'Sign in to continue to your dashboard.'
+            }
+          </p>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={ease}
-        >
-          {/* Headline */}
-          <div style={{ marginBottom: '40px' }}>
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={isSignUp ? 'signup' : 'signin'}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.18 }}
-                style={{
-                  color: '#0F1A0E',
-                  fontSize: 'clamp(32px, 8vw, 48px)',
-                  fontWeight: 900,
-                  letterSpacing: '-2px',
-                  lineHeight: 1.05,
-                  marginBottom: '10px',
-                }}
-              >
-                {isSignUp ? 'Create your\nprofile.' : 'Welcome\nback.'}
-              </motion.h1>
-            </AnimatePresence>
-            <p style={{ color: 'rgba(16,22,14,0.42)', fontSize: '15px', lineHeight: 1.5 }}>
-              {isSignUp
-                ? 'Your medical profile is stored securely and shared with care teams only in an emergency.'
-                : 'Sign in to continue to your health dashboard.'
-              }
-            </p>
+        {/* Form */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {/* Email */}
+          <div>
+            <label style={{ display: 'block', color: '#505068', fontSize: '11px', fontWeight: 500, letterSpacing: '0.6px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px' }}>
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onFocus={() => setFocused('email')}
+              onBlur={() => setFocused(null)}
+              onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleAuth()}
+              style={{
+                width: '100%',
+                background: '#1A1A2E',
+                border: `1px solid ${focused === 'email' ? '#4F8EF7' : 'rgba(255,255,255,0.10)'}`,
+                borderRadius: '12px',
+                padding: '14px 16px',
+                color: '#EEEEF8',
+                fontSize: '15px',
+                outline: 'none',
+                transition: 'border-color 0.15s',
+                boxSizing: 'border-box',
+                fontFamily: 'inherit',
+              }}
+            />
           </div>
 
-          {/* Form */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div>
-              <label style={{ display: 'block', color: 'rgba(16,22,14,0.44)', fontSize: '11px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px' }}>
-                Email
-              </label>
+          {/* Password */}
+          <div>
+            <label style={{ display: 'block', color: '#505068', fontSize: '11px', fontWeight: 500, letterSpacing: '0.6px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px' }}>
+              Password
+            </label>
+            <div style={{ position: 'relative' }}>
               <input
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onFocus={() => setFocused('email')}
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={password}
+                onFocus={() => setFocused('password')}
                 onBlur={() => setFocused(null)}
-                onChange={e => setEmail(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAuth()}
                 style={{
                   width: '100%',
-                  background: '#FFFFFF',
-                  border: `1.5px solid ${focused === 'email' ? '#2C7A50' : 'rgba(16,22,14,0.12)'}`,
-                  borderRadius: '10px',
-                  padding: '13px 14px',
-                  color: '#0F1A0E',
+                  background: '#1A1A2E',
+                  border: `1px solid ${focused === 'password' ? '#4F8EF7' : 'rgba(255,255,255,0.10)'}`,
+                  borderRadius: '12px',
+                  padding: '14px 48px 14px 16px',
+                  color: '#EEEEF8',
                   fontSize: '15px',
                   outline: 'none',
                   transition: 'border-color 0.15s',
-                  WebkitAppearance: 'none',
+                  boxSizing: 'border-box',
+                  fontFamily: 'inherit',
                 }}
               />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', color: 'rgba(16,22,14,0.44)', fontSize: '11px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px' }}>
-                Password
-              </label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  value={password}
-                  onFocus={() => setFocused('password')}
-                  onBlur={() => setFocused(null)}
-                  onChange={e => setPassword(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleAuth()}
-                  style={{
-                    width: '100%',
-                    background: '#FFFFFF',
-                    border: `1.5px solid ${focused === 'password' ? '#2C7A50' : 'rgba(16,22,14,0.12)'}`,
-                    borderRadius: '10px',
-                    padding: '13px 44px 13px 14px',
-                    color: '#0F1A0E',
-                    fontSize: '15px',
-                    outline: 'none',
-                    transition: 'border-color 0.15s',
-                    WebkitAppearance: 'none',
-                  }}
-                />
-                <button
-                  type="button"
-                  tabIndex={-1}
-                  onClick={() => setShowPassword(p => !p)}
-                  style={{
-                    position: 'absolute', right: '13px', top: '50%', transform: 'translateY(-50%)',
-                    background: 'none', border: 'none', cursor: 'pointer',
-                 
-                    color: 'rgba(16,22,14,0.28)', padding: '4px', display: 'flex',
-                  }}
-                >
-                  {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
-                </button>
-              </div>
-              {isSignUp && password.length > 0 && password.length < 8 && (
-                <p style={{ color: '#B91C1C', fontSize: '12px', marginTop: '5px' }}>At least 8 characters required</p>
-              )}
-            </div>
-
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={handleAuth}
-              disabled={loading}
-              style={{
-                width: '100%',
-                background: '#1C3D28',
-                color: '#F0EDE5',
-                fontWeight: 700,
-                fontSize: '15px',
-                padding: '15px',
-                borderRadius: '10px',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                marginTop: '4px',
-                opacity: loading ? 0.65 : 1,
-                transition: 'opacity 0.15s',
-              }}
-            >
-              {loading ? <Loader2 size={17} className="animate-spin"/> : (isSignUp ? 'Create account' : 'Sign in')}
-            </motion.button>
-
-            <div style={{ textAlign: 'center' }}>
               <button
-                onClick={() => setIsSignUp(!isSignUp)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(16,22,14,0.42)', fontSize: '14px' }}
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPassword(p => !p)}
+                style={{
+                  position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: '#505068', padding: '4px', display: 'flex',
+                }}
               >
-                {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-                <span style={{ color: '#2C7A50', fontWeight: 700 }}>
-                  {isSignUp ? 'Sign in' : 'Sign up free'}
-                </span>
+                {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
               </button>
             </div>
+            {isSignUp && password.length > 0 && password.length < 8 && (
+              <p style={{ color: '#FF3737', fontSize: '12px', marginTop: '5px' }}>At least 8 characters required</p>
+            )}
           </div>
-        </motion.div>
-      </div>
+
+          {/* Primary CTA */}
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={handleAuth}
+            disabled={loading}
+            style={{
+              width: '100%',
+              background: '#4F8EF7',
+              color: 'white',
+              fontWeight: 700,
+              fontSize: '15px',
+              borderRadius: '14px',
+              border: 'none',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              marginTop: '4px',
+              opacity: loading ? 0.65 : 1,
+              transition: 'opacity 0.15s',
+              height: '52px',
+            }}
+          >
+            {loading ? <Loader2 size={17} className="animate-spin"/> : (isSignUp ? 'Create account' : 'Sign in')}
+          </motion.button>
+
+          {/* Toggle sign in / sign up */}
+          <div style={{ textAlign: 'center', paddingTop: '4px' }}>
+            <button
+              onClick={() => setIsSignUp(!isSignUp)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8888A8', fontSize: '14px', fontFamily: 'inherit' }}
+            >
+              {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
+              <span style={{ color: '#4F8EF7', fontWeight: 700 }}>
+                {isSignUp ? 'Sign in' : 'Sign up free'}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* Care team link */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: '24px', paddingTop: '18px', textAlign: 'center' }}>
+          <button
+            onClick={() => router.push('/care-team/login')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#505068', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}
+          >
+            care team portal →
+          </button>
+        </div>
+      </motion.div>
     </div>
   )
 }

@@ -40,9 +40,9 @@ function InsightIcon({ name, size = 13 }: { name: Insight['icon']; size?: number
 }
 
 const insightAccent: Record<Insight['type'], { border: string; dot: string; iconColor: string }> = {
-  positive: { border: '#2C7A50', dot: '#2C7A50', iconColor: '#2C7A50' },
-  tip:      { border: '#B45309', dot: '#D97706', iconColor: '#B45309' },
-  warning:  { border: '#B91C1C', dot: '#DC2626', iconColor: '#B91C1C' },
+  positive: { border: '#00D68F', dot: '#00D68F', iconColor: '#00D68F' },
+  tip:      { border: '#F59E0B', dot: '#F59E0B', iconColor: '#F59E0B' },
+  warning:  { border: '#FF3737', dot: '#FF3737', iconColor: '#FF3737' },
 }
 
 function WeeklyInsightsCard({ userId }: { userId: string }) {
@@ -108,44 +108,71 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
 
   return (
     <motion.div variants={fadeUp}
-      style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', overflow: 'hidden' }}>
+      style={{
+        background: '#121220',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '16px',
+        overflow: 'hidden',
+      }}>
       {/* Card header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 14px 0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Sparkles size={13} color="#2C7A50" strokeWidth={2}/>
-          <span style={{ color: 'rgba(16,22,14,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px 0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+          <Sparkles size={13} color="#4F8EF7" strokeWidth={2}/>
+          <span style={{
+            color: '#505068',
+            fontSize: '10px',
+            fontWeight: 700,
+            letterSpacing: '1.5px',
+            textTransform: 'uppercase',
+            fontFamily: 'var(--font-mono, monospace)',
+          }}>
             Weekly Insights
           </span>
         </div>
         <button
           onClick={() => { fetchInsights(true); toast('Refreshing insights…') }}
           disabled={spinning}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px', display: 'flex', alignItems: 'center', gap: '4px', color: 'rgba(16,22,14,0.32)', fontSize: '11px', fontWeight: 600 }}>
-          <RefreshCw size={11} style={{ transition: 'transform 0.6s', transform: spinning ? 'rotate(360deg)' : 'none' }}/>
+          style={{
+            background: 'rgba(79,142,247,0.10)',
+            border: '1px solid rgba(79,142,247,0.18)',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            padding: '4px 9px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            color: '#4F8EF7',
+            fontSize: '11px',
+            fontWeight: 600,
+          }}>
+          <RefreshCw size={10} style={{ transition: 'transform 0.6s', transform: spinning ? 'rotate(360deg)' : 'none' }}/>
           Refresh
         </button>
       </div>
 
       {/* Content */}
-      <div style={{ padding: '10px 14px 14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {loading ? (
           [1, 2, 3].map(i => (
-            <div key={i} style={{ height: '38px', borderRadius: '8px', background: 'rgba(16,22,14,0.04)', animation: 'pulse 1.4s ease-in-out infinite' }}/>
+            <div key={i} style={{ height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', animation: 'pulse 1.4s ease-in-out infinite' }}/>
           ))
         ) : (
           (insights || []).map((ins, i) => {
             const accent = insightAccent[ins.type] ?? insightAccent.tip
             return (
               <div key={i} style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '9px 10px', borderRadius: '8px',
-                background: 'rgba(16,22,14,0.02)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '11px',
+                padding: '10px 12px',
+                borderRadius: '10px',
+                background: 'rgba(255,255,255,0.03)',
                 borderLeft: `3px solid ${accent.border}`,
               }}>
                 <span style={{ color: accent.iconColor, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                   <InsightIcon name={ins.icon} size={13}/>
                 </span>
-                <p style={{ color: '#0F1A0E', fontSize: '13px', lineHeight: 1.45, margin: 0 }}>{ins.text}</p>
+                <p style={{ color: '#EEEEF8', fontSize: '13px', lineHeight: 1.5, margin: 0 }}>{ins.text}</p>
               </div>
             )
           })
@@ -209,7 +236,7 @@ function calcStreak(checkins: any[]): number {
 }
 
 const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } }
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } }
 const fadeUp = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: ease } }
 
 export default function Dashboard() {
@@ -288,12 +315,12 @@ export default function Dashboard() {
   }, [userId])
 
   const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening'
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {[80, 140, 72, 72, 72].map((h, i) => (
-        <Skeleton key={i} style={{ height: `${h}px`, borderRadius: '12px', background: 'rgba(16,22,14,0.05)' }}/>
+    <div style={{ minHeight: '100dvh', background: '#070710', padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {[80, 160, 80, 80, 80].map((h, i) => (
+        <Skeleton key={i} style={{ height: `${h}px`, borderRadius: '16px', background: 'rgba(255,255,255,0.05)' }}/>
       ))}
     </div>
   )
@@ -311,20 +338,39 @@ export default function Dashboard() {
   const emergencyContacts: any[] = profile?.emergency_contacts || []
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F0EDE5', paddingBottom: '76px' }}>
+    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '80px' }}>
 
       {/* Meeting banner */}
       <AnimatePresence>
         {upcomingMeeting && (
           <motion.div initial={{ y: -56, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -56, opacity: 0 }} transition={ease}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#1C3D28', padding: '48px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            style={{
+              position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+              background: 'rgba(0,214,143,0.10)',
+              borderBottom: '1px solid rgba(0,214,143,0.20)',
+              padding: '48px 20px 14px',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              backdropFilter: 'blur(16px)',
+            }}>
             <div>
-              <p style={{ color: 'rgba(240,237,229,0.45)', fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '2px' }}>Care team</p>
-              <p style={{ color: '#F0EDE5', fontWeight: 600, fontSize: '14px' }}>Your call is ready</p>
+              <p style={{ color: '#505068', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, marginBottom: '2px' }}>Care Team</p>
+              <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '15px' }}>Your call is ready</p>
             </div>
             <motion.button whileTap={{ scale: 0.95 }}
               onClick={() => toast('Care team call — coming soon')}
-              style={{ background: 'rgba(240,237,229,0.12)', color: '#F0EDE5', fontWeight: 600, fontSize: '13px', padding: '8px 14px', borderRadius: '8px', border: '1px solid rgba(240,237,229,0.15)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              style={{
+                background: '#00D68F',
+                color: '#070710',
+                fontWeight: 700,
+                fontSize: '13px',
+                padding: '9px 16px',
+                borderRadius: '10px',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}>
               <Video size={13}/> Join
             </motion.button>
           </motion.div>
@@ -332,71 +378,152 @@ export default function Dashboard() {
       </AnimatePresence>
 
       {/* Header */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 }}
-        style={{ padding: '52px 20px 20px', maxWidth: '640px', margin: '0 auto' }}>
+      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: 'easeOut' }}
+        style={{ padding: '56px 20px 24px', maxWidth: '640px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ color: 'rgba(16,22,14,0.36)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.8px', marginBottom: '3px', textTransform: 'uppercase' }}>
+            <p style={{ color: '#505068', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>
               {greeting}
             </p>
-            <h1 style={{ color: '#0F1A0E', fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1 }}>
+            <h1 style={{
+              color: '#EEEEF8',
+              fontSize: '30px',
+              fontWeight: 900,
+              letterSpacing: '-1.5px',
+              lineHeight: 1.05,
+              marginBottom: '10px',
+            }}>
               {profile?.full_name?.split(' ')[0]}
             </h1>
             {profile?.diagnosis && (
-              <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '7px' }}>
+              <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
                 {profile.diagnosis.split(',').map((d: string, i: number) => (
-                  <span key={i} style={{ background: 'rgba(16,22,14,0.06)', color: 'rgba(16,22,14,0.48)', fontSize: '10px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.3px' }}>
-                    {d.trim().toUpperCase()}
+                  <span key={i} style={{
+                    background: 'rgba(79,142,247,0.10)',
+                    color: '#4F8EF7',
+                    fontSize: '10px',
+                    fontWeight: 700,
+                    padding: '3px 8px',
+                    borderRadius: '8px',
+                    fontFamily: 'var(--font-mono, monospace)',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    border: '1px solid rgba(79,142,247,0.18)',
+                  }}>
+                    {d.trim()}
                   </span>
                 ))}
               </div>
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
             {streak >= 2 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(180,83,9,0.08)', border: '1px solid rgba(180,83,9,0.15)', borderRadius: '99px', padding: '4px 9px' }}>
-                <Flame size={12} color="#B45309"/>
-                <span style={{ color: '#B45309', fontSize: '12px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)' }}>{streak}</span>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '5px',
+                background: 'rgba(245,158,11,0.12)',
+                border: '1px solid rgba(245,158,11,0.22)',
+                borderRadius: '99px',
+                padding: '5px 10px',
+              }}>
+                <Flame size={12} color="#F59E0B"/>
+                <span style={{ color: '#F59E0B', fontSize: '12px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)' }}>{streak}</span>
               </div>
             )}
             <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/settings')}
-              style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(16,22,14,0.06)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-              <Settings size={15} color="rgba(16,22,14,0.4)"/>
+              style={{
+                width: '36px', height: '36px',
+                borderRadius: '10px',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer',
+              }}>
+              <Settings size={15} color="#8888A8"/>
             </motion.button>
           </div>
         </div>
       </motion.div>
 
       <motion.div variants={stagger} initial="hidden" animate="show"
-        style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '640px', margin: '0 auto' }}>
+        style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '640px', margin: '0 auto' }}>
 
         {/* Install banner */}
         {installPrompt && (
           <motion.div variants={fadeUp}
-            style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '13px 14px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            style={{
+              background: '#121220',
+              border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: '16px',
+              padding: '14px 16px',
+              display: 'flex', alignItems: 'center', gap: '12px',
+            }}>
             <div style={{ flex: 1 }}>
-              <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '13px' }}>Add to Home Screen</p>
-              <p style={{ color: 'rgba(16,22,14,0.4)', fontSize: '12px', marginTop: '1px' }}>Install for push notifications</p>
+              <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '14px' }}>Add to Home Screen</p>
+              <p style={{ color: '#8888A8', fontSize: '12px', marginTop: '2px' }}>Install for push notifications</p>
             </div>
-            <button onClick={async () => { installPrompt.prompt(); const { outcome } = await installPrompt.userChoice; if (outcome === 'accepted') setInstallPrompt(null) }}
-              style={{ background: '#1C3D28', color: '#F0EDE5', fontWeight: 600, fontSize: '12px', padding: '7px 12px', borderRadius: '7px', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
+            <button
+              onClick={async () => { installPrompt.prompt(); const { outcome } = await installPrompt.userChoice; if (outcome === 'accepted') setInstallPrompt(null) }}
+              style={{
+                background: '#4F8EF7',
+                color: '#070710',
+                fontWeight: 700,
+                fontSize: '12px',
+                padding: '8px 14px',
+                borderRadius: '10px',
+                border: 'none',
+                cursor: 'pointer',
+                flexShrink: 0,
+              }}>
               Install
             </button>
-            <button onClick={() => setInstallPrompt(null)} style={{ background: 'none', border: 'none', color: 'rgba(16,22,14,0.28)', fontSize: '18px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
+            <button onClick={() => setInstallPrompt(null)}
+              style={{ background: 'none', border: 'none', color: '#505068', fontSize: '20px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
           </motion.div>
         )}
 
-        {/* SOS */}
+        {/* SOS emergency button */}
         <motion.div variants={fadeUp}>
           <motion.button whileTap={{ scale: 0.98 }} onClick={() => router.push('/emergency')}
-            style={{ width: '100%', background: '#0F1A0E', borderRadius: '14px', padding: '22px 20px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            style={{
+              width: '100%',
+              background: 'linear-gradient(135deg, #330000 0%, #1A0000 100%)',
+              borderRadius: '22px',
+              padding: '24px 22px',
+              border: '1px solid rgba(255,55,55,0.20)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
             <div style={{ textAlign: 'left' }}>
-              <p style={{ color: 'rgba(240,237,229,0.4)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600 }}>Emergency</p>
-              <p style={{ color: '#F0EDE5', fontSize: '36px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1, fontFamily: 'var(--font-mono, monospace)' }}>SOS</p>
-              <p style={{ color: 'rgba(240,237,229,0.35)', fontSize: '12px', marginTop: '6px', fontWeight: 400 }}>Tap to activate emergency response</p>
+              <p style={{
+                color: 'rgba(255,55,55,0.60)',
+                fontSize: '10px',
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase',
+                marginBottom: '10px',
+                fontFamily: 'var(--font-mono, monospace)',
+                fontWeight: 700,
+              }}>Emergency</p>
+              <p style={{
+                color: '#FF3737',
+                fontSize: '40px',
+                fontWeight: 900,
+                letterSpacing: '-2px',
+                lineHeight: 1,
+                fontFamily: 'var(--font-mono, monospace)',
+              }}>SOS</p>
+              <p style={{ color: 'rgba(255,55,55,0.45)', fontSize: '12px', marginTop: '8px', fontWeight: 500 }}>Tap to activate emergency response</p>
             </div>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#B91C1C', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Phone size={20} color="white" strokeWidth={2.2}/>
+            <div style={{
+              width: '52px', height: '52px',
+              borderRadius: '50%',
+              background: '#FF3737',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+              boxShadow: '0 0 24px rgba(255,55,55,0.40)',
+            }}>
+              <Phone size={22} color="white" strokeWidth={2.2}/>
             </div>
           </motion.button>
         </motion.div>
@@ -406,51 +533,103 @@ export default function Dashboard() {
           {crashRisk && (
             <motion.div variants={fadeUp} initial="hidden" animate="show" exit={{ opacity: 0, scale: 0.97 }}
               style={{
-                background: crashRisk.level === 'high' ? 'rgba(185,28,28,0.05)' : 'rgba(180,83,9,0.05)',
-                border: `1px solid ${crashRisk.level === 'high' ? 'rgba(185,28,28,0.18)' : 'rgba(180,83,9,0.16)'}`,
-                borderRadius: '12px', padding: '13px 14px',
-                display: 'flex', alignItems: 'flex-start', gap: '10px',
+                background: crashRisk.level === 'high' ? 'rgba(255,55,55,0.07)' : 'rgba(245,158,11,0.07)',
+                border: `1px solid ${crashRisk.level === 'high' ? 'rgba(255,55,55,0.22)' : 'rgba(245,158,11,0.22)'}`,
+                borderRadius: '16px',
+                padding: '14px 16px',
+                display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
-              <TrendingDown size={15} color={crashRisk.level === 'high' ? '#B91C1C' : '#B45309'} style={{ marginTop: '1px', flexShrink: 0 }}/>
+              <TrendingDown size={15} color={crashRisk.level === 'high' ? '#FF3737' : '#F59E0B'} style={{ marginTop: '2px', flexShrink: 0 }}/>
               <div style={{ flex: 1 }}>
-                <p style={{ color: crashRisk.level === 'high' ? '#991B1B' : '#92400E', fontWeight: 700, fontSize: '13px', marginBottom: '2px' }}>
+                <p style={{
+                  color: crashRisk.level === 'high' ? '#FF3737' : '#F59E0B',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  marginBottom: '3px',
+                }}>
                   {crashRisk.level === 'high' ? 'High crash risk' : 'Flare pattern detected'}
                 </p>
-                <p style={{ color: 'rgba(16,22,14,0.52)', fontSize: '12px', lineHeight: 1.55, marginBottom: '3px' }}>{crashRisk.reason}</p>
-                <p style={{ color: crashRisk.level === 'high' ? '#B91C1C' : '#B45309', fontSize: '12px', fontWeight: 600 }}>{crashRisk.advice}</p>
+                <p style={{ color: '#8888A8', fontSize: '12px', lineHeight: 1.6, marginBottom: '4px' }}>{crashRisk.reason}</p>
+                <p style={{ color: crashRisk.level === 'high' ? '#FF3737' : '#F59E0B', fontSize: '12px', fontWeight: 600 }}>{crashRisk.advice}</p>
               </div>
-              <button onClick={() => setCrashRisk(null)} style={{ background: 'none', border: 'none', color: 'rgba(16,22,14,0.22)', fontSize: '17px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
+              <button onClick={() => setCrashRisk(null)}
+                style={{ background: 'none', border: 'none', color: '#505068', fontSize: '18px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Check-in + Recovery */}
-        <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+        {/* Check-in + Recovery grid */}
+        <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/checkin')}
-            style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '16px', textAlign: 'left', cursor: 'pointer' }}>
-            <p style={{ color: 'rgba(16,22,14,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Daily</p>
-            <p style={{ color: checkinToday ? '#2C7A50' : '#0F1A0E', fontSize: '20px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '4px' }}>
+            style={{
+              background: checkinToday
+                ? 'linear-gradient(135deg, #003322 0%, #001A14 100%)'
+                : '#121220',
+              border: checkinToday
+                ? '1px solid rgba(0,214,143,0.22)'
+                : '1px solid rgba(255,255,255,0.06)',
+              borderRadius: '16px',
+              padding: '18px 16px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}>
+            <p style={{
+              color: checkinToday ? 'rgba(0,214,143,0.55)' : '#505068',
+              fontSize: '10px',
+              fontWeight: 700,
+              letterSpacing: '1.5px',
+              textTransform: 'uppercase',
+              marginBottom: '12px',
+              fontFamily: 'var(--font-mono, monospace)',
+            }}>Daily</p>
+            <p style={{
+              color: checkinToday ? '#00D68F' : '#EEEEF8',
+              fontSize: '22px',
+              fontWeight: 900,
+              letterSpacing: '-0.8px',
+              lineHeight: 1,
+              marginBottom: '5px',
+            }}>
               {checkinToday ? 'Done ✓' : 'Check in'}
             </p>
-            <p style={{ color: checkinToday ? '#2C7A50' : 'rgba(16,22,14,0.3)', fontSize: '11px', fontWeight: 500 }}>
+            <p style={{
+              color: checkinToday ? 'rgba(0,214,143,0.65)' : '#505068',
+              fontSize: '11px',
+              fontWeight: 500,
+            }}>
               {checkinToday ? 'Completed today' : streak > 0 ? `${streak}-day streak` : 'Tap to start'}
             </p>
           </motion.button>
 
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/timeline')}
-            style={{ background: '#1C3D28', borderRadius: '12px', border: 'none', padding: '16px', textAlign: 'left', cursor: 'pointer' }}>
-            <p style={{ color: 'rgba(240,237,229,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Recovery</p>
+            style={{
+              background: 'linear-gradient(135deg, #0A0A22 0%, #07071A 100%)',
+              borderRadius: '16px',
+              border: '1px solid rgba(79,142,247,0.18)',
+              padding: '18px 16px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}>
+            <p style={{
+              color: 'rgba(79,142,247,0.55)',
+              fontSize: '10px',
+              fontWeight: 700,
+              letterSpacing: '1.5px',
+              textTransform: 'uppercase',
+              marginBottom: '12px',
+              fontFamily: 'var(--font-mono, monospace)',
+            }}>Recovery</p>
             {weeksSinceSurgery !== null ? (
               <>
-                <p style={{ color: '#F0EDE5', fontSize: '20px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '8px' }}>Week {weeksSinceSurgery}</p>
-                <div style={{ height: '2px', background: 'rgba(240,237,229,0.12)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${recoveryPct}%`, background: '#4A9E6B', borderRadius: '99px' }}/>
+                <p style={{ color: '#EEEEF8', fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '10px' }}>Week {weeksSinceSurgery}</p>
+                <div style={{ height: '3px', background: 'rgba(79,142,247,0.15)', borderRadius: '99px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${recoveryPct}%`, background: '#4F8EF7', borderRadius: '99px' }}/>
                 </div>
               </>
             ) : (
               <>
-                <p style={{ color: '#F0EDE5', fontSize: '20px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1 }}>Timeline</p>
-                <p style={{ color: 'rgba(240,237,229,0.35)', fontSize: '11px', marginTop: '4px' }}>Recovery plan</p>
+                <p style={{ color: '#EEEEF8', fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1 }}>Timeline</p>
+                <p style={{ color: '#4F8EF7', fontSize: '11px', marginTop: '5px', fontWeight: 500 }}>Recovery plan</p>
               </>
             )}
           </motion.button>
@@ -461,14 +640,19 @@ export default function Dashboard() {
 
         {/* Grouped list: Contacts · Profile · History */}
         <motion.div variants={fadeUp}
-          style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', overflow: 'hidden' }}>
+          style={{
+            background: '#121220',
+            border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: '16px',
+            overflow: 'hidden',
+          }}>
           {[
             {
               label: 'Emergency contacts',
               sub: emergencyContacts.length > 0 ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''} — notified on SOS` : 'No contacts added',
               href: '/emergency-contacts',
-              icon: <Users size={15} color="#B91C1C"/>,
-              iconBg: 'rgba(185,28,28,0.08)',
+              icon: <Users size={15} color="#FF3737"/>,
+              iconBg: 'rgba(255,55,55,0.10)',
             },
             {
               label: 'Medical profile',
@@ -476,29 +660,43 @@ export default function Dashboard() {
               href: '/medical-profile',
               icon: (
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                  <path d="M7.5 1.5C4.18 1.5 1.5 4.18 1.5 7.5s2.68 6 6 6 6-2.68 6-6-2.68-6-6-6zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm.75 2.25h-1.5v2.25H4.5v1.5h2.25V11h1.5V9H10.5V7.5H8.25V5.25z" fill="#1C3D28"/>
+                  <path d="M7.5 1.5C4.18 1.5 1.5 4.18 1.5 7.5s2.68 6 6 6 6-2.68 6-6-2.68-6-6-6zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm.75 2.25h-1.5v2.25H4.5v1.5h2.25V11h1.5V9H10.5V7.5H8.25V5.25z" fill="#00D68F"/>
                 </svg>
               ),
-              iconBg: 'rgba(28,61,40,0.08)',
+              iconBg: 'rgba(0,214,143,0.10)',
             },
             {
               label: 'Emergency history',
               sub: 'Past SOS events',
               href: '/emergency/history',
-              icon: <Clock size={15} color="#566253"/>,
-              iconBg: 'rgba(16,22,14,0.06)',
+              icon: <Clock size={15} color="#8888A8"/>,
+              iconBg: 'rgba(255,255,255,0.06)',
             },
           ].map((item, i, arr) => (
             <motion.button key={item.href} whileTap={{ scale: 0.99 }} onClick={() => router.push(item.href)}
-              style={{ width: '100%', background: 'none', border: 'none', padding: '14px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: i < arr.length - 1 ? '1px solid rgba(16,22,14,0.05)' : 'none' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: item.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              style={{
+                width: '100%',
+                background: 'none',
+                border: 'none',
+                padding: '15px 18px',
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '14px',
+                borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+              }}>
+              <div style={{
+                width: '34px', height: '34px',
+                borderRadius: '10px',
+                background: item.iconBg,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0,
+              }}>
                 {item.icon}
               </div>
               <div style={{ flex: 1, textAlign: 'left' }}>
-                <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '14px', lineHeight: 1.2 }}>{item.label}</p>
-                <p style={{ color: 'rgba(16,22,14,0.38)', fontSize: '12px', marginTop: '2px' }}>{item.sub}</p>
+                <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '14px', lineHeight: 1.2 }}>{item.label}</p>
+                <p style={{ color: '#8888A8', fontSize: '12px', marginTop: '2px' }}>{item.sub}</p>
               </div>
-              <ChevronRight size={14} color="rgba(16,22,14,0.2)" strokeWidth={2}/>
+              <ChevronRight size={14} color="#505068" strokeWidth={2}/>
             </motion.button>
           ))}
         </motion.div>
@@ -506,29 +704,62 @@ export default function Dashboard() {
         {/* Medications */}
         <motion.div variants={fadeUp}>
           <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/medications')}
-            style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '14px 16px', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: meds.length > 0 ? '10px' : 0 }}>
-              <span style={{ color: 'rgba(16,22,14,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>Medications</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            style={{
+              background: '#121220',
+              border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: '16px',
+              padding: '16px 18px',
+              cursor: 'pointer',
+              width: '100%',
+              textAlign: 'left',
+            }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: meds.length > 0 ? '12px' : 0 }}>
+              <span style={{
+                color: '#505068',
+                fontSize: '10px',
+                fontWeight: 700,
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-mono, monospace)',
+              }}>Medications</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                 {profile?.medications?.length > 0 && (
-                  <span style={{ background: 'rgba(16,22,14,0.06)', color: 'rgba(16,22,14,0.45)', fontSize: '11px', fontWeight: 700, padding: '1px 6px', borderRadius: '4px', fontFamily: 'var(--font-mono, monospace)' }}>
+                  <span style={{
+                    background: 'rgba(255,255,255,0.07)',
+                    color: '#8888A8',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    padding: '2px 7px',
+                    borderRadius: '6px',
+                    fontFamily: 'var(--font-mono, monospace)',
+                  }}>
                     {profile.medications.length}
                   </span>
                 )}
-                <ChevronRight size={14} color="rgba(16,22,14,0.2)" strokeWidth={2}/>
+                <ChevronRight size={14} color="#505068" strokeWidth={2}/>
               </div>
             </div>
             {meds.length > 0 ? (
               <div>
                 {meds.map((med: any, i: number) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '8px 0', borderTop: i > 0 ? '1px solid rgba(16,22,14,0.04)' : 'none' }}>
-                    <p style={{ color: '#0F1A0E', fontSize: '14px', fontWeight: 500 }}>{med.name}</p>
-                    <p style={{ color: 'rgba(16,22,14,0.32)', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', marginLeft: '8px', flexShrink: 0 }}>{med.dose}</p>
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
+                    padding: '9px 0',
+                    borderTop: i > 0 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  }}>
+                    <p style={{ color: '#EEEEF8', fontSize: '14px', fontWeight: 500 }}>{med.name}</p>
+                    <p style={{
+                      color: '#505068',
+                      fontSize: '12px',
+                      fontFamily: 'var(--font-mono, monospace)',
+                      marginLeft: '8px',
+                      flexShrink: 0,
+                    }}>{med.dose}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p style={{ color: 'rgba(16,22,14,0.28)', fontSize: '13px' }}>No medications added</p>
+              <p style={{ color: '#505068', fontSize: '13px' }}>No medications added</p>
             )}
           </motion.button>
         </motion.div>
@@ -536,28 +767,79 @@ export default function Dashboard() {
         {/* Care team */}
         <motion.div variants={fadeUp}>
           <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/appointments')}
-            style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '14px 16px', cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            style={{
+              background: '#121220',
+              border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: '16px',
+              padding: '16px 18px',
+              cursor: 'pointer',
+              width: '100%',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
             <div>
-              <p style={{ color: 'rgba(16,22,14,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '3px', fontFamily: 'var(--font-mono, monospace)' }}>Care team</p>
-              <p style={{ color: '#0F1A0E', fontWeight: 600, fontSize: '14px' }}>Schedule or join a call</p>
+              <p style={{
+                color: '#505068',
+                fontSize: '10px',
+                fontWeight: 700,
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase',
+                marginBottom: '4px',
+                fontFamily: 'var(--font-mono, monospace)',
+              }}>Care Team</p>
+              <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '15px' }}>Schedule or join a call</p>
             </div>
-            <Video size={16} color="rgba(16,22,14,0.28)" strokeWidth={1.8}/>
+            <div style={{
+              width: '38px', height: '38px',
+              borderRadius: '10px',
+              background: 'rgba(79,142,247,0.12)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Video size={16} color="#4F8EF7" strokeWidth={1.8}/>
+            </div>
           </motion.button>
         </motion.div>
 
         {/* Last check-in */}
         {checkins.length > 0 && (
           <motion.div variants={fadeUp}>
-            <motion.button whileTap={{ scale: 0.99 }} onClick={() =>  router.push('/history')}
-              style={{ background: '#FFFFFF', border: '1px solid rgba(16,22,14,0.08)', borderRadius: '12px', padding: '14px 16px', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <p style={{ color: 'rgba(16,22,14,0.36)', fontSize: '10px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>Last check-in</p>
-                <ChevronRight size={14} color="rgba(16,22,14,0.2)" strokeWidth={2}/>
+            <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/history')}
+              style={{
+                background: '#121220',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '16px',
+                padding: '16px 18px',
+                cursor: 'pointer',
+                width: '100%',
+                textAlign: 'left',
+              }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <p style={{
+                  color: '#505068',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  letterSpacing: '1.5px',
+                  textTransform: 'uppercase',
+                  fontFamily: 'var(--font-mono, monospace)',
+                }}>Last Check-in</p>
+                <ChevronRight size={14} color="#505068" strokeWidth={2}/>
               </div>
-              <p style={{ color: '#0F1A0E', fontSize: '13px', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+              <p style={{
+                color: '#EEEEF8',
+                fontSize: '13px',
+                lineHeight: 1.6,
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}>
                 {checkins[0]?.summary || 'No summary available'}
               </p>
-              <p style={{ color: 'rgba(16,22,14,0.3)', fontSize: '11px', marginTop: '6px', fontFamily: 'var(--font-mono, monospace)' }}>
+              <p style={{
+                color: '#505068',
+                fontSize: '11px',
+                marginTop: '8px',
+                fontFamily: 'var(--font-mono, monospace)',
+              }}>
                 {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </p>
             </motion.button>

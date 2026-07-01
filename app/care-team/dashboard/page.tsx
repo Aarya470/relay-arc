@@ -268,9 +268,9 @@ export default function CareTeamDashboard() {
   }
 
   const getStatusColor = (score: number) => {
-    if (score >= 8) return '#FF4A42'
-    if (score >= 5) return '#fcb546'
-    return '#80EF80'
+    if (score >= 8) return '#FF3737'
+    if (score >= 5) return '#F59E0B'
+    return '#00D68F'
   }
 
   const getStatusLabel = (score: number) => {
@@ -287,13 +287,13 @@ export default function CareTeamDashboard() {
   })
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#060610', padding: '80px 16px' }}>
+    <div style={{ minHeight: '100vh', background: '#070710', padding: '80px 16px' }}>
       {[1,2,3,4,5].map(i => <Skeleton key={i} className="h-20 w-full rounded-2xl bg-white/5 mb-3"/>)}
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#060610', paddingBottom: '32px' }}>
+    <div style={{ minHeight: '100vh', background: '#070710', paddingBottom: '32px' }}>
 
       {/* Meeting notification banner */}
       <AnimatePresence>
@@ -302,7 +302,7 @@ export default function CareTeamDashboard() {
             initial={{ y: -80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -80, opacity: 0 }}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #1a3a6e, #4A9EF5)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(74,158,245,0.3)' }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #111840, #2B5EE0)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(79,142,247,0.4)' }}
           >
             <div>
               <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
@@ -346,7 +346,7 @@ export default function CareTeamDashboard() {
           <div style={{ display: 'flex', gap: '8px' }}>
             <motion.button whileTap={{ scale: 0.9 }} onClick={generateSummaries} disabled={generating}
               style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <RefreshCw size={15} color="#4A9EF5" className={generating ? 'animate-spin' : ''}/>
+              <RefreshCw size={15} color="#4F8EF7" className={generating ? 'animate-spin' : ''}/>
             </motion.button>
             <motion.button whileTap={{ scale: 0.9 }}
               onClick={async () => { await supabase.auth.signOut(); router.push('/care-team/login') }}
@@ -360,11 +360,11 @@ export default function CareTeamDashboard() {
         <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
           {[
             { label: 'Total', value: patients.length, color: 'white' },
-            { label: 'Urgent', value: sortedPatients.filter(p => activeEmergencies.some(e => e.user_id === p.id) || (summaries[p.id]?.priority_score || 0) >= 8).length, color: '#FF4A42' },
-            { label: 'Monitor', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 8 && (sc >= 5 || hasOverdueMeds(p, medLogs)) }).length, color: '#fcb546' },
-            { label: 'Stable', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 5 && !hasOverdueMeds(p, medLogs) }).length, color: '#80EF80' },
+            { label: 'Urgent', value: sortedPatients.filter(p => activeEmergencies.some(e => e.user_id === p.id) || (summaries[p.id]?.priority_score || 0) >= 8).length, color: '#FF3737' },
+            { label: 'Monitor', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 8 && (sc >= 5 || hasOverdueMeds(p, medLogs)) }).length, color: '#F59E0B' },
+            { label: 'Stable', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 5 && !hasOverdueMeds(p, medLogs) }).length, color: '#00D68F' },
           ].map((stat, i) => (
-            <div key={i} style={{ flex: 1, background: '#111116', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
+            <div key={i} style={{ flex: 1, background: '#121220', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
               <p style={{ color: stat.color, fontWeight: 700, fontSize: '18px' }}>{stat.value}</p>
               <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</p>
             </div>
@@ -373,7 +373,7 @@ export default function CareTeamDashboard() {
 
         {!Object.keys(summaries).length && (
           <motion.button whileTap={{ scale: 0.97 }} onClick={generateSummaries} disabled={generating}
-            style={{ width: '100%', marginTop: '12px', background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.25)', color: '#4A9EF5', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            style={{ width: '100%', marginTop: '12px', background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.25)', color: '#4F8EF7', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             {generating ? '🤖 Analyzing patients...' : '🤖 Run AI analysis on all patients'}
           </motion.button>
         )}
@@ -399,9 +399,9 @@ export default function CareTeamDashboard() {
               return (
                 <div key={a.id} style={{ background: 'rgba(252,181,70,0.06)', border: '1px solid rgba(252,181,70,0.2)', borderRadius: '14px', padding: '14px', marginBottom: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <Clock size={13} color="#fcb546"/>
+                    <Clock size={13} color="#F59E0B"/>
                     <p style={{ color: 'white', fontWeight: 600, fontSize: '13px', flex: 1 }}>
-                      {patient?.full_name || 'Patient'} — <span style={{ color: '#fcb546' }}>Pending</span>
+                      {patient?.full_name || 'Patient'} — <span style={{ color: '#F59E0B' }}>Pending</span>
                     </p>
                   </div>
                   {a.scheduled_at && (
@@ -413,12 +413,12 @@ export default function CareTeamDashboard() {
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <motion.button whileTap={{ scale: 0.95 }} onClick={() => confirmAppointment(a.id)}
                       style={{ flex: 1, background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.25)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}>
-                      <Check size={13} color="#80EF80"/>
-                      <span style={{ color: '#80EF80', fontSize: '12px', fontWeight: 600 }}>Confirm</span>
+                      <Check size={13} color="#00D68F"/>
+                      <span style={{ color: '#00D68F', fontSize: '12px', fontWeight: 600 }}>Confirm</span>
                     </motion.button>
                     <motion.button whileTap={{ scale: 0.95 }} onClick={() => declineAppointment(a.id)}
                       style={{ flex: 1, background: 'rgba(255,74,66,0.08)', border: '1px solid rgba(255,74,66,0.2)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                      <span style={{ color: '#FF4A42', fontSize: '12px', fontWeight: 600 }}>Decline</span>
+                      <span style={{ color: '#FF3737', fontSize: '12px', fontWeight: 600 }}>Decline</span>
                     </motion.button>
                   </div>
                 </div>
@@ -429,14 +429,14 @@ export default function CareTeamDashboard() {
               const patient = patients.find(p => p.id === a.patient_id)
               const joinable = isJoinable(a)
               return (
-                <div key={a.id} style={{ background: joinable ? 'rgba(74,158,245,0.08)' : '#111116', border: `1px solid ${joinable ? 'rgba(74,158,245,0.3)' : 'rgba(128,239,128,0.15)'}`, borderRadius: '14px', padding: '14px', marginBottom: '8px' }}>
+                <div key={a.id} style={{ background: joinable ? 'rgba(74,158,245,0.08)' : '#121220', border: `1px solid ${joinable ? 'rgba(74,158,245,0.3)' : 'rgba(128,239,128,0.15)'}`, borderRadius: '14px', padding: '14px', marginBottom: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Calendar size={13} color="#80EF80"/>
+                      <Calendar size={13} color="#00D68F"/>
                       <p style={{ color: 'white', fontWeight: 600, fontSize: '13px' }}>{patient?.full_name || 'Patient'}</p>
                     </div>
                     {joinable && (
-                      <span style={{ background: 'rgba(74,158,245,0.15)', border: '1px solid rgba(74,158,245,0.3)', color: '#4A9EF5', fontSize: '9px', fontFamily: 'monospace', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                      <span style={{ background: 'rgba(74,158,245,0.15)', border: '1px solid rgba(74,158,245,0.3)', color: '#4F8EF7', fontSize: '9px', fontFamily: 'monospace', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>
                         Now
                       </span>
                     )}
@@ -447,7 +447,7 @@ export default function CareTeamDashboard() {
                   {joinable && (
                     <motion.button whileTap={{ scale: 0.97 }}
                       onClick={() => setActiveCall(a)}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#4A9EF5', borderRadius: '10px', padding: '10px', color: 'white', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer' }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#4F8EF7', borderRadius: '10px', padding: '10px', color: 'white', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer' }}
                     >
                       <Video size={14}/>
                       Join call with {patient?.full_name?.split(' ')[0]}
@@ -526,13 +526,13 @@ export default function CareTeamDashboard() {
                   {/* Patient info row */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
-                      <p style={{ color: '#FF4A42', fontWeight: 800, fontSize: '17px', marginBottom: '3px' }}>
+                      <p style={{ color: '#FF3737', fontWeight: 800, fontSize: '17px', marginBottom: '3px' }}>
                         {patient?.full_name || 'Unknown patient'}
                       </p>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                         <span style={{
                           background: 'rgba(255,74,66,0.15)', border: '1px solid rgba(255,74,66,0.35)',
-                          color: '#FF4A42', fontSize: '10px', padding: '2px 8px', borderRadius: '20px',
+                          color: '#FF3737', fontSize: '10px', padding: '2px 8px', borderRadius: '20px',
                           fontFamily: 'monospace', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px',
                         }}>
                           {typeLabel}
@@ -548,7 +548,7 @@ export default function CareTeamDashboard() {
                         )}
                       </div>
                     </div>
-                    <AlertTriangle size={22} color="#FF4A42" style={{ flexShrink: 0, opacity: 0.8 }}/>
+                    <AlertTriangle size={22} color="#FF3737" style={{ flexShrink: 0, opacity: 0.8 }}/>
                   </div>
 
                   {/* Medical card — expandable */}
@@ -574,7 +574,7 @@ export default function CareTeamDashboard() {
                           {patient?.blood_type && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', width: '80px', flexShrink: 0 }}>Blood type</span>
-                              <span style={{ color: '#FF4A42', fontWeight: 800, fontSize: '18px', fontFamily: 'monospace' }}>{patient.blood_type}</span>
+                              <span style={{ color: '#FF3737', fontWeight: 800, fontSize: '18px', fontFamily: 'monospace' }}>{patient.blood_type}</span>
                             </div>
                           )}
                           {patient?.allergies && (
@@ -609,7 +609,7 @@ export default function CareTeamDashboard() {
                       <a
                         href={`https://maps.google.com/?q=${encodeURIComponent(emergency.hospital_name)}`}
                         target="_blank" rel="noopener noreferrer"
-                        style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#4A9EF5', fontSize: '11px', fontWeight: 600, textDecoration: 'none', flexShrink: 0, marginLeft: '8px' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#4F8EF7', fontSize: '11px', fontWeight: 600, textDecoration: 'none', flexShrink: 0, marginLeft: '8px' }}
                         onClick={e => e.stopPropagation()}
                       >
                         Maps <ExternalLink size={10}/>
@@ -621,7 +621,7 @@ export default function CareTeamDashboard() {
                   {hasLocation && (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(74,158,245,0.05)', border: '1px solid rgba(74,158,245,0.15)', borderRadius: '10px', padding: '10px 14px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <MapPin size={13} color="#4A9EF5" style={{ flexShrink: 0 }}/>
+                        <MapPin size={13} color="#4F8EF7" style={{ flexShrink: 0 }}/>
                         <div>
                           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1px' }}>Last known location</p>
                           <p style={{ color: 'rgba(255,255,255,0.55)', fontFamily: 'monospace', fontSize: '11px' }}>
@@ -632,7 +632,7 @@ export default function CareTeamDashboard() {
                       <a
                         href={`https://maps.google.com/?q=${emergency.patient_lat},${emergency.patient_lng}`}
                         target="_blank" rel="noopener noreferrer"
-                        style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#4A9EF5', fontSize: '11px', fontWeight: 600, textDecoration: 'none', flexShrink: 0 }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#4F8EF7', fontSize: '11px', fontWeight: 600, textDecoration: 'none', flexShrink: 0 }}
                         onClick={e => e.stopPropagation()}
                       >
                         View <ExternalLink size={10}/>
@@ -651,7 +651,7 @@ export default function CareTeamDashboard() {
                         style={{
                           flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                           background: 'rgba(74,158,245,0.1)', border: '1px solid rgba(74,158,245,0.25)',
-                          color: '#4A9EF5', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
+                          color: '#4F8EF7', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
                           borderRadius: '10px', textDecoration: 'none',
                         }}
                         onClick={e => e.stopPropagation()}
@@ -666,7 +666,7 @@ export default function CareTeamDashboard() {
                         style={{
                           flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                           background: 'rgba(128,239,128,0.08)', border: '1px solid rgba(128,239,128,0.2)',
-                          color: '#80EF80', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
+                          color: '#00D68F', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
                           borderRadius: '10px', textDecoration: 'none',
                         }}
                         onClick={e => e.stopPropagation()}
@@ -691,7 +691,7 @@ export default function CareTeamDashboard() {
                       style={{
                         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                         background: 'rgba(255,74,66,0.12)', border: '1px solid rgba(255,74,66,0.3)',
-                        color: '#FF4A42', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
+                        color: '#FF3737', fontWeight: 700, fontSize: '12px', padding: '10px 8px',
                         borderRadius: '10px', cursor: 'pointer',
                       }}
                     >
@@ -734,7 +734,7 @@ export default function CareTeamDashboard() {
               onClick={() => router.push(`/care-team/patient/${patient.id}`)}
               style={{
                 width: '100%',
-                background: hasActiveEmergency ? 'rgba(255,74,66,0.06)' : '#111116',
+                background: hasActiveEmergency ? 'rgba(255,74,66,0.06)' : '#121220',
                 border: `1px solid ${hasActiveEmergency ? 'rgba(255,74,66,0.3)' : score >= 8 ? 'rgba(255,74,66,0.15)' : 'rgba(255,255,255,0.07)'}`,
                 borderRadius: '18px',
                 padding: '14px 16px',
@@ -754,9 +754,9 @@ export default function CareTeamDashboard() {
               {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <p style={{ color: hasActiveEmergency ? '#FF4A42' : appointments.some(a => a.patient_id === patient.id && a.status === 'pending') ? '#fcb546' : 'white', fontWeight: hasActiveEmergency ? 800 : 600, fontSize: '14px' }}>{patient.full_name}</p>
+                  <p style={{ color: hasActiveEmergency ? '#FF3737' : appointments.some(a => a.patient_id === patient.id && a.status === 'pending') ? '#F59E0B' : 'white', fontWeight: hasActiveEmergency ? 800 : 600, fontSize: '14px' }}>{patient.full_name}</p>
                   {appointments.some(a => a.patient_id === patient.id && a.status === 'pending') && (
-                    <span style={{ background: 'rgba(252,181,70,0.15)', color: '#fcb546', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
+                    <span style={{ background: 'rgba(252,181,70,0.15)', color: '#F59E0B', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
                       APPT REQUEST
                     </span>
                   )}
@@ -764,9 +764,9 @@ export default function CareTeamDashboard() {
                     <motion.span
                       animate={{ opacity: [1, 0.5, 1] }}
                       transition={{ duration: 0.9, repeat: Infinity }}
-                      style={{ background: 'rgba(255,74,66,0.25)', color: '#FF4A42', fontSize: '9px', padding: '2px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '4px', border: '1px solid rgba(255,74,66,0.4)' }}
+                      style={{ background: 'rgba(255,74,66,0.25)', color: '#FF3737', fontSize: '9px', padding: '2px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '4px', border: '1px solid rgba(255,74,66,0.4)' }}
                     >
-                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#FF4A42', display: 'inline-block' }}/>
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#FF3737', display: 'inline-block' }}/>
                       SOS
                     </motion.span>
                   )}
@@ -790,14 +790,14 @@ export default function CareTeamDashboard() {
                     <motion.span
                       animate={{ opacity: [1, 0.55, 1] }}
                       transition={{ duration: 0.9, repeat: Infinity }}
-                      style={{ background: 'rgba(255,74,66,0.2)', border: '1px solid rgba(255,74,66,0.45)', color: '#FF4A42', fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700 }}
+                      style={{ background: 'rgba(255,74,66,0.2)', border: '1px solid rgba(255,74,66,0.45)', color: '#FF3737', fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700 }}
                     >
                       SOS
                     </motion.span>
                     <motion.div
                       whileTap={{ scale: 0.9 }}
                       onClick={(e) => { e.stopPropagation(); const em = activeEmergencies.find(e => e.user_id === patient.id); if (em) dismissEmergency(em.id) }}
-                      style={{ background: 'rgba(255,74,66,0.12)', border: '1px solid rgba(255,74,66,0.3)', borderRadius: '6px', padding: '2px 7px', color: '#FF4A42', fontSize: '9px', cursor: 'pointer', fontWeight: 700, fontFamily: 'monospace' }}
+                      style={{ background: 'rgba(255,74,66,0.12)', border: '1px solid rgba(255,74,66,0.3)', borderRadius: '6px', padding: '2px 7px', color: '#FF3737', fontSize: '9px', cursor: 'pointer', fontWeight: 700, fontFamily: 'monospace' }}
                     >
                       Resolve
                     </motion.div>

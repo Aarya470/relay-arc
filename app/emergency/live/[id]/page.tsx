@@ -87,8 +87,7 @@ export default function EmergencyLivePage() {
 
   return (
     <div
-      className="min-h-screen flex flex-col"
-      style={{ backgroundColor: '#F2EFE9', color: '#1A2820' }}
+      style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: '#070710', color: '#EEEEF8' }}
     >
       {/* Status bar */}
       <AnimatePresence mode="wait">
@@ -99,14 +98,34 @@ export default function EmergencyLivePage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.4 }}
-            className="w-full py-3 px-6 flex items-center justify-center gap-3 text-white font-semibold text-sm"
-            style={{ backgroundColor: isActive ? '#DC2626' : '#5C8B74' }}
+            style={{
+              width: '100%',
+              padding: '14px 24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              color: 'white',
+              fontWeight: 700,
+              fontSize: '13px',
+              background: isActive
+                ? 'linear-gradient(90deg, #CC1F1F, #FF3737)'
+                : 'linear-gradient(90deg, #009965, #00D68F)',
+              boxShadow: isActive
+                ? '0 4px 24px rgba(255,55,55,0.30)'
+                : '0 4px 24px rgba(0,214,143,0.22)',
+              letterSpacing: '-0.1px',
+            }}
           >
             {isActive ? (
               <>
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-white" />
+                <span style={{ position: 'relative', display: 'inline-flex', width: '12px', height: '12px' }}>
+                  <motion.span
+                    style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'white', opacity: 0.75 }}
+                    animate={{ scale: [1, 2, 1], opacity: [0.75, 0, 0.75] }}
+                    transition={{ duration: 1.4, repeat: Infinity }}
+                  />
+                  <span style={{ position: 'relative', display: 'inline-flex', width: '12px', height: '12px', borderRadius: '50%', background: 'white' }} />
                 </span>
                 Emergency in progress
               </>
@@ -120,19 +139,35 @@ export default function EmergencyLivePage() {
         )}
       </AnimatePresence>
 
+      {/* LIVE badge for active emergencies */}
+      {data && isActive && (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '16px 0 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,55,55,0.12)', border: '1px solid rgba(255,55,55,0.28)', borderRadius: '99px', padding: '6px 14px' }}>
+            <motion.div
+              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#FF3737' }}
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            />
+            <span style={{ color: '#FF3737', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>LIVE</span>
+          </div>
+        </div>
+      )}
+
       {/* Main content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-10">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 24px' }}>
         {loading && (
-          <div className="flex flex-col items-center gap-4 text-[#5C8B74]">
-            <Loader2 size={36} className="animate-spin" />
-            <p className="text-sm" style={{ color: '#1A2820' }}>Loading emergency status…</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+              <Loader2 size={36} color="#4F8EF7" />
+            </motion.div>
+            <p style={{ color: '#8888A8', fontSize: '14px' }}>Loading emergency status…</p>
           </div>
         )}
 
         {error && !loading && (
-          <div className="flex flex-col items-center gap-4 text-center max-w-sm">
-            <AlertCircle size={40} style={{ color: '#DC2626' }} />
-            <p className="text-base font-medium">{error}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', textAlign: 'center', maxWidth: '320px' }}>
+            <AlertCircle size={40} color="#FF3737" />
+            <p style={{ color: '#EEEEF8', fontSize: '15px', fontWeight: 600 }}>{error}</p>
           </div>
         )}
 
@@ -144,56 +179,74 @@ export default function EmergencyLivePage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.97 }}
               transition={{ duration: 0.4 }}
-              className="flex flex-col items-center gap-6 max-w-md w-full text-center"
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', maxWidth: '400px', width: '100%', textAlign: 'center' }}
             >
               {/* Patient name */}
-              <h1 className="text-2xl font-bold leading-snug" style={{ color: '#1A2820' }}>
+              <h1 style={{ color: '#EEEEF8', fontSize: '22px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.3 }}>
                 {data.patientFirstName} is receiving emergency care
               </h1>
 
               {/* Emergency type badge */}
               <span
-                className="px-4 py-1.5 rounded-full text-sm font-semibold"
                 style={{
-                  backgroundColor: isActive ? '#FEE2E2' : '#D1FAE5',
-                  color: isActive ? '#DC2626' : '#065F46',
+                  padding: '6px 16px',
+                  borderRadius: '99px',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  background: isActive ? 'rgba(255,55,55,0.12)' : 'rgba(0,214,143,0.12)',
+                  color: isActive ? '#FF3737' : '#00D68F',
+                  border: `1px solid ${isActive ? 'rgba(255,55,55,0.28)' : 'rgba(0,214,143,0.28)'}`,
+                  fontFamily: 'var(--font-mono, monospace)',
+                  letterSpacing: '0.3px',
                 }}
               >
                 {typeLabel}
               </span>
 
               {/* Time since started */}
-              <p className="text-sm font-medium" style={{ color: '#5C8B74' }}>
+              <p style={{ color: '#505068', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>
                 {timeDisplay}
               </p>
 
-              {/* Status message */}
+              {/* Patient info card */}
               <div
-                className="rounded-2xl p-5 text-sm leading-relaxed"
-                style={{ backgroundColor: '#E8E3DA', color: '#1A2820' }}
+                style={{
+                  width: '100%',
+                  background: '#121220',
+                  border: `1px solid ${isActive ? 'rgba(255,55,55,0.18)' : 'rgba(0,214,143,0.16)'}`,
+                  borderRadius: '18px',
+                  padding: '20px',
+                  textAlign: 'left',
+                }}
               >
-                {isActive ? (
-                  <p>
-                    Emergency services have been notified. Your family member is being routed to
-                    the nearest hospital. Stay calm — help is on the way.
-                  </p>
-                ) : (
-                  <p>
-                    {data.patientFirstName} has marked the emergency as resolved and is safe.
-                  </p>
-                )}
+                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Status update</p>
+                <p style={{ color: '#8888A8', fontSize: '13px', lineHeight: 1.65 }}>
+                  {isActive ? (
+                    <>Emergency services have been notified. {data.patientFirstName} is being routed to the nearest hospital. Stay calm — help is on the way.</>
+                  ) : (
+                    <>{data.patientFirstName} has marked the emergency as resolved and is safe.</>
+                  )}
+                </p>
               </div>
 
               {/* Auto-refresh badge */}
               <div
-                className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full"
-                style={{ backgroundColor: '#E8E3DA', color: '#5C8B74' }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '99px',
+                  padding: '6px 14px',
+                  color: '#505068',
+                  fontSize: '11px',
+                  fontFamily: 'var(--font-mono, monospace)',
+                }}
               >
-                <RefreshCw
-                  size={12}
-                  className={spinning ? 'animate-spin' : ''}
-                  style={{ transition: 'transform 0.3s' }}
-                />
+                <motion.div animate={spinning ? { rotate: 360 } : { rotate: 0 }} transition={spinning ? { duration: 0.6, ease: 'linear' } : {}}>
+                  <RefreshCw size={11} color="#505068" />
+                </motion.div>
                 Updates every 15 seconds
               </div>
             </motion.div>
@@ -202,11 +255,23 @@ export default function EmergencyLivePage() {
       </div>
 
       {/* Call 911 button — always at bottom */}
-      <div className="px-6 pb-10 flex justify-center">
+      <div style={{ padding: '0 24px 40px', display: 'flex', justifyContent: 'center' }}>
         <a
           href="tel:911"
-          className="flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-bold text-base shadow-md active:scale-95 transition-transform"
-          style={{ backgroundColor: '#DC2626' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '16px 40px',
+            borderRadius: '16px',
+            background: '#FF3737',
+            color: 'white',
+            fontWeight: 800,
+            fontSize: '15px',
+            textDecoration: 'none',
+            boxShadow: '0 6px 24px rgba(255,55,55,0.35)',
+            letterSpacing: '-0.2px',
+          }}
         >
           <Phone size={20} />
           Call 911

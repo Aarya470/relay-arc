@@ -51,7 +51,7 @@ export default function CareTeamLogin() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#09090C', padding: '56px 24px 32px', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#070710', padding: '56px 24px 32px', display: 'flex', flexDirection: 'column' }}>
       <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/login')}
         style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px' }}>
         <ArrowLeft size={16} color="rgba(255,255,255,0.6)"/>
