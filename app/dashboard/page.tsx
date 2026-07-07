@@ -5,12 +5,28 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
-import { Skeleton } from '@/components/ui/skeleton'
 import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock, AlertTriangle, TrendingDown, Sparkles, RefreshCw, Heart, TrendingUp, Pill, Star } from 'lucide-react'
 import { toast } from 'sonner'
 import { analyzeCrashRisk, CrashRisk } from '@/lib/crash-risk'
 
-// ── Weekly Insights types ────────────────────────────────────────────────────
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const BG      = '#F4F5F7'
+const SURFACE = '#FFFFFF'
+const T1      = '#0E1218'
+const T2      = '#5B6371'
+const T3      = '#9AA2AD'
+const ACCENT  = '#0055FF'
+const ACCENT_DIM = 'rgba(0,85,255,0.08)'
+const RED     = '#D91414'
+const RED_DIM = 'rgba(217,20,20,0.07)'
+const GREEN   = '#007A44'
+const GREEN_DIM = 'rgba(0,122,68,0.08)'
+const AMBER   = '#B45309'
+const AMBER_DIM = 'rgba(180,83,9,0.08)'
+const BORDER  = '#E3E6EC'
+const SHADOW  = '0 1px 4px rgba(14,18,24,0.07)'
+
+// ── Weekly Insights types ─────────────────────────────────────────────────────
 interface Insight {
   type: 'positive' | 'warning' | 'tip'
   icon: 'heart' | 'trend' | 'pill' | 'star' | 'alert'
@@ -31,43 +47,37 @@ function insightCacheKey(userId: string): string {
 }
 
 function InsightIcon({ name, size = 13 }: { name: Insight['icon']; size?: number }) {
-  const color = 'currentColor'
-  if (name === 'heart') return <Heart size={size} color={color} strokeWidth={2}/>
-  if (name === 'trend') return <TrendingUp size={size} color={color} strokeWidth={2}/>
-  if (name === 'pill') return <Pill size={size} color={color} strokeWidth={2}/>
-  if (name === 'alert') return <AlertTriangle size={size} color={color} strokeWidth={2}/>
-  return <Star size={size} color={color} strokeWidth={2}/>
+  if (name === 'heart') return <Heart size={size} color="currentColor" strokeWidth={2}/>
+  if (name === 'trend') return <TrendingUp size={size} color="currentColor" strokeWidth={2}/>
+  if (name === 'pill') return <Pill size={size} color="currentColor" strokeWidth={2}/>
+  if (name === 'alert') return <AlertTriangle size={size} color="currentColor" strokeWidth={2}/>
+  return <Star size={size} color="currentColor" strokeWidth={2}/>
 }
 
-const insightAccent: Record<Insight['type'], { border: string; dot: string; iconColor: string }> = {
-  positive: { border: '#00D68F', dot: '#00D68F', iconColor: '#00D68F' },
-  tip:      { border: '#F59E0B', dot: '#F59E0B', iconColor: '#F59E0B' },
-  warning:  { border: '#FF3737', dot: '#FF3737', iconColor: '#FF3737' },
+const insightAccent: Record<Insight['type'], { left: string; iconColor: string }> = {
+  positive: { left: GREEN,  iconColor: GREEN  },
+  tip:      { left: AMBER,  iconColor: AMBER  },
+  warning:  { left: RED,    iconColor: RED    },
 }
 
 function WeeklyInsightsCard({ userId }: { userId: string }) {
   const [insights, setInsights] = useState<Insight[] | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading]   = useState(true)
   const [spinning, setSpinning] = useState(false)
-  const [hidden, setHidden] = useState(false)
+  const [hidden, setHidden]     = useState(false)
 
   const fetchInsights = useCallback(async (force = false) => {
     if (!userId) return
     if (!force) {
       try {
         const cached = sessionStorage.getItem(insightCacheKey(userId))
-        if (cached) {
-          setInsights(JSON.parse(cached))
-          setLoading(false)
-          return
-        }
+        if (cached) { setInsights(JSON.parse(cached)); setLoading(false); return }
       } catch {}
     }
 
     setSpinning(true)
     try {
       const since7d = new Date(Date.now() - 7 * 86400000).toISOString()
-
       const [{ data: checkinData }, { data: vitalsData }, { data: medData }] = await Promise.all([
         supabase.from('checkins').select('summary, mood, created_at').eq('user_id', userId).gte('created_at', since7d).order('created_at', { ascending: false }).limit(7),
         supabase.from('vitals_logs').select('heart_rate, blood_pressure_systolic, blood_pressure_diastolic, weight_kg, created_at').eq('user_id', userId).gte('created_at', since7d).order('created_at', { ascending: false }).limit(7),
@@ -109,21 +119,22 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
   return (
     <motion.div variants={fadeUp}
       style={{
-        background: '#121220',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: SURFACE,
+        border: `1px solid ${BORDER}`,
         borderRadius: '16px',
         overflow: 'hidden',
+        boxShadow: SHADOW,
       }}>
-      {/* Card header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px 0' }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '14px 16px',
+        borderBottom: `1px solid ${BORDER}`,
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-          <Sparkles size={13} color="#4F8EF7" strokeWidth={2}/>
+          <Sparkles size={13} color={ACCENT} strokeWidth={2}/>
           <span style={{
-            color: '#505068',
-            fontSize: '10px',
-            fontWeight: 700,
-            letterSpacing: '1.5px',
-            textTransform: 'uppercase',
+            color: T3, fontSize: '10px', fontWeight: 700,
+            letterSpacing: '1.2px', textTransform: 'uppercase',
             fontFamily: 'var(--font-mono, monospace)',
           }}>
             Weekly Insights
@@ -133,46 +144,43 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
           onClick={() => { fetchInsights(true); toast('Refreshing insights…') }}
           disabled={spinning}
           style={{
-            background: 'rgba(79,142,247,0.10)',
-            border: '1px solid rgba(79,142,247,0.18)',
-            borderRadius: '6px',
+            background: ACCENT_DIM,
+            border: `1px solid rgba(0,85,255,0.14)`,
+            borderRadius: '7px',
             cursor: 'pointer',
-            padding: '4px 9px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-            color: '#4F8EF7',
-            fontSize: '11px',
-            fontWeight: 600,
+            padding: '4px 10px',
+            display: 'flex', alignItems: 'center', gap: '5px',
+            color: ACCENT, fontSize: '11px', fontWeight: 600,
           }}>
           <RefreshCw size={10} style={{ transition: 'transform 0.6s', transform: spinning ? 'rotate(360deg)' : 'none' }}/>
           Refresh
         </button>
       </div>
 
-      {/* Content */}
-      <div style={{ padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ padding: '12px 16px 14px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {loading ? (
           [1, 2, 3].map(i => (
-            <div key={i} style={{ height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', animation: 'pulse 1.4s ease-in-out infinite' }}/>
+            <div key={i} style={{
+              height: '44px', borderRadius: '8px',
+              background: BG,
+              animation: 'pulse 1.4s ease-in-out infinite',
+            }}/>
           ))
         ) : (
           (insights || []).map((ins, i) => {
-            const accent = insightAccent[ins.type] ?? insightAccent.tip
+            const a = insightAccent[ins.type] ?? insightAccent.tip
             return (
               <div key={i} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '11px',
+                display: 'flex', alignItems: 'flex-start', gap: '11px',
                 padding: '10px 12px',
                 borderRadius: '10px',
-                background: 'rgba(255,255,255,0.03)',
-                borderLeft: `3px solid ${accent.border}`,
+                background: BG,
+                borderLeft: `3px solid ${a.left}`,
               }}>
-                <span style={{ color: accent.iconColor, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                <span style={{ color: a.iconColor, display: 'flex', alignItems: 'center', flexShrink: 0, marginTop: '1px' }}>
                   <InsightIcon name={ins.icon} size={13}/>
                 </span>
-                <p style={{ color: '#EEEEF8', fontSize: '13px', lineHeight: 1.5, margin: 0 }}>{ins.text}</p>
+                <p style={{ color: T2, fontSize: '13px', lineHeight: 1.5, margin: 0 }}>{ins.text}</p>
               </div>
             )
           })
@@ -235,19 +243,19 @@ function calcStreak(checkins: any[]): number {
   return streak
 }
 
-const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
+const ease    = { type: 'spring', stiffness: 300, damping: 28 } as const
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } }
-const fadeUp = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: ease } }
+const fadeUp  = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: ease } }
 
 export default function Dashboard() {
-  const [profile, setProfile] = useState<any>(null)
-  const [checkins, setCheckins] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const [userId, setUserId] = useState('')
+  const [profile, setProfile]           = useState<any>(null)
+  const [checkins, setCheckins]         = useState<any[]>([])
+  const [loading, setLoading]           = useState(true)
+  const [userId, setUserId]             = useState('')
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
-  const [installPrompt, setInstallPrompt] = useState<any>(null)
-  const [showIosHint, setShowIosHint] = useState(false)
-  const [crashRisk, setCrashRisk] = useState<CrashRisk | null>(null)
+  const [installPrompt, setInstallPrompt]     = useState<any>(null)
+  const [showIosHint, setShowIosHint]         = useState(false)
+  const [crashRisk, setCrashRisk]       = useState<CrashRisk | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -302,7 +310,7 @@ export default function Dashboard() {
       const { data } = await supabase.from('appointments').select('*').eq('patient_id', userId).eq('status', 'confirmed')
       if (!data) return
       const now = Date.now()
-      const upcoming = data.find(a => {
+      const upcoming = data.find((a: any) => {
         if (!a.meeting_room_id) return false
         const t = parseTS(a.scheduled_at).getTime()
         return t > now - 5 * 60 * 1000 && t < now + 15 * 60 * 1000
@@ -318,9 +326,9 @@ export default function Dashboard() {
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#070710', padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div style={{ minHeight: '100dvh', background: BG, padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {[80, 160, 80, 80, 80].map((h, i) => (
-        <Skeleton key={i} style={{ height: `${h}px`, borderRadius: '16px', background: 'rgba(255,255,255,0.05)' }}/>
+        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#E3E6EC', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
     </div>
   )
@@ -332,44 +340,57 @@ export default function Dashboard() {
     const ts = checkins[0].created_at
     return new Date(/[Z+]/.test(ts) ? ts : ts + 'Z').toLocaleDateString() === new Date().toLocaleDateString()
   })()
-  const recoveryPct = weeksSinceSurgery !== null ? Math.min((weeksSinceSurgery / 12) * 100, 100) : 0
-  const meds = profile?.medications?.slice(0, 3) || []
-  const streak = calcStreak(checkins)
+  const recoveryPct  = weeksSinceSurgery !== null ? Math.min((weeksSinceSurgery / 12) * 100, 100) : 0
+  const meds         = profile?.medications?.slice(0, 3) || []
+  const streak       = calcStreak(checkins)
   const emergencyContacts: any[] = profile?.emergency_contacts || []
 
+  const Card = ({ children, onClick, style = {} }: { children: React.ReactNode; onClick?: () => void; style?: React.CSSProperties }) => (
+    <motion.div
+      variants={fadeUp}
+      onClick={onClick}
+      style={{
+        background: SURFACE,
+        border: `1px solid ${BORDER}`,
+        borderRadius: '16px',
+        boxShadow: SHADOW,
+        cursor: onClick ? 'pointer' : 'default',
+        ...style,
+      }}
+    >
+      {children}
+    </motion.div>
+  )
+
   return (
-    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: BG, paddingBottom: '80px' }}>
 
       {/* Meeting banner */}
       <AnimatePresence>
         {upcomingMeeting && (
-          <motion.div initial={{ y: -56, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -56, opacity: 0 }} transition={ease}
+          <motion.div
+            initial={{ y: -56, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -56, opacity: 0 }}
+            transition={ease}
             style={{
               position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-              background: 'rgba(0,214,143,0.10)',
-              borderBottom: '1px solid rgba(0,214,143,0.20)',
+              background: 'rgba(0,122,68,0.06)',
+              borderBottom: `1px solid rgba(0,122,68,0.14)`,
               padding: '48px 20px 14px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               backdropFilter: 'blur(16px)',
             }}>
             <div>
-              <p style={{ color: '#505068', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, marginBottom: '2px' }}>Care Team</p>
-              <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '15px' }}>Your call is ready</p>
+              <p style={{ color: T3, fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, marginBottom: '2px' }}>Care Team</p>
+              <p style={{ color: T1, fontWeight: 700, fontSize: '15px' }}>Your call is ready</p>
             </div>
-            <motion.button whileTap={{ scale: 0.95 }}
+            <motion.button
+              whileTap={{ scale: 0.95 }}
               onClick={() => toast('Care team call — coming soon')}
               style={{
-                background: '#00D68F',
-                color: '#070710',
-                fontWeight: 700,
-                fontSize: '13px',
-                padding: '9px 16px',
-                borderRadius: '10px',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
+                background: GREEN, color: '#FFFFFF',
+                fontWeight: 700, fontSize: '13px',
+                padding: '9px 16px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '6px',
               }}>
               <Video size={13}/> Join
             </motion.button>
@@ -378,37 +399,29 @@ export default function Dashboard() {
       </AnimatePresence>
 
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: 'easeOut' }}
-        style={{ padding: '56px 20px 24px', maxWidth: '640px', margin: '0 auto' }}>
+      <motion.div
+        initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        style={{ padding: '56px 20px 20px', maxWidth: '640px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ color: '#505068', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>
+            <p style={{ color: T3, fontSize: '12px', fontWeight: 500, marginBottom: '3px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
               {greeting}
             </p>
-            <h1 style={{
-              color: '#EEEEF8',
-              fontSize: '30px',
-              fontWeight: 900,
-              letterSpacing: '-1.5px',
-              lineHeight: 1.05,
-              marginBottom: '10px',
-            }}>
+            <h1 style={{ color: T1, fontSize: '32px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 1.05, marginBottom: '10px' }}>
               {profile?.full_name?.split(' ')[0]}
             </h1>
             {profile?.diagnosis && (
               <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
                 {profile.diagnosis.split(',').map((d: string, i: number) => (
                   <span key={i} style={{
-                    background: 'rgba(79,142,247,0.10)',
-                    color: '#4F8EF7',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    padding: '3px 8px',
-                    borderRadius: '8px',
+                    background: ACCENT_DIM,
+                    color: ACCENT,
+                    fontSize: '10px', fontWeight: 700,
+                    padding: '3px 8px', borderRadius: '6px',
                     fontFamily: 'var(--font-mono, monospace)',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase',
-                    border: '1px solid rgba(79,142,247,0.18)',
+                    letterSpacing: '0.8px', textTransform: 'uppercase',
+                    border: `1px solid rgba(0,85,255,0.14)`,
                   }}>
                     {d.trim()}
                   </span>
@@ -416,80 +429,73 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
             {streak >= 2 && (
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(245,158,11,0.12)',
-                border: '1px solid rgba(245,158,11,0.22)',
-                borderRadius: '99px',
-                padding: '5px 10px',
+                background: 'rgba(180,83,9,0.08)',
+                border: '1px solid rgba(180,83,9,0.14)',
+                borderRadius: '99px', padding: '5px 10px',
               }}>
-                <Flame size={12} color="#F59E0B"/>
-                <span style={{ color: '#F59E0B', fontSize: '12px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)' }}>{streak}</span>
+                <Flame size={12} color={AMBER}/>
+                <span style={{ color: AMBER, fontSize: '12px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)' }}>{streak}</span>
               </div>
             )}
-            <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/settings')}
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => router.push('/settings')}
               style={{
-                width: '36px', height: '36px',
-                borderRadius: '10px',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                width: '36px', height: '36px', borderRadius: '10px',
+                background: SURFACE, border: `1px solid ${BORDER}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer',
+                cursor: 'pointer', boxShadow: SHADOW,
               }}>
-              <Settings size={15} color="#8888A8"/>
+              <Settings size={15} color={T2}/>
             </motion.button>
           </div>
         </div>
       </motion.div>
 
-      <motion.div variants={stagger} initial="hidden" animate="show"
+      <motion.div
+        variants={stagger} initial="hidden" animate="show"
         style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '640px', margin: '0 auto' }}>
 
         {/* Install banner */}
         {installPrompt && (
           <motion.div variants={fadeUp}
             style={{
-              background: '#121220',
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: '16px',
-              padding: '14px 16px',
-              display: 'flex', alignItems: 'center', gap: '12px',
+              background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '16px',
+              padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px',
+              boxShadow: SHADOW,
             }}>
             <div style={{ flex: 1 }}>
-              <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '14px' }}>Add to Home Screen</p>
-              <p style={{ color: '#8888A8', fontSize: '12px', marginTop: '2px' }}>Install for push notifications</p>
+              <p style={{ color: T1, fontWeight: 700, fontSize: '14px' }}>Add to Home Screen</p>
+              <p style={{ color: T2, fontSize: '12px', marginTop: '2px' }}>Install for push notifications</p>
             </div>
             <button
               onClick={async () => { installPrompt.prompt(); const { outcome } = await installPrompt.userChoice; if (outcome === 'accepted') setInstallPrompt(null) }}
               style={{
-                background: '#4F8EF7',
-                color: '#070710',
-                fontWeight: 700,
-                fontSize: '12px',
-                padding: '8px 14px',
-                borderRadius: '10px',
-                border: 'none',
-                cursor: 'pointer',
-                flexShrink: 0,
+                background: ACCENT, color: 'white', fontWeight: 700, fontSize: '12px',
+                padding: '8px 14px', borderRadius: '9px', border: 'none', cursor: 'pointer', flexShrink: 0,
               }}>
               Install
             </button>
             <button onClick={() => setInstallPrompt(null)}
-              style={{ background: 'none', border: 'none', color: '#505068', fontSize: '20px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
+              style={{ background: 'none', border: 'none', color: T3, fontSize: '20px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
           </motion.div>
         )}
 
         {/* SOS emergency button */}
         <motion.div variants={fadeUp}>
-          <motion.button whileTap={{ scale: 0.98 }} onClick={() => router.push('/emergency')}
+          <motion.button
+            whileTap={{ scale: 0.985 }}
+            onClick={() => router.push('/emergency')}
             style={{
               width: '100%',
-              background: 'linear-gradient(135deg, #330000 0%, #1A0000 100%)',
-              borderRadius: '22px',
-              padding: '24px 22px',
-              border: '1px solid rgba(255,55,55,0.20)',
+              background: RED,
+              borderRadius: '20px',
+              padding: '22px 22px',
+              border: 'none',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -497,31 +503,32 @@ export default function Dashboard() {
             }}>
             <div style={{ textAlign: 'left' }}>
               <p style={{
-                color: 'rgba(255,55,55,0.60)',
+                color: 'rgba(255,255,255,0.55)',
                 fontSize: '10px',
                 letterSpacing: '1.5px',
                 textTransform: 'uppercase',
-                marginBottom: '10px',
+                marginBottom: '8px',
                 fontFamily: 'var(--font-mono, monospace)',
                 fontWeight: 700,
               }}>Emergency</p>
               <p style={{
-                color: '#FF3737',
-                fontSize: '40px',
+                color: '#FFFFFF',
+                fontSize: '42px',
                 fontWeight: 900,
                 letterSpacing: '-2px',
                 lineHeight: 1,
                 fontFamily: 'var(--font-mono, monospace)',
               }}>SOS</p>
-              <p style={{ color: 'rgba(255,55,55,0.45)', fontSize: '12px', marginTop: '8px', fontWeight: 500 }}>Tap to activate emergency response</p>
+              <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '12px', marginTop: '7px', fontWeight: 500 }}>
+                Tap to activate emergency response
+              </p>
             </div>
             <div style={{
-              width: '52px', height: '52px',
+              width: '54px', height: '54px',
               borderRadius: '50%',
-              background: '#FF3737',
+              background: 'rgba(255,255,255,0.18)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: '0 0 24px rgba(255,55,55,0.40)',
             }}>
               <Phone size={22} color="white" strokeWidth={2.2}/>
             </div>
@@ -531,105 +538,90 @@ export default function Dashboard() {
         {/* Crash risk alert */}
         <AnimatePresence>
           {crashRisk && (
-            <motion.div variants={fadeUp} initial="hidden" animate="show" exit={{ opacity: 0, scale: 0.97 }}
+            <motion.div
+              variants={fadeUp} initial="hidden" animate="show" exit={{ opacity: 0, scale: 0.97 }}
               style={{
-                background: crashRisk.level === 'high' ? 'rgba(255,55,55,0.07)' : 'rgba(245,158,11,0.07)',
-                border: `1px solid ${crashRisk.level === 'high' ? 'rgba(255,55,55,0.22)' : 'rgba(245,158,11,0.22)'}`,
-                borderRadius: '16px',
-                padding: '14px 16px',
+                background: crashRisk.level === 'high' ? RED_DIM : AMBER_DIM,
+                border: `1px solid ${crashRisk.level === 'high' ? 'rgba(217,20,20,0.18)' : 'rgba(180,83,9,0.18)'}`,
+                borderRadius: '14px', padding: '14px 16px',
                 display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
-              <TrendingDown size={15} color={crashRisk.level === 'high' ? '#FF3737' : '#F59E0B'} style={{ marginTop: '2px', flexShrink: 0 }}/>
+              <TrendingDown size={15} color={crashRisk.level === 'high' ? RED : AMBER} style={{ marginTop: '2px', flexShrink: 0 }}/>
               <div style={{ flex: 1 }}>
-                <p style={{
-                  color: crashRisk.level === 'high' ? '#FF3737' : '#F59E0B',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  marginBottom: '3px',
-                }}>
+                <p style={{ color: crashRisk.level === 'high' ? RED : AMBER, fontWeight: 700, fontSize: '13px', marginBottom: '3px' }}>
                   {crashRisk.level === 'high' ? 'High crash risk' : 'Flare pattern detected'}
                 </p>
-                <p style={{ color: '#8888A8', fontSize: '12px', lineHeight: 1.6, marginBottom: '4px' }}>{crashRisk.reason}</p>
-                <p style={{ color: crashRisk.level === 'high' ? '#FF3737' : '#F59E0B', fontSize: '12px', fontWeight: 600 }}>{crashRisk.advice}</p>
+                <p style={{ color: T2, fontSize: '12px', lineHeight: 1.6, marginBottom: '4px' }}>{crashRisk.reason}</p>
+                <p style={{ color: crashRisk.level === 'high' ? RED : AMBER, fontSize: '12px', fontWeight: 600 }}>{crashRisk.advice}</p>
               </div>
               <button onClick={() => setCrashRisk(null)}
-                style={{ background: 'none', border: 'none', color: '#505068', fontSize: '18px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
+                style={{ background: 'none', border: 'none', color: T3, fontSize: '18px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Check-in + Recovery grid */}
         <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/checkin')}
+          {/* Check-in card */}
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => router.push('/checkin')}
             style={{
-              background: checkinToday
-                ? 'linear-gradient(135deg, #003322 0%, #001A14 100%)'
-                : '#121220',
-              border: checkinToday
-                ? '1px solid rgba(0,214,143,0.22)'
-                : '1px solid rgba(255,255,255,0.06)',
+              background: checkinToday ? GREEN_DIM : SURFACE,
+              border: `1px solid ${checkinToday ? 'rgba(0,122,68,0.18)' : BORDER}`,
               borderRadius: '16px',
               padding: '18px 16px',
               textAlign: 'left',
               cursor: 'pointer',
+              boxShadow: SHADOW,
             }}>
             <p style={{
-              color: checkinToday ? 'rgba(0,214,143,0.55)' : '#505068',
-              fontSize: '10px',
-              fontWeight: 700,
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase',
-              marginBottom: '12px',
-              fontFamily: 'var(--font-mono, monospace)',
+              color: checkinToday ? GREEN : T3,
+              fontSize: '10px', fontWeight: 700,
+              letterSpacing: '1.2px', textTransform: 'uppercase',
+              marginBottom: '12px', fontFamily: 'var(--font-mono, monospace)',
             }}>Daily</p>
             <p style={{
-              color: checkinToday ? '#00D68F' : '#EEEEF8',
-              fontSize: '22px',
-              fontWeight: 900,
-              letterSpacing: '-0.8px',
-              lineHeight: 1,
-              marginBottom: '5px',
+              color: checkinToday ? GREEN : T1,
+              fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '5px',
             }}>
               {checkinToday ? 'Done ✓' : 'Check in'}
             </p>
-            <p style={{
-              color: checkinToday ? 'rgba(0,214,143,0.65)' : '#505068',
-              fontSize: '11px',
-              fontWeight: 500,
-            }}>
+            <p style={{ color: checkinToday ? GREEN : T3, fontSize: '11px', fontWeight: 500 }}>
               {checkinToday ? 'Completed today' : streak > 0 ? `${streak}-day streak` : 'Tap to start'}
             </p>
           </motion.button>
 
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/timeline')}
+          {/* Recovery card */}
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => router.push('/timeline')}
             style={{
-              background: 'linear-gradient(135deg, #0A0A22 0%, #07071A 100%)',
+              background: SURFACE,
               borderRadius: '16px',
-              border: '1px solid rgba(79,142,247,0.18)',
+              border: `1px solid ${BORDER}`,
               padding: '18px 16px',
               textAlign: 'left',
               cursor: 'pointer',
+              boxShadow: SHADOW,
             }}>
             <p style={{
-              color: 'rgba(79,142,247,0.55)',
-              fontSize: '10px',
-              fontWeight: 700,
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase',
-              marginBottom: '12px',
-              fontFamily: 'var(--font-mono, monospace)',
+              color: ACCENT,
+              fontSize: '10px', fontWeight: 700,
+              letterSpacing: '1.2px', textTransform: 'uppercase',
+              marginBottom: '12px', fontFamily: 'var(--font-mono, monospace)',
             }}>Recovery</p>
             {weeksSinceSurgery !== null ? (
               <>
-                <p style={{ color: '#EEEEF8', fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '10px' }}>Week {weeksSinceSurgery}</p>
-                <div style={{ height: '3px', background: 'rgba(79,142,247,0.15)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${recoveryPct}%`, background: '#4F8EF7', borderRadius: '99px' }}/>
+                <p style={{ color: T1, fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '10px' }}>Week {weeksSinceSurgery}</p>
+                <div style={{ height: '4px', background: BG, borderRadius: '99px', overflow: 'hidden', border: `1px solid ${BORDER}` }}>
+                  <div style={{ height: '100%', width: `${recoveryPct}%`, background: ACCENT, borderRadius: '99px' }}/>
                 </div>
               </>
             ) : (
               <>
-                <p style={{ color: '#EEEEF8', fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1 }}>Timeline</p>
-                <p style={{ color: '#4F8EF7', fontSize: '11px', marginTop: '5px', fontWeight: 500 }}>Recovery plan</p>
+                <p style={{ color: T1, fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1 }}>Timeline</p>
+                <p style={{ color: ACCENT, fontSize: '11px', marginTop: '5px', fontWeight: 500 }}>Recovery plan</p>
               </>
             )}
           </motion.button>
@@ -641,18 +633,18 @@ export default function Dashboard() {
         {/* Grouped list: Contacts · Profile · History */}
         <motion.div variants={fadeUp}
           style={{
-            background: '#121220',
-            border: '1px solid rgba(255,255,255,0.06)',
-            borderRadius: '16px',
-            overflow: 'hidden',
+            background: SURFACE, border: `1px solid ${BORDER}`,
+            borderRadius: '16px', overflow: 'hidden', boxShadow: SHADOW,
           }}>
           {[
             {
               label: 'Emergency contacts',
-              sub: emergencyContacts.length > 0 ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''} — notified on SOS` : 'No contacts added',
+              sub: emergencyContacts.length > 0
+                ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''} — notified on SOS`
+                : 'No contacts added',
               href: '/emergency-contacts',
-              icon: <Users size={15} color="#FF3737"/>,
-              iconBg: 'rgba(255,55,55,0.10)',
+              icon: <Users size={15} color={RED}/>,
+              iconBg: RED_DIM,
             },
             {
               label: 'Medical profile',
@@ -660,32 +652,31 @@ export default function Dashboard() {
               href: '/medical-profile',
               icon: (
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                  <path d="M7.5 1.5C4.18 1.5 1.5 4.18 1.5 7.5s2.68 6 6 6 6-2.68 6-6-2.68-6-6-6zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm.75 2.25h-1.5v2.25H4.5v1.5h2.25V11h1.5V9H10.5V7.5H8.25V5.25z" fill="#00D68F"/>
+                  <path d="M7.5 1.5C4.18 1.5 1.5 4.18 1.5 7.5s2.68 6 6 6 6-2.68 6-6-2.68-6-6-6zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm.75 2.25h-1.5v2.25H4.5v1.5h2.25V11h1.5V9H10.5V7.5H8.25V5.25z" fill={GREEN}/>
                 </svg>
               ),
-              iconBg: 'rgba(0,214,143,0.10)',
+              iconBg: GREEN_DIM,
             },
             {
               label: 'Emergency history',
               sub: 'Past SOS events',
               href: '/emergency/history',
-              icon: <Clock size={15} color="#8888A8"/>,
-              iconBg: 'rgba(255,255,255,0.06)',
+              icon: <Clock size={15} color={T2}/>,
+              iconBg: BG,
             },
           ].map((item, i, arr) => (
-            <motion.button key={item.href} whileTap={{ scale: 0.99 }} onClick={() => router.push(item.href)}
+            <motion.button
+              key={item.href}
+              whileTap={{ scale: 0.99 }}
+              onClick={() => router.push(item.href)}
               style={{
-                width: '100%',
-                background: 'none',
-                border: 'none',
-                padding: '15px 18px',
-                cursor: 'pointer',
+                width: '100%', background: 'none', border: 'none',
+                padding: '15px 18px', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '14px',
-                borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                borderBottom: i < arr.length - 1 ? `1px solid ${BORDER}` : 'none',
               }}>
               <div style={{
-                width: '34px', height: '34px',
-                borderRadius: '10px',
+                width: '34px', height: '34px', borderRadius: '10px',
                 background: item.iconBg,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0,
@@ -693,50 +684,41 @@ export default function Dashboard() {
                 {item.icon}
               </div>
               <div style={{ flex: 1, textAlign: 'left' }}>
-                <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '14px', lineHeight: 1.2 }}>{item.label}</p>
-                <p style={{ color: '#8888A8', fontSize: '12px', marginTop: '2px' }}>{item.sub}</p>
+                <p style={{ color: T1, fontWeight: 600, fontSize: '14px', lineHeight: 1.2 }}>{item.label}</p>
+                <p style={{ color: T3, fontSize: '12px', marginTop: '2px' }}>{item.sub}</p>
               </div>
-              <ChevronRight size={14} color="#505068" strokeWidth={2}/>
+              <ChevronRight size={14} color={T3} strokeWidth={2}/>
             </motion.button>
           ))}
         </motion.div>
 
         {/* Medications */}
         <motion.div variants={fadeUp}>
-          <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/medications')}
+          <motion.button
+            whileTap={{ scale: 0.99 }}
+            onClick={() => router.push('/medications')}
             style={{
-              background: '#121220',
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: '16px',
-              padding: '16px 18px',
-              cursor: 'pointer',
-              width: '100%',
-              textAlign: 'left',
+              background: SURFACE, border: `1px solid ${BORDER}`,
+              borderRadius: '16px', padding: '16px 18px',
+              cursor: 'pointer', width: '100%', textAlign: 'left', boxShadow: SHADOW,
             }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: meds.length > 0 ? '12px' : 0 }}>
               <span style={{
-                color: '#505068',
-                fontSize: '10px',
-                fontWeight: 700,
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase',
+                color: T3, fontSize: '10px', fontWeight: 700,
+                letterSpacing: '1.2px', textTransform: 'uppercase',
                 fontFamily: 'var(--font-mono, monospace)',
               }}>Medications</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                 {profile?.medications?.length > 0 && (
                   <span style={{
-                    background: 'rgba(255,255,255,0.07)',
-                    color: '#8888A8',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    padding: '2px 7px',
-                    borderRadius: '6px',
+                    background: BG, color: T2, fontSize: '11px', fontWeight: 700,
+                    padding: '2px 7px', borderRadius: '6px', border: `1px solid ${BORDER}`,
                     fontFamily: 'var(--font-mono, monospace)',
                   }}>
                     {profile.medications.length}
                   </span>
                 )}
-                <ChevronRight size={14} color="#505068" strokeWidth={2}/>
+                <ChevronRight size={14} color={T3} strokeWidth={2}/>
               </div>
             </div>
             {meds.length > 0 ? (
@@ -745,56 +727,49 @@ export default function Dashboard() {
                   <div key={i} style={{
                     display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
                     padding: '9px 0',
-                    borderTop: i > 0 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    borderTop: i > 0 ? `1px solid ${BORDER}` : 'none',
                   }}>
-                    <p style={{ color: '#EEEEF8', fontSize: '14px', fontWeight: 500 }}>{med.name}</p>
+                    <p style={{ color: T1, fontSize: '14px', fontWeight: 500 }}>{med.name}</p>
                     <p style={{
-                      color: '#505068',
-                      fontSize: '12px',
+                      color: T3, fontSize: '12px',
                       fontFamily: 'var(--font-mono, monospace)',
-                      marginLeft: '8px',
-                      flexShrink: 0,
+                      marginLeft: '8px', flexShrink: 0,
                     }}>{med.dose}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p style={{ color: '#505068', fontSize: '13px' }}>No medications added</p>
+              <p style={{ color: T3, fontSize: '13px' }}>No medications added</p>
             )}
           </motion.button>
         </motion.div>
 
         {/* Care team */}
         <motion.div variants={fadeUp}>
-          <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/appointments')}
+          <motion.button
+            whileTap={{ scale: 0.99 }}
+            onClick={() => router.push('/appointments')}
             style={{
-              background: '#121220',
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: '16px',
-              padding: '16px 18px',
-              cursor: 'pointer',
-              width: '100%',
+              background: SURFACE, border: `1px solid ${BORDER}`,
+              borderRadius: '16px', padding: '16px 18px',
+              cursor: 'pointer', width: '100%',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              boxShadow: SHADOW,
             }}>
             <div>
               <p style={{
-                color: '#505068',
-                fontSize: '10px',
-                fontWeight: 700,
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase',
-                marginBottom: '4px',
-                fontFamily: 'var(--font-mono, monospace)',
+                color: T3, fontSize: '10px', fontWeight: 700,
+                letterSpacing: '1.2px', textTransform: 'uppercase',
+                marginBottom: '4px', fontFamily: 'var(--font-mono, monospace)',
               }}>Care Team</p>
-              <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '15px' }}>Schedule or join a call</p>
+              <p style={{ color: T1, fontWeight: 600, fontSize: '15px' }}>Schedule or join a call</p>
             </div>
             <div style={{
-              width: '38px', height: '38px',
-              borderRadius: '10px',
-              background: 'rgba(79,142,247,0.12)',
+              width: '38px', height: '38px', borderRadius: '10px',
+              background: ACCENT_DIM,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Video size={16} color="#4F8EF7" strokeWidth={1.8}/>
+              <Video size={16} color={ACCENT} strokeWidth={1.8}/>
             </div>
           </motion.button>
         </motion.div>
@@ -802,31 +777,24 @@ export default function Dashboard() {
         {/* Last check-in */}
         {checkins.length > 0 && (
           <motion.div variants={fadeUp}>
-            <motion.button whileTap={{ scale: 0.99 }} onClick={() => router.push('/history')}
+            <motion.button
+              whileTap={{ scale: 0.99 }}
+              onClick={() => router.push('/history')}
               style={{
-                background: '#121220',
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: '16px',
-                padding: '16px 18px',
-                cursor: 'pointer',
-                width: '100%',
-                textAlign: 'left',
+                background: SURFACE, border: `1px solid ${BORDER}`,
+                borderRadius: '16px', padding: '16px 18px',
+                cursor: 'pointer', width: '100%', textAlign: 'left', boxShadow: SHADOW,
               }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <p style={{
-                  color: '#505068',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
+                  color: T3, fontSize: '10px', fontWeight: 700,
+                  letterSpacing: '1.2px', textTransform: 'uppercase',
                   fontFamily: 'var(--font-mono, monospace)',
                 }}>Last Check-in</p>
-                <ChevronRight size={14} color="#505068" strokeWidth={2}/>
+                <ChevronRight size={14} color={T3} strokeWidth={2}/>
               </div>
               <p style={{
-                color: '#EEEEF8',
-                fontSize: '13px',
-                lineHeight: 1.6,
+                color: T1, fontSize: '13px', lineHeight: 1.6,
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
@@ -835,9 +803,7 @@ export default function Dashboard() {
                 {checkins[0]?.summary || 'No summary available'}
               </p>
               <p style={{
-                color: '#505068',
-                fontSize: '11px',
-                marginTop: '8px',
+                color: T3, fontSize: '11px', marginTop: '8px',
                 fontFamily: 'var(--font-mono, monospace)',
               }}>
                 {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}

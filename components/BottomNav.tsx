@@ -3,6 +3,12 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Home, MessageCircle, LayoutList, Activity, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const ACCENT  = '#0055FF'
+const RED     = '#D91414'
+const T3      = '#9AA2AD'
+const BORDER  = '#E3E6EC'
+
 const tabs = [
   { href: '/dashboard',   icon: Home,          label: 'Home'     },
   { href: '/checkin',     icon: MessageCircle, label: 'Check-in' },
@@ -27,6 +33,58 @@ export default function BottomNav() {
       ? pathname === '/dashboard'
       : pathname === href || pathname.startsWith(href + '/')
 
+  const TabButton = ({ tab }: { tab: typeof tabs[0] }) => {
+    const active = isActive(tab.href)
+    return (
+      <motion.button
+        whileTap={{ scale: 0.88 }}
+        onClick={() => router.push(tab.href)}
+        aria-label={tab.label}
+        aria-current={active ? 'page' : undefined}
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '3px',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          padding: '8px 4px',
+          position: 'relative',
+        }}
+      >
+        {active && (
+          <motion.div
+            layoutId="nav-indicator"
+            style={{
+              position: 'absolute',
+              inset: '4px 10%',
+              background: 'rgba(0,85,255,0.07)',
+              borderRadius: '10px',
+            }}
+            transition={{ type: 'spring', stiffness: 500, damping: 36 }}
+          />
+        )}
+        <tab.icon
+          size={20}
+          color={active ? ACCENT : T3}
+          strokeWidth={active ? 2.2 : 1.7}
+        />
+        <span style={{
+          fontSize: '10px',
+          fontWeight: active ? 700 : 500,
+          color: active ? ACCENT : T3,
+          letterSpacing: '0.1px',
+          position: 'relative',
+        }}>
+          {tab.label}
+        </span>
+      </motion.button>
+    )
+  }
+
   return (
     <nav
       aria-label="Main navigation"
@@ -35,10 +93,10 @@ export default function BottomNav() {
         bottom: 0,
         left: 0,
         right: 0,
-        background: 'rgba(7,7,16,0.88)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        borderTop: '1px solid rgba(255,255,255,0.07)',
+        background: 'rgba(255,255,255,0.94)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderTop: `1px solid ${BORDER}`,
         zIndex: 50,
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
@@ -50,59 +108,9 @@ export default function BottomNav() {
         margin: '0 auto',
         height: '62px',
       }}>
-        {tabs.slice(0, 2).map(tab => {
-          const active = isActive(tab.href)
-          return (
-            <motion.button
-              key={tab.href}
-              whileTap={{ scale: 0.88 }}
-              onClick={() => router.push(tab.href)}
-              aria-label={tab.label}
-              aria-current={active ? 'page' : undefined}
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '4px',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '8px 4px',
-                position: 'relative',
-              }}
-            >
-              {active && (
-                <motion.div
-                  layoutId="nav-pill"
-                  style={{
-                    position: 'absolute',
-                    inset: '6px 14%',
-                    background: 'rgba(79,142,247,0.10)',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(79,142,247,0.16)',
-                  }}
-                  transition={{ type: 'spring', stiffness: 460, damping: 34 }}
-                />
-              )}
-              <tab.icon
-                size={20}
-                color={active ? '#4F8EF7' : 'rgba(255,255,255,0.22)'}
-                strokeWidth={active ? 2.3 : 1.7}
-              />
-              <span style={{
-                fontSize: '10px',
-                fontWeight: active ? 700 : 500,
-                color: active ? '#4F8EF7' : 'rgba(255,255,255,0.28)',
-                letterSpacing: '0.2px',
-                position: 'relative',
-              }}>
-                {tab.label}
-              </span>
-            </motion.button>
-          )
-        })}
+
+        <TabButton tab={tabs[0]} />
+        <TabButton tab={tabs[1]} />
 
         {/* SOS — center */}
         <motion.a
@@ -119,89 +127,39 @@ export default function BottomNav() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '4px',
-            padding: '0 20px',
+            gap: '3px',
+            padding: '0 22px',
             cursor: 'pointer',
             textDecoration: 'none',
             flexShrink: 0,
           }}
         >
           <div style={{
-            width: '50px',
-            height: '50px',
+            width: '48px',
+            height: '48px',
             borderRadius: '50%',
-            background: 'linear-gradient(140deg, #FF3737 0%, #CC1A1A 100%)',
-            boxShadow: '0 0 0 3px rgba(255,55,55,0.16), 0 6px 20px rgba(255,55,55,0.50)',
+            background: RED,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: '-10px',
           }}>
-            <Phone size={20} color="white" strokeWidth={2.3} />
+            <Phone size={19} color="white" strokeWidth={2.2} />
           </div>
           <span style={{
             fontSize: '9px',
             fontWeight: 900,
-            color: '#FF3737',
-            letterSpacing: '1.8px',
+            color: RED,
+            letterSpacing: '1.5px',
             fontFamily: 'var(--font-mono, monospace)',
             marginTop: '-1px',
+            position: 'relative',
           }}>SOS</span>
         </motion.a>
 
-        {tabs.slice(2).map(tab => {
-          const active = isActive(tab.href)
-          return (
-            <motion.button
-              key={tab.href}
-              whileTap={{ scale: 0.88 }}
-              onClick={() => router.push(tab.href)}
-              aria-label={tab.label}
-              aria-current={active ? 'page' : undefined}
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '4px',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '8px 4px',
-                position: 'relative',
-              }}
-            >
-              {active && (
-                <motion.div
-                  layoutId="nav-pill"
-                  style={{
-                    position: 'absolute',
-                    inset: '6px 14%',
-                    background: 'rgba(79,142,247,0.10)',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(79,142,247,0.16)',
-                  }}
-                  transition={{ type: 'spring', stiffness: 460, damping: 34 }}
-                />
-              )}
-              <tab.icon
-                size={20}
-                color={active ? '#4F8EF7' : 'rgba(255,255,255,0.22)'}
-                strokeWidth={active ? 2.3 : 1.7}
-              />
-              <span style={{
-                fontSize: '10px',
-                fontWeight: active ? 700 : 500,
-                color: active ? '#4F8EF7' : 'rgba(255,255,255,0.28)',
-                letterSpacing: '0.2px',
-                position: 'relative',
-              }}>
-                {tab.label}
-              </span>
-            </motion.button>
-          )
-        })}
+        <TabButton tab={tabs[2]} />
+        <TabButton tab={tabs[3]} />
+
       </div>
     </nav>
   )

@@ -8,6 +8,22 @@ import { ArrowLeft, Plus, Check, X, ChevronDown, Pill } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const BG      = '#F4F5F7'
+const SURFACE = '#FFFFFF'
+const T1      = '#0E1218'
+const T2      = '#5B6371'
+const T3      = '#9AA2AD'
+const ACCENT  = '#0055FF'
+const ACCENT_DIM = 'rgba(0,85,255,0.08)'
+const RED     = '#D91414'
+const RED_DIM = 'rgba(217,20,20,0.07)'
+const GREEN   = '#007A44'
+const GREEN_DIM = 'rgba(0,122,68,0.08)'
+const AMBER   = '#B45309'
+const BORDER  = '#E3E6EC'
+const SHADOW  = '0 1px 4px rgba(14,18,24,0.07)'
+
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 const TIME_OPTIONS = [
@@ -24,7 +40,6 @@ const FREQUENCY_OPTIONS = [
   'Weekly', 'As needed', 'With meals'
 ]
 
-// Returns "YYYY-MM-DD" in local time for a given Date
 function toDateStr(d: Date): string {
   const y = d.getFullYear()
   const m = String(d.getMonth() + 1).padStart(2, '0')
@@ -34,16 +49,16 @@ function toDateStr(d: Date): string {
 
 export default function Medications() {
   const [medications, setMedications] = useState<any[]>([])
-  const [taken, setTaken] = useState<Record<string, boolean>>({})
-  const [loading, setLoading] = useState(true)
-  const [userId, setUserId] = useState('')
-  const [showAdd, setShowAdd] = useState(false)
-  const [addingTime, setAddingTime] = useState<number | null>(null)
-  const [showTimeDropdown, setShowTimeDropdown] = useState(false)
-  const [showFreqDropdown, setShowFreqDropdown] = useState(false)
-  const [newMed, setNewMed] = useState({ name: '', dose: '', frequency: 'Once daily', times: ['Morning'] })
-  const [allLogs, setAllLogs] = useState<any[]>([])
-  const [saving, setSaving] = useState(false)
+  const [taken, setTaken]             = useState<Record<string, boolean>>({})
+  const [loading, setLoading]         = useState(true)
+  const [userId, setUserId]           = useState('')
+  const [showAdd, setShowAdd]         = useState(false)
+  const [addingTime, setAddingTime]   = useState<number | null>(null)
+  const [showTimeDropdown, setShowTimeDropdown]   = useState(false)
+  const [showFreqDropdown, setShowFreqDropdown]   = useState(false)
+  const [newMed, setNewMed]           = useState({ name: '', dose: '', frequency: 'Once daily', times: ['Morning'] })
+  const [allLogs, setAllLogs]         = useState<any[]>([])
+  const [saving, setSaving]           = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -60,10 +75,7 @@ export default function Medications() {
 
       const [{ data: profile }, { data: logs }, { data: fetchedAllLogs }] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
-        supabase.from('medication_logs').select('*').eq('user_id', user.id).gte(
-          'taken_at',
-          todayMidnight.toISOString()
-        ),
+        supabase.from('medication_logs').select('*').eq('user_id', user.id).gte('taken_at', todayMidnight.toISOString()),
         supabase.from('medication_logs').select('*').eq('user_id', user.id)
           .gte('taken_at', twentyEightDaysAgo.toISOString())
           .order('taken_at', { ascending: true })
@@ -76,7 +88,6 @@ export default function Medications() {
       setMedications(meds)
       setAllLogs(fetchedAllLogs || [])
 
-      // Restore today's taken state from medication_logs
       const initialTaken: Record<string, boolean> = {}
       meds.forEach((med: any, medIndex: number) => {
         const wasTaken = (logs || []).some((log: any) => log.medication_name === med.name)
@@ -101,12 +112,8 @@ export default function Medications() {
       toast.success(`${med.name} marked as taken`)
       const nowIso = new Date().toISOString()
       await supabase.from('medication_logs').insert({
-        user_id: userId,
-        medication_name: med.name,
-        dose: med.dose,
-        taken_at: nowIso
+        user_id: userId, medication_name: med.name, dose: med.dose, taken_at: nowIso
       })
-      // Optimistically add to allLogs so the analytics update without a reload
       setAllLogs(prev => [...prev, { medication_name: med.name, dose: med.dose, taken_at: nowIso, user_id: userId }])
     }
   }
@@ -152,82 +159,56 @@ export default function Medications() {
     await supabase.from('profiles').update({ medications: updated }).eq('id', userId)
   }
 
-  const totalDoses = medications.reduce((acc, m) => acc + (m.times?.length || 1), 0)
-  const takenCount = Object.values(taken).filter(Boolean).length
-  const progress = totalDoses > 0 ? (takenCount / totalDoses) * 100 : 0
+  const totalDoses  = medications.reduce((acc, m) => acc + (m.times?.length || 1), 0)
+  const takenCount  = Object.values(taken).filter(Boolean).length
+  const progress    = totalDoses > 0 ? (takenCount / totalDoses) * 100 : 0
 
-  // ── Analytics derived values ──────────────────────────────────────────────
-
-  // Set of date strings (YYYY-MM-DD) that have at least one log
-  const activeDaysSet = new Set(
-    allLogs.map(log => toDateStr(new Date(log.taken_at)))
-  )
-
-  // 28-day adherence rate
+  // ── Analytics ─────────────────────────────────────────────────────────────
+  const activeDaysSet = new Set(allLogs.map(log => toDateStr(new Date(log.taken_at))))
   const adherenceRate = Math.round((activeDaysSet.size / 28) * 100)
 
-  // Current week dots: Mon → Sun of the current local week
-  const today = new Date()
-  const dayOfWeek = today.getDay() // 0 = Sun
+  const today      = new Date()
+  const dayOfWeek  = today.getDay()
   const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
   const weekDots = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(today)
     d.setDate(today.getDate() + mondayOffset + i)
-    return {
-      dateStr: toDateStr(d),
-      label: d.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2),
-      isFuture: d > today,
-    }
+    return { dateStr: toDateStr(d), label: d.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2), isFuture: d > today }
   })
-  const weekTakenDays = weekDots.filter(dot => !dot.isFuture && activeDaysSet.has(dot.dateStr)).length
+  const weekTakenDays    = weekDots.filter(dot => !dot.isFuture && activeDaysSet.has(dot.dateStr)).length
   const weekPossibleDays = weekDots.filter(dot => !dot.isFuture).length
   const weekPct = weekPossibleDays > 0 ? Math.round((weekTakenDays / weekPossibleDays) * 100) : 0
 
-  // Current streak: consecutive days ending today or yesterday
-  let streak = 0
   const todayStr = toDateStr(today)
-  const yesterdayDate = new Date(today)
-  yesterdayDate.setDate(today.getDate() - 1)
+  const yesterdayDate = new Date(today); yesterdayDate.setDate(today.getDate() - 1)
   const yesterdayStr = toDateStr(yesterdayDate)
-
-  // Start from today; if today not active, try from yesterday
+  let streak = 0
   const startStr = activeDaysSet.has(todayStr) ? todayStr : (activeDaysSet.has(yesterdayStr) ? yesterdayStr : null)
   if (startStr) {
     const cursor = new Date(startStr)
-    while (activeDaysSet.has(toDateStr(cursor))) {
-      streak++
-      cursor.setDate(cursor.getDate() - 1)
-    }
+    while (activeDaysSet.has(toDateStr(cursor))) { streak++; cursor.setDate(cursor.getDate() - 1) }
   }
 
-  // Best streak over 28 days
-  let bestStreak = 0
-  let tempStreak = 0
+  let bestStreak = 0, tempStreak = 0
   const sortedDays = Array.from(activeDaysSet).sort()
   for (let i = 0; i < sortedDays.length; i++) {
-    if (i === 0) {
-      tempStreak = 1
-    } else {
+    if (i === 0) { tempStreak = 1 } else {
       const prev = new Date(sortedDays[i - 1])
       const curr = new Date(sortedDays[i])
       const diffDays = Math.round((curr.getTime() - prev.getTime()) / 86400000)
-      if (diffDays === 1) {
-        tempStreak++
-      } else {
-        tempStreak = 1
-      }
+      tempStreak = diffDays === 1 ? tempStreak + 1 : 1
     }
     if (tempStreak > bestStreak) bestStreak = tempStreak
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
+  const adherenceColor = adherenceRate >= 80 ? GREEN : adherenceRate >= 50 ? AMBER : RED
 
   const sheetInputStyle: React.CSSProperties = {
-    background: '#1A1A2E',
-    border: '1.5px solid rgba(255,255,255,0.10)',
+    background: BG,
+    border: `1.5px solid ${BORDER}`,
     borderRadius: '10px',
-    padding: '14px 16px',
-    color: '#EEEEF8',
+    padding: '13px 16px',
+    color: T1,
     fontSize: '14px',
     outline: 'none',
     width: '100%',
@@ -235,56 +216,54 @@ export default function Medications() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#070710', padding: '80px 16px 100px' }}>
-      {[1,2,3].map(i => <Skeleton key={i} style={{ height: '112px', borderRadius: '16px', background: '#121220', marginBottom: '12px' }}/>)}
+    <div style={{ minHeight: '100dvh', background: BG, padding: '80px 16px 100px' }}>
+      {[1,2,3].map(i => <div key={i} style={{ height: '112px', borderRadius: '16px', background: '#E3E6EC', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}/>)}
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '80px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: BG, paddingBottom: '80px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ padding: '56px 20px 16px', borderBottom: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(16px)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <motion.button
-              whileTap={{ scale: 0.9 }}
-              transition={spring}
+              whileTap={{ scale: 0.9 }} transition={spring}
               onClick={() => router.push('/dashboard')}
-              style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#121220', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              style={{ width: '36px', height: '36px', borderRadius: '10px', background: BG, border: `1px solid ${BORDER}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: SHADOW }}
             >
-              <ArrowLeft size={16} color="#8888A8"/>
+              <ArrowLeft size={16} color={T2}/>
             </motion.button>
             <div>
-              <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>Medications</h1>
-              <p style={{ color: '#8888A8', fontSize: '12px', marginTop: '3px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              <h1 style={{ color: T1, fontWeight: 900, fontSize: '26px', letterSpacing: '-1px', lineHeight: 1 }}>Medications</h1>
+              <p style={{ color: T3, fontSize: '11px', marginTop: '3px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
                 {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
                 {totalDoses > 0 && ` · ${takenCount}/${totalDoses} doses`}
               </p>
             </div>
           </div>
           <motion.button
-            whileTap={{ scale: 0.9 }}
-            transition={spring}
+            whileTap={{ scale: 0.9 }} transition={spring}
             onClick={() => setShowAdd(true)}
-            style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.22)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: ACCENT_DIM, border: `1px solid rgba(0,85,255,0.14)`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <Plus size={16} color="#4F8EF7"/>
+            <Plus size={16} color={ACCENT}/>
           </motion.button>
         </div>
 
         {/* Progress bar */}
-        <div style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '14px 16px' }}>
+        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '14px', padding: '14px 16px', boxShadow: SHADOW }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <p style={{ color: '#EEEEF8', fontSize: '13px', fontWeight: 700 }}>{takenCount} of {totalDoses} doses taken</p>
-            <p style={{ color: '#8888A8', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>{Math.round(progress)}%</p>
+            <p style={{ color: T1, fontSize: '13px', fontWeight: 700 }}>{takenCount} of {totalDoses} doses taken</p>
+            <p style={{ color: T3, fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>{Math.round(progress)}%</p>
           </div>
-          <div style={{ height: '5px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
+          <div style={{ height: '5px', background: BG, borderRadius: '99px', overflow: 'hidden', border: `1px solid ${BORDER}` }}>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
-              style={{ height: '100%', background: '#00D68F', borderRadius: '99px' }}
+              style={{ height: '100%', background: progress >= 100 ? GREEN : ACCENT, borderRadius: '99px' }}
             />
           </div>
         </div>
@@ -294,35 +273,27 @@ export default function Medications() {
       <AnimatePresence>
         {showAdd && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 200, display: 'flex', alignItems: 'flex-end' }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(14,18,24,0.4)', zIndex: 200, display: 'flex', alignItems: 'flex-end' }}
             onClick={e => { if (e.target === e.currentTarget) setShowAdd(false) }}
           >
             <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
+              initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
-                background: '#121220',
-                borderRadius: '24px 24px 0 0',
+                background: SURFACE,
+                borderRadius: '20px 20px 0 0',
                 padding: '24px 20px 40px',
-                width: '100%',
-                maxHeight: '85dvh',
-                overflowY: 'auto',
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderBottom: 'none',
+                width: '100%', maxHeight: '85dvh', overflowY: 'auto',
+                border: `1px solid ${BORDER}`, borderBottom: 'none',
               }}
             >
-              {/* Drag handle */}
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', marginTop: '-8px' }}>
-                <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.10)' }}/>
+                <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: BORDER }}/>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <p style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.5px' }}>Add medication</p>
-                <button onClick={() => setShowAdd(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#505068', padding: '4px' }}>
+                <p style={{ color: T1, fontWeight: 800, fontSize: '18px', letterSpacing: '-0.5px' }}>Add medication</p>
+                <button onClick={() => setShowAdd(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, padding: '4px' }}>
                   <X size={20}/>
                 </button>
               </div>
@@ -339,25 +310,23 @@ export default function Medications() {
                 <div>
                   <button onClick={() => { setShowFreqDropdown(!showFreqDropdown); setShowTimeDropdown(false) }}
                     style={{ ...sheetInputStyle, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: '#EEEEF8' }}>{newMed.frequency}</span>
+                    <span style={{ color: T1 }}>{newMed.frequency}</span>
                     <motion.div animate={{ rotate: showFreqDropdown ? 180 : 0 }} transition={{ duration: 0.18 }}>
-                      <ChevronDown size={16} color="#505068"/>
+                      <ChevronDown size={16} color={T3}/>
                     </motion.div>
                   </button>
                   <AnimatePresence>
                     {showFreqDropdown && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
+                        initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.18, ease: 'easeOut' }}
-                        style={{ overflow: 'hidden', background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', marginTop: '4px' }}
+                        style={{ overflow: 'hidden', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '10px', marginTop: '4px' }}
                       >
                         {FREQUENCY_OPTIONS.map(f => (
                           <button key={f} onClick={() => { setNewMed(prev => ({ ...prev, frequency: f })); setShowFreqDropdown(false) }}
-                            style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.frequency === f ? '#4F8EF7' : '#8888A8', fontSize: '14px', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', fontWeight: newMed.frequency === f ? 700 : 400, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                            style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.frequency === f ? ACCENT : T2, fontSize: '14px', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', fontWeight: newMed.frequency === f ? 700 : 400, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${BORDER}` }}>
                             {f}
-                            {newMed.frequency === f && <Check size={14} color="#4F8EF7"/>}
+                            {newMed.frequency === f && <Check size={14} color={ACCENT}/>}
                           </button>
                         ))}
                       </motion.div>
@@ -369,19 +338,17 @@ export default function Medications() {
                 <div>
                   <button onClick={() => { setShowTimeDropdown(!showTimeDropdown); setShowFreqDropdown(false) }}
                     style={{ ...sheetInputStyle, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: '#EEEEF8' }}>{newMed.times.join(', ')}</span>
+                    <span style={{ color: T1 }}>{newMed.times.join(', ')}</span>
                     <motion.div animate={{ rotate: showTimeDropdown ? 180 : 0 }} transition={{ duration: 0.18 }}>
-                      <ChevronDown size={16} color="#505068"/>
+                      <ChevronDown size={16} color={T3}/>
                     </motion.div>
                   </button>
                   <AnimatePresence>
                     {showTimeDropdown && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
+                        initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.18, ease: 'easeOut' }}
-                        style={{ overflow: 'hidden', background: '#1A1A2E', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', marginTop: '4px' }}
+                        style={{ overflow: 'hidden', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '10px', marginTop: '4px' }}
                       >
                         {TIME_OPTIONS.map(t => (
                           <button key={t}
@@ -391,9 +358,9 @@ export default function Medications() {
                                 : [...newMed.times, t]
                               setNewMed(prev => ({ ...prev, times: times.length > 0 ? times : ['Morning'] }))
                             }}
-                            style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.times.includes(t) ? '#4F8EF7' : '#8888A8', fontSize: '14px', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'inherit', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                            style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', color: newMed.times.includes(t) ? ACCENT : T2, fontSize: '14px', cursor: 'pointer', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'inherit', borderBottom: `1px solid ${BORDER}` }}>
                             {t}
-                            {newMed.times.includes(t) && <Check size={14} color="#4F8EF7"/>}
+                            {newMed.times.includes(t) && <Check size={14} color={ACCENT}/>}
                           </button>
                         ))}
                       </motion.div>
@@ -402,11 +369,10 @@ export default function Medications() {
                 </div>
 
                 <motion.button
-                  whileTap={{ scale: 0.97, y: 1 }}
-                  transition={spring}
+                  whileTap={{ scale: 0.97, y: 1 }} transition={spring}
                   onClick={addMedication}
                   disabled={saving}
-                  style={{ background: '#4F8EF7', color: '#EEEEF8', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '10px', border: 'none', cursor: 'pointer', marginTop: '4px', letterSpacing: '-0.2px' }}
+                  style={{ background: ACCENT, color: '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '15px', borderRadius: '11px', border: 'none', cursor: 'pointer', marginTop: '4px', letterSpacing: '-0.2px' }}
                 >
                   {saving ? 'Saving...' : 'Add medication'}
                 </motion.button>
@@ -419,31 +385,30 @@ export default function Medications() {
       {/* Medication list */}
       <div style={{ padding: '16px' }}>
 
-        {/* Adherence Analytics Card */}
+        {/* Adherence analytics card */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, ...spring }}
-          style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', marginBottom: '16px', overflow: 'hidden' }}
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '16px', marginBottom: '14px', overflow: 'hidden', boxShadow: SHADOW }}
         >
-          {/* Card header */}
-          <div style={{ padding: '14px 16px 10px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <p style={{ color: '#EEEEF8', fontSize: '16px', fontWeight: 700, letterSpacing: '-0.3px' }}>Adherence</p>
-            <span style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>28 days</span>
+          <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <p style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>Adherence</p>
+            <span style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>28 days</span>
           </div>
 
           <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-            {/* This week row */}
+            {/* Week dots */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>This week</p>
-                <span style={{ color: weekPct >= 80 ? '#00D68F' : '#8888A8', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700 }}>{weekPct}%</span>
+                <p style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>This week</p>
+                <span style={{ color: weekPct >= 80 ? GREEN : T3, fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700 }}>{weekPct}%</span>
               </div>
               <div style={{ display: 'flex', gap: '6px', justifyContent: 'space-between' }}>
                 {weekDots.map((dot, i) => {
                   const isActive = activeDaysSet.has(dot.dateStr)
-                  const isToday = dot.dateStr === todayStr
+                  const isToday  = dot.dateStr === todayStr
                   return (
                     <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flex: 1 }}>
                       <motion.div
@@ -451,30 +416,22 @@ export default function Medications() {
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: 0.1 + i * 0.04, type: 'spring', stiffness: 400, damping: 22 }}
                         style={{
-                          width: '30px',
-                          height: '30px',
-                          borderRadius: '50%',
-                          background: dot.isFuture
-                            ? 'transparent'
-                            : isActive
-                              ? 'rgba(0,214,143,0.12)'
-                              : 'rgba(255,255,255,0.04)',
+                          width: '30px', height: '30px', borderRadius: '50%',
+                          background: dot.isFuture ? 'transparent' : isActive ? GREEN_DIM : BG,
                           border: isToday
-                            ? `2px solid ${isActive ? '#00D68F' : 'rgba(255,255,255,0.18)'}`
+                            ? `2px solid ${isActive ? GREEN : BORDER}`
                             : dot.isFuture
-                              ? '1.5px dashed rgba(255,255,255,0.08)'
+                              ? `1.5px dashed ${BORDER}`
                               : isActive
-                                ? '1.5px solid rgba(0,214,143,0.35)'
-                                : '1.5px solid rgba(255,255,255,0.06)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                                ? `1.5px solid rgba(0,122,68,0.3)`
+                                : `1.5px solid ${BORDER}`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}
                       >
-                        {isActive && <Check size={12} color="#00D68F" strokeWidth={3}/>}
+                        {isActive && <Check size={12} color={GREEN} strokeWidth={3}/>}
                       </motion.div>
                       <span style={{
-                        color: isToday ? '#00D68F' : '#505068',
+                        color: isToday ? ACCENT : T3,
                         fontSize: '10px',
                         fontFamily: 'var(--font-mono, monospace)',
                         fontWeight: isToday ? 700 : 400,
@@ -487,61 +444,48 @@ export default function Medications() {
               </div>
             </div>
 
-            {/* Streak + 28-day bar row */}
+            {/* Streak + 28-day */}
             <div style={{ display: 'flex', gap: '10px' }}>
-
-              {/* Streak pill */}
-              <div style={{ flex: '0 0 auto', background: '#1A1A2E', borderRadius: '10px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '90px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <p style={{ color: '#EEEEF8', fontSize: '24px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '-1px', lineHeight: 1 }}>
+              <div style={{ flex: '0 0 auto', background: BG, borderRadius: '10px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '90px', border: `1px solid ${BORDER}` }}>
+                <p style={{ color: T1, fontSize: '24px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '-1px', lineHeight: 1 }}>
                   {streak >= 2 ? `${streak}d` : '—'}
                 </p>
-                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px', marginTop: '2px' }}>
+                <p style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px', marginTop: '2px' }}>
                   {streak >= 2 ? 'streak' : 'no streak'}
                 </p>
                 {bestStreak > 0 && (
-                  <p style={{ color: '#505068', fontSize: '10px', marginTop: '4px' }}>
-                    Best: <span style={{ fontFamily: 'var(--font-mono, monospace)', fontWeight: 600, color: '#8888A8' }}>{bestStreak}d</span>
+                  <p style={{ color: T3, fontSize: '10px', marginTop: '4px' }}>
+                    Best: <span style={{ fontFamily: 'var(--font-mono, monospace)', fontWeight: 600, color: T2 }}>{bestStreak}d</span>
                   </p>
                 )}
               </div>
 
-              {/* 28-day adherence bar */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '6px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                  <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>28-day rate</p>
-                  <span style={{
-                    color: adherenceRate >= 80 ? '#00D68F' : adherenceRate >= 50 ? '#F59E0B' : '#FF3737',
-                    fontSize: '14px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700,
-                  }}>{adherenceRate}%</span>
+                  <p style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>28-day rate</p>
+                  <span style={{ color: adherenceColor, fontSize: '14px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700 }}>{adherenceRate}%</span>
                 </div>
-                <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
+                <div style={{ height: '6px', background: BG, borderRadius: '99px', overflow: 'hidden', border: `1px solid ${BORDER}` }}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${adherenceRate}%` }}
                     transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1], delay: 0.15 }}
-                    style={{
-                      height: '100%',
-                      background: adherenceRate >= 80 ? '#00D68F' : adherenceRate >= 50 ? '#F59E0B' : '#FF3737',
-                      borderRadius: '99px',
-                    }}
+                    style={{ height: '100%', background: adherenceColor, borderRadius: '99px' }}
                   />
                 </div>
-                <p style={{ color: '#505068', fontSize: '10px' }}>
-                  {activeDaysSet.size} of 28 days
-                </p>
+                <p style={{ color: T3, fontSize: '10px' }}>{activeDaysSet.size} of 28 days</p>
               </div>
-
             </div>
           </div>
         </motion.div>
 
         {medications.length === 0 && (
           <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-              <Pill size={22} color="#4F8EF7"/>
+            <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: ACCENT_DIM, border: `1px solid rgba(0,85,255,0.14)`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <Pill size={22} color={ACCENT}/>
             </div>
-            <p style={{ color: '#505068', fontSize: '14px', marginBottom: '16px' }}>No medications added yet</p>
-            <button onClick={() => setShowAdd(true)} style={{ color: '#4F8EF7', fontSize: '14px', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.22)', borderRadius: '10px', padding: '10px 20px', cursor: 'pointer', fontWeight: 700 }}>
+            <p style={{ color: T2, fontSize: '14px', marginBottom: '16px' }}>No medications added yet</p>
+            <button onClick={() => setShowAdd(true)} style={{ color: ACCENT, fontSize: '14px', background: ACCENT_DIM, border: `1px solid rgba(0,85,255,0.14)`, borderRadius: '10px', padding: '10px 20px', cursor: 'pointer', fontWeight: 700 }}>
               Add your first medication
             </button>
           </div>
@@ -553,28 +497,28 @@ export default function Medications() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: medIndex * 0.05, ...spring }}
-            style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', marginBottom: '12px', overflow: 'hidden' }}
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '16px', marginBottom: '12px', overflow: 'hidden', boxShadow: SHADOW }}
           >
             {/* Med header */}
             <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Pill size={17} color="#4F8EF7"/>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: ACCENT_DIM, border: `1px solid rgba(0,85,255,0.14)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Pill size={16} color={ACCENT}/>
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '16px', letterSpacing: '-0.3px' }}>{med.name}</p>
+                <p style={{ color: T1, fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}>{med.name}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}>
-                  <span style={{ background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.22)', color: '#4F8EF7', fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '8px', fontFamily: 'var(--font-mono, monospace)' }}>{med.dose}</span>
-                  <span style={{ color: '#505068', fontSize: '11px' }}>{med.frequency}</span>
+                  <span style={{ background: BG, border: `1px solid ${BORDER}`, color: T2, fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', fontFamily: 'var(--font-mono, monospace)' }}>{med.dose}</span>
+                  <span style={{ color: T3, fontSize: '11px' }}>{med.frequency}</span>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '7px' }}>
                 <button onClick={() => setAddingTime(addingTime === medIndex ? null : medIndex)}
-                  style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Plus size={13} color="#8888A8"/>
+                  style={{ width: '30px', height: '30px', borderRadius: '8px', background: BG, border: `1px solid ${BORDER}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Plus size={13} color={T2}/>
                 </button>
                 <button onClick={() => removeMedication(medIndex)}
-                  style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(255,55,55,0.08)', border: '1px solid rgba(255,55,55,0.15)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <X size={13} color="#FF3737"/>
+                  style={{ width: '30px', height: '30px', borderRadius: '8px', background: RED_DIM, border: `1px solid rgba(217,20,20,0.14)`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <X size={13} color={RED}/>
                 </button>
               </div>
             </div>
@@ -583,16 +527,14 @@ export default function Medications() {
             <AnimatePresence>
               {addingTime === medIndex && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  style={{ overflow: 'hidden', borderTop: '1px solid rgba(255,255,255,0.06)', padding: '12px 16px', background: '#1A1A2E' }}
+                  initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                  style={{ overflow: 'hidden', borderTop: `1px solid ${BORDER}`, padding: '12px 16px', background: BG }}
                 >
-                  <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Add time</p>
+                  <p style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Add time</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {TIME_OPTIONS.map(t => (
                       <button key={t} onClick={() => addTime(medIndex, t)}
-                        style={{ padding: '6px 12px', background: med.times?.includes(t) ? 'rgba(79,142,247,0.12)' : 'rgba(255,255,255,0.04)', border: `1px solid ${med.times?.includes(t) ? 'rgba(79,142,247,0.3)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '8px', color: med.times?.includes(t) ? '#4F8EF7' : '#8888A8', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                        style={{ padding: '6px 12px', background: med.times?.includes(t) ? ACCENT_DIM : SURFACE, border: `1px solid ${med.times?.includes(t) ? 'rgba(0,85,255,0.2)' : BORDER}`, borderRadius: '8px', color: med.times?.includes(t) ? ACCENT : T2, fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit' }}>
                         {t}
                       </button>
                     ))}
@@ -602,35 +544,33 @@ export default function Medications() {
             </AnimatePresence>
 
             {/* Dose times */}
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ borderTop: `1px solid ${BORDER}` }}>
               {med.times?.map((time: string, timeIndex: number) => {
                 const key = `${medIndex}-${timeIndex}`
                 const isTaken = taken[key]
                 return (
-                  <div key={timeIndex} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.04)', opacity: isTaken ? 0.5 : 1, transition: 'opacity 0.2s ease' }}>
+                  <div key={timeIndex} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '11px 16px', borderBottom: `1px solid ${BORDER}`, opacity: isTaken ? 0.5 : 1, transition: 'opacity 0.2s ease' }}>
                     <motion.button
-                      whileTap={{ scale: 0.85 }}
-                      transition={spring}
+                      whileTap={{ scale: 0.85 }} transition={spring}
                       onClick={() => toggleTaken(medIndex, timeIndex)}
-                      style={{ width: '32px', height: '32px', borderRadius: '50%', border: `2px solid ${isTaken ? '#00D68F' : 'rgba(255,255,255,0.12)'}`, background: isTaken ? 'rgba(0,214,143,0.12)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, transition: 'border-color 0.18s ease, background 0.18s ease' }}
+                      style={{ width: '30px', height: '30px', borderRadius: '50%', border: `2px solid ${isTaken ? GREEN : BORDER}`, background: isTaken ? GREEN_DIM : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, transition: 'border-color 0.18s ease, background 0.18s ease' }}
                     >
-                      {isTaken && <Check size={14} color="#00D68F"/>}
+                      {isTaken && <Check size={14} color={GREEN}/>}
                     </motion.button>
-                    <p style={{ color: '#8888A8', fontSize: '13px', flex: 1 }}>{time}</p>
+                    <p style={{ color: T2, fontSize: '13px', flex: 1 }}>{time}</p>
                     {!isTaken ? (
                       <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        transition={spring}
+                        whileTap={{ scale: 0.95 }} transition={spring}
                         onClick={() => toggleTaken(medIndex, timeIndex)}
-                        style={{ background: 'rgba(0,214,143,0.12)', border: '1px solid rgba(0,214,143,0.25)', color: '#00D68F', fontSize: '12px', padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700 }}
+                        style={{ background: GREEN_DIM, border: `1px solid rgba(0,122,68,0.2)`, color: GREEN, fontSize: '12px', padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700 }}
                       >
                         Take
                       </motion.button>
                     ) : (
-                      <span style={{ color: '#00D68F', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Done</span>
+                      <span style={{ color: GREEN, fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Done</span>
                     )}
                     <button onClick={() => removeTime(medIndex, timeIndex)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#505068', padding: '4px' }}>
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, padding: '4px' }}>
                       <X size={12}/>
                     </button>
                   </div>

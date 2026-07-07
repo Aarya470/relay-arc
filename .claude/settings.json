@@ -21,7 +21,21 @@
       "Bash(Sort-Object)",
       "Bash(npx next *)",
       "WebFetch(domain:vercel.com)",
-      "Bash(gh run *)"
+      "Bash(gh run *)",
+      "Read(//c/Users/aarya/.claude/projects/c--Users-aarya-relay-arc/memory/**)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" branch -a)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" status)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" log --oneline -5)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" diff app/api/groq/timeline/route.ts)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" push origin main)",
+      "PowerShell(npx vercel --cwd \"c:\\\\Users\\\\aarya\\\\relay-arc\" --prod --yes 2>&1)",
+      "PowerShell(gh -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" repo view --json name,url 2>&1)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" log --oneline main..worktree-agent-afa17fc65bacb6082)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" log --oneline main..worktree-agent-ad2fef0bac2447136)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" log --oneline main..worktree-agent-ad0a3e89dc2412572)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" log --oneline main..worktree-agent-adeda44d0c85dd62f)",
+      "PowerShell(git -C \"c:\\\\Users\\\\aarya\\\\relay-arc\" status --short)",
+      "PowerShell(New-Item -ItemType Directory -Path \"c:\\\\Users\\\\aarya\\\\relay-arc\\\\.claude\\\\worktrees\\\\agent-ae793bac1d0af78ac\\\\app\\\\api\\\\emergency\\\\alert\" -Force)"
     ],
     "additionalDirectories": [
       "\\mnt\\c\\Users\\aarya\\.claude\\skills",

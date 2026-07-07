@@ -8,18 +8,31 @@ import { ArrowLeft, Send, Loader2, Check } from 'lucide-react'
 import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
-const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const BG      = '#F4F5F7'
+const SURFACE = '#FFFFFF'
+const T1      = '#0E1218'
+const T2      = '#5B6371'
+const T3      = '#9AA2AD'
+const ACCENT  = '#0055FF'
+const ACCENT_DIM = 'rgba(0,85,255,0.09)'
+const GREEN   = '#007A44'
+const GREEN_DIM = 'rgba(0,122,68,0.08)'
+const BORDER  = '#E3E6EC'
+const SHADOW  = '0 1px 4px rgba(14,18,24,0.07)'
+
+const spring       = { type: 'spring', stiffness: 380, damping: 24 } as const
 const bubbleSpring = { type: 'spring', stiffness: 320, damping: 28 } as const
 
 export default function Checkin() {
   const [messages, setMessages] = useState<{ role: string; text: string }[]>([])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [profile, setProfile] = useState<any>(null)
-  const [done, setDone] = useState(false)
-  const [focused, setFocused] = useState(false)
-  const bottomRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
+  const [input, setInput]       = useState('')
+  const [loading, setLoading]   = useState(false)
+  const [profile, setProfile]   = useState<any>(null)
+  const [done, setDone]         = useState(false)
+  const [focused, setFocused]   = useState(false)
+  const bottomRef               = useRef<HTMLDivElement>(null)
+  const router                  = useRouter()
 
   useEffect(() => {
     const load = async () => {
@@ -76,7 +89,7 @@ export default function Checkin() {
         let clinicalSummary = clean
         try {
           clinicalSummary = await callGroq(fullConvo, 'summary') || clean
-        } catch { /* fallback to AI message */ }
+        } catch { /* fallback */ }
 
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
@@ -89,7 +102,6 @@ export default function Checkin() {
     } catch (err: any) {
       console.error('Checkin AI error:', err)
       toast.error('Could not reach the AI right now — please try again')
-      // Remove the user message to allow retry
       setMessages(prev => prev.slice(0, -1))
       setInput(userMsg)
     }
@@ -102,18 +114,21 @@ export default function Checkin() {
   const AIAvatar = ({ size = 28 }: { size?: number }) => (
     <div style={{
       width: size, height: size, borderRadius: '8px', flexShrink: 0,
-      background: 'linear-gradient(135deg, #1A1A2E 0%, #121220 100%)',
-      border: '1px solid rgba(79,142,247,0.3)',
+      background: ACCENT,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <span style={{ color: '#4F8EF7', fontSize: Math.round(size * 0.36) + 'px', fontWeight: 800, letterSpacing: '-0.5px', fontFamily: 'var(--font-mono, monospace)' }}>R</span>
+      {/* ECG pulse line */}
+      <svg width={Math.round(size * 0.62)} height={Math.round(size * 0.42)} viewBox="0 0 18 12" fill="none">
+        <path d="M0 6 H3 L5 1 L8 11 L10 4 L12 8 H15 L17 3 L18 6"
+          stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
     </div>
   )
 
   return (
     <div style={{
       minHeight: '100dvh',
-      background: '#070710',
+      background: BG,
       display: 'flex',
       flexDirection: 'column',
       paddingBottom: '80px',
@@ -125,11 +140,11 @@ export default function Checkin() {
       {/* Header */}
       <div style={{
         padding: '52px 20px 14px',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        borderBottom: `1px solid ${BORDER}`,
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-        background: 'rgba(7,7,16,0.95)',
+        background: 'rgba(255,255,255,0.92)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
       }}>
@@ -138,34 +153,35 @@ export default function Checkin() {
           onClick={() => router.push('/dashboard')}
           style={{
             width: '34px', height: '34px', borderRadius: '10px',
-            background: '#121220',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: BG, border: `1px solid ${BORDER}`,
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0,
           }}
         >
-          <ArrowLeft size={15} color="#8888A8" />
+          <ArrowLeft size={15} color={T2} />
         </motion.button>
+
         <div style={{ flex: 1 }}>
-          <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '17px', letterSpacing: '-0.5px', margin: 0 }}>Daily Check-in</h1>
-          <p style={{ color: '#505068', fontSize: '11px', marginTop: '2px', fontFamily: 'var(--font-mono, monospace)', margin: '2px 0 0' }}>
+          <h1 style={{ color: T1, fontWeight: 800, fontSize: '17px', letterSpacing: '-0.4px', margin: 0 }}>Daily Check-in</h1>
+          <p style={{ color: T3, fontSize: '11px', marginTop: '2px', fontFamily: 'var(--font-mono, monospace)', margin: '2px 0 0', letterSpacing: '0.4px' }}>
             {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
           </p>
         </div>
+
         <div style={{
           display: 'flex', alignItems: 'center', gap: '5px',
-          background: 'rgba(0,214,143,0.12)',
-          border: '1px solid rgba(0,214,143,0.25)',
+          background: GREEN_DIM,
+          border: `1px solid rgba(0,122,68,0.18)`,
           borderRadius: '99px',
           padding: '4px 10px',
         }}>
           <motion.div
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00D68F' }}
+            style={{ width: '5px', height: '5px', borderRadius: '50%', background: GREEN }}
           />
-          <span style={{ color: '#00D68F', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600, letterSpacing: '0.5px' }}>LIVE</span>
+          <span style={{ color: GREEN, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, letterSpacing: '0.5px' }}>LIVE</span>
         </div>
       </div>
 
@@ -182,15 +198,12 @@ export default function Checkin() {
             >
               {m.role === 'ai' && <AIAvatar />}
               <div style={{
-                maxWidth: '78%', padding: '12px 16px',
-                borderRadius: m.role === 'user' ? '20px 20px 5px 20px' : '5px 20px 20px 20px',
-                background: m.role === 'user'
-                  ? 'rgba(79,142,247,0.15)'
-                  : '#121220',
-                border: m.role === 'user'
-                  ? '1px solid rgba(79,142,247,0.25)'
-                  : '1px solid rgba(255,255,255,0.06)',
-                color: m.role === 'user' ? '#EEEEF8' : '#EEEEF8',
+                maxWidth: '78%', padding: '11px 15px',
+                borderRadius: m.role === 'user' ? '18px 18px 5px 18px' : '5px 18px 18px 18px',
+                background: m.role === 'user' ? ACCENT : SURFACE,
+                border: m.role === 'user' ? 'none' : `1px solid ${BORDER}`,
+                boxShadow: m.role === 'user' ? 'none' : SHADOW,
+                color: m.role === 'user' ? '#FFFFFF' : T1,
                 fontSize: '14px', lineHeight: 1.6,
                 fontWeight: m.role === 'user' ? 500 : 400,
               }}>
@@ -209,16 +222,17 @@ export default function Checkin() {
           >
             <AIAvatar />
             <div style={{
-              background: '#121220',
-              border: '1px solid rgba(255,255,255,0.06)',
-              padding: '14px 18px',
-              borderRadius: '5px 20px 20px 20px',
+              background: SURFACE,
+              border: `1px solid ${BORDER}`,
+              boxShadow: SHADOW,
+              padding: '13px 16px',
+              borderRadius: '5px 18px 18px 18px',
               display: 'flex', gap: '5px', alignItems: 'center',
             }}>
               {[0, 1, 2].map(i => (
                 <motion.div
                   key={i}
-                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#505068' }}
+                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: T3 }}
                   animate={{ opacity: [0.25, 1, 0.25], y: [0, -3, 0] }}
                   transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
                 />
@@ -229,12 +243,12 @@ export default function Checkin() {
 
         {done && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 12 }}
+            initial={{ opacity: 0, scale: 0.94, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ ...spring, bounce: 0.3 }}
             style={{
-              background: 'rgba(0,214,143,0.08)',
-              border: '1px solid rgba(0,214,143,0.2)',
+              background: GREEN_DIM,
+              border: `1px solid rgba(0,122,68,0.18)`,
               borderRadius: '16px',
               padding: '28px 20px',
               textAlign: 'center',
@@ -243,48 +257,35 @@ export default function Checkin() {
           >
             <div style={{
               width: '52px', height: '52px', borderRadius: '50%',
-              background: 'rgba(0,214,143,0.15)',
-              border: '1px solid rgba(0,214,143,0.3)',
+              background: GREEN,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 14px',
             }}>
-              <Check size={24} color="#00D68F" strokeWidth={2.5} />
+              <Check size={24} color="white" strokeWidth={2.5} />
             </div>
-            <p style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
-            <p style={{ color: '#8888A8', fontSize: '12px', marginBottom: '20px' }}>Your responses have been saved and your care team has been notified</p>
+            <p style={{ color: T1, fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
+            <p style={{ color: T2, fontSize: '12px', marginBottom: '20px', lineHeight: 1.5 }}>Your responses have been saved and your care team has been notified</p>
             <div style={{ display: 'flex', gap: '8px' }}>
               <motion.button
-                whileTap={{ scale: 0.97, y: 1 }}
-                transition={spring}
+                whileTap={{ scale: 0.97, y: 1 }} transition={spring}
                 onClick={() => router.push('/history')}
                 style={{
-                  flex: 1,
-                  background: '#1A1A2E',
-                  color: '#EEEEF8',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  padding: '13px 16px',
-                  borderRadius: '14px',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  cursor: 'pointer',
+                  flex: 1, background: SURFACE, color: T1,
+                  fontWeight: 700, fontSize: '13px',
+                  padding: '13px 16px', borderRadius: '12px',
+                  border: `1px solid ${BORDER}`, cursor: 'pointer',
                 }}
               >
                 View history
               </motion.button>
               <motion.button
-                whileTap={{ scale: 0.97, y: 1 }}
-                transition={spring}
+                whileTap={{ scale: 0.97, y: 1 }} transition={spring}
                 onClick={() => router.push('/dashboard')}
                 style={{
-                  flex: 1,
-                  background: '#4F8EF7',
-                  color: '#FFFFFF',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  padding: '13px 16px',
-                  borderRadius: '14px',
-                  border: 'none',
-                  cursor: 'pointer',
+                  flex: 1, background: ACCENT, color: '#FFFFFF',
+                  fontWeight: 700, fontSize: '13px',
+                  padding: '13px 16px', borderRadius: '12px',
+                  border: 'none', cursor: 'pointer',
                 }}
               >
                 Dashboard
@@ -296,7 +297,7 @@ export default function Checkin() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Quick replies — shown on first message only */}
+      {/* Quick replies */}
       {messages.length === 1 && !done && (
         <div style={{ padding: '8px 16px 4px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
           {QUICK_REPLIES.map(r => (
@@ -307,15 +308,12 @@ export default function Checkin() {
               onClick={() => setInput(r)}
               style={{
                 flexShrink: 0,
-                background: '#121220',
-                border: '1px solid rgba(255,255,255,0.08)',
+                background: SURFACE,
+                border: `1px solid ${BORDER}`,
                 borderRadius: '99px',
-                padding: '9px 16px',
-                color: '#8888A8',
-                fontSize: '12px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
+                padding: '8px 15px',
+                color: T2, fontSize: '12px', fontWeight: 500,
+                cursor: 'pointer', whiteSpace: 'nowrap',
               }}
             >
               {r}
@@ -328,9 +326,9 @@ export default function Checkin() {
       {!done && (
         <div style={{
           padding: '8px 16px 14px',
-          borderTop: `1px solid ${focused ? 'rgba(79,142,247,0.3)' : 'rgba(255,255,255,0.06)'}`,
+          borderTop: `1px solid ${focused ? 'rgba(0,85,255,0.2)' : BORDER}`,
           display: 'flex', gap: '8px', alignItems: 'center',
-          background: 'rgba(7,7,16,0.95)',
+          background: 'rgba(255,255,255,0.94)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
           transition: 'border-color 0.18s ease',
@@ -344,16 +342,16 @@ export default function Checkin() {
             placeholder="How are you feeling..."
             style={{
               flex: 1,
-              background: '#121220',
-              border: `1.5px solid ${focused ? 'rgba(79,142,247,0.5)' : 'rgba(255,255,255,0.06)'}`,
+              background: BG,
+              border: `1.5px solid ${focused ? ACCENT : BORDER}`,
               borderRadius: '14px',
-              padding: '13px 16px',
-              color: '#EEEEF8',
+              padding: '12px 16px',
+              color: T1,
               fontSize: '14px',
               outline: 'none',
               transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
               fontFamily: 'inherit',
-              boxShadow: focused ? '0 0 0 3px rgba(79,142,247,0.1)' : 'none',
+              boxShadow: focused ? `0 0 0 3px ${ACCENT_DIM}` : 'none',
             }}
           />
           <motion.button
@@ -362,10 +360,10 @@ export default function Checkin() {
             onClick={sendMessage}
             disabled={loading || !input.trim()}
             style={{
-              width: '46px', height: '46px',
-              background: input.trim() ? '#4F8EF7' : '#121220',
-              borderRadius: '14px',
-              border: '1px solid rgba(255,255,255,0.06)',
+              width: '44px', height: '44px',
+              background: input.trim() ? ACCENT : BG,
+              borderRadius: '12px',
+              border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
               cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
@@ -373,8 +371,8 @@ export default function Checkin() {
             }}
           >
             {loading
-              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : '#505068'} className="animate-spin" />
-              : <Send size={16} color={input.trim() ? '#FFFFFF' : '#505068'} />
+              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : T3} className="animate-spin" />
+              : <Send size={16} color={input.trim() ? '#FFFFFF' : T3} />
             }
           </motion.button>
         </div>

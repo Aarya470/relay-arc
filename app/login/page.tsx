@@ -6,14 +6,25 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
 
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const BG      = '#F4F5F7'
+const SURFACE = '#FFFFFF'
+const T1      = '#0E1218'
+const T2      = '#5B6371'
+const T3      = '#9AA2AD'
+const ACCENT  = '#0055FF'
+const RED     = '#D91414'
+const BORDER  = '#E3E6EC'
+const BORDER_FOCUS = '#0055FF'
+
 const ease = { type: 'spring', stiffness: 320, damping: 30 } as const
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isSignUp, setIsSignUp] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [focused, setFocused] = useState<string | null>(null)
+  const [email, setEmail]           = useState('')
+  const [password, setPassword]     = useState('')
+  const [isSignUp, setIsSignUp]     = useState(false)
+  const [loading, setLoading]       = useState(false)
+  const [focused, setFocused]       = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
@@ -33,10 +44,25 @@ export default function Login() {
     setLoading(false)
   }
 
+  const inputStyle = (field: string): React.CSSProperties => ({
+    width: '100%',
+    background: SURFACE,
+    border: `1.5px solid ${focused === field ? BORDER_FOCUS : BORDER}`,
+    borderRadius: '10px',
+    padding: '13px 16px',
+    color: T1,
+    fontSize: '15px',
+    outline: 'none',
+    transition: 'border-color 0.15s',
+    boxSizing: 'border-box',
+    fontFamily: 'inherit',
+    boxShadow: focused === field ? '0 0 0 3px rgba(0,85,255,0.08)' : 'none',
+  })
+
   return (
     <div style={{
       minHeight: '100dvh',
-      background: '#070710',
+      background: BG,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -44,7 +70,6 @@ export default function Login() {
       padding: '24px',
     }}>
 
-      {/* Centered card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -52,64 +77,71 @@ export default function Login() {
         style={{
           width: '100%',
           maxWidth: '400px',
-          background: '#121220',
-          border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '24px',
-          padding: '32px 28px',
+          background: SURFACE,
+          border: `1px solid ${BORDER}`,
+          borderRadius: '20px',
+          padding: '32px 28px 28px',
+          boxShadow: '0 4px 24px rgba(14,18,24,0.08)',
         }}
       >
 
-        {/* Logo / wordmark */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '32px' }}>
+        {/* Logo */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '28px' }}>
           <div style={{
-            width: '48px', height: '48px', borderRadius: '14px',
-            background: 'rgba(79,142,247,0.15)',
-            border: '1.5px solid rgba(79,142,247,0.3)',
+            width: '52px', height: '52px', borderRadius: '14px',
+            background: ACCENT,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '14px',
           }}>
-            <svg width="22" height="22" viewBox="0 0 14 14" fill="none">
-              <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="#4F8EF7"/>
+            {/* ECG pulse line */}
+            <svg width="30" height="20" viewBox="0 0 30 20" fill="none">
+              <path d="M1 10 H6 L8 4 L11 16 L14 8 L16 12 H20 L22 6 L25 14 L27 10 H30"
+                stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <span style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.5px' }}>Relay Arc</span>
-          <p style={{ color: '#505068', fontSize: '13px', marginTop: '4px' }}>Cardiac emergency companion</p>
+          <span style={{ color: T1, fontWeight: 900, fontSize: '20px', letterSpacing: '-0.6px' }}>Relay Arc</span>
+          <p style={{ color: T3, fontSize: '12px', marginTop: '3px', letterSpacing: '0.2px' }}>Cardiac emergency companion</p>
         </div>
 
-        {/* Toggle headline */}
-        <div style={{ marginBottom: '24px', textAlign: 'center' }}>
+        {/* Headline */}
+        <div style={{ marginBottom: '22px', textAlign: 'center' }}>
           <AnimatePresence mode="wait">
             <motion.h1
               key={isSignUp ? 'signup' : 'signin'}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.16 }}
               style={{
-                color: '#EEEEF8',
+                color: T1,
                 fontSize: '22px',
                 fontWeight: 800,
                 letterSpacing: '-0.6px',
                 lineHeight: 1.2,
-                marginBottom: '6px',
+                marginBottom: '5px',
               }}
             >
               {isSignUp ? 'Create your profile' : 'Welcome back'}
             </motion.h1>
           </AnimatePresence>
-          <p style={{ color: '#8888A8', fontSize: '13px', lineHeight: 1.5 }}>
+          <p style={{ color: T2, fontSize: '13px', lineHeight: 1.5 }}>
             {isSignUp
-              ? 'Your medical profile is stored securely.'
-              : 'Sign in to continue to your dashboard.'
+              ? 'Your medical profile is encrypted and secure.'
+              : 'Sign in to access your dashboard.'
             }
           </p>
         </div>
 
         {/* Form */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+
           {/* Email */}
           <div>
-            <label style={{ display: 'block', color: '#505068', fontSize: '11px', fontWeight: 500, letterSpacing: '0.6px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px' }}>
+            <label style={{
+              display: 'block', color: T3, fontSize: '11px', fontWeight: 600,
+              letterSpacing: '0.7px', textTransform: 'uppercase',
+              fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px',
+            }}>
               Email
             </label>
             <input
@@ -120,25 +152,17 @@ export default function Login() {
               onBlur={() => setFocused(null)}
               onChange={e => setEmail(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleAuth()}
-              style={{
-                width: '100%',
-                background: '#1A1A2E',
-                border: `1px solid ${focused === 'email' ? '#4F8EF7' : 'rgba(255,255,255,0.10)'}`,
-                borderRadius: '12px',
-                padding: '14px 16px',
-                color: '#EEEEF8',
-                fontSize: '15px',
-                outline: 'none',
-                transition: 'border-color 0.15s',
-                boxSizing: 'border-box',
-                fontFamily: 'inherit',
-              }}
+              style={inputStyle('email')}
             />
           </div>
 
           {/* Password */}
           <div>
-            <label style={{ display: 'block', color: '#505068', fontSize: '11px', fontWeight: 500, letterSpacing: '0.6px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px' }}>
+            <label style={{
+              display: 'block', color: T3, fontSize: '11px', fontWeight: 600,
+              letterSpacing: '0.7px', textTransform: 'uppercase',
+              fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px',
+            }}>
               Password
             </label>
             <div style={{ position: 'relative' }}>
@@ -150,19 +174,7 @@ export default function Login() {
                 onBlur={() => setFocused(null)}
                 onChange={e => setPassword(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAuth()}
-                style={{
-                  width: '100%',
-                  background: '#1A1A2E',
-                  border: `1px solid ${focused === 'password' ? '#4F8EF7' : 'rgba(255,255,255,0.10)'}`,
-                  borderRadius: '12px',
-                  padding: '14px 48px 14px 16px',
-                  color: '#EEEEF8',
-                  fontSize: '15px',
-                  outline: 'none',
-                  transition: 'border-color 0.15s',
-                  boxSizing: 'border-box',
-                  fontFamily: 'inherit',
-                }}
+                style={{ ...inputStyle('password'), paddingRight: '48px' }}
               />
               <button
                 type="button"
@@ -171,63 +183,77 @@ export default function Login() {
                 style={{
                   position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
                   background: 'none', border: 'none', cursor: 'pointer',
-                  color: '#505068', padding: '4px', display: 'flex',
+                  color: T3, padding: '4px', display: 'flex',
                 }}
               >
                 {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
               </button>
             </div>
             {isSignUp && password.length > 0 && password.length < 8 && (
-              <p style={{ color: '#FF3737', fontSize: '12px', marginTop: '5px' }}>At least 8 characters required</p>
+              <p style={{ color: RED, fontSize: '12px', marginTop: '5px', fontWeight: 500 }}>At least 8 characters required</p>
             )}
           </div>
 
-          {/* Primary CTA */}
+          {/* CTA */}
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={handleAuth}
             disabled={loading}
             style={{
               width: '100%',
-              background: '#4F8EF7',
+              background: ACCENT,
               color: 'white',
               fontWeight: 700,
               fontSize: '15px',
-              borderRadius: '14px',
+              borderRadius: '11px',
               border: 'none',
               cursor: loading ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              marginTop: '4px',
-              opacity: loading ? 0.65 : 1,
+              marginTop: '2px',
+              opacity: loading ? 0.7 : 1,
               transition: 'opacity 0.15s',
-              height: '52px',
+              height: '50px',
+              letterSpacing: '-0.1px',
             }}
           >
-            {loading ? <Loader2 size={17} className="animate-spin"/> : (isSignUp ? 'Create account' : 'Sign in')}
+            {loading
+              ? <Loader2 size={17} className="animate-spin"/>
+              : (isSignUp ? 'Create account' : 'Sign in')
+            }
           </motion.button>
 
-          {/* Toggle sign in / sign up */}
-          <div style={{ textAlign: 'center', paddingTop: '4px' }}>
+          {/* Toggle */}
+          <div style={{ textAlign: 'center' }}>
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8888A8', fontSize: '14px', fontFamily: 'inherit' }}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: T2, fontSize: '13px', fontFamily: 'inherit',
+              }}
             >
               {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-              <span style={{ color: '#4F8EF7', fontWeight: 700 }}>
-                {isSignUp ? 'Sign in' : 'Sign up free'}
+              <span style={{ color: ACCENT, fontWeight: 700 }}>
+                {isSignUp ? 'Sign in' : 'Sign up'}
               </span>
             </button>
           </div>
         </div>
 
         {/* Care team link */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: '24px', paddingTop: '18px', textAlign: 'center' }}>
+        <div style={{
+          borderTop: `1px solid ${BORDER}`,
+          marginTop: '20px', paddingTop: '16px', textAlign: 'center',
+        }}>
           <button
             onClick={() => router.push('/care-team/login')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#505068', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: T3, fontSize: '12px',
+              fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.4px',
+            }}
           >
             care team portal →
           </button>
