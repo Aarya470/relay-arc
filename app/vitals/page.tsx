@@ -352,6 +352,11 @@ export default function VitalsPage() {
         toast.success('Vitals saved')
         await refreshHistory()
         setVitals({ heart_rate: '', systolic: '', diastolic: '', oxygen_sat: '', resp_rate: '' })
+        // Trigger health intelligence in background after vitals update
+        fetch('/api/groq/health-intelligence', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${session.access_token}` },
+        }).catch(() => { /* silent */ })
       }
     } catch {
       toast.error('Network error — try again')
@@ -591,17 +596,4 @@ export default function VitalsPage() {
                 <p style={{ color: '#8888A8', fontSize: '13px', fontWeight: 700 }}>
                   No data for {timeRange} view
                 </p>
-                <p style={{ color: '#505068', fontSize: '11px', marginTop: '6px' }}>
-                  Log at least 2 readings to see trends
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-      </div>
-
-      <BottomNav/>
-    </div>
-  )
-}
+              

@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
-import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock, AlertTriangle, TrendingDown, Sparkles, RefreshCw, Heart, TrendingUp, Pill, Star } from 'lucide-react'
+import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock, AlertTriangle, TrendingDown, Sparkles, RefreshCw, Heart, TrendingUp, Pill, Star, Activity, Zap } from 'lucide-react'
+import type { HealthIntelligence } from '@/app/api/groq/health-intelligence/route'
 import { toast } from 'sonner'
 import { analyzeCrashRisk, CrashRisk } from '@/lib/crash-risk'
 
@@ -58,6 +59,171 @@ const insightAccent: Record<Insight['type'], { left: string; iconColor: string }
   positive: { left: GREEN,  iconColor: GREEN  },
   tip:      { left: AMBER,  iconColor: AMBER  },
   warning:  { left: RED,    iconColor: RED    },
+}
+
+// ─── Health Intelligence Card ────────────────────────────────────────────────
+
+const TRAJECTORY_CONFIG = {
+  improving: { color: GREEN,  bg: GREEN_DIM,  label: 'Improving',  icon: TrendingUp  },
+  stable:    { color: ACCENT, bg: ACCENT_DIM, label: 'Stable',     icon: Activity    },
+  declining: { color: AMBER,  bg: AMBER_DIM,  label: 'Declining',  icon: TrendingDown},
+  critical:  { color: RED,    bg: RED_DIM,    label: 'Critical',   icon: Zap         },
+} as const
+
+function ScoreRing({ score, color }: { score: number; color: string }) {
+  const r = 28, strokeW = 4
+  const circ = 2 * Math.PI * r
+  const dash = (score / 100) * circ
+  return (
+    <div style={{ position: 'relative', width: '72px', height: '72px', flexShrink: 0 }}>
+      <svg width="72" height="72" style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx="36" cy="36" r={r} fill="none" stroke={BORDER} strokeWidth={strokeW}/>
+        <circle cx="36" cy="36" r={r} fill="none" stroke={color} strokeWidth={strokeW}
+          strokeDasharray={`${dash} ${circ - dash}`} strokeLinecap="round"
+          style={{ transition: 'stroke-dasharray 0.8s ease' }}/>
+      </svg>
+      <div style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <span style={{ color, fontSize: '20px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1 }}>{score}</span>
+        <span style={{ color: T3, fontSize: '8px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', marginTop: '1px' }}>/ 100</span>
+      </div>
+    </div>
+  )
+}
+
+function HealthIntelligenceCard({ userId }: { userId: string }) {
+  const [intel, setIntel]     = useState<HealthIntelligence | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [hidden, setHidden]   = useState(false)
+
+  useEffect(() => {
+    if (!userId) return
+    const fetch_ = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        const token = session?.access_token
+        if (!token) { setHidden(true); return }
+        const res = await fetch('/api/groq/health-intelligence', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+        })
+        if (!res.ok) { setHidden(true); return }
+        const { intelligence } = await res.json()
+        if (!intelligence) { setHidden(true); return }
+        setIntel(intelligence)
+      } catch {
+        setHidden(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetch_()
+  }, [userId])
+
+  if (hidden) return null
+
+  const cfg = intel ? (TRAJECTORY_CONFIG[intel.trajectory] ?? TRAJECTORY_CONFIG.stable) : null
+  const TrajIcon = cfg?.icon ?? Activity
+
+  return (
+    <motion.div variants={fadeUp}
+      style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '16px', overflow: 'hidden', boxShadow: SHADOW }}>
+
+      {/* Header */}
+      <div style={{
+        padding: '13px 16px', borderBottom: `1px solid ${BORDER}`,
+        display: 'flex', alignItems: 'center', gap: '7px',
+      }}>
+        <Activity size={12} color={ACCENT} strokeWidth={2.2}/>
+        <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+          AI Health Intelligence
+        </span>
+      </div>
+
+      <div style={{ padding: '16px' }}>
+        {loading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {[56, 36, 36, 36].map((h, i) => (
+              <div key={i} style={{ height: `${h}px`, borderRadius: '8px', background: BG, animation: 'pulse 1.4s ease-in-out infinite' }}/>
+            ))}
+          </div>
+        ) : intel ? (
+          <>
+            {/* Score + trajectory row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+              <ScoreRing score={intel.score} color={cfg!.color}/>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  background: cfg!.bg, border: `1px solid ${cfg!.color}22`,
+                  borderRadius: '7px', padding: '3px 9px', marginBottom: '7px',
+                }}>
+                  <TrajIcon size={11} color={cfg!.color} strokeWidth={2.2}/>
+                  <span style={{ color: cfg!.color, fontSize: '10px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+                    {cfg!.label}
+                  </span>
+                </div>
+                <p style={{ color: T1, fontSize: '13px', fontWeight: 600, lineHeight: 1.4, margin: 0 }}>{intel.headline}</p>
+              </div>
+            </div>
+
+            {/* Patterns */}
+            {intel.patterns.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginBottom: '12px' }}>
+                {intel.patterns.map((p, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'flex-start', gap: '8px',
+                    padding: '8px 10px', borderRadius: '8px', background: BG,
+                    borderLeft: `3px solid ${BORDER}`,
+                  }}>
+                    <span style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, marginTop: '1px', flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
+                    <p style={{ color: T2, fontSize: '12px', lineHeight: 1.5, margin: 0 }}>{p}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 48h prediction */}
+            {intel.prediction && (
+              <div style={{
+                padding: '10px 12px', borderRadius: '10px',
+                background: ACCENT_DIM, border: `1px solid rgba(0,85,255,0.12)`,
+                marginBottom: '10px',
+              }}>
+                <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Next 48h prediction</p>
+                <p style={{ color: ACCENT, fontSize: '12px', lineHeight: 1.55, margin: 0, fontWeight: 500 }}>{intel.prediction}</p>
+              </div>
+            )}
+
+            {/* Recommendation */}
+            {intel.recommendation && (
+              <div style={{
+                padding: '10px 12px', borderRadius: '10px',
+                background: GREEN_DIM, border: `1px solid rgba(0,122,68,0.14)`,
+              }}>
+                <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Today&apos;s priority</p>
+                <p style={{ color: GREEN, fontSize: '12px', lineHeight: 1.55, margin: 0, fontWeight: 600 }}>{intel.recommendation}</p>
+              </div>
+            )}
+
+            {/* Care team alert */}
+            {intel.alertCareTeam && intel.alertReason && (
+              <div style={{
+                marginTop: '10px', padding: '10px 12px', borderRadius: '10px',
+                background: RED_DIM, border: `1px solid rgba(217,20,20,0.18)`,
+                display: 'flex', alignItems: 'center', gap: '8px',
+              }}>
+                <AlertTriangle size={13} color={RED} strokeWidth={2.2} style={{ flexShrink: 0 }}/>
+                <p style={{ color: RED, fontSize: '12px', fontWeight: 600, margin: 0 }}>Care team alerted: {intel.alertReason}</p>
+              </div>
+            )}
+          </>
+        ) : null}
+      </div>
+    </motion.div>
+  )
 }
 
 function WeeklyInsightsCard({ userId }: { userId: string }) {
@@ -627,194 +793,11 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
+        {/* Health Intelligence */}
+        {userId && <HealthIntelligenceCard userId={userId}/>}
+
         {/* Weekly AI Insights */}
         {userId && <WeeklyInsightsCard userId={userId}/>}
 
         {/* Grouped list: Contacts · Profile · History */}
-        <motion.div variants={fadeUp}
-          style={{
-            background: SURFACE, border: `1px solid ${BORDER}`,
-            borderRadius: '16px', overflow: 'hidden', boxShadow: SHADOW,
-          }}>
-          {[
-            {
-              label: 'Emergency contacts',
-              sub: emergencyContacts.length > 0
-                ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''} — notified on SOS`
-                : 'No contacts added',
-              href: '/emergency-contacts',
-              icon: <Users size={15} color={RED}/>,
-              iconBg: RED_DIM,
-            },
-            {
-              label: 'Medical profile',
-              sub: 'Conditions, medications & allergies',
-              href: '/medical-profile',
-              icon: (
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                  <path d="M7.5 1.5C4.18 1.5 1.5 4.18 1.5 7.5s2.68 6 6 6 6-2.68 6-6-2.68-6-6-6zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm.75 2.25h-1.5v2.25H4.5v1.5h2.25V11h1.5V9H10.5V7.5H8.25V5.25z" fill={GREEN}/>
-                </svg>
-              ),
-              iconBg: GREEN_DIM,
-            },
-            {
-              label: 'Emergency history',
-              sub: 'Past SOS events',
-              href: '/emergency/history',
-              icon: <Clock size={15} color={T2}/>,
-              iconBg: BG,
-            },
-          ].map((item, i, arr) => (
-            <motion.button
-              key={item.href}
-              whileTap={{ scale: 0.99 }}
-              onClick={() => router.push(item.href)}
-              style={{
-                width: '100%', background: 'none', border: 'none',
-                padding: '15px 18px', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: '14px',
-                borderBottom: i < arr.length - 1 ? `1px solid ${BORDER}` : 'none',
-              }}>
-              <div style={{
-                width: '34px', height: '34px', borderRadius: '10px',
-                background: item.iconBg,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                {item.icon}
-              </div>
-              <div style={{ flex: 1, textAlign: 'left' }}>
-                <p style={{ color: T1, fontWeight: 600, fontSize: '14px', lineHeight: 1.2 }}>{item.label}</p>
-                <p style={{ color: T3, fontSize: '12px', marginTop: '2px' }}>{item.sub}</p>
-              </div>
-              <ChevronRight size={14} color={T3} strokeWidth={2}/>
-            </motion.button>
-          ))}
-        </motion.div>
-
-        {/* Medications */}
-        <motion.div variants={fadeUp}>
-          <motion.button
-            whileTap={{ scale: 0.99 }}
-            onClick={() => router.push('/medications')}
-            style={{
-              background: SURFACE, border: `1px solid ${BORDER}`,
-              borderRadius: '16px', padding: '16px 18px',
-              cursor: 'pointer', width: '100%', textAlign: 'left', boxShadow: SHADOW,
-            }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: meds.length > 0 ? '12px' : 0 }}>
-              <span style={{
-                color: T3, fontSize: '10px', fontWeight: 700,
-                letterSpacing: '1.2px', textTransform: 'uppercase',
-                fontFamily: 'var(--font-mono, monospace)',
-              }}>Medications</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                {profile?.medications?.length > 0 && (
-                  <span style={{
-                    background: BG, color: T2, fontSize: '11px', fontWeight: 700,
-                    padding: '2px 7px', borderRadius: '6px', border: `1px solid ${BORDER}`,
-                    fontFamily: 'var(--font-mono, monospace)',
-                  }}>
-                    {profile.medications.length}
-                  </span>
-                )}
-                <ChevronRight size={14} color={T3} strokeWidth={2}/>
-              </div>
-            </div>
-            {meds.length > 0 ? (
-              <div>
-                {meds.map((med: any, i: number) => (
-                  <div key={i} style={{
-                    display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
-                    padding: '9px 0',
-                    borderTop: i > 0 ? `1px solid ${BORDER}` : 'none',
-                  }}>
-                    <p style={{ color: T1, fontSize: '14px', fontWeight: 500 }}>{med.name}</p>
-                    <p style={{
-                      color: T3, fontSize: '12px',
-                      fontFamily: 'var(--font-mono, monospace)',
-                      marginLeft: '8px', flexShrink: 0,
-                    }}>{med.dose}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p style={{ color: T3, fontSize: '13px' }}>No medications added</p>
-            )}
-          </motion.button>
-        </motion.div>
-
-        {/* Care team */}
-        <motion.div variants={fadeUp}>
-          <motion.button
-            whileTap={{ scale: 0.99 }}
-            onClick={() => router.push('/appointments')}
-            style={{
-              background: SURFACE, border: `1px solid ${BORDER}`,
-              borderRadius: '16px', padding: '16px 18px',
-              cursor: 'pointer', width: '100%',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              boxShadow: SHADOW,
-            }}>
-            <div>
-              <p style={{
-                color: T3, fontSize: '10px', fontWeight: 700,
-                letterSpacing: '1.2px', textTransform: 'uppercase',
-                marginBottom: '4px', fontFamily: 'var(--font-mono, monospace)',
-              }}>Care Team</p>
-              <p style={{ color: T1, fontWeight: 600, fontSize: '15px' }}>Schedule or join a call</p>
-            </div>
-            <div style={{
-              width: '38px', height: '38px', borderRadius: '10px',
-              background: ACCENT_DIM,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Video size={16} color={ACCENT} strokeWidth={1.8}/>
-            </div>
-          </motion.button>
-        </motion.div>
-
-        {/* Last check-in */}
-        {checkins.length > 0 && (
-          <motion.div variants={fadeUp}>
-            <motion.button
-              whileTap={{ scale: 0.99 }}
-              onClick={() => router.push('/history')}
-              style={{
-                background: SURFACE, border: `1px solid ${BORDER}`,
-                borderRadius: '16px', padding: '16px 18px',
-                cursor: 'pointer', width: '100%', textAlign: 'left', boxShadow: SHADOW,
-              }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <p style={{
-                  color: T3, fontSize: '10px', fontWeight: 700,
-                  letterSpacing: '1.2px', textTransform: 'uppercase',
-                  fontFamily: 'var(--font-mono, monospace)',
-                }}>Last Check-in</p>
-                <ChevronRight size={14} color={T3} strokeWidth={2}/>
-              </div>
-              <p style={{
-                color: T1, fontSize: '13px', lineHeight: 1.6,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-              }}>
-                {checkins[0]?.summary || 'No summary available'}
-              </p>
-              <p style={{
-                color: T3, fontSize: '11px', marginTop: '8px',
-                fontFamily: 'var(--font-mono, monospace)',
-              }}>
-                {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              </p>
-            </motion.button>
-          </motion.div>
-        )}
-
-      </motion.div>
-
-      <BottomNav/>
-    </div>
-  )
-}
+ 

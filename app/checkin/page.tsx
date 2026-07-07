@@ -96,6 +96,16 @@ export default function Checkin() {
           await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
           toast.success('Check-in saved')
           sendPushNotification(user.id, 'Check-in complete', 'Your daily check-in has been saved. Your care team has been notified.')
+
+          // Trigger health intelligence analysis in background (fire-and-forget)
+          // This will auto-alert the care team if patterns are dangerous
+          const { data: { session: s } } = await supabase.auth.getSession()
+          if (s?.access_token) {
+            fetch('/api/groq/health-intelligence', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${s.access_token}` },
+            }).catch(() => { /* silent — non-critical */ })
+          }
         }
         setDone(true)
       }
@@ -364,21 +374,4 @@ export default function Checkin() {
               background: input.trim() ? ACCENT : BG,
               borderRadius: '12px',
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
-              cursor: input.trim() ? 'pointer' : 'default',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0,
-              transition: 'background 0.15s ease',
-            }}
-          >
-            {loading
-              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : T3} className="animate-spin" />
-              : <Send size={16} color={input.trim() ? '#FFFFFF' : T3} />
-            }
-          </motion.button>
-        </div>
-      )}
-
-      <BottomNav />
-    </div>
-  )
-}
+              cursor: input.trim() ? 'pointer' : 
