@@ -6,7 +6,19 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
 import { ChevronRight, CheckCircle2, Video, Settings, Phone, Flame, Users, Clock, AlertTriangle, TrendingDown, Sparkles, RefreshCw, Heart, TrendingUp, Pill, Star, Activity, Zap } from 'lucide-react'
-import type { HealthIntelligence } from '@/app/api/groq/health-intelligence/route'
+// Inline type — mirrors the export in app/api/groq/health-intelligence/route.ts
+// (Defined here to avoid bundling server-only imports into the client)
+interface HealthIntelligence {
+  score: number
+  trajectory: 'improving' | 'stable' | 'declining' | 'critical'
+  headline: string
+  patterns: string[]
+  prediction: string
+  recommendation: string
+  alertCareTeam: boolean
+  alertReason: string | null
+  dataQuality: 'rich' | 'partial' | 'sparse'
+}
 import { toast } from 'sonner'
 import { analyzeCrashRisk, CrashRisk } from '@/lib/crash-risk'
 
@@ -787,17 +799,4 @@ export default function Dashboard() {
             ) : (
               <>
                 <p style={{ color: T1, fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1 }}>Timeline</p>
-                <p style={{ color: ACCENT, fontSize: '11px', marginTop: '5px', fontWeight: 500 }}>Recovery plan</p>
-              </>
-            )}
-          </motion.button>
-        </motion.div>
-
-        {/* Health Intelligence */}
-        {userId && <HealthIntelligenceCard userId={userId}/>}
-
-        {/* Weekly AI Insights */}
-        {userId && <WeeklyInsightsCard userId={userId}/>}
-
-        {/* Grouped list: Contacts · Profile · History */}
- 
+                <p style={{ color: ACCENT, fontSize: '11px', marginTop: '5px', fontW
