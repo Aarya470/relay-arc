@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Menu, X, Phone, MapPin, FileText, Heart, Activity, Pill, Video, TrendingDown, Route, Users, Check } from 'lucide-react'
+import { ArrowRight, Menu, X, Phone, MapPin, FileText, Heart, Activity, Pill, Video, TrendingDown, Route, Users } from 'lucide-react'
 
 // ─── Design tokens — shared with the app ─────────────────────────────────────
 const T1     = '#0E1218'
@@ -34,13 +34,13 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
     setMenuOpen(false)
   }
 
-  const links: [string, string][] = [['how', 'How it works'], ['features', 'Features'], ['mission', 'Mission'], ['for-whom', "Who it's for"]]
+  const links: [string, string][] = [['log', 'How it works'], ['features', 'Features'], ['mission', 'Mission'], ['for-whom', "Who it's for"]]
 
   return (
     <>
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrolled ? 'rgba(255,255,255,0.85)' : 'transparent',
+        background: scrolled ? 'rgba(255,255,255,0.88)' : 'transparent',
         backdropFilter: scrolled ? 'blur(14px)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(14px)' : 'none',
         borderBottom: scrolled ? `1px solid ${BORDER}` : '1px solid transparent',
@@ -57,7 +57,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '26px' }} className="desktop-nav">
             {links.map(([id, label]) => (
-              <button key={id} onClick={() => scrollTo(id)}
+              <button key={id} onClick={() => scrollTo(id)} className="nav-link"
                 style={{ background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
                 {label}
               </button>
@@ -65,7 +65,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button onClick={onSignIn} className="desktop-only"
+            <button onClick={onSignIn} className="desktop-only nav-link"
               style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Sign in
             </button>
@@ -107,7 +107,28 @@ function PhoneMockup() {
   return (
     <div style={{ position: 'relative', width: 'fit-content', margin: '0 auto' }} className="phone-wrap">
 
+      {/* map-paper dot grid */}
+      <div aria-hidden style={{
+        position: 'absolute', inset: '-70px -120px',
+        backgroundImage: 'radial-gradient(rgba(14,18,24,0.13) 1px, transparent 1px)',
+        backgroundSize: '20px 20px',
+        maskImage: 'radial-gradient(closest-side, black 55%, transparent)',
+        WebkitMaskImage: 'radial-gradient(closest-side, black 55%, transparent)',
+        pointerEvents: 'none',
+      }}/>
+
+      {/* dashed route line, house → hospital */}
+      <svg aria-hidden width="560" height="420" viewBox="0 0 560 420" fill="none"
+        style={{ position: 'absolute', top: '-52px', left: '-160px', pointerEvents: 'none' }} className="route-svg">
+        <path d="M24 396 C 120 380, 150 300, 236 268 S 420 160, 508 60" stroke={RED} strokeWidth="1.6" strokeDasharray="5 7" opacity="0.55"/>
+        <circle cx="24" cy="396" r="5" fill={ACCENT}/>
+        <circle cx="24" cy="396" r="10" fill={ACCENT} opacity="0.15"/>
+        <rect x="496" y="44" width="26" height="26" rx="7" fill={RED}/>
+        <path d="M509 51 v12 M503 57 h12" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
+      </svg>
+
       <div style={{
+        position: 'relative',
         width: '308px',
         borderRadius: '42px',
         background: T1,
@@ -176,22 +197,22 @@ function PhoneMockup() {
         </div>
       </div>
 
-      {/* floating detail cards */}
+      {/* floating detail cards — outside the screen, clipping only the bezel */}
       <div className="float-card" style={{
-        position: 'absolute', top: '84px', right: '-88px',
+        position: 'absolute', top: '52px', right: '-128px', zIndex: 6,
         background: 'white', border: `1px solid ${BORDER}`, borderRadius: '12px',
         padding: '10px 13px', boxShadow: '0 10px 32px rgba(14,18,24,0.10)',
-        display: 'flex', alignItems: 'flex-start', gap: '8px', width: '178px',
+        display: 'flex', alignItems: 'flex-start', gap: '8px', width: '176px',
       }}>
         <FileText size={13} color={GREEN} style={{ marginTop: '1px', flexShrink: 0 }}/>
         <div>
           <p style={{ color: T1, fontSize: '11px', fontWeight: 700, marginBottom: '2px' }}>ER brief sent</p>
-          <p style={{ color: T3, fontSize: '10px', fontFamily: mono }}>Lilavati Hospital · 0:42</p>
+          <p style={{ color: T3, fontSize: '10px', fontFamily: mono }}>Lilavati Hosp. · 0:42</p>
         </div>
       </div>
 
       <div className="float-card" style={{
-        position: 'absolute', bottom: '120px', left: '-92px',
+        position: 'absolute', bottom: '38px', left: '-136px', zIndex: 6,
         background: 'white', border: `1px solid ${BORDER}`, borderRadius: '12px',
         padding: '10px 13px', boxShadow: '0 10px 32px rgba(14,18,24,0.10)',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '172px',
@@ -206,6 +227,15 @@ function PhoneMockup() {
     </div>
   )
 }
+
+// ─── Dispatch log data ────────────────────────────────────────────────────────
+const LOG = [
+  { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating” — typed by her son while she sat down.', color: '#D91414' },
+  { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#B45309' },
+  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#0055FF' },
+  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#0055FF' },
+  { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#007A44' },
+]
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
@@ -233,12 +263,6 @@ export default function Home() {
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
-  const steps = [
-    { tag: 'RE · ACT', color: GREEN, title: "Say what's happening", body: 'Describe the emergency in plain words. Relay identifies the type and pulls your medical profile automatically — no menus at 2 a.m.' },
-    { tag: 'RE · ROUTE', color: ACCENT, title: 'Get matched, not just directed', body: 'Not the nearest hospital — the right one for your condition. Your medications, allergies and history arrive before you do.' },
-    { tag: 'RE · COVER', color: AMBER, title: 'Come home supported', body: "Turn-by-turn for family, live status for caregivers, then daily check-ins and a recovery timeline until you're back on your feet." },
-  ]
-
   const features = [
     { Icon: Activity,     color: ACCENT, title: 'AI emergency detection',    body: 'Plain-language triage that starts routing instantly, without forms or phone trees.' },
     { Icon: Route,        color: ACCENT, title: 'Condition-matched routing', body: 'A cath lab for a heart attack — not just the closest ER. GPS navigation included.' },
@@ -246,50 +270,71 @@ export default function Home() {
     { Icon: TrendingDown, color: AMBER,  title: 'Crash-risk prediction',     body: 'Your last seven check-ins, scanned for the pattern that tends to precede a bad day.' },
     { Icon: Heart,        color: GREEN,  title: 'Daily check-ins',           body: 'A two-minute conversation each morning that quietly builds a clinical record.' },
     { Icon: Pill,         color: GREEN,  title: 'Medication tracking',       body: 'Doses, reminders, and a list the ER sees without anyone having to remember it.' },
-    { Icon: Video,        color: ACCENT, title: 'Care-team dashboard',       body: 'Nurses see every patient\u2019s history, vitals and flags — and can schedule video calls.' },
+    { Icon: Video,        color: ACCENT, title: 'Care-team dashboard',       body: 'Nurses see every patient’s history, vitals and flags — and can schedule video calls.' },
     { Icon: Users,        color: AMBER,  title: 'Caregiver live view',       body: 'Share a link; your family watches the emergency unfold and resolve in real time.' },
   ]
 
   const audiences = [
-    { title: 'Cardiac patients',      color: RED,    body: 'Daily check-ins that catch early warnings, an SOS that moves in seconds, and a medical profile that speaks for you when you can\u2019t.' },
-    { title: 'Post-surgery patients', color: AMBER,  body: 'A week-by-week recovery timeline that knows your procedure — what\u2019s normal, what isn\u2019t, and who to call.' },
+    { title: 'Cardiac patients',      color: RED,    body: 'Daily check-ins that catch early warnings, an SOS that moves in seconds, and a medical profile that speaks for you when you can’t.' },
+    { title: 'Post-surgery patients', color: AMBER,  body: 'A week-by-week recovery timeline that knows your procedure — what’s normal, what isn’t, and who to call.' },
     { title: 'Families & caregivers', color: GREEN,  body: 'Live routing the moment it happens, a real-time status feed, and the full history to share with doctors afterwards.' },
     { title: 'Nurses & care teams',   color: ACCENT, body: 'One dashboard for every patient — automated flags, check-in history, secure scheduling and video calls.' },
   ]
+
+  const tickerItems = [
+    ['3.8M', 'cardiac deaths a year in India'],
+    ['45 min', 'average ambulance wait in Mumbai traffic'],
+    ['10 min', 'window to prevent brain damage after arrest'],
+    ['65%', 'of rural India lives 30 km+ from a hospital'],
+    ['<60 s', 'from SOS to a hospital matched and briefed'],
+  ]
+  const Ticker = () => (
+    <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+      {tickerItems.map(([n, l], i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '8px', paddingRight: '56px' }}>
+          <span style={{ color: RED, fontFamily: mono, fontSize: '11px' }}>▲</span>
+          <span style={{ color: T1, fontFamily: mono, fontSize: '12.5px', fontWeight: 700 }}>{n}</span>
+          <span style={{ color: T2, fontFamily: mono, fontSize: '11.5px', letterSpacing: '0.4px', textTransform: 'uppercase' }}>{l}</span>
+        </div>
+      ))}
+    </div>
+  )
 
   return (
     <div style={{ background: 'white', overflowX: 'hidden' }}>
       <NavBar onSignIn={() => router.push('/login')} onGetStarted={() => router.push('/login?signup=1')}/>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section style={{ padding: '150px 24px 90px' }}>
+      <section style={{ padding: '138px 24px 0' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <motion.div
-            initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: 'easeOut' }}
-            style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'center' }} className="hero-grid">
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }}
+            style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
 
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '26px' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: RED, display: 'inline-block' }}/>
-                <span style={{ color: T2, fontSize: '13px', fontWeight: 600 }}>Cardiac emergency response · India</span>
+            <div style={{ paddingBottom: '90px' }} className="hero-copy">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: RED, display: 'inline-block', animation: 'dot-blink 1.6s ease-in-out infinite' }}/>
+                <span style={{ color: T2, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                  19.0760° N, 72.8777° E — Mumbai · cardiac response
+                </span>
               </div>
 
-              <h1 style={{ color: T1, fontSize: 'clamp(40px, 6.2vw, 64px)', fontWeight: 800, lineHeight: 1.04, letterSpacing: '-2.2px', marginBottom: '22px', maxWidth: '560px' }}>
-                When every minute is the margin.
+              <h1 style={{ color: T1, fontSize: 'clamp(40px, 5.8vw, 62px)', fontWeight: 800, lineHeight: 1.03, letterSpacing: '-2.4px', marginBottom: '24px', maxWidth: '600px' }}>
+                When every minute<br/>is the margin<span style={{ color: RED }}>.</span>
               </h1>
 
-              <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '34px', maxWidth: '480px' }}>
+              <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
                 Relay detects the crisis, matches the right hospital for your condition, sends your medical profile ahead, and navigates your family there — all in under a minute.
               </p>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '30px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '32px' }}>
                 <button onClick={() => router.push('/login?signup=1')}
                   style={{ display: 'flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '14px 26px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
                   Create your free profile <ArrowRight size={15}/>
                 </button>
-                <button onClick={() => scrollTo('how')}
+                <button onClick={() => scrollTo('log')}
                   style={{ background: 'none', border: 'none', color: T2, fontWeight: 600, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `1px solid ${BORDER}`, paddingBottom: '2px' }}>
-                  See how it works
+                  Watch one emergency, timed
                 </button>
               </div>
 
@@ -298,56 +343,61 @@ export default function Home() {
               </p>
             </div>
 
-            <PhoneMockup/>
+            <div style={{ position: 'relative', zIndex: 5, marginBottom: '-64px' }} className="phone-col">
+              <PhoneMockup/>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── STATS STRIP ──────────────────────────────────────────────── */}
-      <section style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, background: BG2, padding: '38px 24px' }}>
-        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '32px' }} className="stats-grid">
-            {[
-              ['3.8M', 'cardiac deaths in India each year'],
-              ['45 min', 'average ambulance wait in Mumbai traffic'],
-              ['10 min', 'window to prevent brain damage after arrest'],
-              ['65%', 'of rural India lives 30 km+ from a hospital'],
-            ].map(([value, label], i) => (
-              <div key={i}>
-                <p style={{ color: T1, fontSize: '28px', fontWeight: 800, letterSpacing: '-1.2px', marginBottom: '5px' }}>{value}</p>
-                <p style={{ color: T2, fontSize: '13px', lineHeight: 1.5 }}>{label}</p>
-              </div>
-            ))}
-          </div>
-          <p style={{ color: T3, fontSize: '11.5px', marginTop: '26px' }}>
-            Figures drawn from public reporting on Indian emergency response and cardiovascular health.
-          </p>
+      {/* ── TELEMETRY TICKER ─────────────────────────────────────────── */}
+      <div style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, background: BG2, overflow: 'hidden', padding: '13px 0', position: 'relative' }}>
+        <div className="ticker-track">
+          <Ticker/><Ticker/>
         </div>
-      </section>
+      </div>
 
-      {/* ── HOW IT WORKS ─────────────────────────────────────────────── */}
-      <section id="how" style={{ padding: '100px 24px' }}>
+      {/* ── DISPATCH LOG ─────────────────────────────────────────────── */}
+      <section id="log" style={{ padding: '110px 24px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ maxWidth: '520px', marginBottom: '60px' }}>
-            <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, letterSpacing: '-1.4px', lineHeight: 1.1, marginBottom: '14px' }}>
-              Three steps. No guessing.
-            </h2>
-            <p style={{ color: T2, fontSize: '16px', lineHeight: 1.65 }}>
-              An emergency is not the moment to figure things out. Relay already has.
-            </p>
-          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
+            <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
+              <p style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '16px' }}>How it works</p>
+              <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '16px' }}>
+                One emergency,<br/>timed<span style={{ color: RED }}>.</span>
+              </h2>
+              <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65, marginBottom: '18px' }}>
+                An emergency is not the moment to figure things out. Relay already has. Here is a Tuesday evening, minute by minute.
+              </p>
+              <p style={{ color: T3, fontSize: '12px', lineHeight: 1.6 }}>
+                Composite scenario. Timings reflect how Relay routes and briefs in a metro area.
+              </p>
+            </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px' }} className="how-grid">
-            {steps.map((step, i) => (
-              <div key={i} style={{ borderTop: `2px solid ${T1}`, paddingTop: '22px' }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <span style={{ color: step.color, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.4px' }}>{step.tag}</span>
-                  <span style={{ color: T3, fontFamily: mono, fontSize: '11px' }}>0{i + 1}</span>
+            <div style={{ paddingTop: '6px' }}>
+              {LOG.map((e, i) => (
+                <div key={i} style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '28px', position: 'relative', paddingBottom: i < LOG.length - 1 ? '44px' : 0 }} className="log-row">
+                  {/* timeline spine */}
+                  {i < LOG.length - 1 && (
+                    <div style={{ position: 'absolute', left: '182px', top: '20px', bottom: '-2px', width: '1px', background: BORDER }} className="log-spine"/>
+                  )}
+                  <div style={{ textAlign: 'right' }} className="log-time">
+                    <p style={{ color: T1, fontFamily: mono, fontSize: '14px', fontWeight: 700, letterSpacing: '0.3px' }}>{e.t}</p>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '11px', marginTop: '3px' }}>{e.d}</p>
+                  </div>
+                  <div style={{ position: 'relative', paddingLeft: '30px' }}>
+                    <span style={{ position: 'absolute', left: '-4.5px', top: '5px', width: '9px', height: '9px', borderRadius: '50%', background: e.color, boxShadow: `0 0 0 4px ${e.color}1A` }} className="log-dot"/>
+                    <h3 style={{ color: T1, fontSize: '16.5px', fontWeight: 700, letterSpacing: '-0.3px', marginBottom: '7px' }}>{e.title}</h3>
+                    <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65, maxWidth: '440px' }}>{e.body}</p>
+                  </div>
                 </div>
-                <h3 style={{ color: T1, fontSize: '18px', fontWeight: 700, letterSpacing: '-0.4px', marginBottom: '9px' }}>{step.title}</h3>
-                <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65 }}>{step.body}</p>
+              ))}
+              <div style={{ marginTop: '40px', paddingLeft: '178px' }} className="log-verdict">
+                <p style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px' }}>
+                  Eleven minutes, fifty-one seconds<span style={{ color: RED }}>.</span> The margin, kept.
+                </p>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
@@ -355,23 +405,24 @@ export default function Home() {
       {/* ── FEATURES ─────────────────────────────────────────────────── */}
       <section id="features" style={{ padding: '100px 24px', borderTop: `1px solid ${BORDER}` }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '64px', alignItems: 'start' }} className="features-grid">
-            <div className="features-sticky" style={{ position: 'sticky', top: '96px' }}>
-              <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, letterSpacing: '-1.4px', lineHeight: 1.1, marginBottom: '14px' }}>
-                Built for the whole arc of care.
+          <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
+            <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
+              <p style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '16px' }}>Features</p>
+              <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '16px' }}>
+                The whole arc<br/>of care<span style={{ color: RED }}>.</span>
               </h2>
               <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65 }}>
                 From the first warning sign to the last week of recovery — not just the 911 call.
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '36px 40px' }} className="features-items">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 48px' }} className="features-items">
               {features.map((f, i) => (
-                <div key={i}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: `${f.color}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                <div key={i} style={{ borderTop: `1px solid ${BORDER}`, padding: '20px 0 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                     <f.Icon size={15} color={f.color} strokeWidth={2}/>
+                    <h3 style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px' }}>{f.title}</h3>
                   </div>
-                  <h3 style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px', marginBottom: '6px' }}>{f.title}</h3>
                   <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.6 }}>{f.body}</p>
                 </div>
               ))}
@@ -383,11 +434,11 @@ export default function Home() {
       {/* ── MISSION — the one dark moment ────────────────────────────── */}
       <section id="mission" style={{ background: T1, padding: '110px 24px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '64px', alignItems: 'start' }} className="features-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
             <div>
               <p style={{ color: '#FF6B5E', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '18px' }}>Mission</p>
               <h2 style={{ color: 'white', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1.8px', lineHeight: 1.05 }}>
-                Relay,<br/>not Revive.
+                Relay,<br/>not Revive<span style={{ color: '#FF6B5E' }}>.</span>
               </h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '560px' }}>
@@ -411,8 +462,8 @@ export default function Home() {
       {/* ── WHO IT'S FOR ─────────────────────────────────────────────── */}
       <section id="for-whom" style={{ padding: '100px 24px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, letterSpacing: '-1.4px', lineHeight: 1.1, marginBottom: '48px', maxWidth: '480px' }}>
-            Built for everyone in the room.
+          <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '48px', maxWidth: '480px' }}>
+            Built for everyone<br/>in the room<span style={{ color: RED }}>.</span>
           </h2>
 
           <div>
@@ -432,15 +483,15 @@ export default function Home() {
       {/* ── CTA ──────────────────────────────────────────────────────── */}
       <section style={{ padding: '110px 24px', borderTop: `1px solid ${BORDER}`, background: BG2 }}>
         <div style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ color: T1, fontSize: 'clamp(30px, 5vw, 46px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '16px' }}>
-            Your profile could save your life.
+          <h2 style={{ color: T1, fontSize: 'clamp(30px, 5vw, 46px)', fontWeight: 800, letterSpacing: '-1.8px', lineHeight: 1.08, marginBottom: '16px' }}>
+            Your profile could<br/>save your life<span style={{ color: RED }}>.</span>
           </h2>
           <p style={{ color: T2, fontSize: '16px', lineHeight: 1.65, marginBottom: '34px', maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto' }}>
             Blood type, allergies, medications — ready for paramedics in seconds. No unlocking required.
           </p>
           <button onClick={() => router.push('/login?signup=1')}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', padding: '15px 30px', borderRadius: '12px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-            Set up your profile — it\u2019s free <ArrowRight size={15}/>
+            Set up your profile — it’s free <ArrowRight size={15}/>
           </button>
         </div>
       </section>
@@ -463,7 +514,7 @@ export default function Home() {
             <div style={{ display: 'flex', gap: '64px', flexWrap: 'wrap' }}>
               <div>
                 <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Product</p>
-                {[['features', 'Features'], ['how', 'How it works'], ['for-whom', "Who it's for"]].map(([id, label]) => (
+                {[['features', 'Features'], ['log', 'How it works'], ['for-whom', "Who it's for"]].map(([id, label]) => (
                   <button key={id} onClick={() => scrollTo(id)}
                     style={{ display: 'block', background: 'none', border: 'none', color: T2, fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
                     {label}
@@ -482,7 +533,7 @@ export default function Home() {
             </div>
           </div>
           <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <p style={{ color: T3, fontSize: '12px' }}>© {new Date().getFullYear()} Relay Arc</p>
+            <p style={{ color: T3, fontSize: '12px', fontFamily: mono }}>© {new Date().getFullYear()} Relay Arc — built in India</p>
             <p style={{ color: T3, fontSize: '12px' }}>
               Not a substitute for emergency services. In immediate danger, call your local emergency number.
             </p>
@@ -491,24 +542,42 @@ export default function Home() {
       </footer>
 
       <style>{`
+        .nav-link:hover { color: ${T1} !important; }
         @keyframes sos-pulse-lp {
           0%, 100% { box-shadow: 0 0 0 0 rgba(217,20,20,0.35); }
           50% { box-shadow: 0 0 0 12px rgba(217,20,20,0); }
         }
+        @keyframes dot-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.25; }
+        }
+        @keyframes ticker-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .ticker-track { display: flex; width: max-content; animation: ticker-scroll 42s linear infinite; }
+        .ticker-track:hover { animation-play-state: paused; }
         @media (max-width: 960px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 64px !important; }
-          .features-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .features-sticky { position: static !important; }
+          .hero-grid { grid-template-columns: 1fr !important; gap: 56px !important; }
+          .hero-copy { padding-bottom: 0 !important; }
+          .phone-col { margin-bottom: 40px !important; }
+          .split-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .split-sticky { position: static !important; }
           .float-card { display: none !important; }
+          .route-svg { display: none !important; }
         }
         @media (max-width: 720px) {
           .desktop-nav { display: none !important; }
           .desktop-only { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
-          .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
-          .how-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .features-items { grid-template-columns: 1fr !important; gap: 28px !important; }
+          .features-items { grid-template-columns: 1fr !important; }
           .who-row { grid-template-columns: 1fr !important; gap: 8px !important; padding: 20px 0 !important; }
+          .log-row { grid-template-columns: 1fr !important; gap: 6px !important; }
+          .log-time { text-align: left !important; display: flex; gap: 10px; align-items: baseline; }
+          .log-spine { display: none !important; }
+          .log-dot { display: none !important; }
+          .log-row > div:last-child { padding-left: 0 !important; }
+          .log-verdict { padding-left: 0 !important; }
         }
       `}</style>
     </div>
