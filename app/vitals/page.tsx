@@ -596,4 +596,17 @@ export default function VitalsPage() {
                 <p style={{ color: '#8888A8', fontSize: '13px', fontWeight: 700 }}>
                   No data for {timeRange} view
                 </p>
-              
+                <p style={{ color: '#505068', fontSize: '11px', marginTop: '6px' }}>
+                  Log at least 2 readings to see trends
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+      </div>
+
+      <BottomNav/>
+    </div>
+  )
+}

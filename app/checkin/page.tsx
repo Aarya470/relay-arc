@@ -374,4 +374,21 @@ export default function Checkin() {
               background: input.trim() ? ACCENT : BG,
               borderRadius: '12px',
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
-              cursor: input.trim() ? 'pointer' : 
+              cursor: input.trim() ? 'pointer' : 'default',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+              transition: 'background 0.15s ease',
+            }}
+          >
+            {loading
+              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : T3} className="animate-spin" />
+              : <Send size={16} color={input.trim() ? '#FFFFFF' : T3} />
+            }
+          </motion.button>
+        </div>
+      )}
+
+      <BottomNav />
+    </div>
+  )
+}
