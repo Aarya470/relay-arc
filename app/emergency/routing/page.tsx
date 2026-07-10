@@ -42,21 +42,21 @@ const EMERGENCY_LABELS: Record<string, string> = {
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#070710',
-  card:        '#121220',
-  card2:       '#1A1A2E',
-  border:      'rgba(255,255,255,0.06)',
-  textPrimary: '#EEEEF8',
-  textSec:     '#8888A8',
-  textMuted:   '#505068',
-  red:         '#FF3737',
-  redSoft:     'rgba(255,55,55,0.12)',
-  redGlow:     '0 8px 28px rgba(255,55,55,0.45)',
-  green:       '#00D68F',
-  greenSoft:   'rgba(0,214,143,0.12)',
-  blue:        '#4F8EF7',
-  blueSoft:    'rgba(79,142,247,0.12)',
-  amber:       '#F59E0B',
+  bg:          '#F4F5F7',
+  card:        '#FFFFFF',
+  card2:       '#FFFFFF',
+  border:      '#ECEEF2',
+  textPrimary: '#0E1218',
+  textSec:     '#5B6371',
+  textMuted:   '#9AA2AD',
+  red:         '#D91414',
+  redSoft:     'rgba(217,20,20,0.12)',
+  redGlow:     '0 8px 28px rgba(217,20,20,0.25)',
+  green:       '#007A44',
+  greenSoft:   'rgba(0,122,68,0.12)',
+  blue:        '#0055FF',
+  blueSoft:    'rgba(0,85,255,0.12)',
+  amber:       '#B45309',
 } as const
 
 // ─── Cancel confirm sheet — shared between error and main view ─────────────────
@@ -81,7 +81,7 @@ function CancelConfirmSheet({
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0,0,0,0.80)',
+            background: 'rgba(14,18,24,0.45)',
             zIndex: 200,
             display: 'flex',
             alignItems: 'flex-end',
@@ -104,7 +104,7 @@ function CancelConfirmSheet({
           >
             {/* Drag handle */}
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-              <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.10)' }} />
+              <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: '#E3E6EC' }} />
             </div>
 
             <p style={{
@@ -133,7 +133,7 @@ function CancelConfirmSheet({
                 style={{
                   flex: 1,
                   padding: '15px',
-                  background: 'rgba(255,255,255,0.06)',
+                  background: '#ECEEF2',
                   borderRadius: '14px',
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
@@ -154,7 +154,7 @@ function CancelConfirmSheet({
                 style={{
                   flex: 1,
                   padding: '15px',
-                  background: `linear-gradient(135deg, #FF3737, #CC1A1A)`,
+                  background: `linear-gradient(135deg, #D91414, #CC1A1A)`,
                   borderRadius: '14px',
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
@@ -399,7 +399,7 @@ function RoutingPage() {
         height: '72px',
         borderRadius: '50%',
         background: T.redSoft,
-        border: `1px solid rgba(255,55,55,0.25)`,
+        border: `1px solid rgba(217,20,20,0.25)`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -436,7 +436,7 @@ function RoutingPage() {
           alignItems: 'center',
           justifyContent: 'center',
           gap: '10px',
-          background: `linear-gradient(135deg, #FF3737, #CC1A1A)`,
+          background: `linear-gradient(135deg, #D91414, #CC1A1A)`,
           color: 'white',
           fontWeight: 800,
           fontSize: '17px',
@@ -458,13 +458,13 @@ function RoutingPage() {
         whileTap={{ scale: 0.97 }}
         onClick={() => setShowCancelConfirm(true)}
         style={{
-          background: 'rgba(255,255,255,0.06)',
+          background: '#ECEEF2',
           color: T.textMuted,
           fontWeight: 500,
           fontSize: '13px',
           padding: '11px 24px',
           borderRadius: '12px',
-          border: `1px solid rgba(255,255,255,0.06)`,
+          border: `1px solid #E3E6EC`,
           cursor: 'pointer',
         }}
       >
@@ -498,7 +498,7 @@ function RoutingPage() {
         alignItems: 'center',
         justifyContent: 'space-between',
         flexShrink: 0,
-        borderBottom: `1px solid rgba(255,55,55,0.12)`,
+        borderBottom: `1px solid rgba(217,20,20,0.12)`,
         zIndex: 10,
       }}>
         {/* Pulsing ACTIVE EMERGENCY badge */}
@@ -510,7 +510,7 @@ function RoutingPage() {
             alignItems: 'center',
             gap: '7px',
             background: T.redSoft,
-            border: `1px solid rgba(255,55,55,0.28)`,
+            border: `1px solid rgba(217,20,20,0.28)`,
             borderRadius: '20px',
             padding: '5px 12px',
           }}
@@ -568,7 +568,7 @@ function RoutingPage() {
           justifyContent: 'space-between',
           gap: '12px',
           flexShrink: 0,
-          boxShadow: `0 4px 24px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,55,55,0.06)`,
+          boxShadow: `0 4px 24px rgba(14,18,24,0.10), inset 0 0 0 1px rgba(217,20,20,0.06)`,
         }}
       >
         {/* Hospital name + address */}
@@ -611,7 +611,7 @@ function RoutingPage() {
         {/* ETA + distance badge */}
         <div style={{
           background: T.redSoft,
-          border: `1px solid rgba(255,55,55,0.22)`,
+          border: `1px solid rgba(217,20,20,0.22)`,
           borderRadius: '14px',
           padding: '10px 14px',
           textAlign: 'center',
@@ -628,7 +628,7 @@ function RoutingPage() {
             {estimateTime(hospital.distance || 0)}
           </p>
           <p style={{
-            color: 'rgba(255,55,55,0.55)',
+            color: 'rgba(217,20,20,0.55)',
             fontSize: '10px',
             fontFamily: 'var(--font-mono, monospace)',
             marginTop: '3px',
@@ -649,7 +649,7 @@ function RoutingPage() {
             flexDirection: 'column',
             alignItems: 'center',
             gap: '5px',
-            background: `linear-gradient(135deg, #FF3737, #CC1A1A)`,
+            background: `linear-gradient(135deg, #D91414, #CC1A1A)`,
             color: 'white',
             padding: '11px 14px',
             borderRadius: '14px',
@@ -675,7 +675,7 @@ function RoutingPage() {
         borderRadius: '20px',
         overflow: 'hidden',
         border: `1px solid ${T.border}`,
-        boxShadow: '0 4px 20px rgba(0,0,0,0.35)',
+        boxShadow: '0 4px 20px rgba(14,18,24,0.10)',
       }}>
         <Nav hospital={hospital} />
       </div>
@@ -692,7 +692,7 @@ function RoutingPage() {
           borderTop: `1px solid ${T.border}`,
           padding: '0 14px 40px',
           overflowY: 'auto',
-          boxShadow: '0 -12px 40px rgba(0,0,0,0.55)',
+          boxShadow: '0 -12px 40px rgba(14,18,24,0.10)',
           marginTop: '10px',
         }}
       >
@@ -706,15 +706,15 @@ function RoutingPage() {
             width: '36px',
             height: '4px',
             borderRadius: '2px',
-            background: 'rgba(255,255,255,0.08)',
+            background: '#E3E6EC',
           }} />
         </div>
 
         {/* ── Care team alert status ─────────────────────────────────────────── */}
         <motion.div
           animate={{
-            borderColor: careTeamAlerted ? 'rgba(0,214,143,0.22)' : T.border,
-            backgroundColor: careTeamAlerted ? 'rgba(0,214,143,0.06)' : 'rgba(255,255,255,0.02)',
+            borderColor: careTeamAlerted ? 'rgba(0,122,68,0.22)' : T.border,
+            backgroundColor: careTeamAlerted ? 'rgba(0,122,68,0.06)' : 'transparent',
           }}
           transition={{ duration: 0.5 }}
           style={{
@@ -833,7 +833,7 @@ function RoutingPage() {
                           background: T.greenSoft,
                           padding: '6px 11px',
                           borderRadius: '9px',
-                          border: `1px solid rgba(0,214,143,0.2)`,
+                          border: `1px solid rgba(0,122,68,0.2)`,
                         }}
                       >
                         <Phone size={12} color={T.green} />
@@ -853,7 +853,7 @@ function RoutingPage() {
                     justifyContent: 'center',
                     gap: '8px',
                     background: T.card2,
-                    border: `1px solid rgba(79,142,247,0.22)`,
+                    border: `1px solid rgba(0,85,255,0.22)`,
                     color: T.blue,
                     fontWeight: 700,
                     fontSize: '13px',
@@ -873,7 +873,7 @@ function RoutingPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                background: 'rgba(255,255,255,0.025)',
+                background: 'transparent',
                 border: `1px solid ${T.border}`,
                 color: T.textMuted,
                 fontWeight: 500,
@@ -893,7 +893,7 @@ function RoutingPage() {
           <div style={{
             marginBottom: '14px',
             background: T.card2,
-            border: `1px solid rgba(255,55,55,0.18)`,
+            border: `1px solid rgba(217,20,20,0.18)`,
             borderRadius: '16px',
             overflow: 'hidden',
           }}>
@@ -905,7 +905,7 @@ function RoutingPage() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '14px 15px',
-                background: showMedCard ? 'rgba(255,55,55,0.08)' : 'transparent',
+                background: showMedCard ? 'rgba(217,20,20,0.08)' : 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 transition: 'background 0.2s',
@@ -953,7 +953,7 @@ function RoutingPage() {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '12px',
-                    borderTop: `1px solid rgba(255,55,55,0.12)`,
+                    borderTop: `1px solid rgba(217,20,20,0.12)`,
                   }}>
                     {profile.blood_type && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -1019,7 +1019,7 @@ function RoutingPage() {
                       </div>
                     )}
                     <p style={{
-                      color: 'rgba(255,55,55,0.35)',
+                      color: 'rgba(217,20,20,0.35)',
                       fontSize: '9px',
                       fontFamily: 'var(--font-mono, monospace)',
                       letterSpacing: '1.5px',
@@ -1152,7 +1152,7 @@ function RoutingPage() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '10px',
-              background: `linear-gradient(135deg, #FF3737, #CC1A1A)`,
+              background: `linear-gradient(135deg, #D91414, #CC1A1A)`,
               color: 'white',
               padding: '16px',
               borderRadius: '14px',
@@ -1176,7 +1176,7 @@ function RoutingPage() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              background: 'rgba(255,255,255,0.04)',
+              background: '#ECEEF2',
               color: T.textSec,
               padding: '14px',
               borderRadius: '13px',
@@ -1195,13 +1195,13 @@ function RoutingPage() {
             whileTap={{ scale: 0.97 }}
             onClick={() => setShowCancelConfirm(true)}
             style={{
-              background: 'rgba(255,255,255,0.06)',
+              background: '#ECEEF2',
               color: T.textMuted,
               fontWeight: 500,
               fontSize: '13px',
               padding: '12px 24px',
               borderRadius: '12px',
-              border: `1px solid rgba(255,255,255,0.06)`,
+              border: `1px solid #E3E6EC`,
               cursor: 'pointer',
             }}
           >
@@ -1223,7 +1223,7 @@ function RoutingPage() {
 
 export default function RoutingPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#070710' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#F4F5F7' }} />}>
       <RoutingPage />
     </Suspense>
   )

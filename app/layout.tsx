@@ -21,8 +21,8 @@ const mono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Relay Arc',
-  description: 'Cardiac Emergency Platform',
+  title: 'Relay Arc — Cardiac emergency response',
+  description: 'Relay detects the cardiac crisis, finds the right hospital for your condition, sends your medical profile ahead, and navigates your family there — in under 60 seconds.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#070710" />
+        <meta name="theme-color" content="#F4F5F7" />
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
       <body className={`${jakarta.variable} ${mono.variable} ${jakarta.className}`}>

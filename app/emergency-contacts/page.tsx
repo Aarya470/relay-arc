@@ -12,11 +12,11 @@ const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#1A1A2E',
-  border: '1px solid rgba(255,255,255,0.10)',
+  background: '#FFFFFF',
+  border: '1px solid #D5D9E0',
   borderRadius: '12px',
   padding: '14px 16px',
-  color: '#EEEEF8',
+  color: '#0E1218',
   fontSize: '14px',
   outline: 'none',
   fontFamily: 'inherit',
@@ -26,9 +26,9 @@ const inputStyle: React.CSSProperties = {
 const RELATIONSHIPS = ['Spouse', 'Partner', 'Parent', 'Child', 'Sibling', 'Friend', 'Caregiver', 'Other']
 
 const AVATAR_COLORS = [
-  { bg: 'rgba(79,142,247,0.15)', border: 'rgba(79,142,247,0.3)', text: '#4F8EF7' },
-  { bg: 'rgba(0,214,143,0.12)', border: 'rgba(0,214,143,0.25)', text: '#00D68F' },
-  { bg: 'rgba(255,55,55,0.12)', border: 'rgba(255,55,55,0.25)', text: '#FF3737' },
+  { bg: 'rgba(0,85,255,0.15)', border: 'rgba(0,85,255,0.3)', text: '#0055FF' },
+  { bg: 'rgba(0,122,68,0.12)', border: 'rgba(0,122,68,0.25)', text: '#007A44' },
+  { bg: 'rgba(217,20,20,0.12)', border: 'rgba(217,20,20,0.25)', text: '#D91414' },
   { bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.25)', text: '#A855F7' },
   { bg: 'rgba(251,146,60,0.12)', border: 'rgba(251,146,60,0.25)', text: '#FB923C' },
 ]
@@ -90,35 +90,35 @@ export default function EmergencyContacts() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#070710', padding: '80px 16px 100px' }}>
-      {[1,2,3].map(i => <Skeleton key={i} style={{ height: '72px', borderRadius: '16px', background: 'rgba(255,255,255,0.04)', marginBottom: '10px' }}/>)}
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 16px 100px' }}>
+      {[1,2,3].map(i => <Skeleton key={i} style={{ height: '72px', borderRadius: '16px', background: '#ECEEF2', marginBottom: '10px' }}/>)}
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '80px' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #E3E6EC' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             transition={spring}
             onClick={() => router.back()}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECEEF2', border: '1px solid #D5D9E0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <ArrowLeft size={15} color="#8888A8"/>
+            <ArrowLeft size={15} color="#5B6371"/>
           </motion.button>
           <div style={{ flex: 1 }}>
-            <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Emergency Contacts</h1>
-            <p style={{ color: '#8888A8', fontSize: '12px' }}>Notified automatically in an emergency</p>
+            <h1 style={{ color: '#0E1218', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Emergency Contacts</h1>
+            <p style={{ color: '#5B6371', fontSize: '12px' }}>Notified automatically in an emergency</p>
           </div>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setShowAdd(true)}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,247,0.15)', border: '1px solid rgba(79,142,247,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0,85,255,0.15)', border: '1px solid rgba(0,85,255,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <Plus size={17} color="#4F8EF7"/>
+            <Plus size={17} color="#0055FF"/>
           </motion.button>
         </div>
       </div>
@@ -126,9 +126,9 @@ export default function EmergencyContacts() {
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
 
         {/* Info banner */}
-        <div style={{ background: 'rgba(255,55,55,0.06)', border: '1px solid rgba(255,55,55,0.18)', borderRadius: '14px', padding: '12px 14px', display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '4px' }}>
-          <Heart size={14} color="#FF3737" style={{ flexShrink: 0, marginTop: '2px' }}/>
-          <p style={{ color: '#8888A8', fontSize: '12px', lineHeight: 1.6 }}>
+        <div style={{ background: 'rgba(217,20,20,0.06)', border: '1px solid rgba(217,20,20,0.18)', borderRadius: '14px', padding: '12px 14px', display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '4px' }}>
+          <Heart size={14} color="#D91414" style={{ flexShrink: 0, marginTop: '2px' }}/>
+          <p style={{ color: '#5B6371', fontSize: '12px', lineHeight: 1.6 }}>
             These contacts will receive an automatic notification when you trigger an SOS. Keep this list up to date.
           </p>
         </div>
@@ -144,23 +144,23 @@ export default function EmergencyContacts() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
+                style={{ background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
               >
                 {/* Avatar initial */}
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: color.bg, border: `1.5px solid ${color.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ color: color.text, fontWeight: 700, fontSize: '16px' }}>{initial}</span>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ color: '#EEEEF8', fontWeight: 600, fontSize: '14px' }}>{contact.name}</p>
+                  <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '14px' }}>{contact.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                    <span style={{ color: '#505068', fontSize: '12px' }}>{contact.relationship}</span>
-                    <span style={{ color: '#505068', fontSize: '12px' }}>·</span>
+                    <span style={{ color: '#9AA2AD', fontSize: '12px' }}>{contact.relationship}</span>
+                    <span style={{ color: '#9AA2AD', fontSize: '12px' }}>·</span>
                     <motion.a
                       href={`tel:${contact.phone}`}
                       whileTap={{ scale: 0.96 }}
-                      style={{ color: '#4F8EF7', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px' }}
+                      style={{ color: '#0055FF', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px' }}
                     >
-                      <Phone size={10} color="#4F8EF7"/>
+                      <Phone size={10} color="#0055FF"/>
                       {contact.phone}
                     </motion.a>
                   </div>
@@ -170,9 +170,9 @@ export default function EmergencyContacts() {
                   <motion.button
                     whileTap={{ scale: 0.88 }}
                     onClick={() => removeContact(contact.id)}
-                    style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                    style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#ECEEF2', border: '1px solid #D5D9E0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
                   >
-                    <X size={13} color="#8888A8"/>
+                    <X size={13} color="#5B6371"/>
                   </motion.button>
                 </div>
               </motion.div>
@@ -182,14 +182,14 @@ export default function EmergencyContacts() {
 
         {contacts.length === 0 && !showAdd && (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(255,55,55,0.08)', border: '1px solid rgba(255,55,55,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-              <User size={22} color="rgba(255,55,55,0.5)"/>
+            <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(217,20,20,0.08)', border: '1px solid rgba(217,20,20,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+              <User size={22} color="rgba(217,20,20,0.5)"/>
             </div>
-            <p style={{ color: '#8888A8', fontSize: '14px', marginBottom: '16px' }}>No emergency contacts yet</p>
+            <p style={{ color: '#5B6371', fontSize: '14px', marginBottom: '16px' }}>No emergency contacts yet</p>
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => setShowAdd(true)}
-              style={{ background: '#4F8EF7', color: 'white', fontWeight: 700, fontSize: '13px', padding: '12px 22px', borderRadius: '14px', border: 'none', cursor: 'pointer', height: '44px' }}
+              style={{ background: '#0055FF', color: 'white', fontWeight: 700, fontSize: '13px', padding: '12px 22px', borderRadius: '14px', border: 'none', cursor: 'pointer', height: '44px' }}
             >
               Add your first contact
             </motion.button>
@@ -201,9 +201,9 @@ export default function EmergencyContacts() {
           <motion.button
             whileTap={{ scale: 0.99 }}
             onClick={() => setShowAdd(true)}
-            style={{ width: '100%', background: 'rgba(255,255,255,0.02)', border: '1.5px dashed rgba(255,255,255,0.12)', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#505068', fontSize: '14px', fontWeight: 500 }}
+            style={{ width: '100%', background: 'transparent', border: '1.5px dashed #C9CED6', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#9AA2AD', fontSize: '14px', fontWeight: 500 }}
           >
-            <Plus size={15} color="#505068"/>
+            <Plus size={15} color="#9AA2AD"/>
             Add emergency contact
           </motion.button>
         )}
@@ -215,16 +215,16 @@ export default function EmergencyContacts() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              style={{ background: '#121220', border: '1px solid rgba(79,142,247,0.2)', borderRadius: '20px', padding: '20px' }}
+              style={{ background: '#FFFFFF', border: '1px solid rgba(0,85,255,0.2)', borderRadius: '20px', padding: '20px' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '15px' }}>New contact</p>
+                <p style={{ color: '#0E1218', fontWeight: 700, fontSize: '15px' }}>New contact</p>
                 <motion.button
                   whileTap={{ scale: 0.88 }}
                   onClick={() => setShowAdd(false)}
-                  style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{ width: '30px', height: '30px', borderRadius: '9px', background: '#ECEEF2', border: '1px solid #D5D9E0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
-                  <X size={13} color="#8888A8"/>
+                  <X size={13} color="#5B6371"/>
                 </motion.button>
               </div>
 
@@ -252,9 +252,9 @@ export default function EmergencyContacts() {
                       style={{
                         padding: '6px 12px', borderRadius: '99px', border: '1px solid',
                         fontSize: '12px', fontWeight: 600, cursor: 'pointer',
-                        background: newContact.relationship === r ? 'rgba(79,142,247,0.15)' : 'rgba(255,255,255,0.04)',
-                        borderColor: newContact.relationship === r ? 'rgba(79,142,247,0.4)' : 'rgba(255,255,255,0.10)',
-                        color: newContact.relationship === r ? '#4F8EF7' : '#505068',
+                        background: newContact.relationship === r ? 'rgba(0,85,255,0.15)' : '#ECEEF2',
+                        borderColor: newContact.relationship === r ? 'rgba(0,85,255,0.4)' : '#E3E6EC',
+                        color: newContact.relationship === r ? '#0055FF' : '#9AA2AD',
                       }}
                     >
                       {r}
@@ -265,7 +265,7 @@ export default function EmergencyContacts() {
                   whileTap={{ scale: 0.97 }}
                   onClick={addContact}
                   disabled={saving}
-                  style={{ background: '#4F8EF7', color: 'white', fontWeight: 700, fontSize: '14px', padding: '0 20px', borderRadius: '14px', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', marginTop: '4px', height: '52px', opacity: saving ? 0.7 : 1 }}
+                  style={{ background: '#0055FF', color: 'white', fontWeight: 700, fontSize: '14px', padding: '0 20px', borderRadius: '14px', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', marginTop: '4px', height: '52px', opacity: saving ? 0.7 : 1 }}
                 >
                   {saving ? 'Saving…' : 'Add contact'}
                 </motion.button>

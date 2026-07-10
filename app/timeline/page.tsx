@@ -92,32 +92,32 @@ export default function Timeline() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100dvh', background: '#070710', padding: '80px 16px 100px', maxWidth: '720px', margin: '0 auto' }}>
+      <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 16px 100px', maxWidth: '720px', margin: '0 auto' }}>
         {[1, 2, 3, 4].map((i) => (
-          <Skeleton key={i} style={{ height: '64px', borderRadius: '16px', background: 'rgba(255,255,255,0.04)', marginBottom: '8px' }} />
+          <Skeleton key={i} style={{ height: '64px', borderRadius: '16px', background: '#ECEEF2', marginBottom: '8px' }} />
         ))}
       </div>
     )
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
       <div style={{ padding: '56px 20px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => router.push('/dashboard')}
-              style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <ArrowLeft size={15} color="#8888A8" />
+              style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECEEF2', border: '1px solid #D5D9E0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ArrowLeft size={15} color="#5B6371" />
             </motion.button>
             <div>
-              <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Recovery Timeline</h1>
-              <p style={{ color: '#505068', fontSize: '12px' }}>{cachedDate ? 'Generated today' : 'Personalized for you'}</p>
+              <h1 style={{ color: '#0E1218', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Recovery Timeline</h1>
+              <p style={{ color: '#9AA2AD', fontSize: '12px' }}>{cachedDate ? 'Generated today' : 'Personalized for you'}</p>
             </div>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={forceRefresh} disabled={generating}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,247,0.10)', border: '1px solid rgba(79,142,247,0.20)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0,85,255,0.10)', border: '1px solid rgba(0,85,255,0.20)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <motion.div animate={generating ? { rotate: 360 } : { rotate: 0 }} transition={generating ? { duration: 1, repeat: Infinity, ease: 'linear' } : {}}>
-              <RefreshCw size={14} color="#4F8EF7" />
+              <RefreshCw size={14} color="#0055FF" />
             </motion.div>
           </motion.button>
         </div>
@@ -125,75 +125,75 @@ export default function Timeline() {
 
       {generating && (
         <div style={{ padding: '0 20px 16px' }}>
-          <div style={{ background: 'rgba(79,142,247,0.06)', border: '1px solid rgba(79,142,247,0.16)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ background: 'rgba(0,85,255,0.06)', border: '1px solid rgba(0,85,255,0.16)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ display: 'flex', gap: '4px' }}>
               {[0, 1, 2].map((i) => (
-                <motion.div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4F8EF7' }}
+                <motion.div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0055FF' }}
                   animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }} />
               ))}
             </div>
-            <p style={{ color: '#8888A8', fontSize: '13px' }}>Generating your personalized timeline...</p>
+            <p style={{ color: '#5B6371', fontSize: '13px' }}>Generating your personalized timeline...</p>
           </div>
         </div>
       )}
 
       <div style={{ padding: '0 20px', position: 'relative' }}>
         {timeline.length > 0 && (
-          <div style={{ position: 'absolute', left: '34px', top: '15px', bottom: '15px', width: '2px', background: 'linear-gradient(to bottom, rgba(79,142,247,0.5) 0%, rgba(0,214,143,0.2) 50%, rgba(255,255,255,0.04) 100%)', borderRadius: '99px', zIndex: 0, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', left: '34px', top: '15px', bottom: '15px', width: '2px', background: 'linear-gradient(to bottom, rgba(0,85,255,0.5) 0%, rgba(0,122,68,0.2) 50%, rgba(14,18,24,0.05) 100%)', borderRadius: '99px', zIndex: 0, pointerEvents: 'none' }} />
         )}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', position: 'relative', zIndex: 1 }}>
           {timeline.map((phase, index) => {
             const isCurrent = phase.isCurrent
             const isPast = currentIdx !== -1 && index < currentIdx
-            const dotBorder = isCurrent ? '#4F8EF7' : isPast ? '#00D68F' : 'rgba(255,255,255,0.12)'
-            const cardBorder = isCurrent ? 'rgba(79,142,247,0.28)' : isPast ? 'rgba(0,214,143,0.18)' : 'rgba(255,255,255,0.06)'
-            const cardBg = isCurrent ? 'rgba(79,142,247,0.06)' : '#121220'
+            const dotBorder = isCurrent ? '#0055FF' : isPast ? '#007A44' : '#D5D9E0'
+            const cardBorder = isCurrent ? 'rgba(0,85,255,0.28)' : isPast ? 'rgba(0,122,68,0.18)' : '#ECEEF2'
+            const cardBg = isCurrent ? 'rgba(0,85,255,0.06)' : '#FFFFFF'
             return (
               <motion.div key={index} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.07, ...spring }}
                 style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                 <div style={{ paddingTop: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#070710', border: `2px solid ${dotBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isCurrent ? '0 0 14px rgba(79,142,247,0.35)' : isPast ? '0 0 8px rgba(0,214,143,0.20)' : 'none' }}>
-                    {isPast ? <CheckCircle2 size={14} color="#00D68F" />
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#F4F5F7', border: `2px solid ${dotBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isCurrent ? '0 0 14px rgba(0,85,255,0.35)' : isPast ? '0 0 8px rgba(0,122,68,0.20)' : 'none' }}>
+                    {isPast ? <CheckCircle2 size={14} color="#007A44" />
                       : isCurrent ? <motion.div animate={{ scale: [1, 1.45, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 2, repeat: Infinity }}
-                          style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#4F8EF7' }} />
-                      : <Circle size={12} color="rgba(255,255,255,0.15)" />}
+                          style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#0055FF' }} />
+                      : <Circle size={12} color="#C2C7D0" />}
                   </div>
                 </div>
-                <div style={{ flex: 1, background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '18px', overflow: 'hidden', boxShadow: isCurrent ? '0 6px 24px rgba(79,142,247,0.12)' : '0 2px 8px rgba(0,0,0,0.25)' }}>
+                <div style={{ flex: 1, background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '18px', overflow: 'hidden', boxShadow: isCurrent ? '0 6px 24px rgba(0,85,255,0.12)' : '0 2px 8px rgba(14,18,24,0.06)' }}>
                   <motion.button whileTap={{ scale: 0.99 }} transition={spring} onClick={() => setExpanded(expanded === index ? null : index)}
                     style={{ width: '100%', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                        <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>{phase.title}</p>
+                        <p style={{ color: '#0E1218', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>{phase.title}</p>
                         {isCurrent && (
-                          <span style={{ background: 'rgba(79,142,247,0.14)', border: '1px solid rgba(79,142,247,0.30)', color: '#4F8EF7', fontSize: '9px', padding: '2px 8px', borderRadius: '99px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>NOW</span>
+                          <span style={{ background: 'rgba(0,85,255,0.14)', border: '1px solid rgba(0,85,255,0.30)', color: '#0055FF', fontSize: '9px', padding: '2px 8px', borderRadius: '99px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>NOW</span>
                         )}
                         {isPast && (
-                          <span style={{ background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.22)', color: '#00D68F', fontSize: '9px', padding: '2px 8px', borderRadius: '99px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>DONE</span>
+                          <span style={{ background: 'rgba(0,122,68,0.10)', border: '1px solid rgba(0,122,68,0.22)', color: '#007A44', fontSize: '9px', padding: '2px 8px', borderRadius: '99px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>DONE</span>
                         )}
                       </div>
-                      <p style={{ color: '#505068', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
+                      <p style={{ color: '#9AA2AD', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
                     </div>
                     <motion.div animate={{ rotate: expanded === index ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ flexShrink: 0 }}>
-                      <ChevronDown size={15} color="#505068" />
+                      <ChevronDown size={15} color="#9AA2AD" />
                     </motion.div>
                   </motion.button>
                   <AnimatePresence>
                     {expanded === index && (
                       <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.22 }} style={{ overflow: 'hidden' }}>
-                        <div style={{ padding: '14px 16px 16px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                        <div style={{ padding: '14px 16px 16px', borderTop: '1px solid #E3E6EC', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                           {[
-                            { label: "What's normal", items: phase.normal, color: '#8888A8', dot: '#505068' },
-                            { label: 'Watch out for', items: phase.watchout, color: '#FF3737', dot: '#FF3737' },
-                            { label: 'What to do', items: phase.todo, color: '#00D68F', dot: '#00D68F' },
+                            { label: "What's normal", items: phase.normal, color: '#5B6371', dot: '#9AA2AD' },
+                            { label: 'Watch out for', items: phase.watchout, color: '#D91414', dot: '#D91414' },
+                            { label: 'What to do', items: phase.todo, color: '#007A44', dot: '#007A44' },
                           ].map((section, si) => (
                             <div key={si}>
                               <p style={{ color: section.color, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{section.label}</p>
                               {section.items?.map((item: string, ii: number) => (
                                 <div key={ii} style={{ display: 'flex', gap: '10px', marginBottom: '6px', alignItems: 'flex-start' }}>
                                   <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: section.dot, flexShrink: 0, marginTop: '7px' }} />
-                                  <p style={{ color: '#8888A8', fontSize: '12px', lineHeight: 1.55 }}>{item}</p>
+                                  <p style={{ color: '#5B6371', fontSize: '12px', lineHeight: 1.55 }}>{item}</p>
                                 </div>
                               ))}
                             </div>
@@ -209,8 +209,8 @@ export default function Timeline() {
         </div>
         {!generating && timeline.length === 0 && (
           <div style={{ textAlign: 'center', padding: '56px 0' }}>
-            <p style={{ color: '#505068', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
-            <button onClick={forceRefresh} style={{ color: '#4F8EF7', fontSize: '13px', fontWeight: 700, background: 'none', border: '1px solid rgba(79,142,247,0.30)', borderRadius: '10px', padding: '8px 16px', cursor: 'pointer' }}>
+            <p style={{ color: '#9AA2AD', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
+            <button onClick={forceRefresh} style={{ color: '#0055FF', fontSize: '13px', fontWeight: 700, background: 'none', border: '1px solid rgba(0,85,255,0.30)', borderRadius: '10px', padding: '8px 16px', cursor: 'pointer' }}>
               Try again
             </button>
           </div>

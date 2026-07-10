@@ -406,6 +406,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── FOOTER ───────────────────────────────────────────────────── */}
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '56px 24px 40px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap', marginBottom: '48px' }}>
+            <div style={{ maxWidth: '300px' }}>
+              <p style={{ color: '#EEEEF8', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.4px', marginBottom: '10px' }}>Relay Arc</p>
+              <p style={{ color: '#505068', fontSize: '13px', lineHeight: 1.7 }}>
+                Emergency infrastructure for the places it never reached.
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '56px', flexWrap: 'wrap' }}>
+              <div>
+                <p style={{ color: '#303045', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '14px' }}>Product</p>
+                {[['features', 'Features'], ['how', 'How it works'], ['for-whom', "Who it's for"]].map(([id, label]) => (
+                  <button key={id} onClick={() => scrollTo(id)}
+                    style={{ display: 'block', background: 'none', border: 'none', color: '#8888A8', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div>
+                <p style={{ color: '#303045', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '14px' }}>Company</p>
+                <button onClick={() => scrollTo('mission')}
+                  style={{ display: 'block', background: 'none', border: 'none', color: '#8888A8', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                  Mission
+                </button>
+                <a href="/login" style={{ display: 'block', color: '#8888A8', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Sign in</a>
+                <a href="/login?signup=1" style={{ display: 'block', color: '#8888A8', fontSize: '13px', textDecoration: 'none' }}>Create account</a>
+              </div>
+            </div>
+          </div>
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <p style={{ color: '#303045', fontSize: '12px' }}>© {new Date().getFullYear()} Relay Arc</p>
+            <p style={{ color: '#303045', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)' }}>
+              Not a substitute for emergency services. In immediate danger, call your local emergency number.
+            </p>
+          </div>
+        </div>
+      </footer>
+
       <style>{`
         @media (max-width: 768px) {
           .features-grid { grid-template-columns: 1fr !important; }

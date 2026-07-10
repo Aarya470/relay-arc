@@ -87,7 +87,7 @@ export default function EmergencyLivePage() {
 
   return (
     <div
-      style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: '#070710', color: '#EEEEF8' }}
+      style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: '#F4F5F7', color: '#0E1218' }}
     >
       {/* Status bar */}
       <AnimatePresence mode="wait">
@@ -109,11 +109,11 @@ export default function EmergencyLivePage() {
               fontWeight: 700,
               fontSize: '13px',
               background: isActive
-                ? 'linear-gradient(90deg, #CC1F1F, #FF3737)'
-                : 'linear-gradient(90deg, #009965, #00D68F)',
+                ? 'linear-gradient(90deg, #CC1F1F, #D91414)'
+                : 'linear-gradient(90deg, #009965, #007A44)',
               boxShadow: isActive
-                ? '0 4px 24px rgba(255,55,55,0.30)'
-                : '0 4px 24px rgba(0,214,143,0.22)',
+                ? '0 4px 24px rgba(217,20,20,0.30)'
+                : '0 4px 24px rgba(0,122,68,0.22)',
               letterSpacing: '-0.1px',
             }}
           >
@@ -142,13 +142,13 @@ export default function EmergencyLivePage() {
       {/* LIVE badge for active emergencies */}
       {data && isActive && (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '16px 0 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,55,55,0.12)', border: '1px solid rgba(255,55,55,0.28)', borderRadius: '99px', padding: '6px 14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(217,20,20,0.12)', border: '1px solid rgba(217,20,20,0.28)', borderRadius: '99px', padding: '6px 14px' }}>
             <motion.div
-              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#FF3737' }}
+              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#D91414' }}
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
             />
-            <span style={{ color: '#FF3737', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>LIVE</span>
+            <span style={{ color: '#D91414', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>LIVE</span>
           </div>
         </div>
       )}
@@ -158,16 +158,16 @@ export default function EmergencyLivePage() {
         {loading && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
-              <Loader2 size={36} color="#4F8EF7" />
+              <Loader2 size={36} color="#0055FF" />
             </motion.div>
-            <p style={{ color: '#8888A8', fontSize: '14px' }}>Loading emergency status…</p>
+            <p style={{ color: '#5B6371', fontSize: '14px' }}>Loading emergency status…</p>
           </div>
         )}
 
         {error && !loading && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', textAlign: 'center', maxWidth: '320px' }}>
-            <AlertCircle size={40} color="#FF3737" />
-            <p style={{ color: '#EEEEF8', fontSize: '15px', fontWeight: 600 }}>{error}</p>
+            <AlertCircle size={40} color="#D91414" />
+            <p style={{ color: '#0E1218', fontSize: '15px', fontWeight: 600 }}>{error}</p>
           </div>
         )}
 
@@ -182,7 +182,7 @@ export default function EmergencyLivePage() {
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', maxWidth: '400px', width: '100%', textAlign: 'center' }}
             >
               {/* Patient name */}
-              <h1 style={{ color: '#EEEEF8', fontSize: '22px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.3 }}>
+              <h1 style={{ color: '#0E1218', fontSize: '22px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.3 }}>
                 {data.patientFirstName} is receiving emergency care
               </h1>
 
@@ -193,9 +193,9 @@ export default function EmergencyLivePage() {
                   borderRadius: '99px',
                   fontSize: '13px',
                   fontWeight: 700,
-                  background: isActive ? 'rgba(255,55,55,0.12)' : 'rgba(0,214,143,0.12)',
-                  color: isActive ? '#FF3737' : '#00D68F',
-                  border: `1px solid ${isActive ? 'rgba(255,55,55,0.28)' : 'rgba(0,214,143,0.28)'}`,
+                  background: isActive ? 'rgba(217,20,20,0.12)' : 'rgba(0,122,68,0.12)',
+                  color: isActive ? '#D91414' : '#007A44',
+                  border: `1px solid ${isActive ? 'rgba(217,20,20,0.28)' : 'rgba(0,122,68,0.28)'}`,
                   fontFamily: 'var(--font-mono, monospace)',
                   letterSpacing: '0.3px',
                 }}
@@ -204,7 +204,7 @@ export default function EmergencyLivePage() {
               </span>
 
               {/* Time since started */}
-              <p style={{ color: '#505068', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>
+              <p style={{ color: '#9AA2AD', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>
                 {timeDisplay}
               </p>
 
@@ -212,15 +212,15 @@ export default function EmergencyLivePage() {
               <div
                 style={{
                   width: '100%',
-                  background: '#121220',
-                  border: `1px solid ${isActive ? 'rgba(255,55,55,0.18)' : 'rgba(0,214,143,0.16)'}`,
+                  background: '#FFFFFF',
+                  border: `1px solid ${isActive ? 'rgba(217,20,20,0.18)' : 'rgba(0,122,68,0.16)'}`,
                   borderRadius: '18px',
                   padding: '20px',
                   textAlign: 'left',
                 }}
               >
-                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Status update</p>
-                <p style={{ color: '#8888A8', fontSize: '13px', lineHeight: 1.65 }}>
+                <p style={{ color: '#9AA2AD', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Status update</p>
+                <p style={{ color: '#5B6371', fontSize: '13px', lineHeight: 1.65 }}>
                   {isActive ? (
                     <>Emergency services have been notified. {data.patientFirstName} is being routed to the nearest hospital. Stay calm — help is on the way.</>
                   ) : (
@@ -235,17 +235,17 @@ export default function EmergencyLivePage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: '#ECEEF2',
+                  border: '1px solid #E3E6EC',
                   borderRadius: '99px',
                   padding: '6px 14px',
-                  color: '#505068',
+                  color: '#9AA2AD',
                   fontSize: '11px',
                   fontFamily: 'var(--font-mono, monospace)',
                 }}
               >
                 <motion.div animate={spinning ? { rotate: 360 } : { rotate: 0 }} transition={spinning ? { duration: 0.6, ease: 'linear' } : {}}>
-                  <RefreshCw size={11} color="#505068" />
+                  <RefreshCw size={11} color="#9AA2AD" />
                 </motion.div>
                 Updates every 15 seconds
               </div>
@@ -264,12 +264,12 @@ export default function EmergencyLivePage() {
             gap: '10px',
             padding: '16px 40px',
             borderRadius: '16px',
-            background: '#FF3737',
+            background: '#D91414',
             color: 'white',
             fontWeight: 800,
             fontSize: '15px',
             textDecoration: 'none',
-            boxShadow: '0 6px 24px rgba(255,55,55,0.35)',
+            boxShadow: '0 6px 24px rgba(217,20,20,0.35)',
             letterSpacing: '-0.2px',
           }}
         >

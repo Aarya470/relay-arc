@@ -11,8 +11,8 @@ import BottomNav from '@/components/BottomNav'
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 const inputStyle: React.CSSProperties = {
-  width: '72px', background: '#1A1A2E', border: '1.5px solid rgba(255,255,255,0.10)',
-  borderRadius: '10px', padding: '12px', color: '#EEEEF8', fontSize: '22px',
+  width: '72px', background: '#FFFFFF', border: '1.5px solid #D5D9E0',
+  borderRadius: '10px', padding: '12px', color: '#0E1218', fontSize: '22px',
   fontWeight: 800, outline: 'none', fontFamily: 'inherit', textAlign: 'center',
   letterSpacing: '-0.5px', boxSizing: 'border-box',
 }
@@ -23,11 +23,11 @@ function parseTS(ts: string) {
 }
 
 const VITAL_RANGES = {
-  heart_rate: { low: 40, high: 120, normal: [60, 100] as [number,number], unit: 'bpm',  label: 'Heart Rate',   icon: Heart,    color: '#FF3737' },
-  systolic:   { low: 70, high: 200, normal: [90, 140] as [number,number], unit: 'mmHg', label: 'Systolic BP',  icon: Activity, color: '#4F8EF7' },
-  diastolic:  { low: 40, high: 130, normal: [60, 90]  as [number,number], unit: 'mmHg', label: 'Diastolic BP', icon: Activity, color: '#4F8EF7' },
-  oxygen_sat: { low: 85, high: 100, normal: [95, 100] as [number,number], unit: '%',    label: 'O₂ Sat',       icon: Droplets, color: '#00D68F' },
-  resp_rate:  { low: 8,  high: 40,  normal: [12, 20]  as [number,number], unit: '/min', label: 'Resp. Rate',   icon: Wind,     color: '#F59E0B' },
+  heart_rate: { low: 40, high: 120, normal: [60, 100] as [number,number], unit: 'bpm',  label: 'Heart Rate',   icon: Heart,    color: '#D91414' },
+  systolic:   { low: 70, high: 200, normal: [90, 140] as [number,number], unit: 'mmHg', label: 'Systolic BP',  icon: Activity, color: '#0055FF' },
+  diastolic:  { low: 40, high: 130, normal: [60, 90]  as [number,number], unit: 'mmHg', label: 'Diastolic BP', icon: Activity, color: '#0055FF' },
+  oxygen_sat: { low: 85, high: 100, normal: [95, 100] as [number,number], unit: '%',    label: 'O₂ Sat',       icon: Droplets, color: '#007A44' },
+  resp_rate:  { low: 8,  high: 40,  normal: [12, 20]  as [number,number], unit: '/min', label: 'Resp. Rate',   icon: Wind,     color: '#B45309' },
 }
 
 type VitalKey = keyof typeof VITAL_RANGES
@@ -43,10 +43,10 @@ function statusForValue(key: string, val: number | null) {
 }
 
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
-  ok:    { bg: 'rgba(0,214,143,0.12)',   border: 'rgba(0,214,143,0.25)',   text: '#00D68F' },
-  high:  { bg: 'rgba(255,55,55,0.12)',   border: 'rgba(255,55,55,0.28)',   text: '#FF3737' },
-  low:   { bg: 'rgba(245,158,11,0.12)',  border: 'rgba(245,158,11,0.28)', text: '#F59E0B' },
-  empty: { bg: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.06)', text: '#505068' },
+  ok:    { bg: 'rgba(0,122,68,0.12)',   border: 'rgba(0,122,68,0.25)',   text: '#007A44' },
+  high:  { bg: 'rgba(217,20,20,0.12)',   border: 'rgba(217,20,20,0.28)',   text: '#D91414' },
+  low:   { bg: 'rgba(180,83,9,0.12)',  border: 'rgba(180,83,9,0.28)', text: '#B45309' },
+  empty: { bg: '#ECEEF2', border: '#ECEEF2', text: '#9AA2AD' },
 }
 
 // ─── SparklineInner ───────────────────────────────────────────────────────────
@@ -115,7 +115,7 @@ function SparklineInner({ data, color, width, height, normalRange }: SparklineIn
         <rect
           x={padX} y={bandTop}
           width={innerW} height={Math.max(0, bandBot - bandTop)}
-          fill="rgba(0,214,143,0.08)" rx="2"
+          fill="rgba(0,122,68,0.08)" rx="2"
         />
       )}
 
@@ -136,15 +136,15 @@ function SparklineInner({ data, color, width, height, normalRange }: SparklineIn
 // ─── Trend arrow ──────────────────────────────────────────────────────────────
 
 function trendArrow(vals: number[]): { symbol: string; color: string } {
-  if (vals.length < 4) return { symbol: '→', color: '#505068' }
+  if (vals.length < 4) return { symbol: '→', color: '#9AA2AD' }
   const recent = vals.slice(-3)
   const prior  = vals.slice(-6, -3)
-  if (prior.length === 0) return { symbol: '→', color: '#505068' }
+  if (prior.length === 0) return { symbol: '→', color: '#9AA2AD' }
   const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length
   const delta = ((avg(recent) - avg(prior)) / avg(prior)) * 100
-  if (delta > 2)  return { symbol: '↑', color: '#FF3737' }
-  if (delta < -2) return { symbol: '↓', color: '#00D68F' }
-  return { symbol: '→', color: '#505068' }
+  if (delta > 2)  return { symbol: '↑', color: '#D91414' }
+  if (delta < -2) return { symbol: '↓', color: '#007A44' }
+  return { symbol: '→', color: '#9AA2AD' }
 }
 
 // ─── TrendCard ────────────────────────────────────────────────────────────────
@@ -174,8 +174,8 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 280, damping: 22 }}
       style={{
-        background: '#121220',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: '#FFFFFF',
+        border: '1px solid #E3E6EC',
         borderRadius: '16px',
         padding: '16px',
         display: 'flex',
@@ -193,7 +193,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
           }}>
             <Icon size={13} color={meta.color}/>
           </div>
-          <span style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '16px', letterSpacing: '-0.3px' }}>{meta.label}</span>
+          <span style={{ color: '#0E1218', fontWeight: 700, fontSize: '16px', letterSpacing: '-0.3px' }}>{meta.label}</span>
         </div>
         <span style={{
           background: ss.bg, border: `1px solid ${ss.border}`, color: ss.text,
@@ -223,13 +223,13 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <div style={{ lineHeight: 1 }}>
           <span style={{
-            color: '#EEEEF8', fontWeight: 800, fontSize: '32px', letterSpacing: '-1.2px',
+            color: '#0E1218', fontWeight: 800, fontSize: '32px', letterSpacing: '-1.2px',
             fontFamily: 'var(--font-mono, monospace)',
           }}>
             {Number.isInteger(latest) ? latest : latest.toFixed(1)}
           </span>
           <span style={{
-            color: '#505068', fontSize: '11px', marginLeft: '4px',
+            color: '#9AA2AD', fontSize: '11px', marginLeft: '4px',
             fontFamily: 'var(--font-mono, monospace)',
           }}>
             {meta.unit}
@@ -238,7 +238,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
         <div style={{ textAlign: 'right' }}>
           <div style={{ color: arrowColor, fontSize: '20px', fontWeight: 700, lineHeight: 1 }}>{arrow}</div>
           <div style={{
-            color: '#505068', fontSize: '10px',
+            color: '#9AA2AD', fontSize: '10px',
             fontFamily: 'var(--font-mono, monospace)', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.4px',
           }}>
             avg {avg.toFixed(1)} {meta.unit}
@@ -258,8 +258,8 @@ function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v
   return (
     <div style={{
       display: 'flex', gap: '3px',
-      background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '3px',
-      border: '1px solid rgba(255,255,255,0.06)',
+      background: '#ECEEF2', borderRadius: '10px', padding: '3px',
+      border: '1px solid #E3E6EC',
     }}>
       {opts.map(opt => (
         <button
@@ -268,8 +268,8 @@ function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v
           style={{
             flex: 1, padding: '6px 0', borderRadius: '8px', border: 'none', cursor: 'pointer',
             fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700,
-            background: value === opt ? '#4F8EF7' : 'transparent',
-            color: value === opt ? '#EEEEF8' : '#505068',
+            background: value === opt ? '#0055FF' : 'transparent',
+            color: value === opt ? '#FFFFFF' : '#9AA2AD',
             transition: 'background 0.15s, color 0.15s',
             letterSpacing: '0.3px',
           }}
@@ -374,26 +374,26 @@ export default function VitalsPage() {
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#070710', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '80px' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #E3E6EC' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             transition={spring}
             onClick={() => router.push('/dashboard')}
             style={{
-              width: '38px', height: '38px', borderRadius: '10px', background: '#121220',
-              border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer',
+              width: '38px', height: '38px', borderRadius: '10px', background: '#FFFFFF',
+              border: '1px solid #E3E6EC', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <ArrowLeft size={15} color="#8888A8"/>
+            <ArrowLeft size={15} color="#5B6371"/>
           </motion.button>
           <div>
-            <h1 style={{ color: '#EEEEF8', fontWeight: 900, fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>Vitals</h1>
-            <p style={{ color: '#8888A8', fontSize: '12px', marginTop: '3px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Log your vital signs</p>
+            <h1 style={{ color: '#0E1218', fontWeight: 900, fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>Vitals</h1>
+            <p style={{ color: '#5B6371', fontSize: '12px', marginTop: '3px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Log your vital signs</p>
           </div>
         </div>
       </div>
@@ -401,53 +401,53 @@ export default function VitalsPage() {
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
         {/* Entry grid */}
-        <div style={{ background: '#121220', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '16px' }}>
-          <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Today's readings</p>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '16px' }}>
+          <p style={{ color: '#9AA2AD', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Today's readings</p>
 
           {/* Heart rate */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.04)', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #E9EBF0', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(255,55,55,0.12)', border: '1px solid rgba(255,55,55,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Heart size={14} color="#FF3737"/>
+              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(217,20,20,0.12)', border: '1px solid rgba(217,20,20,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Heart size={14} color="#D91414"/>
               </div>
               <div>
-                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '13px' }}>Heart rate</p>
-                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 60–100 bpm</p>
+                <p style={{ color: '#0E1218', fontWeight: 700, fontSize: '13px' }}>Heart rate</p>
+                <p style={{ color: '#9AA2AD', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 60–100 bpm</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
                 type="number" min="20" max="250"
-                style={{ ...inputStyle, borderColor: vitals.heart_rate ? 'rgba(255,55,55,0.35)' : 'rgba(255,255,255,0.10)' }}
+                style={{ ...inputStyle, borderColor: vitals.heart_rate ? 'rgba(217,20,20,0.35)' : '#E3E6EC' }}
                 placeholder="—" value={vitals.heart_rate}
                 onChange={e => setVitals(p => ({ ...p, heart_rate: e.target.value }))}
               />
-              <span style={{ color: '#505068', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>bpm</span>
+              <span style={{ color: '#9AA2AD', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>bpm</span>
             </div>
           </div>
 
           {/* Blood pressure */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.04)', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #E9EBF0', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Activity size={14} color="#4F8EF7"/>
+              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(0,85,255,0.12)', border: '1px solid rgba(0,85,255,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Activity size={14} color="#0055FF"/>
               </div>
               <div>
-                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '13px' }}>Blood pressure</p>
-                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 90–140 / 60–90</p>
+                <p style={{ color: '#0E1218', fontWeight: 700, fontSize: '13px' }}>Blood pressure</p>
+                <p style={{ color: '#9AA2AD', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 90–140 / 60–90</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <input
                 type="number" min="50" max="260"
-                style={{ ...inputStyle, borderColor: vitals.systolic ? 'rgba(79,142,247,0.35)' : 'rgba(255,255,255,0.10)', width: '62px', fontSize: '18px' }}
+                style={{ ...inputStyle, borderColor: vitals.systolic ? 'rgba(0,85,255,0.35)' : '#E3E6EC', width: '62px', fontSize: '18px' }}
                 placeholder="—" value={vitals.systolic}
                 onChange={e => setVitals(p => ({ ...p, systolic: e.target.value }))}
               />
-              <span style={{ color: '#505068', fontSize: '16px', fontWeight: 300 }}>/</span>
+              <span style={{ color: '#9AA2AD', fontSize: '16px', fontWeight: 300 }}>/</span>
               <input
                 type="number" min="30" max="160"
-                style={{ ...inputStyle, borderColor: vitals.diastolic ? 'rgba(79,142,247,0.35)' : 'rgba(255,255,255,0.10)', width: '62px', fontSize: '18px' }}
+                style={{ ...inputStyle, borderColor: vitals.diastolic ? 'rgba(0,85,255,0.35)' : '#E3E6EC', width: '62px', fontSize: '18px' }}
                 placeholder="—" value={vitals.diastolic}
                 onChange={e => setVitals(p => ({ ...p, diastolic: e.target.value }))}
               />
@@ -455,46 +455,46 @@ export default function VitalsPage() {
           </div>
 
           {/* O2 sat */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.04)', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #E9EBF0', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(0,214,143,0.12)', border: '1px solid rgba(0,214,143,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Droplets size={14} color="#00D68F"/>
+              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(0,122,68,0.12)', border: '1px solid rgba(0,122,68,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Droplets size={14} color="#007A44"/>
               </div>
               <div>
-                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '13px' }}>Oxygen sat.</p>
-                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 95–100%</p>
+                <p style={{ color: '#0E1218', fontWeight: 700, fontSize: '13px' }}>Oxygen sat.</p>
+                <p style={{ color: '#9AA2AD', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 95–100%</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
                 type="number" min="50" max="100"
-                style={{ ...inputStyle, borderColor: vitals.oxygen_sat ? 'rgba(0,214,143,0.35)' : 'rgba(255,255,255,0.10)' }}
+                style={{ ...inputStyle, borderColor: vitals.oxygen_sat ? 'rgba(0,122,68,0.35)' : '#E3E6EC' }}
                 placeholder="—" value={vitals.oxygen_sat}
                 onChange={e => setVitals(p => ({ ...p, oxygen_sat: e.target.value }))}
               />
-              <span style={{ color: '#505068', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>%</span>
+              <span style={{ color: '#9AA2AD', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>%</span>
             </div>
           </div>
 
           {/* Resp rate */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Wind size={14} color="#F59E0B"/>
+              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(180,83,9,0.12)', border: '1px solid rgba(180,83,9,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Wind size={14} color="#B45309"/>
               </div>
               <div>
-                <p style={{ color: '#EEEEF8', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>
-                <p style={{ color: '#505068', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 12–20 /min</p>
+                <p style={{ color: '#0E1218', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>
+                <p style={{ color: '#9AA2AD', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 12–20 /min</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
                 type="number" min="4" max="60"
-                style={{ ...inputStyle, borderColor: vitals.resp_rate ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.10)' }}
+                style={{ ...inputStyle, borderColor: vitals.resp_rate ? 'rgba(180,83,9,0.35)' : '#E3E6EC' }}
                 placeholder="—" value={vitals.resp_rate}
                 onChange={e => setVitals(p => ({ ...p, resp_rate: e.target.value }))}
               />
-              <span style={{ color: '#505068', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>/min</span>
+              <span style={{ color: '#9AA2AD', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>/min</span>
             </div>
           </div>
         </div>
@@ -533,8 +533,8 @@ export default function VitalsPage() {
           onClick={handleSave}
           disabled={saving}
           style={{
-            background: '#4F8EF7',
-            color: '#EEEEF8',
+            background: '#0055FF',
+            color: '#FFFFFF',
             fontWeight: 800, fontSize: '15px', padding: '17px', borderRadius: '16px',
             border: 'none', cursor: saving ? 'not-allowed' : 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
@@ -550,14 +550,14 @@ export default function VitalsPage() {
         {loadingHistory ? (
           <div>
             <p style={{
-              color: '#505068', fontSize: '10px',
+              color: '#9AA2AD', fontSize: '10px',
               fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase',
               letterSpacing: '1px', marginBottom: '12px',
             }}>Trends</p>
             {[1, 2, 3].map(i => (
               <Skeleton key={i} style={{
                 height: '140px', borderRadius: '16px',
-                background: '#121220', marginBottom: '10px',
+                background: '#FFFFFF', marginBottom: '10px',
               }}/>
             ))}
           </div>
@@ -565,7 +565,7 @@ export default function VitalsPage() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <p style={{
-                color: '#505068', fontSize: '10px',
+                color: '#9AA2AD', fontSize: '10px',
                 fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px',
               }}>Trends</p>
               <div style={{ width: '152px' }}>
@@ -590,13 +590,13 @@ export default function VitalsPage() {
               </motion.div>
             ) : (
               <div style={{
-                background: '#121220', border: '1px solid rgba(255,255,255,0.06)',
+                background: '#FFFFFF', border: '1px solid #E3E6EC',
                 borderRadius: '16px', padding: '36px 16px', textAlign: 'center',
               }}>
-                <p style={{ color: '#8888A8', fontSize: '13px', fontWeight: 700 }}>
+                <p style={{ color: '#5B6371', fontSize: '13px', fontWeight: 700 }}>
                   No data for {timeRange} view
                 </p>
-                <p style={{ color: '#505068', fontSize: '11px', marginTop: '6px' }}>
+                <p style={{ color: '#9AA2AD', fontSize: '11px', marginTop: '6px' }}>
                   Log at least 2 readings to see trends
                 </p>
               </div>
