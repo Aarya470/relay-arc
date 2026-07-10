@@ -20,7 +20,12 @@ interface HealthIntelligence {
   dataQuality: 'rich' | 'partial' | 'sparse'
 }
 import { toast } from 'sonner'
-import { analyzeCrashRisk, CrashRisk } from '@/lib/crash-risk'
+// CrashRisk type defined inline — do NOT import from lib/crash-risk (groq-sdk import breaks client bundle)
+interface CrashRisk {
+  level: 'low' | 'medium' | 'high'
+  reason: string
+  advice: string
+}
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#F4F5F7'
@@ -474,7 +479,17 @@ export default function Dashboard() {
       setProfile(data)
       setCheckins(c || [])
       setLoading(false)
-      analyzeCrashRisk(c || []).then(risk => { if (risk && risk.level !== 'low') setCrashRisk(risk) }).catch(() => {})
+      // Fetch crash risk from server API (groq-sdk must NOT be imported in client components)
+      supabase.auth.getSession().then(({ data: { session: s } }) => {
+        if (!s?.access_token) return
+        fetch('/api/groq/crash-risk', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${s.access_token}` },
+        })
+          .then(r => r.json())
+          .then(({ risk }) => { if (risk && risk.level !== 'low') setCrashRisk(risk) })
+          .catch(() => {})
+      })
       registerPushNotifications(user.id)
       cleanupReminders = scheduleCheckinReminders(user.id, c || [])
     }
@@ -987,22 +1002,4 @@ export default function Dashboard() {
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
-              }}>
-                {checkins[0]?.summary || 'No summary available'}
-              </p>
-              <p style={{
-                color: T3, fontSize: '11px', marginTop: '8px',
-                fontFamily: 'var(--font-mono, monospace)',
-              }}>
-                {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              </p>
-            </motion.button>
-          </motion.div>
-        )}
-
-      </motion.div>
-
-      <BottomNav/>
-    </div>
-  )
-}
+  
