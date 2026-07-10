@@ -680,50 +680,59 @@ export default function Dashboard() {
 
         {/* SOS emergency button */}
         <motion.div variants={fadeUp}>
+          <style>{`
+            @keyframes sos-pulse {
+              0%, 100% { box-shadow: 0 0 0 0 rgba(217,20,20,0.5); }
+              50% { box-shadow: 0 0 0 14px rgba(217,20,20,0); }
+            }
+          `}</style>
           <motion.button
-            whileTap={{ scale: 0.985 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => router.push('/emergency')}
             style={{
               width: '100%',
               background: RED,
-              borderRadius: '20px',
-              padding: '22px 22px',
+              borderRadius: '24px',
+              padding: '28px 24px',
               border: 'none',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              animation: 'sos-pulse 2.8s ease-in-out infinite',
             }}>
             <div style={{ textAlign: 'left' }}>
               <p style={{
-                color: 'rgba(255,255,255,0.55)',
+                color: 'rgba(255,255,255,0.50)',
                 fontSize: '10px',
-                letterSpacing: '1.5px',
+                letterSpacing: '2px',
                 textTransform: 'uppercase',
-                marginBottom: '8px',
+                marginBottom: '10px',
                 fontFamily: 'var(--font-mono, monospace)',
                 fontWeight: 700,
-              }}>Emergency</p>
+              }}>Emergency Response</p>
               <p style={{
                 color: '#FFFFFF',
-                fontSize: '42px',
+                fontSize: '64px',
                 fontWeight: 900,
-                letterSpacing: '-2px',
-                lineHeight: 1,
+                letterSpacing: '-3px',
+                lineHeight: 0.9,
                 fontFamily: 'var(--font-mono, monospace)',
               }}>SOS</p>
-              <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '12px', marginTop: '7px', fontWeight: 500 }}>
-                Tap to activate emergency response
+              <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: '12px', marginTop: '10px', fontWeight: 500, letterSpacing: '0.2px' }}>
+                Hold to activate · Care team notified instantly
               </p>
             </div>
-            <div style={{
-              width: '54px', height: '54px',
-              borderRadius: '50%',
-              background: 'rgba(255,255,255,0.18)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0,
-            }}>
-              <Phone size={22} color="white" strokeWidth={2.2}/>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+              <div style={{
+                width: '60px', height: '60px',
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,0.20)',
+                border: '2px solid rgba(255,255,255,0.30)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Phone size={24} color="white" strokeWidth={2}/>
+              </div>
             </div>
           </motion.button>
         </motion.div>
@@ -1002,4 +1011,22 @@ export default function Dashboard() {
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
-  
+  }>
+                {checkins[0]?.summary || 'No summary available'}
+              </p>
+              <p style={{
+                color: T3, fontSize: '11px', marginTop: '8px',
+                fontFamily: 'var(--font-mono, monospace)',
+              }}>
+                {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </p>
+            </motion.button>
+          </motion.div>
+        )}
+
+      </motion.div>
+
+      <BottomNav/>
+    </div>
+  )
+}

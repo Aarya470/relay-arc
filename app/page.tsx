@@ -324,23 +324,39 @@ export default function Home() {
       </section>
 
       {/* ── STATS ────────────────────────────────────────────────────── */}
-      <section id="stats" style={{ padding: '80px 24px', background: '#0A0A18' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <motion.p initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={spring}
-            style={{ color: '#505068', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '40px', textAlign: 'center' }}>
-            Why this exists
-          </motion.p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2px' }}>
-            {STATS.map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ ...spring, delay: i * 0.08 }}
-                style={{ padding: '28px 24px', borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-                <p style={{ color: '#EEEEF8', fontSize: 'clamp(40px, 6vw, 58px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1.5px', lineHeight: 1, marginBottom: '10px' }}>{stat.value}</p>
-                <p style={{ color: '#8888A8', fontSize: '14px', lineHeight: 1.5, marginBottom: '6px' }}>{stat.label}</p>
-                <p style={{ color: '#505068', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)' }}>{stat.sub}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+      <section id="stats" style={{ background: '#070710', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        {STATS.map((stat, i) => (
+          <motion.div key={i}
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: '-60px' }}
+            transition={{ ...spring, delay: i * 0.06 }}
+            style={{
+              borderBottom: '1px solid rgba(255,255,255,0.05)',
+            }}>
+            <div style={{
+              maxWidth: '1100px', margin: '0 auto',
+              padding: '32px 24px 28px',
+              display: 'flex', alignItems: 'flex-start',
+              gap: '24px',
+            }}>
+              <p style={{
+                color: '#EEEEF8',
+                fontSize: 'clamp(80px, 15vw, 148px)',
+                fontFamily: 'var(--font-display, Georgia, serif)',
+                fontWeight: 400,
+                letterSpacing: '-5px',
+                lineHeight: 0.86,
+                flexShrink: 0,
+                width: '42%',
+                minWidth: 0,
+              }}>{stat.value}</p>
+              <div style={{ paddingTop: '6px', flex: 1, minWidth: 0 }}>
+                <p style={{ color: '#EEEEF8', fontSize: 'clamp(14px, 2vw, 17px)', fontWeight: 600, lineHeight: 1.4, marginBottom: '8px' }}>{stat.label}</p>
+                <p style={{ color: '#505068', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.2px', lineHeight: 1.6 }}>{stat.sub}</p>
+              </div>
+              <span style={{ color: '#252535', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '1.5px', paddingTop: '4px', flexShrink: 0 }}>0{i + 1}</span>
+            </div>
+          </motion.div>
+        ))}
       </section>
 
       {/* ── MISSION ──────────────────────────────────────────────────── */}
