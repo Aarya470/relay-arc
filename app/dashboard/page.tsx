@@ -142,103 +142,77 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
   if (hidden) return null
 
   const cfg = intel ? (TRAJECTORY_CONFIG[intel.trajectory] ?? TRAJECTORY_CONFIG.stable) : null
-  const TrajIcon = cfg?.icon ?? Activity
 
   return (
-    <motion.div variants={fadeUp}
-      style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '16px', overflow: 'hidden', boxShadow: SHADOW }}>
-
-      {/* Header */}
-      <div style={{
-        padding: '13px 16px', borderBottom: `1px solid ${BORDER}`,
-        display: 'flex', alignItems: 'center', gap: '7px',
-      }}>
-        <Activity size={12} color={ACCENT} strokeWidth={2.2}/>
-        <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
-          Health Overview
-        </span>
+    <motion.div variants={fadeUp}>
+      {/* Label row */}
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '12px' }}>
+        <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+          Health score
+        </p>
+        {intel && cfg && (
+          <span style={{ color: cfg.color, fontSize: '12px', fontWeight: 600 }}>{cfg.label}</span>
+        )}
       </div>
 
-      <div style={{ padding: '16px' }}>
-        {loading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {[56, 36, 36, 36].map((h, i) => (
-              <div key={i} style={{ height: `${h}px`, borderRadius: '8px', background: BG, animation: 'pulse 1.4s ease-in-out infinite' }}/>
-            ))}
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ height: '80px', borderRadius: '8px', background: BORDER, width: '40%', opacity: 0.5 }}/>
+          <div style={{ height: '16px', borderRadius: '4px', background: BORDER, width: '80%', opacity: 0.4 }}/>
+          <div style={{ height: '16px', borderRadius: '4px', background: BORDER, width: '65%', opacity: 0.3 }}/>
+        </div>
+      ) : intel && cfg ? (
+        <>
+          {/* Big score + headline */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '16px', marginBottom: '20px' }}>
+            <p style={{
+              color: cfg.color,
+              fontSize: '88px',
+              fontFamily: 'var(--font-display, Georgia, serif)',
+              fontWeight: 400,
+              letterSpacing: '-5px',
+              lineHeight: 0.85,
+              flexShrink: 0,
+            }}>{intel.score}</p>
+            <p style={{ color: T1, fontSize: '15px', fontWeight: 600, lineHeight: 1.4, paddingBottom: '6px', flex: 1 }}>
+              {intel.headline}
+            </p>
           </div>
-        ) : intel ? (
-          <>
-            {/* Score + trajectory row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
-              <ScoreRing score={intel.score} color={cfg!.color}/>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '5px',
-                  background: cfg!.bg, border: `1px solid ${cfg!.color}22`,
-                  borderRadius: '7px', padding: '3px 9px', marginBottom: '7px',
-                }}>
-                  <TrajIcon size={11} color={cfg!.color} strokeWidth={2.2}/>
-                  <span style={{ color: cfg!.color, fontSize: '10px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
-                    {cfg!.label}
-                  </span>
-                </div>
-                <p style={{ color: T1, fontSize: '13px', fontWeight: 600, lineHeight: 1.4, margin: 0 }}>{intel.headline}</p>
-              </div>
+
+          {/* Patterns — plain left-border list */}
+          {intel.patterns.length > 0 && (
+            <div style={{ borderLeft: `2px solid ${BORDER}`, paddingLeft: '14px', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
+              {intel.patterns.map((p, i) => (
+                <p key={i} style={{ color: T2, fontSize: '13px', lineHeight: 1.55, margin: 0 }}>{p}</p>
+              ))}
             </div>
+          )}
 
-            {/* Patterns */}
-            {intel.patterns.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginBottom: '12px' }}>
-                {intel.patterns.map((p, i) => (
-                  <div key={i} style={{
-                    display: 'flex', alignItems: 'flex-start', gap: '8px',
-                    padding: '8px 10px', borderRadius: '8px', background: BG,
-                    borderLeft: `3px solid ${BORDER}`,
-                  }}>
-                    <span style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, marginTop: '1px', flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
-                    <p style={{ color: T2, fontSize: '12px', lineHeight: 1.5, margin: 0 }}>{p}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* Prediction inline */}
+          {intel.prediction && (
+            <p style={{ color: T2, fontSize: '13px', lineHeight: 1.6, marginBottom: '10px' }}>
+              <span style={{ color: ACCENT, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px' }}>Next 48h —</span>
+              {intel.prediction}
+            </p>
+          )}
 
-            {/* 48h prediction */}
-            {intel.prediction && (
-              <div style={{
-                padding: '10px 12px', borderRadius: '10px',
-                background: ACCENT_DIM, border: `1px solid rgba(0,85,255,0.12)`,
-                marginBottom: '10px',
-              }}>
-                <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Next 48h prediction</p>
-                <p style={{ color: ACCENT, fontSize: '12px', lineHeight: 1.55, margin: 0, fontWeight: 500 }}>{intel.prediction}</p>
-              </div>
-            )}
+          {/* Recommendation */}
+          {intel.recommendation && (
+            <p style={{ color: GREEN, fontSize: '13px', fontWeight: 600, lineHeight: 1.55 }}>
+              <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px', opacity: 0.7 }}>Today —</span>
+              {intel.recommendation}
+            </p>
+          )}
 
-            {/* Recommendation */}
-            {intel.recommendation && (
-              <div style={{
-                padding: '10px 12px', borderRadius: '10px',
-                background: GREEN_DIM, border: `1px solid rgba(0,122,68,0.14)`,
-              }}>
-                <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Today&apos;s priority</p>
-                <p style={{ color: GREEN, fontSize: '12px', lineHeight: 1.55, margin: 0, fontWeight: 600 }}>{intel.recommendation}</p>
-              </div>
-            )}
-
-            {/* Care team alert */}
-            {intel.alertCareTeam && intel.alertReason && (
-              <div style={{
-                marginTop: '10px', padding: '10px 12px', borderRadius: '10px',
-                background: RED_DIM, border: `1px solid rgba(217,20,20,0.18)`,
-                display: 'flex', alignItems: 'center', gap: '8px',
-              }}>
-                <AlertTriangle size={13} color={RED} strokeWidth={2.2} style={{ flexShrink: 0 }}/>
-                <p style={{ color: RED, fontSize: '12px', fontWeight: 600, margin: 0 }}>Care team alerted: {intel.alertReason}</p>
-              </div>
-            )}
-          </>
-        ) : null}
-      </div>
+          {/* Care team alert */}
+          {intel.alertCareTeam && intel.alertReason && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${BORDER}` }}>
+              <AlertTriangle size={13} color={RED} strokeWidth={2.2} style={{ flexShrink: 0 }}/>
+              <p style={{ color: RED, fontSize: '12px', fontWeight: 600, margin: 0 }}>Care team alerted: {intel.alertReason}</p>
+            </div>
+          )}
+        </>
+      ) : null}
     </motion.div>
   )
 }
@@ -300,53 +274,27 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
   if (hidden) return null
 
   return (
-    <motion.div variants={fadeUp}
-      style={{
-        background: SURFACE,
-        border: `1px solid ${BORDER}`,
-        borderRadius: '16px',
-        overflow: 'hidden',
-        boxShadow: SHADOW,
-      }}>
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 16px',
-        borderBottom: `1px solid ${BORDER}`,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-          <Sparkles size={13} color={ACCENT} strokeWidth={2}/>
-          <span style={{
-            color: T3, fontSize: '10px', fontWeight: 700,
-            letterSpacing: '1.2px', textTransform: 'uppercase',
-            fontFamily: 'var(--font-mono, monospace)',
-          }}>
-            This week
-          </span>
-        </div>
+    <motion.div variants={fadeUp}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+        <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+          This week
+        </p>
         <button
           onClick={() => { fetchInsights(true); toast('Refreshing insights…') }}
           disabled={spinning}
-          style={{
-            background: ACCENT_DIM,
-            border: `1px solid rgba(0,85,255,0.14)`,
-            borderRadius: '7px',
-            cursor: 'pointer',
-            padding: '4px 10px',
-            display: 'flex', alignItems: 'center', gap: '5px',
-            color: ACCENT, fontSize: '11px', fontWeight: 600,
-          }}>
+          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', color: ACCENT, fontSize: '11px', fontWeight: 600, padding: 0 }}>
           <RefreshCw size={10} style={{ transition: 'transform 0.6s', transform: spinning ? 'rotate(360deg)' : 'none' }}/>
           Refresh
         </button>
       </div>
 
-      <div style={{ padding: '12px 16px 14px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
         {loading ? (
           [1, 2, 3].map(i => (
             <div key={i} style={{
-              height: '44px', borderRadius: '8px',
-              background: BG,
-              animation: 'pulse 1.4s ease-in-out infinite',
+              height: '14px', borderRadius: '4px',
+              background: BORDER, opacity: 0.5,
+              marginBottom: '12px', width: `${60 + i * 12}%`,
             }}/>
           ))
         ) : (
@@ -354,16 +302,12 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
             const a = insightAccent[ins.type] ?? insightAccent.tip
             return (
               <div key={i} style={{
-                display: 'flex', alignItems: 'flex-start', gap: '11px',
-                padding: '10px 12px',
-                borderRadius: '10px',
-                background: BG,
-                borderLeft: `3px solid ${a.left}`,
+                display: 'flex', alignItems: 'flex-start', gap: '12px',
+                padding: '11px 0',
+                borderTop: i > 0 ? `1px solid ${BORDER}` : 'none',
               }}>
-                <span style={{ color: a.iconColor, display: 'flex', alignItems: 'center', flexShrink: 0, marginTop: '1px' }}>
-                  <InsightIcon name={ins.icon} size={13}/>
-                </span>
-                <p style={{ color: T2, fontSize: '13px', lineHeight: 1.5, margin: 0 }}>{ins.text}</p>
+                <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: a.left, marginTop: '5px', flexShrink: 0 }}/>
+                <p style={{ color: T1, fontSize: '14px', lineHeight: 1.55, margin: 0 }}>{ins.text}</p>
               </div>
             )
           })
@@ -641,7 +585,7 @@ export default function Dashboard() {
                 width: '36px', height: '36px', borderRadius: '10px',
                 background: SURFACE, border: `1px solid ${BORDER}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', boxShadow: SHADOW,
+                cursor: 'pointer',
               }}>
               <Settings size={15} color={T2}/>
             </motion.button>
@@ -651,7 +595,7 @@ export default function Dashboard() {
 
       <motion.div
         variants={stagger} initial="hidden" animate="show"
-        style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '640px', margin: '0 auto' }}>
+        style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '640px', margin: '0 auto' }}>
 
         {/* Install banner */}
         {installPrompt && (
@@ -854,10 +798,7 @@ export default function Dashboard() {
 
         {/* Quick nav list */}
         <motion.div variants={fadeUp}
-          style={{
-            background: SURFACE, border: `1px solid ${BORDER}`,
-            borderRadius: '20px', overflow: 'hidden',
-          }}>
+          style={{ borderTop: `1px solid ${BORDER}` }}>
           {[
             {
               label: 'Emergency contacts',
@@ -900,18 +841,10 @@ export default function Dashboard() {
               onClick={() => router.push(item.href)}
               style={{
                 width: '100%', background: 'none', border: 'none',
-                padding: '15px 18px', cursor: 'pointer',
+                padding: '14px 0', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '14px',
-                borderBottom: i < arr.length - 1 ? `1px solid ${BORDER}` : 'none',
+                borderBottom: `1px solid ${BORDER}`,
               }}>
-              <div style={{
-                width: '34px', height: '34px', borderRadius: '10px',
-                background: item.iconBg,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                {item.icon}
-              </div>
               <div style={{ flex: 1, textAlign: 'left' }}>
                 <p style={{ color: T1, fontWeight: 600, fontSize: '14px', lineHeight: 1.2 }}>{item.label}</p>
                 <p style={{ color: T3, fontSize: '12px', marginTop: '2px' }}>{item.sub}</p>
