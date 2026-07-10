@@ -168,7 +168,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
             <p style={{
               color: cfg.color,
               fontSize: '88px',
-              fontFamily: 'var(--font-display, Georgia, serif)',
+              fontFamily: 'inherit',
               fontWeight: 400,
               letterSpacing: '-5px',
               lineHeight: 0.85,
@@ -545,7 +545,7 @@ export default function Dashboard() {
             <p style={{ color: T3, fontSize: '11px', fontWeight: 400, marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.4px' }}>
               {greeting}
             </p>
-            <h1 style={{ color: T1, fontSize: '44px', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, fontStyle: 'italic', letterSpacing: '-1px', lineHeight: 1.0, marginBottom: '10px' }}>
+            <h1 style={{ color: T1, fontSize: '44px', fontFamily: 'inherit', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.0, marginBottom: '10px' }}>
               {profile?.full_name?.split(' ')[0]}
             </h1>
             {profile?.diagnosis && (
@@ -729,8 +729,8 @@ export default function Dashboard() {
             <p style={{
               color: checkinToday ? '#FFFFFF' : T1,
               fontSize: '52px',
-              fontFamily: 'var(--font-display, Georgia, serif)',
-              fontWeight: 400,
+              fontFamily: 'inherit',
+              fontWeight: 900,
               letterSpacing: '-2px',
               lineHeight: 0.88,
               marginBottom: '12px',
@@ -765,8 +765,8 @@ export default function Dashboard() {
                 <p style={{
                   color: T1,
                   fontSize: '52px',
-                  fontFamily: 'var(--font-display, Georgia, serif)',
-                  fontWeight: 400,
+                  fontFamily: 'inherit',
+                  fontWeight: 900,
                   letterSpacing: '-2px',
                   lineHeight: 0.88,
                   marginBottom: '12px',
@@ -778,8 +778,8 @@ export default function Dashboard() {
                 <p style={{
                   color: T1,
                   fontSize: '36px',
-                  fontFamily: 'var(--font-display, Georgia, serif)',
-                  fontWeight: 400,
+                  fontFamily: 'inherit',
+                  fontWeight: 900,
                   letterSpacing: '-1.5px',
                   lineHeight: 0.95,
                   marginBottom: '10px',
@@ -948,8 +948,8 @@ export default function Dashboard() {
                 color: T1,
                 fontSize: '16px',
                 lineHeight: 1.55,
-                fontFamily: 'var(--font-display, Georgia, serif)',
-                fontStyle: 'italic',
+                fontFamily: 'inherit',
+                fontStyle: 'normal',
                 fontWeight: 400,
                 display: '-webkit-box',
                 WebkitLineClamp: 3,
