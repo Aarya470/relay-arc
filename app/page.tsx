@@ -268,9 +268,9 @@ export default function Home() {
             </motion.div>
 
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, ...spring }}
-              style={{ color: '#EEEEF8', fontSize: 'clamp(40px, 9vw, 68px)', fontWeight: 900, lineHeight: 1.02, letterSpacing: '-3px', marginBottom: '22px' }}>
+              style={{ color: '#EEEEF8', fontSize: 'clamp(52px, 11vw, 92px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, lineHeight: 0.96, letterSpacing: '-2px', marginBottom: '26px' }}>
               When every<br/>
-              <span style={{ color: '#FF3737' }}>minute</span> is<br/>
+              <span style={{ color: '#FF3737', fontStyle: 'italic' }}>minute</span> is<br/>
               the margin.
             </motion.h1>
 
@@ -334,7 +334,7 @@ export default function Home() {
             {STATS.map((stat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ ...spring, delay: i * 0.08 }}
                 style={{ padding: '28px 24px', borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-                <p style={{ color: '#EEEEF8', fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1, marginBottom: '10px' }}>{stat.value}</p>
+                <p style={{ color: '#EEEEF8', fontSize: 'clamp(40px, 6vw, 58px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1.5px', lineHeight: 1, marginBottom: '10px' }}>{stat.value}</p>
                 <p style={{ color: '#8888A8', fontSize: '14px', lineHeight: 1.5, marginBottom: '6px' }}>{stat.label}</p>
                 <p style={{ color: '#505068', fontSize: '12px', fontFamily: 'var(--font-mono, monospace)' }}>{stat.sub}</p>
               </motion.div>
@@ -350,8 +350,8 @@ export default function Home() {
             <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, color: '#00D68F', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px', background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.20)', padding: '4px 12px', borderRadius: '99px' }}>
               Mission
             </span>
-            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(36px, 7vw, 54px)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.06, marginBottom: '28px' }}>
-              RELAY, not REVIVE.
+            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(48px, 9vw, 80px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-2px', lineHeight: 0.97, marginBottom: '32px', fontStyle: 'italic' }}>
+              Relay,<br/>not Revive.
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
               {[
@@ -363,7 +363,7 @@ export default function Home() {
                 <motion.p key={i}
                   initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }}
                   transition={{ ...spring, delay: i * 0.07 }}
-                  style={{ color: i === 1 ? '#00D68F' : '#8888A8', fontSize: i === 1 ? '20px' : '16px', lineHeight: 1.75, fontWeight: i === 1 ? 700 : 400 }}>
+                  style={{ color: i === 1 ? '#00D68F' : '#8888A8', fontSize: i === 1 ? '22px' : '16px', fontFamily: i === 1 ? 'var(--font-display, Georgia, serif)' : 'inherit', fontStyle: i === 1 ? 'italic' : 'normal', lineHeight: i === 1 ? 1.5 : 1.8, fontWeight: 400 }}>
                   {para}
                 </motion.p>
               ))}
@@ -380,7 +380,7 @@ export default function Home() {
             <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, color: '#00D68F', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.20)', padding: '4px 12px', borderRadius: '99px' }}>
               Who it is for
             </span>
-            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '12px' }}>
+            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(32px, 5.5vw, 50px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1px', lineHeight: 1.08, marginBottom: '12px' }}>
               Built for everyone in the room.
             </h2>
             <p style={{ color: '#8888A8', fontSize: '16px', maxWidth: '480px', margin: '0 auto', lineHeight: 1.65 }}>
@@ -420,7 +420,7 @@ export default function Home() {
             <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, color: '#00D68F', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.20)', padding: '4px 12px', borderRadius: '99px' }}>
               Features
             </span>
-            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '12px' }}>
+            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(32px, 5.5vw, 50px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1px', lineHeight: 1.08, marginBottom: '12px' }}>
               Everything your heart needs.
             </h2>
             <p style={{ color: '#8888A8', fontSize: '16px', maxWidth: '520px', margin: '0 auto', lineHeight: 1.65 }}>
@@ -453,7 +453,7 @@ export default function Home() {
             <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, color: '#00D68F', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.20)', padding: '4px 12px', borderRadius: '99px' }}>
               How it works
             </span>
-            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: 900, letterSpacing: '-1.5px' }}>
+            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(32px, 5.5vw, 50px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1px', lineHeight: 1.08 }}>
               Three steps. No guessing.
             </h2>
           </motion.div>
@@ -489,8 +489,8 @@ export default function Home() {
                 style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00D68F' }}/>
               Stage 2 — Shipped
             </span>
-            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '14px' }}>
-              A major update is here.
+            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(32px, 5.5vw, 50px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1px', lineHeight: 1.08, marginBottom: '14px' }}>
+              We built a lot.<br/><span style={{ fontStyle: 'italic', color: '#8888A8' }}>Here's what shipped.</span>
             </h2>
             <p style={{ color: '#8888A8', fontSize: '16px', maxWidth: '540px', margin: '0 auto', lineHeight: 1.7 }}>
               Relay Stage 2 brings AI crash prediction, severity triage, caregiver live view, and clinical ER briefings — the system now works harder before, during, and after the emergency.
@@ -530,7 +530,7 @@ export default function Home() {
             <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, color: '#00D68F', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', background: 'rgba(0,214,143,0.10)', border: '1px solid rgba(0,214,143,0.20)', padding: '4px 12px', borderRadius: '99px' }}>
               Why Relay
             </span>
-            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '12px' }}>
+            <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(32px, 5.5vw, 50px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1px', lineHeight: 1.08, marginBottom: '12px' }}>
               Designed for the gap that kills.
             </h2>
             <p style={{ color: '#8888A8', fontSize: '16px', maxWidth: '480px', margin: '0 auto', lineHeight: 1.65 }}>
@@ -613,9 +613,8 @@ export default function Home() {
           <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: '#FF3737', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
             <Shield size={24} color="white"/>
           </div>
-          <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(28px, 6vw, 42px)', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 1.1, marginBottom: '16px' }}>
-            Your profile could save your life.
-
+          <h2 style={{ color: '#EEEEF8', fontSize: 'clamp(32px, 6vw, 48px)', fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400, letterSpacing: '-1px', lineHeight: 1.08, marginBottom: '16px' }}>
+            Your profile could<br/><span style={{ fontStyle: 'italic' }}>save your life.</span>
           </h2>
           <p style={{ color: '#8888A8', fontSize: '17px', lineHeight: 1.65, marginBottom: '36px' }}>
             Blood type, allergies, medications — all ready for paramedics in seconds. No unlocking required.
