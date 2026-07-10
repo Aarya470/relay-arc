@@ -44,7 +44,7 @@ const AMBER_DIM = 'rgba(180,83,9,0.08)'
 const BORDER  = '#E3E6EC'
 const SHADOW  = '0 1px 4px rgba(14,18,24,0.07)'
 
-// ── Weekly Insights types ─────────────────────────────────────────────────────
+// ── This week types ─────────────────────────────────────────────────────
 interface Insight {
   type: 'positive' | 'warning' | 'tip'
   icon: 'heart' | 'trend' | 'pill' | 'star' | 'alert'
@@ -155,7 +155,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
       }}>
         <Activity size={12} color={ACCENT} strokeWidth={2.2}/>
         <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
-          AI Health Intelligence
+          Health Overview
         </span>
       </div>
 
@@ -320,7 +320,7 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
             letterSpacing: '1.2px', textTransform: 'uppercase',
             fontFamily: 'var(--font-mono, monospace)',
           }}>
-            Weekly Insights
+            This week
           </span>
         </div>
         <button
@@ -769,28 +769,32 @@ export default function Dashboard() {
             whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/checkin')}
             style={{
-              background: checkinToday ? GREEN_DIM : SURFACE,
-              border: `1px solid ${checkinToday ? 'rgba(0,122,68,0.18)' : BORDER}`,
-              borderRadius: '16px',
-              padding: '18px 16px',
+              background: checkinToday ? GREEN : SURFACE,
+              border: checkinToday ? 'none' : `1px solid ${BORDER}`,
+              borderRadius: '20px',
+              padding: '20px 18px 18px',
               textAlign: 'left',
               cursor: 'pointer',
-              boxShadow: SHADOW,
             }}>
             <p style={{
-              color: checkinToday ? GREEN : T3,
+              color: checkinToday ? 'rgba(255,255,255,0.55)' : T3,
               fontSize: '10px', fontWeight: 700,
-              letterSpacing: '1.2px', textTransform: 'uppercase',
-              marginBottom: '12px', fontFamily: 'var(--font-mono, monospace)',
-            }}>Daily</p>
+              letterSpacing: '1.5px', textTransform: 'uppercase',
+              marginBottom: '10px', fontFamily: 'var(--font-mono, monospace)',
+            }}>{checkinToday ? 'Done' : 'Check in'}</p>
             <p style={{
-              color: checkinToday ? GREEN : T1,
-              fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '5px',
+              color: checkinToday ? '#FFFFFF' : T1,
+              fontSize: '52px',
+              fontFamily: 'var(--font-display, Georgia, serif)',
+              fontWeight: 400,
+              letterSpacing: '-2px',
+              lineHeight: 0.88,
+              marginBottom: '12px',
             }}>
-              {checkinToday ? 'Done ✓' : 'Check in'}
+              {checkinToday ? '✓' : new Date().getDate()}
             </p>
-            <p style={{ color: checkinToday ? GREEN : T3, fontSize: '11px', fontWeight: 500 }}>
-              {checkinToday ? 'Completed today' : streak > 0 ? `${streak}-day streak` : 'Tap to start'}
+            <p style={{ color: checkinToday ? 'rgba(255,255,255,0.65)' : T3, fontSize: '11px', fontWeight: 500 }}>
+              {checkinToday ? 'Today complete' : streak > 0 ? `${streak}-day streak` : 'Not done yet'}
             </p>
           </motion.button>
 
@@ -800,30 +804,43 @@ export default function Dashboard() {
             onClick={() => router.push('/timeline')}
             style={{
               background: SURFACE,
-              borderRadius: '16px',
+              borderRadius: '20px',
               border: `1px solid ${BORDER}`,
-              padding: '18px 16px',
+              padding: '20px 18px 18px',
               textAlign: 'left',
               cursor: 'pointer',
-              boxShadow: SHADOW,
             }}>
             <p style={{
               color: ACCENT,
               fontSize: '10px', fontWeight: 700,
-              letterSpacing: '1.2px', textTransform: 'uppercase',
-              marginBottom: '12px', fontFamily: 'var(--font-mono, monospace)',
+              letterSpacing: '1.5px', textTransform: 'uppercase',
+              marginBottom: '10px', fontFamily: 'var(--font-mono, monospace)',
             }}>Recovery</p>
             {weeksSinceSurgery !== null ? (
               <>
-                <p style={{ color: T1, fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '10px' }}>Week {weeksSinceSurgery}</p>
-                <div style={{ height: '4px', background: BG, borderRadius: '99px', overflow: 'hidden', border: `1px solid ${BORDER}` }}>
-                  <div style={{ height: '100%', width: `${recoveryPct}%`, background: ACCENT, borderRadius: '99px' }}/>
-                </div>
+                <p style={{
+                  color: T1,
+                  fontSize: '52px',
+                  fontFamily: 'var(--font-display, Georgia, serif)',
+                  fontWeight: 400,
+                  letterSpacing: '-2px',
+                  lineHeight: 0.88,
+                  marginBottom: '12px',
+                }}>{weeksSinceSurgery}</p>
+                <p style={{ color: T3, fontSize: '11px', fontWeight: 500 }}>weeks post-surgery</p>
               </>
             ) : (
               <>
-                <p style={{ color: T1, fontSize: '22px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 1 }}>Timeline</p>
-                <p style={{ color: ACCENT, fontSize: '11px', marginTop: '5px', fontWeight: 500 }}>Recovery plan</p>
+                <p style={{
+                  color: T1,
+                  fontSize: '36px',
+                  fontFamily: 'var(--font-display, Georgia, serif)',
+                  fontWeight: 400,
+                  letterSpacing: '-1.5px',
+                  lineHeight: 0.95,
+                  marginBottom: '10px',
+                }}>Plan</p>
+                <p style={{ color: ACCENT, fontSize: '11px', fontWeight: 600 }}>View timeline →</p>
               </>
             )}
           </motion.button>
@@ -835,11 +852,11 @@ export default function Dashboard() {
         {/* Weekly AI Insights */}
         {userId && <WeeklyInsightsCard userId={userId}/>}
 
-        {/* Grouped list: Contacts · Profile · History */}
+        {/* Quick nav list */}
         <motion.div variants={fadeUp}
           style={{
             background: SURFACE, border: `1px solid ${BORDER}`,
-            borderRadius: '16px', overflow: 'hidden', boxShadow: SHADOW,
+            borderRadius: '20px', overflow: 'hidden',
           }}>
           {[
             {
@@ -904,49 +921,39 @@ export default function Dashboard() {
           ))}
         </motion.div>
 
-        {/* Medications */}
+        {/* Medications — flat section, no card chrome */}
         <motion.div variants={fadeUp}>
           <motion.button
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push('/medications')}
             style={{
-              background: SURFACE, border: `1px solid ${BORDER}`,
-              borderRadius: '16px', padding: '16px 18px',
-              cursor: 'pointer', width: '100%', textAlign: 'left', boxShadow: SHADOW,
+              background: 'none', border: 'none',
+              borderTop: `1px solid ${BORDER}`,
+              borderBottom: `1px solid ${BORDER}`,
+              padding: '18px 0',
+              cursor: 'pointer', width: '100%', textAlign: 'left',
             }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: meds.length > 0 ? '12px' : 0 }}>
-              <span style={{
-                color: T3, fontSize: '10px', fontWeight: 700,
-                letterSpacing: '1.2px', textTransform: 'uppercase',
-                fontFamily: 'var(--font-mono, monospace)',
-              }}>Medications</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+              <p style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px' }}>
+                Medications
                 {profile?.medications?.length > 0 && (
-                  <span style={{
-                    background: BG, color: T2, fontSize: '11px', fontWeight: 700,
-                    padding: '2px 7px', borderRadius: '6px', border: `1px solid ${BORDER}`,
-                    fontFamily: 'var(--font-mono, monospace)',
-                  }}>
-                    {profile.medications.length}
+                  <span style={{ color: T3, fontSize: '13px', fontWeight: 400, marginLeft: '8px' }}>
+                    {profile.medications.length} active
                   </span>
                 )}
-                <ChevronRight size={14} color={T3} strokeWidth={2}/>
-              </div>
+              </p>
+              <ChevronRight size={14} color={T3} strokeWidth={2}/>
             </div>
             {meds.length > 0 ? (
-              <div>
+              <div style={{ display: 'flex', gap: '7px', flexWrap: 'wrap' }}>
                 {meds.map((med: any, i: number) => (
                   <div key={i} style={{
-                    display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
-                    padding: '9px 0',
-                    borderTop: i > 0 ? `1px solid ${BORDER}` : 'none',
+                    background: BG, border: `1px solid ${BORDER}`,
+                    borderRadius: '8px', padding: '6px 11px',
+                    display: 'flex', alignItems: 'baseline', gap: '6px',
                   }}>
-                    <p style={{ color: T1, fontSize: '14px', fontWeight: 500 }}>{med.name}</p>
-                    <p style={{
-                      color: T3, fontSize: '12px',
-                      fontFamily: 'var(--font-mono, monospace)',
-                      marginLeft: '8px', flexShrink: 0,
-                    }}>{med.dose}</p>
+                    <span style={{ color: T1, fontSize: '13px', fontWeight: 600 }}>{med.name}</span>
+                    {med.dose && <span style={{ color: T3, fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{med.dose}</span>}
                   </div>
                 ))}
               </div>
@@ -962,63 +969,61 @@ export default function Dashboard() {
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push('/appointments')}
             style={{
-              background: SURFACE, border: `1px solid ${BORDER}`,
-              borderRadius: '16px', padding: '16px 18px',
+              background: 'rgba(0,85,255,0.04)',
+              border: `1px solid rgba(0,85,255,0.10)`,
+              borderRadius: '14px', padding: '14px 16px',
               cursor: 'pointer', width: '100%',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              boxShadow: SHADOW,
+              display: 'flex', alignItems: 'center', gap: '12px',
             }}>
-            <div>
-              <p style={{
-                color: T3, fontSize: '10px', fontWeight: 700,
-                letterSpacing: '1.2px', textTransform: 'uppercase',
-                marginBottom: '4px', fontFamily: 'var(--font-mono, monospace)',
-              }}>Care Team</p>
-              <p style={{ color: T1, fontWeight: 600, fontSize: '15px' }}>Schedule or join a call</p>
-            </div>
             <div style={{
-              width: '38px', height: '38px', borderRadius: '10px',
-              background: ACCENT_DIM,
+              width: '36px', height: '36px', borderRadius: '10px',
+              background: ACCENT, flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Video size={16} color={ACCENT} strokeWidth={1.8}/>
+              <Video size={15} color="#FFFFFF" strokeWidth={2}/>
             </div>
+            <div style={{ flex: 1, textAlign: 'left' }}>
+              <p style={{ color: T1, fontWeight: 700, fontSize: '14px', letterSpacing: '-0.2px' }}>Care team</p>
+              <p style={{ color: T3, fontSize: '12px', marginTop: '1px' }}>Schedule or join a call</p>
+            </div>
+            <ChevronRight size={14} color={ACCENT} strokeWidth={2}/>
           </motion.button>
         </motion.div>
 
-        {/* Last check-in */}
+        {/* Last check-in — pull-quote style */}
         {checkins.length > 0 && (
           <motion.div variants={fadeUp}>
             <motion.button
               whileTap={{ scale: 0.99 }}
               onClick={() => router.push('/history')}
               style={{
-                background: SURFACE, border: `1px solid ${BORDER}`,
-                borderRadius: '16px', padding: '16px 18px',
-                cursor: 'pointer', width: '100%', textAlign: 'left', boxShadow: SHADOW,
+                background: 'none', border: 'none',
+                borderLeft: `3px solid ${BORDER}`,
+                paddingLeft: '16px', paddingRight: 0,
+                paddingTop: '2px', paddingBottom: '2px',
+                cursor: 'pointer', width: '100%', textAlign: 'left', display: 'block',
               }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <p style={{
-                  color: T3, fontSize: '10px', fontWeight: 700,
-                  letterSpacing: '1.2px', textTransform: 'uppercase',
-                  fontFamily: 'var(--font-mono, monospace)',
-                }}>Last Check-in</p>
-                <ChevronRight size={14} color={T3} strokeWidth={2}/>
-              </div>
               <p style={{
-                color: T1, fontSize: '13px', lineHeight: 1.6,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-  }>
-                {checkins[0]?.summary || 'No summary available'}
+                color: T3, fontSize: '10px', fontWeight: 700,
+                letterSpacing: '1.2px', textTransform: 'uppercase',
+                fontFamily: 'var(--font-mono, monospace)',
+                marginBottom: '8px',
+              }}>
+                {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
               </p>
               <p style={{
-                color: T3, fontSize: '11px', marginTop: '8px',
-                fontFamily: 'var(--font-mono, monospace)',
+                color: T1,
+                fontSize: '16px',
+                lineHeight: 1.55,
+                fontFamily: 'var(--font-display, Georgia, serif)',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
               }}>
-                {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                {checkins[0]?.summary || 'No summary available'}
               </p>
             </motion.button>
           </motion.div>
