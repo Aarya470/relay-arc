@@ -169,8 +169,8 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
               color: cfg.color,
               fontSize: '88px',
               fontFamily: 'inherit',
-              fontWeight: 400,
-              letterSpacing: '-5px',
+              fontWeight: 800,
+              letterSpacing: '-4px',
               lineHeight: 0.85,
               flexShrink: 0,
             }}>{intel.score}</p>
@@ -542,8 +542,8 @@ export default function Dashboard() {
         style={{ padding: '56px 20px 20px', maxWidth: '640px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ color: T3, fontSize: '11px', fontWeight: 400, marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.4px' }}>
-              {greeting}
+            <p style={{ color: T3, fontSize: '11px', fontWeight: 700, marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.4px' }}>
+              {greeting} · {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}
             </p>
             <h1 style={{ color: T1, fontSize: '44px', fontFamily: 'inherit', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.0, marginBottom: '10px' }}>
               {profile?.full_name?.split(' ')[0]}
@@ -664,7 +664,7 @@ export default function Dashboard() {
                 fontFamily: 'var(--font-mono, monospace)',
               }}>SOS</p>
               <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: '12px', marginTop: '10px', fontWeight: 500, letterSpacing: '0.2px' }}>
-                Hold to activate · Care team notified instantly
+                Tap to start · Your care team is notified instantly
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
@@ -797,8 +797,9 @@ export default function Dashboard() {
         {userId && <WeeklyInsightsCard userId={userId}/>}
 
         {/* Quick nav list */}
-        <motion.div variants={fadeUp}
-          style={{ borderTop: `1px solid ${BORDER}` }}>
+        <motion.div variants={fadeUp}>
+          <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Your data</p>
+          <div style={{ borderTop: `1px solid ${BORDER}` }}>
           {[
             {
               label: 'Emergency contacts',
@@ -852,6 +853,7 @@ export default function Dashboard() {
               <ChevronRight size={14} color={T3} strokeWidth={2}/>
             </motion.button>
           ))}
+          </div>
         </motion.div>
 
         {/* Medications — flat section, no card chrome */}
