@@ -25,6 +25,7 @@ function Noise({ opacity = 0.05 }: { opacity?: number }) {
 
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted: () => void }) {
+  const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -71,6 +72,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button onClick={() => router.push('/donate')} className="desktop-only"
+              style={{ background: 'transparent', border: 'none', color: RED, fontSize: '13.5px', fontWeight: 700, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Donate
+            </button>
             <button onClick={onSignIn} className="desktop-only nav-link"
               style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Sign in
@@ -97,6 +102,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
                 {label}
               </button>
             ))}
+            <button onClick={() => router.push('/donate')}
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: RED, fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
+              Donate
+            </button>
             <button onClick={onSignIn}
               style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T2, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0' }}>
               Sign in
@@ -586,6 +595,12 @@ export default function Home() {
               <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '15.5px', lineHeight: 1.75 }}>
                 These are not rare situations — this is daily life for hundreds of millions of people. Relay was built for them first. Not as charity, but as the emergency infrastructure that should have already existed.
               </p>
+              <div style={{ marginTop: '14px' }}>
+                <button onClick={() => router.push('/donate')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'none', color: 'white', fontWeight: 700, fontSize: '14.5px', padding: '13px 26px', border: '1.5px solid rgba(255,255,255,0.9)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  Support the mission <span style={{ fontFamily: mono }}>→</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -702,7 +717,8 @@ export default function Home() {
                   Mission
                 </button>
                 <a href="/login" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Sign in</a>
-                <a href="/login?signup=1" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none' }}>Create account</a>
+                <a href="/login?signup=1" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Create account</a>
+                <a href="/donate" style={{ display: 'block', color: '#FF6B5E', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>Donate</a>
               </div>
             </div>
           </div>
