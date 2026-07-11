@@ -237,6 +237,98 @@ const LOG = [
   { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#007A44' },
 ]
 
+// ─── With / without — looping split-screen simulation ───────────────────────
+const RACE_MS = 19000
+const LEFT_EVENTS = [
+  { at: 500,   color: 'rgba(255,255,255,0.35)', text: 'Chest pain — panic sets in' },
+  { at: 3000,  color: 'rgba(255,255,255,0.35)', text: 'Googling symptoms, hands shaking' },
+  { at: 5500,  color: 'rgba(255,255,255,0.35)', text: 'Calling family — no answer' },
+  { at: 8000,  color: 'rgba(255,255,255,0.35)', text: 'Which hospital? Nobody is sure' },
+  { at: 10500, color: '#E8A33D', text: 'Ambulance dispatched — ETA 45 min' },
+  { at: 13500, color: '#FF6B5E', text: 'Stuck in traffic. Still waiting.' },
+]
+const RIGHT_EVENTS = [
+  { at: 500,   color: '#FF6B5E', text: 'SOS held — “chest pain, sweating”' },
+  { at: 2500,  color: '#E8A33D', text: 'Cardiac event classified · profile pulled' },
+  { at: 4500,  color: '#7AA7FF', text: 'Lilavati matched — cath lab free · 4.2 km' },
+  { at: 6500,  color: '#7AA7FF', text: 'ER brief on the intake desk' },
+  { at: 9000,  color: '#7AA7FF', text: 'Family car en route — turn-by-turn' },
+  { at: 12500, color: '#3DDC97', text: 'Arrived — straight through triage' },
+]
+function fmtElapsed(s: number) {
+  const m = Math.floor(s / 60), ss = Math.floor(s % 60)
+  return `+${String(m).padStart(2, '0')}:${String(ss).padStart(2, '0')}`
+}
+function EmergencyRace() {
+  const [t, setT] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setT(prev => (prev + 100) % RACE_MS), 100)
+    return () => clearInterval(id)
+  }, [])
+  const fading = t > RACE_MS - 900
+  const leftSec  = Math.min(t / 16500, 1) * 2820
+  const rightSec = Math.min(t / 12500, 1) * 711
+  const leftStatus  = t >= 15500 ? { label: 'Still en route', color: '#FF6B5E', bg: 'rgba(217,20,20,0.16)' }
+    : t >= 10500 ? { label: 'Waiting for ambulance', color: '#E8A33D', bg: 'rgba(180,83,9,0.16)' }
+    : { label: 'No plan yet', color: 'rgba(255,255,255,0.45)', bg: 'rgba(255,255,255,0.07)' }
+  const rightStatus = t >= 12500 ? { label: 'In the cath lab', color: '#3DDC97', bg: 'rgba(0,122,68,0.2)' }
+    : t >= 4500 ? { label: 'Routing locked', color: '#7AA7FF', bg: 'rgba(0,85,255,0.18)' }
+    : { label: 'SOS active', color: '#FF6B5E', bg: 'rgba(217,20,20,0.16)' }
+
+  const panel = (
+    title: string, titleColor: string, events: typeof LEFT_EVENTS,
+    sec: number, timerColor: string, status: { label: string; color: string; bg: string },
+    cls: string,
+  ) => (
+    <div className={cls} style={{ padding: '22px 24px 24px', display: 'flex', flexDirection: 'column', minHeight: '316px' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '18px' }}>
+        <span style={{ color: titleColor, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>{title}</span>
+        <span style={{ color: timerColor, fontFamily: mono, fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px', fontVariantNumeric: 'tabular-nums' }}>{fmtElapsed(sec)}</span>
+      </div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '11px' }}>
+        {events.map((e, i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'flex-start', gap: '10px',
+            opacity: t >= e.at ? 1 : 0,
+            transform: t >= e.at ? 'translateY(0)' : 'translateY(6px)',
+            transition: 'opacity 0.45s ease, transform 0.45s ease',
+          }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: e.color, marginTop: '6px', flexShrink: 0 }}/>
+            <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: '13.5px', lineHeight: 1.5, margin: 0 }}>{e.text}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: '18px' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: status.bg, borderRadius: '99px', padding: '6px 13px' }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: status.color, animation: status.label === 'Still en route' || status.label === 'SOS active' ? 'dot-blink 1.1s infinite' : 'none' }}/>
+          <span style={{ color: status.color, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase' }}>{status.label}</span>
+        </span>
+      </div>
+    </div>
+  )
+
+  return (
+    <div>
+      <div style={{ background: T1, borderRadius: '20px', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <span style={{ color: 'rgba(255,255,255,0.5)', fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase' }}>Two families · same chest pain · 19:42 on a Tuesday</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0 }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#FF6B5E', animation: 'dot-blink 1.2s infinite' }}/>
+            <span style={{ color: 'rgba(255,255,255,0.5)', fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.6px' }}>SIM · LOOP</span>
+          </span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', opacity: fading ? 0 : 1, transition: 'opacity 0.7s ease' }} className="race-grid">
+          {panel('Without Relay', 'rgba(255,255,255,0.5)', LEFT_EVENTS, leftSec, t >= 15500 ? '#FF6B5E' : 'rgba(255,255,255,0.7)', leftStatus, 'race-left')}
+          {panel('With Relay', '#3DDC97', RIGHT_EVENTS, rightSec, t >= 12500 ? '#3DDC97' : 'rgba(255,255,255,0.7)', rightStatus, 'race-right')}
+        </div>
+      </div>
+      <p style={{ color: T3, fontSize: '11.5px', fontFamily: mono, marginTop: '12px' }}>
+        Simulated side-by-side — not real footage. Ambulance wait reflects Mumbai peak-traffic averages.
+      </p>
+    </div>
+  )
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [authChecked, setAuthChecked] = useState(false)
@@ -360,6 +452,9 @@ export default function Home() {
       {/* ── DISPATCH LOG ─────────────────────────────────────────────── */}
       <section id="log" style={{ padding: '110px 24px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '84px' }}>
+            <EmergencyRace/>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
             <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
               <p style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '16px' }}>How it works</p>
@@ -533,7 +628,7 @@ export default function Home() {
             </div>
           </div>
           <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <p style={{ color: T3, fontSize: '12px', fontFamily: mono }}>© {new Date().getFullYear()} Relay Arc — built in India</p>
+            <p style={{ color: T3, fontSize: '12px', fontFamily: mono }}>© {new Date().getFullYear()} Relay Arc</p>
             <p style={{ color: T3, fontSize: '12px' }}>
               Not a substitute for emergency services. In immediate danger, call your local emergency number.
             </p>
@@ -557,6 +652,7 @@ export default function Home() {
         }
         .ticker-track { display: flex; width: max-content; animation: ticker-scroll 42s linear infinite; }
         .ticker-track:hover { animation-play-state: paused; }
+        .race-left { border-right: 1px solid rgba(255,255,255,0.08); }
         @media (max-width: 960px) {
           .hero-grid { grid-template-columns: 1fr !important; gap: 56px !important; }
           .hero-copy { padding-bottom: 0 !important; }
@@ -578,6 +674,8 @@ export default function Home() {
           .log-dot { display: none !important; }
           .log-row > div:last-child { padding-left: 0 !important; }
           .log-verdict { padding-left: 0 !important; }
+          .race-grid { grid-template-columns: 1fr !important; }
+          .race-left { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.08); }
         }
       `}</style>
     </div>
