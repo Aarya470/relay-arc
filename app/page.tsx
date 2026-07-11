@@ -18,6 +18,11 @@ const AMBER  = '#B45309'
 
 const mono = 'var(--font-mono, monospace)'
 
+const NOISE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")`
+function Noise({ opacity = 0.05 }: { opacity?: number }) {
+  return <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: NOISE, opacity, pointerEvents: 'none' }}/>
+}
+
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted: () => void }) {
   const [scrolled, setScrolled] = useState(false)
@@ -310,7 +315,8 @@ function EmergencyRace() {
 
   return (
     <div>
-      <div style={{ background: T1, borderRadius: '0px', overflow: 'hidden' }}>
+      <div style={{ background: T1, borderRadius: '0px', overflow: 'hidden', position: 'relative' }}>
+        <Noise opacity={0.04}/>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <span style={{ color: 'rgba(255,255,255,0.5)', fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase' }}>Two families · same chest pain · 19:42 on a Tuesday</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0 }}>
@@ -478,9 +484,12 @@ export default function Home() {
               </p>
             </div>
 
-            <div style={{ paddingTop: '6px' }}>
+            <div style={{ paddingTop: '6px', position: 'relative' }}>
+              <span aria-hidden className="log-ghost" style={{ position: 'absolute', top: '-64px', right: '-12px', fontFamily: mono, fontWeight: 700, fontSize: 'clamp(90px, 11vw, 160px)', color: 'transparent', WebkitTextStroke: '1.5px #ECEEF2', letterSpacing: '-6px', pointerEvents: 'none', userSelect: 'none', lineHeight: 1, zIndex: 0 }}>+11:51</span>
               {LOG.map((e, i) => (
-                <div key={i} style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '28px', position: 'relative', paddingBottom: i < LOG.length - 1 ? '44px' : 0 }} className="log-row">
+                <motion.div key={i}
+                  initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.35, delay: i * 0.07, ease: 'easeOut' }}
+                  style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '28px', position: 'relative', paddingBottom: i < LOG.length - 1 ? '44px' : 0, zIndex: 1 }} className="log-row">
                   {/* timeline spine */}
                   {i < LOG.length - 1 && (
                     <div style={{ position: 'absolute', left: '182px', top: '20px', bottom: '-2px', width: '1px', background: BORDER }} className="log-spine"/>
@@ -494,7 +503,7 @@ export default function Home() {
                     <h3 style={{ color: T1, fontSize: '16.5px', fontWeight: 700, letterSpacing: '-0.3px', marginBottom: '7px' }}>{e.title}</h3>
                     <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65, maxWidth: '440px' }}>{e.body}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
               <div style={{ marginTop: '40px', paddingLeft: '178px' }} className="log-verdict">
                 <p style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px' }}>
@@ -551,8 +560,9 @@ export default function Home() {
       </section>
 
       {/* ── MISSION — the one dark moment ────────────────────────────── */}
-      <section id="mission" style={{ background: T1, padding: '96px 24px 110px' }}>
-        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+      <section id="mission" style={{ background: RED, padding: '96px 24px 110px', position: 'relative', overflow: 'hidden' }}>
+        <Noise opacity={0.07}/>
+        <div style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative' }}>
           <div style={{ borderTop: '3px solid #FFFFFF', paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
             <span style={{ color: '#FFFFFF', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Mission</span>
             <span style={{ color: 'rgba(255,255,255,0.45)', fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Relay, not revive</span>
@@ -560,20 +570,20 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
             <div>
               <h2 style={{ color: 'white', fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98 }}>
-                Relay,<br/>not Revive<span style={{ color: '#FF6B5E' }}>.</span>
+                Relay,<br/>not Revive<span style={{ color: T1 }}>.</span>
               </h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '560px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: '15.5px', lineHeight: 1.75 }}>
+              <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '15.5px', lineHeight: 1.75 }}>
                 Not everyone lives where help arrives in eight minutes. In much of the world, an emergency begins with a family doing math instead of getting help. Can we afford the ambulance. How far is the hospital. Will we make it in time.
               </p>
-              <p style={{ color: '#3DDC97', fontSize: '19px', lineHeight: 1.55, fontWeight: 600 }}>
+              <p style={{ color: '#FFFFFF', fontSize: '21px', lineHeight: 1.5, fontWeight: 800, letterSpacing: '-0.01em' }}>
                 Relay exists because no one should have to think before getting help. Help should already be on the way.
               </p>
-              <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: '15.5px', lineHeight: 1.75 }}>
+              <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '15.5px', lineHeight: 1.75 }}>
                 In India, more than 65 percent of people live in rural areas where the nearest hospital can be over 30 kilometres away. In Mumbai, Delhi and Kolkata, ambulances can sit in traffic for 45 minutes while moving only a few kilometres.
               </p>
-              <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: '15.5px', lineHeight: 1.75 }}>
+              <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '15.5px', lineHeight: 1.75 }}>
                 These are not rare situations — this is daily life for hundreds of millions of people. Relay was built for them first. Not as charity, but as the emergency infrastructure that should have already existed.
               </p>
             </div>
@@ -596,7 +606,7 @@ export default function Home() {
               <div key={i} style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '32px', padding: '26px 0', borderTop: `1px solid ${BORDER}`, alignItems: 'baseline' }} className="who-row">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
                   <span style={{ width: '8px', height: '8px', background: a.color, flexShrink: 0 }}/>
-                  <p style={{ color: T1, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.2px' }}>{a.title}</p>
+                  <p style={{ color: T1, fontSize: '17.5px', fontWeight: 800, letterSpacing: '-0.03em' }}>{a.title}</p>
                 </div>
                 <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.65, maxWidth: '620px' }}>{a.body}</p>
               </div>
@@ -660,44 +670,45 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ───────────────────────────────────────────────────── */}
-      <footer style={{ borderTop: `3px solid ${T1}`, padding: '52px 24px 36px', background: 'white' }}>
-        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+      <footer style={{ borderTop: `3px solid ${RED}`, padding: '52px 24px 36px', background: T1, position: 'relative', overflow: 'hidden' }}>
+        <Noise opacity={0.05}/>
+        <div style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap', marginBottom: '44px' }}>
             <div style={{ maxWidth: '300px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                 <div style={{ width: '22px', height: '22px', borderRadius: '7px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Heart size={11} color="white" fill="white" strokeWidth={0}/>
                 </div>
-                <span style={{ color: T1, fontWeight: 800, fontSize: '14.5px', letterSpacing: '-0.3px' }}>Relay Arc</span>
+                <span style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '14.5px', letterSpacing: '-0.3px' }}>Relay Arc</span>
               </div>
-              <p style={{ color: T3, fontSize: '13px', lineHeight: 1.65 }}>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.65 }}>
                 Emergency infrastructure for the places it never reached.
               </p>
             </div>
             <div style={{ display: 'flex', gap: '64px', flexWrap: 'wrap' }}>
               <div>
-                <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Product</p>
+                <p style={{ color: 'rgba(255,255,255,0.38)', fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Product</p>
                 {[['features', 'Features'], ['log', 'How it works'], ['for-whom', "Who it's for"]].map(([id, label]) => (
                   <button key={id} onClick={() => scrollTo(id)}
-                    style={{ display: 'block', background: 'none', border: 'none', color: T2, fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                    style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
                     {label}
                   </button>
                 ))}
               </div>
               <div>
-                <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Company</p>
+                <p style={{ color: 'rgba(255,255,255,0.38)', fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Company</p>
                 <button onClick={() => scrollTo('mission')}
-                  style={{ display: 'block', background: 'none', border: 'none', color: T2, fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
                   Mission
                 </button>
-                <a href="/login" style={{ display: 'block', color: T2, fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Sign in</a>
-                <a href="/login?signup=1" style={{ display: 'block', color: T2, fontSize: '13px', textDecoration: 'none' }}>Create account</a>
+                <a href="/login" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Sign in</a>
+                <a href="/login?signup=1" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none' }}>Create account</a>
               </div>
             </div>
           </div>
-          <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <p style={{ color: T3, fontSize: '12px', fontFamily: mono }}>© {new Date().getFullYear()} Relay Arc</p>
-            <p style={{ color: T3, fontSize: '12px' }}>
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.14)', paddingTop: '22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px', fontFamily: mono }}>© {new Date().getFullYear()} Relay Arc</p>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px' }}>
               Not a substitute for emergency services. In immediate danger, call your local emergency number.
             </p>
           </div>
@@ -729,6 +740,7 @@ export default function Home() {
           .split-sticky { position: static !important; }
           .float-card { display: none !important; }
           .route-svg { display: none !important; }
+          .log-ghost { display: none !important; }
         }
         @media (max-width: 720px) {
           .desktop-nav { display: none !important; }
