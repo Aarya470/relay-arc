@@ -607,9 +607,9 @@ export default function Home() {
             {/* Medical ID card — what the profile actually looks like */}
             <div style={{ transform: 'rotate(-1.5deg)', maxWidth: '360px', justifySelf: 'center' }} className="id-card">
               <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '16px', padding: '22px 24px', boxShadow: '0 20px 60px rgba(14,18,24,0.12)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                  <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0 }}>
-                    Medical profile · show to responders
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', marginBottom: '18px' }}>
+                  <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0, flex: 1 }}>
+                    Medical profile
                   </p>
                   <div style={{ width: '18px', height: '18px', borderRadius: '5px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Heart size={9} color="white" fill="white" strokeWidth={0}/>
