@@ -108,7 +108,7 @@ export default function Donate() {
             <h2 style={{ color: T1, fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>Zelle</h2>
           </div>
           <p style={{ color: T2, fontSize: '14px', lineHeight: 1.6, marginBottom: '18px', maxWidth: '460px' }}>
-            No fees, straight from your US banking app. Open your bank\u2019s app, choose <strong style={{ color: T1 }}>Send with Zelle</strong>, and add this recipient:
+            No fees, straight from your US banking app. Open your bank's app, choose <strong style={{ color: T1 }}>Send with Zelle</strong>, and add this recipient:
           </p>
           <div style={{ display: 'flex', alignItems: 'stretch', gap: '0', maxWidth: '440px', border: `1.5px solid ${T1}` }}>
             <div style={{ flex: 1, padding: '13px 16px', minWidth: 0 }}>
