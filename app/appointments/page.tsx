@@ -305,7 +305,7 @@ export default function Appointments() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -80, opacity: 0 }}
             transition={spring}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #2563EB, #0055FF)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(0,85,255,0.30)' }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#0055FF', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
             <div>
               <p style={{ color: 'rgba(255,255,255,0.60)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
@@ -354,7 +354,7 @@ export default function Appointments() {
 
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setShowRequest(true)}
-          style={{ width: '100%', background: '#0055FF', border: 'none', borderRadius: '16px', padding: '18px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '14px', boxShadow: '0 4px 20px rgba(0,85,255,0.25)' }}>
+          style={{ width: '100%', background: '#0055FF', border: 'none', borderRadius: '16px', padding: '18px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Calendar size={20} color="white" />
           </div>
@@ -403,7 +403,7 @@ export default function Appointments() {
               )}
               {joinable && (
                 <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setActiveCall(a)}
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#0055FF', borderRadius: '12px', padding: '13px', color: 'white', fontWeight: 700, fontSize: '14px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,85,255,0.30)', marginTop: '4px' }}>
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#0055FF', borderRadius: '12px', padding: '13px', color: 'white', fontWeight: 700, fontSize: '14px', border: 'none', cursor: 'pointer', marginTop: '4px' }}>
                   <Video size={15} />
                   Join video call
                 </motion.button>

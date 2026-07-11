@@ -42,7 +42,7 @@ export default function EmergencyStatus() {
     <div style={{ minHeight: '100dvh', background: '#F4F5F7', display: 'flex', flexDirection: 'column', paddingBottom: '32px' }}>
 
       {/* Alert bar */}
-      <div style={{ background: 'linear-gradient(90deg, #CC1F1F, #D91414)', padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 20px rgba(217,20,20,0.35)', flexShrink: 0 }}>
+      <div style={{ background: '#D91414', padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <motion.div
             style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'white' }}
@@ -161,7 +161,7 @@ export default function EmergencyStatus() {
           </p>
           <motion.button
             whileTap={{ scale: 0.97 }}
-            style={{ width: '100%', background: '#D91414', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px', boxShadow: '0 4px 20px rgba(217,20,20,0.35)' }}
+            style={{ width: '100%', background: '#D91414', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}
             onClick={() => window.location.href = 'tel:911'}
           >
             <Phone size={16} />

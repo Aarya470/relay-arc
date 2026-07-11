@@ -26,7 +26,7 @@ export default function NotFound() {
           whileTap={{ scale: 0.97 }}
           transition={spring}
           onClick={() => router.push('/dashboard')}
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#0055FF', color: 'white', fontWeight: 700, fontSize: '14px', padding: '12px 20px', borderRadius: '12px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 20px rgba(0,85,255,0.30)' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#0055FF', color: 'white', fontWeight: 700, fontSize: '14px', padding: '12px 20px', borderRadius: '12px', border: 'none', cursor: 'pointer' }}
         >
           <Home size={15} />
           Go home

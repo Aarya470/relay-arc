@@ -4,20 +4,17 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { Loader2, Eye, EyeOff } from 'lucide-react'
+import { Loader2, Eye, EyeOff, Heart, ArrowRight } from 'lucide-react'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#F4F5F7'
-const SURFACE = '#FFFFFF'
 const T1      = '#0E1218'
 const T2      = '#5B6371'
 const T3      = '#9AA2AD'
 const ACCENT  = '#0055FF'
 const RED     = '#D91414'
 const BORDER  = '#E3E6EC'
-const BORDER_FOCUS = '#0055FF'
 
-const ease = { type: 'spring', stiffness: 320, damping: 30 } as const
+const mono = 'var(--font-mono, monospace)'
 
 export default function Login() {
   const [email, setEmail]           = useState('')
@@ -46,8 +43,8 @@ export default function Login() {
 
   const inputStyle = (field: string): React.CSSProperties => ({
     width: '100%',
-    background: SURFACE,
-    border: `1.5px solid ${focused === field ? BORDER_FOCUS : BORDER}`,
+    background: '#FFFFFF',
+    border: `1.5px solid ${focused === field ? T1 : BORDER}`,
     borderRadius: '10px',
     padding: '13px 16px',
     color: T1,
@@ -56,92 +53,45 @@ export default function Login() {
     transition: 'border-color 0.15s',
     boxSizing: 'border-box',
     fontFamily: 'inherit',
-    boxShadow: focused === field ? '0 0 0 3px rgba(0,85,255,0.08)' : 'none',
   })
 
   return (
-    <div style={{
-      minHeight: '100dvh',
-      background: BG,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '24px',
-    }}>
-
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={ease}
-        style={{
-          width: '100%',
-          maxWidth: '400px',
-          background: SURFACE,
-          border: `1px solid ${BORDER}`,
-          borderRadius: '20px',
-          padding: '32px 28px 28px',
-          boxShadow: '0 4px 24px rgba(14,18,24,0.08)',
-        }}
-      >
+        initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, ease: 'easeOut' }}
+        style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '88px', paddingBottom: '48px' }}>
 
-        {/* Logo */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '28px' }}>
-          <div style={{
-            width: '52px', height: '52px', borderRadius: '14px',
-            background: ACCENT,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            marginBottom: '14px',
-          }}>
-            {/* ECG pulse line */}
-            <svg width="30" height="20" viewBox="0 0 30 20" fill="none">
-              <path d="M1 10 H6 L8 4 L11 16 L14 8 L16 12 H20 L22 6 L25 14 L27 10 H30"
-                stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+        {/* Brand */}
+        <button onClick={() => router.push('/')}
+          style={{ display: 'flex', alignItems: 'center', gap: '9px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '56px' }}>
+          <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Heart size={13} color="white" fill="white" strokeWidth={0}/>
           </div>
-          <span style={{ color: T1, fontWeight: 900, fontSize: '20px', letterSpacing: '-0.6px' }}>Relay Arc</span>
-          <p style={{ color: T3, fontSize: '12px', marginTop: '3px', letterSpacing: '0.2px' }}>Cardiac emergency companion</p>
-        </div>
+          <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
+        </button>
 
         {/* Headline */}
-        <div style={{ marginBottom: '22px', textAlign: 'center' }}>
-          <AnimatePresence mode="wait">
-            <motion.h1
-              key={isSignUp ? 'signup' : 'signin'}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.16 }}
-              style={{
-                color: T1,
-                fontSize: '22px',
-                fontWeight: 800,
-                letterSpacing: '-0.6px',
-                lineHeight: 1.2,
-                marginBottom: '5px',
-              }}
-            >
-              {isSignUp ? 'Create your profile' : 'Welcome back'}
-            </motion.h1>
-          </AnimatePresence>
-          <p style={{ color: T2, fontSize: '13px', lineHeight: 1.5 }}>
-            {isSignUp
-              ? 'Your medical profile is encrypted and secure.'
-              : 'Sign in to access your dashboard.'
-            }
-          </p>
-        </div>
+        <p style={{ color: T3, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '12px' }}>
+          {isSignUp ? 'New profile' : 'Patient sign-in'}
+        </p>
+        <AnimatePresence mode="wait">
+          <motion.h1
+            key={isSignUp ? 'signup' : 'signin'}
+            initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.14 }}
+            style={{ color: T1, fontSize: '30px', fontWeight: 800, letterSpacing: '-1.1px', lineHeight: 1.1, marginBottom: '8px' }}>
+            {isSignUp ? 'Create your profile' : 'Welcome back'}<span style={{ color: RED }}>.</span>
+          </motion.h1>
+        </AnimatePresence>
+        <p style={{ color: T2, fontSize: '14px', lineHeight: 1.55, marginBottom: '36px' }}>
+          {isSignUp
+            ? 'Blood type, medications, allergies — ready before an emergency needs them.'
+            : 'Sign in to your dashboard.'}
+        </p>
 
         {/* Form */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-
-          {/* Email */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{
-              display: 'block', color: T3, fontSize: '11px', fontWeight: 600,
-              letterSpacing: '0.7px', textTransform: 'uppercase',
-              fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px',
-            }}>
+            <label style={{ display: 'block', color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
               Email
             </label>
             <input
@@ -156,13 +106,8 @@ export default function Login() {
             />
           </div>
 
-          {/* Password */}
           <div>
-            <label style={{
-              display: 'block', color: T3, fontSize: '11px', fontWeight: 600,
-              letterSpacing: '0.7px', textTransform: 'uppercase',
-              fontFamily: 'var(--font-mono, monospace)', marginBottom: '7px',
-            }}>
+            <label style={{ display: 'block', color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
               Password
             </label>
             <div style={{ position: 'relative' }}>
@@ -180,82 +125,48 @@ export default function Login() {
                 type="button"
                 tabIndex={-1}
                 onClick={() => setShowPassword(p => !p)}
-                style={{
-                  position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: T3, padding: '4px', display: 'flex',
-                }}
-              >
+                style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: T3, padding: '4px', display: 'flex' }}>
                 {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
               </button>
             </div>
             {isSignUp && password.length > 0 && password.length < 8 && (
-              <p style={{ color: RED, fontSize: '12px', marginTop: '5px', fontWeight: 500 }}>At least 8 characters required</p>
+              <p style={{ color: RED, fontSize: '12px', marginTop: '6px', fontWeight: 500 }}>At least 8 characters required</p>
             )}
           </div>
 
-          {/* CTA */}
           <motion.button
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: 0.985 }}
             onClick={handleAuth}
             disabled={loading}
             style={{
-              width: '100%',
-              background: ACCENT,
-              color: 'white',
-              fontWeight: 700,
-              fontSize: '15px',
-              borderRadius: '11px',
-              border: 'none',
+              width: '100%', background: T1, color: 'white',
+              fontWeight: 600, fontSize: '15px', borderRadius: '11px', border: 'none',
               cursor: loading ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              marginTop: '2px',
-              opacity: loading ? 0.7 : 1,
-              transition: 'opacity 0.15s',
-              height: '50px',
-              letterSpacing: '-0.1px',
-            }}
-          >
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              marginTop: '6px', opacity: loading ? 0.7 : 1, transition: 'opacity 0.15s',
+              height: '50px', fontFamily: 'inherit',
+            }}>
             {loading
               ? <Loader2 size={17} className="animate-spin"/>
-              : (isSignUp ? 'Create account' : 'Sign in')
-            }
+              : <>{isSignUp ? 'Create account' : 'Sign in'} <ArrowRight size={15}/></>}
           </motion.button>
 
-          {/* Toggle */}
-          <div style={{ textAlign: 'center' }}>
-            <button
-              onClick={() => setIsSignUp(!isSignUp)}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: T2, fontSize: '13px', fontFamily: 'inherit',
-              }}
-            >
-              {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-              <span style={{ color: ACCENT, fontWeight: 700 }}>
-                {isSignUp ? 'Sign in' : 'Sign up'}
-              </span>
-            </button>
-          </div>
+          <button
+            onClick={() => setIsSignUp(!isSignUp)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T2, fontSize: '13.5px', fontFamily: 'inherit', textAlign: 'left', padding: 0, marginTop: '4px' }}>
+            {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
+            <span style={{ color: T1, fontWeight: 700, borderBottom: `1px solid ${BORDER}`, paddingBottom: '1px' }}>
+              {isSignUp ? 'Sign in' : 'Create one'}
+            </span>
+          </button>
         </div>
 
         {/* Care team link */}
-        <div style={{
-          borderTop: `1px solid ${BORDER}`,
-          marginTop: '20px', paddingTop: '16px', textAlign: 'center',
-        }}>
+        <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '40px', paddingTop: '18px' }}>
           <button
             onClick={() => router.push('/care-team/login')}
-            style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              color: T3, fontSize: '12px',
-              fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.4px',
-            }}
-          >
-            care team portal →
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, fontSize: '12px', fontFamily: mono, letterSpacing: '0.4px', padding: 0 }}>
+            Care team portal →
           </button>
         </div>
       </motion.div>

@@ -109,8 +109,8 @@ export default function EmergencyLivePage() {
               fontWeight: 700,
               fontSize: '13px',
               background: isActive
-                ? 'linear-gradient(90deg, #CC1F1F, #D91414)'
-                : 'linear-gradient(90deg, #009965, #007A44)',
+                ? '#D91414'
+                : '#007A44',
               boxShadow: isActive
                 ? '0 4px 24px rgba(217,20,20,0.30)'
                 : '0 4px 24px rgba(0,122,68,0.22)',
@@ -269,7 +269,7 @@ export default function EmergencyLivePage() {
             fontWeight: 800,
             fontSize: '15px',
             textDecoration: 'none',
-            boxShadow: '0 6px 24px rgba(217,20,20,0.35)',
+            
             letterSpacing: '-0.2px',
           }}
         >

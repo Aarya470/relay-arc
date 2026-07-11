@@ -66,7 +66,7 @@ export default function TriagePage() {
 
       {/* Alert bar */}
       <div style={{
-        background: 'linear-gradient(90deg, #CC1A1A, #D91414)',
+        background: '#D91414',
         padding: '13px 20px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         boxShadow: '0 2px 20px rgba(217,20,20,0.30)',
@@ -288,7 +288,7 @@ export default function TriagePage() {
                 borderRadius: '16px',
                 padding: '24px',
                 marginBottom: '16px',
-                boxShadow: '0 6px 32px rgba(217,20,20,0.12)',
+                
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                   <motion.div
@@ -314,11 +314,11 @@ export default function TriagePage() {
                 transition={spring}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-                  background: 'linear-gradient(135deg, #D91414, #CC1A1A)', color: 'white',
+                  background: '#D91414', color: 'white',
                   padding: '18px', borderRadius: '12px',
                   fontWeight: 900, fontSize: '18px', letterSpacing: '-0.3px',
                   textDecoration: 'none', marginBottom: '12px',
-                  boxShadow: '0 6px 28px rgba(217,20,20,0.40)',
+                  
                 }}
               >
                 <Phone size={22} />
@@ -353,7 +353,7 @@ export default function TriagePage() {
                 borderRadius: '16px',
                 padding: '24px',
                 marginBottom: '16px',
-                boxShadow: '0 6px 32px rgba(180,83,9,0.10)',
+                
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                   <motion.div
@@ -379,11 +379,11 @@ export default function TriagePage() {
                 transition={spring}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-                  background: 'linear-gradient(135deg, #D91414, #CC1A1A)', color: 'white',
+                  background: '#D91414', color: 'white',
                   padding: '16px', borderRadius: '16px',
                   fontWeight: 800, fontSize: '16px', letterSpacing: '-0.3px',
                   textDecoration: 'none', marginBottom: '10px',
-                  boxShadow: '0 4px 20px rgba(217,20,20,0.32)',
+                  
                 }}
               >
                 <Phone size={18} />

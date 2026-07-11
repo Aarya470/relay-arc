@@ -166,7 +166,7 @@ function BriefContent() {
       {/* Red alert header */}
       <div
         className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3"
-        style={{ background: 'linear-gradient(135deg, #D91414, #CC1A1A)', boxShadow: '0 2px 20px rgba(217,20,20,0.30)' }}
+        style={{ background: '#D91414' }}
       >
         <button
           onClick={() => router.back()}

@@ -9,31 +9,18 @@ import { toast } from 'sonner'
 import BottomNav from '@/components/BottomNav'
 
 const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
+const mono = 'var(--font-mono, monospace)'
 
-function Section({ icon: Icon, color, title, children }: { icon: any, color: string, title: string, children: React.ReactNode }) {
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', overflow: 'hidden' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', borderBottom: '1px solid #E9EBF0' }}>
-        <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: `${color}1A`, border: `1px solid ${color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Icon size={14} color={color}/>
-        </div>
-        <span style={{ color: '#0E1218', fontWeight: 700, fontSize: '13px', letterSpacing: '-0.1px' }}>{title}</span>
-      </div>
-      <div style={{ padding: '14px 16px' }}>{children}</div>
-    </div>
-  )
-}
-
-function Tag({ children, color = '#ECEEF2', textColor = '#5B6371' }: { children: React.ReactNode, color?: string, textColor?: string }) {
-  return (
-    <span style={{ display: 'inline-block', background: color, color: textColor, fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '99px', marginRight: '6px', marginBottom: '6px' }}>
+    <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px', marginTop: '32px' }}>
       {children}
-    </span>
+    </p>
   )
 }
 
 function Empty({ text }: { text: string }) {
-  return <p style={{ color: '#9AA2AD', fontSize: '13px', fontStyle: 'italic' }}>{text}</p>
+  return <p style={{ color: '#9AA2AD', fontSize: '13px', padding: '14px 0' }}>{text}</p>
 }
 
 export default function MedicalProfile() {
@@ -70,8 +57,8 @@ export default function MedicalProfile() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 16px 100px' }}>
-      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '80px', borderRadius: '16px', background: '#ECEEF2', marginBottom: '10px' }}/>)}
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 20px 100px' }}>
+      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '60px', borderRadius: '12px', background: '#ECEEF2', marginBottom: '10px' }}/>)}
     </div>
   )
 
@@ -79,150 +66,154 @@ export default function MedicalProfile() {
   const contacts: any[] = profile?.emergency_contacts || []
   const conditions = profile?.diagnosis ? profile.diagnosis.split(',').map((s: string) => s.trim()).filter(Boolean) : []
   const allergies = profile?.allergies ? profile.allergies.split(',').map((s: string) => s.trim()).filter(Boolean) : []
+  const age = profile?.date_of_birth
+    ? Math.floor((Date.now() - new Date(profile.date_of_birth).getTime()) / (365.25 * 24 * 3600 * 1000))
+    : null
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '90px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid #E3E6EC' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => router.back()}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECEEF2', border: '1px solid #D5D9E0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <ArrowLeft size={15} color="#5B6371"/>
-          </motion.button>
-          <div style={{ flex: 1 }}>
-            <h1 style={{ color: '#0E1218', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Medical Profile</h1>
-            <p style={{ color: '#5B6371', fontSize: '12px' }}>Share with first responders in an emergency</p>
-          </div>
-          <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={handleShare}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0,85,255,0.15)', border: '1px solid rgba(0,85,255,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Share2 size={15} color="#0055FF"/>
-          </motion.button>
+      <div style={{ padding: '56px 20px 0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px' }}>
+          <button onClick={() => router.back()}
+            style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#9AA2AD', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+            <ArrowLeft size={14}/> Back
+          </button>
+          <button onClick={handleShare}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#0055FF', fontSize: '13px', fontWeight: 600, fontFamily: 'inherit' }}>
+            <Share2 size={13}/> Share
+          </button>
         </div>
+        <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
+          Medical profile · show to responders
+        </p>
+        <h1 style={{ color: '#0E1218', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.05 }}>
+          {profile?.full_name || '—'}
+        </h1>
+        <p style={{ color: '#5B6371', fontSize: '13px', marginTop: '8px' }}>
+          {age !== null ? `${age} years` : 'DOB not set'}
+          {profile?.date_of_birth ? ` · born ${new Date(profile.date_of_birth).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''}
+        </p>
       </div>
 
-      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }} ref={cardRef}>
+      <div style={{ padding: '0 20px' }} ref={cardRef}>
 
-        {/* Identity card */}
-        <div style={{ background: '#FFFFFF', border: '1px solid rgba(0,85,255,0.15)', borderRadius: '20px', padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(0,85,255,0.12)', border: '2px solid rgba(0,85,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <User size={22} color="#0055FF"/>
+        {/* Blood type + key facts — big numbers, no cards */}
+        <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-end', borderBottom: '1px solid #E3E6EC', padding: '28px 0 22px' }}>
+          <div>
+            <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Blood type</p>
+            <p style={{ color: '#D91414', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
+              {profile?.blood_type || '—'}
+            </p>
           </div>
           <div>
-            <p style={{ color: '#0E1218', fontWeight: 800, fontSize: '20px', letterSpacing: '-0.5px', lineHeight: 1.1 }}>{profile?.full_name || '—'}</p>
-            {profile?.date_of_birth && (
-              <p style={{ color: '#5B6371', fontSize: '12px', marginTop: '4px' }}>
-                DOB: {new Date(profile.date_of_birth).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-              </p>
-            )}
-            {profile?.blood_type && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(217,20,20,0.12)', border: '1px solid rgba(217,20,20,0.25)', borderRadius: '99px', padding: '3px 10px', marginTop: '6px' }}>
-                <Droplets size={10} color="#D91414"/>
-                <span style={{ color: '#D91414', fontSize: '12px', fontWeight: 700 }}>{profile.blood_type}</span>
-              </div>
-            )}
+            <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Allergies</p>
+            <p style={{ color: allergies.length > 0 ? '#D91414' : '#0E1218', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
+              {allergies.length}
+            </p>
+          </div>
+          <div>
+            <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Medications</p>
+            <p style={{ color: '#0E1218', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
+              {meds.length}
+            </p>
           </div>
         </div>
 
-        {/* Critical alert banner if allergies exist */}
+        {/* Allergies — critical, kept loud */}
         {allergies.length > 0 && (
-          <div style={{ background: 'rgba(217,20,20,0.08)', border: '1.5px solid rgba(217,20,20,0.25)', borderRadius: '14px', padding: '12px 14px', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <AlertTriangle size={16} color="#D91414" style={{ flexShrink: 0, marginTop: '1px' }}/>
-            <div>
-              <p style={{ color: '#D91414', fontWeight: 700, fontSize: '12px', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Allergies — Critical</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                {allergies.map((a: string, i: number) => (
-                  <Tag key={i} color="rgba(217,20,20,0.12)" textColor="#D91414">{a}</Tag>
-                ))}
-              </div>
-            </div>
+          <div style={{ borderLeft: '3px solid #D91414', paddingLeft: '14px', marginTop: '24px' }}>
+            <p style={{ color: '#D91414', fontWeight: 700, fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>
+              Critical — allergies
+            </p>
+            <p style={{ color: '#0E1218', fontSize: '16px', fontWeight: 700, letterSpacing: '-0.2px', lineHeight: 1.5 }}>
+              {allergies.join(' · ')}
+            </p>
           </div>
         )}
 
         {/* Conditions */}
-        <Section icon={Heart} color="#D91414" title="Medical conditions">
-          {conditions.length > 0
-            ? <div style={{ display: 'flex', flexWrap: 'wrap' }}>{conditions.map((c: string, i: number) => <Tag key={i}>{c}</Tag>)}</div>
-            : <Empty text="No conditions listed"/>
-          }
-        </Section>
+        <SectionLabel>Conditions</SectionLabel>
+        <div style={{ borderTop: '1px solid #E3E6EC' }}>
+          {conditions.length > 0 ? conditions.map((c: string, i: number) => (
+            <p key={i} style={{ color: '#0E1218', fontSize: '14.5px', fontWeight: 600, padding: '13px 0', borderBottom: '1px solid #E3E6EC' }}>{c}</p>
+          )) : <Empty text="No conditions listed"/>}
+        </div>
 
         {/* Medications */}
-        <Section icon={Pill} color="#007A44" title="Current medications">
-          {meds.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-              {meds.map((med: any, i: number) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: i > 0 ? '1px solid #E9EBF0' : 'none' }}>
-                  <div>
-                    <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '14px' }}>{med.name}</p>
-                    <p style={{ color: '#5B6371', fontSize: '12px', marginTop: '1px' }}>{med.frequency || ''}{med.time ? ` · ${med.time}` : ''}</p>
-                  </div>
-                  <span style={{ background: 'rgba(0,122,68,0.12)', color: '#007A44', fontSize: '12px', fontWeight: 600, padding: '3px 10px', borderRadius: '99px', flexShrink: 0 }}>{med.dose}</span>
-                </div>
-              ))}
+        <SectionLabel>Current medications</SectionLabel>
+        <div style={{ borderTop: '1px solid #E3E6EC' }}>
+          {meds.length > 0 ? meds.map((med: any, i: number) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '16px', padding: '13px 0', borderBottom: '1px solid #E3E6EC' }}>
+              <div>
+                <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '14.5px' }}>{med.name}</p>
+                {(med.frequency || med.time) && (
+                  <p style={{ color: '#9AA2AD', fontSize: '12.5px', marginTop: '2px' }}>{med.frequency || ''}{med.time ? ` · ${med.time}` : ''}</p>
+                )}
+              </div>
+              <span style={{ color: '#5B6371', fontSize: '13px', fontFamily: mono, flexShrink: 0 }}>{med.dose}</span>
             </div>
-          ) : <Empty text="No medications listed"/>}
-        </Section>
+          )) : <Empty text="No medications listed"/>}
+        </div>
 
-        {/* Additional info */}
+        {/* Care information */}
         {(profile?.surgery_date || profile?.doctor_name) && (
-          <Section icon={Shield} color="#0055FF" title="Care information">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <>
+            <SectionLabel>Care information</SectionLabel>
+            <div style={{ borderTop: '1px solid #E3E6EC' }}>
               {profile?.surgery_date && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: '#5B6371', fontSize: '13px' }}>Surgery date</span>
-                  <span style={{ color: '#0E1218', fontSize: '13px', fontWeight: 600 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '13px 0', borderBottom: '1px solid #E3E6EC' }}>
+                  <span style={{ color: '#9AA2AD', fontSize: '13px' }}>Surgery date</span>
+                  <span style={{ color: '#0E1218', fontSize: '14px', fontWeight: 600 }}>
                     {new Date(profile.surgery_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
               )}
               {profile?.doctor_name && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: '#5B6371', fontSize: '13px' }}>Primary doctor</span>
-                  <span style={{ color: '#0E1218', fontSize: '13px', fontWeight: 600 }}>{profile.doctor_name}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '13px 0', borderBottom: '1px solid #E3E6EC' }}>
+                  <span style={{ color: '#9AA2AD', fontSize: '13px' }}>Primary doctor</span>
+                  <span style={{ color: '#0E1218', fontSize: '14px', fontWeight: 600 }}>{profile.doctor_name}</span>
                 </div>
               )}
             </div>
-          </Section>
+          </>
         )}
 
         {/* Emergency contacts */}
-        <Section icon={Phone} color="#D91414" title="Emergency contacts">
-          {contacts.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-              {contacts.map((c: any, i: number) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: i > 0 ? '1px solid #E9EBF0' : 'none' }}>
-                  <div>
-                    <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '14px' }}>{c.name}</p>
-                    <p style={{ color: '#5B6371', fontSize: '12px', marginTop: '1px' }}>{c.relationship}</p>
-                  </div>
-                  <motion.a href={`tel:${c.phone}`} whileTap={{ scale: 0.96 }}
-                    style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#007A44', fontSize: '13px', fontWeight: 600, textDecoration: 'none', background: 'rgba(0,122,68,0.10)', padding: '6px 12px', borderRadius: '99px', border: '1px solid rgba(0,122,68,0.2)' }}>
-                    <Phone size={12} color="#007A44"/>
-                    {c.phone}
-                  </motion.a>
-                </div>
-              ))}
+        <SectionLabel>Emergency contacts</SectionLabel>
+        <div style={{ borderTop: '1px solid #E3E6EC', marginBottom: '36px' }}>
+          {contacts.length > 0 ? contacts.map((c: any, i: number) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '13px 0', borderBottom: '1px solid #E3E6EC' }}>
+              <div>
+                <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '14.5px' }}>{c.name}</p>
+                <p style={{ color: '#9AA2AD', fontSize: '12.5px', marginTop: '2px' }}>{c.relationship}</p>
+              </div>
+              <a href={`tel:${c.phone}`}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#007A44', fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', fontFamily: mono, flexShrink: 0 }}>
+                <Phone size={12} color="#007A44"/>
+                {c.phone}
+              </a>
             </div>
-          ) : (
-            <div>
-              <Empty text="No emergency contacts added"/>
-              <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/emergency-contacts')}
-                style={{ marginTop: '10px', background: '#ECEEF2', color: '#5B6371', fontSize: '12px', fontWeight: 600, padding: '8px 16px', borderRadius: '10px', border: '1px solid #D5D9E0', cursor: 'pointer' }}>
+          )) : (
+            <div style={{ padding: '14px 0' }}>
+              <p style={{ color: '#9AA2AD', fontSize: '13px', marginBottom: '10px' }}>No emergency contacts added</p>
+              <button onClick={() => router.push('/emergency-contacts')}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0055FF', fontSize: '13.5px', fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
                 Add contacts →
-              </motion.button>
+              </button>
             </div>
           )}
-        </Section>
+        </div>
 
-        {/* Share footer */}
+        {/* Share */}
         <motion.button whileTap={{ scale: 0.98 }} onClick={handleShare}
-          style={{ background: '#0055FF', color: 'white', fontWeight: 700, fontSize: '14px', padding: '0 20px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '52px' }}>
-          <Share2 size={16}/>
+          style={{ width: '100%', background: '#0E1218', color: 'white', fontWeight: 600, fontSize: '14.5px', padding: '0 20px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '52px', fontFamily: 'inherit' }}>
+          <Share2 size={15}/>
           Share with first responders
         </motion.button>
-        <p style={{ color: '#9AA2AD', fontSize: '11px', textAlign: 'center', lineHeight: 1.6, marginTop: '-4px' }}>
-          Share this page or copy the text summary so paramedics have your full medical history.
+        <p style={{ color: '#9AA2AD', fontSize: '11.5px', textAlign: 'center', lineHeight: 1.6, marginTop: '10px' }}>
+          Shares a plain-text summary paramedics can read on any device.
         </p>
       </div>
 

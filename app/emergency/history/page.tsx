@@ -146,7 +146,7 @@ export default function EmergencyHistoryPage() {
                 marginTop: '28px', background: '#0055FF', color: 'white',
                 fontWeight: 600, fontSize: '14px', padding: '12px 24px',
                 borderRadius: '14px', border: 'none', cursor: 'pointer',
-                boxShadow: '0 4px 20px rgba(0,85,255,0.28)',
+                
               }}
             >
               Go to dashboard

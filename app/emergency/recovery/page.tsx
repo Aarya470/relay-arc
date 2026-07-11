@@ -335,7 +335,7 @@ function RecoveryContent() {
               flex: 1, padding: '12px', borderRadius: '12px',
               background: '#0055FF', border: 'none',
               color: '#fff', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
-              boxShadow: '0 4px 20px rgba(0,85,255,0.28)',
+              
             }}
           >
             Back to dashboard

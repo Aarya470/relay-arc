@@ -100,7 +100,7 @@ export default function Onboarding() {
 
         {/* Logo row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '32px' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '9px', background: 'linear-gradient(135deg, #D91414, #CC1A1A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '9px', background: '#D91414', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
               <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="white" strokeWidth="0"/>
             </svg>
@@ -113,7 +113,7 @@ export default function Onboarding() {
           {[1, 2, 3].map(s => (
             <div key={s} style={{ height: '3px', flex: 1, borderRadius: '99px', overflow: 'hidden', background: '#E3E6EC' }}>
               <motion.div
-                style={{ height: '100%', borderRadius: '99px', background: 'linear-gradient(90deg, #0055FF, #0044CC)' }}
+                style={{ height: '100%', borderRadius: '99px', background: '#0055FF' }}
                 initial={{ width: 0 }}
                 animate={{ width: step >= s ? '100%' : '0%' }}
                 transition={{ duration: 0.3 }}
@@ -151,7 +151,7 @@ export default function Onboarding() {
                   if (!form.full_name) { toast.error('Please enter your name'); return }
                   setStep(2)
                 }}
-                style={{ width: '100%', background: 'linear-gradient(135deg, #0055FF, #0044CC)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '4px', boxShadow: '0 6px 20px rgba(0,85,255,0.35)', fontSize: '15px' }}
+                style={{ width: '100%', background: '#0055FF', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '4px', fontSize: '15px' }}
               >
                 Continue <ArrowRight size={16}/>
               </motion.button>
@@ -213,7 +213,7 @@ export default function Onboarding() {
                   if (form.diagnosis.length === 0) { toast.error('Please select at least one condition'); return }
                   setStep(3)
                 }}
-                  style={{ flex: 1, background: 'linear-gradient(135deg, #0055FF, #0044CC)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px', boxShadow: '0 6px 20px rgba(0,85,255,0.35)' }}>
+                  style={{ flex: 1, background: '#0055FF', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
                   Continue <ArrowRight size={16}/>
                 </motion.button>
               </div>
@@ -288,7 +288,7 @@ export default function Onboarding() {
                   whileTap={{ scale: 0.97 }} transition={spring}
                   onClick={handleSubmit}
                   disabled={loading}
-                  style={{ flex: 1, background: 'linear-gradient(135deg, #0055FF, #0044CC)', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: loading ? 0.7 : 1, fontSize: '15px', boxShadow: '0 6px 20px rgba(0,85,255,0.35)' }}
+                  style={{ flex: 1, background: '#0055FF', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: loading ? 0.7 : 1, fontSize: '15px' }}
                 >
                   {loading ? <Loader2 size={16} className="animate-spin"/> : <>Complete <ArrowRight size={16}/></>}
                 </motion.button>

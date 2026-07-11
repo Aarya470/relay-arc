@@ -180,7 +180,7 @@ export default function TransportRequest() {
                   transition={spring}
                   onClick={getLocation}
                   disabled={loading}
-                  style={{ width: '100%', background: 'linear-gradient(135deg, #0055FF, #0044CC)', color: 'white', fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 4px 18px rgba(0,85,255,0.40)' }}
+                  style={{ width: '100%', background: '#0055FF', color: 'white', fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                 >
                   {loading ? <Loader2 size={18} className="animate-spin"/> : <><MapPin size={16}/> Use my location</>}
                 </motion.button>
@@ -237,7 +237,7 @@ export default function TransportRequest() {
                 disabled={!selectedHospital || loading}
                 style={{
                   width: '100%',
-                  background: selectedHospital ? 'linear-gradient(135deg, #D91414, #CC1A1A)' : '#ECEEF2',
+                  background: selectedHospital ? '#D91414' : '#ECEEF2',
                   color: selectedHospital ? 'white' : '#9AA2AD',
                   fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none',
                   cursor: selectedHospital ? 'pointer' : 'not-allowed',

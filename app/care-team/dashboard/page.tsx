@@ -302,7 +302,7 @@ export default function CareTeamDashboard() {
             initial={{ y: -80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -80, opacity: 0 }}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(135deg, #111840, #2B5EE0)', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 24px rgba(0,85,255,0.4)' }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#0E1218', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
             <div>
               <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
@@ -502,7 +502,7 @@ export default function CareTeamDashboard() {
               >
                 {/* Header row */}
                 <div style={{
-                  background: 'linear-gradient(135deg, rgba(185,28,28,0.85), rgba(220,38,38,0.75))',
+                  background: '#D91414',
                   padding: '12px 16px',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 }}>

@@ -61,194 +61,110 @@ export default function HistoryPage() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 16px 100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 20px 100px' }}>
       {[1,2,3,4,5].map(i => (
-        <Skeleton key={i} style={{ height: '56px', borderRadius: '14px', background: '#ECEEF2', marginBottom: '8px' }}/>
+        <Skeleton key={i} style={{ height: '48px', borderRadius: '10px', background: '#ECEEF2', marginBottom: '8px' }}/>
       ))}
     </div>
   )
 
   const checkinGroups = groupByDate(checkins)
   const emergencyGroups = groupByDate(emergencies)
+  const mono = 'var(--font-mono, monospace)'
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '100px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
-      <div style={{
-        padding: '56px 20px 16px',
-        borderBottom: '1px solid #E3E6EC',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            transition={spring}
-            onClick={() => router.push('/dashboard')}
-            style={{
-              width: '36px', height: '36px', borderRadius: '10px',
-              background: '#ECEEF2', border: '1px solid #D5D9E0',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >
-            <ArrowLeft size={15} color="#5B6371"/>
-          </motion.button>
-          <div>
-            <h1 style={{ color: '#0E1218', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Health History</h1>
-            <p style={{ color: '#9AA2AD', fontSize: '12px' }}>Your check-ins and emergencies</p>
-          </div>
-        </div>
+      <div style={{ padding: '56px 20px 0' }}>
+        <button onClick={() => router.push('/dashboard')}
+          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#9AA2AD', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+          <ArrowLeft size={14}/> Dashboard
+        </button>
+        <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Health history</p>
+        <h1 style={{ color: '#0E1218', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, marginBottom: '24px' }}>
+          Your record
+        </h1>
 
-        {/* Tabs */}
-        <div style={{
-          display: 'flex', gap: '6px',
-          background: '#ECEEF2',
-          borderRadius: '14px', padding: '4px',
-        }}>
-          {([['checkins', 'Check-ins', Heart, checkins.length], ['emergencies', 'Emergencies', AlertTriangle, emergencies.length]] as const).map(([key, label, Icon, count]) => (
-            <motion.button
+        {/* Tabs — text + underline */}
+        <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #E3E6EC' }}>
+          {([['checkins', 'Check-ins', checkins.length], ['emergencies', 'Emergencies', emergencies.length]] as const).map(([key, label, count]) => (
+            <button
               key={key}
-              whileTap={{ scale: 0.97 }}
               onClick={() => setTab(key)}
               style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                padding: '9px', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                background: tab === key ? '#FFFFFF' : 'transparent',
-                boxShadow: tab === key ? '0 1px 4px rgba(14,18,24,0.10)' : 'none',
-                transition: 'background 0.15s ease, box-shadow 0.15s ease',
+                display: 'flex', alignItems: 'baseline', gap: '7px',
+                padding: '0 2px 12px', border: 'none', background: 'none', cursor: 'pointer',
+                borderBottom: tab === key ? '2px solid #0E1218' : '2px solid transparent',
+                marginBottom: '-1px', fontFamily: 'inherit',
               }}
             >
-              <Icon size={13} color={tab === key ? '#0E1218' : '#9AA2AD'}/>
-              <span style={{
-                color: tab === key ? '#0E1218' : '#9AA2AD',
-                fontSize: '13px',
-                fontWeight: tab === key ? 700 : 500,
-              }}>
+              <span style={{ color: tab === key ? '#0E1218' : '#9AA2AD', fontSize: '14px', fontWeight: tab === key ? 700 : 500 }}>
                 {label}
               </span>
-              <span style={{
-                background: tab === key
-                  ? (key === 'emergencies' ? 'rgba(217,20,20,0.12)' : 'rgba(0,122,68,0.12)')
-                  : 'transparent',
-                color: tab === key
-                  ? (key === 'emergencies' ? '#D91414' : '#007A44')
-                  : '#9AA2AD',
-                fontSize: '10px', fontWeight: 700,
-                padding: '2px 6px', borderRadius: '99px',
-                fontFamily: 'monospace',
-              }}>
+              <span style={{ color: tab === key ? (key === 'emergencies' ? '#D91414' : '#007A44') : '#C2C7D0', fontSize: '12px', fontFamily: mono, fontWeight: 700 }}>
                 {count}
               </span>
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>
 
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: '20px' }}>
         <AnimatePresence mode="wait">
           {tab === 'checkins' && (
-            <motion.div key="checkins" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 8 }}>
+            <motion.div key="checkins" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               {checkins.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '56px 0' }}>
-                  <div style={{
-                    width: '48px', height: '48px', borderRadius: '50%',
-                    background: 'rgba(0,122,68,0.10)', border: '1px solid rgba(0,122,68,0.18)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    margin: '0 auto 12px',
-                  }}>
-                    <Heart size={20} color="rgba(0,122,68,0.60)"/>
-                  </div>
-                  <p style={{ color: '#9AA2AD', fontSize: '14px' }}>No check-ins yet</p>
-                  <motion.button
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => router.push('/checkin')}
-                    style={{
-                      marginTop: '12px',
-                      background: 'rgba(0,122,68,0.10)', border: '1px solid rgba(0,122,68,0.24)',
-                      color: '#007A44', fontSize: '13px', fontWeight: 700,
-                      padding: '10px 20px', borderRadius: '12px', cursor: 'pointer',
-                    }}
-                  >
-                    Start a check-in
-                  </motion.button>
+                <div style={{ padding: '48px 0' }}>
+                  <p style={{ color: '#9AA2AD', fontSize: '14px', marginBottom: '10px' }}>No check-ins yet.</p>
+                  <button onClick={() => router.push('/checkin')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#007A44', fontSize: '14px', fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
+                    Start your first check-in →
+                  </button>
                 </div>
               ) : (
                 Object.entries(checkinGroups).map(([date, items]) => (
-                  <div key={date} style={{ marginBottom: '20px' }}>
-                    {/* Date chip */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                      <Calendar size={12} color="#9AA2AD"/>
-                      <p style={{
-                        color: '#9AA2AD', fontSize: '11px',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        textTransform: 'uppercase', letterSpacing: '1px',
-                      }}>
-                        {date}
-                      </p>
+                  <div key={date} style={{ marginBottom: '28px' }}>
+                    <p style={{ color: '#9AA2AD', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
+                      {date}
+                    </p>
+                    <div style={{ borderTop: '1px solid #E3E6EC' }}>
+                      {(items as Checkin[]).map((c: Checkin) => (
+                        <div key={c.id} style={{ borderBottom: '1px solid #E3E6EC' }}>
+                          <button
+                            onClick={() => setExpanded(expanded === c.id ? null : c.id)}
+                            style={{ width: '100%', padding: '13px 0', display: 'flex', alignItems: 'center', gap: '16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
+                          >
+                            <span style={{ color: '#0E1218', fontSize: '13px', fontFamily: mono, fontWeight: 700, flexShrink: 0, width: '72px' }}>
+                              {parseTS(c.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                            </span>
+                            <span style={{ flex: 1, color: '#5B6371', fontSize: '13.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {c.summary?.split('\n')[0] || 'Check-in'}
+                            </span>
+                            <motion.span animate={{ rotate: expanded === c.id ? 180 : 0 }} transition={{ duration: 0.15 }} style={{ display: 'flex', flexShrink: 0 }}>
+                              <ChevronDown size={13} color="#C2C7D0"/>
+                            </motion.span>
+                          </button>
+                          <AnimatePresence>
+                            {expanded === c.id && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.18 }}
+                                style={{ overflow: 'hidden' }}
+                              >
+                                <div style={{ borderLeft: '2px solid #E3E6EC', paddingLeft: '14px', margin: '2px 0 16px 88px' }} className="history-expand">
+                                  <p style={{ color: '#5B6371', fontSize: '13px', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
+                                    {c.summary}
+                                  </p>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      ))}
                     </div>
-                    {(items as Checkin[]).map((c: Checkin) => (
-                      <motion.div
-                        key={c.id}
-                        initial={{ opacity: 0, y: 4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        style={{
-                          background: '#FFFFFF',
-                          border: '1px solid #E3E6EC',
-                          borderRadius: '16px', marginBottom: '8px', overflow: 'hidden',
-                        }}
-                      >
-                        <motion.button
-                          whileTap={{ scale: 0.99 }}
-                          onClick={() => setExpanded(expanded === c.id ? null : c.id)}
-                          style={{
-                            width: '100%', padding: '14px 16px',
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{
-                              width: '32px', height: '32px', borderRadius: '10px',
-                              background: 'rgba(0,122,68,0.10)', border: '1px solid rgba(0,122,68,0.18)',
-                              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                            }}>
-                              <Heart size={14} color="#007A44"/>
-                            </div>
-                            <div>
-                              <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '13px' }}>Check-in</p>
-                              <p style={{
-                                color: '#9AA2AD', fontSize: '11px',
-                                fontFamily: 'var(--font-mono, monospace)',
-                              }}>
-                                {parseTS(c.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                              </p>
-                            </div>
-                          </div>
-                          <motion.div animate={{ rotate: expanded === c.id ? 180 : 0 }} transition={{ duration: 0.18 }}>
-                            <ChevronDown size={14} color="#9AA2AD"/>
-                          </motion.div>
-                        </motion.button>
-                        <AnimatePresence>
-                          {expanded === c.id && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                              style={{ overflow: 'hidden' }}
-                            >
-                              <div style={{
-                                padding: '12px 16px 16px',
-                                borderTop: '1px solid #E3E6EC',
-                              }}>
-                                <p style={{ color: '#5B6371', fontSize: '13px', lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>
-                                  {c.summary}
-                                </p>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </motion.div>
-                    ))}
                   </div>
                 ))
               )}
@@ -256,69 +172,38 @@ export default function HistoryPage() {
           )}
 
           {tab === 'emergencies' && (
-            <motion.div key="emergencies" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }}>
+            <motion.div key="emergencies" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               {emergencies.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '56px 0' }}>
-                  <p style={{ color: '#9AA2AD', fontSize: '14px' }}>No emergency events</p>
+                <div style={{ padding: '48px 0' }}>
+                  <p style={{ color: '#9AA2AD', fontSize: '14px' }}>No emergency events. Good.</p>
                 </div>
               ) : (
                 Object.entries(emergencyGroups).map(([date, items]) => (
-                  <div key={date} style={{ marginBottom: '20px' }}>
-                    {/* Date chip */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                      <Calendar size={12} color="#9AA2AD"/>
-                      <p style={{
-                        color: '#9AA2AD', fontSize: '11px',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        textTransform: 'uppercase', letterSpacing: '1px',
-                      }}>
-                        {date}
-                      </p>
-                    </div>
-                    {(items as Emergency[]).map((e: Emergency) => (
-                      <div
-                        key={e.id}
-                        style={{
-                          background: e.status === 'active' ? 'rgba(217,20,20,0.06)' : '#FFFFFF',
-                          border: `1px solid ${e.status === 'active' ? 'rgba(217,20,20,0.22)' : '#ECEEF2'}`,
-                          borderRadius: '16px', padding: '14px 16px', marginBottom: '8px',
-                          display: 'flex', alignItems: 'center', gap: '12px',
-                          boxShadow: e.status === 'active' ? '0 2px 16px rgba(217,20,20,0.08)' : 'none',
-                        }}
-                      >
-                        <div style={{
-                          width: '32px', height: '32px', borderRadius: '10px',
-                          background: e.status === 'resolved' ? '#ECEEF2' : 'rgba(217,20,20,0.12)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                        }}>
-                          <AlertTriangle size={14} color={e.status === 'resolved' ? '#9AA2AD' : '#D91414'}/>
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '13px' }}>
-                            {EMERGENCY_LABELS[e.emergency_type] || e.emergency_type}
-                          </p>
-                          <p style={{
-                            color: '#9AA2AD', fontSize: '11px',
-                            fontFamily: 'var(--font-mono, monospace)',
-                          }}>
+                  <div key={date} style={{ marginBottom: '28px' }}>
+                    <p style={{ color: '#9AA2AD', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
+                      {date}
+                    </p>
+                    <div style={{ borderTop: '1px solid #E3E6EC' }}>
+                      {(items as Emergency[]).map((e: Emergency) => (
+                        <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '13px 0', borderBottom: '1px solid #E3E6EC' }}>
+                          <span style={{ color: '#0E1218', fontSize: '13px', fontFamily: mono, fontWeight: 700, flexShrink: 0, width: '72px' }}>
                             {parseTS(e.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                          </p>
+                          </span>
+                          <span style={{ flex: 1, color: '#0E1218', fontSize: '13.5px', fontWeight: 600 }}>
+                            {EMERGENCY_LABELS[e.emergency_type] || e.emergency_type}
+                          </span>
+                          <span style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '6px',
+                            color: e.status === 'resolved' ? '#007A44' : '#D91414',
+                            fontSize: '10px', fontFamily: mono, fontWeight: 700,
+                            letterSpacing: '1px', textTransform: 'uppercase' as const, flexShrink: 0,
+                          }}>
+                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: e.status === 'resolved' ? '#007A44' : '#D91414' }}/>
+                            {e.status}
+                          </span>
                         </div>
-                        {/* Event type badge */}
-                        <span style={{
-                          fontSize: '9px', fontFamily: 'monospace', fontWeight: 700,
-                          letterSpacing: '0.5px', textTransform: 'uppercase' as const,
-                          padding: '3px 8px', borderRadius: '99px',
-                          background: e.status === 'resolved'
-                            ? 'rgba(0,122,68,0.12)'
-                            : 'rgba(217,20,20,0.12)',
-                          color: e.status === 'resolved' ? '#007A44' : '#D91414',
-                          border: `1px solid ${e.status === 'resolved' ? 'rgba(0,122,68,0.20)' : 'rgba(217,20,20,0.22)'}`,
-                        }}>
-                          {e.status}
-                        </span>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 ))
               )}
@@ -326,6 +211,12 @@ export default function HistoryPage() {
           )}
         </AnimatePresence>
       </div>
+
+      <style>{`
+        @media (max-width: 480px) {
+          .history-expand { margin-left: 0 !important; }
+        }
+      `}</style>
 
       <BottomNav/>
     </div>

@@ -93,7 +93,7 @@ Write a structured summary with: patient overview, symptom patterns, medication 
         {/* Generate / Summary */}
         {!summary ? (
           <motion.button whileTap={{ scale: 0.97 }} onClick={generateSummary} disabled={generating}
-            style={{ background: 'linear-gradient(135deg, rgba(180,83,9,0.12), rgba(180,83,9,0.06))', border: '1px solid rgba(180,83,9,0.22)', color: '#B45309', fontWeight: 700, fontSize: '15px', padding: '20px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 6px 24px rgba(180,83,9,0.1)' }}>
+            style={{ background: 'rgba(180,83,9,0.08)', border: '1px solid rgba(180,83,9,0.22)', color: '#B45309', fontWeight: 700, fontSize: '15px', padding: '20px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             {generating
               ? <><RefreshCw size={16} className="animate-spin"/> Generating...</>
               : <><Sparkles size={16}/> Generate AI Summary</>
