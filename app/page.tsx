@@ -47,6 +47,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
         transition: 'background 0.2s ease, border-color 0.2s ease',
         padding: '0 24px',
       }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: T1 }}/>
         <div style={{ maxWidth: '1120px', margin: '0 auto', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
             <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -70,7 +71,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
               Sign in
             </button>
             <button onClick={onGetStarted}
-              style={{ background: T1, color: 'white', fontSize: '13.5px', fontWeight: 600, padding: '9px 18px', borderRadius: '10px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
+              style={{ background: T1, color: 'white', fontSize: '13.5px', fontWeight: 600, padding: '9px 18px', borderRadius: '0px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
               Get started
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
@@ -200,8 +201,8 @@ function PhoneMockup() {
       {/* floating detail cards — outside the screen, clipping only the bezel */}
       <div className="float-card" style={{
         position: 'absolute', top: '52px', right: '-128px', zIndex: 6,
-        background: 'white', border: `1px solid ${BORDER}`, borderRadius: '12px',
-        padding: '10px 13px', boxShadow: '0 10px 32px rgba(14,18,24,0.10)',
+        background: 'white', border: `1px solid ${T1}`, borderRadius: '0px',
+        padding: '10px 13px', boxShadow: '6px 6px 0 #E9EBF0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '176px',
       }}>
         <FileText size={13} color={GREEN} style={{ marginTop: '1px', flexShrink: 0 }}/>
@@ -213,8 +214,8 @@ function PhoneMockup() {
 
       <div className="float-card" style={{
         position: 'absolute', bottom: '38px', left: '-136px', zIndex: 6,
-        background: 'white', border: `1px solid ${BORDER}`, borderRadius: '12px',
-        padding: '10px 13px', boxShadow: '0 10px 32px rgba(14,18,24,0.10)',
+        background: 'white', border: `1px solid ${T1}`, borderRadius: '0px',
+        padding: '10px 13px', boxShadow: '6px 6px 0 #E9EBF0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '172px',
       }}>
         <MapPin size={13} color={ACCENT} style={{ marginTop: '1px', flexShrink: 0 }}/>
@@ -299,7 +300,7 @@ function EmergencyRace() {
         ))}
       </div>
       <div style={{ marginTop: '18px' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: status.bg, borderRadius: '99px', padding: '6px 13px' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: status.bg, borderRadius: '0px', padding: '6px 12px' }}>
           <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: status.color, animation: status.label === 'Still en route' || status.label === 'SOS active' ? 'dot-blink 1.1s infinite' : 'none' }}/>
           <span style={{ color: status.color, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase' }}>{status.label}</span>
         </span>
@@ -309,7 +310,7 @@ function EmergencyRace() {
 
   return (
     <div>
-      <div style={{ background: T1, borderRadius: '20px', overflow: 'hidden' }}>
+      <div style={{ background: T1, borderRadius: '0px', overflow: 'hidden' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <span style={{ color: 'rgba(255,255,255,0.5)', fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase' }}>Two families · same chest pain · 19:42 on a Tuesday</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0 }}>
@@ -397,68 +398,76 @@ export default function Home() {
       <NavBar onSignIn={() => router.push('/login')} onGetStarted={() => router.push('/login?signup=1')}/>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section style={{ padding: '138px 24px 0' }}>
+      <section style={{ padding: '128px 24px 0' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }}
-            style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }}>
 
-            <div style={{ paddingBottom: '90px' }} className="hero-copy">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
-                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: RED, display: 'inline-block', animation: 'dot-blink 1.6s ease-in-out infinite' }}/>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ width: '7px', height: '7px', background: RED, display: 'inline-block', animation: 'dot-blink 1.6s ease-in-out infinite' }}/>
                 <span style={{ color: T2, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }}>
                   19.0760° N, 72.8777° E — Mumbai · cardiac response
                 </span>
               </div>
-
-              <h1 style={{ color: T1, fontSize: 'clamp(40px, 5.8vw, 62px)', fontWeight: 800, lineHeight: 1.03, letterSpacing: '-2.4px', marginBottom: '24px', maxWidth: '600px' }}>
-                When every minute<br/>is the margin<span style={{ color: RED }}>.</span>
-              </h1>
-
-              <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
-                Relay detects the crisis, matches the right hospital for your condition, sends your medical profile ahead, and navigates your family there — all in under a minute.
-              </p>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '32px' }}>
-                <button onClick={() => router.push('/login?signup=1')}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '14px 26px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  Create your free profile <ArrowRight size={15}/>
-                </button>
-                <button onClick={() => scrollTo('log')}
-                  style={{ background: 'none', border: 'none', color: T2, fontWeight: 600, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `1px solid ${BORDER}`, paddingBottom: '2px' }}>
-                  Watch one emergency, timed
-                </button>
-              </div>
-
-              <p style={{ color: T3, fontSize: '13px' }}>
-                Free for patients — installs from the browser, no app store.
-              </p>
+              <span style={{ color: T3, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }} className="desktop-only">
+                SOS → hospital briefed: under 60s
+              </span>
             </div>
 
-            <div style={{ position: 'relative', zIndex: 5, marginBottom: '-64px' }} className="phone-col">
-              <PhoneMockup/>
+            <h1 style={{ color: T1, fontSize: 'clamp(44px, 8.6vw, 104px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.045em', marginBottom: '40px', maxWidth: '980px' }}>
+              When every minute<br/>is the margin<span style={{ color: RED }}>.</span>
+            </h1>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
+              <div style={{ paddingBottom: '90px', paddingTop: '8px' }} className="hero-copy">
+                <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
+                  Relay detects the crisis, matches the right hospital for your condition, sends your medical profile ahead, and navigates your family there — all in under a minute.
+                </p>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '32px' }}>
+                  <button onClick={() => router.push('/login?signup=1')}
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '14px 28px', borderRadius: '0px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                    Create your free profile <span style={{ fontFamily: mono }}>→</span>
+                  </button>
+                  <button onClick={() => scrollTo('log')}
+                    style={{ background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${T1}`, paddingBottom: '2px' }}>
+                    Watch one emergency, timed
+                  </button>
+                </div>
+
+                <p style={{ color: T3, fontSize: '13px' }}>
+                  Free for patients — installs from the browser, no app store.
+                </p>
+              </div>
+
+              <div style={{ position: 'relative', zIndex: 5, marginBottom: '-64px', marginTop: '-120px' }} className="phone-col">
+                <PhoneMockup/>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* ── TELEMETRY TICKER ─────────────────────────────────────────── */}
-      <div style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, background: BG2, overflow: 'hidden', padding: '13px 0', position: 'relative' }}>
+      <div style={{ borderTop: `2px solid ${T1}`, borderBottom: `1px solid ${T1}`, background: '#FFFFFF', overflow: 'hidden', padding: '13px 0', position: 'relative' }}>
         <div className="ticker-track">
           <Ticker/><Ticker/>
         </div>
       </div>
 
       {/* ── DISPATCH LOG ─────────────────────────────────────────────── */}
-      <section id="log" style={{ padding: '110px 24px' }}>
+      <section id="log" style={{ padding: '96px 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>01 / How it works</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>RE·ACT — RE·ROUTE — RE·COVER</span>
+          </div>
           <div style={{ marginBottom: '84px' }}>
             <EmergencyRace/>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
             <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
-              <p style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '16px' }}>How it works</p>
-              <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '16px' }}>
+              <h2 style={{ color: T1, fontSize: 'clamp(32px, 4.6vw, 56px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
                 One emergency,<br/>timed.
               </h2>
               <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65, marginBottom: '18px' }}>
@@ -481,7 +490,7 @@ export default function Home() {
                     <p style={{ color: T3, fontFamily: mono, fontSize: '11px', marginTop: '3px' }}>{e.d}</p>
                   </div>
                   <div style={{ position: 'relative', paddingLeft: '30px' }}>
-                    <span style={{ position: 'absolute', left: '-4.5px', top: '5px', width: '9px', height: '9px', borderRadius: '50%', background: e.color, boxShadow: `0 0 0 4px ${e.color}1A` }} className="log-dot"/>
+                    <span style={{ position: 'absolute', left: '-4.5px', top: '5px', width: '8px', height: '8px', background: e.color }} className="log-dot"/>
                     <h3 style={{ color: T1, fontSize: '16.5px', fontWeight: 700, letterSpacing: '-0.3px', marginBottom: '7px' }}>{e.title}</h3>
                     <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65, maxWidth: '440px' }}>{e.body}</p>
                   </div>
@@ -498,12 +507,15 @@ export default function Home() {
       </section>
 
       {/* ── FEATURES ─────────────────────────────────────────────────── */}
-      <section id="features" style={{ padding: '100px 24px', borderTop: `1px solid ${BORDER}` }}>
+      <section id="features" style={{ padding: '0 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / Features</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>8 systems, one arc</span>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
             <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
-              <p style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '16px' }}>Features</p>
-              <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '16px' }}>
+              <h2 style={{ color: T1, fontSize: 'clamp(32px, 4.6vw, 56px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
                 The whole arc<br/>of care.
               </h2>
               <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65 }}>
@@ -526,8 +538,8 @@ export default function Home() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 48px' }} className="features-items">
               {features.map((f, i) => (
                 <div key={i} style={{ borderTop: `1px solid ${BORDER}`, padding: '20px 0 24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                    <f.Icon size={15} color={f.color} strokeWidth={2}/>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '8px' }}>
+                    <span style={{ color: f.color, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
                     <h3 style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px' }}>{f.title}</h3>
                   </div>
                   <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.6 }}>{f.body}</p>
@@ -539,12 +551,15 @@ export default function Home() {
       </section>
 
       {/* ── MISSION — the one dark moment ────────────────────────────── */}
-      <section id="mission" style={{ background: T1, padding: '110px 24px' }}>
+      <section id="mission" style={{ background: T1, padding: '96px 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ borderTop: '3px solid #FFFFFF', paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <span style={{ color: '#FFFFFF', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Mission</span>
+            <span style={{ color: 'rgba(255,255,255,0.45)', fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Relay, not revive</span>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
             <div>
-              <p style={{ color: '#FF6B5E', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '18px' }}>Mission</p>
-              <h2 style={{ color: 'white', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1.8px', lineHeight: 1.05 }}>
+              <h2 style={{ color: 'white', fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98 }}>
                 Relay,<br/>not Revive<span style={{ color: '#FF6B5E' }}>.</span>
               </h2>
             </div>
@@ -567,9 +582,12 @@ export default function Home() {
       </section>
 
       {/* ── WHO IT'S FOR ─────────────────────────────────────────────── */}
-      <section id="for-whom" style={{ padding: '100px 24px' }}>
+      <section id="for-whom" style={{ padding: '96px 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '48px', maxWidth: '480px' }}>
+          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px' }}>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>04 / Who it's for</span>
+          </div>
+          <h2 style={{ color: T1, fontSize: 'clamp(32px, 4.6vw, 56px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '48px', maxWidth: '560px' }}>
             Built for everyone<br/>in the room.
           </h2>
 
@@ -577,7 +595,7 @@ export default function Home() {
             {audiences.map((a, i) => (
               <div key={i} style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '32px', padding: '26px 0', borderTop: `1px solid ${BORDER}`, alignItems: 'baseline' }} className="who-row">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: a.color, flexShrink: 0 }}/>
+                  <span style={{ width: '8px', height: '8px', background: a.color, flexShrink: 0 }}/>
                   <p style={{ color: T1, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.2px' }}>{a.title}</p>
                 </div>
                 <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.65, maxWidth: '620px' }}>{a.body}</p>
@@ -588,25 +606,25 @@ export default function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section style={{ padding: '100px 24px', borderTop: `1px solid ${BORDER}`, background: BG2, overflow: 'hidden' }}>
+      <section style={{ padding: '96px 24px 110px', borderTop: `3px solid ${T1}`, background: '#FFFFFF', overflow: 'hidden' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '64px', alignItems: 'center' }} className="cta-grid">
             <div>
-              <h2 style={{ color: T1, fontSize: 'clamp(30px, 5vw, 46px)', fontWeight: 800, letterSpacing: '-1.8px', lineHeight: 1.08, marginBottom: '16px' }}>
+              <h2 style={{ color: T1, fontSize: 'clamp(34px, 5vw, 58px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
                 Your profile could<br/>save your life<span style={{ color: RED }}>.</span>
               </h2>
               <p style={{ color: T2, fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
                 Blood type, allergies, medications — ready for paramedics in seconds. No unlocking required.
               </p>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', padding: '15px 30px', borderRadius: '12px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', padding: '15px 32px', borderRadius: '0px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
                 Set up your profile — it’s free <ArrowRight size={15}/>
               </button>
             </div>
 
             {/* Medical ID card — what the profile actually looks like */}
             <div style={{ transform: 'rotate(-1.5deg)', maxWidth: '360px', justifySelf: 'center' }} className="id-card">
-              <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '16px', padding: '22px 24px', boxShadow: '0 20px 60px rgba(14,18,24,0.12)' }}>
+              <div style={{ background: 'white', border: `1.5px solid ${T1}`, borderRadius: '2px', padding: '22px 24px', boxShadow: '10px 10px 0 #E9EBF0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', marginBottom: '18px' }}>
                   <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0, flex: 1 }}>
                     Medical profile
@@ -642,7 +660,7 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ───────────────────────────────────────────────────── */}
-      <footer style={{ borderTop: `1px solid ${BORDER}`, padding: '52px 24px 36px', background: 'white' }}>
+      <footer style={{ borderTop: `3px solid ${T1}`, padding: '52px 24px 36px', background: 'white' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap', marginBottom: '44px' }}>
             <div style={{ maxWidth: '300px' }}>
@@ -706,7 +724,7 @@ export default function Home() {
         @media (max-width: 960px) {
           .hero-grid { grid-template-columns: 1fr !important; gap: 56px !important; }
           .hero-copy { padding-bottom: 0 !important; }
-          .phone-col { margin-bottom: 40px !important; }
+          .phone-col { margin-bottom: 40px !important; margin-top: 0 !important; }
           .split-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .split-sticky { position: static !important; }
           .float-card { display: none !important; }
