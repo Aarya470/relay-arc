@@ -357,13 +357,13 @@ export default function Home() {
 
   const features = [
     { Icon: Activity,     color: ACCENT, title: 'AI emergency detection',    body: 'Plain-language triage that starts routing instantly, without forms or phone trees.' },
-    { Icon: Route,        color: ACCENT, title: 'Condition-matched routing', body: 'A cath lab for a heart attack — not just the closest ER. GPS navigation included.' },
+    { Icon: Route,        color: ACCENT, title: 'Condition-matched routing', body: 'A cath lab for a heart attack, a stroke unit for a stroke — not just whatever is closest. Turn-by-turn navigation for whoever is driving.' },
     { Icon: FileText,     color: RED,    title: 'ER handoff brief',          body: 'One tap generates a clinical intake note: blood type, allergies, meds, chief complaint.' },
     { Icon: TrendingDown, color: AMBER,  title: 'Crash-risk prediction',     body: 'Your last seven check-ins, scanned for the pattern that tends to precede a bad day.' },
     { Icon: Heart,        color: GREEN,  title: 'Daily check-ins',           body: 'A two-minute conversation each morning that quietly builds a clinical record.' },
-    { Icon: Pill,         color: GREEN,  title: 'Medication tracking',       body: 'Doses, reminders, and a list the ER sees without anyone having to remember it.' },
+    { Icon: Pill,         color: GREEN,  title: 'Medication tracking',       body: 'Doses, reminders, a list the ER sees automatically.' },
     { Icon: Video,        color: ACCENT, title: 'Care-team dashboard',       body: 'Nurses see every patient’s history, vitals and flags — and can schedule video calls.' },
-    { Icon: Users,        color: AMBER,  title: 'Caregiver live view',       body: 'Share a link; your family watches the emergency unfold and resolve in real time.' },
+    { Icon: Users,        color: AMBER,  title: 'Caregiver live view',       body: 'Share a link. Your family sees everything, live.' },
   ]
 
   const audiences = [
@@ -431,7 +431,7 @@ export default function Home() {
               </div>
 
               <p style={{ color: T3, fontSize: '13px' }}>
-                Free for patients · Installs from the browser · No app store needed
+                Free for patients — installs from the browser, no app store.
               </p>
             </div>
 
@@ -459,7 +459,7 @@ export default function Home() {
             <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
               <p style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '16px' }}>How it works</p>
               <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '16px' }}>
-                One emergency,<br/>timed<span style={{ color: RED }}>.</span>
+                One emergency,<br/>timed.
               </h2>
               <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65, marginBottom: '18px' }}>
                 An emergency is not the moment to figure things out. Relay already has. Here is a Tuesday evening, minute by minute.
@@ -504,11 +504,23 @@ export default function Home() {
             <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
               <p style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '16px' }}>Features</p>
               <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '16px' }}>
-                The whole arc<br/>of care<span style={{ color: RED }}>.</span>
+                The whole arc<br/>of care.
               </h2>
               <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65 }}>
                 From the first warning sign to the last week of recovery — not just the 911 call.
               </p>
+
+              <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '28px', paddingTop: '18px' }}>
+                <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '12px' }}>
+                  Shipped — stage 2
+                </p>
+                {['crash-risk prediction', 'severity triage', 'caregiver live view', 'er handoff brief', 'recovery protocol'].map((item, i) => (
+                  <p key={i} style={{ color: T2, fontFamily: mono, fontSize: '12px', lineHeight: 2, margin: 0 }}>
+                    <span style={{ color: GREEN, marginRight: '10px' }}>+</span>{item}
+                  </p>
+                ))}
+                <p style={{ color: T3, fontFamily: mono, fontSize: '11px', marginTop: '12px' }}>stage 3 — in the works</p>
+              </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 48px' }} className="features-items">
@@ -558,7 +570,7 @@ export default function Home() {
       <section id="for-whom" style={{ padding: '100px 24px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <h2 style={{ color: T1, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-1.6px', lineHeight: 1.08, marginBottom: '48px', maxWidth: '480px' }}>
-            Built for everyone<br/>in the room<span style={{ color: RED }}>.</span>
+            Built for everyone<br/>in the room.
           </h2>
 
           <div>
@@ -576,18 +588,56 @@ export default function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section style={{ padding: '110px 24px', borderTop: `1px solid ${BORDER}`, background: BG2 }}>
-        <div style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ color: T1, fontSize: 'clamp(30px, 5vw, 46px)', fontWeight: 800, letterSpacing: '-1.8px', lineHeight: 1.08, marginBottom: '16px' }}>
-            Your profile could<br/>save your life<span style={{ color: RED }}>.</span>
-          </h2>
-          <p style={{ color: T2, fontSize: '16px', lineHeight: 1.65, marginBottom: '34px', maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto' }}>
-            Blood type, allergies, medications — ready for paramedics in seconds. No unlocking required.
-          </p>
-          <button onClick={() => router.push('/login?signup=1')}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', padding: '15px 30px', borderRadius: '12px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-            Set up your profile — it’s free <ArrowRight size={15}/>
-          </button>
+      <section style={{ padding: '100px 24px', borderTop: `1px solid ${BORDER}`, background: BG2, overflow: 'hidden' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '64px', alignItems: 'center' }} className="cta-grid">
+            <div>
+              <h2 style={{ color: T1, fontSize: 'clamp(30px, 5vw, 46px)', fontWeight: 800, letterSpacing: '-1.8px', lineHeight: 1.08, marginBottom: '16px' }}>
+                Your profile could<br/>save your life<span style={{ color: RED }}>.</span>
+              </h2>
+              <p style={{ color: T2, fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
+                Blood type, allergies, medications — ready for paramedics in seconds. No unlocking required.
+              </p>
+              <button onClick={() => router.push('/login?signup=1')}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', padding: '15px 30px', borderRadius: '12px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                Set up your profile — it’s free <ArrowRight size={15}/>
+              </button>
+            </div>
+
+            {/* Medical ID card — what the profile actually looks like */}
+            <div style={{ transform: 'rotate(-1.5deg)', maxWidth: '360px', justifySelf: 'center' }} className="id-card">
+              <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '16px', padding: '22px 24px', boxShadow: '0 20px 60px rgba(14,18,24,0.12)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                  <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0 }}>
+                    Medical profile · show to responders
+                  </p>
+                  <div style={{ width: '18px', height: '18px', borderRadius: '5px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Heart size={9} color="white" fill="white" strokeWidth={0}/>
+                  </div>
+                </div>
+                <p style={{ color: T1, fontSize: '21px', fontWeight: 800, letterSpacing: '-0.6px', marginBottom: '16px' }}>Asha Kulkarni</p>
+                <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-end', borderBottom: `1px solid ${BORDER}`, paddingBottom: '16px', marginBottom: '14px' }}>
+                  <div>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Blood type</p>
+                    <p style={{ color: RED, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>B+</p>
+                  </div>
+                  <div>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Age</p>
+                    <p style={{ color: T1, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>61</p>
+                  </div>
+                  <div>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Meds</p>
+                    <p style={{ color: T1, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>4</p>
+                  </div>
+                </div>
+                <div style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '11px', marginBottom: '14px' }}>
+                  <p style={{ color: RED, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '3px' }}>Critical — allergies</p>
+                  <p style={{ color: T1, fontSize: '13px', fontWeight: 700, margin: 0 }}>Penicillin · Sulfa drugs</p>
+                </div>
+                <p style={{ color: T3, fontFamily: mono, fontSize: '10px', margin: 0 }}>post-CABG · metoprolol 50mg · updated today</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -668,6 +718,8 @@ export default function Home() {
           .mobile-menu-btn { display: flex !important; }
           .features-items { grid-template-columns: 1fr !important; }
           .who-row { grid-template-columns: 1fr !important; gap: 8px !important; padding: 20px 0 !important; }
+          .cta-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .id-card { transform: rotate(0deg) !important; justify-self: start !important; }
           .log-row { grid-template-columns: 1fr !important; gap: 6px !important; }
           .log-time { text-align: left !important; display: flex; gap: 10px; align-items: baseline; }
           .log-spine { display: none !important; }
