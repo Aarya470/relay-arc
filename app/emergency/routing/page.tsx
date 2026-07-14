@@ -345,6 +345,10 @@ function RoutingPage() {
 
   const cancelEmergency = async () => {
     setCancelling(true)
+    // Local escape hatch FIRST: even if the server write fails, the dashboard
+    // must respect the user's explicit cancel and never bounce them back here.
+    try { sessionStorage.setItem('relay_user_cancelled_until', String(Date.now() + 20 * 60 * 1000)) } catch {}
+    let serverConfirmed = false
     try {
       let uid = userIdRef.current
       if (!uid) {
@@ -357,13 +361,21 @@ function RoutingPage() {
           .eq('user_id', uid)
           .eq('status', 'active')
         if (error) throw error
+        // Verify the rows actually flipped — a missing RLS UPDATE policy
+        // makes the update silently affect zero rows.
+        const { data: still } = await supabase.from('emergencies')
+          .select('id').eq('user_id', uid).eq('status', 'active').limit(1)
+        serverConfirmed = !still || still.length === 0
+      } else {
+        serverConfirmed = true // nothing to resolve without a user
       }
-      lockedRef.current = false
-      router.replace('/dashboard')
-    } catch {
-      toast.error('Could not cancel — check your connection and try again')
-      setCancelling(false)
+    } catch { /* fall through — user still leaves */ }
+
+    if (!serverConfirmed) {
+      toast.error('Cancelled on this device, but the server did not confirm — your care team may still see it as active.')
     }
+    lockedRef.current = false
+    router.replace('/dashboard')
   }
 
   // ── Loading state ──────────────────────────────────────────────────────────

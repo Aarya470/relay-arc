@@ -37,6 +37,7 @@ export default function Emergency() {
   const handleSelect = async (type: string) => {
     setSelected(type)
     setLoading(true)
+    try { sessionStorage.removeItem('relay_user_cancelled_until') } catch {}
     try {
       const { data: { user } } = await supabase.auth.getUser()
       let emergencyId = ''

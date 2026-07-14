@@ -409,10 +409,13 @@ export default function Dashboard() {
         .eq('user_id', user.id).eq('status', 'active')
         .order('created_at', { ascending: false })
       if (allActiveEms && allActiveEms.length > 0) {
+        // If the user explicitly cancelled, never bounce them back into routing —
+        // even if the server-side resolve failed (e.g. missing RLS UPDATE policy).
+        let userCancelled = false
+        try { userCancelled = Date.now() < Number(sessionStorage.getItem('relay_user_cancelled_until') || 0) } catch {}
         const fifteenMinAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString()
-        const recentEm = allActiveEms[0].created_at >= fifteenMinAgo ? allActiveEms[0] : null
-        const resolveIds = allActiveEms.slice(recentEm ? 1 : 0).map(e => e.id)
-        if (!recentEm) resolveIds.push(allActiveEms[0].id)
+        const recentEm = !userCancelled && allActiveEms[0].created_at >= fifteenMinAgo ? allActiveEms[0] : null
+        const resolveIds = allActiveEms.filter(e => e.id !== recentEm?.id).map(e => e.id)
         if (resolveIds.length > 0) await supabase.from('emergencies').update({ status: 'resolved' }).in('id', resolveIds)
         if (recentEm) { router.push(`/emergency/routing?type=${recentEm.emergency_type}&id=${recentEm.id}`); return }
       }
