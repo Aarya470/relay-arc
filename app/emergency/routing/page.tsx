@@ -598,7 +598,7 @@ function RoutingPage() {
 
       {/* ── Map — full bleed ────────────────────────────────────────────────── */}
       <div style={{ height: '32vh', flexShrink: 0, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-        {!navMode && <Nav hospital={hospital} />}
+        {!navMode && <Nav hospital={hospital} preview />}
       </div>
 
       {/* ── Content ─────────────────────────────────────────────────────────── */}
