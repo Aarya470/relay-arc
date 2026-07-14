@@ -109,40 +109,33 @@ export default function Emergency() {
           Call 911 now
         </motion.a>
 
-        {/* Type list — one column, big targets, no entrance animation */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {/* Type list — flat hairline rows, no boxes */}
+        <div style={{ borderTop: `1px solid ${BORDER}` }}>
           {TYPES.map(type => {
             const isSel = selected === type.id
             return (
               <motion.button
                 key={type.id}
-                whileTap={{ scale: 0.985 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={() => handleSelect(type.id)}
                 disabled={loading}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '15px',
-                  background: isSel ? RED_DIM : SURFACE,
-                  border: `1.5px solid ${isSel ? RED : BORDER}`,
-                  borderRadius: '12px',
-                  padding: '15px 16px',
-                  minHeight: '64px',
+                  display: 'flex', alignItems: 'center', gap: '16px',
+                  background: isSel ? RED_DIM : 'transparent',
+                  border: 'none',
+                  borderBottom: `1px solid ${BORDER}`,
+                  padding: '17px 4px',
+                  minHeight: '68px',
                   textAlign: 'left',
                   cursor: 'pointer',
-                  transition: 'border-color 0.15s, background 0.15s',
-                  opacity: loading && !isSel ? 0.35 : 1,
+                  transition: 'background 0.15s',
+                  opacity: loading && !isSel ? 0.3 : 1,
                   width: '100%',
                 }}
               >
-                <div style={{
-                  width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0,
-                  background: isSel ? RED_MID : '#FFFFFF',
-                  border: isSel ? 'none' : `1px solid ${BORDER}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <type.Icon size={19} color={isSel ? RED : T1} strokeWidth={2}/>
-                </div>
+                <type.Icon size={20} color={isSel ? RED : T1} strokeWidth={2} style={{ flexShrink: 0 }}/>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ color: isSel ? RED : T1, fontWeight: 800, fontSize: '16.5px', letterSpacing: '-0.2px', lineHeight: 1.2 }}>
+                  <p style={{ color: isSel ? RED : T1, fontWeight: 800, fontSize: '17px', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
                     {type.label}
                   </p>
                   <p style={{ color: T3, fontSize: '13px', lineHeight: 1.4, marginTop: '2px' }}>{type.desc}</p>
@@ -152,7 +145,7 @@ export default function Emergency() {
                     Starting…
                   </span>
                 ) : (
-                  <ChevronRight size={17} color={T3} style={{ flexShrink: 0 }}/>
+                  <ChevronRight size={16} color="#C2C7D0" style={{ flexShrink: 0 }}/>
                 )}
               </motion.button>
             )

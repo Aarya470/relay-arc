@@ -107,11 +107,6 @@ function CancelConfirmSheet({
               width: '100%',
             }}
           >
-            {/* Drag handle */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-              <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: '#E3E6EC' }} />
-            </div>
-
             <p style={{
               color: T.textPrimary,
               fontWeight: 800,
@@ -507,691 +502,226 @@ function RoutingPage() {
   )
 
   // ── Main routing view ──────────────────────────────────────────────────────
+  const MONO = 'var(--font-mono, monospace)'
   return (
-    <div style={{
-      minHeight: '100dvh',
-      background: T.bg,
-      display: 'flex',
-      flexDirection: 'column',
-      overflowX: 'hidden',
-    }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
-      {/* ── Top status bar ──────────────────────────────────────────────────── */}
-      <div style={{
-        background: T.bg,
-        padding: '10px 16px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexShrink: 0,
-        borderBottom: `1px solid rgba(217,20,20,0.12)`,
-        zIndex: 10,
-      }}>
-        {/* Pulsing ACTIVE EMERGENCY badge */}
-        <motion.div
-          animate={{ opacity: [1, 0.6, 1] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '7px',
-            background: T.redSoft,
-            border: `1px solid rgba(217,20,20,0.28)`,
-            borderRadius: '20px',
-            padding: '5px 12px',
-          }}
-        >
-          {/* Pulsing dot */}
+      {/* ── Status line ─────────────────────────────────────────────────────── */}
+      <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(217,20,20,0.18)', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '9px', minWidth: 0 }}>
           <motion.div
-            animate={{ scale: [1, 1.35, 1], opacity: [1, 0.75, 1] }}
-            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
-            style={{
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              background: T.red,
-              flexShrink: 0,
-            }}
+            animate={{ opacity: [1, 0.25, 1] }}
+            transition={{ duration: 1.1, repeat: Infinity }}
+            style={{ width: '8px', height: '8px', background: T.red, flexShrink: 0 }}
           />
-          <span style={{
-            color: T.red,
-            fontFamily: 'var(--font-mono, monospace)',
-            fontSize: '10px',
-            letterSpacing: '1.5px',
-            textTransform: 'uppercase',
-            fontWeight: 700,
-          }}>
-            Active Emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
+          <span style={{ color: T.red, fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            Active emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
           </span>
-        </motion.div>
-
-        {/* Live elapsed timer */}
-        <span style={{
-          color: T.red,
-          fontFamily: 'var(--font-mono, monospace)',
-          fontSize: '14px',
-          fontWeight: 700,
-          letterSpacing: '0.5px',
-          fontVariantNumeric: 'tabular-nums',
-        }}>
+        </div>
+        <span style={{ color: T.red, fontFamily: MONO, fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
           {fmtElapsed(elapsed)}
         </span>
       </div>
 
-      {/* ── Hospital info card (above map) ──────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: 'easeOut' }}
-        style={{
-          background: T.card,
-          margin: '12px 12px 0',
-          borderRadius: '20px',
-          border: `1px solid ${T.border}`,
-          borderLeft: `3px solid ${T.red}`,
-          padding: '16px 16px 16px 18px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '12px',
-          flexShrink: 0,
-          boxShadow: `0 4px 24px rgba(14,18,24,0.10), inset 0 0 0 1px rgba(217,20,20,0.06)`,
-        }}
-      >
-        {/* Hospital name + address */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{
-            color: T.textMuted,
-            fontFamily: 'var(--font-mono, monospace)',
-            fontSize: '9px',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            marginBottom: '5px',
-          }}>
-            Routing to
-          </p>
-          <p style={{
-            color: T.textPrimary,
-            fontWeight: 800,
-            fontSize: '16px',
-            marginBottom: '3px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            letterSpacing: '-0.3px',
-          }}>
-            {hospital.name}
-          </p>
-          {hospital.address && (
-            <p style={{
-              color: T.textMuted,
-              fontSize: '11px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}>
-              {hospital.address}
+      {/* ── Hospital — flat header, big numbers ─────────────────────────────── */}
+      <div style={{ padding: '20px 20px 18px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '20px' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ color: T.textMuted, fontFamily: MONO, fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '1.8px', marginBottom: '7px' }}>
+              Routing to
             </p>
-          )}
-          {hospital.capability && (
-            <span style={{
-              display: 'inline-block',
-              marginTop: '6px',
-              color: T.green,
-              background: T.greenSoft,
-              fontSize: '9px',
-              fontWeight: 700,
-              fontFamily: 'var(--font-mono, monospace)',
-              letterSpacing: '1px',
-              textTransform: 'uppercase',
-              padding: '3px 8px',
-              borderRadius: '5px',
-            }}>
-              ✓ {hospital.capability}
-            </span>
-          )}
+            <p style={{ color: T.textPrimary, fontWeight: 800, fontSize: '22px', letterSpacing: '-0.6px', lineHeight: 1.1, marginBottom: '4px' }}>
+              {hospital.name}
+            </p>
+            {hospital.address && (
+              <p style={{ color: T.textMuted, fontSize: '12.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {hospital.address}
+              </p>
+            )}
+            {hospital.capability && (
+              <p style={{ color: T.green, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+                ✓ {hospital.capability}
+              </p>
+            )}
+          </div>
+          <div style={{ textAlign: 'right', flexShrink: 0 }}>
+            <p style={{ color: T.red, fontWeight: 800, fontSize: '38px', fontFamily: MONO, lineHeight: 0.9, letterSpacing: '-2px' }}>
+              {estimateTime(hospital.distance || 0)}
+            </p>
+            <p style={{ color: T.textMuted, fontSize: '12px', fontFamily: MONO, marginTop: '5px' }}>
+              {formatDistance(hospital.distance || 0)}
+            </p>
+          </div>
         </div>
 
-        {/* ETA + distance badge */}
-        <div style={{
-          background: T.redSoft,
-          border: `1px solid rgba(217,20,20,0.22)`,
-          borderRadius: '14px',
-          padding: '10px 14px',
-          textAlign: 'center',
-          flexShrink: 0,
-        }}>
-          <p style={{
-            color: T.red,
-            fontWeight: 800,
-            fontSize: '24px',
-            fontFamily: 'var(--font-mono, monospace)',
-            lineHeight: 1,
-            letterSpacing: '-1px',
-          }}>
-            {estimateTime(hospital.distance || 0)}
-          </p>
-          <p style={{
-            color: 'rgba(217,20,20,0.55)',
-            fontSize: '10px',
-            fontFamily: 'var(--font-mono, monospace)',
-            marginTop: '3px',
-            letterSpacing: '0.3px',
-          }}>
-            {formatDistance(hospital.distance || 0)}
-          </p>
-        </div>
-
-        {/* Navigate button — red gradient pill with glow */}
         <motion.a
           href={directionsUrl(hospital)}
           target="_blank"
           rel="noopener noreferrer"
-          whileTap={{ scale: 0.93 }}
+          whileTap={{ scale: 0.985 }}
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '5px',
-            background: `#D91414`,
-            color: 'white',
-            padding: '11px 14px',
-            borderRadius: '14px',
-            fontWeight: 700,
-            fontSize: '10px',
-            textDecoration: 'none',
-            flexShrink: 0,
-            boxShadow: T.redGlow,
-            letterSpacing: '0.8px',
-            textTransform: 'uppercase',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+            background: T.red, color: 'white',
+            padding: '17px', borderRadius: '12px',
+            fontWeight: 800, fontSize: '16.5px', letterSpacing: '-0.2px',
+            textDecoration: 'none', marginTop: '16px', minHeight: '56px',
           }}
         >
-          <Navigation2 size={19} strokeWidth={2.5} />
-          Route
+          <Navigation2 size={19} strokeWidth={2.5}/>
+          Navigate — turn-by-turn
         </motion.a>
-      </motion.div>
+      </div>
 
-      {/* ── Map ─────────────────────────────────────────────────────────────── */}
-      <div style={{
-        height: '36vh',
-        flexShrink: 0,
-        margin: '10px 12px 0',
-        borderRadius: '20px',
-        overflow: 'hidden',
-        border: `1px solid ${T.border}`,
-        boxShadow: '0 4px 20px rgba(14,18,24,0.10)',
-      }}>
+      {/* ── Map — full bleed ────────────────────────────────────────────────── */}
+      <div style={{ height: '32vh', flexShrink: 0, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
         <Nav hospital={hospital} />
       </div>
 
-      {/* ── Bottom sheet ─────────────────────────────────────────────────────── */}
+      {/* ── Content ─────────────────────────────────────────────────────────── */}
       <motion.div
-        initial={{ y: 24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.25, ease: 'easeOut' }}
-        style={{
-          flex: 1,
-          background: T.card,
-          borderRadius: '24px 24px 0 0',
-          borderTop: `1px solid ${T.border}`,
-          padding: '0 14px 40px',
-          overflowY: 'auto',
-          boxShadow: '0 -12px 40px rgba(14,18,24,0.10)',
-          marginTop: '10px',
-        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+        style={{ flex: 1, padding: '22px 20px 44px' }}
       >
-        {/* Drag handle */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '12px 0 18px',
-        }}>
-          <div style={{
-            width: '36px',
-            height: '4px',
-            borderRadius: '2px',
-            background: '#E3E6EC',
-          }} />
+
+        {/* Care team status — flat line */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '26px' }}>
+          {careTeamAlerted
+            ? <CheckCircle size={16} color={T.green} style={{ flexShrink: 0 }} />
+            : <Loader2 size={16} color={T.textMuted} className="animate-spin" style={{ flexShrink: 0 }} />
+          }
+          <p style={{ fontSize: '14px', fontWeight: 600, color: careTeamAlerted ? T.green : T.textSec }}>
+            {careTeamAlerted ? 'Care team alerted — they can see your emergency' : 'Alerting your care team…'}
+          </p>
         </div>
 
-        {/* ── Care team alert status ─────────────────────────────────────────── */}
-        <motion.div
-          animate={{
-            borderColor: careTeamAlerted ? 'rgba(0,122,68,0.22)' : T.border,
-            backgroundColor: careTeamAlerted ? 'rgba(0,122,68,0.06)' : 'transparent',
-          }}
-          transition={{ duration: 0.5 }}
-          style={{
-            borderRadius: '14px',
-            padding: '12px 15px',
-            border: '1px solid',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '11px',
-            marginBottom: '14px',
-          }}
-        >
-          {careTeamAlerted
-            ? <CheckCircle size={17} color={T.green} style={{ flexShrink: 0 }} />
-            : <Loader2 size={17} color={T.textMuted} className="animate-spin" style={{ flexShrink: 0 }} />
-          }
-          <div>
-            <p style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: careTeamAlerted ? T.green : T.textSec,
-              lineHeight: 1.4,
-            }}>
-              {careTeamAlerted
-                ? 'Care team alerted — they can see your emergency'
-                : 'Alerting your care team…'
-              }
-            </p>
-            {careTeamAlerted && profile && (
-              <p style={{
-                color: T.textMuted,
-                fontSize: '11px',
-                marginTop: '3px',
-                fontFamily: 'var(--font-mono, monospace)',
-              }}>
-                {profile.full_name} · {EMERGENCY_LABELS[type]}
-              </p>
-            )}
-          </div>
-        </motion.div>
-
-        {/* ── Emergency contacts + SMS ───────────────────────────────────────── */}
+        {/* ── Notify family ─────────────────────────────────────────────────── */}
         {careTeamAlerted && (
-          <div style={{ marginBottom: '14px' }}>
-            {/* Section label */}
-            <p style={{
-              color: T.textMuted,
-              fontFamily: 'var(--font-mono, monospace)',
-              fontSize: '9px',
-              textTransform: 'uppercase',
-              letterSpacing: '2px',
-              marginBottom: '9px',
-            }}>
+          <div style={{ marginBottom: '30px' }}>
+            <p style={{ color: T.textMuted, fontFamily: MONO, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '4px' }}>
               Notify family
             </p>
 
             {notifiedContacts.length > 0 ? (
               <>
-                {/* Text all — the family-routing feature, first and loud */}
+                <div style={{ borderTop: `1px solid ${T.border}`, marginBottom: '12px' }}>
+                  {notifiedContacts.map((c: any, i: number) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', padding: '13px 0', borderBottom: `1px solid ${T.border}` }}>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ color: T.textPrimary, fontSize: '14.5px', fontWeight: 600 }}>{c.name}</p>
+                        {c.relationship && <p style={{ color: T.textMuted, fontSize: '12px', marginTop: '1px' }}>{c.relationship}</p>}
+                      </div>
+                      <a href={`tel:${c.phone}`}
+                        style={{ display: 'flex', alignItems: 'center', gap: '6px', color: T.green, fontSize: '14px', fontWeight: 700, textDecoration: 'none', flexShrink: 0, padding: '8px 0 8px 16px' }}>
+                        <Phone size={14} color={T.green} />
+                        Call
+                      </a>
+                    </div>
+                  ))}
+                </div>
+
                 <motion.a
                   href={buildSmsHref(notifiedContacts, hospital, type)}
-                  whileTap={{ scale: 0.98 }}
+                  whileTap={{ scale: 0.985 }}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    background: T.blue,
-                    color: 'white',
-                    fontWeight: 700,
-                    fontSize: '14.5px',
-                    padding: '16px',
-                    borderRadius: '13px',
-                    textDecoration: 'none',
-                    marginBottom: '9px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px',
+                    background: T.blue, color: 'white',
+                    fontWeight: 700, fontSize: '15px',
+                    padding: '16px', borderRadius: '12px',
+                    textDecoration: 'none', minHeight: '54px',
                   }}
                 >
                   <MessageSquare size={16} color="white" />
                   Text family the hospital + directions
                 </motion.a>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
-                  {notifiedContacts.map((c: any, i: number) => (
-                    <div
-                      key={i}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        background: T.card2,
-                        borderRadius: '13px',
-                        padding: '11px 14px',
-                        border: `1px solid ${T.border}`,
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div>
-                          <span style={{
-                            color: T.textPrimary,
-                            fontSize: '13px',
-                            fontWeight: 600,
-                            display: 'block',
-                          }}>
-                            {c.name}
-                          </span>
-                          {c.relationship && (
-                            <span style={{
-                              color: T.textMuted,
-                              fontSize: '11px',
-                              display: 'block',
-                              marginTop: '1px',
-                            }}>
-                              {c.relationship}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Call link — green */}
-                      <motion.a
-                        href={`tel:${c.phone}`}
-                        whileTap={{ scale: 0.92 }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '5px',
-                          color: T.green,
-                          fontSize: '12px',
-                          fontWeight: 700,
-                          textDecoration: 'none',
-                          background: T.greenSoft,
-                          padding: '6px 11px',
-                          borderRadius: '9px',
-                          border: `1px solid rgba(0,122,68,0.2)`,
-                        }}
-                      >
-                        <Phone size={12} color={T.green} />
-                        Call
-                      </motion.a>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Share live status — caregiver live view */}
-                <motion.button
+                <button
                   onClick={shareLive}
-                  whileTap={{ scale: 0.97 }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    width: '100%',
-                    background: T.card2,
-                    border: `1px solid rgba(0,85,255,0.22)`,
-                    color: T.blue,
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    padding: '14px 16px',
-                    borderRadius: '13px',
-                    cursor: 'pointer',
-                    marginTop: '9px',
-                  }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', background: 'none', border: 'none', color: T.blue, fontWeight: 600, fontSize: '13.5px', padding: '14px', cursor: 'pointer', fontFamily: 'inherit' }}
                 >
-                  <Share2 size={15} color={T.blue} />
-                  Share live status link with family
-                </motion.button>
+                  <Share2 size={14} color={T.blue} />
+                  Share a live status link instead
+                </button>
               </>
             ) : (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                background: 'transparent',
-                border: `1px solid ${T.border}`,
-                color: T.textMuted,
-                fontWeight: 500,
-                fontSize: '13px',
-                padding: '14px 16px',
-                borderRadius: '13px',
-              }}>
-                <MessageSquare size={15} />
-                Add emergency contacts to enable quick SMS
-              </div>
+              <p style={{ color: T.textMuted, fontSize: '13.5px', padding: '13px 0', borderTop: `1px solid ${T.border}` }}>
+                No emergency contacts saved — add them in Settings for one-tap alerts.
+              </p>
             )}
           </div>
         )}
 
-        {/* ── First responder / medical profile card ────────────────────────── */}
+        {/* ── First responder info — always visible, no box ─────────────────── */}
         {profile && (profile.blood_type || profile.allergies || (profile.medications?.length > 0)) && (
-          <div style={{
-            marginBottom: '14px',
-            background: T.card2,
-            border: `1px solid rgba(217,20,20,0.18)`,
-            borderRadius: '16px',
-            overflow: 'hidden',
-          }}>
-            <button
-              onClick={() => setShowMedCard(!showMedCard)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 15px',
-                background: showMedCard ? 'rgba(217,20,20,0.08)' : 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'background 0.2s',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  background: T.red,
-                }} />
-                <span style={{
-                  color: T.red,
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  letterSpacing: '1.2px',
-                  textTransform: 'uppercase',
-                  fontFamily: 'var(--font-mono, monospace)',
-                }}>
-                  First Responder Info
-                </span>
-              </div>
-              <span style={{
-                color: T.textMuted,
-                fontSize: '12px',
-                fontWeight: 500,
-              }}>
-                {showMedCard ? 'Hide' : 'Show'}
-              </span>
-            </button>
-
-            <AnimatePresence>
-              {showMedCard && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.22, ease: 'easeInOut' }}
-                  style={{ overflow: 'hidden' }}
-                >
-                  <div style={{
-                    padding: '16px 15px 18px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
-                    borderTop: `1px solid rgba(217,20,20,0.12)`,
-                  }}>
-                    {profile.blood_type && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                        <span style={{
-                          color: T.textMuted,
-                          fontSize: '11px',
-                          width: '80px',
-                          flexShrink: 0,
-                        }}>
-                          Blood type
-                        </span>
-                        <span style={{
-                          color: T.red,
-                          fontWeight: 800,
-                          fontSize: '26px',
-                          fontFamily: 'var(--font-mono, monospace)',
-                          letterSpacing: '-0.5px',
-                          lineHeight: 1,
-                        }}>
-                          {profile.blood_type}
-                        </span>
-                      </div>
-                    )}
-                    {profile.allergies && (
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-                        <span style={{
-                          color: T.textMuted,
-                          fontSize: '11px',
-                          width: '80px',
-                          flexShrink: 0,
-                          paddingTop: '2px',
-                        }}>
-                          Allergies
-                        </span>
-                        <span style={{
-                          color: T.red,
-                          fontWeight: 600,
-                          fontSize: '13px',
-                          lineHeight: 1.55,
-                        }}>
-                          {profile.allergies}
-                        </span>
-                      </div>
-                    )}
-                    {profile.medications?.length > 0 && (
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-                        <span style={{
-                          color: T.textMuted,
-                          fontSize: '11px',
-                          width: '80px',
-                          flexShrink: 0,
-                          paddingTop: '2px',
-                        }}>
-                          Medications
-                        </span>
-                        <span style={{
-                          color: T.textSec,
-                          fontSize: '12px',
-                          lineHeight: 1.7,
-                        }}>
-                          {profile.medications.slice(0, 4).map((m: any) => m.name || m).join(', ')}
-                        </span>
-                      </div>
-                    )}
-                    <p style={{
-                      color: 'rgba(217,20,20,0.35)',
-                      fontSize: '9px',
-                      fontFamily: 'var(--font-mono, monospace)',
-                      letterSpacing: '1.5px',
-                      textTransform: 'uppercase',
-                      marginTop: '2px',
-                    }}>
-                      Show this screen to paramedics
-                    </p>
-                  </div>
-                </motion.div>
+          <div style={{ marginBottom: '30px' }}>
+            <p style={{ color: T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '4px' }}>
+              First responder info — show this screen
+            </p>
+            <div style={{ borderTop: `2px solid ${T.red}` }}>
+              {profile.blood_type && (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
+                  <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Blood type</span>
+                  <span style={{ color: T.red, fontWeight: 900, fontSize: '34px', fontFamily: MONO, letterSpacing: '-1px', lineHeight: 0.9 }}>
+                    {profile.blood_type}
+                  </span>
+                </div>
               )}
-            </AnimatePresence>
+              {profile.allergies && (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
+                  <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Allergies</span>
+                  <span style={{ color: T.red, fontWeight: 700, fontSize: '15.5px', lineHeight: 1.5 }}>
+                    {profile.allergies}
+                  </span>
+                </div>
+              )}
+              {profile.medications?.length > 0 && (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
+                  <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Medications</span>
+                  <span style={{ color: T.textSec, fontSize: '13.5px', lineHeight: 1.7 }}>
+                    {profile.medications.slice(0, 4).map((m: any) => m.name || m).join(', ')}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
-        {/* ── Other hospitals nearby ────────────────────────────────────────── */}
+        {/* ── Other hospitals — hairline rows ───────────────────────────────── */}
         {nearbyHospitals.length > 1 && (
-          <div style={{ marginBottom: '14px' }}>
+          <div style={{ marginBottom: '30px' }}>
             <button
               onClick={() => setShowAll(!showAll)}
-              style={{
-                color: T.textMuted,
-                fontSize: '11px',
-                fontFamily: 'var(--font-mono, monospace)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                textTransform: 'uppercase',
-                letterSpacing: '1.2px',
-                marginBottom: '9px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: 0,
-              }}
+              style={{ color: T.textMuted, fontSize: '10px', fontWeight: 700, fontFamily: MONO, background: 'none', border: 'none', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '5px', padding: 0 }}
             >
-              {showAll
-                ? 'Hide other hospitals'
-                : `${nearbyHospitals.length - 1} other hospital${nearbyHospitals.length - 1 > 1 ? 's' : ''} nearby`
-              }
-              <ChevronRight
-                size={12}
-                style={{
-                  transform: showAll ? 'rotate(90deg)' : 'none',
-                  transition: 'transform 0.2s ease',
-                }}
-              />
+              {showAll ? 'Hide other hospitals' : `${nearbyHospitals.length - 1} other hospital${nearbyHospitals.length - 1 > 1 ? 's' : ''} nearby`}
+              <ChevronRight size={11} style={{ transform: showAll ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s ease' }}/>
             </button>
 
             <AnimatePresence>
               {showAll && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  style={{ borderTop: `1px solid ${T.border}` }}
                 >
                   {nearbyHospitals.slice(1).map((h, i) => (
-                    <motion.button
+                    <button
                       key={i}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
                       onClick={() => { setHospital(h); setShowAll(false) }}
-                      style={{
-                        width: '100%',
-                        background: T.card2,
-                        border: `1px solid ${T.border}`,
-                        borderRadius: '13px',
-                        padding: '12px 14px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                      }}
+                      style={{ width: '100%', background: 'none', border: 'none', borderBottom: `1px solid ${T.border}`, padding: '13px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
                     >
-                      <div>
-                        <p style={{
-                          color: T.textPrimary,
-                          fontWeight: 600,
-                          fontSize: '13px',
-                          marginBottom: '2px',
-                        }}>
-                          {h.name}
-                        </p>
-                        <p style={{
-                          color: T.textMuted,
-                          fontSize: '11px',
-                        }}>
-                          {h.address}
-                        </p>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ color: T.textPrimary, fontWeight: 600, fontSize: '14px', marginBottom: '2px' }}>{h.name}</p>
+                        <p style={{ color: T.textMuted, fontSize: '11.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{h.address}</p>
                       </div>
-                      <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '12px' }}>
-                        <p style={{
-                          color: T.red,
-                          fontWeight: 700,
-                          fontSize: '14px',
-                          fontFamily: 'var(--font-mono, monospace)',
-                          letterSpacing: '-0.5px',
-                        }}>
+                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <p style={{ color: T.textPrimary, fontWeight: 700, fontSize: '15px', fontFamily: MONO, letterSpacing: '-0.5px' }}>
                           {estimateTime(h.distance || 0)}
                         </p>
-                        <p style={{
-                          color: T.textMuted,
-                          fontSize: '11px',
-                          fontFamily: 'var(--font-mono, monospace)',
-                          marginTop: '2px',
-                        }}>
+                        <p style={{ color: T.textMuted, fontSize: '11px', fontFamily: MONO, marginTop: '2px' }}>
                           {formatDistance(h.distance || 0)}
                         </p>
                       </div>
-                    </motion.button>
+                    </button>
                   ))}
                 </motion.div>
               )}
@@ -1199,73 +729,44 @@ function RoutingPage() {
           </div>
         )}
 
-        {/* ── Action buttons ────────────────────────────────────────────────── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
-
-          {/* Call 911 — full-width red gradient with glow */}
+        {/* ── Actions ───────────────────────────────────────────────────────── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <motion.a
             href="tel:911"
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: 0.985 }}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              background: `#D91414`,
-              color: 'white',
-              padding: '16px',
-              borderRadius: '14px',
-              fontWeight: 800,
-              fontSize: '16px',
-              textDecoration: 'none',
-              boxShadow: T.redGlow,
-              letterSpacing: '0.3px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+              background: T.red, color: 'white',
+              padding: '17px', borderRadius: '12px',
+              fontWeight: 800, fontSize: '17px',
+              textDecoration: 'none', minHeight: '56px', letterSpacing: '-0.1px',
             }}
           >
-            <Phone size={18} strokeWidth={2.5} />
+            <Phone size={19} strokeWidth={2.5} />
             Call 911
           </motion.a>
 
-          {/* ER handoff brief */}
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: 0.985 }}
             onClick={() => router.push(`/emergency/brief?type=${type}&name=${encodeURIComponent(hospital.name)}`)}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              background: '#ECEEF2',
-              color: T.textSec,
-              padding: '14px',
-              borderRadius: '13px',
-              fontWeight: 600,
-              fontSize: '14px',
-              border: `1px solid ${T.border}`,
-              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              background: 'none', color: T.textPrimary,
+              padding: '15px', borderRadius: '12px',
+              fontWeight: 700, fontSize: '14.5px',
+              border: `1.5px solid ${T.textPrimary}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
             }}
           >
             <FileText size={15} />
             ER handoff brief
           </motion.button>
 
-          {/* Cancel — dark ghost */}
-          <motion.button
-            whileTap={{ scale: 0.97 }}
+          <button
             onClick={() => setShowCancelConfirm(true)}
-            style={{
-              background: '#ECEEF2',
-              color: T.textMuted,
-              fontWeight: 500,
-              fontSize: '13px',
-              padding: '12px 24px',
-              borderRadius: '12px',
-              border: `1px solid #E3E6EC`,
-              cursor: 'pointer',
-            }}
+            style={{ background: 'none', color: T.textMuted, fontWeight: 500, fontSize: '13.5px', padding: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
           >
-            I&apos;m safe — cancel emergency
-          </motion.button>
+            I&apos;m safe — <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>cancel this emergency</span>
+          </button>
         </div>
       </motion.div>
 
