@@ -75,6 +75,26 @@ function TurnIcon({ type, color = T1 }: { type: string; color?: string }) {
   return <span style={{ fontSize: '24px', lineHeight: 1, fontFamily: 'monospace', fontWeight: 700, color }}>{arrow}</span>
 }
 
+// Recompute map size after layout settles — a map mounted into a container
+// that is still 0px tall renders as a blank screen with a stranded marker.
+function SizeFix() {
+  const map = useMap()
+  useEffect(() => {
+    const t1 = setTimeout(() => map.invalidateSize(), 60)
+    const t2 = setTimeout(() => map.invalidateSize(), 400)
+    const onResize = () => map.invalidateSize()
+    window.addEventListener('resize', onResize)
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onResize) : null
+    ro?.observe(map.getContainer())
+    return () => {
+      clearTimeout(t1); clearTimeout(t2)
+      window.removeEventListener('resize', onResize)
+      ro?.disconnect()
+    }
+  }, [map])
+  return null
+}
+
 // Auto-follow map
 function MapController({ position }: { position: [number,number] | null }) {
   const map = useMap()
@@ -331,6 +351,7 @@ export default function Navigation({ hospital }: { hospital: any }) {
 
             {/* Auto follow */}
             <MapController position={position}/>
+            <SizeFix/>
           </MapContainer>
         )}
       </div>
