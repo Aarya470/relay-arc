@@ -131,8 +131,8 @@ function ChaseCamera({ position, bearing, zoom, preview }: { position: [number,n
     if (!position) return
     if (preview) { map.setView(position, 15, { animate: true }); return }
     // center a point ahead of the driver so they sit in the lower third
-    const ahead = projectAhead(position[0], position[1], bearing, 120)
-    map.setView(ahead, zoom, { animate: true, duration: 0.9 })
+    const ahead = projectAhead(position[0], position[1], bearing, 70)
+    map.setView(ahead, zoom, { animate: true, duration: 0.45 })
   }, [position, bearing, zoom, preview])
   return null
 }
@@ -305,7 +305,7 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
 
   const upcoming = steps.length > 0 ? steps[Math.min(currentStep + 1, steps.length - 1)] : undefined
   const after = steps.length > 0 ? steps[Math.min(currentStep + 2, steps.length - 1)] : undefined
-  const zoom = speed > 15 ? 16 : speed > 8 ? 16.5 : 17
+  const zoom = speed > 18 ? 16.75 : speed > 9 ? 17.5 : 18
   const mapBearing = preview ? 0 : bearing
 
   if (arrived) return (
@@ -335,13 +335,14 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
         position: 'absolute',
         inset: preview ? 0 : '-30%',
         transform: preview ? 'none' : `rotate(${-mapBearing}deg)`,
-        transition: 'transform 0.9s ease-out',
+        transformOrigin: 'center center',
+        transition: 'transform 0.6s ease-out',
         willChange: 'transform',
       }}>
         {position && (
           <MapContainer
             center={position}
-            zoom={preview ? 15 : 17}
+            zoom={preview ? 15 : 18}
             zoomSnap={0.25}
             style={{ height: '100%', width: '100%' }}
             zoomControl={false}
