@@ -7,8 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText, MessageSquare, Navigation2 } from 'lucide-react'
 import { findNearbyHospitals, formatDistance, estimateTime, Hospital } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
+import { toast } from 'sonner'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
+
+function directionsUrl(h: Hospital) {
+  return `https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}&travelmode=driving`
+}
 
 function buildSmsHref(contacts: any[], hospital: Hospital | null, emergencyType: string) {
   const phones = contacts.map((c: any) => c.phone).filter(Boolean).join(',')
@@ -24,7 +29,7 @@ function buildSmsHref(contacts: any[], hospital: Hospital | null, emergencyType:
   }
   const typeLabel = typeLabels[emergencyType] || 'a medical emergency'
   const hospitalText = hospital
-    ? `They are being routed to ${hospital.name}. Maps: https://maps.google.com/?q=${encodeURIComponent(hospital.name + ' ' + hospital.address)}`
+    ? `They are being routed to ${hospital.name}. Directions: ${directionsUrl(hospital)}`
     : 'They are getting emergency help now.'
   const msg = `URGENT: I am having ${typeLabel} and need emergency help. ${hospitalText} Please call 911 or come to the hospital.`
   return `sms:${phones}?body=${encodeURIComponent(msg)}`
@@ -51,7 +56,7 @@ const T = {
   textMuted:   '#9AA2AD',
   red:         '#D91414',
   redSoft:     'rgba(217,20,20,0.12)',
-  redGlow:     '0 8px 28px rgba(217,20,20,0.25)',
+  redGlow:     'none',
   green:       '#007A44',
   greenSoft:   'rgba(0,122,68,0.12)',
   blue:        '#0055FF',
@@ -196,10 +201,31 @@ function RoutingPage() {
   const [cancelling, setCancelling] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [notifiedContacts, setNotifiedContacts] = useState<any[]>([])
-  const [showMedCard, setShowMedCard] = useState(false)
+  const [showMedCard, setShowMedCard] = useState(true)
+  const [elapsed, setElapsed] = useState(0)
   const lockedRef = useRef(true)
   const activeEmergencyId = useRef(emergencyId)
   const userIdRef = useRef('')
+
+  // Live elapsed timer — the number this product exists for
+  useEffect(() => {
+    const t0 = Date.now()
+    const id = setInterval(() => setElapsed(Math.floor((Date.now() - t0) / 1000)), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const fmtElapsed = (s: number) => `+${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
+
+  const shareLive = async () => {
+    const id = activeEmergencyId.current
+    if (!id) { toast.error('Live link not ready yet — try again in a moment'); return }
+    const url = `${window.location.origin}/emergency/live/${id}`
+    if (typeof navigator.share === 'function') {
+      try { await navigator.share({ title: 'Live emergency status — Relay Arc', url }); return } catch {}
+    }
+    try { await navigator.clipboard.writeText(url); toast.success('Live status link copied — send it to family') }
+    catch { toast.error('Could not copy the link') }
+  }
 
   // Lock the page — prevent back navigation
   useEffect(() => {
@@ -524,7 +550,6 @@ function RoutingPage() {
               height: '7px',
               borderRadius: '50%',
               background: T.red,
-              boxShadow: `0 0 8px ${T.red}`,
               flexShrink: 0,
             }}
           />
@@ -540,14 +565,16 @@ function RoutingPage() {
           </span>
         </motion.div>
 
-        {/* Monospace clock */}
+        {/* Live elapsed timer */}
         <span style={{
-          color: T.textMuted,
+          color: T.red,
           fontFamily: 'var(--font-mono, monospace)',
-          fontSize: '12px',
+          fontSize: '14px',
+          fontWeight: 700,
           letterSpacing: '0.5px',
+          fontVariantNumeric: 'tabular-nums',
         }}>
-          {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {fmtElapsed(elapsed)}
         </span>
       </div>
 
@@ -606,6 +633,23 @@ function RoutingPage() {
               {hospital.address}
             </p>
           )}
+          {hospital.capability && (
+            <span style={{
+              display: 'inline-block',
+              marginTop: '6px',
+              color: T.green,
+              background: T.greenSoft,
+              fontSize: '9px',
+              fontWeight: 700,
+              fontFamily: 'var(--font-mono, monospace)',
+              letterSpacing: '1px',
+              textTransform: 'uppercase',
+              padding: '3px 8px',
+              borderRadius: '5px',
+            }}>
+              ✓ {hospital.capability}
+            </span>
+          )}
         </div>
 
         {/* ETA + distance badge */}
@@ -640,7 +684,7 @@ function RoutingPage() {
 
         {/* Navigate button — red gradient pill with glow */}
         <motion.a
-          href={`https://maps.google.com/?q=${encodeURIComponent(hospital.name + ' ' + hospital.address)}&travelmode=driving`}
+          href={directionsUrl(hospital)}
           target="_blank"
           rel="noopener noreferrer"
           whileTap={{ scale: 0.93 }}
@@ -663,7 +707,7 @@ function RoutingPage() {
           }}
         >
           <Navigation2 size={19} strokeWidth={2.5} />
-          Go
+          Route
         </motion.a>
       </motion.div>
 
@@ -682,9 +726,9 @@ function RoutingPage() {
 
       {/* ── Bottom sheet ─────────────────────────────────────────────────────── */}
       <motion.div
-        initial={{ y: 80, opacity: 0 }}
+        initial={{ y: 24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 26 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
         style={{
           flex: 1,
           background: T.card,
@@ -768,11 +812,34 @@ function RoutingPage() {
               letterSpacing: '2px',
               marginBottom: '9px',
             }}>
-              Emergency contacts
+              Notify family
             </p>
 
             {notifiedContacts.length > 0 ? (
               <>
+                {/* Text all — the family-routing feature, first and loud */}
+                <motion.a
+                  href={buildSmsHref(notifiedContacts, hospital, type)}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    background: T.blue,
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: '14.5px',
+                    padding: '16px',
+                    borderRadius: '13px',
+                    textDecoration: 'none',
+                    marginBottom: '9px',
+                  }}
+                >
+                  <MessageSquare size={16} color="white" />
+                  Text family the hospital + directions
+                </motion.a>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
                   {notifiedContacts.map((c: any, i: number) => (
                     <div
@@ -788,14 +855,6 @@ function RoutingPage() {
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{
-                          width: '7px',
-                          height: '7px',
-                          borderRadius: '50%',
-                          background: T.green,
-                          boxShadow: `0 0 6px ${T.green}`,
-                          flexShrink: 0,
-                        }} />
                         <div>
                           <span style={{
                             color: T.textPrimary,
@@ -843,15 +902,16 @@ function RoutingPage() {
                   ))}
                 </div>
 
-                {/* Text all contacts — blue */}
-                <motion.a
-                  href={buildSmsHref(notifiedContacts, hospital, type)}
+                {/* Share live status — caregiver live view */}
+                <motion.button
+                  onClick={shareLive}
                   whileTap={{ scale: 0.97 }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
+                    width: '100%',
                     background: T.card2,
                     border: `1px solid rgba(0,85,255,0.22)`,
                     color: T.blue,
@@ -859,13 +919,13 @@ function RoutingPage() {
                     fontSize: '13px',
                     padding: '14px 16px',
                     borderRadius: '13px',
-                    textDecoration: 'none',
+                    cursor: 'pointer',
                     marginTop: '9px',
                   }}
                 >
-                  <MessageSquare size={15} color={T.blue} />
-                  Text all my emergency contacts
-                </motion.a>
+                  <Share2 size={15} color={T.blue} />
+                  Share live status link with family
+                </motion.button>
               </>
             ) : (
               <div style={{
@@ -917,7 +977,6 @@ function RoutingPage() {
                   height: '8px',
                   borderRadius: '50%',
                   background: T.red,
-                  boxShadow: `0 0 6px ${T.red}`,
                 }} />
                 <span style={{
                   color: T.red,
@@ -935,7 +994,7 @@ function RoutingPage() {
                 fontSize: '12px',
                 fontWeight: 500,
               }}>
-                {showMedCard ? 'Hide' : 'Show to paramedic'}
+                {showMedCard ? 'Hide' : 'Show'}
               </span>
             </button>
 
@@ -989,7 +1048,7 @@ function RoutingPage() {
                           Allergies
                         </span>
                         <span style={{
-                          color: 'rgba(255,100,100,0.9)',
+                          color: T.red,
                           fontWeight: 600,
                           fontSize: '13px',
                           lineHeight: 1.55,
