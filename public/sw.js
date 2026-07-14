@@ -1,8 +1,13 @@
 self.addEventListener('install', () => self.skipWaiting())
 self.addEventListener('activate', () => self.clients.claim())
 
-// Passthrough fetch with graceful offline fallback
+// Passthrough fetch with graceful offline fallback.
+// IMPORTANT: only mediate same-origin requests. Cross-origin fetches made
+// from inside a service worker are governed by the SW's connect-src CSP,
+// which silently killed map tiles and routing (empty 503s).
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url)
+  if (url.origin !== self.location.origin) return
   event.respondWith(
     fetch(event.request).catch(() => {
       // For navigation requests, return a minimal offline page

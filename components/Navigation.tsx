@@ -130,14 +130,24 @@ export default function Navigation({ hospital }: { hospital: any }) {
 
   const hospitalPos: [number, number] = [hospital.lat, hospital.lng]
 
-  // Fetch OSRM route
+  // Fetch route — FOSSGIS first (reliable), OSRM demo as fallback
   const fetchRoute = useCallback(async (from: [number, number]) => {
+    const routers = [
+      'https://routing.openstreetmap.de/routed-car/route/v1/driving',
+      'https://router.project-osrm.org/route/v1/driving',
+    ]
+    let data: any = null
+    for (const base of routers) {
+      try {
+        const url = `${base}/${from[1]},${from[0]};${hospital.lng},${hospital.lat}?steps=true&geometries=geojson&overview=full`
+        const res = await fetch(url)
+        if (!res.ok) continue
+        const json = await res.json()
+        if (json.code === 'Ok') { data = json; break }
+      } catch { /* try next */ }
+    }
     try {
-      const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${hospital.lng},${hospital.lat}?steps=true&geometries=geojson&overview=full`
-      const res = await fetch(url)
-      const data = await res.json()
-
-      if (data.code !== 'Ok') return
+      if (!data) { setError('Could not load route'); setLoading(false); return }
 
       const leg = data.routes[0].legs[0]
       setEta(data.routes[0].duration)
