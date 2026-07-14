@@ -15,6 +15,46 @@ const GREEN  = '#007A44'
 
 const MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty'
 
+// Liberty paints buildings at 85% lightness on an off-white canvas — nearly
+// invisible. Enrich at runtime: deeper canvas, present buildings, default
+// extrusion heights (OSM height data is sparse in many cities), richer greens.
+async function loadEnrichedStyle(): Promise<any> {
+  try {
+    const res = await fetch(MAP_STYLE)
+    const style = await res.json()
+    for (const l of style.layers) {
+      const p = l.paint || {}
+      switch (l.id) {
+        case 'background':
+          l.paint = { ...p, 'background-color': '#E9ECF0' }; break
+        case 'building':
+          l.paint = { ...p, 'fill-color': '#D8DCE3', 'fill-outline-color': '#BFC6D0' }; break
+        case 'building-3d':
+          l.paint = {
+            ...p,
+            'fill-extrusion-color': '#D4D9E1',
+            'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 16],
+            'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
+            'fill-extrusion-opacity': 0.88,
+          }; break
+        case 'park':
+          l.paint = { ...p, 'fill-color': '#C9E4BC', 'fill-opacity': 0.85 }; break
+        case 'landcover_grass':
+          l.paint = { ...p, 'fill-opacity': 0.5 }; break
+        case 'landcover_wood':
+          l.paint = { ...p, 'fill-opacity': 0.55 }; break
+        case 'landuse_residential':
+          l.paint = { ...p, 'fill-color': 'hsla(215,12%,88%,0.6)' }; break
+        case 'water':
+          l.paint = { ...p, 'fill-color': '#9DC2F0' }; break
+      }
+    }
+    return style
+  } catch {
+    return MAP_STYLE
+  }
+}
+
 const USER_ARROW_HTML = `<div style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;">
   <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(0,85,255,0.55));"></div>
   <div style="position:absolute;top:19px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:20px solid white;"></div>
@@ -194,9 +234,14 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
   useEffect(() => {
     if (!hasFix || !containerRef.current || mapRef.current || arrived) return
     const p = position as [number, number]
-    const map = new maplibregl.Map({
+    let cancelled = false
+    let map: maplibregl.Map | null = null
+    let ro: ResizeObserver | null = null
+    loadEnrichedStyle().then(style => {
+      if (cancelled || !containerRef.current) return
+      map = new maplibregl.Map({
       container: containerRef.current,
-      style: MAP_STYLE,
+      style,
       center: [p[1], p[0]],
       zoom: preview ? 13 : 17.5,
       pitch: preview ? 0 : 58,
@@ -207,6 +252,7 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
     mapRef.current = map
 
     map.on('load', () => {
+      if (!map) return
       map.addSource('route', {
         type: 'geojson',
         data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [] } },
@@ -236,13 +282,15 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
     })
     map.on('error', () => { /* tile hiccups are non-fatal */ })
 
-    const ro = new ResizeObserver(() => map.resize())
-    ro.observe(containerRef.current)
+    ro = new ResizeObserver(() => map?.resize())
+    ro.observe(containerRef.current!)
+    })
     return () => {
-      ro.disconnect()
+      cancelled = true
+      ro?.disconnect()
       styleReadyRef.current = false
       userMarkerRef.current = null
-      map.remove()
+      map?.remove()
       mapRef.current = null
     }
   }, [hasFix, preview, arrived])
