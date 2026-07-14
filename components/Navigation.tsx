@@ -4,15 +4,24 @@ import { MapContainer, TileLayer, Marker, Polyline, useMap, Circle } from 'react
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
+// ─── Design tokens — shared with the app ─────────────────────────────────────
+const T1     = '#0E1218'
+const T2     = '#5B6371'
+const T3     = '#9AA2AD'
+const BORDER = '#E3E6EC'
+const ACCENT = '#0055FF'
+const RED    = '#D91414'
+const GREEN  = '#007A44'
+
 // note: leaflet icons use HTML strings so we keep SVG inline rather than React components
 const userIcon = L.divIcon({
   className: '',
   html: `<div style="
     width:20px;height:20px;
-    background:#4A9EF5;
+    background:${ACCENT};
     border:3px solid white;
     border-radius:50%;
-    box-shadow:0 0 0 4px rgba(74,158,245,0.3);
+    box-shadow:0 0 0 5px rgba(0,85,255,0.22);
   "></div>`,
   iconSize: [20, 20],
   iconAnchor: [10, 10],
@@ -21,16 +30,16 @@ const userIcon = L.divIcon({
 const hospitalIcon = L.divIcon({
   className: '',
   html: `<div style="
-    width:36px;height:36px;
-    background:#80EF80;
-    border-radius:8px;
+    width:34px;height:34px;
+    background:${RED};
+    border-radius:9px;
     display:flex;align-items:center;justify-content:center;
-    font-size:13px;font-weight:700;color:#07070E;letter-spacing:-0.5px;
-    box-shadow:0 4px 12px rgba(128,239,128,0.4);
+    font-size:19px;font-weight:800;color:white;line-height:1;
     border:2px solid white;
-  ">ER</div>`,
-  iconSize: [36, 36],
-  iconAnchor: [18, 36],
+    box-shadow:0 3px 12px rgba(14,18,24,0.3);
+  ">+</div>`,
+  iconSize: [34, 34],
+  iconAnchor: [17, 34],
 })
 
 // Haversine distance in meters
@@ -52,18 +61,18 @@ function formatTime(seconds: number) {
 }
 
 // Turn direction icon
-function TurnIcon({ type }: { type: string }) {
+function TurnIcon({ type, color = T1 }: { type: string; color?: string }) {
   const t = type?.toLowerCase() || ''
   let arrow = '↑'
-  if (t.includes('left')) arrow = '←'
-  else if (t.includes('right')) arrow = '→'
-  else if (t.includes('slight left')) arrow = '↖'
+  if (t.includes('slight left')) arrow = '↖'
   else if (t.includes('slight right')) arrow = '↗'
   else if (t.includes('sharp left')) arrow = '↙'
   else if (t.includes('sharp right')) arrow = '↘'
+  else if (t.includes('left')) arrow = '←'
+  else if (t.includes('right')) arrow = '→'
   else if (t.includes('u-turn')) arrow = '↩'
   else if (t.includes('arrive') || t.includes('destination')) arrow = '+'
-  return <span style={{ fontSize: '24px', lineHeight: 1, fontFamily: 'monospace', fontWeight: 700 }}>{arrow}</span>
+  return <span style={{ fontSize: '24px', lineHeight: 1, fontFamily: 'monospace', fontWeight: 700, color }}>{arrow}</span>
 }
 
 // Auto-follow map
@@ -201,31 +210,31 @@ export default function Navigation({ hospital }: { hospital: any }) {
 
   if (arrived) return (
     <div style={{
-      height: '100%', background: '#09090C',
+      height: '100%', background: '#FFFFFF',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      padding: '24px', gap: '16px'
+      padding: '24px', gap: '14px'
     }}>
-      <div style={{ width: '72px', height: '72px', borderRadius: '20px', background: 'rgba(128,239,128,0.12)', border: '1px solid rgba(128,239,128,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#80EF80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <div style={{ width: '68px', height: '68px', borderRadius: '18px', background: 'rgba(0,122,68,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke={GREEN} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
         </svg>
       </div>
-      <p style={{ color: '#80EF80', fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px' }}>You have arrived</p>
-      <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px', textAlign: 'center', lineHeight: 1.55 }}>
-        {hospital.name} — the ER team is ready for you
+      <p style={{ color: T1, fontSize: '24px', fontWeight: 800, letterSpacing: '-0.6px' }}>You have arrived<span style={{ color: GREEN }}>.</span></p>
+      <p style={{ color: T2, fontSize: '14px', textAlign: 'center', lineHeight: 1.55, maxWidth: '280px' }}>
+        {hospital.name} — the ER already has your brief.
       </p>
     </div>
   )
 
   return (
-    <div style={{ height: '420px', display: 'flex', flexDirection: 'column', background: '#07070F' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
 
       {/* Current instruction bar */}
       {currentStepData && !loading && (
         <div style={{
-          background: '#111116',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          background: '#FFFFFF',
+          borderBottom: `1px solid ${BORDER}`,
           padding: '12px 16px',
           display: 'flex',
           alignItems: 'center',
@@ -234,34 +243,27 @@ export default function Navigation({ hospital }: { hospital: any }) {
         }}>
           <div style={{
             width: '52px', height: '52px',
-            background: 'rgba(74,158,245,0.15)',
+            background: 'rgba(0,85,255,0.08)',
             borderRadius: '12px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0
           }}>
-            <TurnIcon type={currentStepData.type}/>
+            <TurnIcon type={currentStepData.type} color={ACCENT}/>
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ color: 'white', fontWeight: 600, fontSize: '15px', marginBottom: '2px', lineHeight: 1.3 }}>
+            <p style={{ color: T1, fontWeight: 700, fontSize: '15.5px', marginBottom: '3px', lineHeight: 1.3 }}>
               {currentStepData.instruction}
             </p>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', fontFamily: 'monospace' }}>
+            <p style={{ color: T3, fontSize: '12px', fontFamily: 'monospace' }}>
               {distToNext !== null ? formatDist(distToNext) : formatDist(currentStepData.distance)}
             </p>
           </div>
           {eta !== null && (
-            <div style={{
-              background: 'rgba(232,50,42,0.15)',
-              border: '1px solid rgba(232,50,42,0.25)',
-              borderRadius: '12px',
-              padding: '8px 12px',
-              textAlign: 'center',
-              flexShrink: 0
-            }}>
-              <p style={{ color: '#FF4A42', fontWeight: 700, fontSize: '18px', fontFamily: 'monospace', lineHeight: 1 }}>
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <p style={{ color: RED, fontWeight: 800, fontSize: '20px', fontFamily: 'monospace', lineHeight: 1, letterSpacing: '-0.5px' }}>
                 {formatTime(eta)}
               </p>
-              <p style={{ color: 'rgba(255,74,66,0.5)', fontSize: '10px', fontFamily: 'monospace', marginTop: '2px' }}>ETA</p>
+              <p style={{ color: T3, fontSize: '9px', fontFamily: 'monospace', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '1px' }}>ETA</p>
             </div>
           )}
         </div>
@@ -270,17 +272,17 @@ export default function Navigation({ hospital }: { hospital: any }) {
       {/* Loading */}
       {loading && (
         <div style={{
-          background: '#111116',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
-          padding: '16px',
+          background: '#FFFFFF',
+          borderBottom: `1px solid ${BORDER}`,
+          padding: '15px 16px',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
+          gap: '11px',
           flexShrink: 0
         }}>
-          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fcb546', animation: 'pulse 1s infinite' }}/>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>
-            {error || 'Calculating route...'}
+          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#B45309', animation: 'pulse 1s infinite' }}/>
+          <p style={{ color: T2, fontSize: '13px' }}>
+            {error || 'Calculating route…'}
           </p>
         </div>
       )}
@@ -296,22 +298,22 @@ export default function Navigation({ hospital }: { hospital: any }) {
             attributionControl={false}
           >
             <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
               attribution=""
             />
 
             {/* Route line */}
             {route.length > 0 && (
               <>
-                {/* Shadow */}
+                {/* Casing */}
                 <Polyline
                   positions={route}
-                  pathOptions={{ color: '#4A9EF5', weight: 10, opacity: 0.2 }}
+                  pathOptions={{ color: ACCENT, weight: 11, opacity: 0.15 }}
                 />
                 {/* Main route */}
                 <Polyline
                   positions={route}
-                  pathOptions={{ color: '#4A9EF5', weight: 5, opacity: 1 }}
+                  pathOptions={{ color: ACCENT, weight: 5, opacity: 1 }}
                 />
               </>
             )}
@@ -321,7 +323,7 @@ export default function Navigation({ hospital }: { hospital: any }) {
             <Circle
               center={position}
               radius={15}
-              pathOptions={{ color: '#4A9EF5', fillColor: '#4A9EF5', fillOpacity: 0.15, weight: 0 }}
+              pathOptions={{ color: ACCENT, fillColor: ACCENT, fillOpacity: 0.12, weight: 0 }}
             />
 
             {/* Hospital */}
@@ -335,31 +337,31 @@ export default function Navigation({ hospital }: { hospital: any }) {
 
       {/* Bottom info strip */}
       <div style={{
-        background: '#111116',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
+        background: '#FFFFFF',
+        borderTop: `1px solid ${BORDER}`,
         padding: '12px 16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexShrink: 0
       }}>
-        <div>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>
+        <div style={{ minWidth: 0, paddingRight: '12px' }}>
+          <p style={{ color: T3, fontSize: '9.5px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '3px' }}>
             Destination
           </p>
-          <p style={{ color: 'white', fontSize: '13px', fontWeight: 600 }}>{hospital.name}</p>
+          <p style={{ color: T1, fontSize: '13.5px', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{hospital.name}</p>
         </div>
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '18px', alignItems: 'center', flexShrink: 0 }}>
           {totalDist !== null && (
             <div style={{ textAlign: 'right' }}>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Distance</p>
-              <p style={{ color: 'white', fontSize: '13px', fontWeight: 600, fontFamily: 'monospace' }}>{formatDist(totalDist)}</p>
+              <p style={{ color: T3, fontSize: '9.5px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '3px' }}>Distance</p>
+              <p style={{ color: T1, fontSize: '13.5px', fontWeight: 700, fontFamily: 'monospace' }}>{formatDist(totalDist)}</p>
             </div>
           )}
           {speed > 0 && (
             <div style={{ textAlign: 'right' }}>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Speed</p>
-              <p style={{ color: '#80EF80', fontSize: '13px', fontWeight: 600, fontFamily: 'monospace' }}>{Math.round(speed * 3.6)} km/h</p>
+              <p style={{ color: T3, fontSize: '9.5px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '3px' }}>Speed</p>
+              <p style={{ color: GREEN, fontSize: '13.5px', fontWeight: 700, fontFamily: 'monospace' }}>{Math.round(speed * 3.6)} km/h</p>
             </div>
           )}
         </div>
@@ -368,20 +370,20 @@ export default function Navigation({ hospital }: { hospital: any }) {
       {/* Next step preview */}
       {nextStepData && (
         <div style={{
-          background: '#09090C',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
+          background: '#F4F5F7',
+          borderTop: `1px solid ${BORDER}`,
           padding: '10px 16px',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
           flexShrink: 0
         }}>
-          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', flexShrink: 0 }}>
+          <p style={{ color: T3, fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', flexShrink: 0 }}>
             Then
           </p>
-          <TurnIcon type={nextStepData.type}/>
-          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px' }}>{nextStepData.instruction}</p>
-          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', fontFamily: 'monospace', marginLeft: 'auto', flexShrink: 0 }}>
+          <TurnIcon type={nextStepData.type} color={T2}/>
+          <p style={{ color: T2, fontSize: '12.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{nextStepData.instruction}</p>
+          <p style={{ color: T3, fontSize: '11px', fontFamily: 'monospace', marginLeft: 'auto', flexShrink: 0 }}>
             {formatDist(nextStepData.distance)}
           </p>
         </div>

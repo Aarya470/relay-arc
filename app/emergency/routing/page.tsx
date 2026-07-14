@@ -196,8 +196,8 @@ function RoutingPage() {
   const [cancelling, setCancelling] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [notifiedContacts, setNotifiedContacts] = useState<any[]>([])
-  const [showMedCard, setShowMedCard] = useState(true)
   const [elapsed, setElapsed] = useState(0)
+  const [navMode, setNavMode] = useState(false)
   const lockedRef = useRef(true)
   const activeEmergencyId = useRef(emergencyId)
   const userIdRef = useRef('')
@@ -345,15 +345,25 @@ function RoutingPage() {
 
   const cancelEmergency = async () => {
     setCancelling(true)
-    const uid = userIdRef.current
-    if (uid) {
-      await supabase.from('emergencies')
-        .update({ status: 'resolved' })
-        .eq('user_id', uid)
-        .eq('status', 'active')
+    try {
+      let uid = userIdRef.current
+      if (!uid) {
+        const { data: { user } } = await supabase.auth.getUser()
+        uid = user?.id || ''
+      }
+      if (uid) {
+        const { error } = await supabase.from('emergencies')
+          .update({ status: 'resolved' })
+          .eq('user_id', uid)
+          .eq('status', 'active')
+        if (error) throw error
+      }
+      lockedRef.current = false
+      router.replace('/dashboard')
+    } catch {
+      toast.error('Could not cancel — check your connection and try again')
+      setCancelling(false)
     }
-    lockedRef.current = false
-    router.push(`/emergency/recovery?type=${type}`)
   }
 
   // ── Loading state ──────────────────────────────────────────────────────────
@@ -554,27 +564,29 @@ function RoutingPage() {
           </div>
         </div>
 
-        <motion.a
-          href={directionsUrl(hospital)}
-          target="_blank"
-          rel="noopener noreferrer"
+        <motion.button
+          onClick={() => setNavMode(true)}
           whileTap={{ scale: 0.985 }}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-            background: T.red, color: 'white',
-            padding: '17px', borderRadius: '12px',
+            width: '100%', background: T.red, color: 'white',
+            padding: '17px', borderRadius: '12px', border: 'none',
             fontWeight: 800, fontSize: '16.5px', letterSpacing: '-0.2px',
-            textDecoration: 'none', marginTop: '16px', minHeight: '56px',
+            cursor: 'pointer', fontFamily: 'inherit', marginTop: '16px', minHeight: '56px',
           }}
         >
           <Navigation2 size={19} strokeWidth={2.5}/>
-          Navigate — turn-by-turn
-        </motion.a>
+          Start navigation
+        </motion.button>
+        <a href={directionsUrl(hospital)} target="_blank" rel="noopener noreferrer"
+          style={{ display: 'block', textAlign: 'center', color: T.textMuted, fontSize: '12.5px', textDecoration: 'none', padding: '10px 0 0' }}>
+          Prefer Google Maps? <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>Open there instead</span>
+        </a>
       </div>
 
       {/* ── Map — full bleed ────────────────────────────────────────────────── */}
       <div style={{ height: '32vh', flexShrink: 0, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-        <Nav hospital={hospital} />
+        {!navMode && <Nav hospital={hospital} />}
       </div>
 
       {/* ── Content ─────────────────────────────────────────────────────────── */}
@@ -769,6 +781,49 @@ function RoutingPage() {
           </button>
         </div>
       </motion.div>
+
+      {/* ── Full-screen Relay navigation ──────────────────────────────────────── */}
+      <AnimatePresence>
+        {navMode && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}
+            style={{ position: 'fixed', inset: 0, zIndex: 150, background: '#FFFFFF', display: 'flex', flexDirection: 'column' }}
+          >
+            <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(217,20,20,0.18)', flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+                <motion.div animate={{ opacity: [1, 0.25, 1] }} transition={{ duration: 1.1, repeat: Infinity }}
+                  style={{ width: '8px', height: '8px', background: T.red }}/>
+                <span style={{ color: T.red, fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700 }}>
+                  Relay navigation
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <span style={{ color: T.red, fontFamily: MONO, fontSize: '14px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
+                  {fmtElapsed(elapsed)}
+                </span>
+                <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
+                  style={{ background: '#F4F5F7', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <X size={16} color={T.textSec}/>
+                </button>
+              </div>
+            </div>
+
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <Nav hospital={hospital}/>
+            </div>
+
+            <div style={{ padding: '11px 16px', borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, background: '#FFFFFF' }}>
+              <a href="tel:911" style={{ color: T.red, fontWeight: 800, fontSize: '14.5px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '7px' }}>
+                <Phone size={14} strokeWidth={2.5}/> Call 911
+              </a>
+              <a href={directionsUrl(hospital)} target="_blank" rel="noopener noreferrer"
+                style={{ color: T.textMuted, fontSize: '12.5px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                Open in Google Maps
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Cancel confirm sheet ──────────────────────────────────────────────── */}
       <CancelConfirmSheet
