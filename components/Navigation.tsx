@@ -1,8 +1,7 @@
 'use client'
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { MapContainer, TileLayer, Marker, Polyline, useMap, Circle } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
+import maplibregl from 'maplibre-gl'
+import 'maplibre-gl/dist/maplibre-gl.css'
 import { Volume2, VolumeX } from 'lucide-react'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
@@ -14,29 +13,16 @@ const ACCENT = '#0055FF'
 const RED    = '#D91414'
 const GREEN  = '#007A44'
 
-// ─── Icons (recreated per-bearing so they stay upright while the map rotates) ─
-function makeUserIcon(bearing: number) {
-  return L.divIcon({
-    className: '',
-    html: `<div style="transform:rotate(${bearing}deg);width:44px;height:44px;display:flex;align-items:center;justify-content:center;">
-      <div style="width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:34px solid ${ACCENT};
-        filter:drop-shadow(0 2px 6px rgba(0,85,255,0.5));border-radius:4px;"></div>
-      <div style="position:absolute;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:19px solid white;margin-top:9px;"></div>
-    </div>`,
-    iconSize: [44, 44],
-    iconAnchor: [22, 22],
-  })
-}
-function makeHospitalIcon(bearing: number) {
-  return L.divIcon({
-    className: '',
-    html: `<div style="transform:rotate(${bearing}deg);width:36px;height:36px;background:${RED};border-radius:10px;
-      display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;line-height:1;
-      border:2.5px solid white;box-shadow:0 3px 14px rgba(14,18,24,0.35);">+</div>`,
-    iconSize: [36, 36],
-    iconAnchor: [18, 18],
-  })
-}
+const MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty'
+
+const USER_ARROW_HTML = `<div style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;">
+  <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(0,85,255,0.55));"></div>
+  <div style="position:absolute;top:19px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:20px solid white;"></div>
+</div>`
+
+const HOSPITAL_HTML = `<div style="width:38px;height:38px;background:${RED};border-radius:11px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;line-height:1;
+  border:2.5px solid white;box-shadow:0 4px 16px rgba(14,18,24,0.35);font-family:monospace;">+</div>`
 
 // ─── Geometry helpers ─────────────────────────────────────────────────────────
 function distanceBetween(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -53,7 +39,6 @@ function bearingBetween(lat1: number, lon1: number, lat2: number, lon2: number) 
   const x = Math.cos(φ1)*Math.sin(φ2) - Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ)
   return ((Math.atan2(y, x) * 180/Math.PI) + 360) % 360
 }
-// Point `d` meters ahead of (lat,lng) along `brg` degrees
 function projectAhead(lat: number, lng: number, brg: number, d: number): [number, number] {
   const rad = brg * Math.PI/180
   return [lat + (d * Math.cos(rad)) / 111320, lng + (d * Math.sin(rad)) / (111320 * Math.cos(lat * Math.PI/180))]
@@ -66,7 +51,7 @@ function formatTime(seconds: number) {
   return mins < 60 ? `${mins} min` : `${Math.floor(mins/60)} h ${mins%60} m`
 }
 
-// ─── Instruction text (OSRM demo returns no prose — we compose it) ───────────
+// ─── Instruction text (routing servers return no prose — we compose it) ──────
 interface Step {
   name: string
   distance: number
@@ -107,36 +92,6 @@ function TurnGlyph({ step, size = 34, color = 'white' }: { step: Step | undefine
   return <span style={{ fontSize: `${size}px`, lineHeight: 1, fontFamily: 'monospace', fontWeight: 700, color }}>{arrow}</span>
 }
 
-// ─── Map plumbing ─────────────────────────────────────────────────────────────
-function SizeFix() {
-  const map = useMap()
-  useEffect(() => {
-    const t1 = setTimeout(() => map.invalidateSize(), 60)
-    const t2 = setTimeout(() => map.invalidateSize(), 400)
-    const onResize = () => map.invalidateSize()
-    window.addEventListener('resize', onResize)
-    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onResize) : null
-    ro?.observe(map.getContainer())
-    return () => {
-      clearTimeout(t1); clearTimeout(t2)
-      window.removeEventListener('resize', onResize)
-      ro?.disconnect()
-    }
-  }, [map])
-  return null
-}
-function ChaseCamera({ position, bearing, zoom, preview }: { position: [number,number] | null; bearing: number; zoom: number; preview: boolean }) {
-  const map = useMap()
-  useEffect(() => {
-    if (!position) return
-    if (preview) { map.setView(position, 15, { animate: true }); return }
-    // center a point ahead of the driver so they sit in the lower third
-    const ahead = projectAhead(position[0], position[1], bearing, 70)
-    map.setView(ahead, zoom, { animate: true, duration: 0.45 })
-  }, [position, bearing, zoom, preview])
-  return null
-}
-
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Navigation({ hospital, preview = false }: { hospital: any; preview?: boolean }) {
   const [position, setPosition] = useState<[number, number] | null>(null)
@@ -152,6 +107,12 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [muted, setMuted] = useState(false)
+
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const mapRef = useRef<maplibregl.Map | null>(null)
+  const userMarkerRef = useRef<maplibregl.Marker | null>(null)
+  const styleReadyRef = useRef(false)
+  const routeRef = useRef<[number, number][]>([])
   const watchId = useRef<number | null>(null)
   const lastPos = useRef<[number, number] | null>(null)
   const lastRecalc = useRef(0)
@@ -159,8 +120,6 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
   const spokenNear = useRef(false)
   const mutedRef = useRef(false)
   mutedRef.current = muted
-
-  const hospitalPos: [number, number] = [hospital.lat, hospital.lng]
 
   const speak = useCallback((text: string) => {
     if (mutedRef.current || preview) return
@@ -170,6 +129,23 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
       window.speechSynthesis.cancel()
       window.speechSynthesis.speak(u)
     } catch {}
+  }, [preview])
+
+  const drawRoute = useCallback((coords: [number, number][]) => {
+    const map = mapRef.current
+    if (!map || !styleReadyRef.current) return
+    const src = map.getSource('route') as maplibregl.GeoJSONSource | undefined
+    if (!src) return
+    src.setData({
+      type: 'Feature',
+      properties: {},
+      geometry: { type: 'LineString', coordinates: coords.map(([lat, lng]) => [lng, lat]) },
+    })
+    if (preview && coords.length > 1) {
+      const b = new maplibregl.LngLatBounds()
+      coords.forEach(([lat, lng]) => b.extend([lng, lat]))
+      map.fitBounds(b, { padding: 42, duration: 600 })
+    }
   }, [preview])
 
   // Fetch route — FOSSGIS first (reliable), OSRM demo as fallback
@@ -196,7 +172,9 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
     const coords: [number, number][] = data.routes[0].geometry.coordinates.map(
       ([lng, lat]: [number, number]) => [lat, lng]
     )
+    routeRef.current = coords
     setRoute(coords)
+    drawRoute(coords)
     const parsedSteps: Step[] = leg.steps.map((s: any) => ({
       name: s.name || '',
       distance: s.distance,
@@ -209,9 +187,78 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
     setSteps(parsedSteps)
     setCurrentStep(0)
     setLoading(false)
-  }, [hospital])
+  }, [hospital, drawRoute])
 
-  // GPS tracking
+  // ── Map init (once we have a first fix) ─────────────────────────────────────
+  const hasFix = position !== null
+  useEffect(() => {
+    if (!hasFix || !containerRef.current || mapRef.current || arrived) return
+    const p = position as [number, number]
+    const map = new maplibregl.Map({
+      container: containerRef.current,
+      style: MAP_STYLE,
+      center: [p[1], p[0]],
+      zoom: preview ? 13 : 17.5,
+      pitch: preview ? 0 : 58,
+      bearing: 0,
+      attributionControl: false,
+      interactive: preview,
+    })
+    mapRef.current = map
+
+    map.on('load', () => {
+      map.addSource('route', {
+        type: 'geojson',
+        data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [] } },
+      })
+      map.addLayer({
+        id: 'route-casing', type: 'line', source: 'route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#0033A0', 'line-width': 13, 'line-opacity': 0.25 },
+      })
+      map.addLayer({
+        id: 'route-line', type: 'line', source: 'route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': ACCENT, 'line-width': 7.5 },
+      })
+      styleReadyRef.current = true
+      if (routeRef.current.length) drawRoute(routeRef.current)
+
+      const uEl = document.createElement('div')
+      uEl.innerHTML = USER_ARROW_HTML
+      userMarkerRef.current = new maplibregl.Marker({ element: uEl, rotationAlignment: 'viewport' })
+        .setLngLat([p[1], p[0]]).addTo(map)
+
+      const hEl = document.createElement('div')
+      hEl.innerHTML = HOSPITAL_HTML
+      new maplibregl.Marker({ element: hEl, anchor: 'center' })
+        .setLngLat([hospital.lng, hospital.lat]).addTo(map)
+    })
+    map.on('error', () => { /* tile hiccups are non-fatal */ })
+
+    const ro = new ResizeObserver(() => map.resize())
+    ro.observe(containerRef.current)
+    return () => {
+      ro.disconnect()
+      styleReadyRef.current = false
+      userMarkerRef.current = null
+      map.remove()
+      mapRef.current = null
+    }
+  }, [hasFix, preview, arrived])
+
+  // ── Chase camera + marker tracking ──────────────────────────────────────────
+  const zoom = speed > 18 ? 16.5 : speed > 9 ? 17 : 17.5
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !position) return
+    userMarkerRef.current?.setLngLat([position[1], position[0]])
+    if (preview) return
+    const ahead = projectAhead(position[0], position[1], bearing, 55)
+    map.easeTo({ center: [ahead[1], ahead[0]], bearing, zoom, pitch: 58, duration: 500 })
+  }, [position, bearing, zoom, preview])
+
+  // ── GPS tracking ────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!navigator.geolocation) {
       const fallback: [number, number] = [hospital.lat - 0.05, hospital.lng - 0.05]
@@ -242,7 +289,6 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
         setPosition(p)
         setSpeed(pos.coords.speed || 0)
 
-        // Heading: GPS heading while moving, else derive from motion
         if (pos.coords.heading !== null && !isNaN(pos.coords.heading) && (pos.coords.speed || 0) > 1) {
           setBearing(pos.coords.heading)
         } else if (lastPos.current && distanceBetween(p[0], p[1], lastPos.current[0], lastPos.current[1]) > 4) {
@@ -250,14 +296,12 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
         }
         lastPos.current = p
 
-        // Arrival
         const distToHospital = distanceBetween(p[0], p[1], hospital.lat, hospital.lng)
         if (distToHospital < 50) {
           setArrived(true)
           return
         }
 
-        // Advance maneuvers
         if (steps.length > 0 && currentStep < steps.length - 1) {
           const nextStep = steps[currentStep + 1]
           const dist = distanceBetween(p[0], p[1], nextStep.coords[0], nextStep.coords[1])
@@ -272,7 +316,6 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
           }
         }
 
-        // Off-route: recalc when >60m from the polyline (throttled)
         if (route.length > 0 && Date.now() - lastRecalc.current > 20000) {
           let minD = Infinity
           for (let i = 0; i < route.length; i += 3) {
@@ -287,7 +330,6 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
           }
         }
 
-        // Remaining ETA
         if (steps.length > 0) {
           const remaining = steps.slice(currentStep).reduce((acc, s) => acc + s.duration, 0)
           setEta(remaining)
@@ -305,8 +347,6 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
 
   const upcoming = steps.length > 0 ? steps[Math.min(currentStep + 1, steps.length - 1)] : undefined
   const after = steps.length > 0 ? steps[Math.min(currentStep + 2, steps.length - 1)] : undefined
-  const zoom = speed > 18 ? 16.75 : speed > 9 ? 17.5 : 18
-  const mapBearing = preview ? 0 : bearing
 
   if (arrived) return (
     <div style={{
@@ -330,52 +370,11 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
   return (
     <div style={{ height: '100%', position: 'relative', overflow: 'hidden', background: '#E8EAED' }}>
 
-      {/* Rotating map plane — oversized so corners never show */}
-      <div style={{
-        position: 'absolute',
-        inset: preview ? 0 : '-30%',
-        transform: preview ? 'none' : `rotate(${-mapBearing}deg)`,
-        transformOrigin: 'center center',
-        transition: 'transform 0.6s ease-out',
-        willChange: 'transform',
-      }}>
-        {position && (
-          <MapContainer
-            center={position}
-            zoom={preview ? 15 : 18}
-            zoomSnap={0.25}
-            style={{ height: '100%', width: '100%' }}
-            zoomControl={false}
-            attributionControl={false}
-            dragging={preview}
-            scrollWheelZoom={preview}
-            touchZoom={preview}
-            doubleClickZoom={false}
-          >
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-              attribution=""
-            />
-            {route.length > 0 && (
-              <>
-                <Polyline positions={route} pathOptions={{ color: '#0033A0', weight: 12, opacity: 0.25 }} />
-                <Polyline positions={route} pathOptions={{ color: ACCENT, weight: 7, opacity: 1 }} />
-              </>
-            )}
-            <Marker position={position} icon={makeUserIcon(mapBearing)}/>
-            {!preview && (
-              <Circle center={position} radius={20} pathOptions={{ color: ACCENT, fillColor: ACCENT, fillOpacity: 0.08, weight: 0 }}/>
-            )}
-            <Marker position={hospitalPos} icon={makeHospitalIcon(mapBearing)}/>
-            <ChaseCamera position={position} bearing={mapBearing} zoom={zoom} preview={preview}/>
-            <SizeFix/>
-          </MapContainer>
-        )}
-      </div>
+      <div ref={containerRef} style={{ position: 'absolute', inset: 0 }}/>
 
       {!preview && (
         <>
-          {/* ── Maneuver banner — Apple/Tesla style ─────────────────────────── */}
+          {/* ── Maneuver banner ─────────────────────────────────────────────── */}
           <div style={{
             position: 'absolute', top: '12px', left: '12px', right: '12px', zIndex: 500,
             background: T1, borderRadius: '18px',
