@@ -4,7 +4,15 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, ArrowRight, Plus, X, Loader2, Heart, Zap, Brain, Activity, HeartPulse } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Plus, Loader2, Heart, Zap, Brain, Activity, HeartPulse, Check } from 'lucide-react'
+
+const T1 = '#0E1218'
+const T2 = '#5B6371'
+const T3 = '#9AA2AD'
+const BORDER = '#E3E6EC'
+const ACCENT = '#0055FF'
+const RED = '#D91414'
+const mono = 'var(--font-mono, monospace)'
 
 const CONDITIONS = [
   { id: 'Post-cardiac surgery', Icon: Heart,      desc: 'Bypass, valve, ablation, device' },
@@ -12,10 +20,16 @@ const CONDITIONS = [
   { id: 'Dysautonomia',         Icon: Brain,      desc: 'Autonomic nervous system disorder' },
   { id: 'ME/CFS',               Icon: Activity,   desc: 'Myalgic encephalomyelitis' },
   { id: 'General cardiac',      Icon: HeartPulse, desc: 'Arrhythmia, CHF, other' },
-  { id: 'Other',                Icon: Plus,       desc: 'Other condition' },
+  { id: 'Other',                Icon: Plus,       desc: 'Something else' },
 ]
 
-const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
+const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
+
+const STEP_META = [
+  { kicker: '01 / 03', title: 'About you',       sub: 'The basics, once.' },
+  { kicker: '02 / 03', title: 'Your condition',  sub: 'This decides which hospital Relay routes you to.' },
+  { kicker: '03 / 03', title: 'Contacts & meds', sub: 'Sent to the ER ahead of you in an emergency.' },
+]
 
 export default function Onboarding() {
   const [step, setStep] = useState(1)
@@ -24,6 +38,7 @@ export default function Onboarding() {
     full_name: '',
     date_of_birth: '',
     phone: '',
+    blood_type: '',
     diagnosis: [] as string[],
     surgery_date: '',
     allergies: '',
@@ -66,17 +81,19 @@ export default function Onboarding() {
     if (!user) { router.push('/login'); return }
 
     const filteredMeds = form.medications.filter(m => m.name.trim())
+    const filteredContacts = form.emergency_contacts.filter(c => c.name.trim())
 
     const { error } = await supabase.from('profiles').insert({
       id: user.id,
       ...form,
       medications: filteredMeds,
+      emergency_contacts: filteredContacts,
       diagnosis: form.diagnosis.join(', ')
     })
 
     if (error) toast.error(error.message)
     else {
-      toast.success('Profile created!')
+      toast.success('Profile created')
       router.push('/dashboard')
     }
     setLoading(false)
@@ -85,162 +102,175 @@ export default function Onboarding() {
   const inputStyle: React.CSSProperties = {
     width: '100%',
     background: '#FFFFFF',
-    border: '1px solid #D5D9E0',
-    borderRadius: '12px',
-    padding: '14px 16px',
-    color: '#0E1218',
-    fontSize: '14px',
+    border: `1.5px solid ${BORDER}`,
+    borderRadius: '10px',
+    padding: '13px 16px',
+    color: T1,
+    fontSize: '15px',
     outline: 'none',
     fontFamily: 'inherit',
   }
 
+  const label = (text: string) => (
+    <p style={{ color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>{text}</p>
+  )
+
+  const primaryBtn: React.CSSProperties = {
+    flex: 1, background: T1, color: 'white', fontWeight: 600, padding: '15px',
+    borderRadius: '11px', border: 'none', cursor: 'pointer',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+    fontSize: '15px', fontFamily: 'inherit', minHeight: '50px',
+  }
+  const ghostBtn: React.CSSProperties = {
+    flex: 1, background: 'none', border: `1.5px solid ${BORDER}`, color: T2,
+    fontWeight: 500, padding: '15px', borderRadius: '11px', cursor: 'pointer',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+    fontSize: '15px', fontFamily: 'inherit', minHeight: '50px',
+  }
+
+  const meta = STEP_META[step - 1]
+
   return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '48px 20px' }}>
-      <div style={{ maxWidth: '430px', margin: '0 auto' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
+      <div style={{ maxWidth: '420px', margin: '0 auto', paddingTop: '56px', paddingBottom: '48px' }}>
 
-        {/* Logo row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '32px' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '9px', background: '#D91414', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-              <path d="M7 1L9.5 5.5H12.5L10 9L11 13L7 10.5L3 13L4 9L1.5 5.5H4.5L7 1Z" fill="white" strokeWidth="0"/>
-            </svg>
+        {/* Brand */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '40px' }}>
+          <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Heart size={13} color="white" fill="white" strokeWidth={0}/>
           </div>
-          <span style={{ color: '#0E1218', fontWeight: 800, fontSize: '16px', letterSpacing: '-0.4px' }}>Relay Arc</span>
+          <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
         </div>
 
-        {/* Progress bars */}
-        <div style={{ display: 'flex', gap: '6px', marginBottom: '32px' }}>
-          {[1, 2, 3].map(s => (
-            <div key={s} style={{ height: '3px', flex: 1, borderRadius: '99px', overflow: 'hidden', background: '#E3E6EC' }}>
-              <motion.div
-                style={{ height: '100%', borderRadius: '99px', background: '#0055FF' }}
-                initial={{ width: 0 }}
-                animate={{ width: step >= s ? '100%' : '0%' }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
-          ))}
+        {/* Progress + header */}
+        <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '12px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>{meta.kicker}</span>
+          <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase' }}>Profile setup</span>
         </div>
+        <h1 style={{ color: T1, fontSize: '30px', fontWeight: 800, letterSpacing: '-1.1px', lineHeight: 1.05, marginBottom: '6px' }}>
+          {meta.title}<span style={{ color: RED }}>.</span>
+        </h1>
+        <p style={{ color: T2, fontSize: '14px', lineHeight: 1.55, marginBottom: '30px' }}>{meta.sub}</p>
 
         <AnimatePresence mode="wait">
 
-          {/* Step 1 — Basic info */}
           {step === 1 && (
             <motion.div
               key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+              initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: 0.18 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
             >
-              <div style={{ marginBottom: '8px' }}>
-                <p style={{ color: '#0055FF', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px', fontWeight: 600 }}>Step 1 of 3</p>
-                <h1 style={{ color: '#0E1218', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>About you</h1>
-                <p style={{ color: '#5B6371', fontSize: '14px', marginTop: '4px' }}>Your basic information</p>
+              <div>{label('Full name')}<input style={inputStyle} placeholder="Asha Kulkarni" value={form.full_name} onChange={e => update('full_name', e.target.value)}/></div>
+              <div>{label('Date of birth')}<input type="date" style={inputStyle} value={form.date_of_birth} onChange={e => update('date_of_birth', e.target.value)}/></div>
+              <div>{label('Phone')}<input type="tel" style={inputStyle} placeholder="+1 555 000 0000" value={form.phone} onChange={e => update('phone', e.target.value)}/></div>
+
+              <div>
+                {label('Blood type — critical for responders')}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                  {BLOOD_TYPES.map(bt => {
+                    const active = form.blood_type === bt
+                    return (
+                      <button key={bt} onClick={() => update('blood_type', active ? '' : bt)}
+                        style={{
+                          padding: '12px 0', borderRadius: '10px', cursor: 'pointer',
+                          background: active ? T1 : 'none',
+                          border: `1.5px solid ${active ? T1 : BORDER}`,
+                          color: active ? 'white' : T1,
+                          fontWeight: 700, fontSize: '14px', fontFamily: mono, letterSpacing: '0.3px',
+                          transition: 'all 0.12s ease',
+                        }}>
+                        {bt}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
 
-              <input style={inputStyle} placeholder="Full name" value={form.full_name} onChange={e => update('full_name', e.target.value)}/>
-              <input type="date" style={inputStyle} placeholder="Date of birth" value={form.date_of_birth} onChange={e => update('date_of_birth', e.target.value)}/>
-              <input type="tel" style={inputStyle} placeholder="Phone number" value={form.phone} onChange={e => update('phone', e.target.value)}/>
-              <input style={inputStyle} placeholder="Cardiologist or specialist name" value={form.cardiologist} onChange={e => update('cardiologist', e.target.value)}/>
+              <div>{label('Cardiologist or specialist')}<input style={inputStyle} placeholder="Dr. Mehta" value={form.cardiologist} onChange={e => update('cardiologist', e.target.value)}/></div>
 
               <motion.button
-                whileTap={{ scale: 0.97 }}
-                transition={spring}
+                whileTap={{ scale: 0.985 }}
                 onClick={() => {
                   if (!form.full_name) { toast.error('Please enter your name'); return }
                   setStep(2)
                 }}
-                style={{ width: '100%', background: '#0055FF', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '4px', fontSize: '15px' }}
+                style={{ ...primaryBtn, marginTop: '8px' }}
               >
-                Continue <ArrowRight size={16}/>
+                Continue <ArrowRight size={15}/>
               </motion.button>
             </motion.div>
           )}
 
-          {/* Step 2 — Conditions */}
           {step === 2 && (
             <motion.div
               key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+              initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: 0.18 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
             >
-              <div style={{ marginBottom: '8px' }}>
-                <p style={{ color: '#0055FF', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px', fontWeight: 600 }}>Step 2 of 3</p>
-                <h1 style={{ color: '#0E1218', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>Your condition</h1>
-                <p style={{ color: '#5B6371', fontSize: '14px', marginTop: '4px' }}>Select all that apply</p>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div style={{ borderTop: `1px solid ${BORDER}` }}>
                 {CONDITIONS.map(c => {
                   const active = form.diagnosis.includes(c.id)
                   return (
-                    <motion.button
+                    <button
                       key={c.id}
-                      whileTap={{ scale: 0.97 }}
-                      transition={spring}
                       onClick={() => toggleCondition(c.id)}
                       style={{
-                        padding: '16px', borderRadius: '16px', textAlign: 'left', cursor: 'pointer',
-                        background: active ? 'rgba(0,85,255,0.10)' : '#FFFFFF',
-                        border: `1px solid ${active ? 'rgba(0,85,255,0.40)' : '#ECEEF2'}`,
-                        transition: 'border-color 0.15s ease, background 0.15s ease',
+                        display: 'flex', alignItems: 'center', gap: '14px',
+                        width: '100%', textAlign: 'left', cursor: 'pointer',
+                        padding: '14px 4px', minHeight: '58px',
+                        background: active ? 'rgba(0,85,255,0.05)' : 'none',
+                        border: 'none', borderBottom: `1px solid ${BORDER}`,
+                        fontFamily: 'inherit',
+                        transition: 'background 0.12s ease',
                       }}
                     >
-                      <div style={{ width: '32px', height: '32px', borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', background: active ? 'rgba(0,85,255,0.16)' : '#ECEEF2' }}>
-                        <c.Icon size={16} color={active ? '#0055FF' : '#9AA2AD'}/>
+                      <c.Icon size={18} color={active ? ACCENT : T3} strokeWidth={2} style={{ flexShrink: 0 }}/>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontWeight: 700, fontSize: '15px', letterSpacing: '-0.2px', color: active ? ACCENT : T1 }}>{c.id}</p>
+                        <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>{c.desc}</p>
                       </div>
-                      <p style={{ fontWeight: 700, fontSize: '13px', marginBottom: '3px', letterSpacing: '-0.2px', color: active ? '#0E1218' : '#5B6371' }}>
-                        {c.id}
-                      </p>
-                      <p style={{ color: '#9AA2AD', fontSize: '11px', lineHeight: 1.4 }}>{c.desc}</p>
-                    </motion.button>
+                      <div style={{
+                        width: '22px', height: '22px', borderRadius: '7px', flexShrink: 0,
+                        background: active ? ACCENT : 'none',
+                        border: `1.5px solid ${active ? ACCENT : '#C9CED6'}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.12s ease',
+                      }}>
+                        {active && <Check size={13} color="white" strokeWidth={3}/>}
+                      </div>
+                    </button>
                   )
                 })}
               </div>
 
-              <input type="date" style={inputStyle} placeholder="Surgery date (if applicable)" value={form.surgery_date} onChange={e => update('surgery_date', e.target.value)}/>
-              <input style={inputStyle} placeholder="Known allergies" value={form.allergies} onChange={e => update('allergies', e.target.value)}/>
+              <div>{label('Surgery date — if applicable')}<input type="date" style={inputStyle} value={form.surgery_date} onChange={e => update('surgery_date', e.target.value)}/></div>
+              <div>{label('Known allergies')}<input style={inputStyle} placeholder="Penicillin, sulfa drugs…" value={form.allergies} onChange={e => update('allergies', e.target.value)}/></div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => setStep(1)}
-                  style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D5D9E0', color: '#5B6371', fontWeight: 600, padding: '16px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
-                  <ArrowLeft size={16}/> Back
+              <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+                <motion.button whileTap={{ scale: 0.985 }} onClick={() => setStep(1)} style={ghostBtn}>
+                  <ArrowLeft size={15}/> Back
                 </motion.button>
-                <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => {
+                <motion.button whileTap={{ scale: 0.985 }} onClick={() => {
                   if (form.diagnosis.length === 0) { toast.error('Please select at least one condition'); return }
                   setStep(3)
-                }}
-                  style={{ flex: 1, background: '#0055FF', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
-                  Continue <ArrowRight size={16}/>
+                }} style={primaryBtn}>
+                  Continue <ArrowRight size={15}/>
                 </motion.button>
               </div>
             </motion.div>
           )}
 
-          {/* Step 3 — Contacts + Meds */}
           {step === 3 && (
             <motion.div
               key="step3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+              initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: 0.18 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}
             >
-              <div style={{ marginBottom: '4px' }}>
-                <p style={{ color: '#0055FF', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px', fontWeight: 600 }}>Step 3 of 3</p>
-                <h1 style={{ color: '#0E1218', fontSize: '30px', fontWeight: 900, letterSpacing: '-1px' }}>Contacts &amp; meds</h1>
-                <p style={{ color: '#5B6371', fontSize: '14px', marginTop: '4px' }}>Who to alert in an emergency</p>
-              </div>
-
-              {/* Contacts */}
               <div>
-                <p style={{ color: '#9AA2AD', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '8px', fontWeight: 600 }}>Emergency contacts</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {label('Emergency contacts')}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                   {form.emergency_contacts.map((c, i) => (
-                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div key={i} style={{ borderLeft: `2px solid ${BORDER}`, paddingLeft: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       <input style={inputStyle} placeholder="Name" value={c.name} onChange={e => updateContact(i, 'name', e.target.value)}/>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                         <input style={inputStyle} placeholder="Relationship" value={c.relationship} onChange={e => updateContact(i, 'relationship', e.target.value)}/>
@@ -250,47 +280,49 @@ export default function Onboarding() {
                   ))}
                   <button
                     onClick={() => update('emergency_contacts', [...form.emergency_contacts, { name: '', relationship: '', phone: '' }])}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0055FF', fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: ACCENT, fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit', padding: 0 }}
                   >
-                    <Plus size={14}/> Add contact
+                    <Plus size={14}/> Add another contact
                   </button>
                 </div>
               </div>
 
-              {/* Medications */}
               <div>
-                <p style={{ color: '#9AA2AD', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '8px', fontWeight: 600 }}>Current medications</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {label('Current medications')}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                   {form.medications.map((m, i) => (
-                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div key={i} style={{ borderLeft: `2px solid ${BORDER}`, paddingLeft: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       <input style={inputStyle} placeholder="Medication name" value={m.name} onChange={e => updateMed(i, 'name', e.target.value)}/>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                        <input style={inputStyle} placeholder="Dose (e.g. 50mg)" value={m.dose} onChange={e => updateMed(i, 'dose', e.target.value)}/>
+                        <input style={inputStyle} placeholder="Dose — 50mg" value={m.dose} onChange={e => updateMed(i, 'dose', e.target.value)}/>
                         <input style={inputStyle} placeholder="Frequency" value={m.frequency} onChange={e => updateMed(i, 'frequency', e.target.value)}/>
                       </div>
                     </div>
                   ))}
                   <button
                     onClick={() => update('medications', [...form.medications, { name: '', dose: '', frequency: '', times: ['Morning'] }])}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0055FF', fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: ACCENT, fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit', padding: 0 }}
                   >
-                    <Plus size={14}/> Add medication
+                    <Plus size={14}/> Add another medication
                   </button>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px', paddingBottom: '24px' }}>
-                <motion.button whileTap={{ scale: 0.97 }} transition={spring} onClick={() => setStep(2)}
-                  style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D5D9E0', color: '#5B6371', fontWeight: 600, padding: '16px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px' }}>
-                  <ArrowLeft size={16}/> Back
+              <p style={{ color: T3, fontSize: '12.5px', lineHeight: 1.6, borderTop: `1px solid ${BORDER}`, paddingTop: '14px' }}>
+                Everything here goes into your medical profile — shown to paramedics and sent ahead to the ER when you hold SOS. You can edit it any time in Settings.
+              </p>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <motion.button whileTap={{ scale: 0.985 }} onClick={() => setStep(2)} style={ghostBtn}>
+                  <ArrowLeft size={15}/> Back
                 </motion.button>
                 <motion.button
-                  whileTap={{ scale: 0.97 }} transition={spring}
+                  whileTap={{ scale: 0.985 }}
                   onClick={handleSubmit}
                   disabled={loading}
-                  style={{ flex: 1, background: '#0055FF', color: '#FFFFFF', fontWeight: 700, padding: '16px', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: loading ? 0.7 : 1, fontSize: '15px' }}
+                  style={{ ...primaryBtn, opacity: loading ? 0.7 : 1 }}
                 >
-                  {loading ? <Loader2 size={16} className="animate-spin"/> : <>Complete <ArrowRight size={16}/></>}
+                  {loading ? <Loader2 size={16} className="animate-spin"/> : <>Complete profile <ArrowRight size={15}/></>}
                 </motion.button>
               </div>
             </motion.div>

@@ -226,22 +226,17 @@ export default function Medications() {
 
       {/* Header */}
       <div style={{ padding: '56px 20px 16px', borderBottom: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(16px)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <motion.button
-              whileTap={{ scale: 0.9 }} transition={spring}
-              onClick={() => router.push('/dashboard')}
-              style={{ width: '36px', height: '36px', borderRadius: '10px', background: BG, border: `1px solid ${BORDER}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: SHADOW }}
-            >
-              <ArrowLeft size={16} color={T2}/>
-            </motion.button>
-            <div>
-              <h1 style={{ color: T1, fontWeight: 900, fontSize: '26px', letterSpacing: '-1px', lineHeight: 1 }}>Medications</h1>
-              <p style={{ color: T3, fontSize: '11px', marginTop: '3px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-                {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
-                {totalDoses > 0 && ` · ${takenCount}/${totalDoses} doses`}
-              </p>
-            </div>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '18px' }}>
+          <div>
+            <button onClick={() => router.push('/dashboard')}
+              style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '18px', color: T3, fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+              <ArrowLeft size={14}/> Dashboard
+            </button>
+            <p style={{ color: T3, fontSize: '10px', fontWeight: 700, marginBottom: '7px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+              {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+              {totalDoses > 0 && ` · ${takenCount}/${totalDoses} doses`}
+            </p>
+            <h1 style={{ color: T1, fontWeight: 800, fontSize: '32px', letterSpacing: '-1px', lineHeight: 1 }}>Medications</h1>
           </div>
           <motion.button
             whileTap={{ scale: 0.9 }} transition={spring}
@@ -253,7 +248,7 @@ export default function Medications() {
         </div>
 
         {/* Progress bar */}
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '14px', padding: '14px 16px', boxShadow: SHADOW }}>
+        <div style={{ borderTop: `1px solid ${BORDER}`, padding: '14px 0 2px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <p style={{ color: T1, fontSize: '13px', fontWeight: 700 }}>{takenCount} of {totalDoses} doses taken</p>
             <p style={{ color: T3, fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>{Math.round(progress)}%</p>

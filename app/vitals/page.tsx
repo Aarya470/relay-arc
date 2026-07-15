@@ -377,25 +377,15 @@ export default function VitalsPage() {
     <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '80px' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #E3E6EC' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            transition={spring}
-            onClick={() => router.push('/dashboard')}
-            style={{
-              width: '38px', height: '38px', borderRadius: '10px', background: '#FFFFFF',
-              border: '1px solid #E3E6EC', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >
-            <ArrowLeft size={15} color="#5B6371"/>
-          </motion.button>
-          <div>
-            <h1 style={{ color: '#0E1218', fontWeight: 900, fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>Vitals</h1>
-            <p style={{ color: '#5B6371', fontSize: '12px', marginTop: '3px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Log your vital signs</p>
-          </div>
-        </div>
+      <div style={{ padding: '56px 20px 22px' }}>
+        <button onClick={() => router.push('/dashboard')}
+          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#9AA2AD', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+          <ArrowLeft size={14}/> Dashboard
+        </button>
+        <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>
+          {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })} · log your readings
+        </p>
+        <h1 style={{ color: '#0E1218', fontWeight: 800, fontSize: '32px', letterSpacing: '-1px', lineHeight: 1 }}>Vitals</h1>
       </div>
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>

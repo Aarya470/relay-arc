@@ -158,19 +158,19 @@ export default function Checkin() {
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
       }}>
-        <motion.button
-          whileTap={{ scale: 0.9 }}
+        <button
           onClick={() => router.push('/dashboard')}
+          aria-label="Back to dashboard"
           style={{
-            width: '34px', height: '34px', borderRadius: '10px',
-            background: BG, border: `1px solid ${BORDER}`,
-            cursor: 'pointer',
+            width: '38px', height: '38px',
+            background: 'none', border: 'none',
+            cursor: 'pointer', marginLeft: '-8px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0,
           }}
         >
-          <ArrowLeft size={15} color={T2} />
-        </motion.button>
+          <ArrowLeft size={18} color={T2} />
+        </button>
 
         <div style={{ flex: 1 }}>
           <h1 style={{ color: T1, fontWeight: 800, fontSize: '17px', letterSpacing: '-0.4px', margin: 0 }}>Daily Check-in</h1>
