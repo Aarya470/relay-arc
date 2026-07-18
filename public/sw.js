@@ -1,27 +1,54 @@
 self.addEventListener('install', () => self.skipWaiting())
 self.addEventListener('activate', () => self.clients.claim())
 
-// Passthrough fetch with graceful offline fallback.
-// IMPORTANT: only mediate same-origin requests. Cross-origin fetches made
-// from inside a service worker are governed by the SW's connect-src CSP,
-// which silently killed map tiles and routing (empty 503s).
+const CACHE = 'relay-offline-v1'
+
+// Offline emergency kit: same-origin GETs are cached as you browse, so the
+// SOS screen, medical profile and dashboard keep working with zero signal.
+// Cross-origin requests (map tiles, routing) are never mediated — SW fetches
+// are governed by the SW's connect-src CSP and silently broke them before.
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
   if (url.origin !== self.location.origin) return
+  if (event.request.method !== 'GET') return
+
+  // Immutable build assets: cache-first
+  if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/icon')) {
+    event.respondWith(
+      caches.open(CACHE).then(async (cache) => {
+        const hit = await cache.match(event.request)
+        if (hit) return hit
+        const res = await fetch(event.request)
+        if (res.ok) cache.put(event.request, res.clone())
+        return res
+      })
+    )
+    return
+  }
+
+  // Everything else same-origin: network-first, cache fallback, offline page last
   event.respondWith(
-    fetch(event.request).catch(() => {
+    fetch(event.request).then((res) => {
+      if (res.ok) {
+        const copy = res.clone()
+        caches.open(CACHE).then((cache) => cache.put(event.request, copy))
+      }
+      return res
+    }).catch(async () => {
+      const hit = await caches.match(event.request)
+      if (hit) return hit
       // For navigation requests, return a minimal offline page
       if (event.request.mode === 'navigate') {
         return new Response(
           `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline · Relay Arc</title></head>
-<body style="background:#F2EFE9;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;font-family:-apple-system,sans-serif;text-align:center">
-<div style="width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#5C8B74,#3D6B58);display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 8px 24px rgba(92,139,116,0.25)">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L15 9H21L16 13.5L18 21L12 17L6 21L8 13.5L3 9H9L12 2Z" fill="#F2EFE9"/></svg>
+<body style="background:#F4F5F7;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;font-family:-apple-system,sans-serif;text-align:center">
+<div style="width:64px;height:64px;border-radius:20px;background:#D91414;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L15 9H21L16 13.5L18 21L12 17L6 21L8 13.5L3 9H9L12 2Z" fill="#FFFFFF"/></svg>
 </div>
-<h2 style="color:#1A2820;font-size:22px;font-weight:900;letter-spacing:-0.8px;margin:0 0 8px">You're offline</h2>
-<p style="color:rgba(26,40,32,0.5);font-size:14px;margin:0 0 24px;line-height:1.6;max-width:260px">Check your connection, then try again.</p>
-<button onclick="location.reload()" style="background:linear-gradient(135deg,#5C8B74,#3D6B58);color:white;font-weight:700;font-size:14px;padding:14px 28px;border-radius:14px;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(92,139,116,0.25)">Try again</button>
-<p style="margin-top:16px;color:rgba(26,40,32,0.3);font-size:12px">In an emergency, always call 911 directly</p>
+<h2 style="color:#0E1218;font-size:22px;font-weight:900;letter-spacing:-0.8px;margin:0 0 8px">You're offline</h2>
+<p style="color:#5B6371;font-size:14px;margin:0 0 24px;line-height:1.6;max-width:260px">Check your connection, then try again.</p>
+<button onclick="location.reload()" style="background:#D91414;color:white;font-weight:700;font-size:14px;padding:14px 28px;border-radius:14px;border:none;cursor:pointer;">Try again</button>
+<p style="margin-top:16px;color:#9AA2AD;font-size:12px">In an emergency, always call 911 directly</p>
 </body></html>`,
           { headers: { 'Content-Type': 'text/html' } }
         )

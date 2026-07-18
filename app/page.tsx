@@ -542,14 +542,14 @@ export default function Home() {
 
               <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '28px', paddingTop: '18px' }}>
                 <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '12px' }}>
-                  Shipped — stage 2
+                  Shipped — stage 3
                 </p>
-                {['crash-risk prediction', 'severity triage', 'caregiver live view', 'er handoff brief', 'recovery protocol'].map((item, i) => (
+                {['guardian auto-escalation', 'voice sos', 'bystander cpr coach', 'offline emergency kit', 'in-app turn-by-turn nav'].map((item, i) => (
                   <p key={i} style={{ color: T2, fontFamily: mono, fontSize: '12px', lineHeight: 2, margin: 0 }}>
                     <span style={{ color: GREEN, marginRight: '10px' }}>+</span>{item}
                   </p>
                 ))}
-                <p style={{ color: T3, fontFamily: mono, fontSize: '11px', marginTop: '12px' }}>stage 3 — in the works</p>
+                <p style={{ color: T3, fontFamily: mono, fontSize: '11px', marginTop: '12px' }}>stage 4 — in the works</p>
               </div>
             </div>
 

@@ -424,6 +424,7 @@ export default function Dashboard() {
       if (!data) { router.push('/onboarding'); return }
       const { data: c } = await supabase.from('checkins').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(30)
       setProfile(data)
+      try { localStorage.setItem('relay_offline_profile', JSON.stringify(data)) } catch {}
       setCheckins(c || [])
       setLoading(false)
       // Fetch crash risk from server API (groq-sdk must NOT be imported in client components)

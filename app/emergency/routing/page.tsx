@@ -10,6 +10,7 @@ import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
+const GuardianWatch = dynamic(() => import('@/components/GuardianWatch'), { ssr: false })
 
 function directionsUrl(h: Hospital) {
   return `https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}&travelmode=driving`
@@ -269,8 +270,18 @@ function RoutingPage() {
       const userId = user?.id
       if (userId) {
         userIdRef.current = userId
-        const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
-        setProfile(data)
+        try {
+          const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
+          if (data) {
+            setProfile(data)
+            try { localStorage.setItem('relay_offline_profile', JSON.stringify(data)) } catch {}
+          } else { throw new Error('no data') }
+        } catch {
+          try {
+            const cached = localStorage.getItem('relay_offline_profile')
+            if (cached) setProfile(JSON.parse(cached))
+          } catch {}
+        }
       }
 
       if (destLat && destLng && destName) {
@@ -770,6 +781,22 @@ function RoutingPage() {
             Call 911
           </motion.a>
 
+          {type === 'unconscious' && (
+            <motion.button
+              whileTap={{ scale: 0.985 }}
+              onClick={() => router.push('/emergency/cpr')}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                background: 'none', color: T.red,
+                padding: '15px', borderRadius: '12px',
+                fontWeight: 700, fontSize: '14.5px',
+                border: `1.5px solid ${T.red}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
+              }}
+            >
+              Not breathing? Start CPR guide
+            </motion.button>
+          )}
+
           <motion.button
             whileTap={{ scale: 0.985 }}
             onClick={() => router.push(`/emergency/brief?type=${type}&name=${encodeURIComponent(hospital.name)}`)}
@@ -793,6 +820,14 @@ function RoutingPage() {
           </button>
         </div>
       </motion.div>
+
+      {/* ── Guardian — escalates if the patient stops responding ─────────────── */}
+      <GuardianWatch
+        profile={profile}
+        contacts={notifiedContacts}
+        hospitalName={hospital.name}
+        typeLabel={EMERGENCY_LABELS[type] || 'Emergency'}
+      />
 
       {/* ── Full-screen Relay navigation ──────────────────────────────────────── */}
       <AnimatePresence>

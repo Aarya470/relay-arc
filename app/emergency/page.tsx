@@ -1,9 +1,9 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, ChevronRight } from 'lucide-react'
+import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, ChevronRight, Mic } from 'lucide-react'
 import { toast } from 'sonner'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
@@ -32,7 +32,63 @@ const TYPES = [
 export default function Emergency() {
   const [selected, setSelected] = useState('')
   const [loading, setLoading]   = useState(false)
+  const [listening, setListening] = useState(false)
+  const [voiceSupported, setVoiceSupported] = useState(false)
+  const [transcript, setTranscript] = useState('')
+  const recRef = useRef<any>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    setVoiceSupported(!!SR)
+  }, [])
+
+  const classifyAndGo = async (text: string) => {
+    setLoading(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+      if (!token) { toast.error('Sign in required'); setLoading(false); return }
+      const res = await fetch('/api/groq/classify-emergency', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ transcript: text }),
+      })
+      const { type } = await res.json()
+      await handleSelect(type || 'other')
+    } catch {
+      toast.error('Could not understand — tap an option below or call 911')
+      setLoading(false)
+    }
+  }
+
+  const startVoice = () => {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SR) return
+    const rec = new SR()
+    recRef.current = rec
+    rec.lang = 'en-US'
+    rec.interimResults = true
+    rec.continuous = false
+    let finalText = ''
+    rec.onresult = (e: any) => {
+      let text = ''
+      for (let i = 0; i < e.results.length; i++) text += e.results[i][0].transcript
+      setTranscript(text)
+      if (e.results[e.results.length - 1].isFinal) finalText = text
+    }
+    rec.onend = () => {
+      setListening(false)
+      const text = finalText || ''
+      if (text.trim().length > 2) classifyAndGo(text.trim())
+    }
+    rec.onerror = () => { setListening(false); toast.error('Microphone unavailable — tap an option below') }
+    setTranscript('')
+    setListening(true)
+    rec.start()
+  }
+
+  const stopVoice = () => { try { recRef.current?.stop() } catch {} }
 
   const handleSelect = async (type: string) => {
     setSelected(type)
@@ -109,6 +165,37 @@ export default function Emergency() {
           <Phone size={24} strokeWidth={2.5}/>
           Call 911 now
         </motion.a>
+
+        {/* Voice SOS */}
+        {voiceSupported && (
+          <motion.button
+            whileTap={{ scale: 0.985 }}
+            onClick={listening ? stopVoice : startVoice}
+            disabled={loading}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '11px',
+              width: '100%',
+              background: listening ? RED_DIM : '#FFFFFF',
+              border: `1.5px solid ${listening ? RED : T1}`,
+              color: listening ? RED : T1,
+              padding: '17px', borderRadius: '12px',
+              fontWeight: 700, fontSize: '16px',
+              cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <motion.span
+              animate={listening ? { scale: [1, 1.25, 1] } : {}}
+              transition={{ duration: 0.9, repeat: Infinity }}
+              style={{ display: 'flex' }}
+            >
+              <Mic size={19} strokeWidth={2.2}/>
+            </motion.span>
+            {listening
+              ? (transcript ? `"${transcript.slice(-42)}"` : "Listening — describe what's happening")
+              : 'Speak it instead — tap and talk'}
+          </motion.button>
+        )}
 
         {/* Type list — flat hairline rows, no boxes */}
         <div style={{ borderTop: `1px solid ${BORDER}` }}>

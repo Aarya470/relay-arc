@@ -33,8 +33,21 @@ export default function MedicalProfile() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
-      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-      setProfile(data)
+      try {
+        const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+        if (data) {
+          setProfile(data)
+          try { localStorage.setItem('relay_offline_profile', JSON.stringify(data)) } catch {}
+        } else {
+          throw new Error('no data')
+        }
+      } catch {
+        // Offline: fall back to the locally cached profile
+        try {
+          const cached = localStorage.getItem('relay_offline_profile')
+          if (cached) setProfile(JSON.parse(cached))
+        } catch {}
+      }
       setLoading(false)
     }
     load()
