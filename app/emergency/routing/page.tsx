@@ -8,6 +8,7 @@ import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText,
 import { findNearbyHospitals, formatDistance, estimateTime, Hospital } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
+import qrgen from 'qrcode-generator'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
 const GuardianWatch = dynamic(() => import('@/components/GuardianWatch'), { ssr: false })
@@ -199,6 +200,13 @@ function RoutingPage() {
   const [notifiedContacts, setNotifiedContacts] = useState<any[]>([])
   const [elapsed, setElapsed] = useState(0)
   const [navMode, setNavMode] = useState(false)
+  const [roomId, setRoomId] = useState(emergencyId)
+  const [showQr, setShowQr] = useState(false)
+  const roomChannel = useRef<any>(null)
+  const timelineRef = useRef<{ t: string; label: string }[]>([])
+  const lastLocRef = useRef<any>(null)
+  const lastLocSent = useRef(0)
+  const hospitalRef = useRef<Hospital | null>(null)
   const lockedRef = useRef(true)
   const activeEmergencyId = useRef(emergencyId)
   const userIdRef = useRef('')
@@ -259,10 +267,61 @@ function RoutingPage() {
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
-      if (data) activeEmergencyId.current = data.id
+      if (data) { activeEmergencyId.current = data.id; setRoomId(data.id) }
     }
     resolveEmergencyId()
   }, [])
+
+  useEffect(() => { hospitalRef.current = hospital }, [hospital])
+
+  // ── Relay Room: broadcast location + events to family in realtime ──────────
+  const pushEvt = (label: string) => {
+    const e = { t: new Date().toISOString(), label }
+    timelineRef.current = [...timelineRef.current.slice(-29), e]
+    try { roomChannel.current?.send({ type: 'broadcast', event: 'evt', payload: e }) } catch {}
+  }
+
+  useEffect(() => {
+    if (!roomId) return
+    const ch = supabase.channel(`relay-room-${roomId}`, {
+      config: { broadcast: { self: false }, presence: { key: `patient-${roomId.slice(0, 6)}` } },
+    })
+    roomChannel.current = ch
+    ch.on('broadcast', { event: 'sync-req' }, () => {
+      try {
+        ch.send({ type: 'broadcast', event: 'sync', payload: { timeline: timelineRef.current, loc: lastLocRef.current } })
+      } catch {}
+    })
+    ch.subscribe((status: string) => {
+      if (status === 'SUBSCRIBED') {
+        ch.track({ role: 'patient', name: 'Patient' })
+        pushEvt('SOS active — hospital routing started')
+      }
+    })
+    let watch: number | null = null
+    if (navigator.geolocation) {
+      watch = navigator.geolocation.watchPosition(pos => {
+        const now = Date.now()
+        if (now - lastLocSent.current < 8000) return
+        lastLocSent.current = now
+        const h = hospitalRef.current
+        const payload = {
+          lat: pos.coords.latitude, lng: pos.coords.longitude, ts: now,
+          hName: h?.name || '', hLat: h?.lat ?? null, hLng: h?.lng ?? null,
+        }
+        lastLocRef.current = payload
+        try { ch.send({ type: 'broadcast', event: 'loc', payload }) } catch {}
+      }, () => {}, { enableHighAccuracy: true, maximumAge: 5000 })
+    }
+    return () => {
+      if (watch !== null) navigator.geolocation.clearWatch(watch)
+      supabase.removeChannel(ch)
+      roomChannel.current = null
+    }
+  }, [roomId])
+
+  useEffect(() => { if (careTeamAlerted) pushEvt('Care team alerted') }, [careTeamAlerted])
+  useEffect(() => { if (navMode) pushEvt('Turn-by-turn navigation started') }, [navMode])
 
   useEffect(() => {
     const load = async () => {
@@ -385,6 +444,7 @@ function RoutingPage() {
     if (!serverConfirmed) {
       toast.error('Cancelled on this device, but the server did not confirm — your care team may still see it as active.')
     }
+    pushEvt('Emergency cancelled — patient reports safe')
     lockedRef.current = false
     router.replace('/dashboard')
   }
@@ -673,11 +733,31 @@ function RoutingPage() {
 
                 <button
                   onClick={shareLive}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', background: 'none', border: 'none', color: T.blue, fontWeight: 600, fontSize: '13.5px', padding: '14px', cursor: 'pointer', fontFamily: 'inherit' }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', background: 'none', border: 'none', color: T.blue, fontWeight: 600, fontSize: '13.5px', padding: '14px 14px 6px', cursor: 'pointer', fontFamily: 'inherit' }}
                 >
                   <Share2 size={14} color={T.blue} />
                   Share a live status link instead
                 </button>
+                <button
+                  onClick={() => setShowQr(q => !q)}
+                  style={{ display: 'block', width: '100%', background: 'none', border: 'none', color: T.textMuted, fontWeight: 500, fontSize: '12.5px', padding: '4px 14px 10px', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'center' }}
+                >
+                  {showQr ? 'Hide QR' : 'Or show a QR for anyone nearby to scan'}
+                </button>
+                {showQr && roomId && typeof window !== 'undefined' && (() => {
+                  try {
+                    const qr = qrgen(0, 'M')
+                    qr.addData(`${window.location.origin}/emergency/live/${roomId}`)
+                    qr.make()
+                    const svg = qr.createSvgTag({ cellSize: 4, margin: 2 })
+                    return (
+                      <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
+                        <div style={{ width: '164px', border: `1px solid ${T.border}`, borderRadius: '10px', padding: '10px', background: 'white' }}
+                          dangerouslySetInnerHTML={{ __html: svg.replace('<svg ', '<svg style="width:100%;height:auto;display:block" ') }}/>
+                      </div>
+                    )
+                  } catch { return null }
+                })()}
               </>
             ) : (
               <p style={{ color: T.textMuted, fontSize: '13.5px', padding: '13px 0', borderTop: `1px solid ${T.border}` }}>
@@ -827,6 +907,7 @@ function RoutingPage() {
         contacts={notifiedContacts}
         hospitalName={hospital.name}
         typeLabel={EMERGENCY_LABELS[type] || 'Emergency'}
+        onEvent={pushEvt}
       />
 
       {/* ── Full-screen Relay navigation ──────────────────────────────────────── */}

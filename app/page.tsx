@@ -544,7 +544,7 @@ export default function Home() {
                 <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '12px' }}>
                   Shipped — stage 3
                 </p>
-                {['guardian auto-escalation', 'voice sos', 'bystander cpr coach', 'offline emergency kit', 'in-app turn-by-turn nav'].map((item, i) => (
+                {['relay room — live family coordination', 'guardian auto-escalation', 'voice sos', 'bystander cpr coach', 'offline emergency kit', 'in-app turn-by-turn nav'].map((item, i) => (
                   <p key={i} style={{ color: T2, fontFamily: mono, fontSize: '12px', lineHeight: 2, margin: 0 }}>
                     <span style={{ color: GREEN, marginRight: '10px' }}>+</span>{item}
                   </p>

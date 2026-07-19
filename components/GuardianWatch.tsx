@@ -17,11 +17,13 @@ export default function GuardianWatch({
   contacts,
   hospitalName,
   typeLabel,
+  onEvent,
 }: {
   profile: any
   contacts: any[]
   hospitalName: string
   typeLabel: string
+  onEvent?: (label: string) => void
 }) {
   const [phase, setPhase] = useState<'idle' | 'asking' | 'escalated'>('idle')
   const [countdown, setCountdown] = useState(RESPONSE_WINDOW_S)
@@ -87,6 +89,7 @@ export default function GuardianWatch({
 
   const escalate = () => {
     setPhase('escalated')
+    onEvent?.('Guardian alert — patient stopped responding')
     startAlarm()
     try { navigator.vibrate?.([400, 200, 400, 200, 800]) } catch {}
     navigator.geolocation?.getCurrentPosition(
@@ -196,7 +199,7 @@ export default function GuardianWatch({
             </div>
           )}
 
-          <button onClick={respond}
+          <button onClick={() => { onEvent?.('Patient responded — alarm stopped'); respond() }}
             style={{ marginTop: 'auto', background: 'none', border: 'none', color: 'rgba(255,255,255,0.75)', fontSize: '14px', fontWeight: 600, padding: '14px', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
             I&apos;m OK — stop the alarm
           </button>
