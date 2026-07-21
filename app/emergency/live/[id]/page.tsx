@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Phone, CheckCircle, AlertCircle, Loader2, Plus, Check, QrCode } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { emergencyNumber } from '@/lib/emergency-number'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import qrgen from 'qrcode-generator'
@@ -41,6 +42,8 @@ interface Loc { lat: number; lng: number; ts: number; hName?: string; hLat?: num
 
 export default function RelayRoomPage() {
   const params = useParams()
+  const [emg, setEmg] = useState({ number: '911', label: '911' })
+  useEffect(() => { setEmg(emergencyNumber()) }, [])
   const id = params?.id as string
 
   const [data, setData] = useState<EmergencyData | null>(null)
@@ -383,9 +386,9 @@ export default function RelayRoomPage() {
 
             {/* ── Footer actions ── */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <a href="tel:911"
+              <a href={`tel:${emg.number}`}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px', borderRadius: '12px', textDecoration: 'none', minHeight: '54px' }}>
-                <Phone size={17} strokeWidth={2.5}/> Call 911
+                <Phone size={17} strokeWidth={2.5}/> Call {emg.label}
               </a>
               <button onClick={() => setShowQr(q => !q)}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '10px', cursor: 'pointer', fontFamily: 'inherit' }}>

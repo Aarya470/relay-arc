@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { emergencyNumber } from '@/lib/emergency-number'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Phone } from 'lucide-react'
@@ -28,6 +29,8 @@ function computeOutcome(pain: number, canMove: boolean, alone: boolean): Outcome
 }
 
 export default function TriagePage() {
+  const [emg, setEmg] = useState({ number: '911', label: '911' })
+  useEffect(() => { setEmg(emergencyNumber()) }, [])
   const router = useRouter()
   const [step, setStep] = useState<Step>(1)
   const [pain, setPain] = useState<number | null>(null)
@@ -301,7 +304,7 @@ export default function TriagePage() {
                   </span>
                 </div>
                 <h2 style={{ color: '#0E1218', fontSize: '22px', fontWeight: 900, letterSpacing: '-0.5px', marginBottom: '8px', lineHeight: 1.2 }}>
-                  Call 911 immediately.
+                  Call {emg.label} immediately.
                 </h2>
                 <p style={{ color: '#5B6371', fontSize: '14px', lineHeight: 1.6 }}>
                   Do not try to drive yourself. Your symptoms require emergency medical services right away.
@@ -309,7 +312,7 @@ export default function TriagePage() {
               </div>
 
               <motion.a
-                href="tel:911"
+                href={`tel:${emg.number}`}
                 whileTap={{ scale: 0.97 }}
                 transition={spring}
                 style={{
@@ -322,7 +325,7 @@ export default function TriagePage() {
                 }}
               >
                 <Phone size={22} />
-                Call 911 Now
+                Call {emg.label} now
               </motion.a>
 
               <motion.button
@@ -374,7 +377,7 @@ export default function TriagePage() {
               </div>
 
               <motion.a
-                href="tel:911"
+                href={`tel:${emg.number}`}
                 whileTap={{ scale: 0.97 }}
                 transition={spring}
                 style={{
@@ -387,7 +390,7 @@ export default function TriagePage() {
                 }}
               >
                 <Phone size={18} />
-                Call 911
+                Call {emg.label}
               </motion.a>
 
               <motion.button

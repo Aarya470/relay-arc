@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Phone, ArrowLeft, Play, Square } from 'lucide-react'
+import { emergencyNumber } from '@/lib/emergency-number'
 
 const T1 = '#0E1218'
 const T2 = '#5B6371'
@@ -17,6 +18,8 @@ const BEAT_MS = 60000 / BPM
 
 export default function CprCoach() {
   const [running, setRunning] = useState(false)
+  const [emg, setEmg] = useState({ number: '911', label: '911' })
+  useEffect(() => { setEmg(emergencyNumber()) }, [])
   const [beat, setBeat] = useState(false)
   const [count, setCount] = useState(0)
   const audioRef = useRef<{ ctx: AudioContext; stop: () => void } | null>(null)
@@ -73,9 +76,9 @@ export default function CprCoach() {
   return (
     <div style={{ minHeight: '100dvh', background: '#FFFFFF', maxWidth: '560px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
 
-      {/* Call 911 banner — always first */}
-      <a href="tel:911" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 900, fontSize: '18px', padding: '18px', textDecoration: 'none', flexShrink: 0 }}>
-        <Phone size={19} strokeWidth={2.5}/> Call 911 first — put it on speaker
+      {/* Call {emg.label} banner — always first */}
+      <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 900, fontSize: '18px', padding: '18px', textDecoration: 'none', flexShrink: 0 }}>
+        <Phone size={19} strokeWidth={2.5}/> Call {emg.label} first — put it on speaker
       </a>
 
       <div style={{ flex: 1, padding: '20px 20px 36px', display: 'flex', flexDirection: 'column' }}>

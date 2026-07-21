@@ -1,11 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { emergencyNumber } from '@/lib/emergency-number'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Phone, ArrowLeft, CheckCircle, Navigation } from 'lucide-react'
 
 export default function EmergencyStatus() {
+  const [emg, setEmg] = useState({ number: '911', label: '911' })
+  useEffect(() => { setEmg(emergencyNumber()) }, [])
   const [profile, setProfile] = useState<any>(null)
   const [activeEmergency, setActiveEmergency] = useState<any>(null)
   const [time] = useState(new Date().toLocaleTimeString())
@@ -162,10 +165,10 @@ export default function EmergencyStatus() {
           <motion.button
             whileTap={{ scale: 0.97 }}
             style={{ width: '100%', background: '#D91414', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}
-            onClick={() => window.location.href = 'tel:911'}
+            onClick={() => window.location.href = `tel:${emg.number}`}
           >
             <Phone size={16} />
-            Call 911 Again
+            Call {emg.label} again
           </motion.button>
         </div>
 

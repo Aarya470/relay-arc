@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import { emergencyNumber } from '@/lib/emergency-number'
 import { Phone, MessageSquare, HeartPulse, Check } from 'lucide-react'
 
 const T1 = '#0E1218'
@@ -26,6 +27,8 @@ export default function GuardianWatch({
   onEvent?: (label: string) => void
 }) {
   const [phase, setPhase] = useState<'idle' | 'asking' | 'escalated'>('idle')
+  const [emg, setEmg] = useState({ number: '911', label: '911' })
+  useEffect(() => { setEmg(emergencyNumber()) }, [])
   const [countdown, setCountdown] = useState(RESPONSE_WINDOW_S)
   const [coords, setCoords] = useState<[number, number] | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -110,7 +113,7 @@ export default function GuardianWatch({
     const phones = contacts.map((c: any) => c.phone).filter(Boolean).join(',')
     if (!phones) return '#'
     const loc = coords ? ` Location: https://maps.google.com/?q=${coords[0]},${coords[1]}` : ''
-    const msg = `EMERGENCY: ${profile?.full_name || 'Your family member'} may be UNRESPONSIVE (${typeLabel}). They activated Relay SOS and stopped responding.${loc} They were being routed to ${hospitalName}. Call 911.`
+    const msg = `EMERGENCY: ${profile?.full_name || 'Your family member'} may be UNRESPONSIVE (${typeLabel}). They activated Relay SOS and stopped responding.${loc} They were being routed to ${hospitalName}. Call emergency services.`
     return `sms:${phones}?body=${encodeURIComponent(msg)}`
   }
 
@@ -162,8 +165,8 @@ export default function GuardianWatch({
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
-            <a href="tel:911" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: RED, fontWeight: 900, fontSize: '19px', padding: '19px', borderRadius: '13px', textDecoration: 'none', minHeight: '62px' }}>
-              <Phone size={20} strokeWidth={2.5}/> Call 911 now
+            <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: RED, fontWeight: 900, fontSize: '19px', padding: '19px', borderRadius: '13px', textDecoration: 'none', minHeight: '62px' }}>
+              <Phone size={20} strokeWidth={2.5}/> Call {emg.label} now
             </a>
             {contacts.length > 0 && (
               <a href={smsHref()} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '13px', textDecoration: 'none', minHeight: '56px' }}>

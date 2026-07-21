@@ -9,6 +9,7 @@ import { findNearbyHospitals, formatDistance, estimateTime, Hospital } from '@/l
 import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
+import { emergencyNumber } from '@/lib/emergency-number'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
 const GuardianWatch = dynamic(() => import('@/components/GuardianWatch'), { ssr: false })
@@ -181,6 +182,8 @@ function CancelConfirmSheet({
 // ─── Main component ───────────────────────────────────────────────────────────
 function RoutingPage() {
   const searchParams = useSearchParams()
+  const [emg, setEmg] = useState({ number: '911', label: '911' })
+  useEffect(() => { setEmg(emergencyNumber()) }, [])
   const router = useRouter()
   const type = searchParams.get('type') || 'other'
   const emergencyId = searchParams.get('id') || ''
@@ -202,6 +205,10 @@ function RoutingPage() {
   const [navMode, setNavMode] = useState(false)
   const [roomId, setRoomId] = useState(emergencyId)
   const [showQr, setShowQr] = useState(false)
+  const [patientPos, setPatientPos] = useState<[number, number] | null>(null)
+  const [ride, setRide] = useState<'none' | 'dismissed' | 'searching' | 'accepted'>('none')
+  const [rideDriver, setRideDriver] = useState('')
+  const rideIdRef = useRef('')
   const roomChannel = useRef<any>(null)
   const timelineRef = useRef<{ t: string; label: string }[]>([])
   const lastLocRef = useRef<any>(null)
@@ -361,6 +368,7 @@ function RoutingPage() {
         navigator.geolocation.getCurrentPosition(
           async (pos) => {
             const { latitude, longitude } = pos.coords
+            setPatientPos([latitude, longitude])
             const hospitals = await findNearbyHospitals(latitude, longitude, type)
             if (hospitals.length > 0) {
               setHospital(hospitals[0])
@@ -373,7 +381,7 @@ function RoutingPage() {
           },
           () => {
             // Geolocation denied or failed — do NOT fall back to hardcoded coordinates
-            setLocationError('Location unavailable — please call 911 directly')
+            setLocationError('Location unavailable — please call emergency services directly')
             setLoading(false)
             alertCareTeam(userId)
           },
@@ -412,6 +420,63 @@ function RoutingPage() {
 
     setCareTeamAlerted(true)
   }
+
+  // ── SOS ride dispatch — the mission's core case: no vehicle, no ambulance ──
+  const requestRide = async () => {
+    if (!patientPos || !hospital) return
+    setRide('searching')
+    try {
+      const { data, error } = await supabase.from('transport_requests').insert({
+        user_id: userIdRef.current || undefined,
+        patient_name: profile?.full_name || 'Relay patient',
+        pickup_lat: patientPos[0],
+        pickup_lng: patientPos[1],
+        pickup_address: 'Live GPS location via Relay SOS',
+        hospital_name: hospital.name,
+        hospital_lat: hospital.lat,
+        hospital_lng: hospital.lng,
+        emergency_type: type,
+        status: 'pending',
+        expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+      }).select().single()
+      if (error || !data) throw error
+      rideIdRef.current = data.id
+      pushEvt('Community driver requested — searching nearby')
+    } catch {
+      setRide('none')
+      toast.error('Could not request a ride — ask family or call an ambulance')
+    }
+  }
+
+  const cancelRide = async () => {
+    setRide('dismissed')
+    if (rideIdRef.current) {
+      try {
+        await supabase.from('transport_requests')
+          .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+          .eq('id', rideIdRef.current)
+      } catch {}
+    }
+  }
+
+  useEffect(() => {
+    if (ride !== 'searching' || !rideIdRef.current) return
+    const poll = setInterval(async () => {
+      try {
+        const { data } = await supabase.from('transport_requests')
+          .select('status, driver_name')
+          .eq('id', rideIdRef.current)
+          .single()
+        if (data && (data.status === 'accepted' || data.driver_name)) {
+          setRide('accepted')
+          setRideDriver(data.driver_name || 'A community driver')
+          pushEvt(`Driver ${data.driver_name || 'accepted'} — on their way to the patient`)
+          try { navigator.vibrate?.([200, 100, 200]) } catch {}
+        }
+      } catch {}
+    }, 5000)
+    return () => clearInterval(poll)
+  }, [ride])
 
   const cancelEmergency = async () => {
     setCancelling(true)
@@ -541,9 +606,9 @@ function RoutingPage() {
         </p>
       </div>
 
-      {/* Call 911 — red gradient pill with glow */}
+      {/* Call {emg.label} — red gradient pill with glow */}
       <motion.a
-        href="tel:911"
+        href={`tel:${emg.number}`}
         whileTap={{ scale: 0.96 }}
         style={{
           display: 'flex',
@@ -564,7 +629,7 @@ function RoutingPage() {
         }}
       >
         <Phone size={20} strokeWidth={2.5} />
-        Call 911 now
+        Call {emg.label} now
       </motion.a>
 
       {/* Cancel ghost */}
@@ -665,6 +730,52 @@ function RoutingPage() {
           style={{ display: 'block', textAlign: 'center', color: T.textMuted, fontSize: '12.5px', textDecoration: 'none', padding: '10px 0 0' }}>
           Prefer Google Maps? <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>Open there instead</span>
         </a>
+
+        {/* ── Getting there — solve the vehicle, not just the destination ── */}
+        {patientPos && ride !== 'dismissed' && (
+          <div style={{ borderTop: `1px solid ${T.border}`, marginTop: '14px', paddingTop: '14px' }}>
+            <p style={{ color: T.textMuted, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '10px' }}>
+              Getting there
+            </p>
+
+            {ride === 'none' && (
+              <div style={{ display: 'flex', gap: '9px' }}>
+                <button onClick={() => setRide('dismissed')}
+                  style={{ flex: 1, background: 'none', border: `1.5px solid ${T.border}`, color: T.textSec, fontWeight: 600, fontSize: '13.5px', padding: '13px 8px', borderRadius: '11px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                  I have a driver
+                </button>
+                <button onClick={requestRide}
+                  style={{ flex: 1.4, background: T.blue, border: 'none', color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '13px 8px', borderRadius: '11px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                  I need a ride — alert drivers
+                </button>
+              </div>
+            )}
+
+            {ride === 'searching' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
+                <Loader2 size={16} color={T.blue} className="animate-spin" style={{ flexShrink: 0 }}/>
+                <div style={{ flex: 1 }}>
+                  <p style={{ color: T.textPrimary, fontSize: '14px', fontWeight: 700 }}>Alerting nearby community drivers…</p>
+                  <p style={{ color: T.textMuted, fontSize: '12px', marginTop: '2px' }}>Your live location and hospital are attached.</p>
+                </div>
+                <button onClick={cancelRide}
+                  style={{ background: 'none', border: 'none', color: T.textMuted, fontSize: '12.5px', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px', flexShrink: 0 }}>
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            {ride === 'accepted' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
+                <CheckCircle size={17} color={T.green} style={{ flexShrink: 0 }}/>
+                <div>
+                  <p style={{ color: T.green, fontSize: '14.5px', fontWeight: 800 }}>{rideDriver} is coming to you</p>
+                  <p style={{ color: T.textSec, fontSize: '12.5px', marginTop: '2px' }}>They can see your live location. Stay where you are if safe.</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ── Map — full bleed ────────────────────────────────────────────────── */}
@@ -847,7 +958,7 @@ function RoutingPage() {
         {/* ── Actions ───────────────────────────────────────────────────────── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <motion.a
-            href="tel:911"
+            href={`tel:${emg.number}`}
             whileTap={{ scale: 0.985 }}
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
@@ -858,7 +969,7 @@ function RoutingPage() {
             }}
           >
             <Phone size={19} strokeWidth={2.5} />
-            Call 911
+            Call {emg.label}
           </motion.a>
 
           {type === 'unconscious' && (
@@ -941,8 +1052,8 @@ function RoutingPage() {
             </div>
 
             <div style={{ padding: '11px 16px', borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, background: '#FFFFFF' }}>
-              <a href="tel:911" style={{ color: T.red, fontWeight: 800, fontSize: '14.5px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '7px' }}>
-                <Phone size={14} strokeWidth={2.5}/> Call 911
+              <a href={`tel:${emg.number}`} style={{ color: T.red, fontWeight: 800, fontSize: '14.5px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '7px' }}>
+                <Phone size={14} strokeWidth={2.5}/> Call {emg.label}
               </a>
               <a href={directionsUrl(hospital)} target="_blank" rel="noopener noreferrer"
                 style={{ color: T.textMuted, fontSize: '12.5px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>

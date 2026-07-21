@@ -291,7 +291,7 @@ function RecoveryContent() {
               fontSize: '14px', fontWeight: 600, color: '#D91414',
             }}
           >
-            Call 911 immediately if any of these occur.
+            Call emergency services immediately if any of these occur.
           </div>
         </Card>
 

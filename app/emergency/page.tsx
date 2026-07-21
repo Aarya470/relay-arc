@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, ChevronRight, Mic } from 'lucide-react'
 import { toast } from 'sonner'
+import { emergencyNumber } from '@/lib/emergency-number'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#FFFFFF'
@@ -31,6 +32,8 @@ const TYPES = [
 
 export default function Emergency() {
   const [selected, setSelected] = useState('')
+  const [emg, setEmg] = useState({ number: '911', label: '911' })
+  useEffect(() => { setEmg(emergencyNumber()) }, [])
   const [loading, setLoading]   = useState(false)
   const [listening, setListening] = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
@@ -100,12 +103,12 @@ export default function Emergency() {
       if (user) {
         await supabase.from('emergencies').update({ status: 'resolved' }).eq('user_id', user.id).eq('status', 'active')
         const { data, error } = await supabase.from('emergencies').insert({ user_id: user.id, emergency_type: type, status: 'active' }).select().single()
-        if (error) { toast.error('Could not log emergency — call 911 now') }
+        if (error) { toast.error(`Could not log emergency — call ${emg.number} now`) }
         else { emergencyId = data?.id || '' }
       }
       router.push(`/emergency/routing?type=${type}&id=${emergencyId}`)
     } catch {
-      toast.error('Something went wrong — call 911 now')
+      toast.error(`Something went wrong — call ${emg.number} now`)
       setLoading(false)
       setSelected('')
     }
@@ -151,9 +154,9 @@ export default function Emergency() {
           </button>
         </div>
 
-        {/* Call 911 — always first, always huge */}
+        {/* Call {emg.label} — always first, always huge */}
         <motion.a
-          href="tel:911"
+          href={`tel:${emg.number}`}
           whileTap={{ scale: 0.98 }}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
@@ -163,7 +166,7 @@ export default function Emergency() {
             textDecoration: 'none', minHeight: '68px',
           }}>
           <Phone size={24} strokeWidth={2.5}/>
-          Call 911 now
+          Call {emg.label} now
         </motion.a>
 
         {/* Voice SOS */}
