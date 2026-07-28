@@ -1,3 +1,11 @@
+export interface PartnerStatus {
+  name: string
+  accepting: boolean
+  cathLab: boolean | null
+  bedsFree: number | null
+  updatedAt: string
+}
+
 export interface Hospital {
   id: string
   name: string
@@ -7,38 +15,20 @@ export interface Hospital {
   distance?: number
   capability?: string
   phone?: string
+  etaSec?: number
+  etaTrafficSec?: number
+  partner?: PartnerStatus | null
 }
 
 // Emergency type to OSM tags mapping
 const EMERGENCY_CAPABILITIES: Record<string, { tags: string[]; label: string }> = {
-  chest_pain: {
-    tags: ['hospital', 'clinic'],
-    label: 'Cardiac catheterization lab'
-  },
-  stroke: {
-    tags: ['hospital'],
-    label: 'Stroke center'
-  },
-  pots: {
-    tags: ['hospital', 'clinic'],
-    label: 'Autonomic disorders unit'
-  },
-  unconscious: {
-    tags: ['hospital'],
-    label: 'Level 1 trauma center'
-  },
-  breathing: {
-    tags: ['hospital'],
-    label: 'Pulmonary emergency unit'
-  },
-  mecfs: {
-    tags: ['hospital', 'clinic'],
-    label: 'Emergency stabilization'
-  },
-  other: {
-    tags: ['hospital'],
-    label: 'Emergency care'
-  }
+  chest_pain: { tags: ['hospital', 'clinic'], label: 'Cardiac catheterization lab' },
+  stroke: { tags: ['hospital'], label: 'Stroke center' },
+  pots: { tags: ['hospital', 'clinic'], label: 'Autonomic disorders unit' },
+  unconscious: { tags: ['hospital'], label: 'Level 1 trauma center' },
+  breathing: { tags: ['hospital'], label: 'Pulmonary emergency unit' },
+  mecfs: { tags: ['hospital', 'clinic'], label: 'Emergency stabilization' },
+  other: { tags: ['hospital'], label: 'Emergency care' },
 }
 
 function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -47,6 +37,60 @@ function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   const dLon = (lon2 - lon1) * Math.PI / 180
   const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+}
+
+// ── Traffic model — time-of-day congestion heuristic, clearly labeled as
+// estimated. Swap point for a live provider (TomTom/Mapbox) later: replace
+// trafficMultiplier() with a per-route live factor.
+export function trafficMultiplier(d: Date = new Date()): number {
+  const h = d.getHours()
+  const sunday = d.getDay() === 0
+  if (h >= 8 && h < 11) return sunday ? 1.15 : 1.5
+  if (h >= 17 && h < 21) return sunday ? 1.2 : 1.6
+  if (h >= 11 && h < 17) return sunday ? 1.1 : 1.25
+  if (h >= 21 || h < 6) return 1.0
+  return 1.15
+}
+export function trafficLabel(d: Date = new Date()): string {
+  const m = trafficMultiplier(d)
+  if (m >= 1.45) return 'heavy traffic est.'
+  if (m >= 1.2) return 'moderate traffic est.'
+  return 'light traffic'
+}
+
+// ── Real drive times: one OSRM matrix call for all candidates ──────────────
+const ROUTERS = [
+  'https://routing.openstreetmap.de/routed-car',
+  'https://router.project-osrm.org',
+]
+async function fetchDriveTimes(from: [number, number], hs: Hospital[]): Promise<(number | null)[]> {
+  const coords = [`${from[1]},${from[0]}`, ...hs.map(h => `${h.lng},${h.lat}`)].join(';')
+  for (const base of ROUTERS) {
+    try {
+      const res = await fetch(`${base}/table/v1/driving/${coords}?sources=0&annotations=duration`)
+      if (!res.ok) continue
+      const json = await res.json()
+      if (json.code !== 'Ok' || !json.durations?.[0]) continue
+      return json.durations[0].slice(1)
+    } catch { /* try next */ }
+  }
+  return hs.map(() => null)
+}
+
+// ── Partner status: what the hospital itself reports through the portal ─────
+async function fetchPartnerStatuses(hs: Hospital[]): Promise<(PartnerStatus | null)[]> {
+  try {
+    const res = await fetch('/api/hospitals/match', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ candidates: hs.map(h => ({ id: h.id, name: h.name, lat: h.lat, lng: h.lng })) }),
+    })
+    if (!res.ok) return hs.map(() => null)
+    const { statuses } = await res.json()
+    return hs.map(h => statuses?.[h.id] || null)
+  } catch {
+    return hs.map(() => null)
+  }
 }
 
 export async function findNearbyHospitals(
@@ -68,8 +112,7 @@ export async function findNearbyHospitals(
     const data = await res.json()
     const elements = data.elements || []
 
-
-    const hospitals: Hospital[] = elements
+    let hospitals: Hospital[] = elements
       .filter((el: any) => el.tags?.name)
       .map((el: any) => {
         const elLat = el.lat || el.center?.lat
@@ -92,12 +135,43 @@ export async function findNearbyHospitals(
       })
       .filter((h: Hospital) => h.lat && h.lng && h.name)
       .sort((a: Hospital, b: Hospital) => (a.distance || 0) - (b.distance || 0))
+      .slice(0, 8)
 
+    if (hospitals.length === 0) return []
+
+    // Real drive times + hospital-reported status, in parallel
+    const [times, statuses] = await Promise.all([
+      fetchDriveTimes([lat, lng], hospitals),
+      fetchPartnerStatuses(hospitals),
+    ])
+    const mult = trafficMultiplier()
+    hospitals = hospitals.map((h, i) => ({
+      ...h,
+      etaSec: times[i] ?? undefined,
+      etaTrafficSec: times[i] != null ? Math.round(times[i]! * mult) : undefined,
+      partner: statuses[i],
+    }))
+
+    // Dispatch score: traffic-adjusted ETA, penalize diverting partners hard,
+    // slightly favor facilities actively reporting they are accepting.
+    const score = (h: Hospital) => {
+      const base = h.etaTrafficSec ?? ((h.distance || 0) / 1000 / 40 * 3600 * mult)
+      if (h.partner && fresh(h.partner)) {
+        if (!h.partner.accepting) return base * 2.2
+        return base * 0.85
+      }
+      return base
+    }
+    hospitals.sort((a, b) => score(a) - score(b))
     return hospitals.slice(0, 5)
   } catch (e) {
     console.error('Hospital search error:', e)
     return []
   }
+}
+
+export function fresh(p: PartnerStatus, maxMin = 240): boolean {
+  return Date.now() - new Date(p.updatedAt).getTime() < maxMin * 60 * 1000
 }
 
 export function formatDistance(meters: number): string {
@@ -106,7 +180,18 @@ export function formatDistance(meters: number): string {
     : `${Math.round(meters)} m`
 }
 
+export function formatEtaMin(h: Hospital): number | null {
+  if (h.etaTrafficSec != null) return Math.max(1, Math.round(h.etaTrafficSec / 60))
+  return null
+}
+
 export function estimateTime(meters: number): string {
   const minutes = Math.round(meters / 1000 / 50 * 60)
   return minutes < 60 ? `${minutes} min` : `${Math.floor(minutes/60)}h ${minutes%60}m`
+}
+
+export function etaText(h: Hospital): string {
+  const m = formatEtaMin(h)
+  if (m != null) return m < 60 ? `${m} min` : `${Math.floor(m/60)}h ${m%60}m`
+  return estimateTime(h.distance || 0)
 }

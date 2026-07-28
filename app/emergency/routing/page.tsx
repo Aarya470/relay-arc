@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText, MessageSquare, Navigation2 } from 'lucide-react'
-import { findNearbyHospitals, formatDistance, estimateTime, Hospital } from '@/lib/hospitals'
+import { findNearbyHospitals, formatDistance, estimateTime, etaText, trafficLabel, formatEtaMin, fresh, Hospital } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
@@ -207,6 +207,8 @@ function RoutingPage() {
   const [showQr, setShowQr] = useState(false)
   const [patientPos, setPatientPos] = useState<[number, number] | null>(null)
   const [ride, setRide] = useState<'none' | 'dismissed' | 'searching' | 'accepted'>('none')
+  const [erConnected, setErConnected] = useState('')
+  const erNotifiedFor = useRef('')
   const [rideDriver, setRideDriver] = useState('')
   const rideIdRef = useRef('')
   const roomChannel = useRef<any>(null)
@@ -328,6 +330,38 @@ function RoutingPage() {
   }, [roomId])
 
   useEffect(() => { if (careTeamAlerted) pushEvt('Care team alerted') }, [careTeamAlerted])
+
+  // ── Connected hospitals: put this patient on the ER's dispatch board ──────
+  useEffect(() => {
+    if (!hospital || !roomId || !careTeamAlerted) return
+    if (erNotifiedFor.current === hospital.id) return
+    erNotifiedFor.current = hospital.id
+    setErConnected('')
+    const notify = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        const token = session?.access_token
+        if (!token) return
+        const res = await fetch('/api/hospital/incoming', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            hospital: { name: hospital.name, lat: hospital.lat, lng: hospital.lng },
+            patientName: profile?.full_name || 'Relay patient',
+            emergencyType: type,
+            etaMin: formatEtaMin(hospital),
+            liveUrl: `${window.location.origin}/emergency/live/${roomId}`,
+          }),
+        })
+        const json = await res.json()
+        if (json.connected) {
+          setErConnected(json.partnerName || hospital.name)
+          pushEvt(`${json.partnerName || 'Hospital'} ER notified — patient on their dispatch board`)
+        }
+      } catch {}
+    }
+    notify()
+  }, [hospital?.id, roomId, careTeamAlerted])
   useEffect(() => { if (navMode) pushEvt('Turn-by-turn navigation started') }, [navMode])
 
   useEffect(() => {
@@ -701,14 +735,35 @@ function RoutingPage() {
                 ✓ {hospital.capability}
               </p>
             )}
+            {hospital.partner && fresh(hospital.partner) && (
+              <p style={{ color: hospital.partner.accepting ? T.green : T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '5px' }}>
+                {hospital.partner.accepting ? '✓ Accepting now' : '⚠ Diverting'}
+                {hospital.partner.cathLab === true ? ' · cath lab open' : ''}
+                {hospital.partner.bedsFree != null ? ` · ${hospital.partner.bedsFree} beds` : ''}
+                {' — reported by facility'}
+              </p>
+            )}
+            {erConnected && (
+              <p style={{ color: T.green, fontSize: '12.5px', fontWeight: 700, marginTop: '7px' }}>
+                ✓ {erConnected} ER is expecting you
+              </p>
+            )}
+            <p style={{ color: T.textMuted, fontSize: '11.5px', marginTop: '7px' }}>
+              Ranked first: fastest arrival{hospital.partner && fresh(hospital.partner) && hospital.partner.accepting ? ' · confirmed accepting' : ''} · {hospital.capability?.toLowerCase()}
+            </p>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
             <p style={{ color: T.red, fontWeight: 800, fontSize: '38px', fontFamily: MONO, lineHeight: 0.9, letterSpacing: '-2px' }}>
-              {estimateTime(hospital.distance || 0)}
+              {etaText(hospital)}
             </p>
             <p style={{ color: T.textMuted, fontSize: '12px', fontFamily: MONO, marginTop: '5px' }}>
               {formatDistance(hospital.distance || 0)}
             </p>
+            {hospital.etaTrafficSec != null && (
+              <p style={{ color: T.amber, fontSize: '10px', fontFamily: MONO, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+                {trafficLabel()}
+              </p>
+            )}
           </div>
         </div>
 
@@ -941,7 +996,7 @@ function RoutingPage() {
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
                         <p style={{ color: T.textPrimary, fontWeight: 700, fontSize: '15px', fontFamily: MONO, letterSpacing: '-0.5px' }}>
-                          {estimateTime(h.distance || 0)}
+                          {etaText(h)}
                         </p>
                         <p style={{ color: T.textMuted, fontSize: '11px', fontFamily: MONO, marginTop: '2px' }}>
                           {formatDistance(h.distance || 0)}
