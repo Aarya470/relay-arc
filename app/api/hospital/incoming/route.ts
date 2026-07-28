@@ -41,6 +41,12 @@ export async function POST(req: NextRequest) {
       eta_min: typeof etaMin === 'number' ? Math.min(999, Math.max(0, Math.round(etaMin))) : null,
       live_url: typeof liveUrl === 'string' ? liveUrl.slice(0, 300) : null,
     }).select('id').single()
+    try {
+      await admin.from('er_audit').insert({
+        partner_id: hit.id, actor: 'patient', action: 'incoming_dispatched',
+        detail: `${(patientName || 'Relay patient').slice(0, 80)} · ${String(emergencyType).slice(0, 30)} · eta ${etaMin ?? '?'}m`,
+      })
+    } catch {}
     return NextResponse.json({ connected: true, partnerName: hit.name, incomingId: row?.id || null })
   } catch {
     return NextResponse.json({ connected: false })

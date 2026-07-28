@@ -31,3 +31,13 @@ alter table er_incoming enable row level security;
 -- Onboard a partner: coordinates within ~400m of the hospital's OSM position.
 -- insert into hospital_partners (access_code, name, lat, lng, accepting, cath_lab, beds_free)
 -- values ('RELAY-TEST-1', 'Hospital Name', 19.0509, 72.8296, true, true, 6);
+
+create table if not exists er_audit (
+  id uuid primary key default gen_random_uuid(),
+  partner_id uuid references hospital_partners(id) on delete set null,
+  actor text not null,          -- admin | facility | patient
+  action text not null,
+  detail text,
+  created_at timestamptz not null default now()
+);
+alter table er_audit enable row level security;

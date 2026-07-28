@@ -26,6 +26,7 @@ export interface Hospital {
   phone?: string
   etaSec?: number
   etaTrafficSec?: number
+  liveTraffic?: boolean
   partner?: PartnerStatus | null
 }
 
@@ -100,6 +101,22 @@ async function fetchPartnerStatuses(hs: Hospital[]): Promise<(PartnerStatus | nu
   } catch {
     return hs.map(() => null)
   }
+}
+
+// ── Live traffic (optional): set NEXT_PUBLIC_TOMTOM_KEY in Vercel env and
+// the top candidates get true live-traffic ETAs from TomTom Routing;
+// without a key, the time-of-day heuristic below applies unchanged.
+async function liveTrafficEta(from: [number, number], h: Hospital): Promise<number | null> {
+  const key = process.env.NEXT_PUBLIC_TOMTOM_KEY
+  if (!key) return null
+  try {
+    const url = `https://api.tomtom.com/routing/1/calculateRoute/${from[0]},${from[1]}:${h.lat},${h.lng}/json?traffic=true&travelMode=car&key=${key}`
+    const res = await fetch(url)
+    if (!res.ok) return null
+    const json = await res.json()
+    const sec = json.routes?.[0]?.summary?.travelTimeInSeconds
+    return typeof sec === 'number' ? sec : null
+  } catch { return null }
 }
 
 export async function findNearbyHospitals(
@@ -178,7 +195,20 @@ export async function findNearbyHospitals(
       return base
     }
     hospitals.sort((a, b) => score(a) - score(b))
-    return hospitals.slice(0, 5)
+    hospitals = hospitals.slice(0, 5)
+
+    // Upgrade the top 3 with live-traffic ETAs when a provider key is set
+    if (process.env.NEXT_PUBLIC_TOMTOM_KEY) {
+      const top = hospitals.slice(0, 3)
+      const live = await Promise.all(top.map(h => liveTrafficEta([lat, lng], h)))
+      live.forEach((sec, i) => {
+        if (sec != null) {
+          hospitals[i] = { ...hospitals[i], etaTrafficSec: sec, liveTraffic: true }
+        }
+      })
+      hospitals.sort((a, b) => score(a) - score(b))
+    }
+    return hospitals
   } catch (e) {
     console.error('Hospital search error:', e)
     return []

@@ -799,8 +799,8 @@ function RoutingPage() {
               {formatDistance(hospital.distance || 0)}
             </p>
             {hospital.etaTrafficSec != null && (
-              <p style={{ color: T.amber, fontSize: '10px', fontFamily: MONO, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-                {trafficLabel()}
+              <p style={{ color: hospital.liveTraffic ? T.green : T.amber, fontSize: '10px', fontFamily: MONO, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+                {hospital.liveTraffic ? 'live traffic' : trafficLabel()}
               </p>
             )}
           </div>
