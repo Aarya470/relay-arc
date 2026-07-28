@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText, MessageSquare, Navigation2 } from 'lucide-react'
-import { findNearbyHospitals, formatDistance, estimateTime, etaText, trafficLabel, formatEtaMin, fresh, Hospital } from '@/lib/hospitals'
+import { findNearbyHospitals, formatDistance, estimateTime, etaText, trafficLabel, formatEtaMin, fresh, trafficMultiplier, Hospital } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
@@ -209,6 +209,7 @@ function RoutingPage() {
   const [ride, setRide] = useState<'none' | 'dismissed' | 'searching' | 'accepted'>('none')
   const [erConnected, setErConnected] = useState('')
   const erNotifiedFor = useRef('')
+  const erIncomingId = useRef('')
   const [rideDriver, setRideDriver] = useState('')
   const rideIdRef = useRef('')
   const roomChannel = useRef<any>(null)
@@ -356,6 +357,7 @@ function RoutingPage() {
         const json = await res.json()
         if (json.connected) {
           setErConnected(json.partnerName || hospital.name)
+          erIncomingId.current = json.incomingId || ''
           pushEvt(`${json.partnerName || 'Hospital'} ER notified — patient on their dispatch board`)
         }
       } catch {}
@@ -363,6 +365,31 @@ function RoutingPage() {
     notify()
   }, [hospital?.id, roomId, careTeamAlerted])
   useEffect(() => { if (navMode) pushEvt('Turn-by-turn navigation started') }, [navMode])
+
+  // Live ETA countdown on the ER dispatch board (every 45s while en route)
+  useEffect(() => {
+    if (!erConnected) return
+    const tick = setInterval(async () => {
+      const loc = lastLocRef.current
+      const h = hospitalRef.current
+      if (!erIncomingId.current || !loc || !h) return
+      const dLat = (h.lat - loc.lat) * Math.PI / 180
+      const dLng = (h.lng - loc.lng) * Math.PI / 180
+      const a = Math.sin(dLat/2)**2 + Math.cos(loc.lat*Math.PI/180) * Math.cos(h.lat*Math.PI/180) * Math.sin(dLng/2)**2
+      const meters = 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+      const etaMin = Math.max(1, Math.round(meters / 1000 / 38 * 60 * trafficMultiplier()))
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session?.access_token) return
+        await fetch('/api/hospital/incoming', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+          body: JSON.stringify({ id: erIncomingId.current, etaMin }),
+        })
+      } catch {}
+    }, 45000)
+    return () => clearInterval(tick)
+  }, [erConnected])
 
   useEffect(() => {
     const load = async () => {
@@ -544,6 +571,18 @@ function RoutingPage() {
       toast.error('Cancelled on this device, but the server did not confirm — your care team may still see it as active.')
     }
     pushEvt('Emergency cancelled — patient reports safe')
+    if (erIncomingId.current) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session?.access_token) {
+          fetch('/api/hospital/incoming', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+            body: JSON.stringify({ id: erIncomingId.current, status: 'cancelled' }),
+          })
+        }
+      } catch {}
+    }
     lockedRef.current = false
     router.replace('/dashboard')
   }

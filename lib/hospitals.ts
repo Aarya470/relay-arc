@@ -2,8 +2,17 @@ export interface PartnerStatus {
   name: string
   accepting: boolean
   cathLab: boolean | null
+  strokeUnit: boolean | null
+  traumaUnit: boolean | null
   bedsFree: number | null
   updatedAt: string
+}
+
+// Which facility capability matters for which emergency
+export const CAPABILITY_FOR_TYPE: Record<string, keyof Pick<PartnerStatus, 'cathLab' | 'strokeUnit' | 'traumaUnit'>> = {
+  chest_pain: 'cathLab',
+  stroke: 'strokeUnit',
+  unconscious: 'traumaUnit',
 }
 
 export interface Hospital {
@@ -154,11 +163,17 @@ export async function findNearbyHospitals(
 
     // Dispatch score: traffic-adjusted ETA, penalize diverting partners hard,
     // slightly favor facilities actively reporting they are accepting.
+    const capKey = CAPABILITY_FOR_TYPE[emergencyType]
     const score = (h: Hospital) => {
-      const base = h.etaTrafficSec ?? ((h.distance || 0) / 1000 / 40 * 3600 * mult)
+      let base = h.etaTrafficSec ?? ((h.distance || 0) / 1000 / 40 * 3600 * mult)
       if (h.partner && fresh(h.partner)) {
         if (!h.partner.accepting) return base * 2.2
-        return base * 0.85
+        base *= 0.85
+        // Type-relevant capability, as reported by the facility itself
+        if (capKey) {
+          if (h.partner[capKey] === true) base *= 0.8
+          else if (h.partner[capKey] === false) base *= 1.35
+        }
       }
       return base
     }

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid candidates' }, { status: 400 })
     }
     const { data: partners } = await admin.from('hospital_partners')
-      .select('name, lat, lng, accepting, cath_lab, beds_free, status_updated_at')
+      .select('name, lat, lng, accepting, cath_lab, stroke_unit, trauma_unit, beds_free, status_updated_at')
     const statuses: Record<string, any> = {}
     for (const c of candidates) {
       if (typeof c?.lat !== 'number' || typeof c?.lng !== 'number') continue
@@ -31,6 +31,8 @@ export async function POST(req: NextRequest) {
           name: hit.name,
           accepting: hit.accepting,
           cathLab: hit.cath_lab,
+          strokeUnit: hit.stroke_unit,
+          traumaUnit: hit.trauma_unit,
           bedsFree: hit.beds_free,
           updatedAt: hit.status_updated_at,
         }

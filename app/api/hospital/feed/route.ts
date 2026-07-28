@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid code' }, { status: 400 })
     }
     const { data: partner } = await admin.from('hospital_partners')
-      .select('id, name, accepting, cath_lab, beds_free, status_updated_at')
+      .select('id, name, accepting, cath_lab, stroke_unit, trauma_unit, beds_free, status_updated_at')
       .eq('access_code', code).single()
     if (!partner) return NextResponse.json({ error: 'Unknown code' }, { status: 401 })
 

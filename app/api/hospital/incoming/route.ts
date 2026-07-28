@@ -33,15 +33,37 @@ export async function POST(req: NextRequest) {
     const hit = (partners || []).find(p => dist(p.lat, p.lng, hospital.lat, hospital.lng) < 400)
     if (!hit) return NextResponse.json({ connected: false })
 
-    await admin.from('er_incoming').insert({
+    const { data: row } = await admin.from('er_incoming').insert({
       partner_id: hit.id,
+      user_id: user.id,
       patient_name: (patientName || 'Relay patient').slice(0, 120),
       emergency_type: String(emergencyType || 'other').slice(0, 40),
       eta_min: typeof etaMin === 'number' ? Math.min(999, Math.max(0, Math.round(etaMin))) : null,
       live_url: typeof liveUrl === 'string' ? liveUrl.slice(0, 300) : null,
-    })
-    return NextResponse.json({ connected: true, partnerName: hit.name })
+    }).select('id').single()
+    return NextResponse.json({ connected: true, partnerName: hit.name, incomingId: row?.id || null })
   } catch {
     return NextResponse.json({ connected: false })
+  }
+}
+
+// Live updates from the patient's phone: ETA countdown + arrival/cancel.
+export async function PATCH(req: NextRequest) {
+  try {
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const { data: { user } } = await anon.auth.getUser(token)
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    const { id, etaMin, status } = await req.json()
+    if (!id || typeof id !== 'string') return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+    const patch: any = {}
+    if (typeof etaMin === 'number') patch.eta_min = Math.min(999, Math.max(0, Math.round(etaMin)))
+    if (status && ['arrived', 'cancelled'].includes(status)) patch.status = status
+    if (!Object.keys(patch).length) return NextResponse.json({ ok: true })
+    await admin.from('er_incoming').update(patch).eq('id', id).eq('user_id', user.id)
+    return NextResponse.json({ ok: true })
+  } catch {
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

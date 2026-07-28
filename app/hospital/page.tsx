@@ -17,7 +17,7 @@ const TYPE_LABELS: Record<string, string> = {
   mecfs: 'Severe crash', breathing: "Can't breathe", unconscious: 'Unconscious', other: 'Emergency',
 }
 
-interface Partner { id: string; name: string; accepting: boolean; cath_lab: boolean | null; beds_free: number | null; status_updated_at: string }
+interface Partner { id: string; name: string; accepting: boolean; cath_lab: boolean | null; stroke_unit: boolean | null; trauma_unit: boolean | null; beds_free: number | null; status_updated_at: string }
 interface Incoming { id: string; patient_name: string; emergency_type: string; eta_min: number | null; live_url: string | null; status: string; created_at: string }
 
 export default function HospitalPortal() {
@@ -28,6 +28,20 @@ export default function HospitalPortal() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const codeRef = useRef('')
+  const knownIds = useRef<Set<string>>(new Set())
+
+  const chime = () => {
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const gain = ctx.createGain(); gain.gain.value = 0.4; gain.connect(ctx.destination)
+      ;[0, 200, 400].forEach(delay => setTimeout(() => {
+        const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = 950
+        o.connect(gain); o.start(); o.stop(ctx.currentTime + 0.15)
+      }, delay))
+      setTimeout(() => { try { ctx.close() } catch {} }, 1200)
+      navigator.vibrate?.([250, 100, 250])
+    } catch {}
+  }
 
   useEffect(() => {
     try { const c = localStorage.getItem('relay_hospital_code'); if (c) { setCode(c); connect(c) } } catch {}
@@ -46,6 +60,7 @@ export default function HospitalPortal() {
       try { localStorage.setItem('relay_hospital_code', c) } catch {}
       setPartner(json.partner)
       setIncoming(json.incoming)
+      ;(json.incoming || []).forEach((x: Incoming) => knownIds.current.add(x.id))
     } catch {
       setError('Could not connect — check your network.')
     }
@@ -65,6 +80,9 @@ export default function HospitalPortal() {
           const json = await res.json()
           setPartner(json.partner)
           setIncoming(json.incoming)
+          const fresh = (json.incoming || []).filter((x: Incoming) => x.status === 'incoming' && !knownIds.current.has(x.id))
+          if (knownIds.current.size > 0 && fresh.length > 0) chime()
+          ;(json.incoming || []).forEach((x: Incoming) => knownIds.current.add(x.id))
         }
       } catch {}
     }, 10000)
@@ -79,7 +97,7 @@ export default function HospitalPortal() {
     try {
       await fetch('/api/hospital/status', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: codeRef.current, accepting: next.accepting, cath_lab: next.cath_lab, beds_free: next.beds_free }),
+        body: JSON.stringify({ code: codeRef.current, accepting: next.accepting, cath_lab: next.cath_lab, stroke_unit: next.stroke_unit, trauma_unit: next.trauma_unit, beds_free: next.beds_free }),
       })
     } catch {}
     setSaving(false)
@@ -166,23 +184,29 @@ export default function HospitalPortal() {
           </button>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: `1px solid ${BORDER}` }}>
-          <div>
-            <p style={{ color: T1, fontSize: '15.5px', fontWeight: 700 }}>Cath lab available</p>
-            <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>Cardiac patients are routed preferentially when on</p>
+        {([
+          ['cath_lab', 'Cath lab available', 'Cardiac patients routed preferentially when on'],
+          ['stroke_unit', 'Stroke unit available', 'Stroke patients routed preferentially when on'],
+          ['trauma_unit', 'Trauma unit available', 'Unconscious/trauma patients routed preferentially'],
+        ] as const).map(([key, title, sub]) => (
+          <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: `1px solid ${BORDER}` }}>
+            <div>
+              <p style={{ color: T1, fontSize: '15.5px', fontWeight: 700 }}>{title}</p>
+              <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>{sub}</p>
+            </div>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {[true, false].map(v => (
+                <button key={String(v)} onClick={() => saveStatus({ [key]: v } as any)}
+                  style={{ padding: '10px 16px', borderRadius: '10px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, fontSize: '13px',
+                    background: partner[key] === v ? (v ? GREEN : RED) : 'none',
+                    color: partner[key] === v ? 'white' : T2,
+                    border: partner[key] === v ? 'none' : `1.5px solid ${BORDER}` }}>
+                  {v ? 'Yes' : 'No'}
+                </button>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '6px' }}>
-            {[true, false].map(v => (
-              <button key={String(v)} onClick={() => saveStatus({ cath_lab: v })}
-                style={{ padding: '10px 16px', borderRadius: '10px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, fontSize: '13px',
-                  background: partner.cath_lab === v ? (v ? GREEN : RED) : 'none',
-                  color: partner.cath_lab === v ? 'white' : T2,
-                  border: partner.cath_lab === v ? 'none' : `1.5px solid ${BORDER}` }}>
-                {v ? 'Yes' : 'No'}
-              </button>
-            ))}
-          </div>
-        </div>
+        ))}
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: `1px solid ${BORDER}` }}>
           <div>
@@ -223,7 +247,7 @@ export default function HospitalPortal() {
                   {p.patient_name} — {TYPE_LABELS[p.emergency_type] || p.emergency_type}
                 </p>
                 <p style={{ color: T3, fontSize: '12.5px', fontFamily: MONO, marginTop: '3px' }}>
-                  dispatched {ago(p.created_at)}{p.eta_min != null ? ` · was ${p.eta_min} min out` : ''}
+                  dispatched {ago(p.created_at)}{p.eta_min != null ? ` · ~${p.eta_min} min out (live)` : ''}
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
