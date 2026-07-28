@@ -40,7 +40,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
     setMenuOpen(false)
   }
 
-  const links: [string, string][] = [['log', 'How it works'], ['features', 'Features'], ['mission', 'Mission'], ['for-whom', "Who it's for"]]
+  const links: [string, string][] = [['log', 'How it works'], ['features', 'Features'], ['mission', 'Mission']]
 
   return (
     <>
@@ -436,7 +436,7 @@ export default function Home() {
             <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
               <div style={{ paddingBottom: '90px', paddingTop: '8px' }} className="hero-copy">
                 <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
-                  Relay detects the crisis, matches the right hospital for your condition, sends your medical profile ahead, and navigates your family there — all in under a minute.
+                  One button. Relay picks the right hospital, sends your records ahead, and gets your family moving — in under a minute.
                 </p>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '32px' }}>
@@ -451,7 +451,7 @@ export default function Home() {
                 </div>
 
                 <p style={{ color: T3, fontSize: '13px' }}>
-                  Free for patients — installs from the browser, no app store.
+                  Free. No app store needed.
                 </p>
               </div>
 
@@ -471,162 +471,59 @@ export default function Home() {
       </div>
 
       {/* ── DISPATCH LOG ─────────────────────────────────────────────── */}
-      <section id="log" style={{ padding: '96px 24px 110px' }}>
+      {/* ── SEE IT, DON'T READ IT ────────────────────────────────────── */}
+      <section id="log" style={{ padding: '96px 24px 100px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>01 / How it works</span>
-            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>RE·ACT — RE·ROUTE — RE·COVER</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Watch — same emergency, twice</span>
           </div>
-          <div style={{ marginBottom: '84px' }}>
-            <EmergencyRace/>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
-            <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
-              <h2 style={{ color: T1, fontSize: 'clamp(32px, 4.6vw, 56px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
-                One emergency,<br/>timed.
-              </h2>
-              <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65, marginBottom: '18px' }}>
-                An emergency is not the moment to figure things out. Relay already has. Here is a Tuesday evening, minute by minute.
-              </p>
-              <p style={{ color: T3, fontSize: '12px', lineHeight: 1.6 }}>
-                Composite scenario. Timings reflect how Relay routes and briefs in a metro area.
-              </p>
-            </div>
-
-            <div style={{ paddingTop: '6px', position: 'relative' }}>
-              <span aria-hidden className="log-ghost" style={{ position: 'absolute', top: '-64px', right: '-12px', fontFamily: mono, fontWeight: 700, fontSize: 'clamp(90px, 11vw, 160px)', color: 'transparent', WebkitTextStroke: '1.5px #ECEEF2', letterSpacing: '-6px', pointerEvents: 'none', userSelect: 'none', lineHeight: 1, zIndex: 0 }}>+11:51</span>
-              {LOG.map((e, i) => (
-                <motion.div key={i}
-                  initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.35, delay: i * 0.07, ease: 'easeOut' }}
-                  style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '28px', position: 'relative', paddingBottom: i < LOG.length - 1 ? '44px' : 0, zIndex: 1 }} className="log-row">
-                  {/* timeline spine */}
-                  {i < LOG.length - 1 && (
-                    <div style={{ position: 'absolute', left: '182px', top: '20px', bottom: '-2px', width: '1px', background: BORDER }} className="log-spine"/>
-                  )}
-                  <div style={{ textAlign: 'right' }} className="log-time">
-                    <p style={{ color: T1, fontFamily: mono, fontSize: '14px', fontWeight: 700, letterSpacing: '0.3px' }}>{e.t}</p>
-                    <p style={{ color: T3, fontFamily: mono, fontSize: '11px', marginTop: '3px' }}>{e.d}</p>
-                  </div>
-                  <div style={{ position: 'relative', paddingLeft: '30px' }}>
-                    <span style={{ position: 'absolute', left: '-4.5px', top: '5px', width: '8px', height: '8px', background: e.color }} className="log-dot"/>
-                    <h3 style={{ color: T1, fontSize: '16.5px', fontWeight: 700, letterSpacing: '-0.3px', marginBottom: '7px' }}>{e.title}</h3>
-                    <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65, maxWidth: '440px' }}>{e.body}</p>
-                  </div>
-                </motion.div>
-              ))}
-              <div style={{ marginTop: '40px', paddingLeft: '178px' }} className="log-verdict">
-                <p style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px' }}>
-                  Eleven minutes, fifty-one seconds<span style={{ color: RED }}>.</span> The margin, kept.
-                </p>
-              </div>
-            </div>
-          </div>
+          <EmergencyRace/>
+          <p style={{ color: T1, fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 800, letterSpacing: '-0.03em', marginTop: '36px', textAlign: 'center' }}>
+            12 minutes with Relay. Still waiting without<span style={{ color: RED }}>.</span>
+          </p>
         </div>
       </section>
 
-      {/* ── FEATURES ─────────────────────────────────────────────────── */}
+      {/* ── WHAT IT DOES — four lines, no reading ─────────────────────── */}
       <section id="features" style={{ padding: '0 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / Features</span>
-            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>8 systems, one arc</span>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
-            <div className="split-sticky" style={{ position: 'sticky', top: '110px' }}>
-              <h2 style={{ color: T1, fontSize: 'clamp(32px, 4.6vw, 56px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
-                The whole arc<br/>of care.
-              </h2>
-              <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.65 }}>
-                From the first warning sign to the last week of recovery — not just the 911 call.
-              </p>
-
-              <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '28px', paddingTop: '18px' }}>
-                <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '12px' }}>
-                  Shipped — stage 3
-                </p>
-                {['sos ride dispatch — community drivers', 'relay room — live family coordination', 'guardian auto-escalation', 'voice sos', 'bystander cpr coach', 'offline emergency kit'].map((item, i) => (
-                  <p key={i} style={{ color: T2, fontFamily: mono, fontSize: '12px', lineHeight: 2, margin: 0 }}>
-                    <span style={{ color: GREEN, marginRight: '10px' }}>+</span>{item}
-                  </p>
-                ))}
-                <p style={{ color: T3, fontFamily: mono, fontSize: '11px', marginTop: '12px' }}>stage 4 — in the works</p>
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 48px' }} className="features-items">
-              {features.map((f, i) => (
-                <div key={i} style={{ borderTop: `1px solid ${BORDER}`, padding: '20px 0 24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '8px' }}>
-                    <span style={{ color: f.color, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
-                    <h3 style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.2px' }}>{f.title}</h3>
-                  </div>
-                  <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.6 }}>{f.body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MISSION — the one dark moment ────────────────────────────── */}
-      <section id="mission" style={{ background: RED, padding: '96px 24px 110px', position: 'relative', overflow: 'hidden' }}>
-        <Noise opacity={0.07}/>
-        <div style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative' }}>
-          <div style={{ borderTop: '3px solid #FFFFFF', paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <span style={{ color: '#FFFFFF', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Mission</span>
-            <span style={{ color: 'rgba(255,255,255,0.45)', fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Relay, not revive</span>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '72px', alignItems: 'start' }} className="split-grid">
-            <div>
-              <h2 style={{ color: 'white', fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98 }}>
-                Relay,<br/>not Revive<span style={{ color: T1 }}>.</span>
-              </h2>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '560px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '15.5px', lineHeight: 1.75 }}>
-                Not everyone lives where help arrives in eight minutes. In much of the world, an emergency begins with a family doing math instead of getting help. Can we afford the ambulance. How far is the hospital. Will we make it in time.
-              </p>
-              <p style={{ color: '#FFFFFF', fontSize: '21px', lineHeight: 1.5, fontWeight: 800, letterSpacing: '-0.01em' }}>
-                Relay exists because no one should have to think before getting help. Help should already be on the way.
-              </p>
-              <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '15.5px', lineHeight: 1.75 }}>
-                In India, more than 65 percent of people live in rural areas where the nearest hospital can be over 30 kilometres away. In Mumbai, Delhi and Kolkata, ambulances can sit in traffic for 45 minutes while moving only a few kilometres.
-              </p>
-              <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '15.5px', lineHeight: 1.75 }}>
-                These are not rare situations — this is daily life for hundreds of millions of people. Relay was built for them first. Not as charity, but as the emergency infrastructure that should have already existed.
-              </p>
-              <div style={{ marginTop: '14px' }}>
-                <button onClick={() => router.push('/donate')}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'none', color: 'white', fontWeight: 700, fontSize: '14.5px', padding: '13px 26px', border: '1.5px solid rgba(255,255,255,0.9)', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  Support the mission <span style={{ fontFamily: mono }}>→</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── WHO IT'S FOR ─────────────────────────────────────────────── */}
-      <section id="for-whom" style={{ padding: '96px 24px 110px' }}>
-        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px' }}>
-            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>04 / Who it's for</span>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / What it does</span>
           </div>
-          <h2 style={{ color: T1, fontSize: 'clamp(32px, 4.6vw, 56px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '48px', maxWidth: '560px' }}>
-            Built for everyone<br/>in the room.
-          </h2>
-
-          <div>
-            {audiences.map((a, i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '32px', padding: '26px 0', borderTop: `1px solid ${BORDER}`, alignItems: 'baseline' }} className="who-row">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-                  <span style={{ width: '8px', height: '8px', background: a.color, flexShrink: 0 }}/>
-                  <p style={{ color: T1, fontSize: '17.5px', fontWeight: 800, letterSpacing: '-0.03em' }}>{a.title}</p>
-                </div>
-                <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.65, maxWidth: '620px' }}>{a.body}</p>
+          <div className="simple-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '40px 36px' }}>
+            {[
+              ['Finds the right hospital', 'A cath lab for a heart attack — not just the closest ER.'],
+              ['Sends your records ahead', 'Blood type, meds, allergies — there before you are.'],
+              ['Gets your family there', 'Live location and turn-by-turn, shared in one tap.'],
+              ['Watches over you daily', 'Two-minute check-ins that catch trouble early.'],
+            ].map(([title, body], i) => (
+              <div key={i} style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '18px' }}>
+                <span style={{ color: RED, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
+                <h3 style={{ color: T1, fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em', margin: '10px 0 8px', lineHeight: 1.15 }}>{title}</h3>
+                <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55 }}>{body}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── MISSION — three sentences ─────────────────────────────────── */}
+      <section id="mission" style={{ background: RED, padding: '96px 24px 104px', position: 'relative', overflow: 'hidden' }}>
+        <Noise opacity={0.07}/>
+        <div style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative' }}>
+          <div style={{ borderTop: '3px solid #FFFFFF', paddingTop: '14px', marginBottom: '44px' }}>
+            <span style={{ color: '#FFFFFF', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Mission</span>
+          </div>
+          <h2 style={{ color: 'white', fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98, marginBottom: '24px' }}>
+            Relay,<br/>not Revive<span style={{ color: T1 }}>.</span>
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '17px', lineHeight: 1.65, maxWidth: '540px', marginBottom: '14px' }}>
+            Most of the world doesn&apos;t get an ambulance in eight minutes. Relay was built for those places first.
+          </p>
+          <p style={{ color: '#FFFFFF', fontSize: '20px', lineHeight: 1.5, fontWeight: 800, letterSpacing: '-0.01em', maxWidth: '540px' }}>
+            No one should have to think before getting help.
+          </p>
         </div>
       </section>
 
@@ -639,7 +536,7 @@ export default function Home() {
                 Your profile could<br/>save your life<span style={{ color: RED }}>.</span>
               </h2>
               <p style={{ color: T2, fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
-                Blood type, allergies, medications — ready for paramedics in seconds. No unlocking required.
+                Two minutes to set up. Ready for paramedics forever.
               </p>
               <button onClick={() => router.push('/login?signup=1')}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: T1, color: 'white', padding: '15px 32px', borderRadius: '0px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
@@ -703,7 +600,7 @@ export default function Home() {
             <div style={{ display: 'flex', gap: '64px', flexWrap: 'wrap' }}>
               <div>
                 <p style={{ color: 'rgba(255,255,255,0.38)', fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Product</p>
-                {[['features', 'Features'], ['log', 'How it works'], ['for-whom', "Who it's for"]].map(([id, label]) => (
+                {[['features', 'Features'], ['log', 'How it works']].map(([id, label]) => (
                   <button key={id} onClick={() => scrollTo(id)}
                     style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
                     {label}
@@ -753,6 +650,7 @@ export default function Home() {
           .hero-copy { padding-bottom: 0 !important; }
           .phone-col { margin-bottom: 40px !important; margin-top: 0 !important; }
           .split-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .simple-grid { grid-template-columns: 1fr 1fr !important; }
           .split-sticky { position: static !important; }
           .float-card { display: none !important; }
           .route-svg { display: none !important; }
@@ -763,7 +661,7 @@ export default function Home() {
           .desktop-only { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
           .features-items { grid-template-columns: 1fr !important; }
-          .who-row { grid-template-columns: 1fr !important; gap: 8px !important; padding: 20px 0 !important; }
+          .simple-grid { grid-template-columns: 1fr !important; }
           .cta-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
           .id-card { transform: rotate(0deg) !important; justify-self: start !important; }
           .log-row { grid-template-columns: 1fr !important; gap: 6px !important; }
