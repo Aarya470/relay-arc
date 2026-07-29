@@ -115,22 +115,30 @@ function segClosest(p: [number, number], a: [number, number], b: [number, number
   const cx = ax + t * dx, cy = ay + t * dy
   return { t, point: [cy, cx] as [number, number], dist: distanceBetween(py, px, cy, cx) }
 }
-// Snap to route: returns snapped point, segment index, metres travelled along route
+// Snap to route: returns snapped point, segment index, metres travelled along route.
+// Searches a window around the last match for speed, but falls back to a full scan
+// when that window yields a poor match — otherwise a GPS jump (tunnel, signal gap,
+// backgrounded app) clamps to the window edge and distance-along goes badly stale.
 function nearestOnRoute(
   p: [number, number], route: [number, number][], cum: number[], hint: number
 ) {
   if (route.length < 2) return null
-  const from = hint >= 0 ? Math.max(0, hint - 25) : 0
-  const to = hint >= 0 ? Math.min(route.length - 2, hint + 120) : route.length - 2
-  let best = { dist: Infinity, index: 0, point: route[0], along: 0 }
-  for (let i = from; i <= to; i++) {
-    const r = segClosest(p, route[i], route[i+1])
-    if (r.dist < best.dist) {
-      const segLen = cum[i+1] - cum[i]
-      best = { dist: r.dist, index: i, point: r.point, along: cum[i] + r.t * segLen }
+  const scan = (from: number, to: number) => {
+    let best = { dist: Infinity, index: from, point: route[from], along: cum[from] }
+    for (let i = from; i <= to; i++) {
+      const r = segClosest(p, route[i], route[i+1])
+      if (r.dist < best.dist) {
+        const segLen = cum[i+1] - cum[i]
+        best = { dist: r.dist, index: i, point: r.point, along: cum[i] + r.t * segLen }
+      }
     }
+    return best
   }
-  return best
+  if (hint >= 0) {
+    const windowed = scan(Math.max(0, hint - 25), Math.min(route.length - 2, hint + 120))
+    if (windowed.dist <= 80) return windowed
+  }
+  return scan(0, route.length - 2)
 }
 
 function formatDist(m: number) {
