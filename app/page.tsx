@@ -615,7 +615,9 @@ export default function Home() {
                 </button>
                 <a href="/login" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Sign in</a>
                 <a href="/login?signup=1" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Create account</a>
-                <a href="/donate" style={{ display: 'block', color: '#FF6B5E', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>Donate</a>
+                <a href="/donate" style={{ display: 'block', color: '#FF6B5E', fontSize: '13px', fontWeight: 700, textDecoration: 'none', marginBottom: '10px' }}>Donate</a>
+                <a href="/demo" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Live demo</a>
+                <a href="/status" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none' }}>System status</a>
               </div>
             </div>
           </div>
