@@ -26,7 +26,7 @@ help. Relay's only metric is **time to treatment**.
 
 | Step | What Relay does |
 | --- | --- |
-| Detect | Tap a condition, or **speak it** — Web Speech transcribes and an LLM classifies it into the emergency taxonomy |
+| Detect | Tap a condition, or **speak it** — Web Speech transcribes and **our own on-device triage engine** classifies it in ~0.1 ms with no network; the LLM is consulted only when the engine abstains |
 | Rank | Candidate hospitals from OpenStreetMap, priced by **real road drive-time** (OSRM matrix), adjusted for traffic and for what the facility reports it can do right now |
 | Brief | The medical profile (blood type, allergies, medications) is posted to the destination ER's dispatch board before the patient leaves |
 | Move | In-app turn-by-turn navigation; if there's no car, nearby community drivers are alerted |
@@ -42,13 +42,19 @@ Next.js 16 (App Router, React 19, TypeScript)
 ├── Supabase          Postgres + Auth + Realtime broadcast/presence (RLS on every table)
 ├── MapLibre GL       vector maps, native 3D chase camera (OpenFreeMap Liberty style)
 ├── OSRM              routing + drive-time matrix (FOSSGIS primary, demo fallback)
-├── Groq (Llama)      emergency classification, triage, check-in intelligence — server-side only
+├── Relay Triage      OUR OWN classifier: emergency classification on-device in
+│                     ~0.1 ms, offline, explainable, abstains when unsure
+├── Groq (Llama)      consulted only when the triage engine abstains, plus prose
+│                     generation (insights, summaries) — server-side only
 ├── web-push          VAPID push notifications + Vercel cron reminders
 └── Vercel            hosting, cron, edge OG image generation
 ```
 
 **Key design decisions**
 
+- **We own the triage model.** Emergency classification is ours, runs on-device,
+  and works with no signal — see `docs/TRIAGE_ENGINE.md` for the measured
+  head-to-head against Llama, including where the LLM still wins.
 - **No paid map/routing dependency.** Vector tiles and routing are free and keyless.
   Live traffic is an *optional* upgrade: set `NEXT_PUBLIC_TOMTOM_KEY` and the top
   candidates re-rank on live traffic; without it a documented time-of-day model applies
@@ -88,10 +94,12 @@ components/
   Navigation.tsx              turn-by-turn engine (snap, trim, voice, wake lock, night)
   GuardianWatch.tsx           unresponsiveness escalation + bystander takeover
 lib/
+  triage/                     OUR classifier — on-device, offline, explainable
   hospitals.ts                dispatch scoring: drive time × traffic × facility capability
   demo.ts  legal.ts  emergency-number.ts  notifications.ts
+ml/                           triage corpus, trainer, benchmark (not shipped to the browser)
 supabase/                     SQL migrations (partner network, responder mesh)
-tests/                        navigation geometry suite (runs the real shipped code)
+tests/                        navigation geometry + triage parity suites (run the real shipped code)
 docs/                         dispatch engine + responder mesh design notes
 ```
 
@@ -113,7 +121,10 @@ python3 tests/extract.py                                  # sync logic from the 
 cd tests && node --experimental-strip-types navigation.test.ts
 ```
 
-Exercises the real shipped navigation geometry against live routing servers: cumulative
+`triage.test.ts` asserts the TypeScript classifier reproduces the Python trainer
+exactly, plus negation, cardiac-arrest priority, abstention and latency.
+`navigation.test.ts` exercises the real shipped navigation geometry against live
+routing servers: cumulative
 distance vs the router's own total, snap accuracy, drifted-GPS correction, a full
 simulated drive (monotonic remaining distance, route trimming, maneuver advance,
 arrival), the off-route threshold, instruction composition, and the dispatch matrix.

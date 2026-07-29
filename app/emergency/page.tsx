@@ -7,6 +7,7 @@ import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, Chevron
 import { toast } from 'sonner'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { demoOn } from '@/lib/demo'
+import { triage } from '@/lib/triage'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#FFFFFF'
@@ -41,6 +42,7 @@ export default function Emergency() {
   const [listening, setListening] = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
   const [transcript, setTranscript] = useState('')
+  const [heard, setHeard] = useState<{ evidence: string[]; source: 'device' | 'cloud' } | null>(null)
   const recRef = useRef<any>(null)
   const router = useRouter()
 
@@ -49,23 +51,48 @@ export default function Emergency() {
     setVoiceSupported(!!SR)
   }, [])
 
+  // Classification runs on-device first — the Relay Triage Engine decides in
+  // well under a millisecond with no network. The language model is consulted
+  // only when the engine is genuinely unsure, and never blocks an emergency.
   const classifyAndGo = async (text: string) => {
     setLoading(true)
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      const token = session?.access_token
-      if (!token) { toast.error('Sign in required'); setLoading(false); return }
-      const res = await fetch('/api/groq/classify-emergency', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ transcript: text }),
-      })
-      const { type } = await res.json()
-      await handleSelect(type || 'other')
-    } catch {
-      toast.error('Could not understand — tap an option below or call 911')
-      setLoading(false)
+    const local = triage(text)
+
+    if (!local.abstain) {
+      setHeard({ evidence: local.evidence, source: 'device' })
+      await handleSelect(local.type)
+      return
     }
+
+    // Ambiguous phrasing: ask the language model, but only if we're online and
+    // only for as long as an emergency can afford to wait.
+    if (typeof navigator !== 'undefined' && navigator.onLine) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        const token = session?.access_token
+        if (token) {
+          const ctrl = new AbortController()
+          const timer = setTimeout(() => ctrl.abort(), 3500)
+          const res = await fetch('/api/groq/classify-emergency', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ transcript: text }),
+            signal: ctrl.signal,
+          })
+          clearTimeout(timer)
+          const { type } = await res.json()
+          if (type) {
+            setHeard({ evidence: local.evidence, source: 'cloud' })
+            await handleSelect(type)
+            return
+          }
+        }
+      } catch { /* fall through to the on-device best guess */ }
+    }
+
+    // Offline, or the model was unreachable: never dead-end an emergency.
+    setHeard({ evidence: local.evidence, source: 'device' })
+    await handleSelect(local.type)
   }
 
   const startVoice = () => {
@@ -201,6 +228,13 @@ export default function Emergency() {
               ? (transcript ? `"${transcript.slice(-42)}"` : "Listening — describe what's happening")
               : 'Speak it instead — tap and talk'}
           </motion.button>
+        )}
+
+        {heard && (
+          <p style={{ color: T3, fontSize: '12.5px', fontFamily: 'var(--font-mono, monospace)', marginTop: '-6px' }}>
+            {heard.evidence.length > 0 ? `matched: ${heard.evidence.join(' · ')}` : 'starting response'}
+            {heard.source === 'device' ? ' · on-device' : ' · assisted'}
+          </p>
         )}
 
         {/* Type list — flat hairline rows, no boxes */}

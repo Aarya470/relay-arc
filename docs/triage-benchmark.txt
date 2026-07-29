@@ -1,0 +1,22 @@
+evaluation set: 28 utterances the device model has NEVER seen
+device model trained on the remaining 365 examples
+
+RELAY TRIAGE ENGINE (on-device)
+  accuracy            24/28 = 0.857
+  confident subset    17/28 covered, accuracy 1.000
+  latency             0.075 ms per call
+
+GROQ llama-3.1-8b-instant (cloud)
+  answered            28/28 calls (0 failed after retries)
+  accuracy (answered) 27/28 = 0.964
+  latency             median 216 ms · p90 356 ms
+  speed difference    on-device is 2865x faster
+
+  groq misclassifications:
+    "brain fog dizziness racing pulse"  true=pots  groq=other
+
+  device misclassifications:
+    "she has fainted and is not coming around"  true=unconscious  device=pots(0.38)  [ABSTAINED -> defers to cloud]
+    "cannot get my words out"  true=stroke  device=unconscious(0.32)  [ABSTAINED -> defers to cloud]
+    "words coming out wrong"  true=stroke  device=unconscious(0.33)  [ABSTAINED -> defers to cloud]
+    "twisted my ankle badly"  true=other  device=breathing(0.34)  [ABSTAINED -> defers to cloud]

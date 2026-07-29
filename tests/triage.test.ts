@@ -1,0 +1,78 @@
+// Parity + behaviour tests for the Relay Triage Engine.
+//   cd tests && node --experimental-strip-types triage.test.ts
+//
+// The critical assertion is PARITY: the TypeScript featurizer must produce the
+// same predictions as the Python trainer. If they drift, the shipped model is
+// silently scoring different features than it was trained on.
+import { triage, featurize, ABSTAIN_THRESHOLD, MODEL_META } from '../lib/triage/index.ts'
+import fixtures from '../ml/parity_fixtures.json' with { type: 'json' }
+
+let pass = 0, fail = 0
+const ok = (name: string, cond: boolean, detail = '') => {
+  if (cond) { pass++; console.log('  PASS  ' + name + (detail ? ' — ' + detail : '')) }
+  else { fail++; console.log('  FAIL  ' + name + (detail ? ' — ' + detail : '')) }
+}
+
+console.log(`\nModel: ${MODEL_META.trainedExamples} examples, CV accuracy ${MODEL_META.heldOutAccuracy}, abstain < ${ABSTAIN_THRESHOLD}`)
+
+console.log('\n=== A. Python ↔ TypeScript parity ===')
+let mismatch = 0
+for (const f of fixtures as { text: string; class: string; confidence: number }[]) {
+  const r = triage(f.text)
+  const sameClass = r.type === f.class
+  const sameConf = Math.abs(r.confidence - f.confidence) < 0.02
+  if (!sameClass || !sameConf) {
+    mismatch++
+    console.log(`  MISMATCH "${f.text}"  py=${f.class}/${f.confidence}  ts=${r.type}/${r.confidence}`)
+  }
+}
+ok(`all ${(fixtures as any[]).length} trainer fixtures reproduce exactly in TS`, mismatch === 0)
+
+console.log('\n=== B. Classification on unseen phrasings ===')
+const cases: [string, string][] = [
+  ['my chest is crushing and pain going to my jaw', 'chest_pain'],
+  ['he collapsed and will not respond to me', 'unconscious'],
+  ['i cannot breathe and i am wheezing', 'breathing'],
+  ['heart racing hard when i stand up and dizzy', 'pots'],
+  ['her face is drooping and speech slurred', 'stroke'],
+  ['crashed badly after exertion cannot move', 'mecfs'],
+  ['my stomach is in severe pain and vomiting', 'other'],
+]
+for (const [text, want] of cases) {
+  const r = triage(text)
+  ok(`"${text.slice(0, 42)}…" → ${want}`, r.type === want, `got ${r.type} (${r.confidence})`)
+}
+
+console.log('\n=== C. Negation is handled ===')
+const neg = triage('no chest pain but i cannot breathe')
+ok('"no chest pain but cannot breathe" is not chest_pain', neg.type !== 'chest_pain', `got ${neg.type}`)
+ok('  …and resolves to breathing', neg.type === 'breathing', `got ${neg.type}`)
+
+console.log('\n=== D. Cardiac-arrest priority ===')
+const arrest = triage('he is unconscious and not breathing')
+ok('unconscious + not breathing routes to the CPR path', arrest.type === 'unconscious', `got ${arrest.type} (${arrest.confidence})`)
+
+console.log('\n=== E. Abstention on genuinely ambiguous input ===')
+for (const t of ['something is wrong', 'i feel bad', 'help me please', 'asdfgh']) {
+  const r = triage(t)
+  ok(`"${t}" abstains or says other`, r.abstain || r.type === 'other', `${r.type} conf ${r.confidence}`)
+}
+
+console.log('\n=== F. Explainability ===')
+const ex = triage('chest is paining and radiating to my left arm with sweating')
+ok('returns the evidence that drove the decision', ex.evidence.length > 0, ex.evidence.join(' · '))
+
+console.log('\n=== G. Latency (the reason this exists) ===')
+const N = 2000
+const t0 = performance.now()
+for (let i = 0; i < N; i++) triage('chest pain radiating to jaw and sweating')
+const per = (performance.now() - t0) / N
+ok(`classifies in well under 5 ms`, per < 5, `${per.toFixed(3)} ms per call (${N} runs)`)
+
+console.log('\n=== H. Robustness ===')
+ok('empty string does not throw', (() => { try { triage(''); return true } catch { return false } })())
+ok('very long input does not throw', (() => { try { triage('chest pain '.repeat(400)); return true } catch { return false } })())
+ok('featurize is deterministic', JSON.stringify(featurize('chest pain sweating')) === JSON.stringify(featurize('chest pain sweating')))
+
+console.log(`\n${'='.repeat(52)}\n  ${pass} passed, ${fail} failed\n${'='.repeat(52)}`)
+process.exit(fail > 0 ? 1 : 0)
