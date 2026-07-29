@@ -21,8 +21,21 @@ const mono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://relay-arc.vercel.app'),
   title: 'Relay Arc — Cardiac emergency response',
   description: 'Relay detects the cardiac crisis, finds the right hospital for your condition, sends your medical profile ahead, and navigates your family there — in under 60 seconds.',
+  openGraph: {
+    title: 'Relay Arc — when every minute is the margin',
+    description: 'Cardiac emergency response: the right hospital for your condition, your medical records sent ahead, and your family navigated there.',
+    url: 'https://relay-arc.vercel.app',
+    siteName: 'Relay Arc',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Relay Arc — when every minute is the margin',
+    description: 'Cardiac emergency response: the right hospital, records sent ahead, family navigated there.',
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
