@@ -3,10 +3,10 @@
 Our own emergency classifier. No API, no network, ~0.1 ms per call.
 
 ```
-lib/triage/index.ts            runtime (zero dependencies)
-lib/triage/model.generated.ts  trained weights — GENERATED, do not hand-edit
+lib/triage/index.ts            GENERATED — runtime + weights in one file
+ml/runtime_template.ts         the runtime source (edit this, not index.ts)
 ml/corpus.py                   397 labeled utterances
-ml/featurize.py                feature spec (mirrored in index.ts)
+ml/featurize.py                feature spec (mirrored in the runtime)
 ml/train.py                    trainer + exporter
 ml/benchmark.py                head-to-head against Groq
 tests/triage.test.ts           parity + behaviour suite
@@ -38,8 +38,11 @@ itself.
    features become human-readable *evidence*.
 5. **Abstain** below 0.40 confidence and let the language model decide.
 
-The lexicon lives inside the exported model, so the Python trainer and the
-TypeScript runtime cannot drift. `tests/triage.test.ts` asserts parity against
+The engine ships as a single generated file with **no imports at all** — runtime
+and weights inlined — so module resolution behaves identically in Next, webpack
+and plain Node. Edit `ml/runtime_template.ts` and re-run the trainer; never edit
+`lib/triage/index.ts` by hand. The lexicon lives inside the model, so the Python
+trainer and the TypeScript runtime cannot drift. `tests/triage.test.ts` asserts parity against
 fixtures produced by the trainer — if the two implementations ever diverge, that
 test fails.
 
