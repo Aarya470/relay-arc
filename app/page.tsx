@@ -451,7 +451,7 @@ export default function Home() {
                 </div>
 
                 <p style={{ color: T3, fontSize: '13px' }}>
-                  Free. No app store needed.
+                  Free. No app store needed. · <a href="/demo" style={{ color: T2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Live demo</a>
                 </p>
               </div>
 
