@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, ChevronRight, Mic } from 'lucide-react'
 import { toast } from 'sonner'
 import { emergencyNumber } from '@/lib/emergency-number'
+import { demoOn } from '@/lib/demo'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#FFFFFF'
@@ -32,6 +33,8 @@ const TYPES = [
 
 export default function Emergency() {
   const [selected, setSelected] = useState('')
+  const [isDemo, setIsDemo] = useState(false)
+  useEffect(() => { setIsDemo(demoOn()) }, [])
   const [emg, setEmg] = useState({ number: '911', label: '911' })
   useEffect(() => { setEmg(emergencyNumber()) }, [])
   const [loading, setLoading]   = useState(false)
@@ -126,7 +129,7 @@ export default function Emergency() {
             style={{ width: '8px', height: '8px', background: RED }}
           />
           <span style={{ color: RED, fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700 }}>
-            Emergency mode
+            {isDemo ? 'Demo · emergency mode' : 'Emergency mode'}
           </span>
         </div>
         <span style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>

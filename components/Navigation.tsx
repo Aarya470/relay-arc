@@ -16,6 +16,7 @@ const GREEN  = '#007A44'
 const MONO   = 'var(--font-mono, monospace)'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty'
+const DEMO_ORIGIN: [number, number] = [19.1136, 72.8697]   // Andheri East — demo mode only
 
 const USER_ARROW_HTML = `<div style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;">
   <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(0,85,255,0.55));"></div>
@@ -191,7 +192,7 @@ function TurnGlyph({ step, size = 34, color = 'white' }: { step: Step | undefine
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export default function Navigation({ hospital, preview = false }: { hospital: any; preview?: boolean }) {
+export default function Navigation({ hospital, preview = false, demo = false }: { hospital: any; preview?: boolean; demo?: boolean }) {
   const [position, setPosition] = useState<[number, number] | null>(null)
   const [speed, setSpeed] = useState(0)
   const [bearing, setBearing] = useState(0)
@@ -435,8 +436,71 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
     }
   }
 
+  // ── Demo drive: walk the real route at ~50 km/h, no GPS involved ──────────
+  useEffect(() => {
+    if (!demo) return
+    const [oLat, oLng] = [hospital.demoOrigin?.[0] ?? DEMO_ORIGIN[0], hospital.demoOrigin?.[1] ?? DEMO_ORIGIN[1]]
+    setPosition([oLat, oLng])
+    lastPos.current = [oLat, oLng]
+    fetchRoute([oLat, oLng])
+
+    let along = 0
+    const SPEED = 13.9        // m/s ≈ 50 km/h
+    const TICK = 1000
+    const id = setInterval(() => {
+      const route = routeRef.current
+      const cum = cumRef.current
+      if (route.length < 2 || !cum.length) return
+      along = Math.min(along + SPEED, cum[cum.length - 1])
+
+      // interpolate the point at `along` metres
+      let i = 1
+      while (i < cum.length && cum[i] < along) i++
+      const segStart = route[i - 1], segEnd = route[Math.min(i, route.length - 1)]
+      const segLen = Math.max(1, cum[Math.min(i, cum.length - 1)] - cum[i - 1])
+      const t = Math.max(0, Math.min(1, (along - cum[i - 1]) / segLen))
+      const p: [number, number] = [
+        segStart[0] + (segEnd[0] - segStart[0]) * t,
+        segStart[1] + (segEnd[1] - segStart[1]) * t,
+      ]
+
+      setSpeed(SPEED)
+      setBearing(bearingBetween(segStart[0], segStart[1], segEnd[0], segEnd[1]))
+      setPosition(p)
+      lastPos.current = p
+      hintRef.current = i - 1
+
+      const remain = Math.max(0, cum[cum.length - 1] - along)
+      setRemainingDist(remain)
+      const frac = cum[cum.length - 1] > 0 ? remain / cum[cum.length - 1] : 0
+      setRemainingSec(totalDurRef.current * frac * trafficMultiplier())
+      paintRoute([p, ...route.slice(i)])
+
+      // maneuvers + arrival, same rules as live driving
+      const st = stepsRef.current
+      const idx = stepIdxRef.current
+      if (st.length > 0 && idx < st.length - 1) {
+        const nxt = st[idx + 1]
+        const d = distanceBetween(p[0], p[1], nxt.coords[0], nxt.coords[1])
+        setDistToNext(d)
+        if (d < 40) {
+          setCurrentStep(idx + 1)
+          spokenFar.current = false
+          spokenNear.current = false
+        } else {
+          if (!spokenFar.current && d < 350) { spokenFar.current = true; speak(`In ${Math.round(d / 50) * 50} meters, ${instructionText(nxt)}`) }
+          if (!spokenNear.current && d < 70) { spokenNear.current = true; speak(instructionText(nxt)) }
+        }
+      }
+      if (remain < 45) { setArrived(true); clearInterval(id) }
+      else if (remain < 250 && !spokenArrive.current) { spokenArrive.current = true; speak('You are arriving at the hospital') }
+    }, TICK)
+    return () => { clearInterval(id); try { window.speechSynthesis.cancel() } catch {} }
+  }, [demo, hospital, fetchRoute, paintRoute, speak])
+
   // ── GPS: one watcher for the whole session, state read from refs ──────────
   useEffect(() => {
+    if (demo) return
     if (!navigator.geolocation) {
       const fallback: [number, number] = [hospital.lat - 0.05, hospital.lng - 0.05]
       setPosition(fallback)
@@ -529,7 +593,7 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
       if (watchId.current !== null) navigator.geolocation.clearWatch(watchId.current)
       try { window.speechSynthesis.cancel() } catch {}
     }
-  }, [hospital, fetchRoute, paintRoute, speak])
+  }, [demo, hospital, fetchRoute, paintRoute, speak])
 
   const upcoming = steps.length > 0 ? steps[Math.min(currentStep + 1, steps.length - 1)] : undefined
   const after = steps.length > 0 ? steps[Math.min(currentStep + 2, steps.length - 1)] : undefined
@@ -558,6 +622,16 @@ export default function Navigation({ hospital, preview = false }: { hospital: an
     <div style={{ height: '100%', position: 'relative', overflow: 'hidden', background: night && !preview ? '#0F131A' : '#E8EAED' }}>
 
       <div ref={containerRef} style={{ position: 'absolute', inset: 0 }}/>
+
+      {demo && (
+        <div style={{
+          position: 'absolute', top: preview ? '10px' : '104px', left: '12px', zIndex: 520,
+          background: T1, color: 'white', fontFamily: MONO, fontSize: '9.5px', fontWeight: 700,
+          letterSpacing: '1.4px', textTransform: 'uppercase', padding: '5px 9px', borderRadius: '5px',
+        }}>
+          Demo · simulated drive
+        </div>
+      )}
 
       {!preview && (
         <>

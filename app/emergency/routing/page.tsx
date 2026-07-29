@@ -10,6 +10,7 @@ import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
 import { emergencyNumber } from '@/lib/emergency-number'
+import { DEMO, demoOn } from '@/lib/demo'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
 const GuardianWatch = dynamic(() => import('@/components/GuardianWatch'), { ssr: false })
@@ -208,6 +209,8 @@ function RoutingPage() {
   const [patientPos, setPatientPos] = useState<[number, number] | null>(null)
   const [ride, setRide] = useState<'none' | 'dismissed' | 'searching' | 'accepted'>('none')
   const [erConnected, setErConnected] = useState('')
+  const [isDemo, setIsDemo] = useState(false)
+  useEffect(() => { setIsDemo(demoOn()) }, [])
   const erNotifiedFor = useRef('')
   const erIncomingId = useRef('')
   const [rideDriver, setRideDriver] = useState('')
@@ -420,6 +423,27 @@ function RoutingPage() {
           address: '',
           capability: 'Navigation'
         })
+        setLoading(false)
+        alertCareTeam(userId)
+        return
+      }
+
+      // Demo mode: fixed origin + seeded cardiac centres, no GPS required
+      if (demoOn()) {
+        const [dLat, dLng] = DEMO.origin
+        setPatientPos([dLat, dLng])
+        const seeded = DEMO.hospitals.map(h => ({
+          ...h,
+          distance: Math.round(Math.hypot((h.lat - dLat) * 111320, (h.lng - dLng) * 105000)),
+        })) as Hospital[]
+        try {
+          const ranked = await findNearbyHospitals(dLat, dLng, type)
+          const byName = new Map(ranked.map(r => [r.name, r]))
+          const merged = seeded.map(h => ({ ...h, ...(byName.get(h.name) || {}) })) as Hospital[]
+          setHospital(merged[0]); setNearbyHospitals(merged)
+        } catch {
+          setHospital(seeded[0]); setNearbyHospitals(seeded)
+        }
         setLoading(false)
         alertCareTeam(userId)
         return
@@ -746,6 +770,7 @@ function RoutingPage() {
             style={{ width: '8px', height: '8px', background: T.red, flexShrink: 0 }}
           />
           <span style={{ color: T.red, fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {isDemo && <span style={{ background: T.textPrimary, color: 'white', padding: '2px 6px', borderRadius: '4px', marginRight: '7px' }}>DEMO</span>}
             Active emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
           </span>
         </div>
@@ -874,7 +899,7 @@ function RoutingPage() {
 
       {/* ── Map — full bleed ────────────────────────────────────────────────── */}
       <div style={{ height: '32vh', flexShrink: 0, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-        {!navMode && <Nav hospital={hospital} preview />}
+        {!navMode && <Nav hospital={hospital} preview demo={isDemo} />}
       </div>
 
       {/* ── Content ─────────────────────────────────────────────────────────── */}
@@ -1142,7 +1167,7 @@ function RoutingPage() {
             </div>
 
             <div style={{ flex: 1, minHeight: 0 }}>
-              <Nav hospital={hospital}/>
+              <Nav hospital={hospital} demo={isDemo}/>
             </div>
 
             <div style={{ padding: '11px 16px', borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, background: '#FFFFFF' }}>
