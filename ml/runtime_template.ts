@@ -42,8 +42,17 @@ export const MODEL_META = model.meta
 
 /** Mirrors ml/featurize.py: tokenize() */
 function tokenize(text: string): string[] {
-  const cleaned = text.toLowerCase().replace(/’/g, "'").replace(/[^a-z0-9' ]+/g, ' ')
-  return cleaned.split(' ').filter(Boolean).map(w => NORMALISE[w] ?? w)
+  // Devanagari (U+0900–U+097F) is preserved: Hindi and Marathi speech
+  // transcription returns it, and stripping it would erase the input entirely.
+  const cleaned = text.toLowerCase().replace(/’/g, "'")
+    .replace(/[^a-z0-9'\u0900-\u097f ]+/g, ' ')
+  const out: string[] = []
+  for (const w of cleaned.split(' ')) {
+    if (!w) continue
+    const n = NORMALISE[w] ?? w
+    if (n) out.push(n)   // '' means "grammatical filler, drop it"
+  }
+  return out
 }
 
 /** Mirrors ml/featurize.py: features() */

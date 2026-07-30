@@ -23,10 +23,19 @@ export async function POST(req: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { transcript } = await req.json()
+    const { transcript, lang } = await req.json()
     if (!transcript || typeof transcript !== 'string' || transcript.length > 600) {
       return NextResponse.json({ error: 'Invalid transcript' }, { status: 400 })
     }
+
+    // This endpoint only runs when the on-device engine abstained, so the input
+    // is already unusual phrasing. Telling the model which language was spoken
+    // stops it treating romanised Hindi/Marathi as garbled English.
+    const LANG_NAME: Record<string, string> = { hi: 'Hindi', mr: 'Marathi', en: 'English' }
+    const spoken = LANG_NAME[lang] || 'English'
+    const langHint = spoken === 'English'
+      ? ''
+      : `\n\nThe description was spoken in ${spoken}. It may be in Devanagari script or romanised (Latin letters spelling ${spoken} words). Translate it yourself before classifying. Classify on meaning, never on spelling.`
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
     const response = await groq.chat.completions.create({
@@ -44,7 +53,7 @@ export async function POST(req: NextRequest) {
 - mecfs: severe ME/CFS crash, post-exertional collapse
 - other: anything else urgent
 
-Respond ONLY with valid JSON, no other text: {"type":"chest_pain","confidence":"high"} where type is one of the categories and confidence is "high", "medium" or "low".`,
+Respond ONLY with valid JSON, no other text: {"type":"chest_pain","confidence":"high"} where type is one of the categories and confidence is "high", "medium" or "low".${langHint}`,
         },
         { role: 'user', content: `Spoken description: "${transcript}"` },
       ],

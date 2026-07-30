@@ -174,9 +174,25 @@ fixtures = [
     "face drooping and slurred speech", "crashed after shopping trip cannot move",
     "severe stomach pain and vomiting", "my father is clutching his chest sweating",
     "gasping for air inhaler not working", "heart rate shot up when i stood",
+    # Devanagari and romanised — parity must hold across scripts
+    "सीने में दर्द और पसीना", "seene mein dard aur paseena",
+    "सांस नहीं आ रही", "saans nahi aa rahi",
+    "वह बेहोश है", "behosh ho gaya",
+    "खड़े होते ही चक्कर आते हैं", "munh tedha ho gaya",
+    "पेट में बहुत दर्द",
 ]
-Xf, _ = matrix([(t, 'other') for t in fixtures], kept if False else vocab)
-Pf = softmax(Xf @ W + b)
+# Compute fixtures from EXACTLY what was serialised — the pruned, rounded model.
+# Using the full unpruned matrix here produced confidences the shipped engine
+# could not reproduce, which the parity test correctly rejected.
+_Ws = np.array(model['weights'])
+_bs = np.array(model['bias'])
+Xf = np.zeros((len(fixtures), len(kept)))
+for _r, _t in enumerate(fixtures):
+    for _f in features(_t):
+        _j = kept.get(_f)
+        if _j is not None:
+            Xf[_r, _j] = 1.0
+Pf = softmax(Xf @ _Ws + _bs)
 fx = [{'text': t,
        'class': CLASSES[int(Pf[i].argmax())],
        'confidence': round(float(Pf[i].max()), 4)}

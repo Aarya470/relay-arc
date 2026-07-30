@@ -243,6 +243,73 @@ add('other', [
     "twisted my ankle badly", "dislocated my shoulder",
 ])
 
+
+# ── Hindi and Marathi ──────────────────────────────────────────────────────────
+# Both Devanagari (what hi-IN / mr-IN speech transcription returns) and romanised
+# (what people type). Normalised onto the same canonical tokens as English, so
+# these examples reinforce the English ones rather than competing with them.
+#
+# AUTHORED FROM GENERAL KNOWLEDGE, NOT BY A CLINICAL NATIVE SPEAKER — flagged for
+# native-speaker review in docs/TRIAGE_ENGINE.md before real-patient use.
+
+add('chest_pain', [
+    "सीने में दर्द", "seene mein dard", "छाती में दर्द", "chhati mein dard",
+    "सीने में बहुत दर्द हो रहा है", "seene mein bahut dard ho raha hai",
+    "छाती में दर्द और पसीना", "chhati mein dard aur paseena",
+    "दिल का दौरा", "dil ka daura", "दिल में दर्द", "dil mein dard",
+    "सीने में जकड़न", "seene mein jakdan",
+    "छातीत दुखत आहे", "chhatit dukhat aahe", "छातीत तीव्र दुखणे",
+    "हाथ में दर्द और सीने में दर्द", "haath mein dard aur seene mein dard",
+    "सीने में दर्द जबड़े तक", "seene mein dard jabde tak",
+])
+
+add('breathing', [
+    "सांस नहीं आ रही", "saans nahi aa rahi", "सांस लेने में तकलीफ",
+    "saans lene mein takleef", "सांस फूल रही है", "saans phool rahi hai",
+    "दम घुट रहा है", "dam ghut raha hai", "श्वास घेता येत नाही",
+    "shwas gheta yet nahi", "दम लागत आहे", "dam lagat aahe",
+    "सांस की तकलीफ बहुत है", "saans ki takleef bahut hai",
+    "सांस नहीं ले पा रहा", "saans nahi le pa raha",
+])
+
+add('unconscious', [
+    "वह बेहोश है", "voh behosh hai", "बेहोश हो गया", "behosh ho gaya",
+    "होश नहीं आ रहा", "hosh nahi aa raha", "गिर गया और होश नहीं है",
+    "gir gaya aur hosh nahi hai", "बेशुद्ध आहे", "beshuddha aahe",
+    "ती पडली आणि उठत नाही", "जवाब नहीं दे रहा", "jawab nahi de raha",
+    "बेहोश और सांस नहीं", "behosh aur saans nahi",
+])
+
+add('pots', [
+    "खड़े होते ही चक्कर आते हैं", "khade hote hi chakkar aate hain",
+    "चक्कर आ रहे हैं", "chakkar aa rahe hain", "उठते ही चक्कर",
+    "uthte hi chakkar", "दिल तेज़ धड़क रहा है खड़े होने पर",
+    "dil tez dhadak raha hai khade hone par", "धड़कन तेज़ और चक्कर",
+    "dhadkan tez aur chakkar", "उभे राहिल्यावर भोवळ", "भोवळ येत आहे",
+])
+
+add('stroke', [
+    "बोल नहीं पा रहा", "bol nahi pa raha", "मुंह टेढ़ा हो गया",
+    "munh tedha ho gaya", "चेहरा एक तरफ लटक गया", "chehra ek taraf latak gaya",
+    "एक तरफ कमजोरी", "ek taraf kamzori", "हाथ सुन्न हो गया",
+    "haath sunn ho gaya", "लकवा मार गया", "lakwa maar gaya",
+    "बोलणे स्पष्ट नाही", "अचानक कमज़ोरी एक तरफ",
+])
+
+add('mecfs', [
+    "बहुत थकान है हिल नहीं सकता", "bahut thakan hai hil nahi sakta",
+    "थकान से कुछ नहीं हो रहा", "thakan se kuch nahi ho raha",
+    "शरीर में बहुत थकावट", "sharir mein bahut thakavat",
+    "थकवा खूप आहे", "thakva khup aahe",
+])
+
+add('other', [
+    "पेट में बहुत दर्द", "pet mein bahut dard", "उल्टी और बुखार",
+    "ulti aur bukhar", "खून बह रहा है", "khoon bah raha hai",
+    "सिर में बहुत दर्द", "sir mein bahut dard", "बुखार बहुत है",
+    "पोटात दुखत आहे", "मदत हवी", "कुछ समझ नहीं आ रहा",
+])
+
 if __name__ == '__main__':
     from collections import Counter
     print('total examples:', len(CORPUS))

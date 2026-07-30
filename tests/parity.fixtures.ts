@@ -3,52 +3,97 @@ const FIXTURES = [
  {
   "text": "chest is paining and left hand numb",
   "class": "chest_pain",
-  "confidence": 0.9905
+  "confidence": 0.9901
  },
  {
   "text": "no chest pain but cannot breathe",
   "class": "breathing",
-  "confidence": 0.8816
+  "confidence": 0.8989
  },
  {
   "text": "he collapsed and is not responding",
   "class": "unconscious",
-  "confidence": 0.9055
+  "confidence": 0.8971
  },
  {
   "text": "giddiness on standing with racing heart",
   "class": "pots",
-  "confidence": 0.9913
+  "confidence": 0.9956
  },
  {
   "text": "face drooping and slurred speech",
   "class": "stroke",
-  "confidence": 0.9794
+  "confidence": 0.9695
  },
  {
   "text": "crashed after shopping trip cannot move",
   "class": "mecfs",
-  "confidence": 0.9115
+  "confidence": 0.8837
  },
  {
   "text": "severe stomach pain and vomiting",
   "class": "other",
-  "confidence": 0.9132
+  "confidence": 0.9353
  },
  {
   "text": "my father is clutching his chest sweating",
   "class": "chest_pain",
-  "confidence": 0.8778
+  "confidence": 0.8732
  },
  {
   "text": "gasping for air inhaler not working",
   "class": "breathing",
-  "confidence": 0.8584
+  "confidence": 0.8114
  },
  {
   "text": "heart rate shot up when i stood",
   "class": "pots",
-  "confidence": 0.8494
+  "confidence": 0.7977
+ },
+ {
+  "text": "\u0938\u0940\u0928\u0947 \u092e\u0947\u0902 \u0926\u0930\u094d\u0926 \u0914\u0930 \u092a\u0938\u0940\u0928\u093e",
+  "class": "chest_pain",
+  "confidence": 0.99
+ },
+ {
+  "text": "seene mein dard aur paseena",
+  "class": "chest_pain",
+  "confidence": 0.99
+ },
+ {
+  "text": "\u0938\u093e\u0902\u0938 \u0928\u0939\u0940\u0902 \u0906 \u0930\u0939\u0940",
+  "class": "breathing",
+  "confidence": 0.8146
+ },
+ {
+  "text": "saans nahi aa rahi",
+  "class": "breathing",
+  "confidence": 0.8146
+ },
+ {
+  "text": "\u0935\u0939 \u092c\u0947\u0939\u094b\u0936 \u0939\u0948",
+  "class": "unconscious",
+  "confidence": 0.8076
+ },
+ {
+  "text": "behosh ho gaya",
+  "class": "unconscious",
+  "confidence": 0.8515
+ },
+ {
+  "text": "\u0916\u0921\u093c\u0947 \u0939\u094b\u0924\u0947 \u0939\u0940 \u091a\u0915\u094d\u0915\u0930 \u0906\u0924\u0947 \u0939\u0948\u0902",
+  "class": "pots",
+  "confidence": 0.9481
+ },
+ {
+  "text": "munh tedha ho gaya",
+  "class": "stroke",
+  "confidence": 0.9035
+ },
+ {
+  "text": "\u092a\u0947\u091f \u092e\u0947\u0902 \u092c\u0939\u0941\u0924 \u0926\u0930\u094d\u0926",
+  "class": "other",
+  "confidence": 0.8786
  }
 ] as const
 export default FIXTURES

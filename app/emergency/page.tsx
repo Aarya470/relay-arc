@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { demoOn } from '@/lib/demo'
 import { triage } from '@/lib/triage'
+import { VOICE_LANGS, langById, detectLang, rememberLang, resolveLocale, type LangId } from '@/lib/voice-lang'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#FFFFFF'
@@ -43,13 +44,23 @@ export default function Emergency() {
   const [voiceSupported, setVoiceSupported] = useState(false)
   const [transcript, setTranscript] = useState('')
   const [heard, setHeard] = useState<{ evidence: string[]; source: 'device' | 'cloud' } | null>(null)
+  const [lang, setLang] = useState<LangId>('en')
   const recRef = useRef<any>(null)
   const router = useRouter()
+  const L = langById(lang)
 
   useEffect(() => {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     setVoiceSupported(!!SR)
+    setLang(detectLang())
   }, [])
+
+  const pickLang = (id: LangId) => {
+    setLang(id)
+    rememberLang(id)
+    // Switching language mid-listen would keep the old acoustic model running.
+    if (listening) { try { recRef.current?.abort() } catch {} ; setListening(false) }
+  }
 
   // Classification runs on-device first — the Relay Triage Engine decides in
   // well under a millisecond with no network. The language model is consulted
@@ -76,7 +87,7 @@ export default function Emergency() {
           const res = await fetch('/api/groq/classify-emergency', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-            body: JSON.stringify({ transcript: text }),
+            body: JSON.stringify({ transcript: text, lang }),
             signal: ctrl.signal,
           })
           clearTimeout(timer)
@@ -100,7 +111,7 @@ export default function Emergency() {
     if (!SR) return
     const rec = new SR()
     recRef.current = rec
-    rec.lang = 'en-US'
+    rec.lang = resolveLocale(L)
     rec.interimResults = true
     rec.continuous = false
     let finalText = ''
@@ -199,7 +210,33 @@ export default function Emergency() {
           Call {emg.label} now
         </motion.a>
 
-        {/* Voice SOS */}
+        {/* Voice SOS — language first, so the recogniser is right before they talk */}
+        {voiceSupported && (
+          <div style={{ display: 'flex', gap: '6px', marginBottom: '-4px' }}>
+            {VOICE_LANGS.map(l => {
+              const on = l.id === lang
+              return (
+                <button
+                  key={l.id}
+                  onClick={() => pickLang(l.id)}
+                  aria-pressed={on}
+                  style={{
+                    background: on ? T1 : 'transparent',
+                    color: on ? '#FFFFFF' : T3,
+                    border: `1px solid ${on ? T1 : BORDER}`,
+                    padding: '5px 11px', borderRadius: '999px',
+                    fontFamily: 'var(--font-mono, monospace)',
+                    fontSize: '11px', fontWeight: 700, letterSpacing: '0.5px',
+                    cursor: 'pointer', minHeight: '30px',
+                  }}
+                >
+                  {l.chip}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
         {voiceSupported && (
           <motion.button
             whileTap={{ scale: 0.985 }}
@@ -225,8 +262,8 @@ export default function Emergency() {
               <Mic size={19} strokeWidth={2.2}/>
             </motion.span>
             {listening
-              ? (transcript ? `"${transcript.slice(-42)}"` : "Listening — describe what's happening")
-              : 'Speak it instead — tap and talk'}
+              ? (transcript ? `"${transcript.slice(-42)}"` : L.listening)
+              : L.speak}
           </motion.button>
         )}
 
