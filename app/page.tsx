@@ -41,7 +41,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
     setMenuOpen(false)
   }
 
-  const links: [string, string][] = [['log', 'How it works'], ['features', 'Features'], ['mission', 'Mission']]
+  const links: [string, string][] = [['log', 'How it works'], ['mission', 'Mission']]
 
   return (
     <>
@@ -73,6 +73,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button onClick={() => router.push('/features')} className="desktop-only nav-link"
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Features
+            </button>
             <button onClick={() => router.push('/engineering')} className="desktop-only nav-link"
               style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Technology
@@ -107,6 +111,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
                 {label}
               </button>
             ))}
+            <button onClick={() => router.push('/features')}
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
+              Features
+            </button>
             <button onClick={() => router.push('/engineering')}
               style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Technology
@@ -497,8 +505,12 @@ export default function Home() {
       {/* ── WHAT IT DOES — four lines, no reading ─────────────────────── */}
       <section id="features" style={{ padding: '0 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px' }}>
+          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / What it does</span>
+            <button onClick={() => router.push('/features')}
+              style={{ background: 'none', border: 'none', color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', cursor: 'pointer', padding: 0, borderBottom: `2px solid ${T1}` }}>
+              All five, in detail →
+            </button>
           </div>
           <div className="simple-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '40px 36px' }}>
             {[
