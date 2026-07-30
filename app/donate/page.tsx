@@ -5,13 +5,13 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Heart, Copy, Check, ExternalLink } from 'lucide-react'
 
 // ─── Design tokens — shared with the homepage ────────────────────────────────
-const T1     = '#0E1218'
-const T2     = '#5B6371'
-const T3     = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const RED    = '#D91414'
-const GREEN  = '#007A44'
-const ACCENT = '#0055FF'
+const T1     = '#141413'
+const T2     = '#5C5A52'
+const T3     = '#8A8780'
+const BORDER = '#E5E2D9'
+const RED    = '#A33417'
+const GREEN  = '#5F7049'
+const ACCENT = '#5F7049'
 
 const mono = 'var(--font-mono, monospace)'
 

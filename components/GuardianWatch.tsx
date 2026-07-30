@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { Phone, MessageSquare, HeartPulse, Check } from 'lucide-react'
 
-const T1 = '#0E1218'
-const RED = '#D91414'
+const T1 = '#141413'
+const RED = '#A33417'
 const MONO = 'var(--font-mono, monospace)'
 
 const FIRST_CHECK_MS = 60_000
@@ -124,23 +124,23 @@ export default function GuardianWatch({
       {phase === 'asking' && (
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(14,18,24,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
+          style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(20,20,19,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
         >
           <div style={{ background: '#FFFFFF', borderRadius: '18px', padding: '28px 24px', width: '100%', maxWidth: '360px', textAlign: 'center' }}>
-            <p style={{ color: '#9AA2AD', fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '14px' }}>
+            <p style={{ color: '#8A8780', fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '14px' }}>
               Guardian check
             </p>
             <p style={{ color: T1, fontSize: '24px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.15, marginBottom: '6px' }}>
               Are you still responsive?
             </p>
-            <p style={{ color: '#5B6371', fontSize: '13.5px', lineHeight: 1.55, marginBottom: '22px' }}>
+            <p style={{ color: '#5C5A52', fontSize: '13.5px', lineHeight: 1.55, marginBottom: '22px' }}>
               If you don&apos;t answer, Relay will sound an alarm and prepare alerts for your contacts.
             </p>
             <p style={{ color: RED, fontFamily: MONO, fontSize: '46px', fontWeight: 800, lineHeight: 1, marginBottom: '22px', fontVariantNumeric: 'tabular-nums' }}>
               {countdown}
             </p>
             <button onClick={respond}
-              style={{ width: '100%', background: '#007A44', color: 'white', fontWeight: 800, fontSize: '18px', padding: '18px', borderRadius: '13px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', minHeight: '62px' }}>
+              style={{ width: '100%', background: '#5F7049', color: 'white', fontWeight: 800, fontSize: '18px', padding: '18px', borderRadius: '13px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', minHeight: '62px' }}>
               <Check size={20} strokeWidth={2.5}/> I&apos;m OK
             </button>
           </div>

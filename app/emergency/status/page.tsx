@@ -42,10 +42,10 @@ export default function EmergencyStatus() {
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', display: 'flex', flexDirection: 'column', paddingBottom: '32px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FAF9F5', display: 'flex', flexDirection: 'column', paddingBottom: '32px' }}>
 
       {/* Alert bar */}
-      <div style={{ background: '#D91414', padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+      <div style={{ background: '#A33417', padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <motion.div
             style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'white' }}
@@ -62,27 +62,27 @@ export default function EmergencyStatus() {
       </div>
 
       {/* Header */}
-      <div style={{ padding: '14px 20px', borderBottom: '1px solid #E3E6EC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FFFFFF', flexShrink: 0 }}>
+      <div style={{ padding: '14px 20px', borderBottom: '1px solid #E5E2D9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FFFFFF', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => router.push(activeEmergency ? `/emergency/routing?type=${activeEmergency.emergency_type}&id=${activeEmergency.id}` : '/dashboard')}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECEEF2', border: '1px solid #D5D9E0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <ArrowLeft size={16} color="#5B6371" />
+            <ArrowLeft size={16} color="#5C5A52" />
           </motion.button>
           <div>
-            <p style={{ color: '#9AA2AD', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Status</p>
-            <h1 style={{ color: '#0E1218', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>All systems responding</h1>
+            <p style={{ color: '#8A8780', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Status</p>
+            <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>All systems responding</h1>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(217,20,20,0.10)', border: '1px solid rgba(217,20,20,0.25)', borderRadius: '20px', padding: '6px 12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(163,52,23,0.10)', border: '1px solid rgba(163,52,23,0.25)', borderRadius: '20px', padding: '6px 12px' }}>
           <motion.div
-            style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D91414' }}
+            style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#A33417' }}
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
           />
-          <span style={{ color: '#D91414', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>Live</span>
+          <span style={{ color: '#A33417', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>Live</span>
         </div>
       </div>
 
@@ -97,9 +97,9 @@ export default function EmergencyStatus() {
             transition={{ delay: i * 0.1 }}
             style={{
               background: action.color === 'green'
-                ? 'rgba(0,122,68,0.05)'
-                : 'rgba(0,85,255,0.05)',
-              border: `1px solid ${action.color === 'green' ? 'rgba(0,122,68,0.18)' : 'rgba(0,85,255,0.18)'}`,
+                ? 'rgba(120,140,93,0.05)'
+                : 'rgba(120,140,93,0.05)',
+              border: `1px solid ${action.color === 'green' ? 'rgba(120,140,93,0.18)' : 'rgba(120,140,93,0.18)'}`,
               borderRadius: '16px',
               padding: '14px',
               display: 'flex',
@@ -110,46 +110,46 @@ export default function EmergencyStatus() {
             <div style={{
               width: '32px', height: '32px', borderRadius: '10px', flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: action.color === 'green' ? 'rgba(0,122,68,0.12)' : 'rgba(0,85,255,0.12)',
-              border: `1px solid ${action.color === 'green' ? 'rgba(0,122,68,0.25)' : 'rgba(0,85,255,0.22)'}`
+              background: action.color === 'green' ? 'rgba(120,140,93,0.12)' : 'rgba(120,140,93,0.12)',
+              border: `1px solid ${action.color === 'green' ? 'rgba(120,140,93,0.25)' : 'rgba(120,140,93,0.22)'}`
             }}>
-              <CheckCircle size={15} color={action.color === 'green' ? '#007A44' : '#0055FF'} />
+              <CheckCircle size={15} color={action.color === 'green' ? '#5F7049' : '#5F7049'} />
             </div>
             <div style={{ flex: 1 }}>
-              <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
-              <p style={{ color: '#5B6371', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>{action.detail}</p>
-              <p style={{ color: '#9AA2AD', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', marginTop: '5px' }}>{time}</p>
+              <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
+              <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>{action.detail}</p>
+              <p style={{ color: '#8A8780', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', marginTop: '5px' }}>{time}</p>
             </div>
           </motion.div>
         ))}
 
         {/* Nav strip */}
-        <div style={{ background: 'rgba(0,85,255,0.05)', border: '1px solid rgba(0,85,255,0.18)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0,85,255,0.12)', border: '1px solid rgba(0,85,255,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Navigation size={16} color="#0055FF" />
+        <div style={{ background: 'rgba(120,140,93,0.05)', border: '1px solid rgba(120,140,93,0.18)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(120,140,93,0.12)', border: '1px solid rgba(120,140,93,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Navigation size={16} color="#5F7049" />
           </div>
           <div style={{ flex: 1 }}>
-            <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '13px' }}>Turn right onto County Rd</p>
-            <p style={{ color: '#9AA2AD', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
+            <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>Turn right onto County Rd</p>
+            <p style={{ color: '#8A8780', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
           </div>
-          <span style={{ background: 'rgba(0,85,255,0.12)', border: '1px solid rgba(0,85,255,0.25)', color: '#0055FF', fontSize: '11px', padding: '5px 10px', borderRadius: '20px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
+          <span style={{ background: 'rgba(120,140,93,0.12)', border: '1px solid rgba(120,140,93,0.25)', color: '#5F7049', fontSize: '11px', padding: '5px 10px', borderRadius: '20px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
         </div>
 
         {/* Contacts */}
         {profile?.emergency_contacts && (
-          <div style={{ background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '16px' }}>
-            <p style={{ color: '#9AA2AD', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Contacts notified</p>
+          <div style={{ background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px' }}>
+            <p style={{ color: '#8A8780', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Contacts notified</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {profile.emergency_contacts.map((c: any, i: number) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(0,122,68,0.10)', border: '1px solid rgba(0,122,68,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#007A44', fontWeight: 700, fontSize: '13px', flexShrink: 0 }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#5F7049', fontWeight: 700, fontSize: '13px', flexShrink: 0 }}>
                     {c.name?.[0]}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ color: '#0E1218', fontSize: '13px', fontWeight: 600 }}>{c.name}</p>
-                    <p style={{ color: '#9AA2AD', fontSize: '11px' }}>{c.relationship}</p>
+                    <p style={{ color: '#141413', fontSize: '13px', fontWeight: 600 }}>{c.name}</p>
+                    <p style={{ color: '#8A8780', fontSize: '11px' }}>{c.relationship}</p>
                   </div>
-                  <span style={{ color: '#007A44', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700 }}>Notified</span>
+                  <span style={{ color: '#5F7049', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700 }}>Notified</span>
                 </div>
               ))}
             </div>
@@ -157,14 +157,14 @@ export default function EmergencyStatus() {
         )}
 
         {/* Warning */}
-        <div style={{ background: 'rgba(217,20,20,0.06)', border: '1px solid rgba(217,20,20,0.18)', borderRadius: '16px', padding: '16px' }}>
-          <p style={{ color: 'rgba(217,20,20,0.70)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>If anything changes</p>
-          <p style={{ color: '#5B6371', fontSize: '13px', lineHeight: 1.6 }}>
+        <div style={{ background: 'rgba(163,52,23,0.06)', border: '1px solid rgba(163,52,23,0.18)', borderRadius: '16px', padding: '16px' }}>
+          <p style={{ color: 'rgba(163,52,23,0.70)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>If anything changes</p>
+          <p style={{ color: '#5C5A52', fontSize: '13px', lineHeight: 1.6 }}>
             If chest pain starts, breathing becomes difficult, or the patient loses consciousness — stay on the line with 911.
           </p>
           <motion.button
             whileTap={{ scale: 0.97 }}
-            style={{ width: '100%', background: '#D91414', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}
+            style={{ width: '100%', background: '#A33417', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}
             onClick={() => window.location.href = `tel:${emg.number}`}
           >
             <Phone size={16} />

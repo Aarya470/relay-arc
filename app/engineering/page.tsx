@@ -20,9 +20,10 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
   loading: () => <DemoSkeleton label="loading the scorer…" />,
 })
 
-const T1 = '#0E1218', T2 = '#5B6371', T3 = '#9AA2AD'
-const BORDER = '#E3E6EC', BG2 = '#F4F5F7'
-const RED = '#D91414', ACCENT = '#0055FF'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#8A8780'
+const BORDER = '#E5E2D9', BG2 = '#FAF9F5'
+const RED = '#A33417', ACCENT = '#5F7049'
+const ORANGE = '#D97757'   // fill only — dark ink on top
 const mono = 'var(--font-mono, monospace)'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
 
@@ -114,7 +115,7 @@ export default function Engineering() {
             <ArrowLeft size={15}/> Relay Arc
           </button>
           <button onClick={() => router.push('/login?signup=1')}
-            style={{ background: T1, color: '#FFFFFF', fontSize: '13.5px', fontWeight: 600, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 0 }}>
+            style={{ background: ORANGE, color: T1, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 0 }}>
             Create your profile
           </button>
         </div>
@@ -443,7 +444,7 @@ export default function Engineering() {
             </p>
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: T1, color: '#FFFFFF', fontWeight: 600, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 0 }}>
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: T1, fontWeight: 700, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 0 }}>
                 Create your free profile <span style={{ fontFamily: mono }}>→</span>
               </button>
               <button onClick={() => router.push('/demo')}

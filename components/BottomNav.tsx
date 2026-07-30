@@ -4,10 +4,10 @@ import { Home, MessageCircle, LayoutList, Activity, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const ACCENT  = '#0055FF'
-const RED     = '#D91414'
-const T3      = '#9AA2AD'
-const BORDER  = '#E3E6EC'
+const ACCENT  = '#5F7049'
+const RED     = '#A33417'
+const T3      = '#8A8780'
+const BORDER  = '#E5E2D9'
 
 const tabs = [
   { href: '/dashboard',   icon: Home,          label: 'Home'     },
@@ -61,7 +61,7 @@ export default function BottomNav() {
             style={{
               position: 'absolute',
               inset: '4px 10%',
-              background: 'rgba(0,85,255,0.07)',
+              background: 'rgba(120,140,93,0.07)',
               borderRadius: '10px',
             }}
             transition={{ type: 'spring', stiffness: 500, damping: 36 }}

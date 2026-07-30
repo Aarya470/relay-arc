@@ -1,5 +1,5 @@
 export const colors = {
-  bg: '#07070E',
+  bg: '#141413',
   bgCard: '#0F0F18',
   bgCardHover: '#141420',
   bgInput: '#13131E',

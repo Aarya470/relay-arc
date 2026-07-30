@@ -7,12 +7,12 @@ import { toast } from 'sonner'
 import { Loader2, Eye, EyeOff, Heart, ArrowRight } from 'lucide-react'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const T1      = '#0E1218'
-const T2      = '#5B6371'
-const T3      = '#9AA2AD'
-const ACCENT  = '#0055FF'
-const RED     = '#D91414'
-const BORDER  = '#E3E6EC'
+const T1      = '#141413'
+const T2      = '#5C5A52'
+const T3      = '#8A8780'
+const ACCENT  = '#5F7049'
+const RED     = '#A33417'
+const BORDER  = '#E5E2D9'
 
 const mono = 'var(--font-mono, monospace)'
 

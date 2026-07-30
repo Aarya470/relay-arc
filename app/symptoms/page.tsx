@@ -37,23 +37,23 @@ const METRICS: Metric[] = [
 // ── helpers ──────────────────────────────────────────────────────────────────
 function valueColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
-  if (normalized <= 3) return '#007A44'
-  if (normalized <= 6) return '#B45309'
-  return '#D91414'
+  if (normalized <= 3) return '#5F7049'
+  if (normalized <= 6) return '#A87200'
+  return '#A33417'
 }
 
 function valueBg(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
-  if (normalized <= 3) return 'rgba(0,122,68,0.12)'
-  if (normalized <= 6) return 'rgba(180,83,9,0.12)'
-  return 'rgba(217,20,20,0.12)'
+  if (normalized <= 3) return 'rgba(120,140,93,0.12)'
+  if (normalized <= 6) return 'rgba(168,114,0,0.12)'
+  return 'rgba(163,52,23,0.12)'
 }
 
 function sliderFillColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
-  if (normalized <= 3) return 'linear-gradient(90deg, #0055FF, #007A44)'
-  if (normalized <= 6) return 'linear-gradient(90deg, #0055FF, #B45309)'
-  return 'linear-gradient(90deg, #0055FF, #D91414)'
+  if (normalized <= 3) return 'linear-gradient(90deg, #5F7049, #5F7049)'
+  if (normalized <= 6) return 'linear-gradient(90deg, #5F7049, #A87200)'
+  return 'linear-gradient(90deg, #5F7049, #A33417)'
 }
 
 function todayLabel(): string {
@@ -112,7 +112,7 @@ function SymptomSlider({ value, onChange, inverted }: SliderProps) {
           position: 'relative',
           height: '8px',
           borderRadius: '99px',
-          background: '#E9EBF0',
+          background: '#EDEAE0',
           cursor: 'pointer',
           touchAction: 'none',
         }}
@@ -143,7 +143,7 @@ function SymptomSlider({ value, onChange, inverted }: SliderProps) {
             height: '22px',
             borderRadius: '50%',
             background: '#FFFFFF',
-            boxShadow: `0 0 0 2.5px ${color}, 0 2px 8px rgba(14,18,24,0.15)`,
+            boxShadow: `0 0 0 2.5px ${color}, 0 2px 8px rgba(20,20,19,0.15)`,
             transition: 'box-shadow 0.3s',
             pointerEvents: 'none',
           }}
@@ -152,7 +152,7 @@ function SymptomSlider({ value, onChange, inverted }: SliderProps) {
       {/* tick labels */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
         {[0, 2, 4, 6, 8, 10].map(n => (
-          <span key={n} style={{ fontSize: '10px', color: '#9AA2AD', fontWeight: 500 }}>{n}</span>
+          <span key={n} style={{ fontSize: '10px', color: '#8A8780', fontWeight: 500 }}>{n}</span>
         ))}
       </div>
     </div>
@@ -173,7 +173,7 @@ function Sparkline({ values, inverted }: { values: number[]; inverted: boolean }
   const prev = values[values.length - 2]
   const improving = inverted ? last > prev : last < prev
   const same = last === prev
-  const lineColor = same ? '#9AA2AD' : improving ? '#007A44' : '#D91414'
+  const lineColor = same ? '#8A8780' : improving ? '#5F7049' : '#A33417'
 
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} fill="none">
@@ -200,7 +200,7 @@ function DayCard({ log }: { log: SymptomLog }) {
       flexShrink: 0,
       width: '80px',
       background: '#FFFFFF',
-      border: '1px solid #E3E6EC',
+      border: '1px solid #E5E2D9',
       borderRadius: '14px',
       padding: '12px 10px',
       display: 'flex',
@@ -208,7 +208,7 @@ function DayCard({ log }: { log: SymptomLog }) {
       alignItems: 'center',
       gap: '8px',
     }}>
-      <span style={{ fontSize: '10px', fontWeight: 700, color: '#9AA2AD', letterSpacing: '0.2px' }}>
+      <span style={{ fontSize: '10px', fontWeight: 700, color: '#8A8780', letterSpacing: '0.2px' }}>
         {formatDay(log.created_at)}
       </span>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%', alignItems: 'center' }}>
@@ -326,7 +326,7 @@ export default function SymptomsPage() {
   return (
     <div style={{
       minHeight: '100dvh',
-      background: '#F4F5F7',
+      background: '#FAF9F5',
       paddingBottom: '80px',
     }}>
 
@@ -338,7 +338,7 @@ export default function SymptomsPage() {
         background: 'rgba(244,245,247,0.92)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid #E3E6EC',
+        borderBottom: '1px solid #E5E2D9',
         padding: '0 20px',
       }}>
         <div style={{ maxWidth: '560px', margin: '0 auto', display: 'flex', alignItems: 'center', height: '62px', gap: '12px' }}>
@@ -348,18 +348,18 @@ export default function SymptomsPage() {
             style={{
               width: '38px', height: '38px', borderRadius: '10px',
               background: '#FFFFFF',
-              border: '1px solid #E3E6EC',
+              border: '1px solid #E5E2D9',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', flexShrink: 0,
             }}
           >
-            <ArrowLeft size={18} color="#5B6371" strokeWidth={2} />
+            <ArrowLeft size={18} color="#5C5A52" strokeWidth={2} />
           </motion.button>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#0E1218', margin: 0, letterSpacing: '-1px', lineHeight: 1.1 }}>
+            <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#141413', margin: 0, letterSpacing: '-1px', lineHeight: 1.1 }}>
               How are you feeling?
             </h1>
-            <p style={{ fontSize: '12px', color: '#5B6371', margin: '2px 0 0' }}>
+            <p style={{ fontSize: '12px', color: '#5C5A52', margin: '2px 0 0' }}>
               {todayLabel()}
             </p>
           </div>
@@ -375,7 +375,7 @@ export default function SymptomsPage() {
           transition={{ type: 'spring', stiffness: 320, damping: 28 }}
           style={{
             background: '#FFFFFF',
-            border: '1px solid #E3E6EC',
+            border: '1px solid #E5E2D9',
             borderRadius: '16px',
             padding: '20px 20px 16px',
             marginBottom: '16px',
@@ -384,7 +384,7 @@ export default function SymptomsPage() {
           <p style={{
             fontSize: '11px',
             fontWeight: 700,
-            color: '#9AA2AD',
+            color: '#8A8780',
             textTransform: 'uppercase',
             letterSpacing: '1px',
             margin: '0 0 20px',
@@ -415,7 +415,7 @@ export default function SymptomsPage() {
                       }}>
                         <m.Icon size={17} color={color} strokeWidth={2} style={{ transition: 'color 0.3s' }} />
                       </div>
-                      <span style={{ fontSize: '14px', fontWeight: 600, color: '#0E1218', lineHeight: 1.3 }}>
+                      <span style={{ fontSize: '14px', fontWeight: 600, color: '#141413', lineHeight: 1.3 }}>
                         {m.label}
                       </span>
                     </div>
@@ -465,7 +465,7 @@ export default function SymptomsPage() {
           transition={{ delay: 0.18, type: 'spring', stiffness: 320, damping: 28 }}
           style={{
             background: '#FFFFFF',
-            border: '1px solid #E3E6EC',
+            border: '1px solid #E5E2D9',
             borderRadius: '16px',
             padding: '16px',
             marginBottom: '16px',
@@ -474,7 +474,7 @@ export default function SymptomsPage() {
           <label style={{
             fontSize: '11px',
             fontWeight: 700,
-            color: '#9AA2AD',
+            color: '#8A8780',
             textTransform: 'uppercase',
             letterSpacing: '1px',
             display: 'block',
@@ -489,21 +489,21 @@ export default function SymptomsPage() {
             rows={3}
             style={{
               width: '100%',
-              border: '1.5px solid #E3E6EC',
+              border: '1.5px solid #E5E2D9',
               borderRadius: '10px',
               padding: '10px 12px',
               fontSize: '14px',
-              color: '#0E1218',
-              background: '#F4F5F7',
+              color: '#141413',
+              background: '#FAF9F5',
               resize: 'none',
               outline: 'none',
               fontFamily: 'inherit',
               lineHeight: 1.5,
               boxSizing: 'border-box',
-              caretColor: '#0055FF',
+              caretColor: '#5F7049',
             }}
           />
-          <div style={{ textAlign: 'right', fontSize: '11px', color: '#9AA2AD', marginTop: '4px' }}>
+          <div style={{ textAlign: 'right', fontSize: '11px', color: '#8A8780', marginTop: '4px' }}>
             {note.length}/200
           </div>
         </motion.div>
@@ -516,13 +516,13 @@ export default function SymptomsPage() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               style={{
-                background: 'rgba(180,83,9,0.12)',
-                border: '1.5px solid rgba(180,83,9,0.3)',
+                background: 'rgba(168,114,0,0.12)',
+                border: '1.5px solid rgba(168,114,0,0.3)',
                 borderRadius: '12px',
                 padding: '12px 14px',
                 marginBottom: '16px',
                 fontSize: '13px',
-                color: '#B45309',
+                color: '#A87200',
                 fontWeight: 500,
               }}
             >
@@ -543,7 +543,7 @@ export default function SymptomsPage() {
             width: '100%',
             height: '54px',
             borderRadius: '14px',
-            background: submitted ? '#007A44' : '#0055FF',
+            background: submitted ? '#5F7049' : '#5F7049',
             color: '#FFFFFF',
             border: 'none',
             fontSize: '15px',
@@ -558,8 +558,8 @@ export default function SymptomsPage() {
             letterSpacing: '0.2px',
             opacity: submitting ? 0.7 : 1,
             boxShadow: submitted
-              ? '0 4px 20px rgba(0,122,68,0.25)'
-              : '0 4px 20px rgba(0,85,255,0.25)',
+              ? '0 4px 20px rgba(120,140,93,0.25)'
+              : '0 4px 20px rgba(120,140,93,0.25)',
           }}
         >
           <AnimatePresence mode="wait">
@@ -593,7 +593,7 @@ export default function SymptomsPage() {
             transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 28 }}
             style={{
               background: '#FFFFFF',
-              border: '1px solid #E3E6EC',
+              border: '1px solid #E5E2D9',
               borderRadius: '16px',
               padding: '20px',
               marginBottom: '20px',
@@ -602,7 +602,7 @@ export default function SymptomsPage() {
             <p style={{
               fontSize: '11px',
               fontWeight: 700,
-              color: '#9AA2AD',
+              color: '#8A8780',
               textTransform: 'uppercase',
               letterSpacing: '1px',
               margin: '0 0 18px',
@@ -617,15 +617,15 @@ export default function SymptomsPage() {
                 const improving = m.inverted ? latest > prev : latest < prev
                 const same = latest === prev
                 const arrow = same ? '→' : improving ? '↓' : '↑'
-                const arrowColor = same ? '#9AA2AD' : improving ? '#007A44' : '#D91414'
+                const arrowColor = same ? '#8A8780' : improving ? '#5F7049' : '#A33417'
                 return (
                   <div key={m.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                      <m.Icon size={15} color="#9AA2AD" strokeWidth={1.8} />
+                      <m.Icon size={15} color="#8A8780" strokeWidth={1.8} />
                       <span style={{
                         fontSize: '13px',
                         fontWeight: 500,
-                        color: '#5B6371',
+                        color: '#5C5A52',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
@@ -658,7 +658,7 @@ export default function SymptomsPage() {
           <p style={{
             fontSize: '11px',
             fontWeight: 700,
-            color: '#9AA2AD',
+            color: '#8A8780',
             textTransform: 'uppercase',
             letterSpacing: '1px',
             margin: '0 0 14px 2px',
@@ -671,7 +671,7 @@ export default function SymptomsPage() {
                 <div key={i} style={{
                   flexShrink: 0, width: '80px', height: '108px',
                   background: '#FFFFFF',
-                  border: '1px solid #E9EBF0',
+                  border: '1px solid #EDEAE0',
                   borderRadius: '14px',
                   animation: 'pulse 1.5s infinite',
                 }} />
@@ -680,12 +680,12 @@ export default function SymptomsPage() {
           ) : history.length === 0 ? (
             <div style={{
               background: '#FFFFFF',
-              border: '1px solid #E3E6EC',
+              border: '1px solid #E5E2D9',
               borderRadius: '16px',
               padding: '28px 20px',
               textAlign: 'center',
             }}>
-              <p style={{ fontSize: '14px', color: '#9AA2AD', margin: 0 }}>
+              <p style={{ fontSize: '14px', color: '#8A8780', margin: 0 }}>
                 No logs yet — tap "Log symptoms" to start tracking.
               </p>
             </div>
@@ -708,8 +708,8 @@ export default function SymptomsPage() {
             <div style={{ display: 'flex', gap: '16px', marginTop: '12px', flexWrap: 'wrap' }}>
               {METRICS.map(m => (
                 <div key={m.key} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <m.Icon size={12} color="#9AA2AD" strokeWidth={1.8} />
-                  <span style={{ fontSize: '11px', color: '#9AA2AD', fontWeight: 500 }}>
+                  <m.Icon size={12} color="#8A8780" strokeWidth={1.8} />
+                  <span style={{ fontSize: '11px', color: '#8A8780', fontWeight: 500 }}>
                     {m.label.split(' / ')[0]}
                   </span>
                 </div>
@@ -727,8 +727,8 @@ export default function SymptomsPage() {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0.3; }
         }
-        textarea::placeholder { color: #9AA2AD; }
-        textarea:focus { border-color: rgba(0,85,255,0.4) !important; box-shadow: 0 0 0 3px rgba(0,85,255,0.08); }
+        textarea::placeholder { color: #8A8780; }
+        textarea:focus { border-color: rgba(120,140,93,0.4) !important; box-shadow: 0 0 0 3px rgba(120,140,93,0.08); }
       `}</style>
     </div>
   )

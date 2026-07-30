@@ -3,13 +3,13 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Loader2, Minus, Plus, ExternalLink, Check } from 'lucide-react'
 
-const T1 = '#0E1218'
-const T2 = '#5B6371'
-const T3 = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const ACCENT = '#0055FF'
-const RED = '#D91414'
-const GREEN = '#007A44'
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#8A8780'
+const BORDER = '#E5E2D9'
+const ACCENT = '#5F7049'
+const RED = '#A33417'
+const GREEN = '#5F7049'
 const MONO = 'var(--font-mono, monospace)'
 
 const TYPE_LABELS: Record<string, string> = {
@@ -253,7 +253,7 @@ export default function HospitalPortal() {
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 {p.live_url && (
                   <a href={p.live_url} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: ACCENT, fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: `1.5px solid rgba(0,85,255,0.3)`, borderRadius: '9px', padding: '8px 12px' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: ACCENT, fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: `1.5px solid rgba(120,140,93,0.3)`, borderRadius: '9px', padding: '8px 12px' }}>
                     Live room <ExternalLink size={12}/>
                   </a>
                 )}

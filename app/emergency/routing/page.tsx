@@ -51,21 +51,21 @@ const EMERGENCY_LABELS: Record<string, string> = {
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#F4F5F7',
+  bg:          '#FAF9F5',
   card:        '#FFFFFF',
   card2:       '#FFFFFF',
-  border:      '#ECEEF2',
-  textPrimary: '#0E1218',
-  textSec:     '#5B6371',
-  textMuted:   '#9AA2AD',
-  red:         '#D91414',
-  redSoft:     'rgba(217,20,20,0.12)',
+  border:      '#F2F0E8',
+  textPrimary: '#141413',
+  textSec:     '#5C5A52',
+  textMuted:   '#8A8780',
+  red:         '#A33417',
+  redSoft:     'rgba(163,52,23,0.12)',
   redGlow:     'none',
-  green:       '#007A44',
-  greenSoft:   'rgba(0,122,68,0.12)',
-  blue:        '#0055FF',
-  blueSoft:    'rgba(0,85,255,0.12)',
-  amber:       '#B45309',
+  green:       '#5F7049',
+  greenSoft:   'rgba(120,140,93,0.12)',
+  blue:        '#5F7049',
+  blueSoft:    'rgba(120,140,93,0.12)',
+  amber:       '#A87200',
 } as const
 
 // ─── Cancel confirm sheet — shared between error and main view ─────────────────
@@ -90,7 +90,7 @@ function CancelConfirmSheet({
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(14,18,24,0.45)',
+            background: 'rgba(20,20,19,0.45)',
             zIndex: 200,
             display: 'flex',
             alignItems: 'flex-end',
@@ -137,7 +137,7 @@ function CancelConfirmSheet({
                 style={{
                   flex: 1,
                   padding: '15px',
-                  background: '#ECEEF2',
+                  background: '#F2F0E8',
                   borderRadius: '14px',
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
@@ -158,7 +158,7 @@ function CancelConfirmSheet({
                 style={{
                   flex: 1,
                   padding: '15px',
-                  background: `#D91414`,
+                  background: `#A33417`,
                   borderRadius: '14px',
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
@@ -675,7 +675,7 @@ function RoutingPage() {
         height: '72px',
         borderRadius: '50%',
         background: T.redSoft,
-        border: `1px solid rgba(217,20,20,0.25)`,
+        border: `1px solid rgba(163,52,23,0.25)`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -712,7 +712,7 @@ function RoutingPage() {
           alignItems: 'center',
           justifyContent: 'center',
           gap: '10px',
-          background: `#D91414`,
+          background: `#A33417`,
           color: 'white',
           fontWeight: 800,
           fontSize: '17px',
@@ -734,13 +734,13 @@ function RoutingPage() {
         whileTap={{ scale: 0.97 }}
         onClick={() => setShowCancelConfirm(true)}
         style={{
-          background: '#ECEEF2',
+          background: '#F2F0E8',
           color: T.textMuted,
           fontWeight: 500,
           fontSize: '13px',
           padding: '11px 24px',
           borderRadius: '12px',
-          border: `1px solid #E3E6EC`,
+          border: `1px solid #E5E2D9`,
           cursor: 'pointer',
         }}
       >
@@ -762,7 +762,7 @@ function RoutingPage() {
     <div style={{ minHeight: '100dvh', background: '#FFFFFF', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* ── Status line ─────────────────────────────────────────────────────── */}
-      <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(217,20,20,0.18)', flexShrink: 0 }}>
+      <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(163,52,23,0.18)', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '9px', minWidth: 0 }}>
           <motion.div
             animate={{ opacity: [1, 0.25, 1] }}
@@ -1147,7 +1147,7 @@ function RoutingPage() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}
             style={{ position: 'fixed', inset: 0, zIndex: 150, background: '#FFFFFF', display: 'flex', flexDirection: 'column' }}
           >
-            <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(217,20,20,0.18)', flexShrink: 0 }}>
+            <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(163,52,23,0.18)', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
                 <motion.div animate={{ opacity: [1, 0.25, 1] }} transition={{ duration: 1.1, repeat: Infinity }}
                   style={{ width: '8px', height: '8px', background: T.red }}/>
@@ -1160,7 +1160,7 @@ function RoutingPage() {
                   {fmtElapsed(elapsed)}
                 </span>
                 <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
-                  style={{ background: '#F4F5F7', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  style={{ background: '#FAF9F5', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <X size={16} color={T.textSec}/>
                 </button>
               </div>
@@ -1196,7 +1196,7 @@ function RoutingPage() {
 
 export default function RoutingPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#F4F5F7' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#FAF9F5' }} />}>
       <RoutingPage />
     </Suspense>
   )

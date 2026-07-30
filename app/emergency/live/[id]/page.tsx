@@ -10,13 +10,13 @@ import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import qrgen from 'qrcode-generator'
 
-const T1 = '#0E1218'
-const T2 = '#5B6371'
-const T3 = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const ACCENT = '#0055FF'
-const RED = '#D91414'
-const GREEN = '#007A44'
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#8A8780'
+const BORDER = '#E5E2D9'
+const ACCENT = '#5F7049'
+const RED = '#A33417'
+const GREEN = '#5F7049'
 const MONO = 'var(--font-mono, monospace)'
 
 const EMERGENCY_LABELS: Record<string, string> = {
@@ -172,7 +172,7 @@ export default function RelayRoomPage() {
       })
       mapRef.current = map
       const pEl = document.createElement('div')
-      pEl.innerHTML = `<div style="width:20px;height:20px;background:${ACCENT};border:3px solid white;border-radius:50%;box-shadow:0 0 0 5px rgba(0,85,255,0.22);"></div>`
+      pEl.innerHTML = `<div style="width:20px;height:20px;background:${ACCENT};border:3px solid white;border-radius:50%;box-shadow:0 0 0 5px rgba(120,140,93,0.22);"></div>`
       patientMarker.current = new maplibregl.Marker({ element: pEl }).setLngLat([loc.lng, loc.lat]).addTo(map)
     } else {
       patientMarker.current?.setLngLat([loc.lng, loc.lat])
@@ -309,8 +309,8 @@ export default function RelayRoomPage() {
               {people.map((p, i) => (
                 <span key={i} style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
-                  background: p.role === 'patient' ? 'rgba(217,20,20,0.07)' : '#F4F5F7',
-                  border: `1px solid ${p.role === 'patient' ? 'rgba(217,20,20,0.25)' : BORDER}`,
+                  background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#FAF9F5',
+                  border: `1px solid ${p.role === 'patient' ? 'rgba(163,52,23,0.25)' : BORDER}`,
                   borderRadius: '8px', padding: '5px 10px',
                 }}>
                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: p.role === 'patient' ? RED : GREEN }}/>
@@ -363,7 +363,7 @@ export default function RelayRoomPage() {
                   </div>
                   {!t.done && (
                     <button onClick={() => claimTask(t.id)}
-                      style={{ background: t.claimedBy === name ? 'rgba(0,85,255,0.08)' : 'none', border: `1.5px solid ${t.claimedBy === name ? ACCENT : BORDER}`, color: t.claimedBy === name ? ACCENT : T2, fontSize: '12px', fontWeight: 700, padding: '7px 12px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
+                      style={{ background: t.claimedBy === name ? 'rgba(120,140,93,0.08)' : 'none', border: `1.5px solid ${t.claimedBy === name ? ACCENT : BORDER}`, color: t.claimedBy === name ? ACCENT : T2, fontSize: '12px', fontWeight: 700, padding: '7px 12px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
                       {t.claimedBy === name ? 'Mine' : t.claimedBy ? 'Taken' : 'I\u2019ll do it'}
                     </button>
                   )}

@@ -51,18 +51,18 @@ export default function CareTeamLogin() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F4F5F7', padding: '56px 24px 32px', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#FAF9F5', padding: '56px 24px 32px', display: 'flex', flexDirection: 'column' }}>
       <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/login')}
-        style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECEEF2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px' }}>
-        <ArrowLeft size={16} color="#5B6371"/>
+        style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px' }}>
+        <ArrowLeft size={16} color="#5C5A52"/>
       </motion.button>
 
-      <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(0,85,255,0.15)', border: '1px solid rgba(0,85,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+      <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(120,140,93,0.15)', border: '1px solid rgba(120,140,93,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
         
       </div>
 
-      <h1 style={{ color: '#0E1218', fontWeight: 700, fontSize: '28px', marginBottom: '4px' }}>Care team portal</h1>
-      <p style={{ color: '#5B6371', fontSize: '14px', marginBottom: '32px' }}>
+      <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '28px', marginBottom: '4px' }}>Care team portal</h1>
+      <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '32px' }}>
         {mode === 'login' ? 'Sign in to your care team account' : 'Create your care team account'}
       </p>
 
@@ -70,12 +70,12 @@ export default function CareTeamLogin() {
         {mode === 'signup' && (
           <>
             <div style={{ position: 'relative' }}>
-              <User size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#9AA2AD' }}/>
+              <User size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#8A8780' }}/>
               <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)}
-                style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#0E1218', fontSize: '14px', outline: 'none' }}/>
+                style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
             </div>
             <select value={role} onChange={e => setRole(e.target.value)}
-              style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '16px', color: '#0E1218', fontSize: '14px', outline: 'none' }}>
+              style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px', color: '#141413', fontSize: '14px', outline: 'none' }}>
               <option>Nurse</option>
               <option>Doctor</option>
               <option>Care coordinator</option>
@@ -85,35 +85,35 @@ export default function CareTeamLogin() {
         )}
 
         <div style={{ position: 'relative' }}>
-          <Mail size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#9AA2AD' }}/>
+          <Mail size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#8A8780' }}/>
           <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)}
-            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#0E1218', fontSize: '14px', outline: 'none' }}/>
+            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <div style={{ position: 'relative' }}>
-          <Lock size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#9AA2AD' }}/>
+          <Lock size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#8A8780' }}/>
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}
-            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#0E1218', fontSize: '14px', outline: 'none' }}/>
+            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <div style={{ position: 'relative' }}>
           <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔑</span>
           <input type="password" placeholder="Care team access code" value={code} onChange={e => setCode(e.target.value)}
-            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E3E6EC', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#0E1218', fontSize: '14px', outline: 'none' }}/>
+            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <motion.button whileTap={{ scale: 0.97 }} onClick={handleLogin} disabled={loading}
-          style={{ background: '#0055FF', color: 'white', fontWeight: 700, fontSize: '15px', padding: '18px', borderRadius: '16px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '4px' }}>
+          style={{ background: '#5F7049', color: 'white', fontWeight: 700, fontSize: '15px', padding: '18px', borderRadius: '16px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '4px' }}>
           {loading ? <Loader2 size={18} className="animate-spin"/> : mode === 'login' ? 'Sign in' : 'Create account'}
         </motion.button>
 
         <button onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-          style={{ background: 'none', border: 'none', color: '#5B6371', fontSize: '13px', cursor: 'pointer', marginTop: '4px' }}>
+          style={{ background: 'none', border: 'none', color: '#5C5A52', fontSize: '13px', cursor: 'pointer', marginTop: '4px' }}>
           {mode === 'login' ? "New to the care team? Create account" : "Already have an account? Sign in"}
         </button>
       </div>
 
-      <p style={{ color: '#C2C7D0', fontSize: '11px', textAlign: 'center', fontFamily: 'monospace', marginTop: 'auto', paddingTop: '24px' }}>
+      <p style={{ color: '#C4BFB0', fontSize: '11px', textAlign: 'center', fontFamily: 'monospace', marginTop: 'auto', paddingTop: '24px' }}>
         Contact your administrator for access
       </p>
     </div>

@@ -5,12 +5,12 @@ import { motion } from 'framer-motion'
 import { Phone, ArrowLeft, Play, Square } from 'lucide-react'
 import { emergencyNumber } from '@/lib/emergency-number'
 
-const T1 = '#0E1218'
-const T2 = '#5B6371'
-const T3 = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const RED = '#D91414'
-const GREEN = '#007A44'
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#8A8780'
+const BORDER = '#E5E2D9'
+const RED = '#A33417'
+const GREEN = '#5F7049'
 const MONO = 'var(--font-mono, monospace)'
 
 const BPM = 110
@@ -101,7 +101,7 @@ export default function CprCoach() {
             transition={{ duration: BEAT_MS / 2000, ease: 'easeInOut' }}
             style={{
               width: '170px', height: '170px', borderRadius: '50%',
-              background: running ? RED : '#F4F5F7',
+              background: running ? RED : '#FAF9F5',
               border: running ? 'none' : `2px solid ${BORDER}`,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               marginBottom: '22px',

@@ -6,15 +6,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Menu, X, Phone, MapPin, FileText, Heart, Activity, Pill, Video, TrendingDown, Route, Users } from 'lucide-react'
 
 // ─── Design tokens — shared with the app ─────────────────────────────────────
-const T1     = '#0E1218'
-const T2     = '#5B6371'
-const T3     = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const BG2    = '#F4F5F7'
-const ACCENT = '#0055FF'
-const RED    = '#D91414'
-const GREEN  = '#007A44'
-const AMBER  = '#B45309'
+const T1     = '#141413'
+const T2     = '#5C5A52'
+const T3     = '#8A8780'
+const BORDER = '#E5E2D9'
+const BG2    = '#FAF9F5'
+const ACCENT = '#5F7049'
+const RED    = '#A33417'
+const GREEN  = '#5F7049'
+const AMBER  = '#A87200'
+const ORANGE = '#D97757'   // FILL ONLY — 2.96:1 on light, so always dark ink on top
 
 const mono = 'var(--font-mono, monospace)'
 
@@ -56,8 +57,8 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: T1 }}/>
         <div style={{ maxWidth: '1120px', margin: '0 auto', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-            <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Heart size={13} color="white" fill="white" strokeWidth={0}/>
+            <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: ORANGE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Heart size={13} color={T1} fill={T1} strokeWidth={0}/>
             </div>
             <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
           </div>
@@ -85,7 +86,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
               Sign in
             </button>
             <button onClick={onGetStarted}
-              style={{ background: T1, color: 'white', fontSize: '13.5px', fontWeight: 600, padding: '9px 18px', borderRadius: '0px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
+              style={{ background: ORANGE, color: T1, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', borderRadius: '0px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
               Get started
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
@@ -133,7 +134,7 @@ function PhoneMockup() {
       {/* map-paper dot grid */}
       <div aria-hidden style={{
         position: 'absolute', inset: '-70px -120px',
-        backgroundImage: 'radial-gradient(rgba(14,18,24,0.13) 1px, transparent 1px)',
+        backgroundImage: 'radial-gradient(rgba(20,20,19,0.13) 1px, transparent 1px)',
         backgroundSize: '20px 20px',
         maskImage: 'radial-gradient(closest-side, black 55%, transparent)',
         WebkitMaskImage: 'radial-gradient(closest-side, black 55%, transparent)',
@@ -156,7 +157,7 @@ function PhoneMockup() {
         borderRadius: '42px',
         background: T1,
         padding: '10px',
-        boxShadow: '0 30px 90px rgba(14,18,24,0.18), 0 4px 16px rgba(14,18,24,0.08)',
+        boxShadow: '0 30px 90px rgba(20,20,19,0.18), 0 4px 16px rgba(20,20,19,0.08)',
       }}>
         <div style={{ borderRadius: '34px', background: BG2, padding: '18px 16px 22px', overflow: 'hidden' }}>
 
@@ -171,7 +172,7 @@ function PhoneMockup() {
           {/* greeting */}
           <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px' }}>Good morning</p>
           <p style={{ color: T1, fontSize: '26px', fontWeight: 800, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '8px' }}>Asha</p>
-          <span style={{ display: 'inline-block', background: 'rgba(0,85,255,0.08)', border: '1px solid rgba(0,85,255,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '5px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <span style={{ display: 'inline-block', background: 'rgba(120,140,93,0.08)', border: '1px solid rgba(120,140,93,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '5px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
             Post-CABG
           </span>
 
@@ -224,7 +225,7 @@ function PhoneMockup() {
       <div className="float-card" style={{
         position: 'absolute', top: '52px', right: '-128px', zIndex: 6,
         background: 'white', border: `1px solid ${T1}`, borderRadius: '0px',
-        padding: '10px 13px', boxShadow: '6px 6px 0 #E9EBF0',
+        padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '176px',
       }}>
         <FileText size={13} color={GREEN} style={{ marginTop: '1px', flexShrink: 0 }}/>
@@ -237,7 +238,7 @@ function PhoneMockup() {
       <div className="float-card" style={{
         position: 'absolute', bottom: '38px', left: '-136px', zIndex: 6,
         background: 'white', border: `1px solid ${T1}`, borderRadius: '0px',
-        padding: '10px 13px', boxShadow: '6px 6px 0 #E9EBF0',
+        padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '172px',
       }}>
         <MapPin size={13} color={ACCENT} style={{ marginTop: '1px', flexShrink: 0 }}/>
@@ -253,11 +254,11 @@ function PhoneMockup() {
 
 // ─── Dispatch log data ────────────────────────────────────────────────────────
 const LOG = [
-  { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating” — typed by her son while she sat down.', color: '#D91414' },
-  { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#B45309' },
-  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#0055FF' },
-  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#0055FF' },
-  { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#007A44' },
+  { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating” — typed by her son while she sat down.', color: '#A33417' },
+  { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#A87200' },
+  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#5F7049' },
+  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#5F7049' },
+  { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#5F7049' },
 ]
 
 // ─── With / without — looping split-screen simulation ───────────────────────
@@ -291,12 +292,12 @@ function EmergencyRace() {
   const fading = t > RACE_MS - 900
   const leftSec  = Math.min(t / 16500, 1) * 2820
   const rightSec = Math.min(t / 12500, 1) * 711
-  const leftStatus  = t >= 15500 ? { label: 'Still en route', color: '#FF6B5E', bg: 'rgba(217,20,20,0.16)' }
-    : t >= 10500 ? { label: 'Waiting for ambulance', color: '#E8A33D', bg: 'rgba(180,83,9,0.16)' }
+  const leftStatus  = t >= 15500 ? { label: 'Still en route', color: '#FF6B5E', bg: 'rgba(163,52,23,0.16)' }
+    : t >= 10500 ? { label: 'Waiting for ambulance', color: '#E8A33D', bg: 'rgba(168,114,0,0.16)' }
     : { label: 'No plan yet', color: 'rgba(255,255,255,0.45)', bg: 'rgba(255,255,255,0.07)' }
-  const rightStatus = t >= 12500 ? { label: 'In the cath lab', color: '#3DDC97', bg: 'rgba(0,122,68,0.2)' }
-    : t >= 4500 ? { label: 'Routing locked', color: '#7AA7FF', bg: 'rgba(0,85,255,0.18)' }
-    : { label: 'SOS active', color: '#FF6B5E', bg: 'rgba(217,20,20,0.16)' }
+  const rightStatus = t >= 12500 ? { label: 'In the cath lab', color: '#3DDC97', bg: 'rgba(120,140,93,0.2)' }
+    : t >= 4500 ? { label: 'Routing locked', color: '#7AA7FF', bg: 'rgba(120,140,93,0.18)' }
+    : { label: 'SOS active', color: '#FF6B5E', bg: 'rgba(163,52,23,0.16)' }
 
   const panel = (
     title: string, titleColor: string, events: typeof LEFT_EVENTS,
@@ -449,7 +450,7 @@ export default function Home() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '32px' }}>
                   <button onClick={() => router.push('/login?signup=1')}
-                    style={{ display: 'flex', alignItems: 'center', gap: '10px', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '14px 28px', borderRadius: '0px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: T1, fontWeight: 700, fontSize: '15px', padding: '14px 28px', borderRadius: '0px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
                     Create your free profile <span style={{ fontFamily: mono }}>→</span>
                   </button>
                   <button onClick={() => scrollTo('log')}
@@ -548,19 +549,19 @@ export default function Home() {
       </section>
 
       {/* ── MISSION — three sentences ─────────────────────────────────── */}
-      <section id="mission" style={{ background: RED, padding: '96px 24px 104px', position: 'relative', overflow: 'hidden' }}>
+      <section id="mission" style={{ background: ORANGE, padding: '96px 24px 104px', position: 'relative', overflow: 'hidden' }}>
         <Noise opacity={0.07}/>
         <div style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative' }}>
-          <div style={{ borderTop: '3px solid #FFFFFF', paddingTop: '14px', marginBottom: '44px' }}>
-            <span style={{ color: '#FFFFFF', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>04 / Mission</span>
+          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '44px' }}>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>04 / Mission</span>
           </div>
-          <h2 style={{ color: 'white', fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98, marginBottom: '24px' }}>
-            Relay,<br/>not Revive<span style={{ color: T1 }}>.</span>
+          <h2 style={{ color: T1, fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98, marginBottom: '24px' }}>
+            Relay,<br/>not Revive<span style={{ color: '#FFFFFF' }}>.</span>
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '17px', lineHeight: 1.65, maxWidth: '540px', marginBottom: '14px' }}>
+          <p style={{ color: 'rgba(20,20,19,0.78)', fontSize: '17px', lineHeight: 1.65, maxWidth: '540px', marginBottom: '14px' }}>
             Most of the world doesn&apos;t get an ambulance in eight minutes. Relay was built for those places first.
           </p>
-          <p style={{ color: '#FFFFFF', fontSize: '20px', lineHeight: 1.5, fontWeight: 800, letterSpacing: '-0.01em', maxWidth: '540px' }}>
+          <p style={{ color: T1, fontSize: '20px', lineHeight: 1.5, fontWeight: 800, letterSpacing: '-0.01em', maxWidth: '540px' }}>
             No one should have to think before getting help.
           </p>
         </div>
@@ -585,7 +586,7 @@ export default function Home() {
 
             {/* Medical ID card — what the profile actually looks like */}
             <div style={{ transform: 'rotate(-1.5deg)', maxWidth: '360px', justifySelf: 'center' }} className="id-card">
-              <div style={{ background: 'white', border: `1.5px solid ${T1}`, borderRadius: '2px', padding: '22px 24px', boxShadow: '10px 10px 0 #E9EBF0' }}>
+              <div style={{ background: 'white', border: `1.5px solid ${T1}`, borderRadius: '2px', padding: '22px 24px', boxShadow: '10px 10px 0 #EDEAE0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', marginBottom: '18px' }}>
                   <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0, flex: 1 }}>
                     Medical profile
@@ -621,14 +622,14 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ───────────────────────────────────────────────────── */}
-      <footer style={{ borderTop: `3px solid ${RED}`, padding: '52px 24px 36px', background: T1, position: 'relative', overflow: 'hidden' }}>
+      <footer style={{ borderTop: `3px solid ${ORANGE}`, padding: '52px 24px 36px', background: T1, position: 'relative', overflow: 'hidden' }}>
         <Noise opacity={0.05}/>
         <div style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap', marginBottom: '44px' }}>
             <div style={{ maxWidth: '300px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <div style={{ width: '22px', height: '22px', borderRadius: '7px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Heart size={11} color="white" fill="white" strokeWidth={0}/>
+                <div style={{ width: '22px', height: '22px', borderRadius: '7px', background: ORANGE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Heart size={11} color={T1} fill={T1} strokeWidth={0}/>
                 </div>
                 <span style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '14.5px', letterSpacing: '-0.3px' }}>Relay Arc</span>
               </div>
@@ -676,8 +677,8 @@ export default function Home() {
       <style>{`
         .nav-link:hover { color: ${T1} !important; }
         @keyframes sos-pulse-lp {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(217,20,20,0.35); }
-          50% { box-shadow: 0 0 0 12px rgba(217,20,20,0); }
+          0%, 100% { box-shadow: 0 0 0 0 rgba(163,52,23,0.35); }
+          50% { box-shadow: 0 0 0 12px rgba(163,52,23,0); }
         }
         @keyframes dot-blink {
           0%, 100% { opacity: 1; }

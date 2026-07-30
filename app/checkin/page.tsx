@@ -9,17 +9,17 @@ import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#F4F5F7'
+const BG      = '#FAF9F5'
 const SURFACE = '#FFFFFF'
-const T1      = '#0E1218'
-const T2      = '#5B6371'
-const T3      = '#9AA2AD'
-const ACCENT  = '#0055FF'
-const ACCENT_DIM = 'rgba(0,85,255,0.09)'
-const GREEN   = '#007A44'
-const GREEN_DIM = 'rgba(0,122,68,0.08)'
-const BORDER  = '#E3E6EC'
-const SHADOW  = '0 1px 4px rgba(14,18,24,0.07)'
+const T1      = '#141413'
+const T2      = '#5C5A52'
+const T3      = '#8A8780'
+const ACCENT  = '#5F7049'
+const ACCENT_DIM = 'rgba(120,140,93,0.09)'
+const GREEN   = '#5F7049'
+const GREEN_DIM = 'rgba(120,140,93,0.08)'
+const BORDER  = '#E5E2D9'
+const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 const spring       = { type: 'spring', stiffness: 380, damping: 24 } as const
 const bubbleSpring = { type: 'spring', stiffness: 320, damping: 28 } as const
@@ -182,7 +182,7 @@ export default function Checkin() {
         <div style={{
           display: 'flex', alignItems: 'center', gap: '5px',
           background: GREEN_DIM,
-          border: `1px solid rgba(0,122,68,0.18)`,
+          border: `1px solid rgba(120,140,93,0.18)`,
           borderRadius: '99px',
           padding: '4px 10px',
         }}>
@@ -258,7 +258,7 @@ export default function Checkin() {
             transition={{ ...spring, bounce: 0.3 }}
             style={{
               background: GREEN_DIM,
-              border: `1px solid rgba(0,122,68,0.18)`,
+              border: `1px solid rgba(120,140,93,0.18)`,
               borderRadius: '16px',
               padding: '28px 20px',
               textAlign: 'center',
@@ -336,7 +336,7 @@ export default function Checkin() {
       {!done && (
         <div style={{
           padding: '8px 16px 14px',
-          borderTop: `1px solid ${focused ? 'rgba(0,85,255,0.2)' : BORDER}`,
+          borderTop: `1px solid ${focused ? 'rgba(120,140,93,0.2)' : BORDER}`,
           display: 'flex', gap: '8px', alignItems: 'center',
           background: 'rgba(255,255,255,0.94)',
           backdropFilter: 'blur(16px)',

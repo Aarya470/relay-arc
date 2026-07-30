@@ -11,9 +11,9 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { triage, featurize, MODEL_META, ABSTAIN_THRESHOLD } from '@/lib/triage'
 
-const T1 = '#0E1218', T2 = '#5B6371', T3 = '#9AA2AD'
-const BORDER = '#E3E6EC', BG2 = '#F4F5F7'
-const RED = '#D91414', ACCENT = '#0055FF', GREEN = '#007A44'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#8A8780'
+const BORDER = '#E5E2D9', BG2 = '#FAF9F5'
+const CRIT = '#A33417', ACCENT = '#5F7049', GREEN = '#5F7049'
 const mono = 'var(--font-mono, monospace)'
 
 const LABELS: Record<string, string> = {
@@ -140,11 +140,11 @@ export default function TriageDemo() {
               }}/>
               <div style={{
                 position: 'absolute', top: '-4px', bottom: '-4px',
-                left: `${ABSTAIN_THRESHOLD * 100}%`, width: '2px', background: RED,
+                left: `${ABSTAIN_THRESHOLD * 100}%`, width: '2px', background: CRIT,
               }}/>
             </div>
             <p style={{ color: T3, fontFamily: mono, fontSize: '10px', letterSpacing: '0.8px', marginBottom: '18px' }}>
-              red line = {ABSTAIN_THRESHOLD} abstention gate — below it we ask the cloud instead of guessing
+              the marked line = {ABSTAIN_THRESHOLD} abstention gate — below it we ask the cloud instead of guessing
             </p>
 
             {/* what drove it */}
@@ -156,7 +156,7 @@ export default function TriageDemo() {
                 <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '14px' }}>
                   {result.evidence.map(e => (
                     <span key={e} style={{
-                      background: 'rgba(0,85,255,0.07)', border: '1px solid rgba(0,85,255,0.16)',
+                      background: 'rgba(120,140,93,0.07)', border: '1px solid rgba(120,140,93,0.16)',
                       color: ACCENT, fontFamily: mono, fontSize: '11px', fontWeight: 700, padding: '3px 8px',
                     }}>{e}</span>
                   ))}

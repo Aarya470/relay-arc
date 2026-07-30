@@ -12,15 +12,15 @@ import { VOICE_LANGS, langById, detectLang, rememberLang, resolveLocale, type La
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#FFFFFF'
-const SURFACE = '#F4F5F7'
-const T1      = '#0E1218'
-const T2      = '#5B6371'
-const T3      = '#9AA2AD'
-const RED     = '#D91414'
-const RED_DIM = 'rgba(217,20,20,0.07)'
-const RED_MID = 'rgba(217,20,20,0.14)'
-const ACCENT  = '#0055FF'
-const BORDER  = '#E3E6EC'
+const SURFACE = '#FAF9F5'
+const T1      = '#141413'
+const T2      = '#5C5A52'
+const T3      = '#8A8780'
+const RED     = '#A33417'
+const RED_DIM = 'rgba(163,52,23,0.07)'
+const RED_MID = 'rgba(163,52,23,0.14)'
+const ACCENT  = '#5F7049'
+const BORDER  = '#E5E2D9'
 
 
 const TYPES = [
@@ -310,7 +310,7 @@ export default function Emergency() {
                     Starting…
                   </span>
                 ) : (
-                  <ChevronRight size={16} color="#C2C7D0" style={{ flexShrink: 0 }}/>
+                  <ChevronRight size={16} color="#C4BFB0" style={{ flexShrink: 0 }}/>
                 )}
               </motion.button>
             )

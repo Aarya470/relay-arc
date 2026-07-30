@@ -26,21 +26,21 @@ import { assessRisk, type RiskAssessment, type VitalsSample } from '@/lib/risk'
 type CrashRisk = RiskAssessment
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#F4F5F7'
+const BG      = '#FAF9F5'
 const SURFACE = '#FFFFFF'
-const T1      = '#0E1218'
-const T2      = '#5B6371'
-const T3      = '#9AA2AD'
-const ACCENT  = '#0055FF'
-const ACCENT_DIM = 'rgba(0,85,255,0.08)'
-const RED     = '#D91414'
-const RED_DIM = 'rgba(217,20,20,0.07)'
-const GREEN   = '#007A44'
-const GREEN_DIM = 'rgba(0,122,68,0.08)'
-const AMBER   = '#B45309'
-const AMBER_DIM = 'rgba(180,83,9,0.08)'
-const BORDER  = '#E3E6EC'
-const SHADOW  = '0 1px 4px rgba(14,18,24,0.07)'
+const T1      = '#141413'
+const T2      = '#5C5A52'
+const T3      = '#8A8780'
+const ACCENT  = '#5F7049'
+const ACCENT_DIM = 'rgba(120,140,93,0.08)'
+const RED     = '#A33417'
+const RED_DIM = 'rgba(163,52,23,0.07)'
+const GREEN   = '#5F7049'
+const GREEN_DIM = 'rgba(120,140,93,0.08)'
+const AMBER   = '#A87200'
+const AMBER_DIM = 'rgba(168,114,0,0.08)'
+const BORDER  = '#E5E2D9'
+const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 // ── This week types ─────────────────────────────────────────────────────
 interface Insight {
@@ -482,7 +482,7 @@ export default function Dashboard() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {[80, 160, 80, 80, 80].map((h, i) => (
-        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#E3E6EC', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#E5E2D9', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
     </div>
   )
@@ -527,8 +527,8 @@ export default function Dashboard() {
             transition={ease}
             style={{
               position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-              background: 'rgba(0,122,68,0.06)',
-              borderBottom: `1px solid rgba(0,122,68,0.14)`,
+              background: 'rgba(120,140,93,0.06)',
+              borderBottom: `1px solid rgba(120,140,93,0.14)`,
               padding: '48px 20px 14px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               backdropFilter: 'blur(16px)',
@@ -575,7 +575,7 @@ export default function Dashboard() {
                     padding: '3px 8px', borderRadius: '6px',
                     fontFamily: 'var(--font-mono, monospace)',
                     letterSpacing: '0.8px', textTransform: 'uppercase',
-                    border: `1px solid rgba(0,85,255,0.14)`,
+                    border: `1px solid rgba(120,140,93,0.14)`,
                   }}>
                     {d.trim()}
                   </span>
@@ -587,8 +587,8 @@ export default function Dashboard() {
             {streak >= 2 && (
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(180,83,9,0.08)',
-                border: '1px solid rgba(180,83,9,0.14)',
+                background: 'rgba(168,114,0,0.08)',
+                border: '1px solid rgba(168,114,0,0.14)',
                 borderRadius: '99px', padding: '5px 10px',
               }}>
                 <Flame size={12} color={AMBER}/>
@@ -643,8 +643,8 @@ export default function Dashboard() {
         <motion.div variants={fadeUp}>
           <style>{`
             @keyframes sos-pulse {
-              0%, 100% { box-shadow: 0 0 0 0 rgba(217,20,20,0.5); }
-              50% { box-shadow: 0 0 0 14px rgba(217,20,20,0); }
+              0%, 100% { box-shadow: 0 0 0 0 rgba(163,52,23,0.5); }
+              50% { box-shadow: 0 0 0 14px rgba(163,52,23,0); }
             }
           `}</style>
           <motion.button
@@ -705,7 +705,7 @@ export default function Dashboard() {
               variants={fadeUp} initial="hidden" animate="show" exit={{ opacity: 0, scale: 0.97 }}
               style={{
                 background: crashRisk.level === 'high' ? RED_DIM : AMBER_DIM,
-                border: `1px solid ${crashRisk.level === 'high' ? 'rgba(217,20,20,0.18)' : 'rgba(180,83,9,0.18)'}`,
+                border: `1px solid ${crashRisk.level === 'high' ? 'rgba(163,52,23,0.18)' : 'rgba(168,114,0,0.18)'}`,
                 borderRadius: '14px', padding: '14px 16px',
                 display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
@@ -951,8 +951,8 @@ export default function Dashboard() {
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push('/appointments')}
             style={{
-              background: 'rgba(0,85,255,0.04)',
-              border: `1px solid rgba(0,85,255,0.10)`,
+              background: 'rgba(120,140,93,0.04)',
+              border: `1px solid rgba(120,140,93,0.10)`,
               borderRadius: '14px', padding: '14px 16px',
               cursor: 'pointer', width: '100%',
               display: 'flex', alignItems: 'center', gap: '12px',

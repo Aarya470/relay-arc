@@ -4,11 +4,11 @@ import { ArrowLeft, Heart, Phone } from 'lucide-react'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { useEffect, useState } from 'react'
 
-const T1 = '#0E1218'
-const T2 = '#5B6371'
-const T3 = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const RED = '#D91414'
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#8A8780'
+const BORDER = '#E5E2D9'
+const RED = '#A33417'
 const MONO = 'var(--font-mono, monospace)'
 
 export default function LegalDocument({ kicker, title, body }: { kicker: string; title: string; body: string }) {

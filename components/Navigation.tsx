@@ -6,26 +6,26 @@ import { Volume2, VolumeX, Crosshair, List, X, MapPin } from 'lucide-react'
 import { trafficMultiplier } from '@/lib/hospitals'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const T1     = '#0E1218'
-const T2     = '#5B6371'
-const T3     = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const ACCENT = '#0055FF'
-const RED    = '#D91414'
-const GREEN  = '#007A44'
+const T1     = '#141413'
+const T2     = '#5C5A52'
+const T3     = '#8A8780'
+const BORDER = '#E5E2D9'
+const ACCENT = '#5F7049'
+const RED    = '#A33417'
+const GREEN  = '#5F7049'
 const MONO   = 'var(--font-mono, monospace)'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty'
 const DEMO_ORIGIN: [number, number] = [19.1136, 72.8697]   // Andheri East — demo mode only
 
 const USER_ARROW_HTML = `<div style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;">
-  <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(0,85,255,0.55));"></div>
+  <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(120,140,93,0.55));"></div>
   <div style="position:absolute;top:19px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:20px solid white;"></div>
 </div>`
 
 const HOSPITAL_HTML = `<div style="width:38px;height:38px;background:${RED};border-radius:11px;
   display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;line-height:1;
-  border:2.5px solid white;box-shadow:0 4px 16px rgba(14,18,24,0.35);font-family:monospace;">+</div>`
+  border:2.5px solid white;box-shadow:0 4px 16px rgba(20,20,19,0.35);font-family:monospace;">+</div>`
 
 // ─── Style: runtime enrichment, with a real night variant ────────────────────
 async function loadStyle(night: boolean): Promise<any> {
@@ -606,7 +606,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
       alignItems: 'center', justifyContent: 'center',
       padding: '24px', gap: '14px'
     }}>
-      <div style={{ width: '68px', height: '68px', borderRadius: '18px', background: 'rgba(0,122,68,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '68px', height: '68px', borderRadius: '18px', background: 'rgba(120,140,93,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke={GREEN} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
         </svg>
@@ -640,7 +640,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             position: 'absolute', top: '12px', left: '12px', right: '12px', zIndex: 500,
             background: arriving ? GREEN : T1, borderRadius: '18px',
             padding: '16px 18px',
-            boxShadow: '0 10px 34px rgba(14,18,24,0.35)',
+            boxShadow: '0 10px 34px rgba(20,20,19,0.35)',
           }}>
             {loading ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
@@ -690,7 +690,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
                 background: '#FFFFFF', border: `1.5px solid ${ACCENT}`, color: ACCENT,
                 borderRadius: '99px', padding: '11px 16px', cursor: 'pointer',
                 fontFamily: 'inherit', fontWeight: 700, fontSize: '13.5px',
-                boxShadow: '0 6px 20px rgba(14,18,24,0.2)',
+                boxShadow: '0 6px 20px rgba(20,20,19,0.2)',
               }}>
               <Crosshair size={15}/> Re-centre
             </button>
@@ -701,7 +701,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             <div style={{
               position: 'absolute', left: '12px', right: '12px', bottom: '86px', zIndex: 600,
               background: '#FFFFFF', border: `1px solid ${BORDER}`, borderRadius: '16px',
-              maxHeight: '46%', overflowY: 'auto', boxShadow: '0 12px 40px rgba(14,18,24,0.25)',
+              maxHeight: '46%', overflowY: 'auto', boxShadow: '0 12px 40px rgba(20,20,19,0.25)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 16px', borderBottom: `1px solid ${BORDER}`, position: 'sticky', top: 0, background: '#FFFFFF' }}>
                 <span style={{ color: T3, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
@@ -716,7 +716,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
                 <div key={i} style={{
                   display: 'flex', alignItems: 'baseline', gap: '13px',
                   padding: '12px 16px', borderBottom: `1px solid ${BORDER}`,
-                  background: i === currentStep + 1 ? 'rgba(0,85,255,0.05)' : 'transparent',
+                  background: i === currentStep + 1 ? 'rgba(120,140,93,0.05)' : 'transparent',
                   opacity: i <= currentStep ? 0.4 : 1,
                 }}>
                   <TurnGlyph step={s} size={17} color={i === currentStep + 1 ? ACCENT : T2}/>
@@ -736,7 +736,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
             border: `1px solid ${BORDER}`, borderRadius: '18px',
             padding: '13px 16px',
-            boxShadow: '0 8px 28px rgba(14,18,24,0.16)',
+            boxShadow: '0 8px 28px rgba(20,20,19,0.16)',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
           }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px', minWidth: 0 }}>
@@ -759,11 +759,11 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             </div>
             <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
               <button onClick={() => setShowSteps(s => !s)} aria-label="All directions"
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: showSteps ? 'rgba(0,85,255,0.08)' : '#F4F5F7', border: `1px solid ${showSteps ? 'rgba(0,85,255,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '12px', background: showSteps ? 'rgba(120,140,93,0.08)' : '#FAF9F5', border: `1px solid ${showSteps ? 'rgba(120,140,93,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 <List size={17} color={showSteps ? ACCENT : T2}/>
               </button>
               <button onClick={() => setMuted(m => !m)} aria-label={muted ? 'Unmute voice guidance' : 'Mute voice guidance'}
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: muted ? '#F4F5F7' : 'rgba(0,85,255,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(0,85,255,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '12px', background: muted ? '#FAF9F5' : 'rgba(120,140,93,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(120,140,93,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 {muted ? <VolumeX size={17} color={T3}/> : <Volume2 size={17} color={ACCENT}/>}
               </button>
             </div>

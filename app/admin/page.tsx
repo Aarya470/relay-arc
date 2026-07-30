@@ -2,13 +2,13 @@
 import { useState, useRef, useCallback } from 'react'
 import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from 'lucide-react'
 
-const T1 = '#0E1218'
-const T2 = '#5B6371'
-const T3 = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const ACCENT = '#0055FF'
-const RED = '#D91414'
-const GREEN = '#007A44'
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#8A8780'
+const BORDER = '#E5E2D9'
+const ACCENT = '#5F7049'
+const RED = '#A33417'
+const GREEN = '#5F7049'
 const MONO = 'var(--font-mono, monospace)'
 
 interface Partner {
@@ -205,7 +205,7 @@ export default function AdminPartners() {
               </div>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
                 <button onClick={() => copy(p.access_code)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#F4F5F7', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#FAF9F5', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
                   {copied === p.access_code ? <Check size={12} color={GREEN}/> : <Copy size={12} color={T3}/>}
                   {p.access_code}
                 </button>
@@ -214,7 +214,7 @@ export default function AdminPartners() {
                   <RefreshCw size={13} color={T2}/>
                 </button>
                 <button onClick={() => remove(p.id)} aria-label="Remove facility"
-                  style={{ width: '32px', height: '32px', borderRadius: '8px', border: `1px solid rgba(217,20,20,0.3)`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', border: `1px solid rgba(163,52,23,0.3)`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Trash2 size={13} color={RED}/>
                 </button>
               </div>

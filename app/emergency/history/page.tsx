@@ -93,16 +93,16 @@ export default function EmergencyHistoryPage() {
   const groups = groupByMonth(emergencies)
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 20px 40px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FAF9F5', padding: '80px 20px 40px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {[1, 2, 3].map(i => (
-        <div key={i} style={{ height: '72px', borderRadius: '16px', background: '#ECEEF2', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: '72px', borderRadius: '16px', background: '#F2F0E8', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '40px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FAF9F5', paddingBottom: '40px' }}>
       {/* Header */}
       <div style={{ padding: '56px 20px 16px', maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
         <motion.button
@@ -110,16 +110,16 @@ export default function EmergencyHistoryPage() {
           onClick={() => router.back()}
           style={{
             width: '36px', height: '36px', borderRadius: '10px',
-            background: '#ECEEF2', border: '1px solid #D5D9E0',
+            background: '#F2F0E8', border: '1px solid #D8D4C8',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer', flexShrink: 0, marginTop: '2px',
           }}
         >
-          <ArrowLeft size={16} color="#5B6371"/>
+          <ArrowLeft size={16} color="#5C5A52"/>
         </motion.button>
         <div>
-          <h1 style={{ color: '#0E1218', fontSize: '26px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.1 }}>Emergency History</h1>
-          <p style={{ color: '#9AA2AD', fontSize: '13px', marginTop: '4px' }}>Your past SOS events</p>
+          <h1 style={{ color: '#141413', fontSize: '26px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.1 }}>Emergency History</h1>
+          <p style={{ color: '#8A8780', fontSize: '13px', marginTop: '4px' }}>Your past SOS events</p>
         </div>
       </div>
 
@@ -132,18 +132,18 @@ export default function EmergencyHistoryPage() {
           >
             <div style={{
               width: '64px', height: '64px', borderRadius: '20px',
-              background: 'rgba(217,20,20,0.10)', border: '1px solid rgba(217,20,20,0.18)',
+              background: 'rgba(163,52,23,0.10)', border: '1px solid rgba(163,52,23,0.18)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px',
             }}>
-              <AlertCircle size={28} color="#D91414"/>
+              <AlertCircle size={28} color="#A33417"/>
             </div>
-            <p style={{ color: '#0E1218', fontWeight: 700, fontSize: '18px', marginBottom: '8px' }}>No emergency history</p>
-            <p style={{ color: '#9AA2AD', fontSize: '14px', lineHeight: 1.6, maxWidth: '260px' }}>Your past SOS events will appear here</p>
+            <p style={{ color: '#141413', fontWeight: 700, fontSize: '18px', marginBottom: '8px' }}>No emergency history</p>
+            <p style={{ color: '#8A8780', fontSize: '14px', lineHeight: 1.6, maxWidth: '260px' }}>Your past SOS events will appear here</p>
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => router.push('/dashboard')}
               style={{
-                marginTop: '28px', background: '#0055FF', color: 'white',
+                marginTop: '28px', background: '#5F7049', color: 'white',
                 fontWeight: 600, fontSize: '14px', padding: '12px 24px',
                 borderRadius: '14px', border: 'none', cursor: 'pointer',
                 
@@ -158,7 +158,7 @@ export default function EmergencyHistoryPage() {
               <motion.div key={month} variants={fadeUp}>
                 {/* Month chip */}
                 <p style={{
-                  color: '#9AA2AD', fontSize: '11px', fontWeight: 700,
+                  color: '#8A8780', fontSize: '11px', fontWeight: 700,
                   letterSpacing: '1.2px', textTransform: 'uppercase',
                   fontFamily: 'var(--font-mono, monospace)',
                   marginBottom: '10px',
@@ -175,9 +175,9 @@ export default function EmergencyHistoryPage() {
                         whileTap={{ scale: 0.99 }}
                         style={{
                           background: '#FFFFFF',
-                          border: `1px solid ${resolved ? '#ECEEF2' : 'rgba(217,20,20,0.20)'}`,
+                          border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(163,52,23,0.20)'}`,
                           borderRadius: '16px',
-                          boxShadow: resolved ? 'none' : '0 2px 16px rgba(217,20,20,0.08)',
+                          boxShadow: resolved ? 'none' : '0 2px 16px rgba(163,52,23,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
                           alignItems: 'center',
@@ -187,17 +187,17 @@ export default function EmergencyHistoryPage() {
                         {/* Icon */}
                         <div style={{
                           width: '40px', height: '40px', borderRadius: '12px',
-                          background: resolved ? '#ECEEF2' : 'rgba(217,20,20,0.12)',
+                          background: resolved ? '#F2F0E8' : 'rgba(163,52,23,0.12)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                         }}>
-                          <Icon size={18} color={resolved ? '#9AA2AD' : '#D91414'}/>
+                          <Icon size={18} color={resolved ? '#8A8780' : '#A33417'}/>
                         </div>
 
                         {/* Details */}
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ color: '#0E1218', fontWeight: 600, fontSize: '14px' }}>{label}</p>
+                          <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>{label}</p>
                           <p style={{
-                            color: '#9AA2AD', fontSize: '12px', marginTop: '2px',
+                            color: '#8A8780', fontSize: '12px', marginTop: '2px',
                             fontFamily: 'var(--font-mono, monospace)',
                           }}>
                             {formatDateTime(em.created_at)}
@@ -208,25 +208,25 @@ export default function EmergencyHistoryPage() {
                         <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
                           {resolved ? (
                             <span style={{
-                              background: 'rgba(0,122,68,0.12)',
-                              color: '#007A44',
+                              background: 'rgba(120,140,93,0.12)',
+                              color: '#5F7049',
                               fontSize: '11px', fontWeight: 600,
                               padding: '3px 9px', borderRadius: '99px',
-                              border: '1px solid rgba(0,122,68,0.20)',
+                              border: '1px solid rgba(120,140,93,0.20)',
                             }}>
                               Resolved
                             </span>
                           ) : (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                               <span style={{ position: 'relative', display: 'inline-flex', width: '8px', height: '8px' }}>
-                                <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#D91414', opacity: 0.4, animation: 'ping 1.2s cubic-bezier(0,0,0.2,1) infinite' }}/>
-                                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#D91414', display: 'block' }}/>
+                                <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#A33417', opacity: 0.4, animation: 'ping 1.2s cubic-bezier(0,0,0.2,1) infinite' }}/>
+                                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A33417', display: 'block' }}/>
                               </span>
-                              <span style={{ color: '#D91414', fontSize: '11px', fontWeight: 600 }}>Active</span>
+                              <span style={{ color: '#A33417', fontSize: '11px', fontWeight: 600 }}>Active</span>
                             </div>
                           )}
                           {resolved && (
-                            <span style={{ color: '#9AA2AD', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
+                            <span style={{ color: '#8A8780', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
                               {durationHint(em.created_at)}
                             </span>
                           )}

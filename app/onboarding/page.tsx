@@ -6,12 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowLeft, ArrowRight, Plus, Loader2, Heart, Zap, Brain, Activity, HeartPulse, Check } from 'lucide-react'
 
-const T1 = '#0E1218'
-const T2 = '#5B6371'
-const T3 = '#9AA2AD'
-const BORDER = '#E3E6EC'
-const ACCENT = '#0055FF'
-const RED = '#D91414'
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#8A8780'
+const BORDER = '#E5E2D9'
+const ACCENT = '#5F7049'
+const RED = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 
 const CONDITIONS = [
@@ -218,7 +218,7 @@ export default function Onboarding() {
                         display: 'flex', alignItems: 'center', gap: '14px',
                         width: '100%', textAlign: 'left', cursor: 'pointer',
                         padding: '14px 4px', minHeight: '58px',
-                        background: active ? 'rgba(0,85,255,0.05)' : 'none',
+                        background: active ? 'rgba(120,140,93,0.05)' : 'none',
                         border: 'none', borderBottom: `1px solid ${BORDER}`,
                         fontFamily: 'inherit',
                         transition: 'background 0.12s ease',

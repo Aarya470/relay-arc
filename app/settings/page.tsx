@@ -12,17 +12,17 @@ const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 
 const card: React.CSSProperties = {
   background: '#FFFFFF',
-  border: '1px solid #E3E6EC',
+  border: '1px solid #E5E2D9',
   borderRadius: '16px',
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
-  border: '1px solid #D5D9E0',
+  border: '1px solid #D8D4C8',
   borderRadius: '12px',
   padding: '14px 16px',
-  color: '#0E1218',
+  color: '#141413',
   fontSize: '14px',
   outline: 'none',
   fontFamily: 'inherit',
@@ -75,8 +75,8 @@ export default function Settings() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', padding: '80px 20px 100px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '12px', background: '#ECEEF2' }}/>)}
+    <div style={{ minHeight: '100dvh', background: '#FAF9F5', padding: '80px 20px 100px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '12px', background: '#F2F0E8' }}/>)}
     </div>
   )
 
@@ -88,31 +88,31 @@ export default function Settings() {
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#F4F5F7', paddingBottom: '90px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#FAF9F5', paddingBottom: '90px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 22px' }}>
         <button onClick={() => router.push('/dashboard')}
-          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#9AA2AD', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#8A8780', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
           <ArrowLeft size={14}/> Dashboard
         </button>
-        <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>Settings</p>
-        <h1 style={{ color: '#0E1218', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1 }}>
+        <p style={{ color: '#8A8780', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>Settings</p>
+        <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1 }}>
           {profile?.full_name?.split(' ')[0] || 'Profile'}
         </h1>
-        <p style={{ color: '#9AA2AD', fontSize: '13px', marginTop: '8px' }}>{profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}</p>
+        <p style={{ color: '#8A8780', fontSize: '13px', marginTop: '8px' }}>{profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}</p>
       </div>
 
       <div style={{ padding: '0 20px' }}>
 
         {/* Profile fields — flat rows */}
-        <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Profile</p>
-        <div style={{ borderTop: '1px solid #E3E6EC', marginBottom: '32px' }}>
+        <p style={{ color: '#8A8780', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Profile</p>
+        <div style={{ borderTop: '1px solid #E5E2D9', marginBottom: '32px' }}>
           {fields.map(f => (
-            <div key={f.key} style={{ borderBottom: '1px solid #E3E6EC' }}>
+            <div key={f.key} style={{ borderBottom: '1px solid #E5E2D9' }}>
               {editing === f.key ? (
                 <div style={{ padding: '16px 0' }}>
-                  <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1.2px', fontFamily: 'var(--font-mono, monospace)' }}>{f.label}</p>
+                  <p style={{ color: '#8A8780', fontSize: '10px', fontWeight: 700, marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1.2px', fontFamily: 'var(--font-mono, monospace)' }}>{f.label}</p>
                   <input
                     type={f.inputType}
                     autoFocus
@@ -123,11 +123,11 @@ export default function Settings() {
                   />
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <motion.button whileTap={{ scale: 0.97 }} onClick={saveEdit} disabled={saving}
-                      style={{ flex: 1, background: '#0E1218', color: 'white', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '10px', border: 'none', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
+                      style={{ flex: 1, background: '#141413', color: 'white', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '10px', border: 'none', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
                       {saving ? 'Saving…' : 'Save'}
                     </motion.button>
                     <motion.button whileTap={{ scale: 0.97 }} onClick={() => setEditing(null)}
-                      style={{ flex: 1, background: 'none', border: '1px solid #D5D9E0', color: '#5B6371', fontWeight: 500, fontSize: '13px', padding: '12px', borderRadius: '10px', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
+                      style={{ flex: 1, background: 'none', border: '1px solid #D8D4C8', color: '#5C5A52', fontWeight: 500, fontSize: '13px', padding: '12px', borderRadius: '10px', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
                       Cancel
                     </motion.button>
                   </div>
@@ -138,9 +138,9 @@ export default function Settings() {
                   onClick={() => startEdit(f.key, f.value)}
                   style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'baseline', gap: '16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  <p style={{ color: '#9AA2AD', fontSize: '13px', width: '110px', flexShrink: 0 }}>{f.label}</p>
-                  <p style={{ flex: 1, color: f.value ? '#0E1218' : '#C2C7D0', fontSize: '14.5px', fontWeight: f.value ? 600 : 400 }}>{f.value || 'Tap to add'}</p>
-                  <ChevronRight size={13} color="#C2C7D0" style={{ alignSelf: 'center' }}/>
+                  <p style={{ color: '#8A8780', fontSize: '13px', width: '110px', flexShrink: 0 }}>{f.label}</p>
+                  <p style={{ flex: 1, color: f.value ? '#141413' : '#C4BFB0', fontSize: '14.5px', fontWeight: f.value ? 600 : 400 }}>{f.value || 'Tap to add'}</p>
+                  <ChevronRight size={13} color="#C4BFB0" style={{ alignSelf: 'center' }}/>
                 </motion.button>
               )}
             </div>
@@ -148,8 +148,8 @@ export default function Settings() {
         </div>
 
         {/* Data — flat rows */}
-        <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Data</p>
-        <div style={{ borderTop: '1px solid #E3E6EC', marginBottom: '32px' }}>
+        <p style={{ color: '#8A8780', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Data</p>
+        <div style={{ borderTop: '1px solid #E5E2D9', marginBottom: '32px' }}>
           {[
             { label: 'Health history', sub: 'Past check-ins and emergencies', path: '/history' },
             { label: 'Vital signs', sub: 'Log and track HR, BP, O₂', path: '/vitals' },
@@ -159,27 +159,27 @@ export default function Settings() {
               key={item.path}
               whileTap={{ scale: 0.995 }}
               onClick={() => router.push(item.path)}
-              style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'center', gap: '14px', background: 'none', border: 'none', borderBottom: '1px solid #E3E6EC', cursor: 'pointer', textAlign: 'left' }}
+              style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'center', gap: '14px', background: 'none', border: 'none', borderBottom: '1px solid #E5E2D9', cursor: 'pointer', textAlign: 'left' }}
             >
               <div style={{ flex: 1 }}>
-                <p style={{ color: (item as any).red ? '#D91414' : '#0E1218', fontWeight: 600, fontSize: '14.5px' }}>{item.label}</p>
-                <p style={{ color: '#9AA2AD', fontSize: '12.5px', marginTop: '2px' }}>{item.sub}</p>
+                <p style={{ color: (item as any).red ? '#A33417' : '#141413', fontWeight: 600, fontSize: '14.5px' }}>{item.label}</p>
+                <p style={{ color: '#8A8780', fontSize: '12.5px', marginTop: '2px' }}>{item.sub}</p>
               </div>
-              <ChevronRight size={13} color="#C2C7D0"/>
+              <ChevronRight size={13} color="#C4BFB0"/>
             </motion.button>
           ))}
         </div>
 
         {/* Account */}
-        <p style={{ color: '#9AA2AD', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Account</p>
-        <div style={{ borderTop: '1px solid #E3E6EC' }}>
+        <p style={{ color: '#8A8780', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Account</p>
+        <div style={{ borderTop: '1px solid #E5E2D9' }}>
           <motion.button
             whileTap={{ scale: 0.995 }}
             onClick={signOut}
-            style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'center', gap: '10px', background: 'none', border: 'none', borderBottom: '1px solid #E3E6EC', cursor: 'pointer', textAlign: 'left' }}
+            style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'center', gap: '10px', background: 'none', border: 'none', borderBottom: '1px solid #E5E2D9', cursor: 'pointer', textAlign: 'left' }}
           >
-            <LogOut size={14} color="#D91414"/>
-            <p style={{ color: '#D91414', fontWeight: 600, fontSize: '14.5px' }}>Sign out</p>
+            <LogOut size={14} color="#A33417"/>
+            <p style={{ color: '#A33417', fontWeight: 600, fontSize: '14.5px' }}>Sign out</p>
           </motion.button>
         </div>
 
