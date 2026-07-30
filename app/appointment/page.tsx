@@ -7,9 +7,6 @@ import { toast } from 'sonner'
 import { ArrowLeft, Sparkles, RefreshCw, MessageSquare, AlertTriangle, Pill } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
-import Groq from 'groq-sdk'
-
-const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!, dangerouslyAllowBrowser: true })
 
 export default function AppointmentSummary() {
   const [profile, setProfile] = useState<any>(null)
@@ -35,18 +32,29 @@ export default function AppointmentSummary() {
     load()
   }, [])
 
+  // Generated server-side. This used to hold a Groq client built with
+  // NEXT_PUBLIC_GROQ_API_KEY, which shipped the key in the client bundle. The
+  // server rebuilds the prompt from data it refetches under this user's own JWT.
   const generateSummary = async () => {
     setGenerating(true)
-    const prompt = `Generate a concise medical appointment summary.
-Patient: ${profile?.full_name}, Conditions: ${profile?.diagnosis}, Meds: ${JSON.stringify(profile?.medications)}, Allergies: ${profile?.allergies}
-Recent check-ins: ${checkins.map(c => `${new Date(c.created_at).toLocaleDateString()}: ${c.summary}`).join(' | ')}
-Emergencies: ${emergencies.length > 0 ? emergencies.map(e => `${e.emergency_type}`).join(', ') : 'None'}
-Write a structured summary with: patient overview, symptom patterns, medication notes, suggested questions for doctor. Professional and concise.`
-
-    const completion = await groq.chat.completions.create({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }] })
-    setSummary(completion.choices[0].message.content || '')
-    setGenerating(false)
-    toast.success('Summary generated')
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session?.access_token) { toast.error('Please sign in again'); return }
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ task: 'appointment_summary' }),
+      })
+      if (!res.ok) { toast.error('Could not generate a summary'); return }
+      const { text } = await res.json()
+      if (!text) { toast.error('Could not generate a summary'); return }
+      setSummary(text)
+      toast.success('Summary generated')
+    } catch {
+      toast.error('Could not generate a summary')
+    } finally {
+      setGenerating(false)
+    }
   }
 
   if (loading) return (

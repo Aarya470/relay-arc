@@ -6,13 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowLeft, Calendar, Send, X, Check, AlertTriangle, Video, ChevronLeft, ChevronRight, Bell, Pill } from 'lucide-react'
 import JitsiMeeting from '@/components/JitsiMeeting'
-import Groq from 'groq-sdk'
 import { sendPushNotification } from '@/lib/notifications'
-
-const groq = new Groq({
-  apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY!,
-  dangerouslyAllowBrowser: true
-})
 
 function parseTS(ts: string) {
   if (!ts) return new Date()
@@ -86,35 +80,34 @@ export default function PatientDetail() {
       setLoading(false)
 
       // Auto generate summary
-      if (p && c) generateSummary(p, c || [], e || [])
+      if (p && c) generateSummary()
     }
     load()
   }, [patientId])
 
-  const generateSummary = async (p: any, c: any[], e: any[]) => {
+  // Generated server-side. This used to build the prompt here and call Groq from
+  // the browser with NEXT_PUBLIC_GROQ_API_KEY, which shipped the key in the
+  // client bundle. The server refetches this patient under the CALLER'S OWN JWT,
+  // so Supabase RLS decides whether this clinician may see the chart — the same
+  // check that already governed the data on this page.
+  const generateSummary = async () => {
     setGeneratingSummary(true)
-    const prompt = `Summarize this cardiac patient for a care team member. Be direct, simple, and use bullet points.
-
-Patient: ${p.full_name}, ${p.diagnosis}
-Medications: ${p.medications?.map((m: any) => `${m.name} ${m.dose}`).join(', ')}
-Allergies: ${p.allergies || 'None'}
-Surgery date: ${p.surgery_date || 'N/A'}
-Recent check-ins: ${c.slice(0, 5).map((ci: any) => ci.summary).join(' | ') || 'None'}
-Emergencies: ${e.length} total. Latest: ${e[0]?.emergency_type?.replace('_', ' ') || 'none'}
-
-Write:
-1. One sentence status overview
-2. 3-5 bullet points of key things the care team needs to know
-3. One bullet point of recommended action
-
-Keep everything simple and plain English. No medical jargon.`
-
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
-      messages: [{ role: 'user', content: prompt }]
-    })
-    setAiSummary(completion.choices[0].message.content || '')
-    setGeneratingSummary(false)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session?.access_token) { setAiSummary(''); return }
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ task: 'care_team_summary', patientId }),
+      })
+      if (!res.ok) { setAiSummary(''); return }
+      const { text } = await res.json()
+      setAiSummary(text || '')
+    } catch {
+      setAiSummary('')
+    } finally {
+      setGeneratingSummary(false)
+    }
   }
 
   const isOverdueMed = (med: any): boolean => {
@@ -598,7 +591,7 @@ Keep everything simple and plain English. No medical jargon.`
               {!generatingSummary && !aiSummary && (
                 <motion.button
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => generateSummary(patient, checkins, emergencies)}
+                  onClick={() => generateSummary()}
                   style={{ marginTop: '8px', background: '#0055FF', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '10px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
                 >
                   Generate summary

@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "preflight": "node scripts/preflight.mjs",
+    "test": "node --experimental-strip-types tests/triage.test.ts && node --experimental-strip-types tests/risk.test.ts && node --experimental-strip-types tests/navigation.test.ts",
+    "verify": "npm run preflight && npm run test"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

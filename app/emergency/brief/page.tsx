@@ -3,7 +3,6 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import Groq from 'groq-sdk'
 import { motion } from 'framer-motion'
 import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck } from 'lucide-react'
 import { toast } from 'sonner'
@@ -69,29 +68,23 @@ function BriefContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const generateClinicalNote = async (p: Profile) => {
+  // Generated server-side. This used to construct a Groq client in the browser
+  // with NEXT_PUBLIC_GROQ_API_KEY, which put the API key in the client bundle.
+  // The server refetches the profile under this user's own JWT, so nothing about
+  // who can read what has changed.
+  const generateClinicalNote = async (_p: Profile) => {
     try {
-      const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY, dangerouslyAllowBrowser: true })
-      const medNames = (p.medications || []).map(m => `${m.name} ${m.dose}`).join(', ') || 'none'
-      const completion = await groq.chat.completions.create({
-        model: 'llama-3.1-8b-instant',
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You are an emergency medicine assistant. Write a 2-3 sentence clinical handoff note for ER staff. Be specific, clinical, and actionable. Focus on the condition and emergency type.',
-          },
-          {
-            role: 'user',
-            content: `Patient has ${p.diagnosis || 'no known diagnosis on file'}. Current emergency: ${emergencyLabel}. Allergies: ${p.allergies || 'none known'}. Current medications: ${medNames}.`,
-          },
-        ],
-        max_tokens: 180,
-        temperature: 0.3,
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session?.access_token) { setClinicalNote(''); return }
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ task: 'clinical_handoff', emergencyType: type }),
       })
-      setClinicalNote(completion.choices[0]?.message?.content?.trim() || '')
-    } catch (err) {
-      console.error('Groq error:', err)
+      if (!res.ok) { setClinicalNote(''); return }
+      const { text } = await res.json()
+      setClinicalNote(text || '')
+    } catch {
       setClinicalNote('')
     } finally {
       setNoteLoading(false)
