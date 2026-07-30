@@ -20,12 +20,10 @@ interface HealthIntelligence {
   dataQuality: 'rich' | 'partial' | 'sparse'
 }
 import { toast } from 'sonner'
-// CrashRisk type defined inline — do NOT import from lib/crash-risk (groq-sdk import breaks client bundle)
-interface CrashRisk {
-  level: 'low' | 'medium' | 'high'
-  reason: string
-  advice: string
-}
+// lib/risk is pure and dependency-free, so it is safe in the client bundle —
+// unlike the old crash-risk module, which pulled in groq-sdk.
+import { assessRisk, type RiskAssessment, type VitalsSample } from '@/lib/risk'
+type CrashRisk = RiskAssessment
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#F4F5F7'
@@ -237,7 +235,11 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
       const since7d = new Date(Date.now() - 7 * 86400000).toISOString()
       const [{ data: checkinData }, { data: vitalsData }, { data: medData }] = await Promise.all([
         supabase.from('checkins').select('summary, mood, created_at').eq('user_id', userId).gte('created_at', since7d).order('created_at', { ascending: false }).limit(7),
-        supabase.from('vitals_logs').select('heart_rate, blood_pressure_systolic, blood_pressure_diastolic, weight_kg, created_at').eq('user_id', userId).gte('created_at', since7d).order('created_at', { ascending: false }).limit(7),
+        // These are the real vitals_logs columns. This query previously asked for
+        // blood_pressure_systolic / blood_pressure_diastolic / weight_kg, none of
+        // which exist — so it failed outright and the insights call was being fed
+        // an empty vitals array.
+        supabase.from('vitals_logs').select('heart_rate, systolic, diastolic, oxygen_sat, resp_rate, logged_at').eq('user_id', userId).gte('logged_at', since7d).order('logged_at', { ascending: false }).limit(7),
         supabase.from('medication_logs').select('taken, created_at').eq('user_id', userId).gte('created_at', since7d).limit(30),
       ])
 
@@ -427,17 +429,28 @@ export default function Dashboard() {
       try { localStorage.setItem('relay_offline_profile', JSON.stringify(data)) } catch {}
       setCheckins(c || [])
       setLoading(false)
-      // Fetch crash risk from server API (groq-sdk must NOT be imported in client components)
-      supabase.auth.getSession().then(({ data: { session: s } }) => {
-        if (!s?.access_token) return
-        fetch('/api/groq/crash-risk', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${s.access_token}` },
+      // Risk is scored locally. The engine is a pure function, so this needs no
+      // API round-trip and still works with no signal — and the vitals are cached
+      // so a returning offline user gets the same assessment they had last time.
+      supabase
+        .from('vitals_logs')
+        .select('heart_rate, systolic, diastolic, oxygen_sat, resp_rate, logged_at')
+        .eq('user_id', user.id)
+        .gte('logged_at', new Date(Date.now() - 21 * 86400000).toISOString())
+        .order('logged_at', { ascending: false })
+        .limit(60)
+        .then(({ data: vl }) => {
+          const samples = (vl || []) as VitalsSample[]
+          if (samples.length) {
+            try { localStorage.setItem('relay_offline_vitals', JSON.stringify(samples)) } catch {}
+          }
+          let use = samples
+          if (!use.length) {
+            try { use = JSON.parse(localStorage.getItem('relay_offline_vitals') || '[]') } catch {}
+          }
+          const risk = assessRisk(use, { checkinDates: (c || []).map((x: any) => x.created_at) })
+          if (risk && risk.level !== 'low') setCrashRisk(risk)
         })
-          .then(r => r.json())
-          .then(({ risk }) => { if (risk && risk.level !== 'low') setCrashRisk(risk) })
-          .catch(() => {})
-      })
       registerPushNotifications(user.id)
       cleanupReminders = scheduleCheckinReminders(user.id, c || [])
     }
@@ -697,12 +710,42 @@ export default function Dashboard() {
                 display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
               <TrendingDown size={15} color={crashRisk.level === 'high' ? RED : AMBER} style={{ marginTop: '2px', flexShrink: 0 }}/>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{ color: crashRisk.level === 'high' ? RED : AMBER, fontWeight: 700, fontSize: '13px', marginBottom: '3px' }}>
-                  {crashRisk.level === 'high' ? 'High crash risk' : 'Flare pattern detected'}
+                  {crashRisk.level === 'high' ? 'Vitals need urgent review' : 'Vitals worth checking'}
                 </p>
-                <p style={{ color: T2, fontSize: '12px', lineHeight: 1.6, marginBottom: '4px' }}>{crashRisk.reason}</p>
+
+                {/* Each signal shows the actual measurement that earned the points.
+                    The engine is deterministic, so this is the whole reasoning. */}
+                {crashRisk.signals?.length ? (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 7px' }}>
+                    {crashRisk.signals.slice(0, 4).map(s => (
+                      <li key={s.code} style={{ display: 'flex', gap: '7px', alignItems: 'baseline', marginBottom: '2px' }}>
+                        <span style={{
+                          color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px',
+                          fontWeight: 700, flexShrink: 0, minWidth: '15px',
+                        }}>+{s.points}</span>
+                        <span style={{ color: T2, fontSize: '12px', lineHeight: 1.5 }}>{s.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ color: T2, fontSize: '12px', lineHeight: 1.6, marginBottom: '4px' }}>{crashRisk.reason}</p>
+                )}
+
                 <p style={{ color: crashRisk.level === 'high' ? RED : AMBER, fontSize: '12px', fontWeight: 600 }}>{crashRisk.advice}</p>
+
+                {/* Never let this look more authoritative than it is. */}
+                {crashRisk.news2 != null && (
+                  <p style={{
+                    color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',
+                    marginTop: '7px', lineHeight: 1.5, letterSpacing: '0.2px',
+                  }}>
+                    NEWS2 {crashRisk.news2}/12 · {crashRisk.coverage?.measured.length ?? 0} of 4 vitals
+                    {crashRisk.coverage?.missing.length ? ` · no ${crashRisk.coverage.missing.join(', ')}` : ''}
+                    <br/>Partial score — can under-estimate. Not a diagnosis.
+                  </p>
+                )}
               </div>
               <button onClick={() => setCrashRisk(null)}
                 style={{ background: 'none', border: 'none', color: T3, fontSize: '18px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>

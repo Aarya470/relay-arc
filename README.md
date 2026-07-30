@@ -52,9 +52,17 @@ Next.js 16 (App Router, React 19, TypeScript)
 
 **Key design decisions**
 
-- **We own the triage model.** Emergency classification is ours, runs on-device,
-  and works with no signal — see `docs/TRIAGE_ENGINE.md` for the measured
-  head-to-head against Llama, including where the LLM still wins.
+- **We own the triage model.** Emergency classification is ours, runs on-device in
+  English, Hindi and Marathi, and works with no signal — see
+  `docs/TRIAGE_ENGINE.md` for the measured head-to-head against Llama, including
+  where the LLM still wins.
+- **Medical flags are deterministic, not generated.** Deterioration risk
+  implements the vital-sign subscores of NEWS2, the validated early-warning score
+  used in UK hospitals, plus a clearly-labelled personal-baseline layer for
+  chronic illness. Same vitals always produce the same flag, every point names the
+  measurement that earned it, and it runs offline in 0.015 ms. It reports itself as
+  a *partial* NEWS2 (4 of 7 parameters) wherever it surfaces, because a partial
+  score can under-estimate risk. See `docs/RISK_ENGINE.md`.
 - **No paid map/routing dependency.** Vector tiles and routing are free and keyless.
   Live traffic is an *optional* upgrade: set `NEXT_PUBLIC_TOMTOM_KEY` and the top
   candidates re-rank on live traffic; without it a documented time-of-day model applies
