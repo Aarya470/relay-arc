@@ -72,6 +72,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button onClick={() => router.push('/engineering')} className="desktop-only nav-link"
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Technology
+            </button>
             <button onClick={() => router.push('/donate')} className="desktop-only"
               style={{ background: 'transparent', border: 'none', color: RED, fontSize: '13.5px', fontWeight: 700, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Donate
@@ -102,6 +106,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
                 {label}
               </button>
             ))}
+            <button onClick={() => router.push('/engineering')}
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
+              Technology
+            </button>
             <button onClick={() => router.push('/donate')}
               style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: RED, fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Donate
@@ -508,12 +516,43 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── UNDER THE HOOD — four numbers and a door. No essay here; the
+             essay lives at /engineering for anyone who wants it. ─────────── */}
+      <section style={{ borderTop: `3px solid ${T1}`, borderBottom: `1px solid ${T1}`, background: BG2, padding: '52px 24px 56px' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px' }}>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Under the hood</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>we built the parts that matter</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(148px, 1fr))', gap: '28px', marginBottom: '34px' }}>
+            {[
+              ['0.07 ms', 'to know what’s wrong', 'on your phone, no signal'],
+              ['94 KB', 'our triage model', 'ships inside the app'],
+              ['NEWS2', 'hospital-grade scoring', 'same answer every time'],
+              ['0', 'AI calls in an emergency', 'until we’re genuinely unsure'],
+            ].map(([v, k, sub]) => (
+              <div key={k} style={{ borderTop: `2px solid ${T1}`, paddingTop: '10px' }}>
+                <p style={{ color: T1, fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{v}</p>
+                <p style={{ color: T1, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginTop: '8px' }}>{k}</p>
+                <p style={{ color: T3, fontSize: '11.5px', lineHeight: 1.5, marginTop: '4px' }}>{sub}</p>
+              </div>
+            ))}
+          </div>
+
+          <button onClick={() => router.push('/engineering')}
+            style={{ background: 'none', border: 'none', color: T1, fontWeight: 700, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${T1}`, paddingBottom: '2px' }}>
+            Try both engines running live <span style={{ fontFamily: mono }}>→</span>
+          </button>
+        </div>
+      </section>
+
       {/* ── MISSION — three sentences ─────────────────────────────────── */}
       <section id="mission" style={{ background: RED, padding: '96px 24px 104px', position: 'relative', overflow: 'hidden' }}>
         <Noise opacity={0.07}/>
         <div style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative' }}>
           <div style={{ borderTop: '3px solid #FFFFFF', paddingTop: '14px', marginBottom: '44px' }}>
-            <span style={{ color: '#FFFFFF', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Mission</span>
+            <span style={{ color: '#FFFFFF', fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>04 / Mission</span>
           </div>
           <h2 style={{ color: 'white', fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98, marginBottom: '24px' }}>
             Relay,<br/>not Revive<span style={{ color: T1 }}>.</span>
