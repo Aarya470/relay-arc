@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Loader2, Minus, Plus, ExternalLink, Check } from 'lucide-react'
+import { DEMO_PARTNER, DEMO_INCOMING, DEMO_BANNER } from '@/lib/demo-data'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
@@ -43,7 +44,20 @@ export default function HospitalPortal() {
     } catch {}
   }
 
+  // ?demo=1 renders this exact board against synthetic fixtures — no access code,
+  // no database, no real patient. The two screens that prove Relay is a system
+  // rather than a phone app were both behind a login, so nobody could be shown
+  // them without handing over credentials and exposing a real chart.
+  const [isDemo, setIsDemo] = useState(false)
+
   useEffect(() => {
+    const demo = new URLSearchParams(window.location.search).get('demo') === '1'
+    if (demo) {
+      setIsDemo(true)
+      setPartner(DEMO_PARTNER as any)
+      setIncoming(DEMO_INCOMING as any)
+      return
+    }
     try { const c = localStorage.getItem('relay_hospital_code'); if (c) { setCode(c); connect(c) } } catch {}
   }, [])
 
@@ -69,7 +83,7 @@ export default function HospitalPortal() {
 
   // Poll the feed every 10s while connected
   useEffect(() => {
-    if (!partner) return
+    if (!partner || isDemo) return
     const t = setInterval(async () => {
       try {
         const res = await fetch('/api/hospital/feed', {
@@ -155,6 +169,15 @@ export default function HospitalPortal() {
 
   return (
     <div style={{ minHeight: '100dvh', background: '#FFFFFF', maxWidth: '720px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
+
+      {/* A viewer must never be able to mistake demo fixtures for a real chart. */}
+      {isDemo && (
+        <div style={{ background: '#D97757', color: T1, padding: '9px 14px', margin: '0 -20px 0', textAlign: 'center' }}>
+          <span style={{ fontFamily: MONO, fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            {DEMO_BANNER}
+          </span>
+        </div>
+      )}
 
       {/* Header */}
       <div style={{ paddingTop: '48px', marginBottom: '26px' }}>

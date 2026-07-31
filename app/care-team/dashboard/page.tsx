@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RefreshCw, LogOut, ChevronRight, Video, Check, Clock, Calendar, MapPin, Phone, AlertTriangle, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
+import { DEMO_MEMBER, DEMO_PATIENTS, DEMO_CHECKINS, DEMO_EMERGENCIES, DEMO_MED_LOGS, DEMO_APPOINTMENTS, DEMO_SUMMARIES, DEMO_BANNER } from '@/lib/demo-data'
 import { Skeleton } from '@/components/ui/skeleton'
 import JitsiMeeting from '@/components/JitsiMeeting'
 
@@ -58,6 +59,7 @@ export default function CareTeamDashboard() {
   const [summaries, setSummaries] = useState<Record<string, any>>({})
   const [appointments, setAppointments] = useState<any[]>([])
   const [careTeamMember, setCareTeamMember] = useState<any>(null)
+  const [isDemo, setIsDemo] = useState(false)
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [upcomingMeeting, setUpcomingMeeting] = useState<any>(null)
@@ -68,7 +70,12 @@ export default function CareTeamDashboard() {
   const notifiedRef = useRef<Set<string>>(new Set())
   const router = useRouter()
 
+  // Demo mode must never write to the database. Every polling loop below is
+  // short-circuited so the demo view is strictly read-only against fixtures.
+  const demoRef = useRef(false)
+
   const checkEmergencies = useCallback(async () => {
+    if (demoRef.current) return
     const { data } = await supabase
       .from('emergencies')
       .select('*')
@@ -100,6 +107,7 @@ export default function CareTeamDashboard() {
   useEffect(() => {
     if (!careTeamMember) return
     const check = async () => {
+      if (demoRef.current) return
       const { data } = await supabase.from('appointments').select('*').eq('status', 'confirmed')
       if (!data) return
       const now = Date.now()
@@ -142,7 +150,7 @@ export default function CareTeamDashboard() {
   // Silent background refresh — updates appointments + patient list every 25 seconds
   // without showing the loading spinner so the UI doesn't flash
   useEffect(() => {
-    if (!careTeamMember) return
+    if (!careTeamMember || isDemo) return
     const silentRefresh = async () => {
       const [{ data: p }, { data: appts }, { data: em }] = await Promise.all([
         supabase.from('profiles').select('*').order('created_at', { ascending: false }),
@@ -158,6 +166,23 @@ export default function CareTeamDashboard() {
   }, [careTeamMember])
 
   const load = async () => {
+    // ?demo=1 renders this exact dashboard against synthetic fixtures — no login,
+    // no database, no real patient. Lets the dashboard be shown to a school board
+    // or an investor without exposing anyone's chart.
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === '1') {
+      setIsDemo(true)
+      demoRef.current = true
+      setCareTeamMember(DEMO_MEMBER)
+      setPatients(DEMO_PATIENTS as any)
+      setCheckins(DEMO_CHECKINS as any)
+      setEmergencies(DEMO_EMERGENCIES as any)
+      setMedLogs(DEMO_MED_LOGS as any)
+      setAppointments(DEMO_APPOINTMENTS as any)
+      setSummaries(DEMO_SUMMARIES as any)
+      setLoading(false)
+      return
+    }
+
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/care-team/login'); return }
 
@@ -294,6 +319,15 @@ export default function CareTeamDashboard() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#FAF9F5', paddingBottom: '32px' }}>
+
+      {/* A viewer must never be able to mistake demo fixtures for a real chart. */}
+      {isDemo && (
+        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            {DEMO_BANNER}
+          </span>
+        </div>
+      )}
 
       {/* Meeting notification banner */}
       <AnimatePresence>
