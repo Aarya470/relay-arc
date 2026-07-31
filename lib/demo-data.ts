@@ -68,7 +68,7 @@ export const DEMO_INCOMING = [
 // ── Care-team dashboard ─────────────────────────────────────────────────────
 export const DEMO_MEMBER = {
   id: 'demo-member',
-  full_name: 'Dr. Demo Clinician',
+  full_name: 'Demo Clinician',
   role: 'Cardiology',
   email: 'demo@example.invalid',
 }
@@ -126,10 +126,25 @@ export const DEMO_APPOINTMENTS = [
   { id: 'da2', patient_id: 'demo-p2', care_team_id: 'demo-member', type: 'scheduled', status: 'confirmed', scheduled_at: new Date(now + 5 * 86_400_000).toISOString(), concern: 'Orthostatic symptoms worsening', meeting_room_id: null },
 ]
 
-export const DEMO_SUMMARIES: Record<string, { patient_id: string; summary: string; created_at: string }> = {
+export const DEMO_SUMMARIES: Record<string, { patient_id: string; summary: string; priority_score: number; created_at: string }> = {
+  // Scores map to the dashboard's bands: >=8 urgent, 5-7 monitor, <5 stable.
+  // R. Example is the deteriorating patient, so they sort to the top.
+  'demo-p2': {
+    patient_id: 'demo-p2',
+    summary: 'Orthostatic symptoms worsening. Resting pulse is 40 bpm above this patient\'s own baseline and oxygen saturation has dropped to 94%. Vitals score NEWS2 6 — same-day review.',
+    priority_score: 9,
+    created_at: ago(20),
+  },
+  'demo-p3': {
+    patient_id: 'demo-p3',
+    summary: 'Post-exertional crash after a short errand, bed-bound since. Last night\'s medication not logged.',
+    priority_score: 6,
+    created_at: ago(90),
+  },
   'demo-p1': {
     patient_id: 'demo-p1',
     summary: 'Stable post-MI patient, adherent to medication. One episode of exertional chest tightness this week that resolved with rest — worth reviewing at the next appointment.',
+    priority_score: 2,
     created_at: ago(60),
   },
 }
