@@ -92,13 +92,6 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
   const dash = (score / 100) * circ
   return (
     <div style={{ position: 'relative', width: '72px', height: '72px', flexShrink: 0 }}>
-      {isDemo && (
-        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
-            {DEMO_BANNER}
-          </span>
-        </div>
-      )}
       <svg width="72" height="72" style={{ transform: 'rotate(-90deg)' }}>
         <circle cx="36" cy="36" r={r} fill="none" stroke={BORDER} strokeWidth={strokeW}/>
         <circle cx="36" cy="36" r={r} fill="none" stroke={color} strokeWidth={strokeW}
@@ -537,6 +530,13 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: '100dvh', background: BG, paddingBottom: '80px' }}>
+      {isDemo && (
+        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            {DEMO_BANNER}
+          </span>
+        </div>
+      )}
 
       {/* Meeting banner */}
       <AnimatePresence>
