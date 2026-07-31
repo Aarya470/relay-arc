@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { DEMO_PATIENTS, DEMO_CHECKINS, DEMO_EMERGENCIES, DEMO_BANNER } from '@/lib/demo-data'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, AlertCircle, ChevronRight, User } from 'lucide-react'
@@ -13,10 +14,22 @@ export default function NurseDashboard() {
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<any>(null)
   const [tab, setTab] = useState('overview')
+  const [isDemo, setIsDemo] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
     const load = async () => {
+      // ?demo=1 renders this real dashboard against synthetic fixtures, so it can
+      // be shown or recorded without a login and without a real patient's chart.
+      if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === '1') {
+        setIsDemo(true)
+        setPatients(DEMO_PATIENTS as any)
+        setCheckins(DEMO_CHECKINS as any)
+        setEmergencies(DEMO_EMERGENCIES as any)
+        setSelected(DEMO_PATIENTS[1] as any)
+        setLoading(false)
+        return
+      }
       const [{ data: p }, { data: c }, { data: e }] = await Promise.all([
         supabase.from('profiles').select('*').order('created_at', { ascending: false }),
         supabase.from('checkins').select('*').order('created_at', { ascending: false }),
@@ -41,6 +54,13 @@ export default function NurseDashboard() {
 
   return (
     <div className="min-h-screen bg-[#FAF9F5] pb-8">
+      {isDemo && (
+        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            {DEMO_BANNER}
+          </span>
+        </div>
+      )}
 
       {/* Header */}
       <div className="px-5 pt-14 pb-4 border-b border-[#EDEAE0]">
