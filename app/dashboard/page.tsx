@@ -23,6 +23,7 @@ import { toast } from 'sonner'
 // lib/risk is pure and dependency-free, so it is safe in the client bundle —
 // unlike the old crash-risk module, which pulled in groq-sdk.
 import { assessRisk, type RiskAssessment, type VitalsSample } from '@/lib/risk'
+import { DEMO_PATIENTS, DEMO_CHECKINS, DEMO_VITALS, DEMO_BANNER } from '@/lib/demo-data'
 type CrashRisk = RiskAssessment
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
@@ -91,6 +92,13 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
   const dash = (score / 100) * circ
   return (
     <div style={{ position: 'relative', width: '72px', height: '72px', flexShrink: 0 }}>
+      {isDemo && (
+        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            {DEMO_BANNER}
+          </span>
+        </div>
+      )}
       <svg width="72" height="72" style={{ transform: 'rotate(-90deg)' }}>
         <circle cx="36" cy="36" r={r} fill="none" stroke={BORDER} strokeWidth={strokeW}/>
         <circle cx="36" cy="36" r={r} fill="none" stroke={color} strokeWidth={strokeW}
@@ -385,6 +393,7 @@ export default function Dashboard() {
   const [installPrompt, setInstallPrompt]     = useState<any>(null)
   const [showIosHint, setShowIosHint]         = useState(false)
   const [crashRisk, setCrashRisk]       = useState<CrashRisk | null>(null)
+  const [isDemo, setIsDemo] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -402,6 +411,16 @@ export default function Dashboard() {
   useEffect(() => {
     let cleanupReminders: (() => void) | undefined
     const load = async () => {
+      // ?demo=1 renders this real dashboard against synthetic fixtures so it can
+      // be shown or recorded without a login and without a real patient's chart.
+      if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === '1') {
+        setIsDemo(true)
+        setProfile(DEMO_PATIENTS[1] as any)
+        setCheckins(DEMO_CHECKINS.filter(c => c.user_id === 'demo-p2') as any)
+        setCrashRisk(assessRisk(DEMO_VITALS as VitalsSample[]) as any)
+        setLoading(false)
+        return
+      }
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       setUserId(user.id)

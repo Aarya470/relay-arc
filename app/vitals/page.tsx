@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState, useId } from 'react'
 import { supabase } from '@/lib/supabase'
+import { DEMO_VITALS, DEMO_BANNER } from '@/lib/demo-data'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
@@ -290,11 +291,18 @@ export default function VitalsPage() {
   const [saving, setSaving] = useState(false)
   const [recentLogs, setRecentLogs] = useState<any[]>([])
   const [loadingHistory, setLoadingHistory] = useState(true)
+  const [isDemo, setIsDemo] = useState(false)
   const [timeRange, setTimeRange] = useState<TimeRange>('7d')
   const router = useRouter()
 
   useEffect(() => {
     const load = async () => {
+      if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === '1') {
+        setIsDemo(true)
+        setRecentLogs(DEMO_VITALS as any)
+        setLoadingHistory(false)
+        return
+      }
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       const { data } = await supabase
@@ -375,6 +383,13 @@ export default function VitalsPage() {
 
   return (
     <div style={{ minHeight: '100dvh', background: '#FAF9F5', paddingBottom: '80px' }}>
+      {isDemo && (
+        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            {DEMO_BANNER}
+          </span>
+        </div>
+      )}
 
       {/* Header */}
       <div style={{ padding: '56px 20px 22px' }}>
