@@ -46,7 +46,7 @@ export default function NurseLogin() {
         animate={{ opacity: 1, y: 0 }}
         className="flex-1"
       >
-        <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/25 flex items-center justify-center mb-6">
+        <div className="w-12 h-12 rounded-2xl bg-[#788C5D]/15 border border-[#788C5D]/25 flex items-center justify-center mb-6">
           
         </div>
 
@@ -61,7 +61,7 @@ export default function NurseLogin() {
               placeholder="Email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-blue-500/40 transition text-sm"
+              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-[#788C5D]/40 transition text-sm"
             />
           </div>
 
@@ -72,7 +72,7 @@ export default function NurseLogin() {
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-blue-500/40 transition text-sm"
+              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-[#788C5D]/40 transition text-sm"
             />
           </div>
 
@@ -83,7 +83,7 @@ export default function NurseLogin() {
               placeholder="Care team access code"
               value={code}
               onChange={e => setCode(e.target.value)}
-              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-blue-500/40 transition text-sm"
+              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-[#788C5D]/40 transition text-sm"
             />
           </div>
 
@@ -91,7 +91,7 @@ export default function NurseLogin() {
             whileTap={{ scale: 0.98 }}
             onClick={handleLogin}
             disabled={loading}
-            className="w-full bg-blue-600 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-500 transition mt-2 disabled:opacity-50"
+            className="w-full bg-[#4C5A3A] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#5F7049] transition mt-2 disabled:opacity-50"
           >
             {loading ? <Loader2 size={18} className="animate-spin"/> : 'Access care dashboard'}
           </motion.button>

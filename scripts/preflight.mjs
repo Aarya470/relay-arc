@@ -167,8 +167,24 @@ for (const f of code) {
   }
 }
 
+// ── Rule 9: off-palette Tailwind colour classes ──────────────────────────────
+// The app-wide recolour replaced hex literals but not Tailwind class names, so
+// the nurse dashboard kept a blue avatar and red-400 text in a green/orange app —
+// and nobody noticed until it was about to be filmed. Named Tailwind palette
+// colours are banned; use arbitrary values from the token set instead, e.g.
+// text-[#5F7049].
+const TW_COLOUR = /\b(?:text|bg|border|from|via|to|ring|outline|decoration|divide|shadow|accent|caret|fill|stroke)-(?:red|blue|green|amber|yellow|orange|indigo|purple|pink|cyan|teal|emerald|rose|sky|violet|lime|fuchsia)-(?:50|[1-9]00|950)\b/g
+for (const f of code) {
+  const rel = relative(ROOT, f).replace(/\\/g, '/')
+  if (rel.startsWith('scripts/')) continue
+  const text = readFileSync(f, 'utf8')
+  const hits = [...new Set([...text.matchAll(TW_COLOUR)].map(m => m[0]))]
+  for (const h of hits) fail(f, 'off-palette-tailwind', h)
+}
+
 // ── report ───────────────────────────────────────────────────────────────────
 const RULES = {
+  'off-palette-tailwind': 'named Tailwind colour instead of a palette token',
   'secret-in-public-env': 'credential exposed via NEXT_PUBLIC_ (shipped to browsers)',
   'dangerously-allow-browser': 'SDK configured to use a credential in the browser',
   'null-byte': 'file contains NUL bytes (write corruption)',

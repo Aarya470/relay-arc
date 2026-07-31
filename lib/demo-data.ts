@@ -78,6 +78,8 @@ export const DEMO_PATIENTS = [
     id: 'demo-p1', full_name: 'A. Sample', created_at: daysAgo(120),
     diagnosis: 'Post-MI, stent placed 2025', blood_type: 'O+',
     allergies: 'Penicillin', date_of_birth: '1971-04-18', surgery_date: daysAgo(300),
+    phone: '+1 555 0101', cardiologist: 'Dr. Demo (Cardiology)',
+    emergency_contacts: [{ name: 'Spouse (demo)', phone: '+1 555 0198', relation: 'Spouse' }],
     medications: [
       { name: 'Aspirin', dose: '81mg', frequency: 'Daily', times: ['08:00 AM'] },
       { name: 'Atorvastatin', dose: '40mg', frequency: 'Daily', times: ['09:00 PM'] },
@@ -86,7 +88,9 @@ export const DEMO_PATIENTS = [
   {
     id: 'demo-p2', full_name: 'R. Example', created_at: daysAgo(80),
     diagnosis: 'POTS, dysautonomia', blood_type: 'A-',
-    allergies: 'None known', date_of_birth: '2003-11-02', surgery_date: null,
+    allergies: 'Penicillin', date_of_birth: '2003-11-02', surgery_date: null,
+    phone: '+1 555 0102', cardiologist: 'Dr. Demo (Cardiology)',
+    emergency_contacts: [{ name: 'Parent (demo)', phone: '+1 555 0199', relation: 'Parent' }],
     medications: [
       { name: 'Ivabradine', dose: '5mg', frequency: 'Twice daily', times: ['08:00 AM', '08:00 PM'] },
     ],
@@ -95,6 +99,8 @@ export const DEMO_PATIENTS = [
     id: 'demo-p3', full_name: 'M. Placeholder', created_at: daysAgo(45),
     diagnosis: 'ME/CFS, severe', blood_type: 'B+',
     allergies: 'Sulfa drugs', date_of_birth: '1988-07-25', surgery_date: null,
+    phone: '+1 555 0103', cardiologist: 'Dr. Demo (Cardiology)',
+    emergency_contacts: [{ name: 'Sibling (demo)', phone: '+1 555 0197', relation: 'Sibling' }],
     medications: [
       { name: 'Low-dose naltrexone', dose: '4.5mg', frequency: 'Nightly', times: ['10:00 PM'] },
     ],

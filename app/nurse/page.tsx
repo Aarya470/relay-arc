@@ -26,7 +26,6 @@ export default function NurseDashboard() {
         setPatients(DEMO_PATIENTS as any)
         setCheckins(DEMO_CHECKINS as any)
         setEmergencies(DEMO_EMERGENCIES as any)
-        setSelected(DEMO_PATIENTS[1] as any)
         setLoading(false)
         return
       }
@@ -84,7 +83,7 @@ export default function NurseDashboard() {
           </div>
           <div className="flex gap-2">
             {emergencies.length > 0 && (
-              <span className="bg-red-500/15 border border-red-500/25 text-red-400 text-xs px-2.5 py-1 rounded-full font-mono">
+              <span className="bg-[#A33417]/15 border border-[#A33417]/25 text-[#A33417] text-xs px-2.5 py-1 rounded-full font-mono">
                 {emergencies.length}
               </span>
             )}
@@ -115,21 +114,21 @@ export default function NurseDashboard() {
                   key={i}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-950/20 border border-red-500/25 rounded-2xl p-4 flex items-center gap-3"
+                  className="bg-[#A33417]/10 border border-[#A33417]/25 rounded-2xl p-4 flex items-center gap-3"
                 >
                   <motion.div
-                    className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"
+                    className="w-2 h-2 rounded-full bg-[#A33417] flex-shrink-0"
                     animate={{ opacity: [1, 0.3, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   />
                   <div className="flex-1">
                     <p className="text-[#141413] font-semibold text-sm">{patient?.full_name}</p>
-                    <p className="text-red-300/70 text-xs">{e.emergency_type?.replace('_', ' ')} · {new Date(e.created_at).toLocaleTimeString()}</p>
+                    <p className="text-[#A33417]/70 text-xs">{e.emergency_type?.replace('_', ' ')} · {new Date(e.created_at).toLocaleTimeString()}</p>
                   </div>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelected(patient)}
-                    className="bg-red-600 text-white text-xs font-semibold px-3 py-1.5 rounded-xl"
+                    className="bg-[#8F2E14] text-white text-xs font-semibold px-3 py-1.5 rounded-xl"
                   >
                     View
                   </motion.button>
@@ -152,7 +151,7 @@ export default function NurseDashboard() {
                   onClick={() => setSelected(patient)}
                   className="w-full bg-white border border-[#E5E2D9] rounded-2xl p-4 flex items-center gap-3 hover:border-[#C4BFB0] transition text-left"
                 >
-                  <div className="w-10 h-10 rounded-2xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm flex-shrink-0">
+                  <div className="w-10 h-10 rounded-2xl bg-[#788C5D]/15 border border-[#788C5D]/20 flex items-center justify-center text-[#5F7049] font-bold text-sm flex-shrink-0">
                     {patient.full_name?.[0]}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -161,7 +160,7 @@ export default function NurseDashboard() {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${
-                      hasEmergency ? 'bg-red-500' :
+                      hasEmergency ? 'bg-[#A33417]' :
                       patientCheckins.length > 0 ? 'bg-[#5F7049]' : 'bg-[#D8D4C8]'
                     }`}/>
                     <ChevronRight size={14} className="text-[#C4BFB0]"/>
@@ -190,7 +189,7 @@ export default function NurseDashboard() {
             {/* Patient header card */}
             <div className="bg-white border border-[#E5E2D9] rounded-3xl p-4">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg">
+                <div className="w-12 h-12 rounded-2xl bg-[#788C5D]/15 border border-[#788C5D]/20 flex items-center justify-center text-[#5F7049] font-bold text-lg">
                   {selected.full_name?.[0]}
                 </div>
                 <div>
@@ -208,7 +207,7 @@ export default function NurseDashboard() {
                 ].map((item, i) => (
                   <div key={i} className="bg-[#FAF9F5] rounded-xl p-2.5">
                     <p className="text-[#B7BEC7] font-mono text-xs uppercase tracking-wider mb-1">{item.label}</p>
-                    <p className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-red-400' : 'text-[#5C5A52]'}`}>
+                    <p className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-[#A33417]' : 'text-[#5C5A52]'}`}>
                       {item.value}
                     </p>
                   </div>
@@ -238,7 +237,7 @@ export default function NurseDashboard() {
                   <p className="text-[#8A8780] font-mono text-xs uppercase tracking-wider mb-3">Emergency contacts</p>
                   {selected.emergency_contacts?.map((c: any, i: number) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-[#EDEAE0] last:border-0">
-                      <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-xs font-bold">
+                      <div className="w-8 h-8 rounded-xl bg-[#788C5D]/10 flex items-center justify-center text-[#5F7049] text-xs font-bold">
                         {c.name?.[0]}
                       </div>
                       <div>
