@@ -7,7 +7,8 @@
 // tunable parameters.
 import {
   assessRisk, scoreRespRate, scoreSpo2, scoreSystolic, scorePulse,
-  type VitalsSample,
+  scoreTemperature, scoreConsciousness, scoreSupplementalOxygen,
+  type VitalsSample, type Acvpu,
 } from '../lib/risk/index.ts'
 
 let pass = 0, fail = 0
@@ -39,10 +40,26 @@ const table = (name: string, fn: (v: number) => number, rows: [number, number][]
   ok(`${name}: all ${rows.length} boundary values`, bad.length === 0,
     bad.length ? bad.map(([v, e]) => `${v}→${fn(v)} want ${e}`).join(', ') : `${rows.length} checked`)
 }
+// Temperature is asymmetric on purpose: hypothermia scores 3, high fever scores 2.
+const TEMP: [number, number][] = [
+  [33.0, 3], [35.0, 3], [35.1, 1], [36.0, 1], [36.1, 0], [38.0, 0],
+  [38.1, 1], [39.0, 1], [39.1, 2], [41.0, 2],
+]
+
 table('respiratory rate', scoreRespRate, RR)
 table('SpO2 (Scale 1)', scoreSpo2, SPO2)
 table('systolic BP', scoreSystolic, SBP)
 table('pulse', scorePulse, HR)
+table('temperature', scoreTemperature, TEMP)
+
+{
+  // ACVPU: Alert is 0, every other state is 3. No partial credit.
+  const bad = (['C', 'V', 'P', 'U'] as Acvpu[]).filter(a => scoreConsciousness(a) !== 3)
+  ok('ACVPU: Alert scores 0', scoreConsciousness('A') === 0)
+  ok('ACVPU: C/V/P/U all score 3', bad.length === 0, bad.join(',') || '4 checked')
+  ok('supplemental oxygen is binary 0 or 2',
+    scoreSupplementalOxygen(false) === 0 && scoreSupplementalOxygen(true) === 2)
+}
 
 // ─── B. Aggregate scoring and escalation bands ────────────────────────────────
 console.log('\n=== B. Escalation follows the NEWS2 bands ===')
@@ -99,10 +116,40 @@ console.log('\n=== D. Determinism ===')
 console.log('\n=== E. Partial data is reported, not hidden ===')
 {
   const r = assessRisk(one({ heart_rate: 115, oxygen_sat: 94 }))!
-  ok('missing parameters are listed', r.coverage.missing.length === 2, r.coverage.missing.join(', '))
+  ok('missing parameters are listed', r.coverage.missing.length === 5, r.coverage.missing.join(', '))
   ok('measured parameters are listed', r.coverage.measured.length === 2, r.coverage.measured.join(', '))
-  ok('always flagged partial', r.partial === true)
+  ok('flagged partial when anything is missing', r.partial === true)
   ok('disclaimer states it can under-estimate', /under-estimate/.test(r.disclaimer))
+  ok('disclaimer names what is missing', /temperature/.test(r.disclaimer))
+}
+{
+  // A COMPLETE observation set — all seven parameters — drops the caveat.
+  const full = assessRisk(one({
+    resp_rate: 16, oxygen_sat: 98, systolic: 118, diastolic: 76, heart_rate: 72,
+    temperature_c: 36.8, consciousness: 'A', on_oxygen: false,
+  }))!
+  ok('all 7 parameters → not partial', full.partial === false, full.coverage.missing.join(',') || 'none missing')
+  ok('complete set scores 0 for a well patient', full.news2 === 0 && full.level === 'low')
+  ok('complete disclaimer drops the under-estimate line', !/under-estimate/.test(full.disclaimer))
+}
+{
+  // The new parameters must actually move the score.
+  const hypo = assessRisk(one({ heart_rate: 72, systolic: 118, temperature_c: 34.5 }))!
+  ok('hypothermia scores 3 and red-flags', hypo.news2 === 3 && hypo.redFlag)
+  const conf = assessRisk(one({ heart_rate: 72, systolic: 118, consciousness: 'C' }))!
+  ok('new confusion scores 3 and red-flags', conf.news2 === 3 && conf.redFlag)
+  const ox = assessRisk(one({ heart_rate: 72, systolic: 118, on_oxygen: true }))!
+  ok('supplemental oxygen adds 2 without red-flagging', ox.news2 === 2 && !ox.redFlag)
+}
+{
+  // NEWS2 is not validated under 16 — this matters for any school deployment.
+  const child = assessRisk(one({ heart_rate: 72, systolic: 118, oxygen_sat: 98 }), { ageYears: 12 })!
+  ok('under 16 sets the paediatric caveat', child.pediatricCaveat === true)
+  ok('paediatric caveat names PEWS', /PEWS/.test(child.disclaimer))
+  const adult = assessRisk(one({ heart_rate: 72, systolic: 118, oxygen_sat: 98 }), { ageYears: 34 })!
+  ok('16 and over does not set it', adult.pediatricCaveat === false)
+  const unknown = assessRisk(one({ heart_rate: 72, systolic: 118, oxygen_sat: 98 }))!
+  ok('unknown age does not claim a caveat either way', unknown.pediatricCaveat === false)
 }
 {
   ok('a single lone vital is not an assessment', assessRisk(one({ heart_rate: 80 })) === null)

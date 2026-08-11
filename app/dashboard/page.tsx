@@ -760,9 +760,12 @@ export default function Dashboard() {
                     color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',
                     marginTop: '7px', lineHeight: 1.5, letterSpacing: '0.2px',
                   }}>
-                    NEWS2 {crashRisk.news2}/12 · {crashRisk.coverage?.measured.length ?? 0} of 4 vitals
+                    NEWS2 {crashRisk.news2}/20 · {crashRisk.coverage?.measured.length ?? 0} of 7 parameters
                     {crashRisk.coverage?.missing.length ? ` · no ${crashRisk.coverage.missing.join(', ')}` : ''}
-                    <br/>Partial score — can under-estimate. Not a diagnosis.
+                    <br/>{crashRisk.partial
+                      ? 'Partial score — can under-estimate. Not a diagnosis.'
+                      : 'Complete observation set. Not a diagnosis.'}
+                    {crashRisk.pediatricCaveat && <><br/>NEWS2 is not validated under 16 — indicative only.</>}
                   </p>
                 )}
               </div>

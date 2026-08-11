@@ -292,7 +292,9 @@ export default function Features() {
               Stated on every alert
             </p>
             <p style={{ color: INK, fontSize: '15.5px', lineHeight: 1.7, maxWidth: '740px' }}>
-              This is a <strong>partial</strong> NEWS2 — four of seven parameters. A phone cannot take your
+              NEWS2 has seven parameters and Relay now captures all seven — but only when you
+              record them. When any are missing the score reports itself as <strong>partial</strong> and
+              names what is absent. A phone cannot always take your
               temperature, assess your consciousness level, or know whether you are on supplemental
               oxygen. A partial score can only ever <strong>under</strong>-estimate risk, which makes it safe as a
               reason to seek care and unsafe as a reason not to. Decision support, not a diagnosis.

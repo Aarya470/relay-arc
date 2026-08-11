@@ -160,8 +160,9 @@ export default function RiskDemo() {
             </div>
 
             <p style={{ color: T3, fontFamily: mono, fontSize: '10px', lineHeight: 1.6, marginTop: '12px', letterSpacing: '0.3px' }}>
-              Partial NEWS2 — 4 of 7 parameters. No temperature, consciousness level, or
-              supplemental-oxygen status, so it can under-estimate risk. Decision support, not a diagnosis.
+              {result.partial
+                ? `Partial NEWS2 — ${result.coverage.measured.length} of 7 parameters. Missing ${result.coverage.missing.join(', ')}, so it can under-estimate risk.`
+                : 'Complete NEWS2 observation set — all 7 parameters.'} Decision support, not a diagnosis.
             </p>
           </div>
         )}

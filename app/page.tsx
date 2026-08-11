@@ -658,6 +658,10 @@ export default function Home() {
                     {label}
                   </button>
                 ))}
+                <button onClick={() => router.push('/changelog')}
+                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                  Changelog
+                </button>
               </div>
               <div>
                 <p style={{ color: 'rgba(255,255,255,0.38)', fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Company</p>

@@ -5,7 +5,7 @@ Deterministic deterioration scoring. No language model, no API, 0.015 ms.
 ```
 lib/risk/index.ts         the engine — pure, zero dependencies, client-safe
 app/api/risk/route.ts     server path (care-team alerting, background jobs)
-tests/risk.test.ts        35 assertions, incl. full NEWS2 table conformance
+tests/risk.test.ts        50 assertions, incl. full NEWS2 table conformance
 ```
 
 ```bash
@@ -35,7 +35,7 @@ something that influences whether a person seeks care.
 
 ## What it computes
 
-### Layer 1 — partial NEWS2 (validated)
+### Layer 1 — NEWS2 (validated)
 
 The vital-sign subscores of **NEWS2** (National Early Warning Score 2, Royal
 College of Physicians), the early-warning score used to detect acute
@@ -48,26 +48,47 @@ table and pinned by tests:
 | SpO₂ (Scale 1) | ≤91 | 92–93 | 94–95 | ≥96 | | | |
 | Systolic BP | ≤90 | 91–100 | 101–110 | 111–219 | | | ≥220 |
 | Pulse | ≤40 | | 41–50 | 51–90 | 91–110 | 111–130 | ≥131 |
+| Temperature °C | ≤35.0 | ≥39.1 | 35.1–36.0 · 38.1–39.0 | 36.1–38.0 | | | |
+| Consciousness | C/V/P/U | | | Alert | | | |
+| Supplemental O₂ | | on oxygen | | room air | | | |
+
+**All seven parameters are now implemented.** A reading reports `partial: true`
+whenever any are missing and names them; a complete observation set reports
+`partial: false` and drops the under-estimation caveat.
+
+**Two caveats a clinician should confirm first:**
+
+1. **The temperature row.** Every other row was transcribed from a source that
+   stated its bands unambiguously. For temperature the sources I could reach
+   disagreed on alignment, so `scoreTemperature()` implements the standard
+   published table as I understand it, pinned by boundary tests. This is the first
+   thing to check in review.
+2. **Age.** NEWS2 is designed for adults aged 16 and over and is **not validated in
+   children** — paediatric practice uses PEWS. `assessRisk()` accepts `ageYears` and
+   sets `pediatricCaveat` when under 16. This matters directly for a school pilot,
+   where most subjects are under 16.
 
 Escalation follows the published bands: aggregate 0–4 low, 5–6 medium, ≥7 high —
 plus NEWS2's separate rule that **any single parameter scoring 3 escalates on its
 own**, even with a low aggregate. That branch is the most safety-critical code
 here and has its own test.
 
-### THIS IS A PARTIAL NEWS2 — stated everywhere it surfaces
+### PARTIAL READINGS ARE STATED EVERYWHERE THEY SURFACE
 
-Full NEWS2 has seven parameters. Relay can measure four.
+All seven parameters are implemented, but a reading is only as complete as what was
+actually recorded — and most check-ins will not include a temperature.
 
-- **Implemented:** respiratory rate, SpO₂, systolic BP, pulse
-- **Not captured:** temperature, consciousness level (ACVPU), supplemental oxygen
+- **Complete set** → `partial: false`, and the under-estimation caveat is dropped.
+- **Anything missing** → `partial: true`, and `coverage.missing` names it. The
+  disclaimer is generated from that list, so it can never drift out of sync with
+  what was really measured.
 
-A partial score can only ever **under**-estimate risk, never over-estimate it.
-That makes it safe as a prompt to seek care and unsafe as a reason not to. Every
-result carries `partial: true` and a `coverage` object listing exactly which
-vitals were and were not measured, and the dashboard prints
-`NEWS2 n/12 · k of 4 vitals · Partial score — can under-estimate. Not a diagnosis.`
-under every alert. It is decision support, not a diagnosis, and not a substitute
-for a clinician or for emergency services.
+A partial score can only ever **under**-estimate risk, never over-estimate it. That
+makes it safe as a prompt to seek care and unsafe as a reason not to. The dashboard
+prints `NEWS2 n/20 · k of 7 parameters` under every alert, followed by either the
+partial caveat or "Complete observation set", plus the paediatric line when age is
+known and under 16. It is decision support, not a diagnosis, and not a substitute for
+a clinician or for emergency services.
 
 ### Layer 2 — personal baseline (heuristic, unvalidated)
 
@@ -116,11 +137,15 @@ array on every dashboard load. Fixed alongside this.
 
 ## Roadmap
 
-1. Capture temperature and an ACVPU consciousness prompt to complete NEWS2 —
-   this is the single highest-value addition and removes the "partial" caveat.
-2. Track supplemental-oxygen status so SpO₂ Scale 2 can be selected correctly for
-   patients with hypercapnic respiratory failure.
-3. Validate the personal-baseline layer against outcomes once there is consented
+1. **Have a clinician confirm the temperature band table.** It is the one row
+   transcribed from sources that disagreed, and it is the first thing to check.
+2. **Decide what to do about under-16s.** NEWS2 is not validated in children, the
+   engine flags it, but a school pilot is mostly under-16s. The honest options are
+   to implement PEWS as well, or to restrict the risk indicator to adults.
+3. Offer SpO₂ Scale 2 selection now that supplemental-oxygen status is captured —
+   it is only correct for documented hypercapnic respiratory failure and must be a
+   deliberate clinical choice, not a default.
+4. Validate the personal-baseline layer against outcomes once there is consented
    production data. Until then it stays labelled unvalidated.
 4. Orthostatic vitals (lying vs standing HR/BP) — the actual diagnostic signal for
    POTS, and currently not captured at all.

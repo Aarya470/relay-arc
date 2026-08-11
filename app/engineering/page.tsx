@@ -330,8 +330,10 @@ export default function Engineering() {
               Said everywhere it appears
             </p>
             <p style={{ color: T1, fontSize: '16px', lineHeight: 1.7, maxWidth: '740px' }}>
-              This is a <strong>partial</strong> NEWS2. Full NEWS2 has seven parameters; a phone can measure four.
-              There is no temperature, no consciousness level, no supplemental-oxygen status. A partial
+              NEWS2 has seven parameters and all seven are now implemented — temperature,
+              consciousness level and supplemental-oxygen status were added in July 2026.
+              A reading is only as complete as what was recorded, so the score reports itself as
+              partial whenever a parameter is missing, and names it. A partial
               score can only ever <strong>under</strong>-estimate risk — which makes it safe as a prompt to seek
               care and unsafe as a reason not to. Every result carries that caveat and a list of exactly
               which vitals were missing, and it is printed under every alert a user sees. It is decision
@@ -417,7 +419,8 @@ export default function Engineering() {
             {[
               ['495 examples is a small corpus', 'The triage model improves with data, and the real corpus should come from anonymised production transcripts under consent — not from us inventing more sentences.'],
               ['Sparse phrasings are unreliable', 'Injury vocabulary is thin, and "other" is a grab-bag class that deserves subdividing. Stroke versus unconscious on speech symptoms still needs more data.'],
-              ['NEWS2 is only four of seven parameters', 'Temperature and a consciousness prompt are the highest-value additions and would remove the "partial" caveat entirely.'],
+              ['NEWS2 is not validated under 16', 'It is designed for adults; paediatric practice uses PEWS. The score flags this when age is known, but the underlying instrument is still the adult one.'],
+              ['The temperature band table needs a clinician\'s eye', 'Every other row was transcribed from an unambiguous source. For temperature the sources disagreed on alignment, so that row is flagged for confirmation.'],
               ['The personal-baseline layer is unvalidated', 'It is clinically plausible and carefully bounded, but it has not been tested against outcomes. It stays labelled that way until it has been.'],
               ['Orthostatic vitals are not captured', 'Lying-versus-standing heart rate is the actual diagnostic signal for POTS, and right now we do not collect it.'],
               ['The hospital network is small', 'Real drive-time ranking works everywhere. Live capability and diversion status only work where a facility has actually connected, and that is a partnership problem, not a software one.'],
