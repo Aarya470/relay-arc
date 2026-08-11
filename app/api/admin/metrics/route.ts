@@ -63,7 +63,10 @@ export async function GET(req: NextRequest) {
     const E = emergencies.data || []
     const M = medLogs.data || []
 
-    const since = (rows: { created_at?: string; logged_at?: string; taken_at?: string }[], d: number) => {
+    // Generic so the row type survives the filter — a non-generic version narrowed
+    // away user_id and then uniq() could not see it.
+    type Stamped = { created_at?: string; logged_at?: string; taken_at?: string }
+    const since = <T extends Stamped>(rows: T[], d: number): T[] => {
       const cut = iso(d)
       return rows.filter(r => (r.created_at || r.logged_at || r.taken_at || '') >= cut)
     }
