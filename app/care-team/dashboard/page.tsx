@@ -841,7 +841,7 @@ export default function CareTeamDashboard() {
                     {overdueM ? 'Monitor' : sum ? getStatusLabel(score) : '—'}
                   </span>
                 )}
-                <ChevronRight size={14} color="#B7BEC7"/>
+                <ChevronRight size={14} color="#8A8780"/>
               </div>
             </motion.button>
           )

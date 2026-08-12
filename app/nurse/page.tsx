@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, AlertCircle, ChevronRight, User } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
+import { formatDate } from '@/lib/utils'
 
 export default function NurseDashboard() {
   const [patients, setPatients] = useState<any[]>([])
@@ -88,7 +89,7 @@ export default function NurseDashboard() {
               </span>
             )}
             {!selected && (
-              <span className="bg-[#F2F0E8] border border-[#E5E2D9] text-[#8A93A0] text-xs px-2.5 py-1 rounded-full font-mono">
+              <span className="bg-[#F2F0E8] border border-[#E5E2D9] text-[#8A8780] text-xs px-2.5 py-1 rounded-full font-mono">
                 {patients.length} pts
               </span>
             )}
@@ -137,7 +138,7 @@ export default function NurseDashboard() {
             })}
 
             {/* Patient list */}
-            <p className="text-[#B7BEC7] font-mono text-xs uppercase tracking-wider px-1">All patients</p>
+            <p className="text-[#8A8780] font-mono text-xs uppercase tracking-wider px-1">All patients</p>
             {patients.map((patient, i) => {
               const patientCheckins = getCheckins(patient.id)
               const hasEmergency = getEmergency(patient.id)
@@ -172,7 +173,7 @@ export default function NurseDashboard() {
             {patients.length === 0 && (
               <div className="text-center py-12">
                 <User size={32} className="text-[#C6CBD3] mx-auto mb-3"/>
-                <p className="text-[#B7BEC7] text-sm">No patients yet</p>
+                <p className="text-[#8A8780] text-sm">No patients yet</p>
               </div>
             )}
 
@@ -203,10 +204,10 @@ export default function NurseDashboard() {
                   { label: 'Phone', value: selected.phone || 'N/A' },
                   { label: 'Cardiologist', value: selected.cardiologist || 'N/A' },
                   { label: 'Allergies', value: selected.allergies || 'None', red: true },
-                  { label: 'Surgery', value: selected.surgery_date || 'N/A' },
+                  { label: 'Surgery', value: formatDate(selected.surgery_date) },
                 ].map((item, i) => (
                   <div key={i} className="bg-[#FAF9F5] rounded-xl p-2.5">
-                    <p className="text-[#B7BEC7] font-mono text-xs uppercase tracking-wider mb-1">{item.label}</p>
+                    <p className="text-[#8A8780] font-mono text-xs uppercase tracking-wider mb-1">{item.label}</p>
                     <p className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-[#A33417]' : 'text-[#5C5A52]'}`}>
                       {item.value}
                     </p>
@@ -253,10 +254,10 @@ export default function NurseDashboard() {
             {tab === 'checkins' && (
               <div className="bg-white border border-[#E5E2D9] rounded-2xl p-4">
                 <p className="text-[#8A8780] font-mono text-xs uppercase tracking-wider mb-3">Check-in history</p>
-                {getCheckins(selected.id).length === 0 && <p className="text-[#B7BEC7] text-sm">No check-ins yet</p>}
+                {getCheckins(selected.id).length === 0 && <p className="text-[#8A8780] text-sm">No check-ins yet</p>}
                 {getCheckins(selected.id).slice(0, 10).map((c, i) => (
                   <div key={i} className="py-2.5 border-b border-[#EDEAE0] last:border-0">
-                    <p className="text-[#B7BEC7] font-mono text-xs mb-1">{new Date(c.created_at).toLocaleString()}</p>
+                    <p className="text-[#8A8780] font-mono text-xs mb-1">{new Date(c.created_at).toLocaleString()}</p>
                     <p className="text-[#5C5A52] text-xs leading-relaxed">{c.summary}</p>
                   </div>
                 ))}
@@ -266,14 +267,14 @@ export default function NurseDashboard() {
             {tab === 'medications' && (
               <div className="bg-white border border-[#E5E2D9] rounded-2xl p-4">
                 <p className="text-[#8A8780] font-mono text-xs uppercase tracking-wider mb-3">Medications</p>
-                {selected.medications?.length === 0 && <p className="text-[#B7BEC7] text-sm">No medications</p>}
+                {selected.medications?.length === 0 && <p className="text-[#8A8780] text-sm">No medications</p>}
                 {selected.medications?.map((m: any, i: number) => (
                   <div key={i} className="flex justify-between items-center py-2.5 border-b border-[#EDEAE0] last:border-0">
                     <div>
                       <p className="text-[#141413] text-sm font-medium">{m.name}</p>
                       <p className="text-[#8A8780] text-xs">{m.frequency}</p>
                     </div>
-                    <span className="text-[#8A93A0] font-mono text-xs">{m.dose}</span>
+                    <span className="text-[#8A8780] font-mono text-xs">{m.dose}</span>
                   </div>
                 ))}
               </div>

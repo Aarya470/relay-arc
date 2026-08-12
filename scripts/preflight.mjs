@@ -33,8 +33,19 @@ function walk(dir, out = []) {
 }
 
 const problems = []
-const fail = (file, rule, detail) =>
-  problems.push({ file: relative(ROOT, file).replace(/\\/g, '/'), rule, detail })
+const warnings = []
+const rel_ = file => relative(ROOT, file).replace(/\\/g, '/')
+
+// fail() blocks the gate. warn() reports and does not.
+//
+// The distinction exists because the two kinds of finding have different costs.
+// A null byte or a leaked credential must stop everything. A cosmetic drift like
+// an off-palette hex is worth surfacing every run, but making it blocking on the
+// day it was introduced would have meant either a 21-file recolour before an
+// unrelated commit could land, or — far more likely — the whole gate being
+// switched off. A check that is too strict to live with gets deleted.
+const fail = (file, rule, detail) => problems.push({ file: rel_(file), rule, detail })
+const warn = (file, rule, detail) => warnings.push({ file: rel_(file), rule, detail })
 
 const files = walk(ROOT)
 const code = files.filter(f => ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.css'].includes(extname(f)))
@@ -182,8 +193,40 @@ for (const f of code) {
   for (const h of hits) fail(f, 'off-palette-tailwind', h)
 }
 
+// ── Rule 10: cool blue-grey hex literals ─────────────────────────────────────
+// Rule 9 catches Tailwind class names, but the recolour also left raw hexes from
+// the old palette behind: #B7BEC7 field labels and #8A93A0 chips survived in the
+// nurse and driver views and were only spotted while capturing screenshots for a
+// video. They are close enough to the warm greys to pass a glance and clearly
+// wrong beside them.
+//
+// The test is arithmetic rather than a blocklist, so a new blue-grey is caught
+// too: flag any 6-digit hex whose blue channel leads red by a clear margin. The
+// real palette is warm throughout (#8A8780, #5C5A52, #E5E2D9), so nothing in the
+// token set trips this.
+const HEX = /#([0-9a-fA-F]{6})\b/g
+const WARM_OK = new Set(['5f7049', '788c5d', 'd97757', 'a33417', 'a87200'])
+for (const f of code) {
+  const rel = relative(ROOT, f).replace(/\\/g, '/')
+  if (rel.startsWith('scripts/')) continue
+  const text = readFileSync(f, 'utf8')
+  const seen = new Set()
+  for (const m of text.matchAll(HEX)) {
+    const h = m[1].toLowerCase()
+    if (seen.has(h) || WARM_OK.has(h)) continue
+    const r = parseInt(h.slice(0, 2), 16)
+    const b = parseInt(h.slice(4, 6), 16)
+    // Blue leading red by >12 on a mid-tone grey means it came from the old palette.
+    if (b - r > 12 && r > 40 && r < 220) {
+      seen.add(h)
+      warn(f, 'cool-grey-hex', `#${m[1]} (blue ${b} > red ${r})`)
+    }
+  }
+}
+
 // ── report ───────────────────────────────────────────────────────────────────
 const RULES = {
+  'cool-grey-hex': 'blue-tinted hex left over from the pre-recolour palette',
   'off-palette-tailwind': 'named Tailwind colour instead of a palette token',
   'secret-in-public-env': 'credential exposed via NEXT_PUBLIC_ (shipped to browsers)',
   'dangerously-allow-browser': 'SDK configured to use a credential in the browser',
@@ -195,17 +238,28 @@ const RULES = {
   'server-sdk-in-client': "server-only SDK imported by a 'use client' file",
 }
 
+const group = list => {
+  const by = {}
+  for (const p of list) (by[p.rule] ||= []).push(p)
+  for (const [rule, items] of Object.entries(by)) {
+    console.log(`  ${rule} — ${RULES[rule]}`)
+    for (const p of items) console.log(`      ${p.file}  ${p.detail}`)
+    console.log()
+  }
+}
+
 console.log(`\npreflight: ${code.length} source files checked\n`)
+
+if (warnings.length) {
+  console.log(`ADVISORY (${warnings.length}) — does not block\n`)
+  group(warnings)
+}
+
 if (problems.length === 0) {
-  console.log('  clean — no known build-breaking patterns\n')
+  console.log('  clean — no build-breaking patterns\n')
   process.exit(0)
 }
-const byRule = {}
-for (const p of problems) (byRule[p.rule] ||= []).push(p)
-for (const [rule, list] of Object.entries(byRule)) {
-  console.log(`  ${rule} — ${RULES[rule]}`)
-  for (const p of list) console.log(`      ${p.file}  ${p.detail}`)
-  console.log()
-}
+console.log(`BLOCKING (${problems.length})\n`)
+group(problems)
 console.log(`${problems.length} problem${problems.length === 1 ? '' : 's'}\n`)
 process.exit(1)

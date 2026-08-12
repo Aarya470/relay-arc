@@ -84,7 +84,7 @@ export default function DriverDashboard() {
       <div style={{ background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
         <p style={{ color: '#8A8780', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.patient_name}</p>
-        <p style={{ color: '#8A93A0', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
+        <p style={{ color: '#8A8780', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => {
@@ -100,7 +100,7 @@ export default function DriverDashboard() {
       <div style={{ background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px' }}>
         <p style={{ color: '#8A8780', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Then take to</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.hospital_name}</p>
-        <p style={{ color: '#8A93A0', fontSize: '13px', marginBottom: '12px' }}>
+        <p style={{ color: '#8A8780', fontSize: '13px', marginBottom: '12px' }}>
           Emergency: {accepted.emergency_type?.replace('_', ' ')}
         </p>
         <motion.button
@@ -178,14 +178,14 @@ export default function DriverDashboard() {
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'flex-start' }}>
                       <MapPin size={13} color="#A87200" style={{ flexShrink: 0, marginTop: '2px' }}/>
                       <div>
-                        <p style={{ color: '#8A93A0', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
+                        <p style={{ color: '#8A8780', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.pickup_address}</p>
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                       <AlertCircle size={13} color="#5F7049" style={{ flexShrink: 0, marginTop: '2px' }}/>
                       <div>
-                        <p style={{ color: '#8A93A0', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Hospital</p>
+                        <p style={{ color: '#8A8780', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Hospital</p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.hospital_name}</p>
                       </div>
                     </div>

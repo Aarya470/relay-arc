@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Calendar, Send, X, Check, AlertTriangle, Video, ChevronLeft, ChevronRight, Bell, Pill } from 'lucide-react'
 import JitsiMeeting from '@/components/JitsiMeeting'
 import { sendPushNotification } from '@/lib/notifications'
+import { formatDate } from '@/lib/utils'
 
 function parseTS(ts: string) {
   if (!ts) return new Date()
@@ -440,9 +441,11 @@ export default function PatientDetail() {
               <p style={{ color: '#8A8780', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>Patient info</p>
               {[
                 { label: 'Phone', value: patient.phone },
-                { label: 'Date of birth', value: patient.date_of_birth },
+                // Empty-string fallback so a missing date is filtered out below
+                // rather than rendering a placeholder row.
+                { label: 'Date of birth', value: formatDate(patient.date_of_birth, '') },
                 { label: 'Cardiologist', value: patient.cardiologist },
-                { label: 'Surgery date', value: patient.surgery_date },
+                { label: 'Surgery date', value: formatDate(patient.surgery_date, '') },
                 { label: 'Blood type', value: patient.blood_type, red: true },
                 { label: 'Allergies', value: patient.allergies, amber: true },
                 { label: 'Conditions', value: patient.diagnosis },
