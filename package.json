@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "preflight": "node scripts/preflight.mjs",
-    "test": "node --experimental-strip-types tests/triage.test.ts && node --experimental-strip-types tests/risk.test.ts && node --experimental-strip-types tests/navigation.test.ts && node --experimental-strip-types tests/claims.test.ts",
-    "verify": "npm run preflight && npm run test"
+    "test": "node --experimental-strip-types tests/triage.test.ts && node --experimental-strip-types tests/risk.test.ts && node --experimental-strip-types tests/navigation.test.ts && node --experimental-strip-types tests/claims.test.ts && node --experimental-strip-types tests/fhir.test.ts",
+    "verify": "npm run preflight && npm run test",
+    "validate:fhir": "node --experimental-strip-types scripts/validate-fhir.mts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
