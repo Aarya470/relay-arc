@@ -31,6 +31,16 @@ const KIND: Record<Kind, { label: string; color: string }> = {
 // Newest first. Keep this honest — the CORRECTION entries are the point.
 const ENTRIES: Entry[] = [
   {
+    date: '2026-08-12', kind: 'shipped',
+    title: 'An emergency card that needs no account',
+    body: 'Every entrance to Relay Arc asked for an account and a full medical profile before returning anything, and the real payoff only arrives during an emergency. So anyone willing to spend two minutes got nothing for it. /card inverts that: fill in the fields and you immediately get a lock-screen image and a printable wallet card. Phones show their lock wallpaper without being unlocked, so a responder can read blood type and allergies off a locked phone with no app and no signal. Nothing is uploaded — there is no account and no server call, the data stays in your browser, and the images are drawn on your device. There is deliberately no shareable link with the data encoded in it, because a URL carrying someone\'s medical history can be forwarded, logged, or sit in a history forever.',
+  },
+  {
+    date: '2026-08-12', kind: 'fixed',
+    title: 'A patient chart showed a raw timestamp where a date belongs',
+    body: 'The nurse patient view rendered the surgery date straight from the database column, so opening a patient displayed 2025-10-16T04:13:59.678Z. Found while capturing the dashboard for a video. A clinician who sees a raw timestamp in a chart field reasonably concludes the rest of the chart is untrustworthy, so this was a correctness problem and not a cosmetic one. Also swept seven more cool blue-grey hex values the recolour missed, and preflight now catches them arithmetically rather than by blocklist — any mid-tone hex whose blue channel leads red by more than twelve. It found twenty-one further instances, so it reports as advisory rather than blocking: a gate that demands an unrelated twenty-one-file recolour before any commit can land is a gate that gets switched off.',
+  },
+  {
     date: '2026-07-31', kind: 'shipped',
     title: 'NEWS2 is complete — all seven parameters',
     body: 'Added temperature, consciousness level (ACVPU) and supplemental-oxygen status. Until now the risk score used four of the seven parameters and said so on every alert; a complete observation set now drops that caveat automatically. The score also flags when the subject is under 16, because NEWS2 is designed for adults and paediatric practice uses PEWS instead — which matters for any school deployment.',
