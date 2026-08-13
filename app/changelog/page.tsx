@@ -31,6 +31,16 @@ const KIND: Record<Kind, { label: string; color: string }> = {
 // Newest first. Keep this honest — the CORRECTION entries are the point.
 const ENTRIES: Entry[] = [
   {
+    date: '2026-08-13', kind: 'shipped',
+    title: 'Patients no longer see a risk score. Clinicians still do.',
+    body: 'FDA replaced its Clinical Decision Support guidance in January 2026. Two lines in it matter here: software that gives recommendations to patients or caregivers rather than health professionals meets the definition of a device, and software intended for critical, time-sensitive decisions is not considered to allow independent review of its basis. So the dashboard no longer shows a deterioration level, a NEWS2 number, or advice. It shows you your own readings that sit outside your usual range, says your care team can see them, and says plainly that only a clinician can assess them. The score is still computed and still reaches the care team, where the audience is a clinician. The triage classifier now suggests a category and you confirm it, rather than deciding on its own inference — which is also just safer, because the category picks which hospital capability is matched. Full reasoning, including the two places a regulator could reasonably disagree with us, is published in docs/INTENDED_USE.md.',
+  },
+  {
+    date: '2026-08-13', kind: 'shipped',
+    title: 'A FHIR export that validates',
+    body: 'Hospitals running certified EHRs are required to expose FHIR APIs, so that is the interface worth building against. Relay can now produce a FHIR R4 Bundle of a person\u2019s own record with real LOINC codes. It exports and deliberately does not import: receiving records from a hospital would make Relay a HIPAA business associate and trigger a great deal more than we can currently honour. Worth recording how the first version failed \u2014 it used an invented identifier scheme, the tests passed, the types were fine, the build was green, and the HL7 reference validator returned seventeen errors because none of the internal references resolved. It now returns zero.',
+  },
+  {
     date: '2026-08-12', kind: 'shipped',
     title: 'An emergency card that needs no account',
     body: 'Every entrance to Relay Arc asked for an account and a full medical profile before returning anything, and the real payoff only arrives during an emergency. So anyone willing to spend two minutes got nothing for it. /card inverts that: fill in the fields and you immediately get a lock-screen image and a printable wallet card. Phones show their lock wallpaper without being unlocked, so a responder can read blood type and allergies off a locked phone with no app and no signal. Nothing is uploaded — there is no account and no server call, the data stays in your browser, and the images are drawn on your device. There is deliberately no shareable link with the data encoded in it, because a URL carrying someone\'s medical history can be forwarded, logged, or sit in a history forever.',
