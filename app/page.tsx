@@ -73,6 +73,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button onClick={() => router.push('/card')} className="desktop-only nav-link"
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Emergency card
+            </button>
             <button onClick={() => router.push('/features')} className="desktop-only nav-link"
               style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Features
@@ -111,6 +115,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
                 {label}
               </button>
             ))}
+            <button onClick={() => router.push('/card')}
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
+              Emergency card
+            </button>
             <button onClick={() => router.push('/features')}
               style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Features
@@ -456,19 +464,23 @@ export default function Home() {
                   One button. Relay picks the right hospital, sends your records ahead, and gets your family moving — in under a minute.
                 </p>
 
+                {/* The card is the primary action deliberately. Asking a first-time
+                    visitor for an account and a full medical profile before giving
+                    them anything is why the funnel leaked; the card pays out in two
+                    minutes and the profile is offered as the upgrade. */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '32px' }}>
-                  <button onClick={() => router.push('/login?signup=1')}
+                  <button onClick={() => router.push('/card')}
                     style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: T1, fontWeight: 700, fontSize: '15px', padding: '14px 28px', borderRadius: '0px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-                    Create your free profile <span style={{ fontFamily: mono }}>→</span>
+                    Make an emergency card <span style={{ fontFamily: mono }}>→</span>
                   </button>
-                  <button onClick={() => scrollTo('log')}
+                  <button onClick={() => router.push('/login?signup=1')}
                     style={{ background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${T1}`, paddingBottom: '2px' }}>
-                    Watch one emergency, timed
+                    Create your free profile
                   </button>
                 </div>
 
                 <p style={{ color: T3, fontSize: '13px' }}>
-                  Free. No app store needed. · <a href="/demo" style={{ color: T2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Live demo</a>
+                  Two minutes, no account, nothing uploaded. · <button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: 0, color: T2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${BORDER}` }}>Watch one emergency, timed</button> · <a href="/demo" style={{ color: T2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Live demo</a>
                 </p>
               </div>
 
