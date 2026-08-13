@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, AlertCircle, ChevronRight, User } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate } from '@/lib/utils'
+import IntendedUse from '@/components/IntendedUse'
 
 export default function NurseDashboard() {
   const [patients, setPatients] = useState<any[]>([])
@@ -136,6 +137,9 @@ export default function NurseDashboard() {
                 </motion.div>
               )
             })}
+
+            {/* Criterion 4 labelling — must stay visible. See components/IntendedUse.tsx */}
+            <IntendedUse/>
 
             {/* Patient list */}
             <p className="text-[#8A8780] font-mono text-xs uppercase tracking-wider px-1">All patients</p>

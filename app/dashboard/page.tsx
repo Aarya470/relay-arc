@@ -717,57 +717,57 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
-        {/* Crash risk alert */}
+        {/* Readings outside your usual range.
+            REGULATORY: this panel deliberately shows the patient their OWN recorded
+            measurements and nothing else. It does not show a risk level, a NEWS2
+            score, or advice about what to do, because a deterioration
+            classification presented to a patient rather than a clinician meets the
+            FDA device definition — see docs/INTENDED_USE.md §3 and §6.
+            The score IS still computed; it is routed to the care-team surfaces,
+            where the audience is a clinician and Criterion 3 is satisfied.
+            The engine's level is used here only to decide whether the readings are
+            worth surfacing at all, never to label them. Do not reintroduce tiering,
+            colour-coding by severity, or `advice` on this screen. */}
         <AnimatePresence>
           {crashRisk && (
             <motion.div
               variants={fadeUp} initial="hidden" animate="show" exit={{ opacity: 0, scale: 0.97 }}
               style={{
-                background: crashRisk.level === 'high' ? RED_DIM : AMBER_DIM,
-                border: `1px solid ${crashRisk.level === 'high' ? 'rgba(163,52,23,0.18)' : 'rgba(168,114,0,0.18)'}`,
+                background: SURFACE,
+                border: `1px solid ${BORDER}`,
                 borderRadius: '14px', padding: '14px 16px',
                 display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
-              <TrendingDown size={15} color={crashRisk.level === 'high' ? RED : AMBER} style={{ marginTop: '2px', flexShrink: 0 }}/>
+              <TrendingDown size={15} color={T3} style={{ marginTop: '2px', flexShrink: 0 }}/>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ color: crashRisk.level === 'high' ? RED : AMBER, fontWeight: 700, fontSize: '13px', marginBottom: '3px' }}>
-                  {crashRisk.level === 'high' ? 'Vitals need urgent review' : 'Vitals worth checking'}
+                <p style={{ color: T1, fontWeight: 700, fontSize: '13px', marginBottom: '3px' }}>
+                  Some recent readings are outside your usual range
                 </p>
 
-                {/* Each signal shows the actual measurement that earned the points.
-                    The engine is deterministic, so this is the whole reasoning. */}
+                {/* The patient's own measurements, quoted back with the number.
+                    This is their record, not an assessment of it. */}
                 {crashRisk.signals?.length ? (
                   <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 7px' }}>
                     {crashRisk.signals.slice(0, 4).map(s => (
                       <li key={s.code} style={{ display: 'flex', gap: '7px', alignItems: 'baseline', marginBottom: '2px' }}>
-                        <span style={{
-                          color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px',
-                          fontWeight: 700, flexShrink: 0, minWidth: '15px',
-                        }}>+{s.points}</span>
+                        <span style={{ color: T3, fontSize: '12px', flexShrink: 0 }}>·</span>
                         <span style={{ color: T2, fontSize: '12px', lineHeight: 1.5 }}>{s.label}</span>
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <p style={{ color: T2, fontSize: '12px', lineHeight: 1.6, marginBottom: '4px' }}>{crashRisk.reason}</p>
-                )}
+                ) : null}
 
-                <p style={{ color: crashRisk.level === 'high' ? RED : AMBER, fontSize: '12px', fontWeight: 600 }}>{crashRisk.advice}</p>
-
-                {/* Never let this look more authoritative than it is. */}
-                {crashRisk.news2 != null && (
-                  <p style={{
-                    color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',
-                    marginTop: '7px', lineHeight: 1.5, letterSpacing: '0.2px',
-                  }}>
-                    NEWS2 {crashRisk.news2}/20 · {crashRisk.coverage?.measured.length ?? 0} of 7 parameters
-                    {crashRisk.coverage?.missing.length ? ` · no ${crashRisk.coverage.missing.join(', ')}` : ''}
-                    <br/>{crashRisk.partial
-                      ? 'Partial score — can under-estimate. Not a diagnosis.'
-                      : 'Complete observation set. Not a diagnosis.'}
-                    {crashRisk.pediatricCaveat && <><br/>NEWS2 is not validated under 16 — indicative only.</>}
-                  </p>
-                )}
+                <p style={{ color: T2, fontSize: '12px', lineHeight: 1.6 }}>
+                  Your care team can see these readings. Relay Arc does not assess
+                  whether they are serious — only a clinician can.
+                </p>
+                <p style={{
+                  color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',
+                  marginTop: '7px', lineHeight: 1.5, letterSpacing: '0.2px',
+                }}>
+                  If you feel unwell, contact your clinician. In an emergency, call
+                  emergency services first.
+                </p>
               </div>
               <button onClick={() => setCrashRisk(null)}
                 style={{ background: 'none', border: 'none', color: T3, fontSize: '18px', cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>

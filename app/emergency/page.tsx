@@ -44,6 +44,9 @@ export default function Emergency() {
   const [voiceSupported, setVoiceSupported] = useState(false)
   const [transcript, setTranscript] = useState('')
   const [heard, setHeard] = useState<{ evidence: string[]; source: 'device' | 'cloud' } | null>(null)
+  // A classifier suggestion awaiting the user, rather than an executed decision.
+  // See the comment on classifyAndGo.
+  const [pending, setPending] = useState<{ type: string; label: string } | null>(null)
   const [lang, setLang] = useState<LangId>('en')
   const recRef = useRef<any>(null)
   const router = useRouter()
@@ -62,16 +65,44 @@ export default function Emergency() {
     if (listening) { try { recRef.current?.abort() } catch {} ; setListening(false) }
   }
 
-  // Classification runs on-device first — the Relay Triage Engine decides in
-  // well under a millisecond with no network. The language model is consulted
-  // only when the engine is genuinely unsure, and never blocks an emergency.
+  // Classification runs on-device first — the Relay Triage Engine matches in well
+  // under a millisecond with no network. The language model is consulted only when
+  // the engine is genuinely unsure, and never blocks an emergency.
+  //
+  // REGULATORY + SAFETY: the classifier SUGGESTS a category and the person
+  // confirms it. It used to call handleSelect() directly, which made the software
+  // the thing that decided what was happening to someone — a determination about a
+  // patient, made for a patient, in a time-critical context. See
+  // docs/INTENDED_USE.md §6. Reframed as input assistance: the suggestion is
+  // visible, labelled as a suggestion, and overridable.
+  //
+  // It is also simply safer. The category selects which hospital capability is
+  // matched, so a silent misclassification routes someone to a facility that
+  // cannot treat them. A visible two-second window costs two seconds and prevents
+  // that. The call-emergency-services button is unaffected and always available.
+  const suggest = (type: string, evidence: string[], source: 'device' | 'cloud') => {
+    setHeard({ evidence, source })
+    setPending({ type, label: TYPES.find(t => t.id === type)?.label || type })
+    setLoading(false)
+  }
+
+  // Auto-confirm so the common case (the suggestion is right) costs no taps.
+  useEffect(() => {
+    if (!pending) return
+    const t = setTimeout(() => {
+      setPending(null)
+      handleSelect(pending.type)
+    }, 2200)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pending])
+
   const classifyAndGo = async (text: string) => {
     setLoading(true)
     const local = triage(text)
 
     if (!local.abstain) {
-      setHeard({ evidence: local.evidence, source: 'device' })
-      await handleSelect(local.type)
+      suggest(local.type, local.evidence, 'device')
       return
     }
 
@@ -93,8 +124,7 @@ export default function Emergency() {
           clearTimeout(timer)
           const { type } = await res.json()
           if (type) {
-            setHeard({ evidence: local.evidence, source: 'cloud' })
-            await handleSelect(type)
+            suggest(type, local.evidence, 'cloud')
             return
           }
         }
@@ -135,6 +165,8 @@ export default function Emergency() {
   const stopVoice = () => { try { recRef.current?.stop() } catch {} }
 
   const handleSelect = async (type: string) => {
+    // A manual pick always wins over a pending suggestion, and cancels its timer.
+    setPending(null)
     setSelected(type)
     setLoading(true)
     try { sessionStorage.removeItem('relay_user_cancelled_until') } catch {}
@@ -267,11 +299,35 @@ export default function Emergency() {
           </motion.button>
         )}
 
-        {heard && (
+        {heard && !pending && (
           <p style={{ color: T3, fontSize: '12.5px', fontFamily: 'var(--font-mono, monospace)', marginTop: '-6px' }}>
             {heard.evidence.length > 0 ? `matched: ${heard.evidence.join(' · ')}` : 'starting response'}
             {heard.source === 'device' ? ' · on-device' : ' · assisted'}
           </p>
+        )}
+
+        {/* The suggestion, stated as a suggestion. Overridable by tapping any type
+            below, which cancels the auto-continue. */}
+        {pending && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}
+            style={{
+              border: `1px solid ${BORDER}`, borderLeft: `3px solid ${T1}`,
+              padding: '11px 13px', marginTop: '-6px',
+            }}>
+            <p style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>
+              Suggested — starting in a moment
+            </p>
+            <p style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{pending.label}</p>
+            {heard && heard.evidence.length > 0 && (
+              <p style={{ color: T3, fontSize: '11.5px', fontFamily: 'var(--font-mono, monospace)', marginTop: '3px' }}>
+                heard: {heard.evidence.join(' · ')}{heard.source === 'device' ? ' · on-device' : ' · assisted'}
+              </p>
+            )}
+            <p style={{ color: T2, fontSize: '12px', lineHeight: 1.5, marginTop: '6px' }}>
+              Not right? Pick the correct one below — that overrides this.
+            </p>
+          </motion.div>
         )}
 
         {/* Type list — flat hairline rows, no boxes */}
