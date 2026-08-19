@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import FollowLinks from '@/components/FollowLinks'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Menu, X, Phone, MapPin, FileText, Heart, Activity, Pill, Video, TrendingDown, Route, Users } from 'lucide-react'
 
@@ -686,6 +687,8 @@ export default function Home() {
                 <a href="/donate" style={{ display: 'block', color: '#FF6B5E', fontSize: '13px', fontWeight: 700, textDecoration: 'none', marginBottom: '10px' }}>Donate</a>
                 <a href="/demo" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Live demo</a>
                 <a href="/status" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none' }}>System status</a>
+                {/* Renders nothing until lib/social.ts has a URL. */}
+                <div style={{ marginTop: '14px' }}><FollowLinks tone="dark" variant="inline"/></div>
               </div>
             </div>
           </div>
