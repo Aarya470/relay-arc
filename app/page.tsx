@@ -373,27 +373,28 @@ function EmergencyRace() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
-  const [authChecked, setAuthChecked] = useState(false)
   const router = useRouter()
 
+  // SEARCH VISIBILITY: this used to gate the entire page behind `authChecked`,
+  // returning a loading dot until a useEffect resolved the session. useEffect
+  // never runs on the server, so the server-rendered HTML was permanently a blank
+  // white page containing one 8px dot — no headline, no copy, no links, no
+  // headings at all. Every crawler that does not execute JavaScript saw nothing,
+  // which is why the site could not be found by searching for it.
+  //
+  // The redirect is still worth doing, so it still happens; it just no longer
+  // decides whether anything renders. A signed-in visitor briefly sees the
+  // marketing page before being moved to their dashboard, which is a far better
+  // trade than being invisible to search. Do not reintroduce an early return here.
   useEffect(() => {
     const check = async () => {
       const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        const { data } = await supabase.from('profiles').select('id').eq('id', session.user.id).single()
-        router.replace(data ? '/dashboard' : '/onboarding')
-        return
-      }
-      setAuthChecked(true)
+      if (!session) return
+      const { data } = await supabase.from('profiles').select('id').eq('id', session.user.id).single()
+      router.replace(data ? '/dashboard' : '/onboarding')
     }
     check()
   }, [router])
-
-  if (!authChecked) return (
-    <div style={{ minHeight: '100dvh', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: RED }}/>
-    </div>
-  )
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 

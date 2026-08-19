@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
 import MeetingAlert from '@/components/MeetingAlert'
 import LegalModal from '@/components/LegalModal'
+import { SITE_URL } from '@/lib/site'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -21,7 +22,11 @@ const mono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://relay-arc.vercel.app'),
+  // Driven by NEXT_PUBLIC_SITE_URL so attaching a custom domain does not require
+  // a code change, and so canonical URLs point at one origin rather than being
+  // split between the domain and the vercel.app subdomain. See lib/site.ts.
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: '/' },
   title: 'Relay Arc — Cardiac emergency response',
   description: 'Relay detects the cardiac crisis, finds the right hospital for your condition, sends your medical profile ahead, and navigates your family there — in under 60 seconds.',
   openGraph: {
