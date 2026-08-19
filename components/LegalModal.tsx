@@ -1,23 +1,53 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PRIVACY_POLICY, TERMS_OF_SERVICE } from '@/lib/legal'
 
 const STORAGE_KEY = 'relay_arc_legal_v1'
 
+/**
+ * Where the consent gate is allowed to appear.
+ *
+ * WHY THIS IS AN ALLOWLIST AND NOT A BLOCKLIST
+ * This component is mounted in the root layout, so it used to interrupt every
+ * visitor on every page — somebody reading /features or watching the demo got a
+ * two-step legal wall before seeing anything. That is bad for a project whose
+ * whole problem is that nobody has looked at it yet, and it is also the wrong
+ * moment: a person reading a marketing page has not given us anything.
+ *
+ * Consent matters at the point where someone creates an account and starts
+ * entering medical information, so the gate now appears only on the routes where
+ * that actually happens. An allowlist rather than a blocklist because the failure
+ * modes are asymmetric: forgetting to add a new public page would wrongly show the
+ * wall again, while forgetting to add a new signup route would silently skip
+ * consent. The first is annoying; the second is a problem. So new routes default
+ * to "no gate" and account-creation routes have to be named explicitly.
+ *
+ * /card is deliberately absent: it takes no account and uploads nothing, so there
+ * is nothing to consent to.
+ */
+const GATED_ROUTES = ['/login', '/onboarding']
 
+const needsGate = (pathname: string | null) =>
+  !!pathname && GATED_ROUTES.some(r => pathname === r || pathname.startsWith(`${r}/`))
 
 export default function LegalModal() {
   // step 1 = privacy policy, step 2 = terms of service, done = hidden
   const [step, setStep] = useState<1 | 2 | 'done'>('done')
   const [canAccept, setCanAccept] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  // usePathname is safe here. Note it is NOT useSearchParams, which would force a
+  // bailout to client rendering and re-break the server-rendered HTML that search
+  // engines read — see the comment in app/page.tsx.
+  const pathname = usePathname()
 
   useEffect(() => {
+    if (!needsGate(pathname)) { setStep('done'); return }
     try {
       if (!localStorage.getItem(STORAGE_KEY)) setStep(1)
     } catch { setStep(1) }
-  }, [])
+  }, [pathname])
 
   // Reset "read" flag and scroll to top whenever the step changes
   useEffect(() => {
