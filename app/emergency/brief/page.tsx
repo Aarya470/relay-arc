@@ -4,8 +4,9 @@ import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
-import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck } from 'lucide-react'
+import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck, Activity } from 'lucide-react'
 import { toast } from 'sonner'
+import { autonomicHandoff } from '@/lib/autonomic'
 
 const EMERGENCY_LABELS: Record<string, string> = {
   chest_pain: 'Chest pain',
@@ -41,6 +42,17 @@ function BriefContent() {
   const [authChecked, setAuthChecked] = useState(false)
 
   const emergencyLabel = EMERGENCY_LABELS[type] || 'Emergency'
+
+  // Autonomic context for staff, derived from the diagnosis text and the
+  // emergency type. Declared above buildPlainText because both the printed card
+  // and the copyable text have to carry the same content — a paper card that
+  // says more than the text a nurse pastes into a chart is a way for the caution
+  // line to go missing from the version that gets kept.
+  const handoff = autonomicHandoff({
+    diagnosis: profile?.diagnosis,
+    emergencyType: type,
+    baselineRestingHr: null,
+  })
 
   useEffect(() => {
     const init = async () => {
@@ -118,6 +130,15 @@ function BriefContent() {
       '',
       `EMERGENCY TYPE: ${emergencyLabel}`,
       hospitalName ? `DESTINATION: ${hospitalName}` : '',
+      '',
+      handoff.applies
+        ? [
+            'AUTONOMIC CONTEXT FOR STAFF:',
+            ...handoff.lines.map(l => `  • ${l}`),
+            '',
+            `  CAUTION: ${handoff.caution}`,
+          ].join('\n')
+        : '',
       '',
       `EMERGENCY CONTACT: ${contactLine}`,
       '',
@@ -278,6 +299,42 @@ function BriefContent() {
             </p>
           </div>
         </Section>
+
+        {/* Autonomic context — only when the profile suggests it applies */}
+        {handoff.applies && (
+          <Section>
+            <SectionLabel>AUTONOMIC CONTEXT FOR STAFF</SectionLabel>
+            <ul className="space-y-2 mt-1">
+              {handoff.lines.map((l, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <Activity
+                    className="w-3.5 h-3.5 flex-shrink-0 mt-1"
+                    style={{ color: '#5F7049' }}
+                  />
+                  <span className="text-sm leading-relaxed" style={{ color: '#141413' }}>
+                    {l}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {/* Never conditional, never collapsed. A card that only says the
+                tachycardia is expected is how a real event gets waved through. */}
+            <div
+              className="mt-3 rounded-xl p-3"
+              style={{ background: 'rgba(163,52,23,0.07)', border: '1px solid rgba(163,52,23,0.2)' }}
+            >
+              <p
+                className="text-xs font-bold uppercase tracking-widest mb-1"
+                style={{ color: '#A33417', letterSpacing: '0.13em' }}
+              >
+                Caution
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: '#5C5A52' }}>
+                {handoff.caution}
+              </p>
+            </div>
+          </Section>
+        )}
 
         {/* Emergency contacts */}
         <Section>

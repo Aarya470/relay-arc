@@ -73,6 +73,20 @@ export interface RiskAssessment {
   news2: number
   /** Points from the unvalidated personal-baseline layer. */
   baselinePoints: number
+  /**
+   * The NEWS2 aggregate recomputed with the pulse subscore taken against this
+   * person's own resting pulse instead of the generic table. Null when no
+   * baseline is available.
+   *
+   * Presentational only. `level` is decided by `news2` and nothing else, so this
+   * can never talk the app down from escalating. Shown to clinicians beside the
+   * raw score, never in place of it.
+   */
+  news2PersonalPulse: number | null
+  /** Where the baseline used came from, so a clinician can weigh it. */
+  baselineSource: 'declared' | 'measured' | null
+  /** The resting pulse the personal comparison was made against. */
+  baselineRestingHr: number | null
   /** True when any single NEWS2 parameter scored 3 — an escalation trigger. */
   redFlag: boolean
   signals: Signal[]
@@ -168,6 +182,40 @@ export function scoreSupplementalOxygen(onOxygen: boolean): number {
   return onOxygen ? 2 : 0
 }
 
+// ─── personal pulse subscore (NOT NEWS2) ──────────────────────────────────────
+//
+// WHY THIS EXISTS
+// NEWS2 has one pulse table for every human being. A resting pulse of 110 scores
+// 1, and 135 scores 3 and trips the red flag. For a large share of the people
+// this app is built for, 110 sitting still is an ordinary Tuesday. The generic
+// table therefore reports a POTS patient as deteriorating on days when nothing
+// whatsoever has changed, and a score that cries wolf every day is a score
+// people stop reading — which is the actual danger.
+//
+// WHAT THIS IS
+// The same 0–3 point structure applied to the *deviation* from that person's own
+// recorded resting pulse instead of to the absolute number.
+//
+// WHAT THIS IS NOT
+// It is not NEWS2, it is not validated, and it is not published anywhere. It is a
+// heuristic and it is labelled as one everywhere it surfaces. Critically it is
+// never allowed to change `level`: escalation is decided by the raw NEWS2
+// aggregate alone. A personalised score that could talk the app *down* from
+// escalating would be a way for a genuinely deteriorating patient with a high
+// baseline to be reassured to death. So this can only ever add context to a
+// number, never subtract urgency from one.
+//
+// Bands are symmetric because a pulse that has fallen well below someone's own
+// normal is as much of a change as one that has risen, and in a patient on rate
+// control it can matter more.
+export function scorePulseAgainstBaseline(hr: number, baselineHr: number): number {
+  const delta = Math.abs(hr - baselineHr)
+  if (delta >= 30) return 3
+  if (delta >= 20) return 2
+  if (delta >= 10) return 1
+  return 0
+}
+
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 function median(xs: number[]): number {
@@ -205,6 +253,30 @@ export interface AssessOptions {
    * practice uses PEWS instead. This matters directly for any school deployment.
    */
   ageYears?: number | null
+  /**
+   * Resting pulse the person has recorded as normal for them, from their medical
+   * profile.
+   *
+   * Preferred over the median of history when history is thin. Once there are
+   * enough prior readings the measured median wins, because what someone
+   * actually logs beats what they once typed into a form — a declared baseline
+   * is a memory, and it goes stale as treatment changes.
+   */
+  declaredRestingHr?: number | null
+  /**
+   * A supine-then-standing pulse pair taken during this episode, from
+   * lib/autonomic. Contributes to the baseline layer, never to NEWS2 — an
+   * orthostatic delta is not one of NEWS2's seven parameters and must not be
+   * smuggled into its aggregate.
+   */
+  orthostatic?: {
+    hrDelta: number
+    threshold: number
+    thresholdBand: string
+    meetsHrCriterion: boolean
+    orthostaticHypotension: boolean | null
+    outsideWindow: boolean
+  } | null
 }
 
 /**
@@ -262,9 +334,13 @@ export function assessRisk(samples: VitalsSample[], opts: AssessOptions = {}): R
     if (p > 0) add('news2_sbp', `Systolic blood pressure ${sbp} mmHg`, p, NEWS2_BASIS)
   } else missing.push('systolic blood pressure')
 
+  // Held so the personal-baseline variant can be computed by subtracting this
+  // one subscore back out of the aggregate rather than re-walking every parameter.
+  let rawPulsePoints: number | null = null
   if (hr != null) {
     measured.push('pulse')
     const p = scorePulse(hr)
+    rawPulsePoints = p
     news2 += p; if (p === 3) redFlag = true
     if (p > 0) add('news2_pulse', `Pulse ${hr} bpm`, p, NEWS2_BASIS)
   } else missing.push('pulse')
@@ -320,13 +396,52 @@ export function assessRisk(samples: VitalsSample[], opts: AssessOptions = {}): R
     .map(s => num(s.heart_rate))
     .filter((v): v is number => v != null)
 
-  if (hr != null && priorHr.length >= 4) {
-    const base = median(priorHr)
+  // Which baseline to compare against.
+  //
+  // Measured wins when there is enough of it. A declared baseline is what someone
+  // typed into a form once, and it goes stale the moment a beta blocker is
+  // started or a dose changes, whereas the median of four recent readings cannot.
+  // But thin history used to mean no personal comparison at all, which is worst
+  // for exactly the new user whose absolute numbers look alarming and are normal
+  // for them — so the declared figure now fills that gap.
+  const declared = num(opts.declaredRestingHr)
+  let baselineRestingHr: number | null = null
+  let baselineSource: 'declared' | 'measured' | null = null
+  if (priorHr.length >= 4) {
+    baselineRestingHr = Math.round(median(priorHr))
+    baselineSource = 'measured'
+  } else if (declared != null) {
+    baselineRestingHr = Math.round(declared)
+    baselineSource = 'declared'
+  }
+
+  if (hr != null && baselineRestingHr != null) {
+    const base = baselineRestingHr
     const delta = Math.round(hr - base)
+    const origin = baselineSource === 'declared' ? 'recorded normal' : 'usual'
     if (delta >= 15) {
-      bAdd('baseline_hr_surge', `Pulse ${delta} bpm above your usual ${Math.round(base)} bpm`, 2)
+      bAdd('baseline_hr_surge', `Pulse ${delta} bpm above your ${origin} ${base} bpm`, 2)
     } else if (delta >= 10) {
-      bAdd('baseline_hr_up', `Pulse ${delta} bpm above your usual ${Math.round(base)} bpm`, 1)
+      bAdd('baseline_hr_up', `Pulse ${delta} bpm above your ${origin} ${base} bpm`, 1)
+    }
+  }
+
+  // Orthostatic delta. Sits in the baseline layer, not in NEWS2 — the aggregate
+  // has seven named parameters and this is not one of them.
+  const orth = opts.orthostatic
+  if (orth && !orth.outsideWindow) {
+    if (orth.meetsHrCriterion) {
+      bAdd(
+        'orthostatic_hr',
+        `Pulse rose ${orth.hrDelta} bpm on standing, at or above the ${orth.threshold} bpm mark for ${orth.thresholdBand}`,
+        1
+      )
+    }
+    // Scored higher than the tachycardia itself, because a genuine blood-pressure
+    // drop on standing is a different and more immediately dangerous finding than
+    // a rise in pulse, and it is the one that ends with someone on the floor.
+    if (orth.orthostaticHypotension) {
+      bAdd('orthostatic_hypotension', 'Blood pressure fell enough on standing to meet the definition of orthostatic hypotension', 2)
     }
   }
 
@@ -363,6 +478,17 @@ export function assessRisk(samples: VitalsSample[], opts: AssessOptions = {}): R
       bAdd('checkin_gap', `No check-in for ${Math.floor(gapDays)} days (you usually log every ${usualGap.toFixed(0)})`, 1)
     }
   }
+
+  // ── the personalised view of the same reading ───────────────────────────────
+  // Swap the one pulse subscore for the baseline-relative one. Deliberately
+  // computed AFTER escalation inputs are already fixed, and deliberately not
+  // consulted below: it is a second opinion printed next to the first, not a
+  // vote. If this ever appears in the `level` decision, the safety property the
+  // comment on scorePulseAgainstBaseline describes has been lost.
+  const news2PersonalPulse =
+    hr != null && rawPulsePoints != null && baselineRestingHr != null
+      ? news2 - rawPulsePoints + scorePulseAgainstBaseline(hr, baselineRestingHr)
+      : null
 
   // ── escalation ──────────────────────────────────────────────────────────────
   // NEWS2's published bands drive the outcome. The baseline layer can nudge low
@@ -402,6 +528,7 @@ export function assessRisk(samples: VitalsSample[], opts: AssessOptions = {}): R
   return {
     level, reason, advice,
     news2, baselinePoints, redFlag, signals,
+    news2PersonalPulse, baselineSource, baselineRestingHr,
     coverage: { measured, missing },
     partial,
     pediatricCaveat,

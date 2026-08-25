@@ -39,6 +39,12 @@ export const abs = (path = '/') =>
 export const PUBLIC_ROUTES: { path: string; priority: number; changeFrequency: 'daily' | 'weekly' | 'monthly' | 'yearly' }[] = [
   { path: '/',            priority: 1.0, changeFrequency: 'weekly'  },
   { path: '/card',        priority: 0.9, changeFrequency: 'monthly' },
+  // Both rank high on purpose. They answer questions people actually type —
+  // "is my POTS flare an emergency", "what if I can't pay the ER" — rather than
+  // describing the product, and neither needs an account, so a search visitor
+  // gets something usable on arrival instead of a signup wall.
+  { path: '/flare',       priority: 0.9, changeFrequency: 'monthly' },
+  { path: '/rights',      priority: 0.9, changeFrequency: 'monthly' },
   { path: '/features',    priority: 0.8, changeFrequency: 'monthly' },
   { path: '/engineering', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/changelog',   priority: 0.7, changeFrequency: 'weekly'  },
