@@ -51,13 +51,13 @@ const EMERGENCY_LABELS: Record<string, string> = {
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#FAF9F5',
+  bg:          '#EFF2E8',
   card:        '#FFFFFF',
   card2:       '#FFFFFF',
   border:      '#F2F0E8',
   textPrimary: '#141413',
   textSec:     '#5C5A52',
-  textMuted:   '#8A8780',
+  textMuted:   '#84827A',
   red:         '#A33417',
   redSoft:     'rgba(163,52,23,0.12)',
   redGlow:     'none',
@@ -740,7 +740,7 @@ function RoutingPage() {
           fontSize: '13px',
           padding: '11px 24px',
           borderRadius: '12px',
-          border: `1px solid #E5E2D9`,
+          border: `1px solid #DCE1D0`,
           cursor: 'pointer',
         }}
       >
@@ -1160,7 +1160,7 @@ function RoutingPage() {
                   {fmtElapsed(elapsed)}
                 </span>
                 <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
-                  style={{ background: '#FAF9F5', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  style={{ background: '#EFF2E8', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <X size={16} color={T.textSec}/>
                 </button>
               </div>
@@ -1196,7 +1196,7 @@ function RoutingPage() {
 
 export default function RoutingPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#FAF9F5' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#EFF2E8' }} />}>
       <RoutingPage />
     </Suspense>
   )

@@ -1,0 +1,175 @@
+'use client'
+// Date entry that does not make you scroll back forty years.
+//
+// WHY NOT `<input type="date">`
+// It was what onboarding used, and it is the wrong control for the two dates
+// this app asks for. The browser hands rendering to the OS, so it looks
+// different on every device and matches nothing else on the page, and on Android
+// it is a spinner. Worse, both fields here are dates in the *past*: a date of
+// birth is thirty or fifty years back, and the native picker opens on the
+// current month with arrows that move one month at a time. That is six hundred
+// taps to reach 1974. People give up, or they type a wrong year and never
+// notice.
+//
+// WHAT THIS DOES INSTEAD
+// Three separate inputs — day, month, year — because that is how a person says a
+// date out loud, and each one is reachable in a single tap. The month is a
+// select, so 03 versus 3 versus March stops being a guess, and the ambiguity
+// between US and rest-of-world ordering disappears with it. Focus advances
+// automatically once a segment can no longer take another digit.
+//
+// WHY THE YEAR FIELD IS PLAIN NUMERIC AND NOT A DROPDOWN
+// A hundred-item year dropdown is its own scrolling problem. Typing four digits
+// is faster than any list, and it is the one segment where a keyboard genuinely
+// wins.
+//
+// The value in and out is always ISO yyyy-mm-dd, so this drops into anything
+// that used the native input without touching the calling code or the database.
+import { useEffect, useMemo, useRef, useState } from 'react'
+
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#84827A'
+const BORDER = '#DCE1D0', WHITE = '#FFFFFF', CRIT = '#A33417'
+
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+
+/** Days in a month, leap years included — 29 February is a real birthday. */
+function daysInMonth(year: number, month1: number): number {
+  if (!year || !month1) return 31
+  return new Date(year, month1, 0).getDate()
+}
+
+function parseISO(v: string): { d: string; m: string; y: string } {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || '')
+  if (!m) return { d: '', m: '', y: '' }
+  return { y: m[1], m: m[2], d: m[3] }
+}
+
+export default function DateField({
+  value, onChange, label, hint, maxYear, minYear = 1900, id,
+}: {
+  value: string
+  onChange: (iso: string) => void
+  label: string
+  hint?: string
+  /** Defaults to this year. Neither a birthday nor a past surgery is in the future. */
+  maxYear?: number
+  minYear?: number
+  id?: string
+}) {
+  const thisYear = new Date().getFullYear()
+  const hiY = maxYear ?? thisYear
+
+  const init = parseISO(value)
+  const [d, setD] = useState(init.d)
+  const [m, setM] = useState(init.m)
+  const [y, setY] = useState(init.y)
+
+  const dayRef = useRef<HTMLInputElement>(null)
+  const yearRef = useRef<HTMLInputElement>(null)
+
+  // Re-sync when the parent replaces the value, e.g. a profile finishing its
+  // load after the field has already rendered empty.
+  useEffect(() => {
+    const p = parseISO(value)
+    if (p.y || p.m || p.d) { setD(p.d); setM(p.m); setY(p.y) }
+  }, [value])
+
+  const error = useMemo(() => {
+    if (!d && !m && !y) return null            // empty is not an error, it is unfilled
+    if (!d || !m || !y) return null            // mid-typing, do not scold
+    const yi = Number(y), mi = Number(m), di = Number(d)
+    if (yi < minYear || yi > hiY) return `Year must be between ${minYear} and ${hiY}`
+    if (di > daysInMonth(yi, mi)) return `${MONTHS[mi - 1]} ${yi} only has ${daysInMonth(yi, mi)} days`
+    return null
+  }, [d, m, y, minYear, hiY])
+
+  // Push upward only when the date is complete and valid, so a half-typed year
+  // never lands in the database as 0002-05-14.
+  useEffect(() => {
+    if (d && m && y && !error) {
+      const iso = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`
+      if (iso !== value) onChange(iso)
+    } else if (!d && !m && !y && value) {
+      onChange('')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [d, m, y, error])
+
+  const seg: React.CSSProperties = {
+    border: 'none', outline: 'none', background: 'transparent',
+    fontSize: 17, fontWeight: 600, color: INK, fontFamily: 'inherit',
+    padding: '12px 0', textAlign: 'center', minWidth: 0,
+  }
+
+  return (
+    <div>
+      <label htmlFor={id} style={{ display: 'block', fontSize: 13.5, fontWeight: 700, color: INK, marginBottom: hint ? 3 : 7 }}>
+        {label}
+      </label>
+      {hint && <p style={{ fontSize: 12.5, color: INK2, lineHeight: 1.5, marginBottom: 8 }}>{hint}</p>}
+
+      <div style={{
+        display: 'grid', gridTemplateColumns: '58px 1fr 74px', alignItems: 'center',
+        background: WHITE, border: `1.5px solid ${error ? CRIT : BORDER}`, borderRadius: 10,
+        overflow: 'hidden',
+      }}>
+        <input
+          id={id}
+          ref={dayRef}
+          inputMode="numeric"
+          placeholder="DD"
+          maxLength={2}
+          value={d}
+          onChange={e => {
+            const v = e.target.value.replace(/\D/g, '').slice(0, 2)
+            setD(v)
+            // Two digits, or a leading digit that cannot start a valid day —
+            // 4 through 9 can only be a single-digit day — so move on.
+            if (v.length === 2 || (v.length === 1 && Number(v) > 3)) {
+              (document.getElementById(`${id}-month`) as HTMLSelectElement | null)?.focus()
+            }
+          }}
+          onBlur={() => { if (d.length === 1) setD(d.padStart(2, '0')) }}
+          style={{ ...seg, borderRight: `1px solid ${BORDER}` }}
+          aria-label="Day"
+        />
+
+        <select
+          id={`${id}-month`}
+          value={m}
+          onChange={e => { setM(e.target.value); if (e.target.value) yearRef.current?.focus() }}
+          style={{
+            ...seg, textAlign: 'left', paddingLeft: 12, paddingRight: 8,
+            cursor: 'pointer', appearance: 'none',
+            color: m ? INK : INK3, borderRight: `1px solid ${BORDER}`,
+            width: '100%',
+          }}
+          aria-label="Month"
+        >
+          <option value="">Month</option>
+          {MONTHS.map((name, i) => (
+            <option key={name} value={String(i + 1).padStart(2, '0')}>{name}</option>
+          ))}
+        </select>
+
+        <input
+          ref={yearRef}
+          inputMode="numeric"
+          placeholder="YYYY"
+          maxLength={4}
+          value={y}
+          onChange={e => setY(e.target.value.replace(/\D/g, '').slice(0, 4))}
+          style={seg}
+          aria-label="Year"
+        />
+      </div>
+
+      {error && (
+        <p style={{ fontSize: 12.5, color: CRIT, marginTop: 6, lineHeight: 1.5 }}>{error}</p>
+      )}
+    </div>
+  )
+}

@@ -4,12 +4,14 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, ArrowRight, Plus, Loader2, Heart, Zap, Brain, Activity, HeartPulse, Check } from 'lucide-react'
+import { Activity, ArrowLeft, ArrowRight, Brain, Check, Heart, HeartPulse, Loader2, Plus, Zap } from 'lucide-react'
+import DateField from '@/components/DateField'
+import Mark from '@/components/Mark'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#8A8780'
-const BORDER = '#E5E2D9'
+const T3 = '#84827A'
+const BORDER = '#DCE1D0'
 const ACCENT = '#5F7049'
 const RED = '#A33417'
 const mono = 'var(--font-mono, monospace)'
@@ -136,9 +138,7 @@ export default function Onboarding() {
 
         {/* Brand */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '40px' }}>
-          <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Heart size={13} color="white" fill="white" strokeWidth={0}/>
-          </div>
+          <Mark size={26} />
           <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
         </div>
 
@@ -161,7 +161,13 @@ export default function Onboarding() {
               style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
             >
               <div>{label('Full name')}<input style={inputStyle} placeholder="Asha Kulkarni" value={form.full_name} onChange={e => update('full_name', e.target.value)}/></div>
-              <div>{label('Date of birth')}<input type="date" style={inputStyle} value={form.date_of_birth} onChange={e => update('date_of_birth', e.target.value)}/></div>
+              <DateField
+                id="dob"
+                label="Date of birth"
+                hint="Type the day, pick the month, type the year."
+                value={form.date_of_birth}
+                onChange={v => update('date_of_birth', v)}
+              />
               <div>{label('Phone')}<input type="tel" style={inputStyle} placeholder="+1 555 000 0000" value={form.phone} onChange={e => update('phone', e.target.value)}/></div>
 
               <div>
@@ -243,7 +249,13 @@ export default function Onboarding() {
                 })}
               </div>
 
-              <div>{label('Surgery date — if applicable')}<input type="date" style={inputStyle} value={form.surgery_date} onChange={e => update('surgery_date', e.target.value)}/></div>
+              <DateField
+                id="surgery"
+                label="Surgery date — if applicable"
+                hint="Leave blank if this does not apply to you."
+                value={form.surgery_date}
+                onChange={v => update('surgery_date', v)}
+              />
               <div>{label('Known allergies')}<input style={inputStyle} placeholder="Penicillin, sulfa drugs…" value={form.allergies} onChange={e => update('allergies', e.target.value)}/></div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>

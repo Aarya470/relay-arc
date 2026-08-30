@@ -31,7 +31,7 @@ export default function NurseLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF9F5] px-6 py-12 flex flex-col">
+    <div className="min-h-screen bg-[#EFF2E8] px-6 py-12 flex flex-col">
 
       <motion.button
         whileTap={{ scale: 0.9 }}
@@ -51,39 +51,39 @@ export default function NurseLogin() {
         </div>
 
         <h1 className="text-[#141413] text-3xl font-bold mb-1">Care team login</h1>
-        <p className="text-[#8A8780] text-sm mb-8">Access requires a valid care team code</p>
+        <p className="text-[#84827A] text-sm mb-8">Access requires a valid care team code</p>
 
         <div className="space-y-3">
           <div className="relative">
-            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8A8780]"/>
+            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#84827A]"/>
             <input
               type="email"
               placeholder="Email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-[#788C5D]/40 transition text-sm"
+              className="w-full bg-white border border-[#DCE1D0] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#84827A] outline-none focus:border-[#788C5D]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
-            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8A8780]"/>
+            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#84827A]"/>
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-[#788C5D]/40 transition text-sm"
+              className="w-full bg-white border border-[#DCE1D0] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#84827A] outline-none focus:border-[#788C5D]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8A8780] text-sm">🔑</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#84827A] text-sm">🔑</span>
             <input
               type="password"
               placeholder="Care team access code"
               value={code}
               onChange={e => setCode(e.target.value)}
-              className="w-full bg-white border border-[#E5E2D9] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#8A8780] outline-none focus:border-[#788C5D]/40 transition text-sm"
+              className="w-full bg-white border border-[#DCE1D0] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#84827A] outline-none focus:border-[#788C5D]/40 transition text-sm"
             />
           </div>
 

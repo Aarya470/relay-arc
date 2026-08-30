@@ -1,12 +1,13 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { Heart, RefreshCw, ArrowLeft, Check, X, AlertTriangle } from 'lucide-react'
+import { RefreshCw, ArrowLeft, Check, X, AlertTriangle } from 'lucide-react'
+import Mark from '@/components/Mark'
 import { useRouter } from 'next/navigation'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#8A8780'
-const BORDER = '#E5E2D9'
+const T3 = '#84827A'
+const BORDER = '#DCE1D0'
 const RED = '#A33417'
 const GREEN = '#5F7049'
 const AMBER = '#A87200'
@@ -41,9 +42,7 @@ export default function StatusPage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '44px' }}>
           <button onClick={() => router.push('/')}
             style={{ display: 'flex', alignItems: 'center', gap: '9px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-            <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Heart size={13} color="white" fill="white" strokeWidth={0}/>
-            </div>
+            <Mark size={26} />
             <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
           </button>
           <button onClick={() => router.push('/')}

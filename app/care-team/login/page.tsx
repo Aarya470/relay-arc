@@ -51,7 +51,7 @@ export default function CareTeamLogin() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FAF9F5', padding: '56px 24px 32px', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#EFF2E8', padding: '56px 24px 32px', display: 'flex', flexDirection: 'column' }}>
       <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/login')}
         style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px' }}>
         <ArrowLeft size={16} color="#5C5A52"/>
@@ -70,12 +70,12 @@ export default function CareTeamLogin() {
         {mode === 'signup' && (
           <>
             <div style={{ position: 'relative' }}>
-              <User size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#8A8780' }}/>
+              <User size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#84827A' }}/>
               <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)}
-                style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
+                style={{ width: '100%', background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
             </div>
             <select value={role} onChange={e => setRole(e.target.value)}
-              style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px', color: '#141413', fontSize: '14px', outline: 'none' }}>
+              style={{ width: '100%', background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '16px', padding: '16px', color: '#141413', fontSize: '14px', outline: 'none' }}>
               <option>Nurse</option>
               <option>Doctor</option>
               <option>Care coordinator</option>
@@ -85,21 +85,21 @@ export default function CareTeamLogin() {
         )}
 
         <div style={{ position: 'relative' }}>
-          <Mail size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#8A8780' }}/>
+          <Mail size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#84827A' }}/>
           <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)}
-            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
+            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <div style={{ position: 'relative' }}>
-          <Lock size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#8A8780' }}/>
+          <Lock size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#84827A' }}/>
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}
-            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
+            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <div style={{ position: 'relative' }}>
           <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔑</span>
           <input type="password" placeholder="Care team access code" value={code} onChange={e => setCode(e.target.value)}
-            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
+            style={{ width: '100%', background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <motion.button whileTap={{ scale: 0.97 }} onClick={handleLogin} disabled={loading}

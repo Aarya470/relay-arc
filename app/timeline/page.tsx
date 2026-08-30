@@ -92,7 +92,7 @@ export default function Timeline() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100dvh', background: '#FAF9F5', padding: '80px 16px 100px', maxWidth: '720px', margin: '0 auto' }}>
+      <div style={{ minHeight: '100dvh', background: '#EFF2E8', padding: '80px 16px 100px', maxWidth: '720px', margin: '0 auto' }}>
         {[1, 2, 3, 4].map((i) => (
           <Skeleton key={i} style={{ height: '64px', borderRadius: '16px', background: '#F2F0E8', marginBottom: '8px' }} />
         ))}
@@ -101,7 +101,7 @@ export default function Timeline() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FAF9F5', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', paddingBottom: '100px', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
       <div style={{ padding: '56px 20px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -111,7 +111,7 @@ export default function Timeline() {
             </motion.button>
             <div>
               <h1 style={{ color: '#141413', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Recovery Timeline</h1>
-              <p style={{ color: '#8A8780', fontSize: '12px' }}>{cachedDate ? 'Generated today' : 'Personalized for you'}</p>
+              <p style={{ color: '#84827A', fontSize: '12px' }}>{cachedDate ? 'Generated today' : 'Personalized for you'}</p>
             </div>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={forceRefresh} disabled={generating}
@@ -152,7 +152,7 @@ export default function Timeline() {
               <motion.div key={index} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.07, ...spring }}
                 style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                 <div style={{ paddingTop: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#FAF9F5', border: `2px solid ${dotBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isCurrent ? '0 0 14px rgba(120,140,93,0.35)' : isPast ? '0 0 8px rgba(120,140,93,0.20)' : 'none' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#EFF2E8', border: `2px solid ${dotBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isCurrent ? '0 0 14px rgba(120,140,93,0.35)' : isPast ? '0 0 8px rgba(120,140,93,0.20)' : 'none' }}>
                     {isPast ? <CheckCircle2 size={14} color="#5F7049" />
                       : isCurrent ? <motion.div animate={{ scale: [1, 1.45, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 2, repeat: Infinity }}
                           style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#5F7049' }} />
@@ -172,19 +172,19 @@ export default function Timeline() {
                           <span style={{ background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.22)', color: '#5F7049', fontSize: '9px', padding: '2px 8px', borderRadius: '99px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>DONE</span>
                         )}
                       </div>
-                      <p style={{ color: '#8A8780', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
+                      <p style={{ color: '#84827A', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
                     </div>
                     <motion.div animate={{ rotate: expanded === index ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ flexShrink: 0 }}>
-                      <ChevronDown size={15} color="#8A8780" />
+                      <ChevronDown size={15} color="#84827A" />
                     </motion.div>
                   </motion.button>
                   <AnimatePresence>
                     {expanded === index && (
                       <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.22 }} style={{ overflow: 'hidden' }}>
-                        <div style={{ padding: '14px 16px 16px', borderTop: '1px solid #E5E2D9', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                        <div style={{ padding: '14px 16px 16px', borderTop: '1px solid #DCE1D0', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                           {[
-                            { label: "What's normal", items: phase.normal, color: '#5C5A52', dot: '#8A8780' },
+                            { label: "What's normal", items: phase.normal, color: '#5C5A52', dot: '#84827A' },
                             { label: 'Watch out for', items: phase.watchout, color: '#A33417', dot: '#A33417' },
                             { label: 'What to do', items: phase.todo, color: '#5F7049', dot: '#5F7049' },
                           ].map((section, si) => (
@@ -209,7 +209,7 @@ export default function Timeline() {
         </div>
         {!generating && timeline.length === 0 && (
           <div style={{ textAlign: 'center', padding: '56px 0' }}>
-            <p style={{ color: '#8A8780', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
+            <p style={{ color: '#84827A', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
             <button onClick={forceRefresh} style={{ color: '#5F7049', fontSize: '13px', fontWeight: 700, background: 'none', border: '1px solid rgba(120,140,93,0.30)', borderRadius: '10px', padding: '8px 16px', cursor: 'pointer' }}>
               Try again
             </button>

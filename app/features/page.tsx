@@ -13,8 +13,8 @@ import { DispatchScene, OnDeviceScene, RelayScene } from '@/components/viz/Scene
 import { Flow } from '@/components/viz/Flow'
 import { BarChart, StepChart, Donut } from '@/components/viz/Chart'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#8A8780'
-const BORDER = '#E5E2D9', CREAM = '#FAF9F5'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#84827A'
+const BORDER = '#DCE1D0', CREAM = '#EFF2E8'
 const GREEN = '#788C5D', GREEN_DEEP = '#5F7049'
 const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#A87200'
 const mono = 'var(--font-mono, monospace)'

@@ -179,7 +179,7 @@ function RecoveryContent() {
   const protocol = PROTOCOLS[type] || PROTOCOLS.other
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FAF9F5' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8' }}>
       {/* Green "You're safe" header */}
       <div
         style={{
@@ -194,7 +194,7 @@ function RecoveryContent() {
           onClick={() => router.push('/dashboard')}
           style={{
             padding: '4px', borderRadius: '50%', background: 'none',
-            border: 'none', cursor: 'pointer', color: '#FAF9F5',
+            border: 'none', cursor: 'pointer', color: '#EFF2E8',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
           aria-label="Back to dashboard"
@@ -202,8 +202,8 @@ function RecoveryContent() {
           <ChevronLeft style={{ width: '20px', height: '20px' }} />
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle style={{ width: '20px', height: '20px', color: '#FAF9F5' }} />
-          <span style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#FAF9F5' }}>
+          <CheckCircle style={{ width: '20px', height: '20px', color: '#EFF2E8' }} />
+          <span style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#EFF2E8' }}>
             You&apos;re safe
           </span>
         </div>
@@ -307,7 +307,7 @@ function RecoveryContent() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               width: '100%', padding: '12px', borderRadius: '12px',
               fontSize: '14px', fontWeight: 600, textDecoration: 'none',
-              background: '#5F7049', color: '#FAF9F5',
+              background: '#5F7049', color: '#EFF2E8',
             }}
           >
             <Phone style={{ width: '16px', height: '16px' }} />
@@ -364,7 +364,7 @@ function Card({
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
         border: highlight
           ? '1px solid rgba(163,52,23,0.22)'
-          : '1px solid #E5E2D9',
+          : '1px solid #DCE1D0',
         borderRadius: '16px',
         padding: '16px',
       }}
@@ -388,7 +388,7 @@ function CardLabel({
       style={{
         fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
         letterSpacing: '0.13em', marginBottom: noMargin ? '0' : '8px',
-        color: danger ? '#A33417' : '#8A8780',
+        color: danger ? '#A33417' : '#84827A',
       }}
     >
       {children}
@@ -401,7 +401,7 @@ export default function RecoveryPage() {
     <Suspense
       fallback={
         <div
-          style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF9F5' }}
+          style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#EFF2E8' }}
         >
           <div
             style={{

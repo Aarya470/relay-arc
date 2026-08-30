@@ -65,7 +65,7 @@ export default function TriagePage() {
   const progressPct = step === 1 ? 33 : step === 2 ? 66 : 100
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FAF9F5', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', display: 'flex', flexDirection: 'column' }}>
 
       {/* Alert bar */}
       <div style={{
@@ -101,7 +101,7 @@ export default function TriagePage() {
         </motion.button>
 
         {/* Progress bar */}
-        <div style={{ flex: 1, margin: '0 14px', height: '4px', borderRadius: '4px', background: '#E5E2D9', overflow: 'hidden' }}>
+        <div style={{ flex: 1, margin: '0 14px', height: '4px', borderRadius: '4px', background: '#DCE1D0', overflow: 'hidden' }}>
           <motion.div
             animate={{ width: `${progressPct}%` }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
@@ -140,8 +140,8 @@ export default function TriagePage() {
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <span style={{ color: '#8A8780', fontSize: '11px' }}>Mild</span>
-                <span style={{ color: '#8A8780', fontSize: '11px' }}>Worst ever</span>
+                <span style={{ color: '#84827A', fontSize: '11px' }}>Mild</span>
+                <span style={{ color: '#84827A', fontSize: '11px' }}>Worst ever</span>
               </div>
 
               {/* Pain scale */}
@@ -174,15 +174,15 @@ export default function TriagePage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#5F7049' }} />
-                  <span style={{ color: '#8A8780', fontSize: '10px' }}>1–5 mild</span>
+                  <span style={{ color: '#84827A', fontSize: '10px' }}>1–5 mild</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A87200' }} />
-                  <span style={{ color: '#8A8780', fontSize: '10px' }}>6–8 moderate</span>
+                  <span style={{ color: '#84827A', fontSize: '10px' }}>6–8 moderate</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A33417' }} />
-                  <span style={{ color: '#8A8780', fontSize: '10px' }}>9–10 severe</span>
+                  <span style={{ color: '#84827A', fontSize: '10px' }}>9–10 severe</span>
                 </div>
               </div>
             </motion.div>
@@ -402,7 +402,7 @@ export default function TriagePage() {
                   borderRadius: '16px',
                   background: '#5F7049',
                   border: 'none',
-                  color: '#FAF9F5',
+                  color: '#EFF2E8',
                   fontSize: '15px',
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -447,7 +447,7 @@ export default function TriagePage() {
                   borderRadius: '16px',
                   background: '#5F7049',
                   border: 'none',
-                  color: '#FAF9F5',
+                  color: '#EFF2E8',
                   fontSize: '15px',
                   fontWeight: 700,
                   cursor: 'pointer',

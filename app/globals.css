@@ -23,22 +23,31 @@
    point badge.
    ────────────────────────────────────────────────────────────────────────── */
 :root {
-  /* Backgrounds — warm, not blue-grey */
-  --bg:        #FAF9F5;
-  --bg-2:      #F2F0E8;
+  /* Backgrounds — koala green, a tint of --green rather than a neutral.
+     #EFF2E8 measures 16.27:1 with --text, 6.10:1 with --text-2 and 6.06:1 with
+     --crit, so the page moved off cream without weakening anything that has to
+     be read. White surfaces sit only 1.13:1 off it, which is the intended
+     effect: cards lift off the page by a hair rather than by a border. */
+  --bg:        #EFF2E8;
+  --bg-2:      #E6EBDA;
   --surface:   #FFFFFF;
-  --surface-2: #FAF9F5;
-  --surface-3: #EDEAE0;
+  --surface-2: #F7F9F2;
+  --surface-3: #E2E8D4;
 
   /* Borders */
-  --border:        #E5E2D9;
-  --border-mid:    #D8D4C8;
-  --border-strong: #C4BFB0;
+  --border:        #DCE1D0;
+  --border-mid:    #CBD2BC;
+  --border-strong: #B4BDA2;
 
-  /* Text — 17.50:1, 6.56:1, 3.40:1 on cream */
+  /* Text — 16.27:1, 6.10:1, 3.40:1 on the green background.
+     --text-3 was darkened from #84827A when the background changed. It had been
+     tuned to exactly 3.40:1 on cream, and the same value on green fell to
+     3.16:1; #84827A puts it back where it was. It is a meta and decorative tone
+     that does not clear 4.5:1 on either background, so it must not be used for
+     anything a person has to read to use the page. */
   --text:   #141413;
   --text-2: #5C5A52;
-  --text-3: #8A8780;
+  --text-3: #84827A;
 
   /* Koala green — brand. --green for fills and large text (3.49:1),
      --green-deep for body text and white-on-green buttons (5.11:1 / 5.38:1) */

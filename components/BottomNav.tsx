@@ -6,8 +6,8 @@ import { motion } from 'framer-motion'
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const ACCENT  = '#5F7049'
 const RED     = '#A33417'
-const T3      = '#8A8780'
-const BORDER  = '#E5E2D9'
+const T3      = '#84827A'
+const BORDER  = '#DCE1D0'
 
 const tabs = [
   { href: '/dashboard',   icon: Home,          label: 'Home'     },

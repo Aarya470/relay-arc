@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Phone, RefreshCw, Heart } from 'lucide-react'
+import { Phone, RefreshCw } from 'lucide-react'
+import Mark from '@/components/Mark'
 import { emergencyNumber } from '@/lib/emergency-number'
 
 // If this app breaks during an emergency, the failure screen itself has to be
@@ -15,13 +16,11 @@ export default function ErrorBoundary({ error, reset }: { error: Error & { diges
   return (
     <div style={{ minHeight: '100dvh', background: '#FFFFFF', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px', maxWidth: '440px', margin: '0 auto' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '36px' }}>
-        <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: '#A33417', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Heart size={13} color="white" fill="white" strokeWidth={0}/>
-        </div>
+        <Mark size={26} />
         <span style={{ color: '#141413', fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
       </div>
 
-      <p style={{ color: '#8A8780', fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '10px' }}>
+      <p style={{ color: '#84827A', fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '10px' }}>
         Something broke
       </p>
       <h1 style={{ color: '#141413', fontSize: '30px', fontWeight: 800, letterSpacing: '-1.1px', lineHeight: 1.1, marginBottom: '10px' }}>

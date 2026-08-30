@@ -90,16 +90,16 @@ export default function EmergencyContacts() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#FAF9F5', padding: '80px 16px 100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', padding: '80px 16px 100px' }}>
       {[1,2,3].map(i => <Skeleton key={i} style={{ height: '72px', borderRadius: '16px', background: '#F2F0E8', marginBottom: '10px' }}/>)}
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FAF9F5', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', paddingBottom: '80px' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #E5E2D9' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #DCE1D0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -144,7 +144,7 @@ export default function EmergencyContacts() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                style={{ background: '#FFFFFF', border: '1px solid #E5E2D9', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
+                style={{ background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
               >
                 {/* Avatar initial */}
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: color.bg, border: `1.5px solid ${color.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -153,8 +153,8 @@ export default function EmergencyContacts() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>{contact.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                    <span style={{ color: '#8A8780', fontSize: '12px' }}>{contact.relationship}</span>
-                    <span style={{ color: '#8A8780', fontSize: '12px' }}>·</span>
+                    <span style={{ color: '#84827A', fontSize: '12px' }}>{contact.relationship}</span>
+                    <span style={{ color: '#84827A', fontSize: '12px' }}>·</span>
                     <motion.a
                       href={`tel:${contact.phone}`}
                       whileTap={{ scale: 0.96 }}
@@ -201,9 +201,9 @@ export default function EmergencyContacts() {
           <motion.button
             whileTap={{ scale: 0.99 }}
             onClick={() => setShowAdd(true)}
-            style={{ width: '100%', background: 'transparent', border: '1.5px dashed #C9CED6', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#8A8780', fontSize: '14px', fontWeight: 500 }}
+            style={{ width: '100%', background: 'transparent', border: '1.5px dashed #C9CED6', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#84827A', fontSize: '14px', fontWeight: 500 }}
           >
-            <Plus size={15} color="#8A8780"/>
+            <Plus size={15} color="#84827A"/>
             Add emergency contact
           </motion.button>
         )}
@@ -253,8 +253,8 @@ export default function EmergencyContacts() {
                         padding: '6px 12px', borderRadius: '99px', border: '1px solid',
                         fontSize: '12px', fontWeight: 600, cursor: 'pointer',
                         background: newContact.relationship === r ? 'rgba(120,140,93,0.15)' : '#F2F0E8',
-                        borderColor: newContact.relationship === r ? 'rgba(120,140,93,0.4)' : '#E5E2D9',
-                        color: newContact.relationship === r ? '#5F7049' : '#8A8780',
+                        borderColor: newContact.relationship === r ? 'rgba(120,140,93,0.4)' : '#DCE1D0',
+                        color: newContact.relationship === r ? '#5F7049' : '#84827A',
                       }}
                     >
                       {r}

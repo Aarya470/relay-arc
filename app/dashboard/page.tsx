@@ -27,11 +27,11 @@ import { DEMO_PATIENTS, DEMO_CHECKINS, DEMO_VITALS, DEMO_BANNER } from '@/lib/de
 type CrashRisk = RiskAssessment
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#FAF9F5'
+const BG      = '#EFF2E8'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#8A8780'
+const T3      = '#84827A'
 const ACCENT  = '#5F7049'
 const ACCENT_DIM = 'rgba(120,140,93,0.08)'
 const RED     = '#A33417'
@@ -40,7 +40,7 @@ const GREEN   = '#5F7049'
 const GREEN_DIM = 'rgba(120,140,93,0.08)'
 const AMBER   = '#A87200'
 const AMBER_DIM = 'rgba(168,114,0,0.08)'
-const BORDER  = '#E5E2D9'
+const BORDER  = '#DCE1D0'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 // ── This week types ─────────────────────────────────────────────────────
@@ -494,7 +494,7 @@ export default function Dashboard() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {[80, 160, 80, 80, 80].map((h, i) => (
-        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#E5E2D9', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#DCE1D0', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
     </div>
   )

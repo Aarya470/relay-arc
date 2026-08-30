@@ -34,7 +34,7 @@ export default function FollowLinks({ tone = 'dark', variant = 'inline' }: Props
   if (links.length === 0) return null
 
   const fg = tone === 'dark' ? 'rgba(255,255,255,0.72)' : '#5C5A52'
-  const edge = tone === 'dark' ? 'rgba(255,255,255,0.28)' : '#E5E2D9'
+  const edge = tone === 'dark' ? 'rgba(255,255,255,0.28)' : '#DCE1D0'
 
   if (variant === 'buttons') {
     return (

@@ -4,14 +4,15 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import FollowLinks from '@/components/FollowLinks'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Menu, X, Phone, MapPin, FileText, Heart, Activity, Pill, Video, TrendingDown, Route, Users } from 'lucide-react'
+import { Activity, ArrowRight, FileText, Heart, MapPin, Menu, Phone, Pill, Route, TrendingDown, Users, Video, X } from 'lucide-react'
+import Mark from '@/components/Mark'
 
 // ─── Design tokens — shared with the app ─────────────────────────────────────
 const T1     = '#141413'
 const T2     = '#5C5A52'
-const T3     = '#8A8780'
-const BORDER = '#E5E2D9'
-const BG2    = '#FAF9F5'
+const T3     = '#84827A'
+const BORDER = '#DCE1D0'
+const BG2    = '#EFF2E8'
 const ACCENT = '#5F7049'
 const RED    = '#A33417'
 const GREEN  = '#5F7049'
@@ -58,9 +59,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: T1 }}/>
         <div style={{ maxWidth: '1120px', margin: '0 auto', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-            <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: ORANGE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Heart size={13} color={T1} fill={T1} strokeWidth={0}/>
-            </div>
+            <Mark size={26} />
             <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
           </div>
 
@@ -617,9 +616,7 @@ export default function Home() {
                   <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0, flex: 1 }}>
                     Medical profile
                   </p>
-                  <div style={{ width: '18px', height: '18px', borderRadius: '5px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Heart size={9} color="white" fill="white" strokeWidth={0}/>
-                  </div>
+                  <Mark size={18} />
                 </div>
                 <p style={{ color: T1, fontSize: '21px', fontWeight: 800, letterSpacing: '-0.6px', marginBottom: '16px' }}>Asha Kulkarni</p>
                 <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-end', borderBottom: `1px solid ${BORDER}`, paddingBottom: '16px', marginBottom: '14px' }}>
@@ -654,9 +651,7 @@ export default function Home() {
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap', marginBottom: '44px' }}>
             <div style={{ maxWidth: '300px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <div style={{ width: '22px', height: '22px', borderRadius: '7px', background: ORANGE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Heart size={11} color={T1} fill={T1} strokeWidth={0}/>
-                </div>
+                <Mark size={22} />
                 <span style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '14.5px', letterSpacing: '-0.3px' }}>Relay Arc</span>
               </div>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.65 }}>

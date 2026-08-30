@@ -1,14 +1,15 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Heart, Play, ArrowLeft, Check } from 'lucide-react'
+import { Play, ArrowLeft, Check } from 'lucide-react'
+import Mark from '@/components/Mark'
 import { DEMO, setDemo, demoOn } from '@/lib/demo'
 import { supabase } from '@/lib/supabase'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#8A8780'
-const BORDER = '#E5E2D9'
+const T3 = '#84827A'
+const BORDER = '#DCE1D0'
 const RED = '#A33417'
 const GREEN = '#5F7049'
 const MONO = 'var(--font-mono, monospace)'
@@ -32,9 +33,7 @@ export default function DemoLauncher() {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '44px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-            <div style={{ width: '26px', height: '26px', borderRadius: '8px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Heart size={13} color="white" fill="white" strokeWidth={0}/>
-            </div>
+            <Mark size={26} />
             <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
           </div>
           <button onClick={() => router.push('/')}

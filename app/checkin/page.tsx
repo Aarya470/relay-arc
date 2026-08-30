@@ -9,16 +9,16 @@ import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#FAF9F5'
+const BG      = '#EFF2E8'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#8A8780'
+const T3      = '#84827A'
 const ACCENT  = '#5F7049'
 const ACCENT_DIM = 'rgba(120,140,93,0.09)'
 const GREEN   = '#5F7049'
 const GREEN_DIM = 'rgba(120,140,93,0.08)'
-const BORDER  = '#E5E2D9'
+const BORDER  = '#DCE1D0'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 const spring       = { type: 'spring', stiffness: 380, damping: 24 } as const

@@ -4,8 +4,8 @@ import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from 'lucide-re
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#8A8780'
-const BORDER = '#E5E2D9'
+const T3 = '#84827A'
+const BORDER = '#DCE1D0'
 const ACCENT = '#5F7049'
 const RED = '#A33417'
 const GREEN = '#5F7049'
@@ -205,7 +205,7 @@ export default function AdminPartners() {
               </div>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
                 <button onClick={() => copy(p.access_code)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#FAF9F5', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#EFF2E8', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
                   {copied === p.access_code ? <Check size={12} color={GREEN}/> : <Copy size={12} color={T3}/>}
                   {p.access_code}
                 </button>

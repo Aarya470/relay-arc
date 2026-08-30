@@ -12,8 +12,8 @@ import qrgen from 'qrcode-generator'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#8A8780'
-const BORDER = '#E5E2D9'
+const T3 = '#84827A'
+const BORDER = '#DCE1D0'
 const ACCENT = '#5F7049'
 const RED = '#A33417'
 const GREEN = '#5F7049'
@@ -309,7 +309,7 @@ export default function RelayRoomPage() {
               {people.map((p, i) => (
                 <span key={i} style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
-                  background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#FAF9F5',
+                  background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#EFF2E8',
                   border: `1px solid ${p.role === 'patient' ? 'rgba(163,52,23,0.25)' : BORDER}`,
                   borderRadius: '8px', padding: '5px 10px',
                 }}>

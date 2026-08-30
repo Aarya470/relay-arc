@@ -9,11 +9,11 @@ import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#FAF9F5'
+const BG      = '#EFF2E8'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#8A8780'
+const T3      = '#84827A'
 const ACCENT  = '#5F7049'
 const ACCENT_DIM = 'rgba(120,140,93,0.08)'
 const RED     = '#A33417'
@@ -21,7 +21,7 @@ const RED_DIM = 'rgba(163,52,23,0.07)'
 const GREEN   = '#5F7049'
 const GREEN_DIM = 'rgba(120,140,93,0.08)'
 const AMBER   = '#A87200'
-const BORDER  = '#E5E2D9'
+const BORDER  = '#DCE1D0'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
@@ -217,7 +217,7 @@ export default function Medications() {
 
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '80px 16px 100px' }}>
-      {[1,2,3].map(i => <div key={i} style={{ height: '112px', borderRadius: '16px', background: '#E5E2D9', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}/>)}
+      {[1,2,3].map(i => <div key={i} style={{ height: '112px', borderRadius: '16px', background: '#DCE1D0', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}/>)}
     </div>
   )
 
