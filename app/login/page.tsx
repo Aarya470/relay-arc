@@ -34,12 +34,36 @@ export default function Login() {
   const [resending, setResending] = useState(false)
   const router = useRouter()
 
+  /**
+   * Reject if a call has not settled in time.
+   *
+   * WHY THIS IS HERE
+   * A misconfigured SMTP port took the signup endpoint from "returns an error"
+   * to "never responds at all". Supabase opened a socket to the mail server and
+   * waited, the HTTP request stayed pending indefinitely, and because the code
+   * below had no timeout and no try/finally, `setLoading(false)` was never
+   * reached. The button span forever with no message — the single worst failure
+   * mode available, because the person cannot tell whether it worked, and
+   * pressing it again just starts a second doomed request.
+   *
+   * Any await that a stranger is staring at needs a bound. The specific bug is
+   * fixed; this makes the whole class of it survivable.
+   */
+  const withTimeout = <T,>(p: PromiseLike<T>, ms = 20_000): Promise<T> =>
+    Promise.race([
+      Promise.resolve(p),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('TIMEOUT')), ms)
+      ),
+    ])
+
   const handleAuth = async () => {
     if (!email || !password) { toast.error('Fill in all fields'); return }
     if (isSignUp && password.length < 8) { toast.error('Password must be at least 8 characters'); return }
     setLoading(true)
+    try {
     if (isSignUp) {
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await withTimeout(supabase.auth.signUp({
         email,
         password,
         // WITHOUT THIS, NOBODY CAN EVER FINISH SIGNING UP.
@@ -51,7 +75,7 @@ export default function Login() {
         // Site URL still has to be correct as well, because Supabase only honours
         // a redirect that is on its allow-list.
         options: { emailRedirectTo: `${SITE_URL}/auth/callback` },
-      })
+      }))
       if (error) {
         toast.error(error.message)
       } else if (data.user && data.session) {
@@ -64,7 +88,7 @@ export default function Login() {
         setSentTo(email)
       }
     } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error } = await withTimeout(supabase.auth.signInWithPassword({ email, password }))
       if (error) {
         // Supabase returns the same "Invalid login credentials" for a wrong
         // password and for a correct password on an unconfirmed account, which
@@ -79,7 +103,27 @@ export default function Login() {
         router.push('/dashboard')
       }
     }
-    setLoading(false)
+    } catch (e) {
+      // The timeout path, plus anything that throws rather than returning an
+      // error object. Signup is the dangerous case: the account may well have
+      // been created server-side before the response stalled, so the message
+      // must not say it failed. Telling someone to sign up again when the
+      // account already exists sends them into "user already registered", which
+      // reads like a second, different bug.
+      if (e instanceof Error && e.message === 'TIMEOUT') {
+        toast.error(
+          isSignUp
+            ? 'The server did not respond in time. Your account may still have been created — check your email for a confirmation link, and try signing in before signing up again.'
+            : 'The server did not respond in time. Check your connection and try again.'
+        )
+      } else {
+        toast.error(e instanceof Error ? e.message : 'Something went wrong. Try again.')
+      }
+    } finally {
+      // Runs on every path, including the ones that throw. Without this the
+      // button can spin forever, which is how this bug presented.
+      setLoading(false)
+    }
   }
 
   const resend = async () => {
