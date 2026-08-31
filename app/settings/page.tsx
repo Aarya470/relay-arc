@@ -58,11 +58,19 @@ export default function Settings() {
     setSaving(true)
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
-    const { error } = await supabase.from('profiles').update({ [editing]: editValue }).eq('id', user.id)
+    // Same trap as onboarding: date_of_birth is editable here, and clearing the
+    // field sends '' which Postgres rejects for a date column. Blanking to null
+    // for every field, because '' and null both mean "not answered" and keeping
+    // two empties forces every reader to check for both.
+    const next = editValue.trim() === '' ? null : editValue
+    const { error } = await supabase.from('profiles').update({ [editing]: next }).eq('id', user.id)
     if (error) {
-      toast.error('Could not save — try again')
+      // Show what actually went wrong. "Could not save — try again" sent me
+      // hunting for a network fault when the real message named the column and
+      // the bad value.
+      toast.error(error.message || 'Could not save — try again')
     } else {
-      setProfile((prev: any) => ({ ...prev, [editing]: editValue }))
+      setProfile((prev: any) => ({ ...prev, [editing]: next }))
       toast.success('Saved')
       setEditing(null)
     }

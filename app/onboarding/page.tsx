@@ -79,18 +79,36 @@ export default function Onboarding() {
       return
     }
     setLoading(true)
+    try {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/login'); return }
 
     const filteredMeds = form.medications.filter(m => m.name.trim())
     const filteredContacts = form.emergency_contacts.filter(c => c.name.trim())
 
+    // An untouched text input holds '', and Postgres rejects '' for a date
+    // column outright: `invalid input syntax for type date: ""`. Because the
+    // whole form is spread into one insert, one blank optional date failed the
+    // entire profile — so someone who skipped "surgery date, if applicable",
+    // exactly as the label invites, could not finish onboarding at all.
+    //
+    // Blanking to null is applied to every field rather than just the two dates.
+    // '' and null mean the same thing here — the person did not answer — and
+    // storing '' makes every later read do `value || 'None'` guesswork against
+    // two different empties.
+    const blankToNull = <T extends Record<string, unknown>>(o: T) =>
+      Object.fromEntries(
+        Object.entries(o).map(([k, v]) => [k, typeof v === 'string' && v.trim() === '' ? null : v])
+      ) as { [K in keyof T]: T[K] | null }
+
     const { error } = await supabase.from('profiles').insert({
       id: user.id,
-      ...form,
+      ...blankToNull(form),
       medications: filteredMeds,
       emergency_contacts: filteredContacts,
-      diagnosis: form.diagnosis.join(', ')
+      // Joined after the blanking pass, so an empty selection becomes null
+      // rather than the empty string a join would produce.
+      diagnosis: form.diagnosis.length ? form.diagnosis.join(', ') : null,
     })
 
     if (error) toast.error(error.message)
@@ -98,7 +116,13 @@ export default function Onboarding() {
       toast.success('Profile created')
       router.push('/dashboard')
     }
-    setLoading(false)
+    } catch (e) {
+      // Same reason as the login page: without this, a throw leaves the button
+      // spinning with nothing said.
+      toast.error(e instanceof Error ? e.message : 'Could not save your profile. Try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const inputStyle: React.CSSProperties = {
