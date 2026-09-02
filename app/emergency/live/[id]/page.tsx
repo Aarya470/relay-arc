@@ -12,11 +12,11 @@ import qrgen from 'qrcode-generator'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#7E7C74'
-const BORDER = '#CFD9BB'
-const ACCENT = '#5D6E47'
+const T3 = '#716F67'
+const BORDER = '#B5C68F'
+const ACCENT = '#51623B'
 const RED = '#A33417'
-const GREEN = '#5D6E47'
+const GREEN = '#51623B'
 const MONO = 'var(--font-mono, monospace)'
 
 const EMERGENCY_LABELS: Record<string, string> = {
@@ -224,21 +224,21 @@ export default function RelayRoomPage() {
   const typeLabel = data ? (EMERGENCY_LABELS[data.type] ?? 'Emergency') : ''
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
       <Loader2 size={22} color={ACCENT} className="animate-spin"/>
       <p style={{ color: T2, fontSize: '14px' }}>Opening the room…</p>
     </div>
   )
 
   if (error) return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '24px', textAlign: 'center' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '24px', textAlign: 'center' }}>
       <AlertCircle size={36} color={RED}/>
       <p style={{ color: T1, fontSize: '15px', fontWeight: 600, maxWidth: '300px' }}>{error}</p>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', maxWidth: '640px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', maxWidth: '640px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
 
       {/* Status bar */}
       <div style={{ padding: '13px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: isActive ? RED : GREEN, flexShrink: 0 }}>
@@ -309,7 +309,7 @@ export default function RelayRoomPage() {
               {people.map((p, i) => (
                 <span key={i} style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
-                  background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#E4EBD3',
+                  background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#CDDAAD',
                   border: `1px solid ${p.role === 'patient' ? 'rgba(163,52,23,0.25)' : BORDER}`,
                   borderRadius: '8px', padding: '5px 10px',
                 }}>

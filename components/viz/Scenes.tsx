@@ -6,10 +6,10 @@
 // times, and the one it picks is not the nearest.
 import { IsoBox, IsoTile, IsoPath, IsoGrid, IsoPin, iso } from './Iso'
 
-const INK = '#141413', INK3 = '#7E7C74', BORDER = '#CFD9BB'
-const GREEN = '#6F8354', GREEN_DEEP = '#5D6E47'
+const INK = '#141413', INK3 = '#716F67', BORDER = '#B5C68F'
+const GREEN = '#687C4D', GREEN_DEEP = '#51623B'
 const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#A87200'
-const CREAM = '#E4EBD3'
+const CREAM = '#CDDAAD'
 const mono = 'var(--font-mono, monospace)'
 
 function Frame({ children, vb, label }: { children: React.ReactNode; vb: string; label?: string }) {

@@ -17,8 +17,8 @@
 // it, because putting "intended for use by a healthcare professional" in front of a
 // patient would be incoherent — the correct fix there was to stop showing patients a
 // risk classification at all. See docs/INTENDED_USE.md §6.
-const INK2 = '#5C5A52', INK3 = '#7E7C74'
-const BORDER = '#CFD9BB', CREAM = '#E4EBD3'
+const INK2 = '#5C5A52', INK3 = '#716F67'
+const BORDER = '#B5C68F', CREAM = '#CDDAAD'
 const mono = 'var(--font-mono, monospace)'
 
 export default function IntendedUse({ compact = false }: { compact?: boolean }) {

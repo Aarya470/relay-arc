@@ -9,19 +9,19 @@ import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#E4EBD3'
+const BG      = '#CDDAAD'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#7E7C74'
-const ACCENT  = '#5D6E47'
+const T3      = '#716F67'
+const ACCENT  = '#51623B'
 const ACCENT_DIM = 'rgba(120,140,93,0.08)'
 const RED     = '#A33417'
 const RED_DIM = 'rgba(163,52,23,0.07)'
-const GREEN   = '#5D6E47'
+const GREEN   = '#51623B'
 const GREEN_DIM = 'rgba(120,140,93,0.08)'
 const AMBER   = '#A87200'
-const BORDER  = '#CFD9BB'
+const BORDER  = '#B5C68F'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
@@ -217,7 +217,7 @@ export default function Medications() {
 
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '80px 16px 100px' }}>
-      {[1,2,3].map(i => <div key={i} style={{ height: '112px', borderRadius: '16px', background: '#CFD9BB', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}/>)}
+      {[1,2,3].map(i => <div key={i} style={{ height: '112px', borderRadius: '16px', background: '#B5C68F', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}/>)}
     </div>
   )
 

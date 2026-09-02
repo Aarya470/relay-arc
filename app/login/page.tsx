@@ -11,10 +11,10 @@ import { SITE_URL } from '@/lib/site'
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#7E7C74'
-const ACCENT  = '#5D6E47'
+const T3      = '#716F67'
+const ACCENT  = '#51623B'
 const RED     = '#A33417'
-const BORDER  = '#CFD9BB'
+const BORDER  = '#B5C68F'
 
 const mono = 'var(--font-mono, monospace)'
 
@@ -154,7 +154,7 @@ export default function Login() {
   })
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '0 24px' }}>
       <motion.div
         initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, ease: 'easeOut' }}
         style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '88px', paddingBottom: '48px' }}>

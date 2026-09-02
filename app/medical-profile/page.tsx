@@ -13,14 +13,14 @@ const mono = 'var(--font-mono, monospace)'
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{ color: '#7E7C74', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px', marginTop: '32px' }}>
+    <p style={{ color: '#716F67', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px', marginTop: '32px' }}>
       {children}
     </p>
   )
 }
 
 function Empty({ text }: { text: string }) {
-  return <p style={{ color: '#7E7C74', fontSize: '13px', padding: '14px 0' }}>{text}</p>
+  return <p style={{ color: '#716F67', fontSize: '13px', padding: '14px 0' }}>{text}</p>
 }
 
 export default function MedicalProfile() {
@@ -70,7 +70,7 @@ export default function MedicalProfile() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', padding: '80px 20px 100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '80px 20px 100px' }}>
       {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '60px', borderRadius: '12px', background: '#F2F0E8', marginBottom: '10px' }}/>)}
     </div>
   )
@@ -84,21 +84,21 @@ export default function MedicalProfile() {
     : null
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', paddingBottom: '90px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', paddingBottom: '90px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px' }}>
           <button onClick={() => router.back()}
-            style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#7E7C74', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#716F67', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
             <ArrowLeft size={14}/> Back
           </button>
           <button onClick={handleShare}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#5D6E47', fontSize: '13px', fontWeight: 600, fontFamily: 'inherit' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#51623B', fontSize: '13px', fontWeight: 600, fontFamily: 'inherit' }}>
             <Share2 size={13}/> Share
           </button>
         </div>
-        <p style={{ color: '#7E7C74', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
+        <p style={{ color: '#716F67', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
           Medical profile · show to responders
         </p>
         <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.05 }}>
@@ -113,21 +113,21 @@ export default function MedicalProfile() {
       <div style={{ padding: '0 20px' }} ref={cardRef}>
 
         {/* Blood type + key facts — big numbers, no cards */}
-        <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-end', borderBottom: '1px solid #CFD9BB', padding: '28px 0 22px' }}>
+        <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-end', borderBottom: '1px solid #B5C68F', padding: '28px 0 22px' }}>
           <div>
-            <p style={{ color: '#7E7C74', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Blood type</p>
+            <p style={{ color: '#716F67', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Blood type</p>
             <p style={{ color: '#A33417', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
               {profile?.blood_type || '—'}
             </p>
           </div>
           <div>
-            <p style={{ color: '#7E7C74', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Allergies</p>
+            <p style={{ color: '#716F67', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Allergies</p>
             <p style={{ color: allergies.length > 0 ? '#A33417' : '#141413', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
               {allergies.length}
             </p>
           </div>
           <div>
-            <p style={{ color: '#7E7C74', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Medications</p>
+            <p style={{ color: '#716F67', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Medications</p>
             <p style={{ color: '#141413', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
               {meds.length}
             </p>
@@ -148,21 +148,21 @@ export default function MedicalProfile() {
 
         {/* Conditions */}
         <SectionLabel>Conditions</SectionLabel>
-        <div style={{ borderTop: '1px solid #CFD9BB' }}>
+        <div style={{ borderTop: '1px solid #B5C68F' }}>
           {conditions.length > 0 ? conditions.map((c: string, i: number) => (
-            <p key={i} style={{ color: '#141413', fontSize: '14.5px', fontWeight: 600, padding: '13px 0', borderBottom: '1px solid #CFD9BB' }}>{c}</p>
+            <p key={i} style={{ color: '#141413', fontSize: '14.5px', fontWeight: 600, padding: '13px 0', borderBottom: '1px solid #B5C68F' }}>{c}</p>
           )) : <Empty text="No conditions listed"/>}
         </div>
 
         {/* Medications */}
         <SectionLabel>Current medications</SectionLabel>
-        <div style={{ borderTop: '1px solid #CFD9BB' }}>
+        <div style={{ borderTop: '1px solid #B5C68F' }}>
           {meds.length > 0 ? meds.map((med: any, i: number) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '16px', padding: '13px 0', borderBottom: '1px solid #CFD9BB' }}>
+            <div key={i} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '16px', padding: '13px 0', borderBottom: '1px solid #B5C68F' }}>
               <div>
                 <p style={{ color: '#141413', fontWeight: 600, fontSize: '14.5px' }}>{med.name}</p>
                 {(med.frequency || med.time) && (
-                  <p style={{ color: '#7E7C74', fontSize: '12.5px', marginTop: '2px' }}>{med.frequency || ''}{med.time ? ` · ${med.time}` : ''}</p>
+                  <p style={{ color: '#716F67', fontSize: '12.5px', marginTop: '2px' }}>{med.frequency || ''}{med.time ? ` · ${med.time}` : ''}</p>
                 )}
               </div>
               <span style={{ color: '#5C5A52', fontSize: '13px', fontFamily: mono, flexShrink: 0 }}>{med.dose}</span>
@@ -174,18 +174,18 @@ export default function MedicalProfile() {
         {(profile?.surgery_date || profile?.doctor_name) && (
           <>
             <SectionLabel>Care information</SectionLabel>
-            <div style={{ borderTop: '1px solid #CFD9BB' }}>
+            <div style={{ borderTop: '1px solid #B5C68F' }}>
               {profile?.surgery_date && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '13px 0', borderBottom: '1px solid #CFD9BB' }}>
-                  <span style={{ color: '#7E7C74', fontSize: '13px' }}>Surgery date</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '13px 0', borderBottom: '1px solid #B5C68F' }}>
+                  <span style={{ color: '#716F67', fontSize: '13px' }}>Surgery date</span>
                   <span style={{ color: '#141413', fontSize: '14px', fontWeight: 600 }}>
                     {new Date(profile.surgery_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
               )}
               {profile?.doctor_name && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '13px 0', borderBottom: '1px solid #CFD9BB' }}>
-                  <span style={{ color: '#7E7C74', fontSize: '13px' }}>Primary doctor</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '13px 0', borderBottom: '1px solid #B5C68F' }}>
+                  <span style={{ color: '#716F67', fontSize: '13px' }}>Primary doctor</span>
                   <span style={{ color: '#141413', fontSize: '14px', fontWeight: 600 }}>{profile.doctor_name}</span>
                 </div>
               )}
@@ -195,24 +195,24 @@ export default function MedicalProfile() {
 
         {/* Emergency contacts */}
         <SectionLabel>Emergency contacts</SectionLabel>
-        <div style={{ borderTop: '1px solid #CFD9BB', marginBottom: '36px' }}>
+        <div style={{ borderTop: '1px solid #B5C68F', marginBottom: '36px' }}>
           {contacts.length > 0 ? contacts.map((c: any, i: number) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '13px 0', borderBottom: '1px solid #CFD9BB' }}>
+            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '13px 0', borderBottom: '1px solid #B5C68F' }}>
               <div>
                 <p style={{ color: '#141413', fontWeight: 600, fontSize: '14.5px' }}>{c.name}</p>
-                <p style={{ color: '#7E7C74', fontSize: '12.5px', marginTop: '2px' }}>{c.relationship}</p>
+                <p style={{ color: '#716F67', fontSize: '12.5px', marginTop: '2px' }}>{c.relationship}</p>
               </div>
               <a href={`tel:${c.phone}`}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#5D6E47', fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', fontFamily: mono, flexShrink: 0 }}>
-                <Phone size={12} color="#5D6E47"/>
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#51623B', fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', fontFamily: mono, flexShrink: 0 }}>
+                <Phone size={12} color="#51623B"/>
                 {c.phone}
               </a>
             </div>
           )) : (
             <div style={{ padding: '14px 0' }}>
-              <p style={{ color: '#7E7C74', fontSize: '13px', marginBottom: '10px' }}>No emergency contacts added</p>
+              <p style={{ color: '#716F67', fontSize: '13px', marginBottom: '10px' }}>No emergency contacts added</p>
               <button onClick={() => router.push('/emergency-contacts')}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5D6E47', fontSize: '13.5px', fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#51623B', fontSize: '13.5px', fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
                 Add contacts →
               </button>
             </div>
@@ -225,7 +225,7 @@ export default function MedicalProfile() {
           <Share2 size={15}/>
           Share with first responders
         </motion.button>
-        <p style={{ color: '#7E7C74', fontSize: '11.5px', textAlign: 'center', lineHeight: 1.6, marginTop: '10px' }}>
+        <p style={{ color: '#716F67', fontSize: '11.5px', textAlign: 'center', lineHeight: 1.6, marginTop: '10px' }}>
           Shares a plain-text summary paramedics can read on any device.
         </p>
       </div>

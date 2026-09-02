@@ -8,10 +8,10 @@ import { supabase } from '@/lib/supabase'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#7E7C74'
-const BORDER = '#CFD9BB'
+const T3 = '#716F67'
+const BORDER = '#B5C68F'
 const RED = '#A33417'
-const GREEN = '#5D6E47'
+const GREEN = '#51623B'
 const MONO = 'var(--font-mono, monospace)'
 
 export default function DemoLauncher() {
@@ -27,7 +27,7 @@ export default function DemoLauncher() {
   const toggle = (next: boolean) => { setDemo(next); setOn(next) }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '0 24px' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
       <div style={{ maxWidth: '460px', margin: '0 auto', paddingTop: '64px', paddingBottom: '60px' }}>
 

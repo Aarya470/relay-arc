@@ -7,16 +7,16 @@ import { ArrowLeft, Copy, Check, ChevronRight, Heart, Activity, Zap, AlertCircle
 import { toast } from 'sonner'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#E4EBD3'
+const BG      = '#CDDAAD'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#7E7C74'
-const ACCENT  = '#5D6E47'
+const T3      = '#716F67'
+const ACCENT  = '#51623B'
 const ACCENT_DIM = 'rgba(120,140,93,0.08)'
-const GREEN   = '#5D6E47'
+const GREEN   = '#51623B'
 const GREEN_DIM = 'rgba(120,140,93,0.08)'
-const BORDER  = '#CFD9BB'
+const BORDER  = '#B5C68F'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 const spring = { type: 'spring', stiffness: 340, damping: 26 } as const

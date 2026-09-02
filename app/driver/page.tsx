@@ -68,23 +68,23 @@ export default function DriverDashboard() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#E4EBD3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#CDDAAD', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Loader2 size={32} color="#A87200" className="animate-spin"/>
     </div>
   )
 
   if (accepted) return (
-    <div style={{ minHeight: '100vh', background: '#E4EBD3', padding: '56px 20px 20px' }}>
+    <div style={{ minHeight: '100vh', background: '#CDDAAD', padding: '56px 20px 20px' }}>
       <div style={{ background: 'rgba(120,140,93,0.08)', border: '1px solid rgba(120,140,93,0.2)', borderRadius: '20px', padding: '24px', textAlign: 'center', marginBottom: '16px' }}>
         <span style={{ fontSize: '48px', display: 'block', marginBottom: '12px' }}>🚗</span>
-        <p style={{ color: '#5D6E47', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>Ride accepted</p>
+        <p style={{ color: '#51623B', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>Ride accepted</p>
         <p style={{ color: '#5C5A52', fontSize: '14px' }}>You are helping save a life</p>
       </div>
 
-      <div style={{ background: '#FFFFFF', border: '1px solid #CFD9BB', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
-        <p style={{ color: '#7E7C74', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
+      <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
+        <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.patient_name}</p>
-        <p style={{ color: '#7E7C74', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
+        <p style={{ color: '#716F67', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => {
@@ -97,10 +97,10 @@ export default function DriverDashboard() {
         </motion.button>
       </div>
 
-      <div style={{ background: '#FFFFFF', border: '1px solid #CFD9BB', borderRadius: '16px', padding: '16px' }}>
-        <p style={{ color: '#7E7C74', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Then take to</p>
+      <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '16px' }}>
+        <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Then take to</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.hospital_name}</p>
-        <p style={{ color: '#7E7C74', fontSize: '13px', marginBottom: '12px' }}>
+        <p style={{ color: '#716F67', fontSize: '13px', marginBottom: '12px' }}>
           Emergency: {accepted.emergency_type?.replace('_', ' ')}
         </p>
         <motion.button
@@ -118,9 +118,9 @@ export default function DriverDashboard() {
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#E4EBD3', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#CDDAAD', display: 'flex', flexDirection: 'column' }}>
 
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid #CFD9BB', display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid #B5C68F', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => router.push('/dashboard')}
@@ -129,11 +129,11 @@ export default function DriverDashboard() {
           <ArrowLeft size={16} color="#5C5A52"/>
         </motion.button>
         <div>
-          <p style={{ color: '#7E7C74', fontFamily: 'monospace', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
+          <p style={{ color: '#716F67', fontFamily: 'monospace', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
           <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '20px' }}>Help someone now</h1>
         </div>
-        <div style={{ marginLeft: 'auto', background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8', border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#CFD9BB'}`, borderRadius: '20px', padding: '4px 10px' }}>
-          <p style={{ color: requests.length > 0 ? '#A33417' : '#7E7C74', fontFamily: 'monospace', fontSize: '11px' }}>
+        <div style={{ marginLeft: 'auto', background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8', border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#B5C68F'}`, borderRadius: '20px', padding: '4px 10px' }}>
+          <p style={{ color: requests.length > 0 ? '#A33417' : '#716F67', fontFamily: 'monospace', fontSize: '11px' }}>
             {requests.length} pending
           </p>
         </div>
@@ -144,11 +144,11 @@ export default function DriverDashboard() {
           <div style={{ textAlign: 'center', paddingTop: '60px' }}>
             <span style={{ fontSize: '48px', display: 'block', marginBottom: '16px' }}>🚗</span>
             <p style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>No requests nearby</p>
-            <p style={{ color: '#7E7C74', fontSize: '13px' }}>Check back soon — requests update in real time</p>
+            <p style={{ color: '#716F67', fontSize: '13px' }}>Check back soon — requests update in real time</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <p style={{ color: '#7E7C74', fontSize: '12px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+            <p style={{ color: '#716F67', fontSize: '12px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
               Active requests
             </p>
             <AnimatePresence>
@@ -161,7 +161,7 @@ export default function DriverDashboard() {
                   transition={{ delay: i * 0.05 }}
                   style={{ background: '#FFFFFF', border: '1px solid rgba(163,52,23,0.2)', borderRadius: '16px', overflow: 'hidden' }}
                 >
-                  <div style={{ padding: '14px', borderBottom: '1px solid #CFD9BB' }}>
+                  <div style={{ padding: '14px', borderBottom: '1px solid #B5C68F' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                       <motion.div
                         style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A33417', flexShrink: 0 }}
@@ -171,21 +171,21 @@ export default function DriverDashboard() {
                       <p style={{ color: '#A33417', fontWeight: 600, fontSize: '13px' }}>
                         {req.emergency_type?.replace('_', ' ')} emergency
                       </p>
-                      <p style={{ color: '#7E7C74', fontSize: '11px', marginLeft: 'auto', fontFamily: 'monospace' }}>
+                      <p style={{ color: '#716F67', fontSize: '11px', marginLeft: 'auto', fontFamily: 'monospace' }}>
                         {new Date(req.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'flex-start' }}>
                       <MapPin size={13} color="#A87200" style={{ flexShrink: 0, marginTop: '2px' }}/>
                       <div>
-                        <p style={{ color: '#7E7C74', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
+                        <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.pickup_address}</p>
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                      <AlertCircle size={13} color="#5D6E47" style={{ flexShrink: 0, marginTop: '2px' }}/>
+                      <AlertCircle size={13} color="#51623B" style={{ flexShrink: 0, marginTop: '2px' }}/>
                       <div>
-                        <p style={{ color: '#7E7C74', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Hospital</p>
+                        <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Hospital</p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.hospital_name}</p>
                       </div>
                     </div>

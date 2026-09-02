@@ -14,9 +14,9 @@ import {
   assessRisk, scoreRespRate, scoreSpo2, scoreSystolic, scorePulse,
 } from '@/lib/risk'
 
-const T1 = '#141413', T2 = '#5C5A52', T3 = '#7E7C74'
-const BORDER = '#CFD9BB', BG2 = '#E4EBD3'
-const RED = '#A33417', AMBER = '#A87200', GREEN = '#5D6E47'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#716F67'
+const BORDER = '#B5C68F', BG2 = '#CDDAAD'
+const RED = '#A33417', AMBER = '#A87200', GREEN = '#51623B'
 const mono = 'var(--font-mono, monospace)'
 
 interface Param {

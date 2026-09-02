@@ -10,9 +10,9 @@ import Mark from '@/components/Mark'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#7E7C74'
-const BORDER = '#CFD9BB'
-const ACCENT = '#5D6E47'
+const T3 = '#716F67'
+const BORDER = '#B5C68F'
+const ACCENT = '#51623B'
 const RED = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 
@@ -157,7 +157,7 @@ export default function Onboarding() {
   const meta = STEP_META[step - 1]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '0 24px' }}>
       <div style={{ maxWidth: '420px', margin: '0 auto', paddingTop: '56px', paddingBottom: '48px' }}>
 
         {/* Brand */}

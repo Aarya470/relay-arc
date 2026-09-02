@@ -26,8 +26,8 @@ import { supabase } from '@/lib/supabase'
 import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from 'lucide-react'
 import Mark from '@/components/Mark'
 
-const T1 = '#141413', T2 = '#5C5A52', T3 = '#7E7C74'
-const ACCENT = '#5D6E47', RED = '#A33417', BORDER = '#CFD9BB'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#716F67'
+const ACCENT = '#51623B', RED = '#A33417', BORDER = '#B5C68F'
 const mono = 'var(--font-mono, monospace)'
 
 type State = 'working' | 'confirmed' | 'error'
@@ -88,7 +88,7 @@ export default function AuthCallback() {
   }, [router])
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '0 24px' }}>
       <div style={{ maxWidth: 380, margin: '0 auto', paddingTop: 88, paddingBottom: 48 }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 56 }}>

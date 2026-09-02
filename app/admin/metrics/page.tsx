@@ -5,9 +5,9 @@
 // and the API it calls returns aggregates only — never a name or a row.
 import { useState, useEffect, useCallback } from 'react'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#7E7C74'
-const CREAM = '#E4EBD3', BORDER = '#CFD9BB'
-const GREEN = '#5D6E47', ORANGE = '#D97757', CRIT = '#A33417', WARN = '#A87200'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#716F67'
+const CREAM = '#CDDAAD', BORDER = '#B5C68F'
+const GREEN = '#51623B', ORANGE = '#D97757', CRIT = '#A33417', WARN = '#A87200'
 const mono = 'var(--font-mono, monospace)'
 
 interface Metrics {

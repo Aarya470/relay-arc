@@ -4,11 +4,11 @@ import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from 'lucide-re
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#7E7C74'
-const BORDER = '#CFD9BB'
-const ACCENT = '#5D6E47'
+const T3 = '#716F67'
+const BORDER = '#B5C68F'
+const ACCENT = '#51623B'
 const RED = '#A33417'
-const GREEN = '#5D6E47'
+const GREEN = '#51623B'
 const MONO = 'var(--font-mono, monospace)'
 
 interface Partner {
@@ -103,7 +103,7 @@ export default function AdminPartners() {
   }
 
   if (!connected) return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '0 24px' }}>
       <div style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '96px' }}>
         <p style={{ color: T3, fontFamily: MONO, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '12px' }}>
           Relay · operations
@@ -128,7 +128,7 @@ export default function AdminPartners() {
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', maxWidth: '760px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', maxWidth: '760px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
       <div style={{ paddingTop: '48px', marginBottom: '30px' }}>
         <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
           <span style={{ color: T1, fontFamily: MONO, fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>Partner network operations</span>
@@ -205,7 +205,7 @@ export default function AdminPartners() {
               </div>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
                 <button onClick={() => copy(p.access_code)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#E4EBD3', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#CDDAAD', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
                   {copied === p.access_code ? <Check size={12} color={GREEN}/> : <Copy size={12} color={T3}/>}
                   {p.access_code}
                 </button>

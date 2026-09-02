@@ -33,9 +33,9 @@ import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Download, Printer, Trash2, Check } from 'lucide-react'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#7E7C74'
-const CREAM = '#E4EBD3', BORDER = '#CFD9BB', WHITE = '#FFFFFF'
-const GREEN_DEEP = '#5D6E47'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#716F67'
+const CREAM = '#CDDAAD', BORDER = '#B5C68F', WHITE = '#FFFFFF'
+const GREEN_DEEP = '#51623B'
 const ORANGE = '#D97757', CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 

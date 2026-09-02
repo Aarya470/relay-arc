@@ -6,11 +6,11 @@ import { DEMO_PARTNER, DEMO_INCOMING, DEMO_BANNER } from '@/lib/demo-data'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#7E7C74'
-const BORDER = '#CFD9BB'
-const ACCENT = '#5D6E47'
+const T3 = '#716F67'
+const BORDER = '#B5C68F'
+const ACCENT = '#51623B'
 const RED = '#A33417'
-const GREEN = '#5D6E47'
+const GREEN = '#51623B'
 const MONO = 'var(--font-mono, monospace)'
 
 const TYPE_LABELS: Record<string, string> = {
@@ -133,7 +133,7 @@ export default function HospitalPortal() {
   }
 
   if (!partner) return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '0 24px' }}>
       <div style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '96px' }}>
         <p style={{ color: T3, fontFamily: MONO, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '12px' }}>
           Relay · hospital portal
@@ -168,7 +168,7 @@ export default function HospitalPortal() {
   const past = incoming.filter(i => i.status !== 'incoming')
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#E4EBD3', maxWidth: '720px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
+    <div style={{ minHeight: '100dvh', background: '#CDDAAD', maxWidth: '720px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
 
       {/* A viewer must never be able to mistake demo fixtures for a real chart. */}
       {isDemo && (

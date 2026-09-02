@@ -31,7 +31,7 @@ export default function NurseLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#E4EBD3] px-6 py-12 flex flex-col">
+    <div className="min-h-screen bg-[#CDDAAD] px-6 py-12 flex flex-col">
 
       <motion.button
         whileTap={{ scale: 0.9 }}
@@ -46,44 +46,44 @@ export default function NurseLogin() {
         animate={{ opacity: 1, y: 0 }}
         className="flex-1"
       >
-        <div className="w-12 h-12 rounded-2xl bg-[#6F8354]/15 border border-[#6F8354]/25 flex items-center justify-center mb-6">
+        <div className="w-12 h-12 rounded-2xl bg-[#687C4D]/15 border border-[#687C4D]/25 flex items-center justify-center mb-6">
           
         </div>
 
         <h1 className="text-[#141413] text-3xl font-bold mb-1">Care team login</h1>
-        <p className="text-[#7E7C74] text-sm mb-8">Access requires a valid care team code</p>
+        <p className="text-[#716F67] text-sm mb-8">Access requires a valid care team code</p>
 
         <div className="space-y-3">
           <div className="relative">
-            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7E7C74]"/>
+            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#716F67]"/>
             <input
               type="email"
               placeholder="Email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full bg-white border border-[#CFD9BB] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#7E7C74] outline-none focus:border-[#6F8354]/40 transition text-sm"
+              className="w-full bg-white border border-[#B5C68F] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#716F67] outline-none focus:border-[#687C4D]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
-            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7E7C74]"/>
+            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#716F67]"/>
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full bg-white border border-[#CFD9BB] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#7E7C74] outline-none focus:border-[#6F8354]/40 transition text-sm"
+              className="w-full bg-white border border-[#B5C68F] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#716F67] outline-none focus:border-[#687C4D]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7E7C74] text-sm">🔑</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#716F67] text-sm">🔑</span>
             <input
               type="password"
               placeholder="Care team access code"
               value={code}
               onChange={e => setCode(e.target.value)}
-              className="w-full bg-white border border-[#CFD9BB] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#7E7C74] outline-none focus:border-[#6F8354]/40 transition text-sm"
+              className="w-full bg-white border border-[#B5C68F] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#716F67] outline-none focus:border-[#687C4D]/40 transition text-sm"
             />
           </div>
 
@@ -91,7 +91,7 @@ export default function NurseLogin() {
             whileTap={{ scale: 0.98 }}
             onClick={handleLogin}
             disabled={loading}
-            className="w-full bg-[#4C5A3A] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#5D6E47] transition mt-2 disabled:opacity-50"
+            className="w-full bg-[#4C5A3A] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#51623B] transition mt-2 disabled:opacity-50"
           >
             {loading ? <Loader2 size={18} className="animate-spin"/> : 'Access care dashboard'}
           </motion.button>
