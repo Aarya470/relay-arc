@@ -14,7 +14,7 @@ export default function ErrorBoundary({ error, reset }: { error: Error & { diges
   }, [error])
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px', maxWidth: '440px', margin: '0 auto' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px', maxWidth: '440px', margin: '0 auto' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '36px' }}>
         <Mark size={26} />
         <span style={{ color: '#141413', fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>

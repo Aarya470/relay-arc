@@ -101,7 +101,7 @@ export default function Engineering() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100dvh' }}>
+    <div style={{ background: '#EFF2E8', minHeight: '100dvh' }}>
 
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
       <header style={{

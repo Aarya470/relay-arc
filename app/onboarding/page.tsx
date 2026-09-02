@@ -157,7 +157,7 @@ export default function Onboarding() {
   const meta = STEP_META[step - 1]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', padding: '0 24px' }}>
       <div style={{ maxWidth: '420px', margin: '0 auto', paddingTop: '56px', paddingBottom: '48px' }}>
 
         {/* Brand */}

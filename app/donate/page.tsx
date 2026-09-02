@@ -38,7 +38,7 @@ export default function Donate() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
 
       <motion.div

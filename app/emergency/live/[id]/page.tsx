@@ -224,21 +224,21 @@ export default function RelayRoomPage() {
   const typeLabel = data ? (EMERGENCY_LABELS[data.type] ?? 'Emergency') : ''
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
       <Loader2 size={22} color={ACCENT} className="animate-spin"/>
       <p style={{ color: T2, fontSize: '14px' }}>Opening the room…</p>
     </div>
   )
 
   if (error) return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '24px', textAlign: 'center' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '24px', textAlign: 'center' }}>
       <AlertCircle size={36} color={RED}/>
       <p style={{ color: T1, fontSize: '15px', fontWeight: 600, maxWidth: '300px' }}>{error}</p>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', maxWidth: '640px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', maxWidth: '640px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
 
       {/* Status bar */}
       <div style={{ padding: '13px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: isActive ? RED : GREEN, flexShrink: 0 }}>

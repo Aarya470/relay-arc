@@ -103,7 +103,7 @@ export default function AdminPartners() {
   }
 
   if (!connected) return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', padding: '0 24px' }}>
       <div style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '96px' }}>
         <p style={{ color: T3, fontFamily: MONO, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '12px' }}>
           Relay · operations
@@ -128,7 +128,7 @@ export default function AdminPartners() {
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', maxWidth: '760px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', maxWidth: '760px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
       <div style={{ paddingTop: '48px', marginBottom: '30px' }}>
         <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
           <span style={{ color: T1, fontFamily: MONO, fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>Partner network operations</span>

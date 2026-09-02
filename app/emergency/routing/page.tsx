@@ -759,7 +759,7 @@ function RoutingPage() {
   // ── Main routing view ──────────────────────────────────────────────────────
   const MONO = 'var(--font-mono, monospace)'
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* ── Status line ─────────────────────────────────────────────────────── */}
       <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(163,52,23,0.18)', flexShrink: 0 }}>

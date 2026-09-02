@@ -27,7 +27,7 @@ export default function DemoLauncher() {
   const toggle = (next: boolean) => { setDemo(next); setOn(next) }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', padding: '0 24px' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
       <div style={{ maxWidth: '460px', margin: '0 auto', paddingTop: '64px', paddingBottom: '60px' }}>
 

@@ -74,7 +74,7 @@ export default function CprCoach() {
   useEffect(() => () => { audioRef.current?.stop() }, [])
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', maxWidth: '560px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', maxWidth: '560px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
 
       {/* Call {emg.label} banner — always first */}
       <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 900, fontSize: '18px', padding: '18px', textDecoration: 'none', flexShrink: 0 }}>

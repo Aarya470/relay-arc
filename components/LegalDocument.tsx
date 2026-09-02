@@ -21,7 +21,7 @@ export default function LegalDocument({ kicker, title, body }: { kicker: string;
   const blocks = body.trim().split(/\n\n+/)
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
 
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '64px 24px 80px' }}>

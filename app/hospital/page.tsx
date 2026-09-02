@@ -133,7 +133,7 @@ export default function HospitalPortal() {
   }
 
   if (!partner) return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', padding: '0 24px' }}>
       <div style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '96px' }}>
         <p style={{ color: T3, fontFamily: MONO, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '12px' }}>
           Relay · hospital portal
@@ -168,7 +168,7 @@ export default function HospitalPortal() {
   const past = incoming.filter(i => i.status !== 'incoming')
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#FFFFFF', maxWidth: '720px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
+    <div style={{ minHeight: '100dvh', background: '#EFF2E8', maxWidth: '720px', margin: '0 auto', width: '100%', padding: '0 20px 60px' }}>
 
       {/* A viewer must never be able to mistake demo fixtures for a real chart. */}
       {isDemo && (

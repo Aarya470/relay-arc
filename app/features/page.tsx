@@ -61,7 +61,7 @@ export default function Features() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100dvh' }}>
+    <div style={{ background: '#EFF2E8', minHeight: '100dvh' }}>
 
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px', position: 'sticky', top: 0, background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(8px)', zIndex: 40 }}>
         <div style={{ ...WRAP, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
