@@ -13,6 +13,10 @@ const T2     = '#5C5A52'
 const T3     = '#84827A'
 const BORDER = '#DCE1D0'
 const BG2    = '#EFF2E8'
+// A deeper tint of the same green. The page background moved from white to BG2,
+// so the one band that was BG2 to stand out against white would have vanished
+// into the page. It needs its own value rather than reusing the page colour.
+const BG_DEEP = '#E6EBDA'
 const ACCENT = '#5F7049'
 const RED    = '#A33417'
 const GREEN  = '#5F7049'
@@ -435,7 +439,7 @@ export default function Home() {
   )
 
   return (
-    <div style={{ background: 'white', overflowX: 'hidden' }}>
+    <div style={{ background: BG2, overflowX: 'hidden' }}>
       <NavBar onSignIn={() => router.push('/login')} onGetStarted={() => router.push('/login?signup=1')}/>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
@@ -494,7 +498,7 @@ export default function Home() {
       </section>
 
       {/* ── TELEMETRY TICKER ─────────────────────────────────────────── */}
-      <div style={{ borderTop: `2px solid ${T1}`, borderBottom: `1px solid ${T1}`, background: '#FFFFFF', overflow: 'hidden', padding: '13px 0', position: 'relative' }}>
+      <div style={{ borderTop: `2px solid ${T1}`, borderBottom: `1px solid ${T1}`, background: BG2, overflow: 'hidden', padding: '13px 0', position: 'relative' }}>
         <div className="ticker-track">
           <Ticker/><Ticker/>
         </div>
@@ -544,7 +548,7 @@ export default function Home() {
 
       {/* ── UNDER THE HOOD — four numbers and a door. No essay here; the
              essay lives at /engineering for anyone who wants it. ─────────── */}
-      <section style={{ borderTop: `3px solid ${T1}`, borderBottom: `1px solid ${T1}`, background: BG2, padding: '52px 24px 56px' }}>
+      <section style={{ borderTop: `3px solid ${T1}`, borderBottom: `1px solid ${T1}`, background: BG_DEEP, padding: '52px 24px 56px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Under the hood</span>
@@ -593,7 +597,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px 110px', borderTop: `3px solid ${T1}`, background: '#FFFFFF', overflow: 'hidden' }}>
+      <section style={{ padding: '96px 24px 110px', borderTop: `3px solid ${T1}`, background: BG2, overflow: 'hidden' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '64px', alignItems: 'center' }} className="cta-grid">
             <div>
