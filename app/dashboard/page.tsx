@@ -27,20 +27,20 @@ import { DEMO_PATIENTS, DEMO_CHECKINS, DEMO_VITALS, DEMO_BANNER } from '@/lib/de
 type CrashRisk = RiskAssessment
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#CDDAAD'
+const BG      = '#B3DDAC'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#716F67'
-const ACCENT  = '#51623B'
-const ACCENT_DIM = 'rgba(120,140,93,0.08)'
+const T3      = '#6F6D65'
+const ACCENT  = '#42623C'
+const ACCENT_DIM = 'rgba(86,128,78,0.08)'
 const RED     = '#A33417'
 const RED_DIM = 'rgba(163,52,23,0.07)'
-const GREEN   = '#51623B'
-const GREEN_DIM = 'rgba(120,140,93,0.08)'
+const GREEN   = '#42623C'
+const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER   = '#A87200'
 const AMBER_DIM = 'rgba(168,114,0,0.08)'
-const BORDER  = '#B5C68F'
+const BORDER  = '#98C890'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 // ── This week types ─────────────────────────────────────────────────────
@@ -494,7 +494,7 @@ export default function Dashboard() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {[80, 160, 80, 80, 80].map((h, i) => (
-        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#B5C68F', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#98C890', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
     </div>
   )
@@ -546,8 +546,8 @@ export default function Dashboard() {
             transition={ease}
             style={{
               position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-              background: 'rgba(120,140,93,0.06)',
-              borderBottom: `1px solid rgba(120,140,93,0.14)`,
+              background: 'rgba(86,128,78,0.06)',
+              borderBottom: `1px solid rgba(86,128,78,0.14)`,
               padding: '48px 20px 14px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               backdropFilter: 'blur(16px)',
@@ -594,7 +594,7 @@ export default function Dashboard() {
                     padding: '3px 8px', borderRadius: '6px',
                     fontFamily: 'var(--font-mono, monospace)',
                     letterSpacing: '0.8px', textTransform: 'uppercase',
-                    border: `1px solid rgba(120,140,93,0.14)`,
+                    border: `1px solid rgba(86,128,78,0.14)`,
                   }}>
                     {d.trim()}
                   </span>
@@ -973,8 +973,8 @@ export default function Dashboard() {
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push('/appointments')}
             style={{
-              background: 'rgba(120,140,93,0.04)',
-              border: `1px solid rgba(120,140,93,0.10)`,
+              background: 'rgba(86,128,78,0.04)',
+              border: `1px solid rgba(86,128,78,0.10)`,
               borderRadius: '14px', padding: '14px 16px',
               cursor: 'pointer', width: '100%',
               display: 'flex', alignItems: 'center', gap: '12px',

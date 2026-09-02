@@ -10,16 +10,16 @@ import Mark from '@/components/Mark'
 // ─── Design tokens — shared with the app ─────────────────────────────────────
 const T1     = '#141413'
 const T2     = '#5C5A52'
-const T3     = '#716F67'
-const BORDER = '#B5C68F'
-const BG2    = '#CDDAAD'
+const T3     = '#6F6D65'
+const BORDER = '#98C890'
+const BG2    = '#B3DDAC'
 // A deeper tint of the same green. The page background moved from white to BG2,
 // so the one band that was BG2 to stand out against white would have vanished
 // into the page. It needs its own value rather than reusing the page colour.
-const BG_DEEP = '#C2D09C'
-const ACCENT = '#51623B'
+const BG_DEEP = '#95D08B'
+const ACCENT = '#42623C'
 const RED    = '#A33417'
-const GREEN  = '#51623B'
+const GREEN  = '#42623C'
 const AMBER  = '#A87200'
 const ORANGE = '#D97757'   // FILL ONLY — 2.96:1 on light, so always dark ink on top
 
@@ -192,7 +192,7 @@ function PhoneMockup() {
           {/* greeting */}
           <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px' }}>Good morning</p>
           <p style={{ color: T1, fontSize: '26px', fontWeight: 800, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '8px' }}>Asha</p>
-          <span style={{ display: 'inline-block', background: 'rgba(120,140,93,0.08)', border: '1px solid rgba(120,140,93,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '5px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '5px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
             Post-CABG
           </span>
 
@@ -276,9 +276,9 @@ function PhoneMockup() {
 const LOG = [
   { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating” — typed by her son while she sat down.', color: '#A33417' },
   { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#A87200' },
-  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#51623B' },
-  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#51623B' },
-  { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#51623B' },
+  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#42623C' },
+  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#42623C' },
+  { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#42623C' },
 ]
 
 // ─── With / without — looping split-screen simulation ───────────────────────
@@ -315,8 +315,8 @@ function EmergencyRace() {
   const leftStatus  = t >= 15500 ? { label: 'Still en route', color: '#FF6B5E', bg: 'rgba(163,52,23,0.16)' }
     : t >= 10500 ? { label: 'Waiting for ambulance', color: '#E8A33D', bg: 'rgba(168,114,0,0.16)' }
     : { label: 'No plan yet', color: 'rgba(255,255,255,0.45)', bg: 'rgba(255,255,255,0.07)' }
-  const rightStatus = t >= 12500 ? { label: 'In the cath lab', color: '#3DDC97', bg: 'rgba(120,140,93,0.2)' }
-    : t >= 4500 ? { label: 'Routing locked', color: '#7AA7FF', bg: 'rgba(120,140,93,0.18)' }
+  const rightStatus = t >= 12500 ? { label: 'In the cath lab', color: '#3DDC97', bg: 'rgba(86,128,78,0.2)' }
+    : t >= 4500 ? { label: 'Routing locked', color: '#7AA7FF', bg: 'rgba(86,128,78,0.18)' }
     : { label: 'SOS active', color: '#FF6B5E', bg: 'rgba(163,52,23,0.16)' }
 
   const panel = (

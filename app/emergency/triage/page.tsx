@@ -11,13 +11,13 @@ type Step = 1 | 2 | 3 | 'result'
 type Outcome = 'call911' | 'high' | 'monitor'
 
 function getPainColor(n: number): string {
-  if (n <= 5) return '#51623B'
+  if (n <= 5) return '#42623C'
   if (n <= 8) return '#A87200'
   return '#A33417'
 }
 
 function getPainBg(n: number): string {
-  if (n <= 5) return 'rgba(120,140,93,0.12)'
+  if (n <= 5) return 'rgba(86,128,78,0.12)'
   if (n <= 8) return 'rgba(168,114,0,0.12)'
   return 'rgba(163,52,23,0.12)'
 }
@@ -65,7 +65,7 @@ export default function TriagePage() {
   const progressPct = step === 1 ? 33 : step === 2 ? 66 : 100
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', display: 'flex', flexDirection: 'column' }}>
 
       {/* Alert bar */}
       <div style={{
@@ -101,11 +101,11 @@ export default function TriagePage() {
         </motion.button>
 
         {/* Progress bar */}
-        <div style={{ flex: 1, margin: '0 14px', height: '4px', borderRadius: '4px', background: '#B5C68F', overflow: 'hidden' }}>
+        <div style={{ flex: 1, margin: '0 14px', height: '4px', borderRadius: '4px', background: '#98C890', overflow: 'hidden' }}>
           <motion.div
             animate={{ width: `${progressPct}%` }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            style={{ height: '100%', borderRadius: '4px', background: '#51623B' }}
+            style={{ height: '100%', borderRadius: '4px', background: '#42623C' }}
           />
         </div>
 
@@ -119,7 +119,7 @@ export default function TriagePage() {
                 width: isActive ? '18px' : '6px',
                 height: '6px',
                 borderRadius: '3px',
-                background: isActive || isDone ? '#51623B' : '#D8D4C8',
+                background: isActive || isDone ? '#42623C' : '#D8D4C8',
                 transition: 'all 0.3s ease',
               }} />
             )
@@ -140,8 +140,8 @@ export default function TriagePage() {
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <span style={{ color: '#716F67', fontSize: '11px' }}>Mild</span>
-                <span style={{ color: '#716F67', fontSize: '11px' }}>Worst ever</span>
+                <span style={{ color: '#6F6D65', fontSize: '11px' }}>Mild</span>
+                <span style={{ color: '#6F6D65', fontSize: '11px' }}>Worst ever</span>
               </div>
 
               {/* Pain scale */}
@@ -173,16 +173,16 @@ export default function TriagePage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#51623B' }} />
-                  <span style={{ color: '#716F67', fontSize: '10px' }}>1–5 mild</span>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#42623C' }} />
+                  <span style={{ color: '#6F6D65', fontSize: '10px' }}>1–5 mild</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A87200' }} />
-                  <span style={{ color: '#716F67', fontSize: '10px' }}>6–8 moderate</span>
+                  <span style={{ color: '#6F6D65', fontSize: '10px' }}>6–8 moderate</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A33417' }} />
-                  <span style={{ color: '#716F67', fontSize: '10px' }}>9–10 severe</span>
+                  <span style={{ color: '#6F6D65', fontSize: '10px' }}>9–10 severe</span>
                 </div>
               </div>
             </motion.div>
@@ -206,7 +206,7 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: '16px',
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(120,140,93,0.25)',
+                    border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
                     textAlign: 'left',
                     boxShadow: '0 0 0 0 transparent',
@@ -254,7 +254,7 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: '16px',
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(120,140,93,0.25)',
+                    border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
                     textAlign: 'left',
                   }}
@@ -400,13 +400,13 @@ export default function TriagePage() {
                 style={{
                   padding: '16px',
                   borderRadius: '16px',
-                  background: '#51623B',
+                  background: '#42623C',
                   border: 'none',
-                  color: '#CDDAAD',
+                  color: '#B3DDAC',
                   fontSize: '15px',
                   fontWeight: 700,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 20px rgba(120,140,93,0.28)',
+                  boxShadow: '0 4px 20px rgba(86,128,78,0.28)',
                 }}
               >
                 Navigate to nearest hospital
@@ -417,16 +417,16 @@ export default function TriagePage() {
           {step === 'result' && outcome === 'monitor' && (
             <motion.div key="result-monitor" variants={pageVariants} initial="initial" animate="animate" exit="exit" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <div style={{
-                background: 'rgba(120,140,93,0.07)',
-                border: '1.5px solid rgba(120,140,93,0.20)',
+                background: 'rgba(86,128,78,0.07)',
+                border: '1.5px solid rgba(86,128,78,0.20)',
                 borderRadius: '16px',
                 padding: '24px',
                 marginBottom: '16px',
-                boxShadow: '0 6px 32px rgba(120,140,93,0.08)',
+                boxShadow: '0 6px 32px rgba(86,128,78,0.08)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#51623B', flexShrink: 0 }} />
-                  <span style={{ color: '#51623B', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#42623C', flexShrink: 0 }} />
+                  <span style={{ color: '#42623C', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
                     Monitor at Home
                   </span>
                 </div>
@@ -445,14 +445,14 @@ export default function TriagePage() {
                 style={{
                   padding: '16px',
                   borderRadius: '16px',
-                  background: '#51623B',
+                  background: '#42623C',
                   border: 'none',
-                  color: '#CDDAAD',
+                  color: '#B3DDAC',
                   fontSize: '15px',
                   fontWeight: 700,
                   cursor: 'pointer',
                   marginBottom: '10px',
-                  boxShadow: '0 4px 20px rgba(120,140,93,0.26)',
+                  boxShadow: '0 4px 20px rgba(86,128,78,0.26)',
                 }}
               >
                 Go to hospital

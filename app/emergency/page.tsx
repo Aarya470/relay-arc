@@ -12,15 +12,15 @@ import { VOICE_LANGS, langById, detectLang, rememberLang, resolveLocale, type La
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#FFFFFF'
-const SURFACE = '#CDDAAD'
+const SURFACE = '#B3DDAC'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#716F67'
+const T3      = '#6F6D65'
 const RED     = '#A33417'
 const RED_DIM = 'rgba(163,52,23,0.07)'
 const RED_MID = 'rgba(163,52,23,0.14)'
-const ACCENT  = '#51623B'
-const BORDER  = '#B5C68F'
+const ACCENT  = '#42623C'
+const BORDER  = '#98C890'
 
 
 const TYPES = [

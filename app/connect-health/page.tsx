@@ -7,16 +7,16 @@ import { ArrowLeft, Copy, Check, ChevronRight, Heart, Activity, Zap, AlertCircle
 import { toast } from 'sonner'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#CDDAAD'
+const BG      = '#B3DDAC'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#716F67'
-const ACCENT  = '#51623B'
-const ACCENT_DIM = 'rgba(120,140,93,0.08)'
-const GREEN   = '#51623B'
-const GREEN_DIM = 'rgba(120,140,93,0.08)'
-const BORDER  = '#B5C68F'
+const T3      = '#6F6D65'
+const ACCENT  = '#42623C'
+const ACCENT_DIM = 'rgba(86,128,78,0.08)'
+const GREEN   = '#42623C'
+const GREEN_DIM = 'rgba(86,128,78,0.08)'
+const BORDER  = '#98C890'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
@@ -77,7 +77,7 @@ function CopyButton({ value }: { value: string }) {
       style={{
         display: 'flex', alignItems: 'center', gap: '6px',
         background: copied ? GREEN_DIM : ACCENT_DIM,
-        border: `1px solid ${copied ? 'rgba(120,140,93,0.2)' : 'rgba(120,140,93,0.2)'}`,
+        border: `1px solid ${copied ? 'rgba(86,128,78,0.2)' : 'rgba(86,128,78,0.2)'}`,
         borderRadius: '8px',
         padding: '7px 13px',
         cursor: 'pointer',
@@ -176,7 +176,7 @@ export default function ConnectHealth() {
           </p>
         </div>
         {connected && (
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px', background: GREEN_DIM, border: '1px solid rgba(120,140,93,0.2)', borderRadius: '99px', padding: '4px 10px' }}>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px', background: GREEN_DIM, border: '1px solid rgba(86,128,78,0.2)', borderRadius: '99px', padding: '4px 10px' }}>
             <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: GREEN }}/>
             <span style={{ color: GREEN, fontSize: '10px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>SYNCED</span>
           </div>

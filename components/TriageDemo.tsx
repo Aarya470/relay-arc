@@ -11,9 +11,9 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { triage, featurize, MODEL_META, ABSTAIN_THRESHOLD } from '@/lib/triage'
 
-const T1 = '#141413', T2 = '#5C5A52', T3 = '#716F67'
-const BORDER = '#B5C68F', BG2 = '#CDDAAD'
-const CRIT = '#A33417', ACCENT = '#51623B', GREEN = '#51623B'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#6F6D65'
+const BORDER = '#98C890', BG2 = '#B3DDAC'
+const CRIT = '#A33417', ACCENT = '#42623C', GREEN = '#42623C'
 const mono = 'var(--font-mono, monospace)'
 
 const LABELS: Record<string, string> = {
@@ -156,7 +156,7 @@ export default function TriageDemo() {
                 <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '14px' }}>
                   {result.evidence.map(e => (
                     <span key={e} style={{
-                      background: 'rgba(120,140,93,0.07)', border: '1px solid rgba(120,140,93,0.16)',
+                      background: 'rgba(86,128,78,0.07)', border: '1px solid rgba(86,128,78,0.16)',
                       color: ACCENT, fontFamily: mono, fontSize: '11px', fontWeight: 700, padding: '3px 8px',
                     }}>{e}</span>
                   ))}

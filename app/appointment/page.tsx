@@ -64,7 +64,7 @@ export default function AppointmentSummary() {
   )
 
   const stats = [
-    { label: 'Check-ins', value: checkins.length, color: '#51623B', bg: 'rgba(120,140,93,0.07)', border: 'rgba(120,140,93,0.15)', Icon: MessageSquare },
+    { label: 'Check-ins', value: checkins.length, color: '#42623C', bg: 'rgba(86,128,78,0.07)', border: 'rgba(86,128,78,0.15)', Icon: MessageSquare },
     { label: 'Emergencies', value: emergencies.length, color: '#A33417', bg: 'rgba(163,52,23,0.07)', border: 'rgba(163,52,23,0.15)', Icon: AlertTriangle },
     { label: 'Medications', value: profile?.medications?.length || 0, color: '#A87200', bg: 'rgba(168,114,0,0.07)', border: 'rgba(168,114,0,0.15)', Icon: Pill },
   ]
@@ -74,7 +74,7 @@ export default function AppointmentSummary() {
       <div style={{ padding: '56px 20px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/dashboard')}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: '1px solid #B5C68F', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: '1px solid #98C890', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <ArrowLeft size={15} color="rgba(237,234,224,0.5)"/>
           </motion.button>
           <div>
@@ -108,7 +108,7 @@ export default function AppointmentSummary() {
             }
           </motion.button>
         ) : (
-          <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
+          <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <div style={{ width: '22px', height: '22px', borderRadius: '6px', background: 'rgba(168,114,0,0.12)', border: '1px solid rgba(168,114,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -117,7 +117,7 @@ export default function AppointmentSummary() {
                 <p style={{ color: 'rgba(237,234,224,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Summary</p>
               </div>
               <motion.button whileTap={{ scale: 0.9 }} onClick={generateSummary}
-                style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #B5C68F', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #98C890', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <RefreshCw size={12} color="rgba(237,234,224,0.3)"/>
               </motion.button>
             </div>
@@ -126,13 +126,13 @@ export default function AppointmentSummary() {
         )}
 
         {/* Check-in history */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
           <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Recent check-ins</p>
           {checkins.length === 0 && <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '13px' }}>No check-ins yet</p>}
           {checkins.slice(0, 5).map((c, i) => (
             <div key={i} style={{ borderBottom: i < Math.min(checkins.length, 5) - 1 ? '1px solid #EDEAE0' : 'none', paddingBottom: i < Math.min(checkins.length, 5) - 1 ? '12px' : 0, marginBottom: i < Math.min(checkins.length, 5) - 1 ? '12px' : 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '5px' }}>
-                <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(120,140,93,0.5)', flexShrink: 0 }}/>
+                <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(86,128,78,0.5)', flexShrink: 0 }}/>
                 <p style={{ color: 'rgba(237,234,224,0.22)', fontFamily: 'monospace', fontSize: '10px' }}>{new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
               </div>
               <p style={{ color: 'rgba(237,234,224,0.55)', fontSize: '12px', lineHeight: 1.6 }}>{c.summary}</p>

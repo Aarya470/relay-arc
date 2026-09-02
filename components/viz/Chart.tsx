@@ -7,7 +7,7 @@
 // benchmark, never invented shapes.
 import { useEffect, useRef, useState } from 'react'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#716F67', BORDER = '#B5C68F'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65', BORDER = '#98C890'
 const mono = 'var(--font-mono, monospace)'
 
 /** Reveal on scroll — the bars grow once, when they come into view. */
@@ -50,7 +50,7 @@ export function BarChart({
             <span style={{ color: INK, fontSize: '13px', fontWeight: 600 }}>{b.label}</span>
             <span style={{ color: INK, fontFamily: mono, fontSize: '12.5px', fontWeight: 700 }}>{fmt(b.value)}</span>
           </div>
-          <div style={{ height: `${height}px`, background: '#CDDAAD', border: `1px solid ${BORDER}`, position: 'relative', overflow: 'hidden' }}>
+          <div style={{ height: `${height}px`, background: '#B3DDAC', border: `1px solid ${BORDER}`, position: 'relative', overflow: 'hidden' }}>
             <div style={{
               position: 'absolute', inset: '0 auto 0 0',
               width: seen ? `${Math.max(0.6, (b.value / top) * 100)}%` : '0%',

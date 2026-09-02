@@ -235,30 +235,30 @@ export default function PatientDetail() {
   }
 
   const score = summary?.priority_score || 0
-  const priorityColor = score >= 8 ? '#A33417' : score >= 5 ? '#A87200' : '#51623B'
-  const priorityBg = score >= 8 ? 'rgba(163,52,23,0.12)' : score >= 5 ? 'rgba(168,114,0,0.12)' : 'rgba(120,140,93,0.12)'
-  const priorityBorder = score >= 8 ? 'rgba(163,52,23,0.28)' : score >= 5 ? 'rgba(168,114,0,0.28)' : 'rgba(120,140,93,0.28)'
+  const priorityColor = score >= 8 ? '#A33417' : score >= 5 ? '#A87200' : '#42623C'
+  const priorityBg = score >= 8 ? 'rgba(163,52,23,0.12)' : score >= 5 ? 'rgba(168,114,0,0.12)' : 'rgba(86,128,78,0.12)'
+  const priorityBorder = score >= 8 ? 'rgba(163,52,23,0.28)' : score >= 5 ? 'rgba(168,114,0,0.28)' : 'rgba(86,128,78,0.28)'
 
   if (loading || !patient) return (
-    <div style={{ minHeight: '100vh', background: '#CDDAAD', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#B3DDAC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
         <div style={{ display: 'flex', gap: '6px' }}>
           {[0, 1, 2].map(i => (
             <motion.div
               key={i}
-              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#51623B' }}
+              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#42623C' }}
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
             />
           ))}
         </div>
-        <p style={{ color: '#716F67', fontSize: '13px', letterSpacing: '0.02em' }}>Loading patient data…</p>
+        <p style={{ color: '#6F6D65', fontSize: '13px', letterSpacing: '0.02em' }}>Loading patient data…</p>
       </div>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#CDDAAD', paddingBottom: '48px' }}>
+    <div style={{ minHeight: '100vh', background: '#B3DDAC', paddingBottom: '48px' }}>
 
       {/* Jitsi overlay */}
       <AnimatePresence>
@@ -286,7 +286,7 @@ export default function PatientDetail() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '24px 24px 0 0', padding: '28px 20px 52px', width: '100%' }}
+              style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '24px 24px 0 0', padding: '28px 20px 52px', width: '100%' }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>Reschedule appointment</p>
@@ -298,7 +298,7 @@ export default function PatientDetail() {
                 </button>
               </div>
 
-              <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>New date</p>
+              <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>New date</p>
               <input
                 type="date"
                 value={rescheduleDate}
@@ -307,7 +307,7 @@ export default function PatientDetail() {
                 style={{ width: '100%', background: '#FFFFFF', border: '1px solid #D8D4C8', borderRadius: '12px', padding: '13px 16px', color: '#141413', fontSize: '14px', outline: 'none', marginBottom: '14px', boxSizing: 'border-box' }}
               />
 
-              <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>New time</p>
+              <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>New time</p>
               <input
                 type="time"
                 value={rescheduleTime}
@@ -319,7 +319,7 @@ export default function PatientDetail() {
                 whileTap={{ scale: 0.97 }}
                 onClick={rescheduleAppointment}
                 disabled={!rescheduleDate}
-                style={{ width: '100%', background: rescheduleDate ? '#51623B' : '#F2F0E8', color: rescheduleDate ? '#ffffff' : '#716F67', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '12px', border: 'none', cursor: rescheduleDate ? 'pointer' : 'default', transition: 'background 0.15s' }}
+                style={{ width: '100%', background: rescheduleDate ? '#42623C' : '#F2F0E8', color: rescheduleDate ? '#ffffff' : '#6F6D65', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '12px', border: 'none', cursor: rescheduleDate ? 'pointer' : 'default', transition: 'background 0.15s' }}
               >
                 Confirm reschedule
               </motion.button>
@@ -329,7 +329,7 @@ export default function PatientDetail() {
       </AnimatePresence>
 
       {/* Header */}
-      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #B5C68F', padding: '56px 20px 0' }}>
+      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #98C890', padding: '56px 20px 0' }}>
         {/* Back + name row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
           <motion.button
@@ -343,7 +343,7 @@ export default function PatientDetail() {
           <div style={{ flex: 1, minWidth: 0 }}>
             <h1 style={{ color: '#141413', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.5px', lineHeight: 1.15, margin: 0 }}>{patient.full_name}</h1>
             <div style={{ marginTop: '5px' }}>
-              <span style={{ display: 'inline-block', background: 'rgba(120,140,93,0.12)', border: '1px solid rgba(120,140,93,0.25)', borderRadius: '6px', padding: '2px 9px', color: '#51623B', fontSize: '11px', fontWeight: 600 }}>
+              <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.25)', borderRadius: '6px', padding: '2px 9px', color: '#42623C', fontSize: '11px', fontWeight: 600 }}>
                 {patient.diagnosis}
               </span>
             </div>
@@ -386,10 +386,10 @@ export default function PatientDetail() {
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => { setAppointmentType('scheduled'); setShowSchedule(true) }}
-          style={{ width: '100%', background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.22)', borderRadius: '12px', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginBottom: '18px' }}
+          style={{ width: '100%', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', borderRadius: '12px', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginBottom: '18px' }}
         >
-          <Calendar size={14} color="#51623B" />
-          <span style={{ color: '#51623B', fontWeight: 600, fontSize: '13px' }}>Schedule appointment</span>
+          <Calendar size={14} color="#42623C" />
+          <span style={{ color: '#42623C', fontWeight: 600, fontSize: '13px' }}>Schedule appointment</span>
         </motion.button>
 
         {/* Tab bar */}
@@ -412,7 +412,7 @@ export default function PatientDetail() {
                 fontSize: '13px',
                 fontWeight: tab === t.id ? 700 : 500,
                 whiteSpace: 'nowrap',
-                color: tab === t.id ? '#51623B' : '#716F67',
+                color: tab === t.id ? '#42623C' : '#6F6D65',
                 transition: 'color 0.15s',
               }}
             >
@@ -420,7 +420,7 @@ export default function PatientDetail() {
               {tab === t.id && (
                 <motion.div
                   layoutId="tab-underline"
-                  style={{ position: 'absolute', bottom: 0, left: '10px', right: '10px', height: '2px', background: '#51623B', borderRadius: '2px' }}
+                  style={{ position: 'absolute', bottom: 0, left: '10px', right: '10px', height: '2px', background: '#42623C', borderRadius: '2px' }}
                   transition={{ type: 'spring', stiffness: 400, damping: 34 }}
                 />
               )}
@@ -437,8 +437,8 @@ export default function PatientDetail() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
             {/* Patient info card */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '18px' }}>
-              <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>Patient info</p>
+            <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '18px' }}>
+              <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>Patient info</p>
               {[
                 { label: 'Phone', value: patient.phone },
                 // Empty-string fallback so a missing date is filtered out below
@@ -462,7 +462,7 @@ export default function PatientDetail() {
                     borderBottom: i < arr.length - 1 ? '1px solid #EDEAE0' : 'none',
                   }}
                 >
-                  <span style={{ color: '#716F67', fontSize: '12px', flexShrink: 0 }}>{item.label}</span>
+                  <span style={{ color: '#6F6D65', fontSize: '12px', flexShrink: 0 }}>{item.label}</span>
                   <span style={{
                     color: (item as any).red ? '#A33417' : (item as any).amber ? '#A87200' : '#141413',
                     fontSize: '12px',
@@ -477,10 +477,10 @@ export default function PatientDetail() {
             </div>
 
             {/* Medications card */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '18px' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                <Pill size={12} color="#51623B" />
-                <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px' }}>Medications</p>
+                <Pill size={12} color="#42623C" />
+                <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px' }}>Medications</p>
               </div>
 
               {patient.medications?.map((m: any, i: number) => {
@@ -496,7 +496,7 @@ export default function PatientDetail() {
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: overdue ? '8px' : 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ display: 'inline-block', background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.20)', borderRadius: '6px', padding: '2px 8px', color: overdue ? '#A33417' : '#51623B', fontSize: '12px', fontWeight: 600 }}>
+                        <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.20)', borderRadius: '6px', padding: '2px 8px', color: overdue ? '#A33417' : '#42623C', fontSize: '12px', fontWeight: 600 }}>
                           {m.name}
                         </span>
                         {overdue && (
@@ -505,7 +505,7 @@ export default function PatientDetail() {
                           </span>
                         )}
                       </div>
-                      <span style={{ color: '#716F67', fontSize: '11px', fontFamily: 'monospace' }}>{m.dose} · {m.frequency}</span>
+                      <span style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'monospace' }}>{m.dose} · {m.frequency}</span>
                     </div>
 
                     {overdue && (
@@ -516,15 +516,15 @@ export default function PatientDetail() {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
-                          background: reminderSent[m.name] ? 'rgba(120,140,93,0.10)' : '#F2F0E8',
-                          border: `1px solid ${reminderSent[m.name] ? 'rgba(120,140,93,0.25)' : '#B5C68F'}`,
+                          background: reminderSent[m.name] ? 'rgba(86,128,78,0.10)' : '#F2F0E8',
+                          border: `1px solid ${reminderSent[m.name] ? 'rgba(86,128,78,0.25)' : '#98C890'}`,
                           borderRadius: '8px',
                           padding: '6px 12px',
                           cursor: reminderSent[m.name] ? 'default' : 'pointer',
                         }}
                       >
-                        <Bell size={11} color={reminderSent[m.name] ? '#51623B' : '#5C5A52'} />
-                        <span style={{ color: reminderSent[m.name] ? '#51623B' : '#5C5A52', fontSize: '11px', fontWeight: 600 }}>
+                        <Bell size={11} color={reminderSent[m.name] ? '#42623C' : '#5C5A52'} />
+                        <span style={{ color: reminderSent[m.name] ? '#42623C' : '#5C5A52', fontSize: '11px', fontWeight: 600 }}>
                           {reminderSent[m.name] ? 'Reminder sent' : 'Send reminder'}
                         </span>
                       </motion.button>
@@ -534,7 +534,7 @@ export default function PatientDetail() {
               })}
 
               {(!patient.medications || patient.medications.length === 0) && (
-                <p style={{ color: '#716F67', fontSize: '13px' }}>No medications on file</p>
+                <p style={{ color: '#6F6D65', fontSize: '13px' }}>No medications on file</p>
               )}
             </div>
 
@@ -560,7 +560,7 @@ export default function PatientDetail() {
                       <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#A33417', flexShrink: 0 }} />
                       <span style={{ color: '#5C5A52', fontSize: '12px' }}>{e.emergency_type?.replace('_', ' ')}</span>
                     </div>
-                    <span style={{ color: '#716F67', fontSize: '11px', fontFamily: 'monospace' }}>
+                    <span style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'monospace' }}>
                       {new Date(e.created_at).toLocaleDateString()}
                     </span>
                   </div>
@@ -569,10 +569,10 @@ export default function PatientDetail() {
             )}
 
             {/* AI Summary card */}
-            <div style={{ background: '#FFFFFF', border: '1px solid rgba(120,140,93,0.18)', borderRadius: '16px', padding: '18px' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid rgba(86,128,78,0.18)', borderRadius: '16px', padding: '18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <span style={{ fontSize: '16px' }}>✦</span>
-                <p style={{ color: '#51623B', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px' }}>AI Summary</p>
+                <p style={{ color: '#42623C', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px' }}>AI Summary</p>
               </div>
 
               {generatingSummary ? (
@@ -580,12 +580,12 @@ export default function PatientDetail() {
                   {[0, 1, 2].map(i => (
                     <motion.div
                       key={i}
-                      style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#51623B' }}
+                      style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#42623C' }}
                       animate={{ opacity: [0.3, 1, 0.3] }}
                       transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
                     />
                   ))}
-                  <p style={{ color: '#716F67', fontSize: '12px', marginLeft: '4px' }}>Generating summary…</p>
+                  <p style={{ color: '#6F6D65', fontSize: '12px', marginLeft: '4px' }}>Generating summary…</p>
                 </div>
               ) : (
                 <p style={{ color: '#141413', fontSize: '13px', lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{aiSummary}</p>
@@ -595,7 +595,7 @@ export default function PatientDetail() {
                 <motion.button
                   whileTap={{ scale: 0.97 }}
                   onClick={() => generateSummary()}
-                  style={{ marginTop: '8px', background: '#51623B', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '10px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
+                  style={{ marginTop: '8px', background: '#42623C', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '10px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
                 >
                   Generate summary
                 </motion.button>
@@ -604,8 +604,8 @@ export default function PatientDetail() {
 
             {/* Emergency contacts card */}
             {patient.emergency_contacts?.length > 0 && (
-              <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '18px' }}>
-                <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>Emergency contacts</p>
+              <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '18px' }}>
+                <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>Emergency contacts</p>
                 {patient.emergency_contacts.map((c: any, i: number) => (
                   <div
                     key={i}
@@ -618,12 +618,12 @@ export default function PatientDetail() {
                       borderBottom: i < patient.emergency_contacts.length - 1 ? '1px solid #EDEAE0' : 'none',
                     }}
                   >
-                    <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(120,140,93,0.12)', border: '1px solid rgba(120,140,93,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#51623B', fontWeight: 700, fontSize: '14px', flexShrink: 0 }}>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#42623C', fontWeight: 700, fontSize: '14px', flexShrink: 0 }}>
                       {c.name?.[0]}
                     </div>
                     <div>
                       <p style={{ color: '#141413', fontSize: '13px', fontWeight: 600, margin: 0 }}>{c.name}</p>
-                      <p style={{ color: '#716F67', fontSize: '11px', margin: 0, marginTop: '2px' }}>{c.relationship} · {c.phone}</p>
+                      <p style={{ color: '#6F6D65', fontSize: '11px', margin: 0, marginTop: '2px' }}>{c.relationship} · {c.phone}</p>
                     </div>
                   </div>
                 ))}
@@ -636,20 +636,20 @@ export default function PatientDetail() {
         {tab === 'checkins' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {checkins.length === 0 && (
-              <p style={{ color: '#716F67', fontSize: '13px', textAlign: 'center', padding: '40px 0' }}>No check-ins yet</p>
+              <p style={{ color: '#6F6D65', fontSize: '13px', textAlign: 'center', padding: '40px 0' }}>No check-ins yet</p>
             )}
             {checkins.map((c, i) => (
               <div
                 key={i}
-                style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '16px' }}
+                style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px' }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Check size={14} color="#51623B" />
+                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Check size={14} color="#42623C" />
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ color: '#141413', fontSize: '12px', fontWeight: 700, margin: 0 }}>Check-in completed</p>
-                    <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', margin: 0, marginTop: '2px' }}>
+                    <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', margin: 0, marginTop: '2px' }}>
                       {new Date(c.created_at).toLocaleString()}
                     </p>
                   </div>
@@ -657,10 +657,10 @@ export default function PatientDetail() {
 
                 {/* Clinical summary lines */}
                 <div style={{ background: '#FFFFFF', borderRadius: '10px', padding: '12px', marginTop: '4px' }}>
-                  <p style={{ color: '#716F67', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>Clinical summary</p>
+                  <p style={{ color: '#6F6D65', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '8px' }}>Clinical summary</p>
                   {c.summary?.split('\n').filter((s: string) => s.trim().length > 5).slice(0, 7).map((line: string, j: number) => (
                     <div key={j} style={{ display: 'flex', gap: '8px', marginBottom: '5px' }}>
-                      <span style={{ color: '#51623B', fontSize: '12px', flexShrink: 0, marginTop: '1px' }}>–</span>
+                      <span style={{ color: '#42623C', fontSize: '12px', flexShrink: 0, marginTop: '1px' }}>–</span>
                       <p style={{ color: '#5C5A52', fontSize: '12px', lineHeight: 1.6, margin: 0 }}>{line.trim().replace(/^[•\-\*]\s*/, '')}</p>
                     </div>
                   ))}
@@ -674,8 +674,8 @@ export default function PatientDetail() {
         {tab === 'notes' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {/* Add note input */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '16px' }}>
-              <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '12px' }}>Add note</p>
+            <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px' }}>
+              <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '12px' }}>Add note</p>
               <textarea
                 value={newNote}
                 onChange={e => setNewNote(e.target.value)}
@@ -685,7 +685,7 @@ export default function PatientDetail() {
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={addNote}
-                style={{ width: '100%', background: '#51623B', color: '#ffffff', fontWeight: 700, fontSize: '14px', padding: '13px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                style={{ width: '100%', background: '#42623C', color: '#ffffff', fontWeight: 700, fontSize: '14px', padding: '13px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <Send size={14} />
                 Save note
@@ -696,9 +696,9 @@ export default function PatientDetail() {
             {notes.map((note, i) => (
               <div
                 key={i}
-                style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '14px', padding: '14px 16px' }}
+                style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '14px', padding: '14px 16px' }}
               >
-                <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', marginBottom: '8px' }}>
+                <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', marginBottom: '8px' }}>
                   {new Date(note.created_at).toLocaleString()}
                 </p>
                 <p style={{ color: '#141413', fontSize: '13px', lineHeight: 1.65 }}>{note.content}</p>
@@ -712,12 +712,12 @@ export default function PatientDetail() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {appointments.length === 0 && (
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <Calendar size={32} color="#716F67" style={{ margin: '0 auto 12px' }} />
-                <p style={{ color: '#716F67', fontSize: '13px' }}>No appointments yet</p>
+                <Calendar size={32} color="#6F6D65" style={{ margin: '0 auto 12px' }} />
+                <p style={{ color: '#6F6D65', fontSize: '13px' }}>No appointments yet</p>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
                   onClick={() => { setAppointmentType('scheduled'); setShowSchedule(true) }}
-                  style={{ marginTop: '16px', background: '#51623B', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '11px 22px', borderRadius: '12px', border: 'none', cursor: 'pointer' }}
+                  style={{ marginTop: '16px', background: '#42623C', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '11px 22px', borderRadius: '12px', border: 'none', cursor: 'pointer' }}
                 >
                   Schedule first appointment
                 </motion.button>
@@ -726,31 +726,31 @@ export default function PatientDetail() {
 
             {appointments.map((appt, i) => {
               const joinable = isJoinable(appt)
-              const statusColor = appt.status === 'confirmed' ? '#51623B'
+              const statusColor = appt.status === 'confirmed' ? '#42623C'
                 : appt.status === 'declined' ? '#A33417'
-                : appt.status === 'completed' ? '#51623B'
+                : appt.status === 'completed' ? '#42623C'
                 : '#A87200'
-              const statusBg = appt.status === 'confirmed' ? 'rgba(120,140,93,0.08)'
+              const statusBg = appt.status === 'confirmed' ? 'rgba(86,128,78,0.08)'
                 : appt.status === 'declined' ? 'rgba(163,52,23,0.08)'
-                : appt.status === 'completed' ? 'rgba(120,140,93,0.08)'
+                : appt.status === 'completed' ? 'rgba(86,128,78,0.08)'
                 : 'rgba(168,114,0,0.08)'
-              const borderColor = appt.status === 'confirmed' ? 'rgba(120,140,93,0.20)'
+              const borderColor = appt.status === 'confirmed' ? 'rgba(86,128,78,0.20)'
                 : appt.status === 'declined' ? 'rgba(163,52,23,0.18)'
-                : appt.status === 'completed' ? 'rgba(120,140,93,0.18)'
+                : appt.status === 'completed' ? 'rgba(86,128,78,0.18)'
                 : 'rgba(168,114,0,0.20)'
 
               return (
                 <div
                   key={i}
                   style={{
-                    background: joinable ? 'rgba(120,140,93,0.07)' : statusBg,
-                    border: `1px solid ${joinable ? 'rgba(120,140,93,0.30)' : borderColor}`,
+                    background: joinable ? 'rgba(86,128,78,0.07)' : statusBg,
+                    border: `1px solid ${joinable ? 'rgba(86,128,78,0.30)' : borderColor}`,
                     borderRadius: '16px',
                     padding: '16px',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                    <span style={{ color: appt.type === 'immediate' ? '#A33417' : '#51623B', fontSize: '13px', fontWeight: 700 }}>
+                    <span style={{ color: appt.type === 'immediate' ? '#A33417' : '#42623C', fontSize: '13px', fontWeight: 700 }}>
                       {appt.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
                     </span>
                     <span style={{ color: statusColor, fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', fontWeight: 600 }}>
@@ -765,7 +765,7 @@ export default function PatientDetail() {
                   )}
 
                   {(appt.notes || appt.patient_concern) && (
-                    <p style={{ color: '#716F67', fontSize: '12px', marginBottom: '12px', lineHeight: 1.5 }}>
+                    <p style={{ color: '#6F6D65', fontSize: '12px', marginBottom: '12px', lineHeight: 1.5 }}>
                       {appt.notes || appt.patient_concern}
                     </p>
                   )}
@@ -776,17 +776,17 @@ export default function PatientDetail() {
                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         onClick={() => confirmAppointment(appt.id)}
-                        style={{ flex: 1, background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.22)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
+                        style={{ flex: 1, background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
                       >
-                        <Check size={13} color="#51623B" />
-                        <span style={{ color: '#51623B', fontSize: '12px', fontWeight: 700 }}>Confirm</span>
+                        <Check size={13} color="#42623C" />
+                        <span style={{ color: '#42623C', fontSize: '12px', fontWeight: 700 }}>Confirm</span>
                       </motion.button>
                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         onClick={() => { setReschedulingAppt(appt); setRescheduleDate(''); setRescheduleTime('09:00') }}
-                        style={{ flex: 1, background: 'rgba(120,140,93,0.08)', border: '1px solid rgba(120,140,93,0.18)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                        style={{ flex: 1, background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.18)', borderRadius: '10px', padding: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                       >
-                        <span style={{ color: '#51623B', fontSize: '12px', fontWeight: 700 }}>Reschedule</span>
+                        <span style={{ color: '#42623C', fontSize: '12px', fontWeight: 700 }}>Reschedule</span>
                       </motion.button>
                       <motion.button
                         whileTap={{ scale: 0.95 }}
@@ -814,7 +814,7 @@ export default function PatientDetail() {
                     <motion.button
                       whileTap={{ scale: 0.97 }}
                       onClick={() => setActiveCall(appt)}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#51623B', borderRadius: '10px', padding: '12px', color: '#ffffff', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer', marginTop: '12px' }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#42623C', borderRadius: '10px', padding: '12px', color: '#ffffff', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer', marginTop: '12px' }}
                     >
                       <Video size={15} />
                       Join video call
@@ -842,7 +842,7 @@ export default function PatientDetail() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', bounce: 0.1 }}
-              style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '24px 24px 0 0', padding: '24px 20px 52px', width: '100%', maxHeight: '88vh', overflowY: 'auto' }}
+              style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '24px 24px 0 0', padding: '24px 20px 52px', width: '100%', maxHeight: '88vh', overflowY: 'auto' }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>Schedule appointment</p>
@@ -855,7 +855,7 @@ export default function PatientDetail() {
               </div>
 
               {/* Calendar picker */}
-              <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                   <button
                     onClick={() => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y - 1) } else setCalMonth(m => m - 1) }}
@@ -875,7 +875,7 @@ export default function PatientDetail() {
                 {/* Day headers */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '8px' }}>
                   {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
-                    <p key={i} style={{ color: '#716F67', fontSize: '11px', textAlign: 'center', fontFamily: 'monospace', margin: 0 }}>{d}</p>
+                    <p key={i} style={{ color: '#6F6D65', fontSize: '11px', textAlign: 'center', fontFamily: 'monospace', margin: 0 }}>{d}</p>
                   ))}
                 </div>
 
@@ -898,8 +898,8 @@ export default function PatientDetail() {
                           border: 'none',
                           cursor: isPast ? 'default' : 'pointer',
                           fontSize: '13px',
-                          background: isSelected ? '#51623B' : 'transparent',
-                          color: isSelected ? '#ffffff' : isPast ? '#716F67' : '#141413',
+                          background: isSelected ? '#42623C' : 'transparent',
+                          color: isSelected ? '#ffffff' : isPast ? '#6F6D65' : '#141413',
                           fontWeight: isSelected ? 700 : 400,
                         }}
                       >
@@ -912,8 +912,8 @@ export default function PatientDetail() {
 
               {/* Time picker */}
               {selectedDate && (
-                <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '14px', marginBottom: '12px' }}>
-                  <p style={{ color: '#716F67', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '10px' }}>Select time</p>
+                <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '14px', marginBottom: '12px' }}>
+                  <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '10px' }}>Select time</p>
                   <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none' }}>
                     {times.map(t => (
                       <button
@@ -922,14 +922,14 @@ export default function PatientDetail() {
                         style={{
                           padding: '8px 14px',
                           borderRadius: '20px',
-                          border: selectedTime === t ? '1px solid rgba(120,140,93,0.40)' : '1px solid #B5C68F',
+                          border: selectedTime === t ? '1px solid rgba(86,128,78,0.40)' : '1px solid #98C890',
                           cursor: 'pointer',
                           fontSize: '12px',
                           fontWeight: 600,
                           whiteSpace: 'nowrap',
                           flexShrink: 0,
-                          background: selectedTime === t ? 'rgba(120,140,93,0.18)' : '#F2F0E8',
-                          color: selectedTime === t ? '#51623B' : '#5C5A52',
+                          background: selectedTime === t ? 'rgba(86,128,78,0.18)' : '#F2F0E8',
+                          color: selectedTime === t ? '#42623C' : '#5C5A52',
                         }}
                       >
                         {t}
@@ -951,7 +951,7 @@ export default function PatientDetail() {
                 whileTap={{ scale: 0.97 }}
                 onClick={scheduleAppointment}
                 disabled={!selectedDate}
-                style={{ width: '100%', background: selectedDate ? '#51623B' : '#F2F0E8', color: selectedDate ? '#ffffff' : '#716F67', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '12px', border: 'none', cursor: selectedDate ? 'pointer' : 'default', transition: 'background 0.15s' }}
+                style={{ width: '100%', background: selectedDate ? '#42623C' : '#F2F0E8', color: selectedDate ? '#ffffff' : '#6F6D65', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '12px', border: 'none', cursor: selectedDate ? 'pointer' : 'default', transition: 'background 0.15s' }}
               >
                 {selectedDate ? `Confirm for ${selectedDate} at ${selectedTime}` : 'Select a date to continue'}
               </motion.button>

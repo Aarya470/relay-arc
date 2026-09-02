@@ -61,7 +61,7 @@ export default function HistoryPage() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '80px 20px 100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px' }}>
       {[1,2,3,4,5].map(i => (
         <Skeleton key={i} style={{ height: '48px', borderRadius: '10px', background: '#F2F0E8', marginBottom: '8px' }}/>
       ))}
@@ -73,21 +73,21 @@ export default function HistoryPage() {
   const mono = 'var(--font-mono, monospace)'
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', paddingBottom: '100px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '100px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* Header */}
       <div style={{ padding: '56px 20px 0' }}>
         <button onClick={() => router.push('/dashboard')}
-          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#716F67', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#6F6D65', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
           <ArrowLeft size={14}/> Dashboard
         </button>
-        <p style={{ color: '#716F67', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Health history</p>
+        <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Health history</p>
         <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, marginBottom: '24px' }}>
           Your record
         </h1>
 
         {/* Tabs — text + underline */}
-        <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #B5C68F' }}>
+        <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #98C890' }}>
           {([['checkins', 'Check-ins', checkins.length], ['emergencies', 'Emergencies', emergencies.length]] as const).map(([key, label, count]) => (
             <button
               key={key}
@@ -99,10 +99,10 @@ export default function HistoryPage() {
                 marginBottom: '-1px', fontFamily: 'inherit',
               }}
             >
-              <span style={{ color: tab === key ? '#141413' : '#716F67', fontSize: '14px', fontWeight: tab === key ? 700 : 500 }}>
+              <span style={{ color: tab === key ? '#141413' : '#6F6D65', fontSize: '14px', fontWeight: tab === key ? 700 : 500 }}>
                 {label}
               </span>
-              <span style={{ color: tab === key ? (key === 'emergencies' ? '#A33417' : '#51623B') : '#C4BFB0', fontSize: '12px', fontFamily: mono, fontWeight: 700 }}>
+              <span style={{ color: tab === key ? (key === 'emergencies' ? '#A33417' : '#42623C') : '#C4BFB0', fontSize: '12px', fontFamily: mono, fontWeight: 700 }}>
                 {count}
               </span>
             </button>
@@ -116,21 +116,21 @@ export default function HistoryPage() {
             <motion.div key="checkins" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               {checkins.length === 0 ? (
                 <div style={{ padding: '48px 0' }}>
-                  <p style={{ color: '#716F67', fontSize: '14px', marginBottom: '10px' }}>No check-ins yet.</p>
+                  <p style={{ color: '#6F6D65', fontSize: '14px', marginBottom: '10px' }}>No check-ins yet.</p>
                   <button onClick={() => router.push('/checkin')}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#51623B', fontSize: '14px', fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#42623C', fontSize: '14px', fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
                     Start your first check-in →
                   </button>
                 </div>
               ) : (
                 Object.entries(checkinGroups).map(([date, items]) => (
                   <div key={date} style={{ marginBottom: '28px' }}>
-                    <p style={{ color: '#716F67', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
+                    <p style={{ color: '#6F6D65', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
                       {date}
                     </p>
-                    <div style={{ borderTop: '1px solid #B5C68F' }}>
+                    <div style={{ borderTop: '1px solid #98C890' }}>
                       {(items as Checkin[]).map((c: Checkin) => (
-                        <div key={c.id} style={{ borderBottom: '1px solid #B5C68F' }}>
+                        <div key={c.id} style={{ borderBottom: '1px solid #98C890' }}>
                           <button
                             onClick={() => setExpanded(expanded === c.id ? null : c.id)}
                             style={{ width: '100%', padding: '13px 0', display: 'flex', alignItems: 'center', gap: '16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
@@ -154,7 +154,7 @@ export default function HistoryPage() {
                                 transition={{ duration: 0.18 }}
                                 style={{ overflow: 'hidden' }}
                               >
-                                <div style={{ borderLeft: '2px solid #B5C68F', paddingLeft: '14px', margin: '2px 0 16px 88px' }} className="history-expand">
+                                <div style={{ borderLeft: '2px solid #98C890', paddingLeft: '14px', margin: '2px 0 16px 88px' }} className="history-expand">
                                   <p style={{ color: '#5C5A52', fontSize: '13px', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
                                     {c.summary}
                                   </p>
@@ -175,17 +175,17 @@ export default function HistoryPage() {
             <motion.div key="emergencies" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               {emergencies.length === 0 ? (
                 <div style={{ padding: '48px 0' }}>
-                  <p style={{ color: '#716F67', fontSize: '14px' }}>No emergency events. Good.</p>
+                  <p style={{ color: '#6F6D65', fontSize: '14px' }}>No emergency events. Good.</p>
                 </div>
               ) : (
                 Object.entries(emergencyGroups).map(([date, items]) => (
                   <div key={date} style={{ marginBottom: '28px' }}>
-                    <p style={{ color: '#716F67', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
+                    <p style={{ color: '#6F6D65', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
                       {date}
                     </p>
-                    <div style={{ borderTop: '1px solid #B5C68F' }}>
+                    <div style={{ borderTop: '1px solid #98C890' }}>
                       {(items as Emergency[]).map((e: Emergency) => (
-                        <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '13px 0', borderBottom: '1px solid #B5C68F' }}>
+                        <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '13px 0', borderBottom: '1px solid #98C890' }}>
                           <span style={{ color: '#141413', fontSize: '13px', fontFamily: mono, fontWeight: 700, flexShrink: 0, width: '72px' }}>
                             {parseTS(e.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                           </span>
@@ -194,11 +194,11 @@ export default function HistoryPage() {
                           </span>
                           <span style={{
                             display: 'inline-flex', alignItems: 'center', gap: '6px',
-                            color: e.status === 'resolved' ? '#51623B' : '#A33417',
+                            color: e.status === 'resolved' ? '#42623C' : '#A33417',
                             fontSize: '10px', fontFamily: mono, fontWeight: 700,
                             letterSpacing: '1px', textTransform: 'uppercase' as const, flexShrink: 0,
                           }}>
-                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: e.status === 'resolved' ? '#51623B' : '#A33417' }}/>
+                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: e.status === 'resolved' ? '#42623C' : '#A33417' }}/>
                             {e.status}
                           </span>
                         </div>

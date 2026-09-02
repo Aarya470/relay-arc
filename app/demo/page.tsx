@@ -8,10 +8,10 @@ import { supabase } from '@/lib/supabase'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#716F67'
-const BORDER = '#B5C68F'
+const T3 = '#6F6D65'
+const BORDER = '#98C890'
 const RED = '#A33417'
-const GREEN = '#51623B'
+const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
 export default function DemoLauncher() {
@@ -27,7 +27,7 @@ export default function DemoLauncher() {
   const toggle = (next: boolean) => { setDemo(next); setOn(next) }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
       <div style={{ maxWidth: '460px', margin: '0 auto', paddingTop: '64px', paddingBottom: '60px' }}>
 
@@ -76,7 +76,7 @@ export default function DemoLauncher() {
         <button onClick={() => toggle(!on)}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            width: '100%', background: on ? 'rgba(120,140,93,0.06)' : 'none',
+            width: '100%', background: on ? 'rgba(86,128,78,0.06)' : 'none',
             border: `1.5px solid ${on ? GREEN : BORDER}`, borderRadius: '12px',
             padding: '15px 18px', cursor: 'pointer', fontFamily: 'inherit', marginBottom: '12px',
           }}>

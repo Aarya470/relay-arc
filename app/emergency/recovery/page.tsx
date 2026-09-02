@@ -179,22 +179,22 @@ function RecoveryContent() {
   const protocol = PROTOCOLS[type] || PROTOCOLS.other
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC' }}>
       {/* Green "You're safe" header */}
       <div
         style={{
           position: 'sticky', top: 0, zIndex: 20,
           display: 'flex', alignItems: 'center', gap: '12px',
           padding: '16px',
-          background: '#51623B',
-          boxShadow: '0 2px 20px rgba(120,140,93,0.30)',
+          background: '#42623C',
+          boxShadow: '0 2px 20px rgba(86,128,78,0.30)',
         }}
       >
         <button
           onClick={() => router.push('/dashboard')}
           style={{
             padding: '4px', borderRadius: '50%', background: 'none',
-            border: 'none', cursor: 'pointer', color: '#CDDAAD',
+            border: 'none', cursor: 'pointer', color: '#B3DDAC',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
           aria-label="Back to dashboard"
@@ -202,8 +202,8 @@ function RecoveryContent() {
           <ChevronLeft style={{ width: '20px', height: '20px' }} />
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle style={{ width: '20px', height: '20px', color: '#CDDAAD' }} />
-          <span style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#CDDAAD' }}>
+          <CheckCircle style={{ width: '20px', height: '20px', color: '#B3DDAC' }} />
+          <span style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#B3DDAC' }}>
             You&apos;re safe
           </span>
         </div>
@@ -218,7 +218,7 @@ function RecoveryContent() {
         >
           <p style={{
             fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
-            letterSpacing: '0.12em', color: '#51623B', marginBottom: '4px',
+            letterSpacing: '0.12em', color: '#42623C', marginBottom: '4px',
           }}>
             Recovery protocol
           </p>
@@ -238,7 +238,7 @@ function RecoveryContent() {
         {/* Next 24-48 hours */}
         <Card delay={0.1}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <Clock style={{ width: '16px', height: '16px', flexShrink: 0, color: '#51623B' }} />
+            <Clock style={{ width: '16px', height: '16px', flexShrink: 0, color: '#42623C' }} />
             <CardLabel noMargin>Next 24–48 hours</CardLabel>
           </div>
           <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -249,7 +249,7 @@ function RecoveryContent() {
                     flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '11px', fontWeight: 700, marginTop: '2px',
-                    background: 'rgba(120,140,93,0.15)', color: '#51623B',
+                    background: 'rgba(86,128,78,0.15)', color: '#42623C',
                   }}
                 >
                   {i + 1}
@@ -307,7 +307,7 @@ function RecoveryContent() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               width: '100%', padding: '12px', borderRadius: '12px',
               fontSize: '14px', fontWeight: 600, textDecoration: 'none',
-              background: '#51623B', color: '#CDDAAD',
+              background: '#42623C', color: '#B3DDAC',
             }}
           >
             <Phone style={{ width: '16px', height: '16px' }} />
@@ -333,7 +333,7 @@ function RecoveryContent() {
             onClick={() => router.push('/dashboard')}
             style={{
               flex: 1, padding: '12px', borderRadius: '12px',
-              background: '#51623B', border: 'none',
+              background: '#42623C', border: 'none',
               color: '#fff', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
               
             }}
@@ -364,7 +364,7 @@ function Card({
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
         border: highlight
           ? '1px solid rgba(163,52,23,0.22)'
-          : '1px solid #B5C68F',
+          : '1px solid #98C890',
         borderRadius: '16px',
         padding: '16px',
       }}
@@ -388,7 +388,7 @@ function CardLabel({
       style={{
         fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
         letterSpacing: '0.13em', marginBottom: noMargin ? '0' : '8px',
-        color: danger ? '#A33417' : '#716F67',
+        color: danger ? '#A33417' : '#6F6D65',
       }}
     >
       {children}
@@ -401,12 +401,12 @@ export default function RecoveryPage() {
     <Suspense
       fallback={
         <div
-          style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#CDDAAD' }}
+          style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#B3DDAC' }}
         >
           <div
             style={{
               width: '32px', height: '32px', borderRadius: '50%',
-              border: '2px solid #51623B', borderTopColor: 'transparent',
+              border: '2px solid #42623C', borderTopColor: 'transparent',
               animation: 'spin 0.8s linear infinite',
             }}
           />

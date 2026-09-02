@@ -24,53 +24,69 @@
    ────────────────────────────────────────────────────────────────────────── */
 :root {
   /* Backgrounds — koala green, a tint of --green rather than a neutral.
-     This started at #EFF2E8, which was reported as "still white" three times
-     and correctly so: its widest channel gap was 10/255, i.e. neutral to the
-     eye and green only in the stylesheet. #CDDAAD opens that to 45/255.
+     Two separate mistakes got made here, and they are worth writing down
+     because both looked like the same complaint.
 
-     45 is not an aesthetic choice, it is the floor. Going deeper pushes
-     --text-2 (4.68:1 here) and --crit (4.65:1) under the 4.5:1 body-text bar,
-     and the only way past that is to darken body text and the emergency colour
-     as well. So this is the deepest green the page can be without touching the
-     two things a person has to read in an emergency.
+     First it was too pale. #EFF2E8 had a widest channel gap of 10/255 — green
+     in the stylesheet, neutral to the eye. Deepening it to 45/255 fixed the
+     paleness and produced the second problem: it then read as YELLOW, because
+     every value in this family sat at hue 77 degrees. At 10/255 nobody could
+     see the hue at all, so the yellow was invisible until the colour got deep
+     enough to have a hue worth seeing. Saturation exposed it.
 
-     --text is 12.49:1. White surfaces sit 1.48:1 off the page, which is the
+     So this is #B3DDAC: hue rotated 77 -> 111 degrees, which is green rather
+     than yellow-green, at a 49/255 gap.
+
+     The contrast floor still binds. --text-2 is 4.56:1 and --crit 4.53:1
+     against this page, so it cannot go much deeper without also darkening body
+     copy and the emergency colour — the two things a person has to read while
+     deciding whether to call an ambulance.
+
+     --text is 12.16:1. White surfaces sit 1.52:1 off the page, which is the
      intended effect: cards lift off it without needing a heavier border. */
-  --bg:        #CDDAAD;
-  --bg-2:      #C2D09C;
+  --bg:        #B3DDAC;
+  --bg-2:      #95D08B;
   --surface:   #FFFFFF;
-  --surface-2: #E3EBCB;
-  --surface-3: #BFCF9B;
+  --surface-2: #CEE9C9;
+  --surface-3: #8FCD84;
 
   /* Borders */
-  --border:        #B5C68F;
-  --border-mid:    #A6B87C;
-  --border-strong: #93A667;
+  --border:        #98C890;
+  --border-mid:    #84BD7A;
+  --border-strong: #66AD59;
 
-  /* Text — 12.49:1, 4.68:1, 3.41:1 on the green background.
+  /* Text — 12.16:1, 4.56:1, 3.42:1 on the green background. These stay
+     neutral on purpose: tinting them green as well would leave nothing on the
+     page that is not the brand colour, and body copy is not where personality
+     belongs in an app people read during a medical emergency.
+
      --text-3 has been darkened once per background change: #8A8780 on cream,
-     #84827A, #7E7C74, and #716F67 here. Each step is whatever value puts it
+     #84827A, #7E7C74, and #6F6D65 here. Each step is whatever value puts it
      back at its intended 3.40:1, because a decorative tone that drifts lighter
-     every time the page moves ends up illegible by accident.
-     It does not clear 4.5:1 on any of these backgrounds, so it must not be used
-     for anything a person has to read to use the page.
+     every time the page moves ends up illegible by accident. It does not clear
+     4.5:1 on any of these backgrounds, so it must not be used for anything a
+     person has to read to use the page.
 
-     --text-2 at 4.68:1 is the tightest pairing in the system now. Anything that
+     --text-2 at 4.56:1 is the tightest pairing in the system. Anything that
      darkens the page further has to darken this with it. */
   --text:   #141413;
   --text-2: #5C5A52;
-  --text-3: #716F67;
+  --text-3: #6F6D65;
 
-  /* Koala green — brand. --green for fills and large text (3.11:1),
-     --green-deep for body text and white-on-green buttons (4.50:1 / 6.65:1).
-     Both darken every time the page does. The page and the brand green are
-     tints of each other, so a deeper page eats the contrast between them, and
-     these two are the values that keep --green over the 3:1 large-text bar and
+  /* Koala green — brand. --green for fills and large text (3.02:1),
+     --green-deep for body text and white-on-green buttons (4.55:1 / 6.90:1).
+     Both were rebuilt at hue 111 with the page. Leaving them at the old 77
+     would have put a yellow-green button on a green page, which is the one
+     pairing that reads as a mistake rather than a choice.
+
+     They also darken every time the page does: the page and the brand green are
+     tints of each other, so a deeper page eats the contrast between them. These
+     are the values that hold --green over the 3:1 large-text bar and
      --green-deep over 4.5:1 for body copy. */
-  --green:      #687C4D;
-  --green-deep: #51623B;
-  --green-dim:  #4C5A3A;
-  --green-soft: rgba(120,140,93,0.09);
+  --green:      #56804E;
+  --green-deep: #42623C;
+  --green-dim:  #344D2F;
+  --green-soft: rgba(86,128,78,0.09);
 
   /* Claude orange — FILL ONLY, dark ink on top. See note above. */
   --orange:      #D97757;
@@ -85,7 +101,7 @@
   /* Warning / watch — --warn for fills (1.66:1 clear of --crit),
      --warn-text for text on light (5.14:1) */
   --warn:      #A87200;
-  --warn-text: #805200;
+  --warn-text: #7C5200;
   --warn-soft: rgba(168,114,0,0.10);
 
   /* Legacy aliases — older rules still reference these names. Kept pointing at
@@ -94,9 +110,9 @@
   --red-dim:  #8F2E14;
   --red-soft: rgba(163,52,23,0.08);
   --red-glow: none;
-  --blue:      #51623B;
-  --blue-dim:  #4C5A3A;
-  --blue-soft: rgba(120,140,93,0.09);
+  --blue:      #42623C;
+  --blue-dim:  #344D2F;
+  --blue-soft: rgba(86,128,78,0.09);
   --amber:      #A87200;
   --amber-soft: rgba(168,114,0,0.10);
 
@@ -130,7 +146,7 @@ body {
 ::-webkit-scrollbar { width: 0; display: none; }
 
 ::selection {
-  background: rgba(120,140,93,0.14);
+  background: rgba(86,128,78,0.14);
   color: var(--text);
 }
 

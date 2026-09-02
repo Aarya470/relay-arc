@@ -9,16 +9,16 @@ import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#CDDAAD'
+const BG      = '#B3DDAC'
 const SURFACE = '#FFFFFF'
 const T1      = '#141413'
 const T2      = '#5C5A52'
-const T3      = '#716F67'
-const ACCENT  = '#51623B'
-const ACCENT_DIM = 'rgba(120,140,93,0.09)'
-const GREEN   = '#51623B'
-const GREEN_DIM = 'rgba(120,140,93,0.08)'
-const BORDER  = '#B5C68F'
+const T3      = '#6F6D65'
+const ACCENT  = '#42623C'
+const ACCENT_DIM = 'rgba(86,128,78,0.09)'
+const GREEN   = '#42623C'
+const GREEN_DIM = 'rgba(86,128,78,0.08)'
+const BORDER  = '#98C890'
 const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
 
 const spring       = { type: 'spring', stiffness: 380, damping: 24 } as const
@@ -182,7 +182,7 @@ export default function Checkin() {
         <div style={{
           display: 'flex', alignItems: 'center', gap: '5px',
           background: GREEN_DIM,
-          border: `1px solid rgba(120,140,93,0.18)`,
+          border: `1px solid rgba(86,128,78,0.18)`,
           borderRadius: '99px',
           padding: '4px 10px',
         }}>
@@ -258,7 +258,7 @@ export default function Checkin() {
             transition={{ ...spring, bounce: 0.3 }}
             style={{
               background: GREEN_DIM,
-              border: `1px solid rgba(120,140,93,0.18)`,
+              border: `1px solid rgba(86,128,78,0.18)`,
               borderRadius: '16px',
               padding: '28px 20px',
               textAlign: 'center',
@@ -336,7 +336,7 @@ export default function Checkin() {
       {!done && (
         <div style={{
           padding: '8px 16px 14px',
-          borderTop: `1px solid ${focused ? 'rgba(120,140,93,0.2)' : BORDER}`,
+          borderTop: `1px solid ${focused ? 'rgba(86,128,78,0.2)' : BORDER}`,
           display: 'flex', gap: '8px', alignItems: 'center',
           background: 'rgba(255,255,255,0.94)',
           backdropFilter: 'blur(16px)',

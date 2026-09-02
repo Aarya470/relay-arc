@@ -20,9 +20,9 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
   loading: () => <DemoSkeleton label="loading the scorer…" />,
 })
 
-const T1 = '#141413', T2 = '#5C5A52', T3 = '#716F67'
-const BORDER = '#B5C68F', BG2 = '#CDDAAD'
-const RED = '#A33417', ACCENT = '#51623B'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#6F6D65'
+const BORDER = '#98C890', BG2 = '#B3DDAC'
+const RED = '#A33417', ACCENT = '#42623C'
 const ORANGE = '#D97757'   // fill only — dark ink on top
 const mono = 'var(--font-mono, monospace)'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
@@ -101,7 +101,7 @@ export default function Engineering() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#CDDAAD', minHeight: '100dvh' }}>
+    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
 
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
       <header style={{

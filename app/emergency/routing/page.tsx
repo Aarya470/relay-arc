@@ -51,20 +51,20 @@ const EMERGENCY_LABELS: Record<string, string> = {
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#CDDAAD',
+  bg:          '#B3DDAC',
   card:        '#FFFFFF',
   card2:       '#FFFFFF',
   border:      '#F2F0E8',
   textPrimary: '#141413',
   textSec:     '#5C5A52',
-  textMuted:   '#716F67',
+  textMuted:   '#6F6D65',
   red:         '#A33417',
   redSoft:     'rgba(163,52,23,0.12)',
   redGlow:     'none',
-  green:       '#51623B',
-  greenSoft:   'rgba(120,140,93,0.12)',
-  blue:        '#51623B',
-  blueSoft:    'rgba(120,140,93,0.12)',
+  green:       '#42623C',
+  greenSoft:   'rgba(86,128,78,0.12)',
+  blue:        '#42623C',
+  blueSoft:    'rgba(86,128,78,0.12)',
   amber:       '#A87200',
 } as const
 
@@ -740,7 +740,7 @@ function RoutingPage() {
           fontSize: '13px',
           padding: '11px 24px',
           borderRadius: '12px',
-          border: `1px solid #B5C68F`,
+          border: `1px solid #98C890`,
           cursor: 'pointer',
         }}
       >
@@ -759,7 +759,7 @@ function RoutingPage() {
   // ── Main routing view ──────────────────────────────────────────────────────
   const MONO = 'var(--font-mono, monospace)'
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* ── Status line ─────────────────────────────────────────────────────── */}
       <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(163,52,23,0.18)', flexShrink: 0 }}>
@@ -1160,7 +1160,7 @@ function RoutingPage() {
                   {fmtElapsed(elapsed)}
                 </span>
                 <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
-                  style={{ background: '#CDDAAD', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  style={{ background: '#B3DDAC', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <X size={16} color={T.textSec}/>
                 </button>
               </div>
@@ -1196,7 +1196,7 @@ function RoutingPage() {
 
 export default function RoutingPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#CDDAAD' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#B3DDAC' }} />}>
       <RoutingPage />
     </Suspense>
   )

@@ -4,7 +4,7 @@
 // branches with labelled edges — and Mermaid would fight all three.
 import { useInView } from './Chart'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#716F67', BORDER = '#B5C68F'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65', BORDER = '#98C890'
 const mono = 'var(--font-mono, monospace)'
 
 export interface Node {

@@ -25,9 +25,9 @@ import Link from 'next/link'
 import { ArrowLeft, Scale, AlertCircle, ArrowRight, Printer } from 'lucide-react'
 import { rightsFor, guessCountry, COUNTRIES, type Country } from '@/lib/rights'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#716F67'
-const CREAM = '#CDDAAD', BORDER = '#B5C68F', WHITE = '#FFFFFF'
-const GREEN_DEEP = '#51623B'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65'
+const CREAM = '#B3DDAC', BORDER = '#98C890', WHITE = '#FFFFFF'
+const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757'
 const mono = 'var(--font-mono, monospace)'
 

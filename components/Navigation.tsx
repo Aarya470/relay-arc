@@ -8,18 +8,18 @@ import { trafficMultiplier } from '@/lib/hospitals'
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T1     = '#141413'
 const T2     = '#5C5A52'
-const T3     = '#716F67'
-const BORDER = '#B5C68F'
-const ACCENT = '#51623B'
+const T3     = '#6F6D65'
+const BORDER = '#98C890'
+const ACCENT = '#42623C'
 const RED    = '#A33417'
-const GREEN  = '#51623B'
+const GREEN  = '#42623C'
 const MONO   = 'var(--font-mono, monospace)'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty'
 const DEMO_ORIGIN: [number, number] = [19.1136, 72.8697]   // Andheri East — demo mode only
 
 const USER_ARROW_HTML = `<div style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;">
-  <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(120,140,93,0.55));"></div>
+  <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(86,128,78,0.55));"></div>
   <div style="position:absolute;top:19px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:20px solid white;"></div>
 </div>`
 
@@ -606,7 +606,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
       alignItems: 'center', justifyContent: 'center',
       padding: '24px', gap: '14px'
     }}>
-      <div style={{ width: '68px', height: '68px', borderRadius: '18px', background: 'rgba(120,140,93,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '68px', height: '68px', borderRadius: '18px', background: 'rgba(86,128,78,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke={GREEN} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
         </svg>
@@ -716,7 +716,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
                 <div key={i} style={{
                   display: 'flex', alignItems: 'baseline', gap: '13px',
                   padding: '12px 16px', borderBottom: `1px solid ${BORDER}`,
-                  background: i === currentStep + 1 ? 'rgba(120,140,93,0.05)' : 'transparent',
+                  background: i === currentStep + 1 ? 'rgba(86,128,78,0.05)' : 'transparent',
                   opacity: i <= currentStep ? 0.4 : 1,
                 }}>
                   <TurnGlyph step={s} size={17} color={i === currentStep + 1 ? ACCENT : T2}/>
@@ -759,11 +759,11 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             </div>
             <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
               <button onClick={() => setShowSteps(s => !s)} aria-label="All directions"
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: showSteps ? 'rgba(120,140,93,0.08)' : '#CDDAAD', border: `1px solid ${showSteps ? 'rgba(120,140,93,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '12px', background: showSteps ? 'rgba(86,128,78,0.08)' : '#B3DDAC', border: `1px solid ${showSteps ? 'rgba(86,128,78,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 <List size={17} color={showSteps ? ACCENT : T2}/>
               </button>
               <button onClick={() => setMuted(m => !m)} aria-label={muted ? 'Unmute voice guidance' : 'Mute voice guidance'}
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: muted ? '#CDDAAD' : 'rgba(120,140,93,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(120,140,93,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '12px', background: muted ? '#B3DDAC' : 'rgba(86,128,78,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(86,128,78,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 {muted ? <VolumeX size={17} color={T3}/> : <Volume2 size={17} color={ACCENT}/>}
               </button>
             </div>

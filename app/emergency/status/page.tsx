@@ -42,7 +42,7 @@ export default function EmergencyStatus() {
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', display: 'flex', flexDirection: 'column', paddingBottom: '32px' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', display: 'flex', flexDirection: 'column', paddingBottom: '32px' }}>
 
       {/* Alert bar */}
       <div style={{ background: '#A33417', padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -62,7 +62,7 @@ export default function EmergencyStatus() {
       </div>
 
       {/* Header */}
-      <div style={{ padding: '14px 20px', borderBottom: '1px solid #B5C68F', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FFFFFF', flexShrink: 0 }}>
+      <div style={{ padding: '14px 20px', borderBottom: '1px solid #98C890', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FFFFFF', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -72,7 +72,7 @@ export default function EmergencyStatus() {
             <ArrowLeft size={16} color="#5C5A52" />
           </motion.button>
           <div>
-            <p style={{ color: '#716F67', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Status</p>
+            <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Status</p>
             <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>All systems responding</h1>
           </div>
         </div>
@@ -97,9 +97,9 @@ export default function EmergencyStatus() {
             transition={{ delay: i * 0.1 }}
             style={{
               background: action.color === 'green'
-                ? 'rgba(120,140,93,0.05)'
-                : 'rgba(120,140,93,0.05)',
-              border: `1px solid ${action.color === 'green' ? 'rgba(120,140,93,0.18)' : 'rgba(120,140,93,0.18)'}`,
+                ? 'rgba(86,128,78,0.05)'
+                : 'rgba(86,128,78,0.05)',
+              border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.18)' : 'rgba(86,128,78,0.18)'}`,
               borderRadius: '16px',
               padding: '14px',
               display: 'flex',
@@ -110,46 +110,46 @@ export default function EmergencyStatus() {
             <div style={{
               width: '32px', height: '32px', borderRadius: '10px', flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: action.color === 'green' ? 'rgba(120,140,93,0.12)' : 'rgba(120,140,93,0.12)',
-              border: `1px solid ${action.color === 'green' ? 'rgba(120,140,93,0.25)' : 'rgba(120,140,93,0.22)'}`
+              background: action.color === 'green' ? 'rgba(86,128,78,0.12)' : 'rgba(86,128,78,0.12)',
+              border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.25)' : 'rgba(86,128,78,0.22)'}`
             }}>
-              <CheckCircle size={15} color={action.color === 'green' ? '#51623B' : '#51623B'} />
+              <CheckCircle size={15} color={action.color === 'green' ? '#42623C' : '#42623C'} />
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
               <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>{action.detail}</p>
-              <p style={{ color: '#716F67', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', marginTop: '5px' }}>{time}</p>
+              <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', marginTop: '5px' }}>{time}</p>
             </div>
           </motion.div>
         ))}
 
         {/* Nav strip */}
-        <div style={{ background: 'rgba(120,140,93,0.05)', border: '1px solid rgba(120,140,93,0.18)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(120,140,93,0.12)', border: '1px solid rgba(120,140,93,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Navigation size={16} color="#51623B" />
+        <div style={{ background: 'rgba(86,128,78,0.05)', border: '1px solid rgba(86,128,78,0.18)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Navigation size={16} color="#42623C" />
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>Turn right onto County Rd</p>
-            <p style={{ color: '#716F67', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
+            <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
           </div>
-          <span style={{ background: 'rgba(120,140,93,0.12)', border: '1px solid rgba(120,140,93,0.25)', color: '#51623B', fontSize: '11px', padding: '5px 10px', borderRadius: '20px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
+          <span style={{ background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.25)', color: '#42623C', fontSize: '11px', padding: '5px 10px', borderRadius: '20px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
         </div>
 
         {/* Contacts */}
         {profile?.emergency_contacts && (
-          <div style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '16px' }}>
-            <p style={{ color: '#716F67', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Contacts notified</p>
+          <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px' }}>
+            <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Contacts notified</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {profile.emergency_contacts.map((c: any, i: number) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#51623B', fontWeight: 700, fontSize: '13px', flexShrink: 0 }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#42623C', fontWeight: 700, fontSize: '13px', flexShrink: 0 }}>
                     {c.name?.[0]}
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ color: '#141413', fontSize: '13px', fontWeight: 600 }}>{c.name}</p>
-                    <p style={{ color: '#716F67', fontSize: '11px' }}>{c.relationship}</p>
+                    <p style={{ color: '#6F6D65', fontSize: '11px' }}>{c.relationship}</p>
                   </div>
-                  <span style={{ color: '#51623B', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700 }}>Notified</span>
+                  <span style={{ color: '#42623C', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700 }}>Notified</span>
                 </div>
               ))}
             </div>

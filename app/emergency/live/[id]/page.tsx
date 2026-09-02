@@ -12,11 +12,11 @@ import qrgen from 'qrcode-generator'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#716F67'
-const BORDER = '#B5C68F'
-const ACCENT = '#51623B'
+const T3 = '#6F6D65'
+const BORDER = '#98C890'
+const ACCENT = '#42623C'
 const RED = '#A33417'
-const GREEN = '#51623B'
+const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
 const EMERGENCY_LABELS: Record<string, string> = {
@@ -172,7 +172,7 @@ export default function RelayRoomPage() {
       })
       mapRef.current = map
       const pEl = document.createElement('div')
-      pEl.innerHTML = `<div style="width:20px;height:20px;background:${ACCENT};border:3px solid white;border-radius:50%;box-shadow:0 0 0 5px rgba(120,140,93,0.22);"></div>`
+      pEl.innerHTML = `<div style="width:20px;height:20px;background:${ACCENT};border:3px solid white;border-radius:50%;box-shadow:0 0 0 5px rgba(86,128,78,0.22);"></div>`
       patientMarker.current = new maplibregl.Marker({ element: pEl }).setLngLat([loc.lng, loc.lat]).addTo(map)
     } else {
       patientMarker.current?.setLngLat([loc.lng, loc.lat])
@@ -224,21 +224,21 @@ export default function RelayRoomPage() {
   const typeLabel = data ? (EMERGENCY_LABELS[data.type] ?? 'Emergency') : ''
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
       <Loader2 size={22} color={ACCENT} className="animate-spin"/>
       <p style={{ color: T2, fontSize: '14px' }}>Opening the room…</p>
     </div>
   )
 
   if (error) return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '24px', textAlign: 'center' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '24px', textAlign: 'center' }}>
       <AlertCircle size={36} color={RED}/>
       <p style={{ color: T1, fontSize: '15px', fontWeight: 600, maxWidth: '300px' }}>{error}</p>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', maxWidth: '640px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', maxWidth: '640px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
 
       {/* Status bar */}
       <div style={{ padding: '13px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: isActive ? RED : GREEN, flexShrink: 0 }}>
@@ -309,7 +309,7 @@ export default function RelayRoomPage() {
               {people.map((p, i) => (
                 <span key={i} style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
-                  background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#CDDAAD',
+                  background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#B3DDAC',
                   border: `1px solid ${p.role === 'patient' ? 'rgba(163,52,23,0.25)' : BORDER}`,
                   borderRadius: '8px', padding: '5px 10px',
                 }}>
@@ -363,7 +363,7 @@ export default function RelayRoomPage() {
                   </div>
                   {!t.done && (
                     <button onClick={() => claimTask(t.id)}
-                      style={{ background: t.claimedBy === name ? 'rgba(120,140,93,0.08)' : 'none', border: `1.5px solid ${t.claimedBy === name ? ACCENT : BORDER}`, color: t.claimedBy === name ? ACCENT : T2, fontSize: '12px', fontWeight: 700, padding: '7px 12px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
+                      style={{ background: t.claimedBy === name ? 'rgba(86,128,78,0.08)' : 'none', border: `1.5px solid ${t.claimedBy === name ? ACCENT : BORDER}`, color: t.claimedBy === name ? ACCENT : T2, fontSize: '12px', fontWeight: 700, padding: '7px 12px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
                       {t.claimedBy === name ? 'Mine' : t.claimedBy ? 'Taken' : 'I\u2019ll do it'}
                     </button>
                   )}

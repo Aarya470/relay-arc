@@ -26,8 +26,8 @@ const inputStyle: React.CSSProperties = {
 const RELATIONSHIPS = ['Spouse', 'Partner', 'Parent', 'Child', 'Sibling', 'Friend', 'Caregiver', 'Other']
 
 const AVATAR_COLORS = [
-  { bg: 'rgba(120,140,93,0.15)', border: 'rgba(120,140,93,0.3)', text: '#51623B' },
-  { bg: 'rgba(120,140,93,0.12)', border: 'rgba(120,140,93,0.25)', text: '#51623B' },
+  { bg: 'rgba(86,128,78,0.15)', border: 'rgba(86,128,78,0.3)', text: '#42623C' },
+  { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
   { bg: 'rgba(163,52,23,0.12)', border: 'rgba(163,52,23,0.25)', text: '#A33417' },
   { bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.25)', text: '#A855F7' },
   { bg: 'rgba(251,146,60,0.12)', border: 'rgba(251,146,60,0.25)', text: '#FB923C' },
@@ -90,16 +90,16 @@ export default function EmergencyContacts() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', padding: '80px 16px 100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 16px 100px' }}>
       {[1,2,3].map(i => <Skeleton key={i} style={{ height: '72px', borderRadius: '16px', background: '#F2F0E8', marginBottom: '10px' }}/>)}
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#CDDAAD', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '80px' }}>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #B5C68F' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #98C890' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -116,9 +116,9 @@ export default function EmergencyContacts() {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setShowAdd(true)}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(120,140,93,0.15)', border: '1px solid rgba(120,140,93,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(86,128,78,0.15)', border: '1px solid rgba(86,128,78,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <Plus size={17} color="#51623B"/>
+            <Plus size={17} color="#42623C"/>
           </motion.button>
         </div>
       </div>
@@ -144,7 +144,7 @@ export default function EmergencyContacts() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                style={{ background: '#FFFFFF', border: '1px solid #B5C68F', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
+                style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
               >
                 {/* Avatar initial */}
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: color.bg, border: `1.5px solid ${color.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -153,14 +153,14 @@ export default function EmergencyContacts() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>{contact.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                    <span style={{ color: '#716F67', fontSize: '12px' }}>{contact.relationship}</span>
-                    <span style={{ color: '#716F67', fontSize: '12px' }}>·</span>
+                    <span style={{ color: '#6F6D65', fontSize: '12px' }}>{contact.relationship}</span>
+                    <span style={{ color: '#6F6D65', fontSize: '12px' }}>·</span>
                     <motion.a
                       href={`tel:${contact.phone}`}
                       whileTap={{ scale: 0.96 }}
-                      style={{ color: '#51623B', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px' }}
+                      style={{ color: '#42623C', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px' }}
                     >
-                      <Phone size={10} color="#51623B"/>
+                      <Phone size={10} color="#42623C"/>
                       {contact.phone}
                     </motion.a>
                   </div>
@@ -189,7 +189,7 @@ export default function EmergencyContacts() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => setShowAdd(true)}
-              style={{ background: '#51623B', color: 'white', fontWeight: 700, fontSize: '13px', padding: '12px 22px', borderRadius: '14px', border: 'none', cursor: 'pointer', height: '44px' }}
+              style={{ background: '#42623C', color: 'white', fontWeight: 700, fontSize: '13px', padding: '12px 22px', borderRadius: '14px', border: 'none', cursor: 'pointer', height: '44px' }}
             >
               Add your first contact
             </motion.button>
@@ -201,9 +201,9 @@ export default function EmergencyContacts() {
           <motion.button
             whileTap={{ scale: 0.99 }}
             onClick={() => setShowAdd(true)}
-            style={{ width: '100%', background: 'transparent', border: '1.5px dashed #C9CED6', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#716F67', fontSize: '14px', fontWeight: 500 }}
+            style={{ width: '100%', background: 'transparent', border: '1.5px dashed #C9CED6', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#6F6D65', fontSize: '14px', fontWeight: 500 }}
           >
-            <Plus size={15} color="#716F67"/>
+            <Plus size={15} color="#6F6D65"/>
             Add emergency contact
           </motion.button>
         )}
@@ -215,7 +215,7 @@ export default function EmergencyContacts() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              style={{ background: '#FFFFFF', border: '1px solid rgba(120,140,93,0.2)', borderRadius: '20px', padding: '20px' }}
+              style={{ background: '#FFFFFF', border: '1px solid rgba(86,128,78,0.2)', borderRadius: '20px', padding: '20px' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '15px' }}>New contact</p>
@@ -252,9 +252,9 @@ export default function EmergencyContacts() {
                       style={{
                         padding: '6px 12px', borderRadius: '99px', border: '1px solid',
                         fontSize: '12px', fontWeight: 600, cursor: 'pointer',
-                        background: newContact.relationship === r ? 'rgba(120,140,93,0.15)' : '#F2F0E8',
-                        borderColor: newContact.relationship === r ? 'rgba(120,140,93,0.4)' : '#B5C68F',
-                        color: newContact.relationship === r ? '#51623B' : '#716F67',
+                        background: newContact.relationship === r ? 'rgba(86,128,78,0.15)' : '#F2F0E8',
+                        borderColor: newContact.relationship === r ? 'rgba(86,128,78,0.4)' : '#98C890',
+                        color: newContact.relationship === r ? '#42623C' : '#6F6D65',
                       }}
                     >
                       {r}
@@ -265,7 +265,7 @@ export default function EmergencyContacts() {
                   whileTap={{ scale: 0.97 }}
                   onClick={addContact}
                   disabled={saving}
-                  style={{ background: '#51623B', color: 'white', fontWeight: 700, fontSize: '14px', padding: '0 20px', borderRadius: '14px', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', marginTop: '4px', height: '52px', opacity: saving ? 0.7 : 1 }}
+                  style={{ background: '#42623C', color: 'white', fontWeight: 700, fontSize: '14px', padding: '0 20px', borderRadius: '14px', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', marginTop: '4px', height: '52px', opacity: saving ? 0.7 : 1 }}
                 >
                   {saving ? 'Saving…' : 'Add contact'}
                 </motion.button>
