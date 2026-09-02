@@ -25,7 +25,7 @@ export default function OpengraphImage() {
           <div style={{ color: 'white', fontSize: '86px', fontWeight: 800, letterSpacing: '-4px', lineHeight: 1.02, display: 'flex' }}>
             is the margin<span style={{ color: '#A33417' }}>.</span>
           </div>
-          <div style={{ color: '#84827A', fontSize: '30px', marginTop: '26px', display: 'flex', maxWidth: '900px' }}>
+          <div style={{ color: '#7E7C74', fontSize: '30px', marginTop: '26px', display: 'flex', maxWidth: '900px' }}>
             Cardiac emergency response — the right hospital, your records sent ahead, your family moving.
           </div>
         </div>

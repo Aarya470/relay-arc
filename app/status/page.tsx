@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#84827A'
-const BORDER = '#DCE1D0'
+const T3 = '#7E7C74'
+const BORDER = '#CFD9BB'
 const RED = '#A33417'
-const GREEN = '#5F7049'
+const GREEN = '#5D6E47'
 const AMBER = '#A87200'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -35,7 +35,7 @@ export default function StatusPage() {
   const operational = data?.overall === 'operational'
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#EFF2E8' }}>
+    <div style={{ minHeight: '100dvh', background: '#E4EBD3' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '64px 24px 80px' }}>
 

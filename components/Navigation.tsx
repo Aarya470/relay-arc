@@ -8,11 +8,11 @@ import { trafficMultiplier } from '@/lib/hospitals'
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T1     = '#141413'
 const T2     = '#5C5A52'
-const T3     = '#84827A'
-const BORDER = '#DCE1D0'
-const ACCENT = '#5F7049'
+const T3     = '#7E7C74'
+const BORDER = '#CFD9BB'
+const ACCENT = '#5D6E47'
 const RED    = '#A33417'
-const GREEN  = '#5F7049'
+const GREEN  = '#5D6E47'
 const MONO   = 'var(--font-mono, monospace)'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty'
@@ -759,11 +759,11 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             </div>
             <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
               <button onClick={() => setShowSteps(s => !s)} aria-label="All directions"
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: showSteps ? 'rgba(120,140,93,0.08)' : '#EFF2E8', border: `1px solid ${showSteps ? 'rgba(120,140,93,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '12px', background: showSteps ? 'rgba(120,140,93,0.08)' : '#E4EBD3', border: `1px solid ${showSteps ? 'rgba(120,140,93,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 <List size={17} color={showSteps ? ACCENT : T2}/>
               </button>
               <button onClick={() => setMuted(m => !m)} aria-label={muted ? 'Unmute voice guidance' : 'Mute voice guidance'}
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: muted ? '#EFF2E8' : 'rgba(120,140,93,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(120,140,93,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '12px', background: muted ? '#E4EBD3' : 'rgba(120,140,93,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(120,140,93,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 {muted ? <VolumeX size={17} color={T3}/> : <Volume2 size={17} color={ACCENT}/>}
               </button>
             </div>

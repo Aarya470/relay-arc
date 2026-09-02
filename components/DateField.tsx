@@ -27,8 +27,8 @@
 // that used the native input without touching the calling code or the database.
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#84827A'
-const BORDER = '#DCE1D0', WHITE = '#FFFFFF', CRIT = '#A33417'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#7E7C74'
+const BORDER = '#CFD9BB', WHITE = '#FFFFFF', CRIT = '#A33417'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',

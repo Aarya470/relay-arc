@@ -165,8 +165,8 @@ function BriefContent() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#EFF2E8' }}>
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5F7049' }} />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#E4EBD3' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5D6E47' }} />
       </div>
     )
   }
@@ -176,7 +176,7 @@ function BriefContent() {
   const primaryContact = contacts[0]
 
   return (
-    <div className="min-h-screen" style={{ background: '#EFF2E8' }}>
+    <div className="min-h-screen" style={{ background: '#E4EBD3' }}>
       {/* Red alert header */}
       <div
         className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3"
@@ -222,7 +222,7 @@ function BriefContent() {
         <Section>
           <SectionLabel>PATIENT</SectionLabel>
           <p className="text-xl font-bold" style={{ color: '#141413' }}>
-            {profile?.full_name || <span style={{ color: '#84827A' }}>Unknown</span>}
+            {profile?.full_name || <span style={{ color: '#7E7C74' }}>Unknown</span>}
           </p>
           {profile?.date_of_birth && (
             <p className="text-sm mt-0.5" style={{ color: '#5C5A52' }}>
@@ -255,7 +255,7 @@ function BriefContent() {
               {profile.allergies}
             </p>
           ) : (
-            <p className="text-base" style={{ color: '#84827A' }}>
+            <p className="text-base" style={{ color: '#7E7C74' }}>
               None known
             </p>
           )}
@@ -270,7 +270,7 @@ function BriefContent() {
                 <li key={i} className="flex items-start gap-2">
                   <span
                     className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: '#5F7049' }}
+                    style={{ background: '#5D6E47' }}
                   />
                   <span className="text-sm" style={{ color: '#141413' }}>
                     <span className="font-semibold">{m.name}</span>
@@ -283,7 +283,7 @@ function BriefContent() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm" style={{ color: '#84827A' }}>
+            <p className="text-sm" style={{ color: '#7E7C74' }}>
               None on file
             </p>
           )}
@@ -309,7 +309,7 @@ function BriefContent() {
                 <li key={i} className="flex items-start gap-2">
                   <Activity
                     className="w-3.5 h-3.5 flex-shrink-0 mt-1"
-                    style={{ color: '#5F7049' }}
+                    style={{ color: '#5D6E47' }}
                   />
                   <span className="text-sm leading-relaxed" style={{ color: '#141413' }}>
                     {l}
@@ -349,12 +349,12 @@ function BriefContent() {
                   </span>
                 )}
               </p>
-              <p className="text-lg font-bold mt-0.5" style={{ color: '#5F7049' }}>
+              <p className="text-lg font-bold mt-0.5" style={{ color: '#5D6E47' }}>
                 {primaryContact.phone}
               </p>
             </div>
           ) : (
-            <p className="text-sm" style={{ color: '#84827A' }}>
+            <p className="text-sm" style={{ color: '#7E7C74' }}>
               None on file
             </p>
           )}
@@ -364,7 +364,7 @@ function BriefContent() {
         <Section>
           <SectionLabel>AI CLINICAL NOTE</SectionLabel>
           {noteLoading ? (
-            <div className="flex items-center gap-2 mt-1" style={{ color: '#5F7049' }}>
+            <div className="flex items-center gap-2 mt-1" style={{ color: '#5D6E47' }}>
               <Loader2 className="w-4 h-4 animate-spin" />
               <span className="text-sm" style={{ color: '#5C5A52' }}>Generating note…</span>
             </div>
@@ -373,11 +373,11 @@ function BriefContent() {
               {clinicalNote}
             </p>
           ) : (
-            <p className="text-sm" style={{ color: '#84827A' }}>
+            <p className="text-sm" style={{ color: '#7E7C74' }}>
               Note unavailable — use profile data above.
             </p>
           )}
-          <p className="text-xs mt-2" style={{ color: '#84827A' }}>
+          <p className="text-xs mt-2" style={{ color: '#7E7C74' }}>
             AI-generated · verify with patient or records
           </p>
         </Section>
@@ -400,8 +400,8 @@ function BriefContent() {
             onClick={handleCopy}
             className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
             style={{
-              background: copied ? '#5F7049' : '#5F7049',
-              color: copied ? '#EFF2E8' : '#fff',
+              background: copied ? '#5D6E47' : '#5D6E47',
+              color: copied ? '#E4EBD3' : '#fff',
               borderRadius: '14px',
               border: 'none',
               boxShadow: copied ? '0 4px 20px rgba(120,140,93,0.28)' : '0 4px 20px rgba(120,140,93,0.28)',
@@ -442,7 +442,7 @@ function Section({
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
         border: highlight
           ? '1px solid rgba(163,52,23,0.22)'
-          : '1px solid #DCE1D0',
+          : '1px solid #CFD9BB',
         borderRadius: '16px',
       }}
     >
@@ -455,7 +455,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="text-xs font-bold uppercase tracking-widest mb-1.5"
-      style={{ color: '#84827A', letterSpacing: '0.13em' }}
+      style={{ color: '#7E7C74', letterSpacing: '0.13em' }}
     >
       {children}
     </p>
@@ -466,8 +466,8 @@ export default function BriefPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center" style={{ background: '#EFF2E8' }}>
-          <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5F7049' }} />
+        <div className="min-h-screen flex items-center justify-center" style={{ background: '#E4EBD3' }}>
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#5D6E47' }} />
         </div>
       }
     >

@@ -33,9 +33,9 @@ import {
   type FlareAssessment,
 } from '@/lib/autonomic'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#84827A'
-const CREAM = '#EFF2E8', BORDER = '#DCE1D0', WHITE = '#FFFFFF'
-const GREEN_DEEP = '#5F7049'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#7E7C74'
+const CREAM = '#E4EBD3', BORDER = '#CFD9BB', WHITE = '#FFFFFF'
+const GREEN_DEEP = '#5D6E47'
 const ORANGE = '#D97757', CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 

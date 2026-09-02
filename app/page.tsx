@@ -10,16 +10,16 @@ import Mark from '@/components/Mark'
 // ─── Design tokens — shared with the app ─────────────────────────────────────
 const T1     = '#141413'
 const T2     = '#5C5A52'
-const T3     = '#84827A'
-const BORDER = '#DCE1D0'
-const BG2    = '#EFF2E8'
+const T3     = '#7E7C74'
+const BORDER = '#CFD9BB'
+const BG2    = '#E4EBD3'
 // A deeper tint of the same green. The page background moved from white to BG2,
 // so the one band that was BG2 to stand out against white would have vanished
 // into the page. It needs its own value rather than reusing the page colour.
-const BG_DEEP = '#E6EBDA'
-const ACCENT = '#5F7049'
+const BG_DEEP = '#D9E2C4'
+const ACCENT = '#5D6E47'
 const RED    = '#A33417'
-const GREEN  = '#5F7049'
+const GREEN  = '#5D6E47'
 const AMBER  = '#A87200'
 const ORANGE = '#D97757'   // FILL ONLY — 2.96:1 on light, so always dark ink on top
 
@@ -276,9 +276,9 @@ function PhoneMockup() {
 const LOG = [
   { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating” — typed by her son while she sat down.', color: '#A33417' },
   { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#A87200' },
-  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#5F7049' },
-  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#5F7049' },
-  { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#5F7049' },
+  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#5D6E47' },
+  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#5D6E47' },
+  { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#5D6E47' },
 ]
 
 // ─── With / without — looping split-screen simulation ───────────────────────

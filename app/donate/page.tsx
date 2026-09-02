@@ -8,11 +8,11 @@ import Mark from '@/components/Mark'
 // ─── Design tokens — shared with the homepage ────────────────────────────────
 const T1     = '#141413'
 const T2     = '#5C5A52'
-const T3     = '#84827A'
-const BORDER = '#DCE1D0'
+const T3     = '#7E7C74'
+const BORDER = '#CFD9BB'
 const RED    = '#A33417'
-const GREEN  = '#5F7049'
-const ACCENT = '#5F7049'
+const GREEN  = '#5D6E47'
+const ACCENT = '#5D6E47'
 
 const mono = 'var(--font-mono, monospace)'
 
@@ -38,7 +38,7 @@ export default function Donate() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#EFF2E8' }}>
+    <div style={{ minHeight: '100dvh', background: '#E4EBD3' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
 
       <motion.div

@@ -4,10 +4,10 @@ import { Home, MessageCircle, LayoutList, Activity, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const ACCENT  = '#5F7049'
+const ACCENT  = '#5D6E47'
 const RED     = '#A33417'
-const T3      = '#84827A'
-const BORDER  = '#DCE1D0'
+const T3      = '#7E7C74'
+const BORDER  = '#CFD9BB'
 
 const tabs = [
   { href: '/dashboard',   icon: Home,          label: 'Home'     },

@@ -24,35 +24,42 @@
    ────────────────────────────────────────────────────────────────────────── */
 :root {
   /* Backgrounds — koala green, a tint of --green rather than a neutral.
-     #EFF2E8 measures 16.27:1 with --text, 6.10:1 with --text-2 and 6.06:1 with
-     --crit, so the page moved off cream without weakening anything that has to
-     be read. White surfaces sit only 1.13:1 off it, which is the intended
-     effect: cards lift off the page by a hair rather than by a border. */
-  --bg:        #EFF2E8;
-  --bg-2:      #E6EBDA;
+     This was #EFF2E8, which everyone reported as "still white" and they were
+     right: its widest channel gap was 10/255, so it was neutral to the eye and
+     only measurably green in the stylesheet. #E4EBD3 opens that to 24/255,
+     which is the least it can be and still read as a colour on a phone.
+     It measures 15.03:1 with --text, 5.63:1 with --text-2 and 5.59:1 with
+     --crit. White surfaces sit 1.23:1 off it, which is the intended effect:
+     cards lift off the page by a hair rather than by a border. */
+  --bg:        #E4EBD3;
+  --bg-2:      #D9E2C4;
   --surface:   #FFFFFF;
-  --surface-2: #F7F9F2;
-  --surface-3: #E2E8D4;
+  --surface-2: #F2F6E9;
+  --surface-3: #D3DDBC;
 
   /* Borders */
-  --border:        #DCE1D0;
-  --border-mid:    #CBD2BC;
-  --border-strong: #B4BDA2;
+  --border:        #CFD9BB;
+  --border-mid:    #BFCAA8;
+  --border-strong: #A8B58F;
 
-  /* Text — 16.27:1, 6.10:1, 3.40:1 on the green background.
-     --text-3 was darkened from #84827A when the background changed. It had been
-     tuned to exactly 3.40:1 on cream, and the same value on green fell to
-     3.16:1; #84827A puts it back where it was. It is a meta and decorative tone
-     that does not clear 4.5:1 on either background, so it must not be used for
-     anything a person has to read to use the page. */
+  /* Text — 15.03:1, 5.63:1, 3.41:1 on the green background.
+     --text-3 has now been darkened twice, once per background change: #8A8780
+     on cream, #84827A on the pale green, #7E7C74 here. Each step is the value
+     that puts it back at its intended 3.40:1, because a decorative tone that
+     drifts lighter every time the page changes ends up illegible by accident.
+     It does not clear 4.5:1 on any of these backgrounds, so it must not be used
+     for anything a person has to read to use the page. */
   --text:   #141413;
   --text-2: #5C5A52;
-  --text-3: #84827A;
+  --text-3: #7E7C74;
 
-  /* Koala green — brand. --green for fills and large text (3.49:1),
-     --green-deep for body text and white-on-green buttons (5.11:1 / 5.38:1) */
-  --green:      #788C5D;
-  --green-deep: #5F7049;
+  /* Koala green — brand. --green for fills and large text (3.39:1),
+     --green-deep for body text and white-on-green buttons (4.52:1 / 5.55:1).
+     Both were darkened a step with the background: on #E4EBD3 the old --green
+     landed on exactly 3.00:1, i.e. the large-text bar with no headroom at all,
+     and --green-deep had slipped under 4.5:1 for body text. */
+  --green:      #6F8354;
+  --green-deep: #5D6E47;
   --green-dim:  #4C5A3A;
   --green-soft: rgba(120,140,93,0.09);
 
@@ -69,7 +76,7 @@
   /* Warning / watch — --warn for fills (1.66:1 clear of --crit),
      --warn-text for text on light (5.14:1) */
   --warn:      #A87200;
-  --warn-text: #8F6100;
+  --warn-text: #8D5F00;
   --warn-soft: rgba(168,114,0,0.10);
 
   /* Legacy aliases — older rules still reference these names. Kept pointing at
@@ -78,7 +85,7 @@
   --red-dim:  #8F2E14;
   --red-soft: rgba(163,52,23,0.08);
   --red-glow: none;
-  --blue:      #5F7049;
+  --blue:      #5D6E47;
   --blue-dim:  #4C5A3A;
   --blue-soft: rgba(120,140,93,0.09);
   --amber:      #A87200;

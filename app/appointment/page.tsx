@@ -64,7 +64,7 @@ export default function AppointmentSummary() {
   )
 
   const stats = [
-    { label: 'Check-ins', value: checkins.length, color: '#5F7049', bg: 'rgba(120,140,93,0.07)', border: 'rgba(120,140,93,0.15)', Icon: MessageSquare },
+    { label: 'Check-ins', value: checkins.length, color: '#5D6E47', bg: 'rgba(120,140,93,0.07)', border: 'rgba(120,140,93,0.15)', Icon: MessageSquare },
     { label: 'Emergencies', value: emergencies.length, color: '#A33417', bg: 'rgba(163,52,23,0.07)', border: 'rgba(163,52,23,0.15)', Icon: AlertTriangle },
     { label: 'Medications', value: profile?.medications?.length || 0, color: '#A87200', bg: 'rgba(168,114,0,0.07)', border: 'rgba(168,114,0,0.15)', Icon: Pill },
   ]
@@ -74,7 +74,7 @@ export default function AppointmentSummary() {
       <div style={{ padding: '56px 20px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => router.push('/dashboard')}
-            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: '1px solid #DCE1D0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: '1px solid #CFD9BB', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <ArrowLeft size={15} color="rgba(237,234,224,0.5)"/>
           </motion.button>
           <div>
@@ -108,7 +108,7 @@ export default function AppointmentSummary() {
             }
           </motion.button>
         ) : (
-          <div style={{ background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
+          <div style={{ background: '#FFFFFF', border: '1px solid #CFD9BB', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <div style={{ width: '22px', height: '22px', borderRadius: '6px', background: 'rgba(168,114,0,0.12)', border: '1px solid rgba(168,114,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -117,7 +117,7 @@ export default function AppointmentSummary() {
                 <p style={{ color: 'rgba(237,234,224,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Summary</p>
               </div>
               <motion.button whileTap={{ scale: 0.9 }} onClick={generateSummary}
-                style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #DCE1D0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #CFD9BB', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <RefreshCw size={12} color="rgba(237,234,224,0.3)"/>
               </motion.button>
             </div>
@@ -126,7 +126,7 @@ export default function AppointmentSummary() {
         )}
 
         {/* Check-in history */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #CFD9BB', borderRadius: '20px', padding: '18px', boxShadow: '0 4px 20px rgba(20,20,19,0.06)' }}>
           <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Recent check-ins</p>
           {checkins.length === 0 && <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '13px' }}>No check-ins yet</p>}
           {checkins.slice(0, 5).map((c, i) => (

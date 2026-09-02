@@ -13,9 +13,9 @@ import { DispatchScene, OnDeviceScene, RelayScene } from '@/components/viz/Scene
 import { Flow } from '@/components/viz/Flow'
 import { BarChart, StepChart, Donut } from '@/components/viz/Chart'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#84827A'
-const BORDER = '#DCE1D0', CREAM = '#EFF2E8'
-const GREEN = '#788C5D', GREEN_DEEP = '#5F7049'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#7E7C74'
+const BORDER = '#CFD9BB', CREAM = '#E4EBD3'
+const GREEN = '#6F8354', GREEN_DEEP = '#5D6E47'
 const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#A87200'
 const mono = 'var(--font-mono, monospace)'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
@@ -61,7 +61,7 @@ export default function Features() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#EFF2E8', minHeight: '100dvh' }}>
+    <div style={{ background: '#E4EBD3', minHeight: '100dvh' }}>
 
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px', position: 'sticky', top: 0, background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(8px)', zIndex: 40 }}>
         <div style={{ ...WRAP, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>

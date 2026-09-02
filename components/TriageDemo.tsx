@@ -11,9 +11,9 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { triage, featurize, MODEL_META, ABSTAIN_THRESHOLD } from '@/lib/triage'
 
-const T1 = '#141413', T2 = '#5C5A52', T3 = '#84827A'
-const BORDER = '#DCE1D0', BG2 = '#EFF2E8'
-const CRIT = '#A33417', ACCENT = '#5F7049', GREEN = '#5F7049'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#7E7C74'
+const BORDER = '#CFD9BB', BG2 = '#E4EBD3'
+const CRIT = '#A33417', ACCENT = '#5D6E47', GREEN = '#5D6E47'
 const mono = 'var(--font-mono, monospace)'
 
 const LABELS: Record<string, string> = {

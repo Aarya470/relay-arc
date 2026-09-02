@@ -51,19 +51,19 @@ const EMERGENCY_LABELS: Record<string, string> = {
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#EFF2E8',
+  bg:          '#E4EBD3',
   card:        '#FFFFFF',
   card2:       '#FFFFFF',
   border:      '#F2F0E8',
   textPrimary: '#141413',
   textSec:     '#5C5A52',
-  textMuted:   '#84827A',
+  textMuted:   '#7E7C74',
   red:         '#A33417',
   redSoft:     'rgba(163,52,23,0.12)',
   redGlow:     'none',
-  green:       '#5F7049',
+  green:       '#5D6E47',
   greenSoft:   'rgba(120,140,93,0.12)',
-  blue:        '#5F7049',
+  blue:        '#5D6E47',
   blueSoft:    'rgba(120,140,93,0.12)',
   amber:       '#A87200',
 } as const
@@ -740,7 +740,7 @@ function RoutingPage() {
           fontSize: '13px',
           padding: '11px 24px',
           borderRadius: '12px',
-          border: `1px solid #DCE1D0`,
+          border: `1px solid #CFD9BB`,
           cursor: 'pointer',
         }}
       >
@@ -759,7 +759,7 @@ function RoutingPage() {
   // ── Main routing view ──────────────────────────────────────────────────────
   const MONO = 'var(--font-mono, monospace)'
   return (
-    <div style={{ minHeight: '100dvh', background: '#EFF2E8', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
+    <div style={{ minHeight: '100dvh', background: '#E4EBD3', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
 
       {/* ── Status line ─────────────────────────────────────────────────────── */}
       <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(163,52,23,0.18)', flexShrink: 0 }}>
@@ -1160,7 +1160,7 @@ function RoutingPage() {
                   {fmtElapsed(elapsed)}
                 </span>
                 <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
-                  style={{ background: '#EFF2E8', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  style={{ background: '#E4EBD3', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <X size={16} color={T.textSec}/>
                 </button>
               </div>
@@ -1196,7 +1196,7 @@ function RoutingPage() {
 
 export default function RoutingPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#EFF2E8' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#E4EBD3' }} />}>
       <RoutingPage />
     </Suspense>
   )

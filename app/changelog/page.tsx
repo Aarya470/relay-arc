@@ -8,9 +8,9 @@
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#84827A'
-const BORDER = '#DCE1D0', CREAM = '#EFF2E8'
-const GREEN_DEEP = '#5F7049', ORANGE = '#D97757', CRIT = '#A33417'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#7E7C74'
+const BORDER = '#CFD9BB', CREAM = '#E4EBD3'
+const GREEN_DEEP = '#5D6E47', ORANGE = '#D97757', CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 
 type Kind = 'shipped' | 'fixed' | 'honest'
@@ -110,7 +110,7 @@ const ENTRIES: Entry[] = [
 export default function Changelog() {
   const router = useRouter()
   return (
-    <div style={{ background: '#EFF2E8', minHeight: '100dvh' }}>
+    <div style={{ background: '#E4EBD3', minHeight: '100dvh' }}>
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px' }}>
         <div style={{ maxWidth: '820px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>

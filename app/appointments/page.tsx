@@ -82,7 +82,7 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
               style={{ height: ITEM_H, scrollSnapAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
               onClick={() => { onChange(t); ref.current?.scrollTo({ top: i * ITEM_H, behavior: 'smooth' }) }}
             >
-              <span style={{ fontSize: sel ? '18px' : '14px', fontWeight: sel ? 800 : 400, color: sel ? '#5F7049' : '#84827A', letterSpacing: sel ? '-0.4px' : 0, transition: 'all 0.15s ease', fontFamily: 'inherit' }}>
+              <span style={{ fontSize: sel ? '18px' : '14px', fontWeight: sel ? 800 : 400, color: sel ? '#5D6E47' : '#7E7C74', letterSpacing: sel ? '-0.4px' : 0, transition: 'all 0.15s ease', fontFamily: 'inherit' }}>
                 {t}
               </span>
             </div>
@@ -118,7 +118,7 @@ function CalendarPicker({ selectedDay, onSelect }: { selectedDay: Date | null; o
         </motion.button>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '6px' }}>
-        {DAYS.map(d => <p key={d} style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: '#84827A', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.3px' }}>{d}</p>)}
+        {DAYS.map(d => <p key={d} style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: '#7E7C74', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.3px' }}>{d}</p>)}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '3px' }}>
         {cells.map((day, i) => {
@@ -126,7 +126,7 @@ function CalendarPicker({ selectedDay, onSelect }: { selectedDay: Date | null; o
           const past = isPast(day), selected = isSelected(day), todayFlag = isToday(day)
           return (
             <motion.button key={i} whileTap={past ? {} : { scale: 0.88 }} transition={spring} onClick={() => !past && onSelect(new Date(viewYear, viewMonth, day))} disabled={past}
-              style={{ height: '36px', borderRadius: '9px', border: todayFlag && !selected ? '1.5px solid rgba(120,140,93,0.4)' : 'none', background: selected ? '#5F7049' : 'transparent', color: past ? '#84827A' : selected ? '#FFFFFF' : todayFlag ? '#5F7049' : '#141413', fontSize: '13px', fontWeight: selected ? 800 : todayFlag ? 700 : 500, cursor: past ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ height: '36px', borderRadius: '9px', border: todayFlag && !selected ? '1.5px solid rgba(120,140,93,0.4)' : 'none', background: selected ? '#5D6E47' : 'transparent', color: past ? '#7E7C74' : selected ? '#FFFFFF' : todayFlag ? '#5D6E47' : '#141413', fontSize: '13px', fontWeight: selected ? 800 : todayFlag ? 700 : 500, cursor: past ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {day}
             </motion.button>
           )
@@ -280,9 +280,9 @@ export default function Appointments() {
     : null
 
   const statusStyle = (status: string) => ({
-    color: status === 'confirmed' ? '#5F7049' : status === 'completed' ? '#84827A' : (status === 'declined' || status === 'missed') ? '#A33417' : '#5C5A52',
+    color: status === 'confirmed' ? '#5D6E47' : status === 'completed' ? '#7E7C74' : (status === 'declined' || status === 'missed') ? '#A33417' : '#5C5A52',
     background: status === 'confirmed' ? 'rgba(120,140,93,0.12)' : (status === 'declined' || status === 'missed') ? 'rgba(163,52,23,0.12)' : '#F2F0E8',
-    border: `1px solid ${status === 'confirmed' ? 'rgba(120,140,93,0.28)' : (status === 'declined' || status === 'missed') ? 'rgba(163,52,23,0.22)' : '#DCE1D0'}`,
+    border: `1px solid ${status === 'confirmed' ? 'rgba(120,140,93,0.28)' : (status === 'declined' || status === 'missed') ? 'rgba(163,52,23,0.22)' : '#CFD9BB'}`,
     fontSize: '9px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase' as const, letterSpacing: '1px',
     padding: '2px 7px', borderRadius: '99px',
   })
@@ -295,7 +295,7 @@ export default function Appointments() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#EFF2E8', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: '#E4EBD3', paddingBottom: '100px' }}>
 
       {/* Meeting notification banner */}
       <AnimatePresence>
@@ -305,7 +305,7 @@ export default function Appointments() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -80, opacity: 0 }}
             transition={spring}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#5F7049', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#5D6E47', padding: '52px 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
             <div>
               <p style={{ color: 'rgba(255,255,255,0.60)', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '3px' }}>
@@ -314,7 +314,7 @@ export default function Appointments() {
               <p style={{ color: 'white', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.2px' }}>Your care team call is ready</p>
             </div>
             <motion.button whileTap={{ scale: 0.95 }} onClick={() => setActiveCall(upcomingMeeting)}
-              style={{ background: 'white', color: '#5F7049', fontWeight: 700, fontSize: '12px', padding: '10px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+              style={{ background: 'white', color: '#5D6E47', fontWeight: 700, fontSize: '12px', padding: '10px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
               <Video size={13} />
               Join now
             </motion.button>
@@ -342,19 +342,19 @@ export default function Appointments() {
             </motion.button>
             <div>
               <h1 style={{ color: '#141413', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Care Team</h1>
-              <p style={{ color: '#84827A', fontSize: '12px' }}>Talk to a professional</p>
+              <p style={{ color: '#7E7C74', fontSize: '12px' }}>Talk to a professional</p>
             </div>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => { setShowRequest(true) }}
             style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(120,140,93,0.12)', border: '1px solid rgba(120,140,93,0.22)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Plus size={15} color="#5F7049" />
+            <Plus size={15} color="#5D6E47" />
           </motion.button>
         </div>
       </div>
 
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setShowRequest(true)}
-          style={{ width: '100%', background: '#5F7049', border: 'none', borderRadius: '16px', padding: '18px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '14px' }}>
+          style={{ width: '100%', background: '#5D6E47', border: 'none', borderRadius: '16px', padding: '18px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Calendar size={20} color="white" />
           </div>
@@ -364,14 +364,14 @@ export default function Appointments() {
           </div>
         </motion.button>
 
-        <p style={{ color: '#84827A', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Your appointments</p>
+        <p style={{ color: '#7E7C74', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>Your appointments</p>
 
         {appointments.length === 0 && !loading && (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#F2F0E8', border: '1px solid #DCE1D0', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-              <Calendar size={20} color="#84827A" />
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#F2F0E8', border: '1px solid #CFD9BB', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+              <Calendar size={20} color="#7E7C74" />
             </div>
-            <p style={{ color: '#84827A', fontSize: '13px' }}>No appointments yet</p>
+            <p style={{ color: '#7E7C74', fontSize: '13px' }}>No appointments yet</p>
           </div>
         )}
 
@@ -382,8 +382,8 @@ export default function Appointments() {
               style={{ background: '#FFFFFF', border: `1px solid ${joinable ? 'rgba(120,140,93,0.30)' : cardBorderColor(a.status)}`, borderRadius: '16px', padding: '16px', boxShadow: joinable ? '0 4px 20px rgba(120,140,93,0.14)' : '0 2px 8px rgba(0,0,0,0.20)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  {a.type === 'immediate' ? <Clock size={13} color="#A33417" /> : <CalendarCheck size={13} color="#5F7049" />}
-                  <span style={{ color: a.type === 'immediate' ? '#A33417' : '#5F7049', fontSize: '12px', fontWeight: 700 }}>
+                  {a.type === 'immediate' ? <Clock size={13} color="#A33417" /> : <CalendarCheck size={13} color="#5D6E47" />}
+                  <span style={{ color: a.type === 'immediate' ? '#A33417' : '#5D6E47', fontSize: '12px', fontWeight: 700 }}>
                     {a.type === 'immediate' ? 'Immediate call' : 'Scheduled visit'}
                   </span>
                 </div>
@@ -403,7 +403,7 @@ export default function Appointments() {
               )}
               {joinable && (
                 <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setActiveCall(a)}
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#5F7049', borderRadius: '12px', padding: '13px', color: 'white', fontWeight: 700, fontSize: '14px', border: 'none', cursor: 'pointer', marginTop: '4px' }}>
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#5D6E47', borderRadius: '12px', padding: '13px', color: 'white', fontWeight: 700, fontSize: '14px', border: 'none', cursor: 'pointer', marginTop: '4px' }}>
                   <Video size={15} />
                   Join video call
                 </motion.button>
@@ -426,9 +426,9 @@ export default function Appointments() {
             style={{ position: 'fixed', inset: 0, background: 'rgba(20,20,19,0.40)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
             onClick={e => { if (e.target === e.currentTarget) close() }}>
             <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{ background: '#FFFFFF', borderRadius: '24px 24px 0 0', width: '100%', maxHeight: '92dvh', overflowY: 'auto', boxShadow: '0 -8px 40px rgba(20,20,19,0.12)', border: '1px solid #DCE1D0', borderBottom: 'none' }}>
+              style={{ background: '#FFFFFF', borderRadius: '24px 24px 0 0', width: '100%', maxHeight: '92dvh', overflowY: 'auto', boxShadow: '0 -8px 40px rgba(20,20,19,0.12)', border: '1px solid #CFD9BB', borderBottom: 'none' }}>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 0' }}>
-                <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: '#DCE1D0' }} />
+                <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: '#CFD9BB' }} />
               </div>
               <div style={{ padding: '16px 20px 48px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -441,14 +441,14 @@ export default function Appointments() {
                 </div>
 
                 <div style={{ marginBottom: '20px' }}>
-                    <div style={{ background: '#FFFFFF', border: '1px solid #DCE1D0', borderRadius: '18px', padding: '16px', marginBottom: '12px' }}>
+                    <div style={{ background: '#FFFFFF', border: '1px solid #CFD9BB', borderRadius: '18px', padding: '16px', marginBottom: '12px' }}>
                       <CalendarPicker selectedDay={selectedDay} onSelect={setSelectedDay} />
                     </div>
 
                     <AnimatePresence>
                       {selectedDay && (
                         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} transition={spring}>
-                          <p style={{ color: '#84827A', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Select a time</p>
+                          <p style={{ color: '#7E7C74', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Select a time</p>
                           <TimeScrollPicker value={selectedTime} onChange={setSelectedTime} />
                           {scheduledInPast && (
                             <p style={{ color: '#A33417', fontSize: '12px', marginTop: '8px', textAlign: 'center' }}>
@@ -463,8 +463,8 @@ export default function Appointments() {
                       {summaryLabel && (
                         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={spring}
                           style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(120,140,93,0.10)', border: '1px solid rgba(120,140,93,0.22)', borderRadius: '12px', padding: '10px 14px' }}>
-                          <CalendarCheck size={14} color="#5F7049" style={{ flexShrink: 0 }} />
-                          <p style={{ color: '#5F7049', fontSize: '13px', fontWeight: 600 }}>{summaryLabel}</p>
+                          <CalendarCheck size={14} color="#5D6E47" style={{ flexShrink: 0 }} />
+                          <p style={{ color: '#5D6E47', fontSize: '13px', fontWeight: 600 }}>{summaryLabel}</p>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -472,10 +472,10 @@ export default function Appointments() {
 
                 <textarea value={concern} onChange={e => setConcern(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
                   placeholder="What would you like to discuss? (optional)"
-                  style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${focused ? 'rgba(120,140,93,0.50)' : '#DCE1D0'}`, borderRadius: '14px', padding: '14px 16px', color: '#141413', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '80px', marginBottom: '14px', fontFamily: 'inherit', transition: 'border-color 0.18s ease' }} />
+                  style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${focused ? 'rgba(120,140,93,0.50)' : '#CFD9BB'}`, borderRadius: '14px', padding: '14px 16px', color: '#141413', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '80px', marginBottom: '14px', fontFamily: 'inherit', transition: 'border-color 0.18s ease' }} />
 
                 <motion.button whileTap={canSubmit ? { scale: 0.97, y: 1 } : {}} transition={spring} onClick={request} disabled={!canSubmit}
-                  style={{ width: '100%', background: !canSubmit ? '#F2F0E8' : '#5F7049', color: !canSubmit ? '#84827A' : '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: canSubmit ? 'pointer' : 'default', boxShadow: canSubmit ? '0 8px 24px rgba(120,140,93,0.28)' : 'none', transition: 'all 0.2s ease', letterSpacing: '-0.1px' }}>
+                  style={{ width: '100%', background: !canSubmit ? '#F2F0E8' : '#5D6E47', color: !canSubmit ? '#7E7C74' : '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: canSubmit ? 'pointer' : 'default', boxShadow: canSubmit ? '0 8px 24px rgba(120,140,93,0.28)' : 'none', transition: 'all 0.2s ease', letterSpacing: '-0.1px' }}>
                   Book appointment
                 </motion.button>
               </div>

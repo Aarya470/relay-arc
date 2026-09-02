@@ -7,10 +7,10 @@ import { emergencyNumber } from '@/lib/emergency-number'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#84827A'
-const BORDER = '#DCE1D0'
+const T3 = '#7E7C74'
+const BORDER = '#CFD9BB'
 const RED = '#A33417'
-const GREEN = '#5F7049'
+const GREEN = '#5D6E47'
 const MONO = 'var(--font-mono, monospace)'
 
 const BPM = 110
@@ -74,7 +74,7 @@ export default function CprCoach() {
   useEffect(() => () => { audioRef.current?.stop() }, [])
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#EFF2E8', maxWidth: '560px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', background: '#E4EBD3', maxWidth: '560px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
 
       {/* Call {emg.label} banner — always first */}
       <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 900, fontSize: '18px', padding: '18px', textDecoration: 'none', flexShrink: 0 }}>
@@ -101,7 +101,7 @@ export default function CprCoach() {
             transition={{ duration: BEAT_MS / 2000, ease: 'easeInOut' }}
             style={{
               width: '170px', height: '170px', borderRadius: '50%',
-              background: running ? RED : '#EFF2E8',
+              background: running ? RED : '#E4EBD3',
               border: running ? 'none' : `2px solid ${BORDER}`,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               marginBottom: '22px',
