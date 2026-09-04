@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
+import { Plus_Jakarta_Sans, Nunito, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
@@ -14,9 +14,33 @@ const jakarta = Plus_Jakarta_Sans({
   weight: ['400', '500', '600', '700', '800'],
 })
 
-const mono = JetBrains_Mono({
+// --font-mono is a misnomer now and the name is kept on purpose: it is read by
+// well over a hundred inline `fontFamily: var(--font-mono, monospace)` styles
+// across the app, and renaming it would mean touching every one of them to
+// change a typeface. So the variable keeps its name and gets a new face.
+//
+// This slot was JetBrains Mono, which is what made the uppercase label chips
+// (RELAY ARC, KNOW YOUR RIGHTS, FLARE CHECK, the 01/02/03 numbers) read as hard
+// and technical. Nunito has rounded terminals and carries the same tracking
+// without the boxiness.
+//
+// It is not monospaced, so the alignment the old face gave for free is now
+// bought explicitly with tabular-nums on the body in globals.css. That matters
+// for the dispatch timer and the vitals columns, where digits changing width
+// makes numbers jitter as they update.
+const mono = Nunito({
   subsets: ['latin'],
   variable: '--font-mono',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+})
+
+// Kept for the few places that need real monospace rather than the label look:
+// an opaque ingest token, where being able to tell 0 from O and 1 from l is the
+// entire point of the typeface.
+const code = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-code',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
 })
@@ -63,7 +87,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#B3DDAC" />
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
-      <body className={`${jakarta.variable} ${mono.variable} ${jakarta.className}`}>
+      <body className={`${jakarta.variable} ${mono.variable} ${code.variable} ${jakarta.className}`}>
         <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
           {children}
           <LegalModal />

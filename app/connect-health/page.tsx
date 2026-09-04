@@ -234,7 +234,7 @@ export default function ConnectHealth() {
                 background: BG, borderRadius: '10px', padding: '12px 14px',
                 border: `1px solid ${BORDER}`,
               }}>
-                <code style={{ color: T1, fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', wordBreak: 'break-all', flex: 1 }}>
+                <code style={{ color: T1, fontSize: '12px', fontFamily: 'var(--font-code, monospace)', wordBreak: 'break-all', flex: 1 }}>
                   {token || '—'}
                 </code>
                 {token && <CopyButton value={token}/>}
@@ -256,7 +256,7 @@ export default function ConnectHealth() {
           </div>
           <div style={{ padding: '14px 16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', background: BG, borderRadius: '10px', padding: '12px 14px', border: `1px solid ${BORDER}` }}>
-              <code style={{ color: T1, fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', wordBreak: 'break-all', flex: 1 }}>
+              <code style={{ color: T1, fontSize: '11px', fontFamily: 'var(--font-code, monospace)', wordBreak: 'break-all', flex: 1 }}>
                 {ingestUrl}
               </code>
               <CopyButton value={ingestUrl}/>

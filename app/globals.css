@@ -137,10 +137,21 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: 'ss01' on;
   min-height: 100dvh;
+
+  /* Bought back what dropping the monospace label face gave away. Digits now
+     share one width everywhere, so the dispatch timer, the NEWS2 score and the
+     vitals columns do not jitter sideways as the numbers update. */
+  font-variant-numeric: tabular-nums;
 }
 
-.font-mono, code, kbd, pre {
-  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+/* The label look. Rounded, not monospaced — see the note in app/layout.tsx. */
+.font-mono {
+  font-family: var(--font-mono), system-ui, sans-serif;
+}
+
+/* Actual monospace, for content where character shapes carry meaning. */
+code, kbd, pre, .font-code {
+  font-family: var(--font-code), 'JetBrains Mono', ui-monospace, monospace;
 }
 
 ::-webkit-scrollbar { width: 0; display: none; }
