@@ -117,34 +117,37 @@
   --amber-soft: rgba(168,114,0,0.10);
 
   /* ── The dark page, being rolled out ──────────────────────────────────────
-     Sage 5, lifted one step to #447448, is the page colour. The homepage runs on it now;
+     Sage 5, lifted one step to #4B8150, is the page colour. The homepage runs on it now;
      the rest of the app is still on the light --bg above and stays there until
      each page is converted, because flipping --bg globally would darken pages
      whose text is still ink and make them unreadable. That is not a trade worth
      making silently in an app people open during a cardiac event.
 
      Every value here is derived from --page, not picked:
-       --on-*   cream text, at 5.47 / 4.52 / 3.03 against the page. All three
-                moved when the page went one step lighter, because a lighter
-                page eats cream contrast from the other side. Note how close
-                --on-2 now sits to white: at 5.47:1 for white there is only
-                1.21:1 of room left, so the headline/body distinction here is
-                carried by weight and size, not by colour. Lighten the page
-                again and that separation disappears entirely.
-       --coral  what red becomes here. #A33417 is 1.25:1 against this green and
-                Claude orange is 1.75:1 — both are the SAME BRIGHTNESS as the
+       --on-*   THIS PAGE IS AT THE CEILING. White is 4.61:1 on #4B8150. One
+                step lighter (L 41%) and white itself drops to 4.43:1 — below
+                the 4.5:1 bar for body text, which would leave nothing at all
+                that is legible on the page. So do not lighten this further
+                without moving body copy onto white cards instead.
+
+                The cream tier below white is therefore gone: --on and --on-2
+                are both #FFFFFF now, and headline versus body is carried
+                entirely by weight and size. --on-3 at 3.01:1 survives for meta
+                and decoration only, never for anything that has to be read.
+       --coral  what red becomes here. #A33417 is 1.45:1 against this green and
+                Claude orange is 1.53:1 — both are the SAME BRIGHTNESS as the
                 page, not merely dim. Orange survives as a fill with ink on top.
        alerts   stay on white surfaces. Any red and any amber that both clear
                 4.5:1 on a dark background land at 1.00:1 from each other, so
                 "call an ambulance" and "keep an eye on this" become the same
                 brightness. On white they keep their 1.66:1 separation. */
-  --page:      #447448;
-  --page-2:    #35573A;
-  --page-rule: #69A76E;
+  --page:      #4B8150;
+  --page-2:    #3A6440;
+  --page-rule: #7EB382;
   --on:        #FFFFFF;
-  --on-2:      #E5EBE5;
-  --on-3:      #B5C5B6;
-  --coral:     #EDB3A1;
+  --on-2:      #FFFFFF;
+  --on-3:      #C8D4C9;
+  --coral:     #F2C8BC;
 
   /* Radius scale */
   --r-xs: 6px;

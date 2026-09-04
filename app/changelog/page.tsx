@@ -8,9 +8,9 @@
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65'
-const BORDER = '#98C890', CREAM = '#B3DDAC'
-const GREEN_DEEP = '#42623C', ORANGE = '#D97757', CRIT = '#A33417'
+const INK = '#FFFFFF', INK2 = '#5C5A52', INK3 = '#6F6D65'
+const BORDER = '#7EB382', CREAM = '#4B8150'
+const GREEN_DEEP = '#C8D4C9', ORANGE = '#D97757', CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 
 type Kind = 'shipped' | 'fixed' | 'honest'
@@ -24,7 +24,7 @@ interface Entry {
 
 const KIND: Record<Kind, { label: string; color: string }> = {
   shipped: { label: 'SHIPPED', color: GREEN_DEEP },
-  fixed:   { label: 'FIXED',   color: ORANGE },
+  fixed:   { label: 'FIXED',   color: '#F2C8BC' },
   honest:  { label: 'CORRECTION', color: CRIT },
 }
 
@@ -110,7 +110,7 @@ const ENTRIES: Entry[] = [
 export default function Changelog() {
   const router = useRouter()
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div style={{ background: '#4B8150', minHeight: '100dvh' }}>
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px' }}>
         <div style={{ maxWidth: '820px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>

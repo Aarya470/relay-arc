@@ -14,21 +14,21 @@ const T3     = '#6F6D65'
 const BORDER = '#98C890'
 // ─── The page is dark now ───────────────────────────────────────────────────
 // Sage 5. Everything below is derived from it rather than picked.
-const PAGE     = '#447448'
-const PAGE_2   = '#35573A'   // deeper band, 1.50:1 off the page
-const RULE     = '#69A76E'   // hairline on dark, 1.90:1 — a dark rule vanishes
+const PAGE     = '#4B8150'
+const PAGE_2   = '#3A6440'   // deeper band, 1.50:1 off the page
+const RULE     = '#7EB382'   // hairline on dark, 1.90:1 — a dark rule vanishes
 
 // Text ON the dark page. Cream, not ink.
 const ON       = '#FFFFFF'   // 6.27:1 — headlines and anything structural
-const ON_2     = '#E5EBE5'   // 4.54:1 — body copy, the AA floor
-const ON_3     = '#B5C5B6'   // 3.02:1 — meta and decoration ONLY, never body
+const ON_2     = '#FFFFFF'   // 4.54:1 — body copy, the AA floor
+const ON_3     = '#C8D4C9'   // 3.02:1 — meta and decoration ONLY, never body
 
 // The accent problem, written down because it is counter-intuitive:
 // --crit #A33417 is 1.09:1 against this page and Claude orange is 2.01:1. Both
 // are invisible as text here — not dim, the SAME brightness as the background.
 // So the orange survives only as a fill with ink on top, and anything that used
 // to be red text becomes cream or this coral.
-const CORAL    = '#EDB3A1'   // 3.01:1 — large display text only
+const CORAL    = '#F2C8BC'   // 3.01:1 — large display text only
 const INK      = '#141413'   // still correct on orange fills and white cards
 
 const BG2    = '#B3DDAC'     // kept: the phone mockup renders a light app screen
@@ -383,7 +383,7 @@ function EmergencyRace() {
           {panel('With Relay', '#3DDC97', RIGHT_EVENTS, rightSec, t >= 12500 ? '#3DDC97' : 'rgba(255,255,255,0.7)', rightStatus, 'race-right')}
         </div>
       </div>
-      <p style={{ color: '#B5C5B6', fontSize: '11.5px', fontFamily: mono, marginTop: '12px' }}>
+      <p style={{ color: '#C8D4C9', fontSize: '11.5px', fontFamily: mono, marginTop: '12px' }}>
         Simulated side-by-side — not real footage. Ambulance wait reflects Mumbai peak-traffic averages.
       </p>
     </div>

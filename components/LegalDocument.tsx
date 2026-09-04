@@ -5,10 +5,10 @@ import Mark from '@/components/Mark'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { useEffect, useState } from 'react'
 
-const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#6F6D65'
-const BORDER = '#98C890'
+const T1 = '#FFFFFF'
+const T2 = '#FFFFFF'
+const T3 = '#C8D4C9'
+const BORDER = '#7EB382'
 const RED = '#A33417'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -21,8 +21,8 @@ export default function LegalDocument({ kicker, title, body }: { kicker: string;
   const blocks = body.trim().split(/\n\n+/)
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC' }}>
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
+    <div style={{ minHeight: '100dvh', background: '#4B8150' }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: '#D97757', zIndex: 10 }}/>
 
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '64px 24px 80px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '48px' }}>

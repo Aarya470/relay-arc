@@ -6,10 +6,10 @@ import { ArrowLeft, Copy, Check, ExternalLink } from 'lucide-react'
 import Mark from '@/components/Mark'
 
 // ─── Design tokens — shared with the homepage ────────────────────────────────
-const T1     = '#141413'
-const T2     = '#5C5A52'
-const T3     = '#6F6D65'
-const BORDER = '#98C890'
+const T1 = '#FFFFFF'
+const T2 = '#FFFFFF'
+const T3 = '#C8D4C9'
+const BORDER = '#7EB382'
 const RED    = '#A33417'
 const GREEN  = '#42623C'
 const ACCENT = '#42623C'
@@ -38,8 +38,8 @@ export default function Donate() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC' }}>
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: T1, zIndex: 10 }}/>
+    <div style={{ minHeight: '100dvh', background: '#4B8150' }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: '#D97757', zIndex: 10 }}/>
 
       <motion.div
         initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, ease: 'easeOut' }}
@@ -80,7 +80,7 @@ export default function Donate() {
             One-time or monthly, from any PayPal balance or linked bank.
           </p>
           <a href={PAYPAL_URL} target="_blank" rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: T1, color: 'white', fontWeight: 600, fontSize: '14.5px', padding: '13px 24px', textDecoration: 'none', fontFamily: 'inherit' }}>
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: '#D97757', color: '#141413', fontWeight: 600, fontSize: '14.5px', padding: '13px 24px', textDecoration: 'none', fontFamily: 'inherit' }}>
             Donate with PayPal <ExternalLink size={13}/>
           </a>
         </div>
