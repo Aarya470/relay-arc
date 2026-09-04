@@ -116,6 +116,30 @@
   --amber:      #A87200;
   --amber-soft: rgba(168,114,0,0.10);
 
+  /* ── The dark page, being rolled out ──────────────────────────────────────
+     Sage 5 (#3E6A43) is the chosen page colour. The homepage runs on it now;
+     the rest of the app is still on the light --bg above and stays there until
+     each page is converted, because flipping --bg globally would darken pages
+     whose text is still ink and make them unreadable. That is not a trade worth
+     making silently in an app people open during a cardiac event.
+
+     Every value here is derived from --page, not picked:
+       --on-*   cream text, at 6.27 / 4.54 / 3.02 against the page
+       --coral  what red becomes here. #A33417 is 1.09:1 against this green and
+                Claude orange is 2.01:1 — both are the SAME BRIGHTNESS as the
+                page, not merely dim. Orange survives as a fill with ink on top.
+       alerts   stay on white surfaces. Any red and any amber that both clear
+                4.5:1 on a dark background land at 1.00:1 from each other, so
+                "call an ambulance" and "keep an eye on this" become the same
+                brightness. On white they keep their 1.66:1 separation. */
+  --page:      #3E6A43;
+  --page-2:    #2C4E2F;
+  --page-rule: #5B9C61;
+  --on:        #FFFFFF;
+  --on-2:      #D1DFD2;
+  --on-3:      #A6B9A7;
+  --coral:     #E9A38D;
+
   /* Radius scale */
   --r-xs: 6px;
   --r-sm: 10px;
