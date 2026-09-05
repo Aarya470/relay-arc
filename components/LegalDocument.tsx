@@ -52,7 +52,7 @@ export default function LegalDocument({ kicker, title, body }: { kicker: string;
           </p>
           <p style={{ color: T1, fontSize: '15px', fontWeight: 600, lineHeight: 1.6, marginBottom: '12px' }}>
             Relay Arc is not an emergency service and not a medical device. In a life-threatening
-            situation, call {emg.label} immediately — do not rely on this app.
+            situation, call {emg.label} immediately. Do not rely on this app.
           </p>
           <a href={`tel:${emg.number}`}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: RED, color: 'white', fontWeight: 700, fontSize: '14px', padding: '11px 18px', borderRadius: '10px', textDecoration: 'none' }}>

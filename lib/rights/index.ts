@@ -81,7 +81,7 @@ const US: RightsPack = {
       id: 'emtala_stabilise',
       title: 'If they cannot treat you, they have to arrange the transfer',
       body:
-        'Once an emergency condition is found, the hospital has to stabilise it. If they do not have what you need — a catheterisation lab, a stroke unit — they must arrange an appropriate transfer to somewhere that does. Sending you away untreated to find your own way is the violation.',
+        'Once an emergency condition is found, the hospital has to stabilise it. If they do not have what you need. A catheterisation lab, a stroke unit. They must arrange an appropriate transfer to somewhere that does. Sending you away untreated to find your own way is the violation.',
       limit:
         'The obligation ends once you are stable. After that point they can discharge you, and a stabilised patient is not the same as a treated one.',
       basis: 'EMTALA, 42 U.S.C. §1395dd(b)–(c)',
@@ -92,10 +92,10 @@ const US: RightsPack = {
       body:
         'Around three in five US hospitals are nonprofit. In exchange for paying no federal income tax, each one is required to have a written financial assistance policy, publish it, and apply it. Ask for the financial assistance policy by that name, or for the "charity care application".',
       limit:
-        'It applies to nonprofit hospitals. For-profit hospitals are not covered by this rule, though many have their own programme, and public hospitals run separate schemes. Federal law also sets no income cut-off — each hospital picks its own, so eligibility genuinely varies by hospital.',
+        'It applies to nonprofit hospitals. For-profit hospitals are not covered by this rule, though many have their own programme, and public hospitals run separate schemes. Federal law also sets no income cut-off. Each hospital picks its own, so eligibility genuinely varies by hospital.',
       action:
         'Ask financial counselling or the billing office for the financial assistance policy in writing. Get it before you agree to a payment plan, because a signed plan is harder to undo than an unpaid bill.',
-      basis: 'Internal Revenue Code §501(r)(4); 26 CFR §1.501(r)-4',
+      basis: 'Internal Revenue Code §501(r)(4), 26 CFR §1.501(r)-4',
     },
     {
       id: 'fap_window',
@@ -105,7 +105,7 @@ const US: RightsPack = {
       limit:
         'The 240 days run from the first billing statement, not from the visit, and not from when the debt is sold. Missing the window means losing it.',
       action: 'Apply even if the bill has already gone to collections. Ask for the application in writing and keep the date you sent it.',
-      basis: 'Internal Revenue Code §501(r)(6); 26 CFR §1.501(r)-6',
+      basis: 'Internal Revenue Code §501(r)(6), 26 CFR §1.501(r)-6',
     },
     {
       id: 'fap_collections',
@@ -115,7 +115,7 @@ const US: RightsPack = {
       limit:
         'This restricts the aggressive actions specifically. Ordinary billing and ordinary reminders continue throughout.',
       action: 'If a collection notice arrives and nobody ever offered you the financial assistance policy, say so in writing. That is the point the rule exists for.',
-      basis: 'Internal Revenue Code §501(r)(6); 26 CFR §1.501(r)-6',
+      basis: 'Internal Revenue Code §501(r)(6), 26 CFR §1.501(r)-6',
     },
   ],
 }

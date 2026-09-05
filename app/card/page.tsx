@@ -270,7 +270,7 @@ export default function EmergencyCard() {
         </h1>
         <p style={{ color: INK2, fontSize: '16.5px', lineHeight: 1.65, maxWidth: '660px', marginBottom: '14px' }}>
           Fill this in once. You get a lock-screen image and a printable wallet card.
-          Both work with no signal, no app and no battery on anyone else&apos;s phone —
+          Both work with no signal, no app and no battery on anyone else&apos;s phone. 
           because a locked screen shows its wallpaper to whoever picks it up.
         </p>
         <p style={{ color: INK2, fontSize: '15px', lineHeight: 1.65, maxWidth: '660px' }}>
@@ -307,7 +307,7 @@ export default function EmergencyCard() {
                 </div>
               </div>
               <div>
-                <span style={label}>Allergies — printed in red</span>
+                <span style={label}>Allergies. printed in red</span>
                 <input style={input} value={c.allergies} onChange={e => set('allergies', e.target.value)} placeholder="Penicillin, latex… or leave blank"/>
               </div>
               <div>
@@ -315,14 +315,14 @@ export default function EmergencyCard() {
                 <input style={input} value={c.conditions} onChange={e => set('conditions', e.target.value)} placeholder="POTS, post-MI, ME/CFS…"/>
               </div>
               <div>
-                <span style={label}>Medications — one per line</span>
+                <span style={label}>Medications. one per line</span>
                 <textarea style={{ ...input, minHeight: '104px', resize: 'vertical' }} value={c.medications}
                   onChange={e => set('medications', e.target.value)} placeholder={'Ivabradine 5mg twice daily\nFludrocortisone 0.1mg daily'}/>
               </div>
               <div>
                 <span style={label}>Anything a responder should know</span>
                 <textarea style={{ ...input, minHeight: '70px', resize: 'vertical' }} value={c.notes}
-                  onChange={e => set('notes', e.target.value)} placeholder="e.g. Do not sit me upright — orthostatic intolerance"/>
+                  onChange={e => set('notes', e.target.value)} placeholder="e.g. Do not sit me upright. Orthostatic intolerance"/>
               </div>
 
               <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginTop: '14px', marginBottom: '4px' }}>
@@ -427,8 +427,8 @@ export default function EmergencyCard() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px', marginTop: '24px' }}>
           <p style={{ color: INK2, fontSize: '15.5px', lineHeight: 1.65 }}>
             A card is static. A profile lets Relay Arc press one button and pick a hospital
-            that can actually treat what is happening — ranked by real drive time and by
-            whether that facility has the right unit and is accepting patients — then send
+            that can actually treat what is happening. Ranked by real drive time and by
+            whether that facility has the right unit and is accepting patients. Then send
             these same details to them before the car moves.
           </p>
           <div>
@@ -444,7 +444,7 @@ export default function EmergencyCard() {
         <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '64px', paddingTop: '22px', display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center' }}>
           <p style={{ color: INK3, fontSize: '12.5px', lineHeight: 1.6, maxWidth: '580px' }}>
             Relay Arc is decision support and not a diagnosis. This card does not
-            summon help and does not replace calling emergency services — in an
+            summon help and does not replace calling emergency services. In an
             emergency, call them first.
           </p>
           <button onClick={clearAll} style={{ ...btn(), color: CRIT, borderColor: BORDER }}>

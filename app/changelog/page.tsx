@@ -33,7 +33,7 @@ const ENTRIES: Entry[] = [
   {
     date: '2026-08-13', kind: 'shipped',
     title: 'Patients no longer see a risk score. Clinicians still do.',
-    body: 'FDA replaced its Clinical Decision Support guidance in January 2026. Two lines in it matter here: software that gives recommendations to patients or caregivers rather than health professionals meets the definition of a device, and software intended for critical, time-sensitive decisions is not considered to allow independent review of its basis. So the dashboard no longer shows a deterioration level, a NEWS2 number, or advice. It shows you your own readings that sit outside your usual range, says your care team can see them, and says plainly that only a clinician can assess them. The score is still computed and still reaches the care team, where the audience is a clinician. The triage classifier now suggests a category and you confirm it, rather than deciding on its own inference — which is also just safer, because the category picks which hospital capability is matched. Full reasoning, including the two places a regulator could reasonably disagree with us, is published in docs/INTENDED_USE.md.',
+    body: 'FDA replaced its Clinical Decision Support guidance in January 2026. Two lines in it matter here: software that gives recommendations to patients or caregivers rather than health professionals meets the definition of a device, and software intended for critical, time-sensitive decisions is not considered to allow independent review of its basis. So the dashboard no longer shows a deterioration level, a NEWS2 number, or advice. It shows you your own readings that sit outside your usual range, says your care team can see them, and says plainly that only a clinician can assess them. The score is still computed and still reaches the care team, where the audience is a clinician. The triage classifier now suggests a category and you confirm it, rather than deciding on its own inference. Which is also just safer, because the category picks which hospital capability is matched. Full reasoning, including the two places a regulator could reasonably disagree with us, is published in docs/INTENDED_USE.md.',
   },
   {
     date: '2026-08-13', kind: 'shipped',
@@ -43,21 +43,21 @@ const ENTRIES: Entry[] = [
   {
     date: '2026-08-12', kind: 'shipped',
     title: 'An emergency card that needs no account',
-    body: 'Every entrance to Relay Arc asked for an account and a full medical profile before returning anything, and the real payoff only arrives during an emergency. So anyone willing to spend two minutes got nothing for it. /card inverts that: fill in the fields and you immediately get a lock-screen image and a printable wallet card. Phones show their lock wallpaper without being unlocked, so a responder can read blood type and allergies off a locked phone with no app and no signal. Nothing is uploaded — there is no account and no server call, the data stays in your browser, and the images are drawn on your device. There is deliberately no shareable link with the data encoded in it, because a URL carrying someone\'s medical history can be forwarded, logged, or sit in a history forever.',
+    body: 'Every entrance to Relay Arc asked for an account and a full medical profile before returning anything, and the real payoff only arrives during an emergency. So anyone willing to spend two minutes got nothing for it. /card inverts that: fill in the fields and you immediately get a lock-screen image and a printable wallet card. Phones show their lock wallpaper without being unlocked, so a responder can read blood type and allergies off a locked phone with no app and no signal. Nothing is uploaded. There is no account and no server call, the data stays in your browser, and the images are drawn on your device. There is deliberately no shareable link with the data encoded in it, because a URL carrying someone\'s medical history can be forwarded, logged, or sit in a history forever.',
   },
   {
     date: '2026-08-12', kind: 'fixed',
     title: 'A patient chart showed a raw timestamp where a date belongs',
-    body: 'The nurse patient view rendered the surgery date straight from the database column, so opening a patient displayed 2025-10-16T04:13:59.678Z. Found while capturing the dashboard for a video. A clinician who sees a raw timestamp in a chart field reasonably concludes the rest of the chart is untrustworthy, so this was a correctness problem and not a cosmetic one. Also swept seven more cool blue-grey hex values the recolour missed, and preflight now catches them arithmetically rather than by blocklist — any mid-tone hex whose blue channel leads red by more than twelve. It found twenty-one further instances, so it reports as advisory rather than blocking: a gate that demands an unrelated twenty-one-file recolour before any commit can land is a gate that gets switched off.',
+    body: 'The nurse patient view rendered the surgery date straight from the database column, so opening a patient displayed 2025-10-16T04:13:59.678Z. Found while capturing the dashboard for a video. A clinician who sees a raw timestamp in a chart field reasonably concludes the rest of the chart is untrustworthy, so this was a correctness problem and not a cosmetic one. Also swept seven more cool blue-grey hex values the recolour missed, and preflight now catches them arithmetically rather than by blocklist. Any mid-tone hex whose blue channel leads red by more than twelve. It found twenty-one further instances, so it reports as advisory rather than blocking: a gate that demands an unrelated twenty-one-file recolour before any commit can land is a gate that gets switched off.',
   },
   {
     date: '2026-07-31', kind: 'shipped',
-    title: 'NEWS2 is complete — all seven parameters',
-    body: 'Added temperature, consciousness level (ACVPU) and supplemental-oxygen status. Until now the risk score used four of the seven parameters and said so on every alert; a complete observation set now drops that caveat automatically. The score also flags when the subject is under 16, because NEWS2 is designed for adults and paediatric practice uses PEWS instead — which matters for any school deployment.',
+    title: 'NEWS2 is complete. All seven parameters',
+    body: 'Added temperature, consciousness level (ACVPU) and supplemental-oxygen status. Until now the risk score used four of the seven parameters and said so on every alert. A complete observation set now drops that caveat automatically. The score also flags when the subject is under 16, because NEWS2 is designed for adults and paediatric practice uses PEWS instead. Which matters for any school deployment.',
   },
   {
     date: '2026-07-31', kind: 'shipped',
-    title: 'Public demo views — no login needed',
+    title: 'Public demo views. No login needed',
     body: 'The hospital board, care-team dashboard, nurse dashboard, patient dashboard and vitals screens can all be viewed with ?demo=1 against synthetic data. Every one carries a permanent banner saying the data is not real. Previously these were behind a login, which meant nobody could be shown them without exposing a real patient\'s chart.',
   },
   {
@@ -73,7 +73,7 @@ const ENTRIES: Entry[] = [
   {
     date: '2026-07-30', kind: 'shipped',
     title: 'The risk score stopped being AI',
-    body: 'Deterioration risk used to be a language model reading free-text check-ins at temperature 0.2. It is now a deterministic implementation of the NEWS2 vital-sign subscores. A medical flag has to give the same answer twice and has to show the measurement behind every point it scores; an LLM in that position does neither. Forty boundary-value tests pin every threshold to the published table so a clinical constant cannot be quietly tuned.',
+    body: 'Deterioration risk used to be a language model reading free-text check-ins at temperature 0.2. It is now a deterministic implementation of the NEWS2 vital-sign subscores. A medical flag has to give the same answer twice and has to show the measurement behind every point it scores. A language model in that position does neither. Forty boundary-value tests pin every threshold to the published table so a clinical constant cannot be quietly tuned.',
   },
   {
     date: '2026-07-30', kind: 'fixed',
@@ -83,17 +83,17 @@ const ENTRIES: Entry[] = [
   {
     date: '2026-07-30', kind: 'shipped',
     title: 'Hindi and Marathi, at zero accuracy cost',
-    body: 'Voice SOS recognised en-US only, so a Hindi speaker\'s emergency was transcribed as nonsense before any classifier saw it. Rather than train separate models, Hindi and Marathi terms — in both Devanagari and romanised form — are normalised onto the same English tokens the model already learned. Ninety-eight examples added, cross-validation accuracy unchanged at 0.891. The vocabulary was written from general knowledge and still needs native-speaker review; that caveat is in the corpus.',
+    body: 'Voice SOS recognised en-US only, so a Hindi speaker\'s emergency was transcribed as nonsense before any classifier saw it. Rather than train separate models, Hindi and Marathi terms. in both Devanagari and romanised form. are normalised onto the same English tokens the model already learned. Ninety-eight examples added, cross-validation accuracy unchanged at 0.891. The vocabulary was written from general knowledge and still needs native-speaker review; that caveat is in the corpus.',
   },
   {
     date: '2026-07-29', kind: 'honest',
     title: 'Published a benchmark where a competitor beats us',
-    body: 'Our on-device classifier scores 85.7% against llama-3.1-8b-instant\'s 96.4% on 28 unseen phrasings. That table is on the technology page with the competitor listed above us. The argument is not that we are more accurate — it is that every case ours got wrong, it declined to answer rather than guessing, so roughly 61% of emergencies resolve on-device with no errors and the rest escalate. An earlier version of this benchmark showed us winning 100% to 0%; that result was wrong, caused by a contaminated evaluation set and by counting the competitor\'s rate-limit errors as wrong answers. It was thrown out.',
+    body: 'Our on-device classifier scores 85.7% against llama-3.1-8b-instant\'s 96.4% on 28 unseen phrasings. That table is on the technology page with the competitor listed above us. The argument is not that we are more accurate. it is that every case ours got wrong, it declined to answer rather than guessing, so roughly 61% of emergencies resolve on-device with no errors and the rest escalate. An earlier version of this benchmark showed us winning 100% to 0%; that result was wrong, caused by a contaminated evaluation set and by counting the competitor\'s rate-limit errors as wrong answers. It was thrown out.',
   },
   {
     date: '2026-07-29', kind: 'shipped',
     title: 'Our own triage model, running on the phone',
-    body: '495 hand-written utterances, multinomial logistic regression over word and word-pair features with negation handling, compiled into a single 94 KB TypeScript file with the weights inlined. Classifies an emergency in 0.07 ms with no network, because emergencies happen in basements and on rural roads. An earlier attempt to grow the corpus made accuracy worse — 86.7% down to 78.5% — because distinctive clinical terms appeared only once and landed in the test split.',
+    body: '495 hand-written utterances, multinomial logistic regression over word and word-pair features with negation handling, compiled into a single 94 KB TypeScript file with the weights inlined. Classifies an emergency in 0.07 ms with no network, because emergencies happen in basements and on rural roads. An earlier attempt to grow the corpus made accuracy worse. 86.7% down to 78.5%. Because distinctive clinical terms appeared only once and landed in the test split.',
   },
   {
     date: '2026-07-29', kind: 'fixed',
@@ -103,7 +103,7 @@ const ENTRIES: Entry[] = [
   {
     date: '2026-07-28', kind: 'shipped',
     title: 'Dispatch ranks by drive time and capability, not distance',
-    body: 'One routing-matrix call prices every nearby hospital on the real road network, then ranking applies traffic, the facility capability the emergency actually needs — a catheterisation lab for cardiac, stroke unit for stroke — and whether the hospital reports it is accepting patients. The nearest hospital is frequently the wrong hospital.',
+    body: 'One routing-matrix call prices every nearby hospital on the real road network, then ranking applies traffic, the facility capability the emergency actually needs. A catheterisation lab for cardiac, stroke unit for stroke. And whether the hospital reports it is accepting patients. The nearest hospital is frequently the wrong hospital.',
   },
 ]
 
@@ -135,7 +135,7 @@ export default function Changelog() {
           </h1>
           <p style={{ color: INK2, fontSize: '16.5px', lineHeight: 1.7, marginBottom: '54px', maxWidth: '640px' }}>
             Corrections are marked and kept. A changelog containing only features is a
-            marketing page, and this is a medical tool — if you are deciding whether to
+            marketing page, and this is a medical tool. If you are deciding whether to
             trust it, the failures are the part worth reading.
           </p>
 

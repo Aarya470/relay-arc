@@ -92,7 +92,7 @@ export default function Donate() {
             <h2 style={{ color: T1, fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>Credit or debit card</h2>
           </div>
           <p style={{ color: T2, fontSize: '14px', lineHeight: 1.6, marginBottom: '18px', maxWidth: '440px' }}>
-            Guest checkout — no account needed. Visa, Mastercard, Amex, Discover.
+            Guest checkout. No account needed. Visa, Mastercard, Amex, Discover.
           </p>
           <a href={CARD_URL} target="_blank" rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'none', color: T1, fontWeight: 600, fontSize: '14.5px', padding: '12px 24px', textDecoration: 'none', border: `1.5px solid ${T1}`, fontFamily: 'inherit' }}>
@@ -126,7 +126,7 @@ export default function Donate() {
         </div>
 
         <p style={{ color: T3, fontFamily: mono, fontSize: '11.5px', lineHeight: 1.7, marginTop: '28px' }}>
-          Every donation goes to development and infrastructure. Questions — 5satadruroy@gmail.com
+          Every donation goes to development and infrastructure. Questions. 5satadruroy@gmail.com
         </p>
       </motion.div>
     </div>

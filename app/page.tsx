@@ -36,7 +36,7 @@ const ACCENT = '#42623C'
 const RED    = '#A33417'
 const GREEN  = '#42623C'
 const AMBER  = '#A87200'
-const ORANGE = '#D97757'   // FILL ONLY — 2.96:1 on light, so always dark ink on top
+const ORANGE = '#D97757'   // FILL ONLY. 2.96:1 on light, so always dark ink on top
 
 const mono = 'var(--font-mono, monospace)'
 
@@ -289,30 +289,30 @@ function PhoneMockup() {
 
 // ─── Dispatch log data ────────────────────────────────────────────────────────
 const LOG = [
-  { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating” — typed by her son while she sat down.', color: '#A33417' },
+  { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating”. Typed by her son while she sat down.', color: '#A33417' },
   { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#A87200' },
-  { t: '19:42:31', d: '+0:24', title: 'Hospital matched — not just nearest', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#42623C' },
-  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint — before the car leaves the lane.', color: '#42623C' },
+  { t: '19:42:31', d: '+0:24', title: 'Hospital matched by capability', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#42623C' },
+  { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint. Before the car leaves the lane.', color: '#42623C' },
   { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#42623C' },
 ]
 
 // ─── With / without — looping split-screen simulation ───────────────────────
 const RACE_MS = 19000
 const LEFT_EVENTS = [
-  { at: 500,   color: 'rgba(255,255,255,0.35)', text: 'Chest pain — panic sets in' },
+  { at: 500,   color: 'rgba(255,255,255,0.35)', text: 'Chest pain. Panic sets in' },
   { at: 3000,  color: 'rgba(255,255,255,0.35)', text: 'Googling symptoms, hands shaking' },
-  { at: 5500,  color: 'rgba(255,255,255,0.35)', text: 'Calling family — no answer' },
+  { at: 5500,  color: 'rgba(255,255,255,0.35)', text: 'Calling family. No answer' },
   { at: 8000,  color: 'rgba(255,255,255,0.35)', text: 'Which hospital? Nobody is sure' },
-  { at: 10500, color: '#E8A33D', text: 'Ambulance dispatched — ETA 45 min' },
+  { at: 10500, color: '#E8A33D', text: 'Ambulance dispatched. ETA 45 min' },
   { at: 13500, color: '#FF6B5E', text: 'Stuck in traffic. Still waiting.' },
 ]
 const RIGHT_EVENTS = [
-  { at: 500,   color: '#FF6B5E', text: 'SOS held — “chest pain, sweating”' },
+  { at: 500,   color: '#FF6B5E', text: 'SOS held. “chest pain, sweating”' },
   { at: 2500,  color: '#E8A33D', text: 'Cardiac event classified · profile pulled' },
-  { at: 4500,  color: '#7AA7FF', text: 'Lilavati matched — cath lab free · 4.2 km' },
+  { at: 4500,  color: '#7AA7FF', text: 'Lilavati matched. Cath lab free · 4.2 km' },
   { at: 6500,  color: '#7AA7FF', text: 'ER brief on the intake desk' },
-  { at: 9000,  color: '#7AA7FF', text: 'Family car en route — turn-by-turn' },
-  { at: 12500, color: '#3DDC97', text: 'Arrived — straight through triage' },
+  { at: 9000,  color: '#7AA7FF', text: 'Family car en route. Turn-by-turn' },
+  { at: 12500, color: '#3DDC97', text: 'Arrived. Straight through triage' },
 ]
 function fmtElapsed(s: number) {
   const m = Math.floor(s / 60), ss = Math.floor(s % 60)
@@ -383,7 +383,7 @@ function EmergencyRace() {
         </div>
       </div>
       <p style={{ color: '#C8D4C9', fontSize: '11.5px', fontFamily: mono, marginTop: '12px' }}>
-        Simulated side-by-side — not real footage. Ambulance wait reflects Mumbai peak-traffic averages.
+        Simulated side-by-side. Not real footage. Ambulance wait reflects Mumbai peak-traffic averages.
       </p>
     </div>
   )
@@ -418,20 +418,20 @@ export default function Home() {
 
   const features = [
     { Icon: Activity,     color: ACCENT, title: 'AI emergency detection',    body: 'Plain-language triage that starts routing instantly, without forms or phone trees.' },
-    { Icon: Route,        color: ACCENT, title: 'Condition-matched routing', body: 'A cath lab for a heart attack, a stroke unit for a stroke — not just whatever is closest. Turn-by-turn navigation for whoever is driving.' },
+    { Icon: Route,        color: ACCENT, title: 'Condition-matched routing', body: 'A heart attack needs a cath lab and a stroke needs a stroke unit. The closest hospital may have neither. Directions for whoever is driving.' },
     { Icon: FileText,     color: RED,    title: 'ER handoff brief',          body: 'One tap generates a clinical intake note: blood type, allergies, meds, chief complaint.' },
     { Icon: TrendingDown, color: AMBER,  title: 'Crash-risk prediction',     body: 'Your last seven check-ins, scanned for the pattern that tends to precede a bad day.' },
     { Icon: Heart,        color: GREEN,  title: 'Daily check-ins',           body: 'A two-minute conversation each morning that quietly builds a clinical record.' },
     { Icon: Pill,         color: GREEN,  title: 'Medication tracking',       body: 'Doses, reminders, a list the ER sees automatically.' },
-    { Icon: Video,        color: ACCENT, title: 'Care-team dashboard',       body: 'Nurses see every patient’s history, vitals and flags — and can schedule video calls.' },
+    { Icon: Video,        color: ACCENT, title: 'Care-team dashboard',       body: 'Nurses see every patient’s history, vitals and flags. And can schedule video calls.' },
     { Icon: Users,        color: AMBER,  title: 'Caregiver live view',       body: 'Share a link. Your family sees everything, live.' },
   ]
 
   const audiences = [
     { title: 'Cardiac patients',      color: RED,    body: 'Daily check-ins that catch early warnings, an SOS that moves in seconds, and a medical profile that speaks for you when you can’t.' },
-    { title: 'Post-surgery patients', color: AMBER,  body: 'A week-by-week recovery timeline that knows your procedure — what’s normal, what isn’t, and who to call.' },
+    { title: 'Post-surgery patients', color: AMBER,  body: 'A week by week recovery timeline for your procedure, with what is normal and who to call.' },
     { title: 'Families & caregivers', color: GREEN,  body: 'Live routing the moment it happens, a real-time status feed, and the full history to share with doctors afterwards.' },
-    { title: 'Nurses & care teams',   color: ACCENT, body: 'One dashboard for every patient — automated flags, check-in history, secure scheduling and video calls.' },
+    { title: 'Nurses & care teams',   color: ACCENT, body: 'One dashboard for every patient, with flags, check-in history, scheduling and video calls.' },
   ]
 
   const tickerItems = [
@@ -466,22 +466,23 @@ export default function Home() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ width: '7px', height: '7px', background: CORAL, display: 'inline-block', animation: 'dot-blink 1.6s ease-in-out infinite' }}/>
                 <span style={{ color: T2, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                  19.0760° N, 72.8777° E — Mumbai · cardiac response
+                  Mumbai · cardiac and dysautonomia response
                 </span>
               </div>
               <span style={{ color: T3, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }} className="desktop-only">
-                SOS → hospital briefed: under 60s
+                Hospital gets your details before you arrive
               </span>
             </div>
 
             <h1 style={{ color: ON, fontSize: 'clamp(44px, 8.6vw, 104px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.045em', marginBottom: '40px', maxWidth: '980px' }}>
-              When every minute<br/>is the margin<span style={{ color: CORAL }}>.</span>
+              The closest hospital is not<br/>always the right one<span style={{ color: ON_3 }}>.</span>
             </h1>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
               <div style={{ background: PANEL_2, borderRadius: '18px', padding: '28px 28px 32px', marginBottom: '90px' }} className="hero-copy">
                 <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
-                  One button. Relay picks the right hospital, sends your records ahead, and gets your family moving — in under a minute.
+                  One button. It works out what is happening, finds a hospital that can treat it,
+                  and sends your medical details ahead. It works with no signal.
                 </p>
 
                 {/* The card is the primary action deliberately. Asking a first-time
@@ -525,11 +526,11 @@ export default function Home() {
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ background: PANEL_2, borderRadius: '10px', padding: '11px 14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>01 / How it works</span>
-            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Watch — same emergency, twice</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>The same emergency, twice</span>
           </div>
           <EmergencyRace/>
           <p style={{ color: ON, fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 800, letterSpacing: '-0.03em', marginTop: '36px', textAlign: 'center' }}>
-            12 minutes with Relay. Still waiting without<span style={{ color: CORAL }}>.</span>
+            Twelve minutes with the app. Still waiting without it<span style={{ color: ON_3 }}>.</span>
           </p>
         </div>
       </section>
@@ -546,10 +547,10 @@ export default function Home() {
           </div>
           <div className="simple-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '40px 36px' }}>
             {[
-              ['Finds the right hospital', 'A cath lab for a heart attack — not just the closest ER.'],
-              ['Sends your records ahead', 'Blood type, meds, allergies — there before you are.'],
-              ['Gets your family there', 'Live location and turn-by-turn, shared in one tap.'],
-              ['Watches over you daily', 'Two-minute check-ins that catch trouble early.'],
+              ['Finds a hospital that can treat it', 'A heart attack needs a cath lab. The closest ER may not have one.'],
+              ['Sends your details ahead', 'Blood type, medicines and allergies, there before you are.'],
+              ['Gets your family there', 'Your location and directions, shared in one tap.'],
+              ['Checks in with you daily', 'Two minutes a day, so a bad week shows up early.'],
             ].map(([title, body], i) => (
               <div key={i} style={{ background: PANEL, borderRadius: '14px', padding: '18px 18px 20px' }}>
                 <span style={{ color: RED, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
@@ -567,15 +568,15 @@ export default function Home() {
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Under the hood</span>
-            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>we built the parts that matter</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>how the decision gets made</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(148px, 1fr))', gap: '28px', marginBottom: '34px' }}>
             {[
-              ['0.07 ms', 'to know what’s wrong', 'on your phone, no signal'],
-              ['94 KB', 'our triage model', 'ships inside the app'],
-              ['NEWS2', 'hospital-grade scoring', 'same answer every time'],
-              ['0', 'AI calls in an emergency', 'until we’re genuinely unsure'],
+              ['0.07 ms', 'to sort the symptoms', 'on your phone, no signal'],
+              ['94 KB', 'the triage model', 'ships inside the app'],
+              ['NEWS2', 'the score hospitals use', 'same answer every time'],
+              ['0', 'AI calls in an emergency', 'only if the result is unclear'],
             ].map(([v, k, sub]) => (
               <div key={k} style={{ borderTop: `2px solid ${T1}`, paddingTop: '10px' }}>
                 <p style={{ color: T1, fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{v}</p>
@@ -587,7 +588,7 @@ export default function Home() {
 
           <button onClick={() => router.push('/engineering')}
             style={{ background: 'none', border: 'none', color: T1, fontWeight: 700, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${T1}`, paddingBottom: '2px' }}>
-            Try both engines running live <span style={{ fontFamily: mono }}>→</span>
+            See it run <span style={{ fontFamily: mono }}>→</span>
           </button>
         </div>
       </section>
@@ -603,7 +604,8 @@ export default function Home() {
             Relay,<br/>not Revive<span style={{ color: '#FFFFFF' }}>.</span>
           </h2>
           <p style={{ color: 'rgba(20,20,19,0.78)', fontSize: '17px', lineHeight: 1.65, maxWidth: '540px', marginBottom: '14px' }}>
-            Most of the world doesn&apos;t get an ambulance in eight minutes. Relay was built for those places first.
+            Most of the world does not get an ambulance in eight minutes. This was built for
+            those places first.
           </p>
           <p style={{ color: T1, fontSize: '20px', lineHeight: 1.5, fontWeight: 800, letterSpacing: '-0.01em', maxWidth: '540px' }}>
             No one should have to think before getting help.
@@ -620,11 +622,11 @@ export default function Home() {
                 Your profile could<br/>save your life<span style={{ color: CORAL }}>.</span>
               </h2>
               <p style={{ color: INK, background: PANEL_2, borderRadius: '12px', padding: '14px 16px', fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
-                Two minutes to set up. Ready for paramedics forever.
+                Two minutes to set up. Ready for paramedics after that.
               </p>
               <button onClick={() => router.push('/login?signup=1')}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: ORANGE, color: INK, padding: '15px 32px', borderRadius: '0px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-                Set up your profile — it’s free <ArrowRight size={15}/>
+                Set up your profile, it is free <ArrowRight size={15}/>
               </button>
             </div>
 
@@ -653,7 +655,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '11px', marginBottom: '14px' }}>
-                  <p style={{ color: CORAL, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '3px' }}>Critical — allergies</p>
+                  <p style={{ color: CORAL, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '3px' }}>Critical. allergies</p>
                   <p style={{ color: T1, fontSize: '13px', fontWeight: 700, margin: 0 }}>Penicillin · Sulfa drugs</p>
                 </div>
                 <p style={{ color: T3, fontFamily: mono, fontSize: '10px', margin: 0 }}>post-CABG · metoprolol 50mg · updated today</p>

@@ -108,7 +108,7 @@ export default function Features() {
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
           <Head n="01" title="Emergency triage" right="what is wrong"/>
-          <H2>It decides before it asks anyone&apos;s permission — or their network.</H2>
+          <H2>It decides before it asks anyone&apos;s permission. or their network.</H2>
           <P>
             Say what is happening, or tap a type. The classifier runs on the phone, so a basement, a
             lift or a rural road makes no difference. The cloud model is a fallback for genuinely
@@ -143,7 +143,7 @@ export default function Features() {
 
           <div style={{ marginTop: '30px' }}>
             <Grid>
-              <Panel label="Time to a decision — measured">
+              <Panel label="Time to a decision. Measured">
                 <BarChart
                   bars={[
                     { label: 'On-device', value: 0.11, color: GREEN, note: 'no network involved' },
@@ -151,17 +151,17 @@ export default function Features() {
                   ]}
                   format={v => (v < 1 ? `${v} ms` : `${v} ms`)}
                 />
-                <Cap>Bars are linear — the on-device bar is not a rounding error, it is 1,400× shorter</Cap>
+                <Cap>Bars are linear. the on-device bar is not a rounding error, it is 1,400× shorter</Cap>
               </Panel>
               <Panel label="Where emergencies get settled">
                 <Donut value={0.61} label="on device" color={GREEN}
-                  sub="Settled instantly, offline, with no errors on the held-out evaluation. The other 39% are the ambiguous phrasings, and those go to the cloud model — which is better at exactly those."/>
+                  sub="Settled instantly, offline, with no errors on the held-out evaluation. The other 39% are the ambiguous phrasings, and those go to the cloud model. Which is better at exactly those."/>
               </Panel>
             </Grid>
           </div>
 
           <div style={{ marginTop: '30px' }}>
-            <Panel label="Accuracy — including where we lose">
+            <Panel label="Accuracy. Including where we lose">
               <BarChart
                 bars={[
                   { label: 'Llama 3.1 8B (cloud)', value: 96.4, color: INK3, note: 'more accurate than ours on raw classification' },
@@ -213,10 +213,10 @@ export default function Features() {
           </Panel>
 
           <div style={{ marginTop: '30px' }}>
-            <Panel label="A worked example — same three hospitals, two ways of ranking">
+            <Panel label="A worked example. Same three hospitals, two ways of ranking">
               <BarChart
                 bars={[
-                  { label: 'Nearest · no cath lab', value: 4, color: WARN, note: 'ranked first by distance — then transfers you, and the clock keeps running' },
+                  { label: 'Nearest · no cath lab', value: 4, color: WARN, note: 'ranked first by distance. Then transfers you, and the clock keeps running' },
                   { label: 'Chosen · cath lab, accepting', value: 11, color: GREEN, note: 'ranked first by us: 7 minutes further, and definitive treatment on arrival' },
                   { label: 'Third · diverting', value: 9, color: INK3, note: 'closer than the choice, but reported it is not accepting' },
                 ]}
@@ -232,9 +232,9 @@ export default function Features() {
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
           <Head n="03" title="Deterioration risk" right="how urgent"/>
-          <H2>It watches the slope, not just the reading.</H2>
+          <H2>One reading says less than the direction it is moving.</H2>
           <P>
-            Log vitals and the score is arithmetic on published thresholds — the vital-sign subscores of
+            Log vitals and the score is arithmetic on published thresholds. The vital-sign subscores of
             NEWS2, the early-warning score used in hospitals to catch deterioration before it becomes an
             emergency. Same numbers in, same flag out, every time, with every point traced to the
             reading that produced it.
@@ -251,7 +251,7 @@ export default function Features() {
               xLabel="consecutive readings"
               yLabel="NEWS2 aggregate"
             />
-            <Cap>Synthetic patient, real thresholds — the bands are NEWS2&apos;s published escalation bands, the curve is illustrative</Cap>
+            <Cap>Synthetic patient, real thresholds. the bands are NEWS2&apos;s published escalation bands, the curve is illustrative</Cap>
           </Panel>
 
           <div style={{ marginTop: '30px' }}>
@@ -282,7 +282,7 @@ export default function Features() {
                     { from: 'b', to: 'o', label: 'CANNOT REACH HIGH', dashed: true, color: INK3 },
                   ]}
                 />
-                <Cap>The unvalidated layer can raise low to medium and never to high — enforced by a test</Cap>
+                <Cap>The unvalidated layer can raise low to medium and never to high. enforced by a test</Cap>
               </Panel>
             </Grid>
           </div>
@@ -292,7 +292,7 @@ export default function Features() {
               Stated on every alert
             </p>
             <p style={{ color: INK, fontSize: '15.5px', lineHeight: 1.7, maxWidth: '740px' }}>
-              NEWS2 has seven parameters and Relay now captures all seven — but only when you
+              NEWS2 has seven parameters and Relay now captures all seven. But only when you
               record them. When any are missing the score reports itself as <strong>partial</strong> and
               names what is absent. A phone cannot always take your
               temperature, assess your consciousness level, or know whether you are on supplemental
@@ -311,7 +311,7 @@ export default function Features() {
           <P>
             The moment SOS fires, a shared room opens. Family see live location and the same countdown.
             A bystander can take over if you stop responding. If a partner hospital is connected, their
-            emergency board has your blood type, allergies and medications before the car moves — and
+            emergency board has your blood type, allergies and medications before the car moves. And
             the app only claims &ldquo;the ER is expecting you&rdquo; when a real facility actually acknowledged.
           </P>
 
@@ -345,7 +345,7 @@ export default function Features() {
           <P>
             The second a panicking family member leaves for another application, the hospital briefing,
             the arrival estimate and the shared room stop travelling with them. So turn-by-turn is built
-            in — vector tiles, a chase camera, snap-to-route, a wake lock so the screen never dies at a
+            in. Vector tiles, a chase camera, snap-to-route, a wake lock so the screen never dies at a
             junction, and a night mode.
           </P>
 
@@ -366,7 +366,7 @@ export default function Features() {
                 { from: 'f', to: 'a', label: 'RETRY' },
               ]}
             />
-            <Cap>The full re-scan branch exists because of a real bug — a windowed-only search silently latched onto the wrong part of the line after a GPS jump and under-reported distance by half</Cap>
+            <Cap>The full re-scan branch exists because of a real bug. a windowed-only search silently latched onto the wrong part of the line after a GPS jump and under-reported distance by half</Cap>
           </Panel>
         </div>
       </section>

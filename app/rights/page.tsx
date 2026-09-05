@@ -34,7 +34,7 @@ const ORANGE = '#D97757'
 
 // The dark page, and text ON it.
 const PAGE = '#4B8150'
-const ON = '#FFFFFF'          // 4.61:1 — and the ceiling, see globals.css
+const ON = '#FFFFFF'          // 4.61:1. and the ceiling, see globals.css
 const ON_3 = '#C8D4C9'        // 3.01:1, meta only
 const RULE = '#7EB382'        // hairline on dark; a dark rule vanishes here
 const CORAL = '#F2C8BC'       // ORANGE is 1.53:1 on this page and unusable as text
@@ -101,7 +101,7 @@ export default function RightsPage() {
             <AlertCircle size={19} color={ORANGE} style={{ flexShrink: 0, marginTop: 2 }} />
             <div style={{ color: INK2, fontSize: 15, lineHeight: 1.6 }}>
               Nothing has been written for {pack.label} yet, and the American version is not close
-              enough to adapt. Leaving it blank is the honest option — a confidently wrong card
+              enough to adapt. Leaving it blank is the honest option. A confidently wrong card
               about who has to treat you is worse than no card.
             </div>
           </div>
@@ -114,7 +114,7 @@ export default function RightsPage() {
             }}>
               <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 12 }}>
                 <div style={{
-                  fontFamily: mono, fontSize: 12, fontWeight: 700, color: ORANGE, marginTop: 4, flexShrink: 0,
+                  fontFamily: mono, fontSize: 12, fontWeight: 700, color: '#A33417', marginTop: 4, flexShrink: 0,
                 }}>
                   {String(i + 1).padStart(2, '0')}
                 </div>

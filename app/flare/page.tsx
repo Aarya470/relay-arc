@@ -208,7 +208,7 @@ export default function FlarePage() {
             </div>
 
             <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 12 }}>
-              NUMBERS — ALL OPTIONAL
+              OPTIONAL NUMBERS
             </div>
             <p style={{ color: ON, fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
               Skip every one of these if you do not have them or do not feel like standing up.
@@ -242,7 +242,7 @@ export default function FlarePage() {
                   </div>
                 )}
               </div>
-              <Field label="Your age" hint="Changes which threshold applies — the mark is higher between 12 and 19" value={age} onChange={setAge} />
+              <Field label="Your age" hint="Changes which threshold applies. The mark is higher between 12 and 19" value={age} onChange={setAge} />
             </div>
 
             <button
@@ -356,7 +356,7 @@ export default function FlarePage() {
         )}
 
         <p style={{ color: ON_3, fontSize: 12, lineHeight: 1.6, marginTop: 30, paddingTop: 20, borderTop: `1px solid ${RULE}` }}>
-          Nothing on this page is sent anywhere. There is no account and no server call — what you
+          Nothing on this page is sent anywhere. There is no account and no server call. What you
           type stays in this browser and disappears when you close the tab.
         </p>
       </div>
@@ -378,7 +378,7 @@ function Field({ label, hint, value, onChange }: {
       {hint && <div style={{ color: INK2, fontSize: 13, lineHeight: 1.5, marginTop: 3 }}>{hint}</div>}
       <input
         type="number" inputMode="numeric" value={value} onChange={e => onChange(e.target.value)}
-        placeholder="—"
+        placeholder=". "
         style={{
           marginTop: 10, width: '100%', fontFamily: mono, fontSize: 20, fontWeight: 700,
           border: 'none', borderBottom: `1px solid ${BORDER}`, background: 'transparent',
@@ -397,7 +397,7 @@ function Mini({ label, value, onChange }: { label: string; value: string; onChan
       </div>
       <input
         type="number" inputMode="numeric" value={value} onChange={e => onChange(e.target.value)}
-        placeholder="—"
+        placeholder=". "
         style={{
           marginTop: 4, width: '100%', fontFamily: mono, fontSize: 19, fontWeight: 700,
           border: 'none', borderBottom: `1px solid ${BORDER}`, background: 'transparent',

@@ -61,7 +61,7 @@ export default function StatusPage() {
         </div>
 
         <h1 style={{ color: T1, fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.02, marginBottom: '10px' }}>
-          {loading && !data ? 'Checking every dependency' : operational ? 'All critical systems operational' : 'Degraded — a critical dependency is down'}
+          {loading && !data ? 'Checking every dependency' : operational ? 'All critical systems operational' : 'Degraded. A critical dependency is down'}
           <span style={{ color: operational ? GREEN : RED }}>.</span>
         </h1>
         <p style={{ color: T2, fontSize: '15px', lineHeight: 1.65, marginBottom: '38px' }}>
@@ -102,7 +102,7 @@ export default function StatusPage() {
         <p style={{ color: T3, fontSize: '12px', lineHeight: 1.7, borderTop: `1px solid ${BORDER}`, paddingTop: '18px' }}>
           Optional checks are graceful-degradation paths: without live traffic Relay uses a time-of-day
           model, and without partner facilities it still routes on capability and drive time. Configuration
-          rows report presence only — no key material is ever returned.
+          rows report presence only. No key material is ever returned.
         </p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>

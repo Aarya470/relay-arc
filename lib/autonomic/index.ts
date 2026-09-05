@@ -31,8 +31,8 @@
 
 /** Sources for every threshold in this file, shown in the UI next to the number. */
 export const BASIS = {
-  pots: 'Heart Rhythm Society 2015 expert consensus on POTS — sustained rise of ≥30 bpm within 10 minutes of standing (≥40 bpm ages 12–19), without orthostatic hypotension',
-  oh: 'Consensus definition of orthostatic hypotension — fall of ≥20 mmHg systolic or ≥10 mmHg diastolic within 3 minutes of standing',
+  pots: 'Heart Rhythm Society 2015 expert consensus on POTS. Sustained rise of ≥30 bpm within 10 minutes of standing (≥40 bpm ages 12–19), without orthostatic hypotension',
+  oh: 'Consensus definition of orthostatic hypotension. Fall of ≥20 mmHg systolic or ≥10 mmHg diastolic within 3 minutes of standing',
   counter: 'Physical counter-pressure manoeuvres, standard first-line management for orthostatic intolerance and impending syncope',
 } as const
 
@@ -172,7 +172,7 @@ export const RED_FLAGS: RedFlag[] = [
   },
   {
     id: 'fainted',
-    prompt: 'Actually lost consciousness, not just felt close to it',
+    prompt: 'Actually passed out, rather than feeling close to it',
     because: 'Feeling faint is common with dysautonomia. Genuinely passing out needs assessment, especially if you hit anything on the way down.',
   },
   {
@@ -357,7 +357,7 @@ export const COUNTER_STEPS: CounterStep[] = [
   {
     id: 'down',
     title: 'Get on the floor',
-    body: 'Lie flat, right now, wherever you are. Not a chair, not the sofa — flat. If you are somewhere you cannot lie down, crouch or sit on the ground with your head lower than your heart.',
+    body: 'Lie flat, right now, wherever you are. Not a chair, not the sofa. Flat. If you are somewhere you cannot lie down, crouch or sit on the ground with your head lower than your heart.',
     holdSeconds: null,
   },
   {

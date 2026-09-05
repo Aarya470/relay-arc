@@ -23,7 +23,7 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
 const T1 = '#FFFFFF', T2 = '#5C5A52', T3 = '#6F6D65'
 const BORDER = '#7EB382', BG2 = '#3A6440'
 const RED = '#A33417', ACCENT = '#42623C'
-const ORANGE = '#D97757'   // fill only — dark ink on top
+const ORANGE = '#D97757'   // fill only. dark ink on top
 const mono = 'var(--font-mono, monospace)'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
 
@@ -127,7 +127,7 @@ export default function Engineering() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '26px' }}>
             <span style={{ width: '7px', height: '7px', background: RED, display: 'inline-block' }}/>
             <span style={{ color: T2, fontFamily: mono, fontSize: '11.5px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              Under the hood — everything on this page runs live
+              Under the hood. Everything on this page runs live
             </span>
           </div>
 
@@ -144,8 +144,8 @@ export default function Engineering() {
             what it said. In an emergency all three of those happen at once.
           </P>
           <P wide>
-            So the four things Relay depends on in the worst moment — deciding what is wrong, deciding
-            how urgent it is, deciding which hospital, and getting you there — are ours. They run on
+            So the four things Relay depends on in the worst moment. Deciding what is wrong, deciding
+            how urgent it is, deciding which hospital, and getting you there. Are ours. They run on
             the device, they explain themselves, and they work with no network. Below are two of them,
             running in this browser tab right now. Type into them. Break them.
           </P>
@@ -162,12 +162,12 @@ export default function Engineering() {
       {/* ── 01 TRIAGE ────────────────────────────────────────────────────── */}
       <section style={{ padding: '92px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="01" title="Triage engine" right="classification — ours"/>
+          <SectionHead n="01" title="Triage engine" right="classification. Ours"/>
           <H2>It has to decide what&apos;s wrong before it knows if there&apos;s signal.</H2>
           <P>
             Someone gasping into their phone cannot wait on a round trip, and a basement or a rural
             road may not offer one. So classification happens first, on the device, in a fraction of a
-            millisecond — and the language model is consulted only when our own model admits it is
+            millisecond. And the language model is consulted only when our own model admits it is
             unsure.
           </P>
 
@@ -178,28 +178,28 @@ export default function Engineering() {
           <H2>How it was actually built</H2>
           <P>
             Multinomial logistic regression over binary word and word-pair features. Deliberately the
-            most boring model that could work, because a linear model can be asked <em>why</em> — every
+            most boring model that could work, because a linear model can be asked <em>why</em>. Every
             decision decomposes into the exact terms that drove it, which is the list you saw above.
           </P>
 
           <div style={{ marginBottom: '40px' }}>
             <Step n="01" title="Write the corpus by hand"
-              body="495 labelled utterances in the words people actually use under stress — 'chest is paining', 'he won't wake up', 'crashed after shopping' — not clinical vocabulary. This is the part with no shortcut."/>
+              body="495 labelled utterances in the words people actually use under stress. 'chest is paining', 'he won't wake up', 'crashed after shopping'. Not clinical vocabulary. This is the part with no shortcut."/>
             <Step n="02" title="Featurise with negation handling"
               body="Unigrams and bigrams, plus a negation window: 'no chest pain but I cannot breathe' must not read as chest pain. Terms inside a negator's scope get a NOT_ prefix, with an exemption list for words like 'breath' that stay clinically positive either way."/>
             <Step n="03" title="Train, then prune"
-              body="Gradient descent with L2. Features whose weight lands under 0.02 are dropped — 36 of 1,168 — because a weight that small is memorised noise, not signal."/>
+              body="Gradient descent with L2. Features whose weight lands under 0.02 are dropped. 36 of 1,168. because a weight that small is memorised noise, not signal."/>
             <Step n="04" title="Compile the model into TypeScript"
               body="The trainer emits one self-contained module with the weights inlined and zero imports. Nothing to fetch at runtime, nothing to keep in sync, and the classifier works the first time the app opens on a phone that has never been online."/>
             <Step n="05" title="Prove Python and TypeScript agree"
-              body="A generated fixture file pins what the Python trainer predicted. The TypeScript must reproduce it exactly. Drift between the two would mean the shipped model scores different features than it was trained on — silently, and only in production."/>
+              body="A generated fixture file pins what the Python trainer predicted. The TypeScript must reproduce it exactly. Drift between the two would mean the shipped model scores different features than it was trained on. Silently, and only in production."/>
           </div>
 
           {/* the honest benchmark */}
           <div style={{ border: `2px solid ${T1}`, marginBottom: '20px' }}>
             <div style={{ borderBottom: `1px solid ${T1}`, padding: '11px 16px', background: BG2 }}>
               <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-                Head-to-head — 28 phrasings the model had never seen
+                Head-to-head. 28 phrasings the model had never seen
               </span>
             </div>
             <div style={{ overflowX: 'auto' }}>
@@ -218,7 +218,7 @@ export default function Engineering() {
                 <tbody>
                   {[
                     ['Accuracy, all cases', '85.7%', '96.4%', 1],
-                    ['Accuracy when confident', '100%', '—', 0],
+                    ['Accuracy when confident', '100%', '. ', 0],
                     ['Median latency', '0.11 ms', '155 ms', 0],
                     ['Works with no signal', 'yes', 'no', 0],
                     ['Explains its decision', 'yes', 'no', 0],
@@ -243,7 +243,7 @@ export default function Engineering() {
               That is not the claim. The claim is what happened to the cases we got wrong:
               <strong style={{ color: T1 }}> every single one fell below the abstention gate</strong>. The model
               declined to answer rather than answer badly. So roughly 61% of emergencies are settled
-              on-device, instantly, offline, with no errors on this evaluation — and the remaining 39%
+              on-device, instantly, offline, with no errors on this evaluation. And the remaining 39%
               go to the language model, which is strong on exactly the ambiguous phrasings a small
               corpus is weak on. If there is no network, the on-device guess is used rather than
               dead-ending someone mid-emergency. A model that knows when to shut up is worth more here
@@ -257,7 +257,7 @@ export default function Engineering() {
               Where it went wrong first
             </p>
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.7, maxWidth: '720px', marginBottom: '14px' }}>
-              The first attempt to grow the corpus made the model <em>worse</em> — held-out accuracy fell
+              The first attempt to grow the corpus made the model <em>worse</em>. Held-out accuracy fell
               from 86.7% to 78.5%. The cause was that distinctive clinical terms appeared exactly once,
               so a term would land in the test split having never been seen in training, and a single
               train/test split was too noisy to notice.
@@ -265,7 +265,7 @@ export default function Engineering() {
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.7, maxWidth: '720px' }}>
               Two rules came out of it, and they still hold: every distinctive term needs at least three
               different phrasings, and accuracy is measured by 5-fold cross-validation rather than one
-              split. A benchmark that flattered us was also thrown out — the first run showed 100% for us
+              split. A benchmark that flattered us was also thrown out. The first run showed 100% for us
               and 0% for Groq, which turned out to be a contaminated eval set plus Groq quietly returning
               errors that were being counted as wrong answers.
             </p>
@@ -276,7 +276,7 @@ export default function Engineering() {
       {/* ── 02 RISK ──────────────────────────────────────────────────────── */}
       <section style={{ padding: '92px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="02" title="Risk engine" right="deterioration — ours"/>
+          <SectionHead n="02" title="Risk engine" right="deterioration. Ours"/>
           <H2>A medical flag that can&apos;t explain itself is worthless to a doctor.</H2>
           <P>
             This used to be a language model reading free-text check-ins and guessing a risk level. That
@@ -285,7 +285,7 @@ export default function Engineering() {
             it again. Ask a model at temperature 0.2 twice and you may get two answers.
           </P>
           <P>
-            So it is now arithmetic on published thresholds — the vital-sign subscores of <strong style={{ color: T1 }}>NEWS2</strong>,
+            So it is now arithmetic on published thresholds. The vital-sign subscores of <strong style={{ color: T1 }}>NEWS2</strong>,
             the early-warning score used in UK hospitals to catch deterioration. Same vitals, same flag,
             every time, with every point traced to the reading that earned it.
           </P>
@@ -298,7 +298,7 @@ export default function Engineering() {
           <P>
             NEWS2 uses absolute thresholds, which is right for acute hospital care and wrong for chronic
             illness. Someone with ME/CFS whose resting pulse normally sits at 58 and is suddenly at 76
-            scores <strong style={{ color: T1 }}>NEWS2 zero</strong> — textbook normal — while being 18 bpm into their own crash
+            scores <strong style={{ color: T1 }}>NEWS2 zero</strong>. Textbook normal. While being 18 bpm into their own crash
             pattern. So a second layer scores deviation from that person&apos;s own history: pulse against a
             21-day personal median, narrow pulse pressure, a rising-pulse trend, and gaps in logging,
             because someone too unwell to log is itself a signal.
@@ -306,7 +306,7 @@ export default function Engineering() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '22px', marginBottom: '38px' }}>
             <div style={{ border: `1px solid ${BORDER}`, padding: '20px' }}>
-              <p style={{ color: ACCENT, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '10px' }}>Layer 1 — validated</p>
+              <p style={{ color: ACCENT, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '10px' }}>Layer 1. validated</p>
               <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Partial NEWS2</p>
               <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65 }}>
                 Thresholds transcribed from the published table and pinned by 40 boundary-value tests, so
@@ -315,7 +315,7 @@ export default function Engineering() {
               </p>
             </div>
             <div style={{ border: `1px solid ${BORDER}`, padding: '20px' }}>
-              <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '10px' }}>Layer 2 — heuristic</p>
+              <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '10px' }}>Layer 2. heuristic</p>
               <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Personal baseline</p>
               <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65 }}>
                 Labelled unvalidated in every signal it emits, and structurally incapable of raising an
@@ -330,11 +330,11 @@ export default function Engineering() {
               Said everywhere it appears
             </p>
             <p style={{ color: T1, fontSize: '16px', lineHeight: 1.7, maxWidth: '740px' }}>
-              NEWS2 has seven parameters and all seven are now implemented — temperature,
+              NEWS2 has seven parameters and all seven are now implemented. Temperature,
               consciousness level and supplemental-oxygen status were added in July 2026.
               A reading is only as complete as what was recorded, so the score reports itself as
               partial whenever a parameter is missing, and names it. A partial
-              score can only ever <strong>under</strong>-estimate risk — which makes it safe as a prompt to seek
+              score can only ever <strong>under</strong>-estimate risk. Which makes it safe as a prompt to seek
               care and unsafe as a reason not to. Every result carries that caveat and a list of exactly
               which vitals were missing, and it is printed under every alert a user sees. It is decision
               support. It is not a diagnosis, and it is not a substitute for a clinician or an ambulance.
@@ -346,11 +346,11 @@ export default function Engineering() {
       {/* ── 03 DISPATCH ──────────────────────────────────────────────────── */}
       <section style={{ padding: '92px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="03" title="Dispatch engine" right="which hospital — ours"/>
+          <SectionHead n="03" title="Dispatch engine" right="which hospital. Ours"/>
           <H2>The nearest hospital is frequently the wrong hospital.</H2>
           <P>
             &ldquo;Nearest&rdquo; is a straight line on a map. A cardiac arrest needs a hospital with an open
-            catheterisation lab, not the one 600 metres away that will stabilise and then transfer —
+            catheterisation lab, not the one 600 metres away that will stabilise and then transfer. 
             spending the only minutes that mattered. So distance is the input we care about least.
           </P>
 
@@ -362,9 +362,9 @@ export default function Engineering() {
             </div>
             <div style={{ padding: '4px 16px 14px' }}>
               {[
-                ['Real drive time', 'One routing-matrix call prices every candidate at once on the actual road network — not a radius.'],
+                ['Real drive time', 'One routing-matrix call prices every candidate at once on the actual road network. Not a radius.'],
                 ['Traffic', 'A live-traffic provider re-ranks the top candidates when a key is configured. Without one, a documented time-of-day model applies and the interface says "estimated" rather than implying live data.'],
-                ['Facility capability', 'Cath lab for cardiac, stroke unit for stroke, trauma for unresponsive. A hospital reporting it lacks the relevant capability is pushed down; one reporting it has it is pulled up.'],
+                ['Facility capability', 'Cath lab for cardiac, stroke unit for stroke, trauma for unresponsive. A hospital reporting it lacks the relevant capability is pushed down. One reporting it has the capability is pulled up.'],
                 ['Whether they are accepting', 'Partner hospitals report diversion status through a portal. A facility that says it is diverting is penalised hard rather than silently recommended.'],
                 ['Freshness', 'Hospital-reported status older than four hours stops counting. Stale confidence is worse than no confidence.'],
               ].map(([k, v]) => (
@@ -379,7 +379,7 @@ export default function Engineering() {
           <P>
             When a hospital is genuinely connected, their emergency board lights up before the car
             moves: type, arrival estimate, blood type, allergies, medications. And it only ever says
-            &ldquo;the ER is expecting you&rdquo; when a real partner facility actually acknowledged — never as
+            &ldquo;the ER is expecting you&rdquo; when a real partner facility actually acknowledged. Never as
             decoration. Anything simulated is badged as simulated.
           </P>
         </div>
@@ -388,7 +388,7 @@ export default function Engineering() {
       {/* ── 04 NAVIGATION ────────────────────────────────────────────────── */}
       <section style={{ padding: '92px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="04" title="Navigation" right="getting there — ours"/>
+          <SectionHead n="04" title="Navigation" right="getting there. Ours"/>
           <H2>Handing someone off to a map app loses the emergency.</H2>
           <P>
             The moment you bounce a panicking family member into another application, the hospital
@@ -399,7 +399,7 @@ export default function Engineering() {
           <P>
             The bug worth mentioning was found by our own test rather than a user. After a GPS jump the
             route-position search only looked in a window around the last known point, so it silently
-            latched onto the wrong part of the line and under-reported distance travelled by half — 4.9 km
+            latched onto the wrong part of the line and under-reported distance travelled by half. 4.9 km
             instead of 9.7. It now falls back to a full scan when the windowed match is poor.
           </P>
         </div>
@@ -417,9 +417,9 @@ export default function Engineering() {
 
           <div style={{ marginBottom: '20px' }}>
             {[
-              ['495 examples is a small corpus', 'The triage model improves with data, and the real corpus should come from anonymised production transcripts under consent — not from us inventing more sentences.'],
+              ['495 examples is a small corpus', 'The triage model improves with data, and the real corpus should come from anonymised production transcripts under consent. Not from us inventing more sentences.'],
               ['Sparse phrasings are unreliable', 'Injury vocabulary is thin, and "other" is a grab-bag class that deserves subdividing. Stroke versus unconscious on speech symptoms still needs more data.'],
-              ['NEWS2 is not validated under 16', 'It is designed for adults; paediatric practice uses PEWS. The score flags this when age is known, but the underlying instrument is still the adult one.'],
+              ['NEWS2 is not validated under 16', 'It is built for adults. Paediatric practice uses PEWS instead. The score flags this when age is known, but the underlying instrument is still the adult one.'],
               ['The temperature band table needs a clinician\'s eye', 'Every other row was transcribed from an unambiguous source. For temperature the sources disagreed on alignment, so that row is flagged for confirmation.'],
               ['The personal-baseline layer is unvalidated', 'It is clinically plausible and carefully bounded, but it has not been tested against outcomes. It stays labelled that way until it has been.'],
               ['Orthostatic vitals are not captured', 'Lying-versus-standing heart rate is the actual diagnostic signal for POTS, and right now we do not collect it.'],
