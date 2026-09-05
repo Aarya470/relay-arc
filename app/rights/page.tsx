@@ -25,10 +25,24 @@ import Link from 'next/link'
 import { ArrowLeft, Scale, AlertCircle, ArrowRight, Printer } from 'lucide-react'
 import { rightsFor, guessCountry, COUNTRIES, type Country } from '@/lib/rights'
 
+// Ink tones. These are for text INSIDE the white cards, which is most of this
+// page, so they are unchanged.
 const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65'
-const CREAM = '#B3DDAC', BORDER = '#98C890', WHITE = '#FFFFFF'
+const WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757'
+
+// The dark page, and text ON it.
+const PAGE = '#4B8150'
+const ON = '#FFFFFF'          // 4.61:1 — and the ceiling, see globals.css
+const ON_3 = '#C8D4C9'        // 3.01:1, meta only
+const RULE = '#7EB382'        // hairline on dark; a dark rule vanishes here
+const CORAL = '#F2C8BC'       // ORANGE is 1.53:1 on this page and unusable as text
+
+// A light tint for the block inside each white card. This is the job the old
+// CREAM constant used to do, kept separate now that the page itself is dark.
+const TINT = '#EDF2E9'
+const BORDER = '#DCE6D6'      // card-internal hairline, on white
 const mono = 'var(--font-mono, monospace)'
 
 export default function RightsPage() {
@@ -43,25 +57,25 @@ export default function RightsPage() {
   const pack = rightsFor(country)
 
   return (
-    <div style={{ minHeight: '100dvh', background: CREAM, color: INK }}>
+    <div style={{ minHeight: '100dvh', background: PAGE, color: INK }}>
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '20px 20px 120px' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
           <Link href="/" aria-label="Home" style={{
-            width: 38, height: 38, borderRadius: 12, border: `1px solid ${BORDER}`,
+            width: 38, height: 38, borderRadius: 12, border: `1px solid ${WHITE}`,
             background: WHITE, display: 'grid', placeItems: 'center', color: INK2,
           }}>
             <ArrowLeft size={17} />
           </Link>
-          <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 2, color: ORANGE, fontWeight: 700 }}>
+          <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 2, color: CORAL, fontWeight: 700 }}>
             KNOW YOUR RIGHTS
           </div>
         </div>
 
-        <h1 style={{ fontSize: 34, fontWeight: 800, letterSpacing: -1, lineHeight: 1.12, marginBottom: 14 }}>
+        <h1 style={{ color: ON, fontSize: 34, fontWeight: 800, letterSpacing: -1, lineHeight: 1.12, marginBottom: 14 }}>
           What an emergency room owes you, and what it does not.
         </h1>
-        <p style={{ color: INK2, fontSize: 16, lineHeight: 1.65, marginBottom: 26 }}>{pack.preamble}</p>
+        <p style={{ color: ON, fontSize: 16, lineHeight: 1.65, marginBottom: 26 }}>{pack.preamble}</p>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 32, flexWrap: 'wrap' }}>
           {COUNTRIES.map(c => {
@@ -70,8 +84,8 @@ export default function RightsPage() {
               <button key={c.code} onClick={() => setCountry(c.code)} style={{
                 fontFamily: mono, fontSize: 11, letterSpacing: 1, fontWeight: 700,
                 padding: '9px 14px', borderRadius: 999, cursor: 'pointer',
-                border: `1px solid ${on ? INK : BORDER}`,
-                background: on ? INK : WHITE, color: on ? WHITE : INK2,
+                border: `1px solid ${on ? WHITE : RULE}`,
+                background: on ? WHITE : 'transparent', color: on ? INK : ON,
               }}>
                 {c.label.toUpperCase()}
               </button>
@@ -113,7 +127,7 @@ export default function RightsPage() {
 
               {/* Rendered at the same weight as the claim, never as fine print. */}
               <div style={{
-                background: CREAM, borderLeft: `2px solid ${INK3}`, borderRadius: 6,
+                background: TINT, borderLeft: `2px solid ${INK3}`, borderRadius: 6,
                 padding: '12px 14px', marginBottom: r.action ? 12 : 14,
               }}>
                 <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.4, color: INK3, fontWeight: 700, marginBottom: 5 }}>
@@ -148,7 +162,7 @@ export default function RightsPage() {
               onClick={() => window.print()}
               style={{
                 width: '100%', marginTop: 24, padding: '15px', borderRadius: 14,
-                border: `1px solid ${BORDER}`, background: WHITE, color: INK,
+                border: `1px solid ${WHITE}`, background: WHITE, color: INK,
                 fontWeight: 700, fontSize: 15, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
               }}
@@ -160,7 +174,7 @@ export default function RightsPage() {
             <Link href="/flare" style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               textDecoration: 'none', color: INK, marginTop: 12,
-              background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 14, padding: '15px 16px',
+              background: WHITE, border: `1px solid ${WHITE}`, borderRadius: 14, padding: '15px 16px',
             }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 15 }}>Not sure whether to go at all?</div>
@@ -173,7 +187,7 @@ export default function RightsPage() {
           </>
         )}
 
-        <p style={{ color: INK3, fontSize: 12, lineHeight: 1.65, marginTop: 30, paddingTop: 20, borderTop: `1px solid ${BORDER}` }}>
+        <p style={{ color: ON_3, fontSize: 12, lineHeight: 1.65, marginTop: 30, paddingTop: 20, borderTop: `1px solid ${RULE}` }}>
           This is a plain-language summary of published law, not legal advice, and Relay Arc is not
           a law firm. Hospitals set their own eligibility rules within these requirements, so the
           only way to find out what you qualify for is to ask that hospital for its policy in

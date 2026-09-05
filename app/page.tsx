@@ -12,24 +12,23 @@ const T1     = '#141413'
 const T2     = '#5C5A52'
 const T3     = '#6F6D65'
 const BORDER = '#98C890'
-// ─── The page is dark now ───────────────────────────────────────────────────
-// Sage 5. Everything below is derived from it rather than picked.
-const PAGE     = '#4B8150'
-const PAGE_2   = '#3A6440'   // deeper band, 1.50:1 off the page
-const RULE     = '#7EB382'   // hairline on dark, 1.90:1 — a dark rule vanishes
-
-// Text ON the dark page. Cream, not ink.
-const ON       = '#FFFFFF'   // 6.27:1 — headlines and anything structural
-const ON_2     = '#FFFFFF'   // 4.54:1 — body copy, the AA floor
-const ON_3     = '#C8D4C9'   // 3.02:1 — meta and decoration ONLY, never body
-
-// The accent problem, written down because it is counter-intuitive:
-// --crit #A33417 is 1.09:1 against this page and Claude orange is 2.01:1. Both
-// are invisible as text here — not dim, the SAME brightness as the background.
-// So the orange survives only as a fill with ink on top, and anything that used
-// to be red text becomes cream or this coral.
-const CORAL    = '#F2C8BC'   // 3.01:1 — large display text only
-const INK      = '#141413'   // still correct on orange fills and white cards
+// ─── The green page ─────────────────────────────────────────────────────────
+// #57945C. White on it is 3.62:1, which clears the 3:1 bar for LARGE type only
+// (>= 24px, or >= 18.66px bold). It does not clear 4.5:1, so no small copy sits
+// on the page at all — headlines do, and everything else goes on a panel.
+//
+// That is not a workaround for the colour. The emergency red and the warning
+// amber only hold their 1.66:1 luminance separation on a light surface, so
+// alerts belonged on panels regardless; this page colour just forced it.
+const PAGE     = '#57945C'
+const PAGE_2   = '#3F7345'   // deeper band, 1.55:1 off the page
+const RULE     = '#9DC6A1'   // hairline on the page
+const PANEL    = '#FFFFFF'   // ink 18.43:1, --crit 6.86:1
+const PANEL_2  = '#EDF4EC'   // softer panel, ink 16.46:1
+const ON       = '#FFFFFF'   // LARGE type on the page ONLY
+const ON_3     = '#E6EBE6'   // 3:1, large decorative type only
+const CORAL    = '#F9E6E0'
+const INK      = '#141413'   // and this is what panels and orange fills use
 
 const BG2    = '#B3DDAC'     // kept: the phone mockup renders a light app screen
 const BG_DEEP = '#95D08B'
@@ -69,10 +68,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
     <>
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrolled ? 'rgba(44,78,47,0.90)' : 'transparent',
+        background: scrolled ? 'rgba(255,255,255,0.94)' : 'rgba(237,244,236,0.92)',
         backdropFilter: scrolled ? 'blur(14px)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(14px)' : 'none',
-        borderBottom: scrolled ? `1px solid ${RULE}` : '1px solid transparent',
+        borderBottom: scrolled ? `1px solid ${BORDER}` : '1px solid transparent',
         transition: 'background 0.2s ease, border-color 0.2s ease',
         padding: '0 24px',
       }}>
@@ -80,13 +79,13 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
         <div style={{ maxWidth: '1120px', margin: '0 auto', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
             <Mark size={26} />
-            <span style={{ color: ON, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
+            <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '26px' }} className="desktop-nav">
             {links.map(([id, label]) => (
               <button key={id} onClick={() => scrollTo(id)} className="nav-link"
-                style={{ background: 'none', border: 'none', color: ON_2, fontSize: '13.5px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+                style={{ background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
                 {label}
               </button>
             ))}
@@ -94,23 +93,23 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button onClick={() => router.push('/card')} className="desktop-only nav-link"
-              style={{ background: 'transparent', border: 'none', color: ON_2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Emergency card
             </button>
             <button onClick={() => router.push('/features')} className="desktop-only nav-link"
-              style={{ background: 'transparent', border: 'none', color: ON_2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Features
             </button>
             <button onClick={() => router.push('/engineering')} className="desktop-only nav-link"
-              style={{ background: 'transparent', border: 'none', color: ON_2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Technology
             </button>
             <button onClick={() => router.push('/donate')} className="desktop-only"
-              style={{ background: 'transparent', border: 'none', color: CORAL, fontSize: '13.5px', fontWeight: 700, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              style={{ background: 'transparent', border: 'none', color: RED, fontSize: '13.5px', fontWeight: 700, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Donate
             </button>
             <button onClick={onSignIn} className="desktop-only nav-link"
-              style={{ background: 'transparent', border: 'none', color: ON_2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Sign in
             </button>
             <button onClick={onGetStarted}
@@ -119,7 +118,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
               style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }} className="mobile-menu-btn">
-              {menuOpen ? <X size={20} color={ON}/> : <Menu size={20} color={ON}/>}
+              {menuOpen ? <X size={20} color={T1}/> : <Menu size={20} color={T1}/>}
             </button>
           </div>
         </div>
@@ -128,31 +127,31 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
       <AnimatePresence>
         {menuOpen && (
           <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.16 }}
-            style={{ position: 'fixed', top: '64px', left: 0, right: 0, zIndex: 99, background: 'rgba(44,78,47,0.97)', backdropFilter: 'blur(14px)', borderBottom: `1px solid ${RULE}`, padding: '8px 24px 18px' }}>
+            style={{ position: 'fixed', top: '64px', left: 0, right: 0, zIndex: 99, background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(14px)', borderBottom: `1px solid ${BORDER}`, padding: '8px 24px 18px' }}>
             {links.map(([id, label]) => (
               <button key={id} onClick={() => scrollTo(id)}
-                style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: ON, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${RULE}` }}>
+                style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
                 {label}
               </button>
             ))}
             <button onClick={() => router.push('/card')}
-              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: ON, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${RULE}` }}>
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Emergency card
             </button>
             <button onClick={() => router.push('/features')}
-              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: ON, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${RULE}` }}>
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Features
             </button>
             <button onClick={() => router.push('/engineering')}
-              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: ON, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${RULE}` }}>
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Technology
             </button>
             <button onClick={() => router.push('/donate')}
-              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: CORAL, fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${RULE}` }}>
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: RED, fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Donate
             </button>
             <button onClick={onSignIn}
-              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: ON_2, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0' }}>
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T2, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0' }}>
               Sign in
             </button>
           </motion.div>
@@ -446,9 +445,9 @@ export default function Home() {
     <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
       {tickerItems.map(([n, l], i) => (
         <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '8px', paddingRight: '56px' }}>
-          <span style={{ color: CORAL, fontFamily: mono, fontSize: '11px' }}>▲</span>
-          <span style={{ color: ON, fontFamily: mono, fontSize: '12.5px', fontWeight: 700 }}>{n}</span>
-          <span style={{ color: ON_2, fontFamily: mono, fontSize: '11.5px', letterSpacing: '0.4px', textTransform: 'uppercase' }}>{l}</span>
+          <span style={{ color: RED, fontFamily: mono, fontSize: '11px' }}>▲</span>
+          <span style={{ color: T1, fontFamily: mono, fontSize: '12.5px', fontWeight: 700 }}>{n}</span>
+          <span style={{ color: T2, fontFamily: mono, fontSize: '11.5px', letterSpacing: '0.4px', textTransform: 'uppercase' }}>{l}</span>
         </div>
       ))}
     </div>
@@ -463,14 +462,14 @@ export default function Home() {
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }}>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px', background: PANEL_2, padding: '10px 14px', borderRadius: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ width: '7px', height: '7px', background: CORAL, display: 'inline-block', animation: 'dot-blink 1.6s ease-in-out infinite' }}/>
-                <span style={{ color: ON_2, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                <span style={{ color: T2, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }}>
                   19.0760° N, 72.8777° E — Mumbai · cardiac response
                 </span>
               </div>
-              <span style={{ color: ON_3, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }} className="desktop-only">
+              <span style={{ color: T3, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }} className="desktop-only">
                 SOS → hospital briefed: under 60s
               </span>
             </div>
@@ -480,8 +479,8 @@ export default function Home() {
             </h1>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
-              <div style={{ paddingBottom: '90px', paddingTop: '8px' }} className="hero-copy">
-                <p style={{ color: ON_2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
+              <div style={{ background: PANEL_2, borderRadius: '18px', padding: '28px 28px 32px', marginBottom: '90px' }} className="hero-copy">
+                <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
                   One button. Relay picks the right hospital, sends your records ahead, and gets your family moving — in under a minute.
                 </p>
 
@@ -495,13 +494,13 @@ export default function Home() {
                     Make an emergency card <span style={{ fontFamily: mono }}>→</span>
                   </button>
                   <button onClick={() => router.push('/login?signup=1')}
-                    style={{ background: 'none', border: 'none', color: ON, fontWeight: 600, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${ON}`, paddingBottom: '2px' }}>
+                    style={{ background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${T1}`, paddingBottom: '2px' }}>
                     Create your free profile
                   </button>
                 </div>
 
-                <p style={{ color: ON_3, fontSize: '13px' }}>
-                  Two minutes, no account, nothing uploaded. · <button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: 0, color: ON_2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${RULE}` }}>Watch one emergency, timed</button> · <a href="/demo" style={{ color: ON_2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${RULE}` }}>Live demo</a>
+                <p style={{ color: T3, fontSize: '13px' }}>
+                  Two minutes, no account, nothing uploaded. · <button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: 0, color: T2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${BORDER}` }}>Watch one emergency, timed</button> · <a href="/demo" style={{ color: T2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Live demo</a>
                 </p>
               </div>
 
@@ -514,7 +513,7 @@ export default function Home() {
       </section>
 
       {/* ── TELEMETRY TICKER ─────────────────────────────────────────── */}
-      <div style={{ borderTop: `2px solid ${ON}`, borderBottom: `1px solid ${ON}`, background: PAGE_2, overflow: 'hidden', padding: '13px 0', position: 'relative' }}>
+      <div style={{ borderTop: `2px solid ${INK}`, borderBottom: `1px solid ${INK}`, background: PANEL_2, overflow: 'hidden', padding: '13px 0', position: 'relative' }}>
         <div className="ticker-track">
           <Ticker/><Ticker/>
         </div>
@@ -524,9 +523,9 @@ export default function Home() {
       {/* ── SEE IT, DON'T READ IT ────────────────────────────────────── */}
       <section id="log" style={{ padding: '96px 24px 100px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ borderTop: `3px solid ${ON}`, paddingTop: '14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <span style={{ color: ON, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>01 / How it works</span>
-            <span style={{ color: ON_3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Watch — same emergency, twice</span>
+          <div style={{ background: PANEL_2, borderRadius: '10px', padding: '11px 14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>01 / How it works</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Watch — same emergency, twice</span>
           </div>
           <EmergencyRace/>
           <p style={{ color: ON, fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 800, letterSpacing: '-0.03em', marginTop: '36px', textAlign: 'center' }}>
@@ -538,10 +537,10 @@ export default function Home() {
       {/* ── WHAT IT DOES — four lines, no reading ─────────────────────── */}
       <section id="features" style={{ padding: '0 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ borderTop: `3px solid ${ON}`, paddingTop: '14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
-            <span style={{ color: ON, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / What it does</span>
+          <div style={{ background: PANEL_2, borderRadius: '10px', padding: '11px 14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / What it does</span>
             <button onClick={() => router.push('/features')}
-              style={{ background: 'none', border: 'none', color: ON, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', cursor: 'pointer', padding: 0, borderBottom: `2px solid ${ON}` }}>
+              style={{ background: 'none', border: 'none', color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', cursor: 'pointer', padding: 0, borderBottom: `2px solid ${T1}` }}>
               All five, in detail →
             </button>
           </div>
@@ -552,10 +551,10 @@ export default function Home() {
               ['Gets your family there', 'Live location and turn-by-turn, shared in one tap.'],
               ['Watches over you daily', 'Two-minute check-ins that catch trouble early.'],
             ].map(([title, body], i) => (
-              <div key={i} style={{ borderTop: `1px solid ${RULE}`, paddingTop: '18px' }}>
-                <span style={{ color: CORAL, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
-                <h3 style={{ color: ON, fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em', margin: '10px 0 8px', lineHeight: 1.15 }}>{title}</h3>
-                <p style={{ color: ON_2, fontSize: '13.5px', lineHeight: 1.55 }}>{body}</p>
+              <div key={i} style={{ background: PANEL, borderRadius: '14px', padding: '18px 18px 20px' }}>
+                <span style={{ color: RED, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
+                <h3 style={{ color: T1, fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em', margin: '10px 0 8px', lineHeight: 1.15 }}>{title}</h3>
+                <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55 }}>{body}</p>
               </div>
             ))}
           </div>
@@ -564,11 +563,11 @@ export default function Home() {
 
       {/* ── UNDER THE HOOD — four numbers and a door. No essay here; the
              essay lives at /engineering for anyone who wants it. ─────────── */}
-      <section style={{ borderTop: `3px solid ${ON}`, borderBottom: `1px solid ${ON}`, background: PAGE_2, padding: '52px 24px 56px' }}>
+      <section style={{ borderTop: `3px solid ${INK}`, borderBottom: `1px solid ${INK}`, background: PANEL_2, padding: '52px 24px 56px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px' }}>
-            <span style={{ color: ON, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Under the hood</span>
-            <span style={{ color: ON_3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>we built the parts that matter</span>
+            <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>03 / Under the hood</span>
+            <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>we built the parts that matter</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(148px, 1fr))', gap: '28px', marginBottom: '34px' }}>
@@ -578,16 +577,16 @@ export default function Home() {
               ['NEWS2', 'hospital-grade scoring', 'same answer every time'],
               ['0', 'AI calls in an emergency', 'until we’re genuinely unsure'],
             ].map(([v, k, sub]) => (
-              <div key={k} style={{ borderTop: `2px solid ${ON}`, paddingTop: '10px' }}>
-                <p style={{ color: ON, fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{v}</p>
-                <p style={{ color: ON, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginTop: '8px' }}>{k}</p>
-                <p style={{ color: ON_3, fontSize: '11.5px', lineHeight: 1.5, marginTop: '4px' }}>{sub}</p>
+              <div key={k} style={{ borderTop: `2px solid ${T1}`, paddingTop: '10px' }}>
+                <p style={{ color: T1, fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{v}</p>
+                <p style={{ color: T1, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginTop: '8px' }}>{k}</p>
+                <p style={{ color: T3, fontSize: '11.5px', lineHeight: 1.5, marginTop: '4px' }}>{sub}</p>
               </div>
             ))}
           </div>
 
           <button onClick={() => router.push('/engineering')}
-            style={{ background: 'none', border: 'none', color: ON, fontWeight: 700, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${ON}`, paddingBottom: '2px' }}>
+            style={{ background: 'none', border: 'none', color: T1, fontWeight: 700, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${T1}`, paddingBottom: '2px' }}>
             Try both engines running live <span style={{ fontFamily: mono }}>→</span>
           </button>
         </div>
@@ -613,14 +612,14 @@ export default function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px 110px', borderTop: `3px solid ${ON}`, background: PAGE_2, overflow: 'hidden' }}>
+      <section style={{ padding: '96px 24px 110px', borderTop: `3px solid ${INK}`, background: PAGE, overflow: 'hidden' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '64px', alignItems: 'center' }} className="cta-grid">
             <div>
               <h2 style={{ color: ON, fontSize: 'clamp(34px, 5vw, 58px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
                 Your profile could<br/>save your life<span style={{ color: CORAL }}>.</span>
               </h2>
-              <p style={{ color: ON_2, fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
+              <p style={{ color: INK, background: PANEL_2, borderRadius: '12px', padding: '14px 16px', fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
                 Two minutes to set up. Ready for paramedics forever.
               </p>
               <button onClick={() => router.push('/login?signup=1')}
@@ -631,33 +630,33 @@ export default function Home() {
 
             {/* Medical ID card — what the profile actually looks like */}
             <div style={{ transform: 'rotate(-1.5deg)', maxWidth: '360px', justifySelf: 'center' }} className="id-card">
-              <div style={{ background: 'white', border: `1.5px solid ${ON}`, borderRadius: '2px', padding: '22px 24px', boxShadow: '10px 10px 0 #EDEAE0' }}>
+              <div style={{ background: PANEL, border: `1.5px solid ${T1}`, borderRadius: '2px', padding: '22px 24px', boxShadow: '10px 10px 0 rgba(20,20,19,0.14)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', marginBottom: '18px' }}>
-                  <p style={{ color: ON_3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0, flex: 1 }}>
+                  <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0, flex: 1 }}>
                     Medical profile
                   </p>
                   <Mark size={18} />
                 </div>
-                <p style={{ color: ON, fontSize: '21px', fontWeight: 800, letterSpacing: '-0.6px', marginBottom: '16px' }}>Asha Kulkarni</p>
+                <p style={{ color: T1, fontSize: '21px', fontWeight: 800, letterSpacing: '-0.6px', marginBottom: '16px' }}>Asha Kulkarni</p>
                 <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-end', borderBottom: `1px solid ${RULE}`, paddingBottom: '16px', marginBottom: '14px' }}>
                   <div>
-                    <p style={{ color: ON_3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Blood type</p>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Blood type</p>
                     <p style={{ color: CORAL, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>B+</p>
                   </div>
                   <div>
-                    <p style={{ color: ON_3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Age</p>
-                    <p style={{ color: ON, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>61</p>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Age</p>
+                    <p style={{ color: T1, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>61</p>
                   </div>
                   <div>
-                    <p style={{ color: ON_3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Meds</p>
-                    <p style={{ color: ON, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>4</p>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Meds</p>
+                    <p style={{ color: T1, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>4</p>
                   </div>
                 </div>
                 <div style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '11px', marginBottom: '14px' }}>
                   <p style={{ color: CORAL, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '3px' }}>Critical — allergies</p>
-                  <p style={{ color: ON, fontSize: '13px', fontWeight: 700, margin: 0 }}>Penicillin · Sulfa drugs</p>
+                  <p style={{ color: T1, fontSize: '13px', fontWeight: 700, margin: 0 }}>Penicillin · Sulfa drugs</p>
                 </div>
-                <p style={{ color: ON_3, fontFamily: mono, fontSize: '10px', margin: 0 }}>post-CABG · metoprolol 50mg · updated today</p>
+                <p style={{ color: T3, fontFamily: mono, fontSize: '10px', margin: 0 }}>post-CABG · metoprolol 50mg · updated today</p>
               </div>
             </div>
           </div>

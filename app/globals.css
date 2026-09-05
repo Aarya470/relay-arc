@@ -116,38 +116,33 @@
   --amber:      #A87200;
   --amber-soft: rgba(168,114,0,0.10);
 
-  /* ── The dark page, being rolled out ──────────────────────────────────────
-     Sage 5, lifted one step to #4B8150, is the page colour. The homepage runs on it now;
-     the rest of the app is still on the light --bg above and stays there until
-     each page is converted, because flipping --bg globally would darken pages
-     whose text is still ink and make them unreadable. That is not a trade worth
-     making silently in an app people open during a cardiac event.
+  /* ── The green page ───────────────────────────────────────────────────────
+     #57945C. Lighter than the previous #4B8150, and getting there required a
+     change of approach rather than a change of value.
 
-     Every value here is derived from --page, not picked:
-       --on-*   THIS PAGE IS AT THE CEILING. White is 4.61:1 on #4B8150. One
-                step lighter (L 41%) and white itself drops to 4.43:1 — below
-                the 4.5:1 bar for body text, which would leave nothing at all
-                that is legible on the page. So do not lighten this further
-                without moving body copy onto white cards instead.
+     Between #4B8150 and #538D58 there is a dead zone: white text has fallen
+     under 4.5:1 and ink has not yet reached it, so at #4F8754 nothing passes at
+     all. And ink never fully recovers -- on any mid-green, --text-2 and --crit
+     sit near 1.7:1 and stay there. There is no page colour in this range that
+     supports the full text system directly on it.
 
-                The cream tier below white is therefore gone: --on and --on-2
-                are both #FFFFFF now, and headline versus body is carried
-                entirely by weight and size. --on-3 at 3.01:1 survives for meta
-                and decoration only, never for anything that has to be read.
-       --coral  what red becomes here. #A33417 is 1.45:1 against this green and
-                Claude orange is 1.53:1 — both are the SAME BRIGHTNESS as the
-                page, not merely dim. Orange survives as a fill with ink on top.
-       alerts   stay on white surfaces. Any red and any amber that both clear
-                4.5:1 on a dark background land at 1.00:1 from each other, so
-                "call an ambulance" and "keep an eye on this" become the same
-                brightness. On white they keep their 1.66:1 separation. */
-  --page:      #4B8150;
-  --page-2:    #3A6440;
-  --page-rule: #7EB382;
-  --on:        #FFFFFF;
-  --on-2:      #FFFFFF;
-  --on-3:      #C8D4C9;
-  --coral:     #F2C8BC;
+     So the system changed. Only LARGE type sits on the page: white at 3.62:1,
+     which clears the 3:1 bar for anything >= 24px, or >= 18.66px bold. All
+     small copy moves onto panels -- #FFFFFF or the softer #EDF4EC -- where ink
+     is 18.43:1 and 16.46:1, --text-2 clears 6.9:1, and --crit keeps 6.86:1.
+
+     That last number is the reason this is the right shape rather than a
+     workaround. The emergency red and the warning amber only hold their 1.66:1
+     luminance separation on a light surface. Putting every alert on a panel is
+     what the palette needed anyway; the page colour just forced the issue. */
+  --page:      #57945C;
+  --page-2:    #3F7345;   /* deeper band, 1.55:1 off the page */
+  --page-rule: #9DC6A1;   /* hairline on the page */
+  --panel:     #FFFFFF;   /* small copy lives here */
+  --panel-2:   #EDF4EC;   /* softer panel, still 16.46:1 with ink */
+  --on:        #FFFFFF;   /* LARGE type only -- 3.62:1 */
+  --on-3:      #E6EBE6;   /* 3:1, large decorative type only */
+  --coral:     #F9E6E0;
 
   /* Radius scale */
   --r-xs: 6px;

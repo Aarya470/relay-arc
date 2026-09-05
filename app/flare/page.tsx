@@ -33,10 +33,18 @@ import {
   type FlareAssessment,
 } from '@/lib/autonomic'
 
+// Ink tones, for text inside the white cards, which is nearly all of this page.
 const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65'
-const CREAM = '#B3DDAC', BORDER = '#98C890', WHITE = '#FFFFFF'
+const BORDER = '#DCE6D6', WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757', CRIT = '#A33417'
+
+// The dark page, and the few things that sit directly on it.
+const PAGE = '#4B8150'
+const ON = '#FFFFFF'
+const ON_3 = '#C8D4C9'
+const RULE = '#7EB382'
+const CORAL = '#F2C8BC'
 const mono = 'var(--font-mono, monospace)'
 
 type Step = 'flags' | 'detail' | 'result'
@@ -91,17 +99,17 @@ export default function FlarePage() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: CREAM, color: INK }}>
+    <div style={{ minHeight: '100dvh', background: PAGE, color: INK }}>
       <div style={{ maxWidth: 620, margin: '0 auto', padding: '20px 20px 120px' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
           <Link href="/" aria-label="Home" style={{
             width: 38, height: 38, borderRadius: 12, border: `1px solid ${BORDER}`,
-            background: WHITE, display: 'grid', placeItems: 'center', color: INK2,
+            background: WHITE, display: 'grid', placeItems: 'center', color: INK2, borderColor: WHITE,
           }}>
             <ArrowLeft size={17} />
           </Link>
-          <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 2, color: ORANGE, fontWeight: 700 }}>
+          <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 2, color: CORAL, fontWeight: 700 }}>
             FLARE CHECK
           </div>
         </div>
@@ -109,7 +117,8 @@ export default function FlarePage() {
         {/* Always reachable. Present on every step including the reassuring one. */}
         <a href="tel:911" style={{
           display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none',
-          background: CRIT, color: WHITE, borderRadius: 14, padding: '14px 16px', marginBottom: 24,
+          background: WHITE, color: CRIT, borderRadius: 14, padding: '14px 16px', marginBottom: 24,
+          borderLeft: `6px solid ${CRIT}`,
         }}>
           <Phone size={18} />
           <div>
@@ -120,10 +129,10 @@ export default function FlarePage() {
 
         {step === 'flags' && (
           <>
-            <h1 style={{ fontSize: 30, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.15, marginBottom: 10 }}>
+            <h1 style={{ color: ON, fontSize: 30, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.15, marginBottom: 10 }}>
               Is any of this happening?
             </h1>
-            <p style={{ color: INK2, fontSize: 15, lineHeight: 1.6, marginBottom: 24 }}>
+            <p style={{ color: ON, fontSize: 15, lineHeight: 1.6, marginBottom: 24 }}>
               Read the whole list before answering. These are the things that get explained away
               by people who have felt something similar many times before, and they are also how
               a serious event looks.
@@ -159,7 +168,7 @@ export default function FlarePage() {
 
             <button onClick={goFromFlags} style={{
               width: '100%', marginTop: 22, padding: '16px', borderRadius: 14, border: 'none',
-              background: flags.length ? CRIT : INK, color: WHITE, fontWeight: 800, fontSize: 15,
+              background: flags.length ? CRIT : WHITE, color: flags.length ? WHITE : INK, fontWeight: 800, fontSize: 15,
               cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             }}>
               {flags.length ? 'See what to do' : 'None of these'}
@@ -170,10 +179,10 @@ export default function FlarePage() {
 
         {step === 'detail' && (
           <>
-            <h1 style={{ fontSize: 30, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.15, marginBottom: 10 }}>
+            <h1 style={{ color: ON, fontSize: 30, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.15, marginBottom: 10 }}>
               Does this feel like your usual episodes?
             </h1>
-            <p style={{ color: INK2, fontSize: 15, lineHeight: 1.6, marginBottom: 22 }}>
+            <p style={{ color: ON, fontSize: 15, lineHeight: 1.6, marginBottom: 22 }}>
               You know your own pattern better than any score does. This answer counts for more
               than the numbers underneath it.
             </p>
@@ -198,10 +207,10 @@ export default function FlarePage() {
               })}
             </div>
 
-            <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.6, color: INK3, fontWeight: 700, marginBottom: 12 }}>
+            <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 12 }}>
               NUMBERS — ALL OPTIONAL
             </div>
-            <p style={{ color: INK2, fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+            <p style={{ color: ON, fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
               Skip every one of these if you do not have them or do not feel like standing up.
               Leaving them blank does not make the answer worse.
             </p>
@@ -212,7 +221,7 @@ export default function FlarePage() {
               <div style={{
                 background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 14, padding: 16,
               }}>
-                <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Lying down, then standing</div>
+                <div style={{ color: INK, fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Lying down, then standing</div>
                 <div style={{ color: INK2, fontSize: 13, lineHeight: 1.55, marginBottom: 14 }}>
                   Only if you are safe to stand and someone is nearby. Rest lying down first, take
                   your pulse, then stand and take it again.
@@ -240,8 +249,9 @@ export default function FlarePage() {
               onClick={() => setStep('result')}
               disabled={!feelsLike}
               style={{
-                width: '100%', marginTop: 22, padding: '16px', borderRadius: 14, border: 'none',
-                background: feelsLike ? INK : BORDER, color: feelsLike ? WHITE : INK3,
+                width: '100%', marginTop: 22, padding: '16px', borderRadius: 14,
+                background: feelsLike ? WHITE : 'transparent', color: feelsLike ? INK : ON_3,
+                border: feelsLike ? 'none' : `1px solid ${RULE}`,
                 fontWeight: 800, fontSize: 15, cursor: feelsLike ? 'pointer' : 'default',
               }}
             >
@@ -261,7 +271,7 @@ export default function FlarePage() {
                 {result.outcome === 'escalate'
                   ? <AlertTriangle size={20} color={CRIT} style={{ flexShrink: 0, marginTop: 3 }} />
                   : <Info size={20} color={result.outcome === 'unclear' ? ORANGE : GREEN_DEEP} style={{ flexShrink: 0, marginTop: 3 }} />}
-                <h1 style={{ fontSize: 23, fontWeight: 800, letterSpacing: -0.5, lineHeight: 1.25 }}>
+                <h1 style={{ color: INK, fontSize: 23, fontWeight: 800, letterSpacing: -0.5, lineHeight: 1.25 }}>
                   {result.headline}
                 </h1>
               </div>
@@ -274,7 +284,7 @@ export default function FlarePage() {
 
             {result.next.includes('counter_manoeuvres') && (
               <>
-                <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.6, color: INK3, fontWeight: 700, marginBottom: 10 }}>
+                <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 10 }}>
                   DO THESE IN ORDER
                 </div>
                 <div style={{ display: 'grid', gap: 10, marginBottom: 24 }}>
@@ -311,7 +321,7 @@ export default function FlarePage() {
                     )
                   })}
                 </div>
-                <div style={{ fontFamily: mono, fontSize: 10, color: INK3, lineHeight: 1.5, marginBottom: 26 }}>
+                <div style={{ fontFamily: mono, fontSize: 10, color: ON_3, lineHeight: 1.5, marginBottom: 26 }}>
                   {BASIS.counter}
                 </div>
               </>
@@ -341,11 +351,11 @@ export default function FlarePage() {
               Start again
             </button>
 
-            <p style={{ color: INK3, fontSize: 12, lineHeight: 1.6, marginTop: 22 }}>{result.disclaimer}</p>
+            <p style={{ color: ON_3, fontSize: 12, lineHeight: 1.6, marginTop: 22 }}>{result.disclaimer}</p>
           </>
         )}
 
-        <p style={{ color: INK3, fontSize: 12, lineHeight: 1.6, marginTop: 30, paddingTop: 20, borderTop: `1px solid ${BORDER}` }}>
+        <p style={{ color: ON_3, fontSize: 12, lineHeight: 1.6, marginTop: 30, paddingTop: 20, borderTop: `1px solid ${RULE}` }}>
           Nothing on this page is sent anywhere. There is no account and no server call — what you
           type stays in this browser and disappears when you close the tab.
         </p>
