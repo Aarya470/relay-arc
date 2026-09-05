@@ -51,19 +51,19 @@ export const metadata: Metadata = {
   // split between the domain and the vercel.app subdomain. See lib/site.ts.
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: '/' },
-  title: 'Relay Arc — Cardiac emergency response',
-  description: 'Relay detects the cardiac crisis, finds the right hospital for your condition, sends your medical profile ahead, and navigates your family there — in under 60 seconds.',
+  title: 'Relay Arc: emergency help for heart and dysautonomia conditions',
+  description: 'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. It works with no signal, and the emergency card needs no account.',
   openGraph: {
-    title: 'Relay Arc — when every minute is the margin',
-    description: 'Cardiac emergency response: the right hospital for your condition, your medical records sent ahead, and your family navigated there.',
-    url: 'https://relay-arc.vercel.app',
+    title: 'Relay Arc: the closest hospital is not always the right one',
+    description: 'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. No account needed for the emergency card.',
+    url: SITE_URL,
     siteName: 'Relay Arc',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Relay Arc — when every minute is the margin',
-    description: 'Cardiac emergency response: the right hospital, records sent ahead, family navigated there.',
+    title: 'Relay Arc: the closest hospital is not always the right one',
+    description: 'A free app that finds a hospital which can treat your condition and sends your medical details ahead.',
   },
   manifest: '/manifest.json',
   appleWebApp: {

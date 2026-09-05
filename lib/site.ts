@@ -7,14 +7,17 @@
 // needs to declare which origin is canonical — and that answer has to change
 // without a code edit.
 //
-// Set NEXT_PUBLIC_SITE_URL in Vercel to the custom domain, e.g.
-//   NEXT_PUBLIC_SITE_URL = https://relayarc.org
-// Redeploy, and metadataBase, every canonical link, the sitemap and robots.txt
-// all follow automatically. Until it is set, everything falls back to the
-// vercel.app origin, which is correct today.
+// Set NEXT_PUBLIC_SITE_URL in Vercel to the custom domain. Redeploy, and
+// metadataBase, every canonical link, the sitemap and robots.txt all follow.
+//
+// The fallback used to be the vercel.app subdomain, which was right before the
+// domain existed and wrong afterwards. It meant every shared link preview
+// printed relay-arc.vercel.app, so sharing the site advertised an address
+// nobody should be using. The fallback is now the real domain, so this is
+// correct whether or not the env var is set.
 //
 // No trailing slash — Next's metadataBase and the sitemap both expect none.
-const FALLBACK = 'https://relay-arc.vercel.app'
+const FALLBACK = 'https://www.relay-arc.org'
 
 function normalise(raw: string | undefined): string {
   if (!raw || !raw.trim()) return FALLBACK
