@@ -383,7 +383,7 @@ function EmergencyRace() {
         </div>
       </div>
       <p style={{ color: '#C8D4C9', fontSize: '11.5px', fontFamily: mono, marginTop: '12px' }}>
-        Simulated side-by-side. Not real footage. Ambulance wait reflects Mumbai peak-traffic averages.
+        Simulated, not real footage. The timings are illustrative and are not measured results.
       </p>
     </div>
   )
