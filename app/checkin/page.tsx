@@ -128,7 +128,7 @@ export default function Checkin() {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
       {/* ECG pulse line */}
-      <svg width={Math.round(size * 0.62)} height={Math.round(size * 0.42)} viewBox="0 0 18 12" fill="none">
+      <svg aria-hidden focusable={false} width={Math.round(size * 0.62)} height={Math.round(size * 0.42)} viewBox="0 0 18 12" fill="none">
         <path d="M0 6 H3 L5 1 L8 11 L10 4 L12 8 H15 L17 3 L18 6"
           stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>

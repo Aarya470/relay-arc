@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
 import MeetingAlert from '@/components/MeetingAlert'
 import LegalModal from '@/components/LegalModal'
+import Analytics from '@/components/Analytics'
 import { SITE_URL } from '@/lib/site'
 
 const jakarta = Plus_Jakarta_Sans({
@@ -94,13 +95,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#B3DDAC" />
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
       <body className={`${jakarta.variable} ${mono.variable} ${code.variable} ${jakarta.className}`}>
         <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
           {children}
           <LegalModal />
+        <Analytics />
           <MeetingAlert />
           <Toaster position="top-center" richColors />
         </div>

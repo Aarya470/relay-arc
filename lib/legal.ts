@@ -93,7 +93,11 @@ We use your browser storage rather than tracking cookies. Specifically:
 • Emergency card contents and form drafts, so a half-finished card survives a reload.
 • Small preferences such as the last screen you used.
 
-We do not use advertising cookies and we do not run third-party analytics or tracking pixels. You can clear this at any time through your browser settings, which will sign you out.
+We do not use advertising cookies and we do not run third-party analytics or tracking pixels.
+
+We do count page views, on our own server. One row per page per day, holding a number. No visitor identifier, no session, no IP address, no referrer and no user agent, which means two people opening the same page on the same day are indistinguishable from one person opening it twice. There is nothing in that table that can be traced to you. We honour Do Not Track and Global Privacy Control automatically, and the notice at the bottom of the site lets you switch the counting off.
+
+You can clear all of this at any time through your browser settings, which will sign you out.
 
 9. HOW LONG WE KEEP IT
 • Account and medical data: while your account exists, and for up to 30 days after you delete it, so an accidental deletion can be undone.

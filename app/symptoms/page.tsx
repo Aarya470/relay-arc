@@ -176,7 +176,7 @@ function Sparkline({ values, inverted }: { values: number[]; inverted: boolean }
   const lineColor = same ? '#6F6D65' : improving ? '#42623C' : '#A33417'
 
   return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} fill="none">
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} fill="none" role="img" aria-label="Symptom severity over time">
       <polyline
         points={pts.join(' ')}
         stroke={lineColor}
