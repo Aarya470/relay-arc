@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Calendar, Send, X, Check, AlertTriangle, Video, ChevronLeft, ChevronRight, Bell, Pill } from 'lucide-react'
+import { Activity, AlertTriangle, ArrowLeft, Bell, Calendar, Check, ChevronLeft, ChevronRight, Pill, Send, Video, X } from 'lucide-react'
 import JitsiMeeting from '@/components/JitsiMeeting'
 import { sendPushNotification } from '@/lib/notifications'
 import { formatDate } from '@/lib/utils'
@@ -571,7 +571,7 @@ export default function PatientDetail() {
             {/* AI Summary card */}
             <div style={{ background: '#FFFFFF', border: '1px solid rgba(86,128,78,0.18)', borderRadius: '16px', padding: '18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                <span style={{ fontSize: '16px' }}>✦</span>
+                <Activity size={15} />
                 <p style={{ color: '#42623C', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px' }}>AI Summary</p>
               </div>
 

@@ -1,133 +1,190 @@
-// Single source of truth for legal copy — used by both the consent modal
+// Single source of truth for legal copy, used by the consent modal
 // (components/LegalModal.tsx) and the public /privacy and /terms pages.
+//
+// WHAT WAS WRONG WITH THE PREVIOUS VERSION
+// It was structurally fine and factually incomplete, which is the dangerous
+// combination for a privacy policy. Specifically:
+//
+//  - It listed four third parties. The app actually sends data to seven. The
+//    two missing ones matter most: Resend receives an email address, and the
+//    geocoding and routing services receive LOCATION during an emergency,
+//    which is the most sensitive thing the app handles.
+//  - It gave no legal basis for processing. Health data is a special category
+//    under GDPR and needs explicit consent, and "by using Relay Arc you agree
+//    to this policy in full" is not explicit consent.
+//  - It said nothing about local storage, and the app stores drafts and the
+//    whole emergency card on the device.
+//  - It banned under-18s while lib/autonomic ships a 40 bpm orthostatic
+//    threshold specifically for ages 12 to 19. The product was built to serve
+//    teenagers and the terms forbade them from using it.
+//
+// NOT LEGAL ADVICE. This is a careful, plain-language document that follows the
+// usual structure and describes what the code actually does. Three decisions in
+// here are the operator's to make and are flagged in the text: the governing
+// jurisdiction, the minimum age, and whether to keep an arbitration clause.
 
-export const LEGAL_LAST_UPDATED = "May 2026"
+export const LEGAL_LAST_UPDATED = "September 2026"
+
+const CONTACT = "relay.arc.org@gmail.com"
 
 export const PRIVACY_POLICY = `PRIVACY POLICY
-Last updated: May 2026
+Last updated: September 2026
 
-1. OVERVIEW
-Relay Arc ("we", "us", "our") operates a digital health coordination platform. This Privacy Policy explains how we collect, use, and protect your information. By using Relay Arc, you agree to this policy in full.
+1. THE SHORT VERSION
+Relay Arc is free and is run as a nonprofit project. We do not sell your data, we do not share it with advertisers, and we do not use it to build advertising profiles. We collect the least we can get away with while still being useful in an emergency.
 
-2. INFORMATION WE COLLECT
-We collect information you provide directly:
-• Full name, email address, and account credentials
-• Medical conditions, diagnoses, and prescription medications you enter
-• Daily check-in responses and symptom descriptions
-• Device location data (only when you activate an emergency SOS alert)
-• Push notification subscription tokens
+Two things are worth knowing before the detail:
+• The emergency card at /rights and /card is made in your browser and stays there. It is not uploaded, there is no account, and closing the tab discards it.
+• If you create an account, the medical details you enter are stored so they can be sent ahead to a hospital during an emergency. That is the whole point of the account, and it means real health information leaves your device.
 
-We collect automatically:
-• Device type, browser, and operating system
-• IP address and approximate location
-• App usage patterns and feature interactions
+2. WHO WE ARE
+Relay Arc is operated by an individual maintainer as a nonprofit project. Contact for any privacy question, request or complaint: ${CONTACT}. We answer privacy requests within 30 days.
 
-3. HOW WE USE YOUR INFORMATION
-• To facilitate communication between you and your care team
-• To deliver medication reminders and appointment notifications
-• To process AI-assisted health check-in summaries
-• To route emergency alerts to your designated care team
-• To improve app reliability and user experience
+3. WHAT WE COLLECT, AND WHY
+Information you type in:
+• Name, email address and password. Needed to have an account at all.
+• Date of birth. Used to pick the correct clinical thresholds, because some of them differ for ages 12 to 19.
+• Medical conditions, medications, allergies and blood type. Sent ahead to a hospital during an emergency, and shown on the emergency card.
+• Emergency contacts, including their name and phone number.
+• Daily check-in answers, symptoms and vital signs you record.
+• Your cardiologist or care team, if you add them.
 
-4. AI PROCESSING
-Relay Arc uses Groq AI (api.groq.com) to process your health check-in responses and generate clinical summaries. By using the check-in feature, you explicitly consent to your health information being processed by Groq's AI models. We encourage you to review Groq's privacy policy. We do not control how third-party AI providers handle data once transmitted.
+Information collected automatically:
+• Device type, browser and operating system.
+• IP address, which reveals approximate location.
+• Which features you used and when, so we can tell what is broken.
 
-5. THIRD-PARTY SERVICES
-Your data may be processed by:
-• Supabase (supabase.com) — database and authentication infrastructure
-• Groq (groq.com) — AI language model processing
-• Jitsi / 8x8 (jit.si) — video consultation infrastructure
-• Vercel — hosting and content delivery
+Location, treated separately because it is the most sensitive:
+• Precise device location is read only when you start an emergency, and only to find hospitals near you and produce directions. It is not tracked in the background and it is not recorded when the app is idle.
 
-Each third-party provider has its own privacy policy. We are not responsible for the data practices of third-party services.
+4. LEGAL BASIS FOR PROCESSING
+If you are in the UK, the EU or another region with similar law:
+• Health data is a special category of personal data. We rely on your explicit consent, given when you accept this policy during signup and again when you enter medical details. You can withdraw consent at any time by deleting your account or by writing to us.
+• For account security, fraud prevention and keeping the service running, we rely on our legitimate interests.
+• Where the law requires us to keep something, we rely on our legal obligation.
 
-6. DATA SECURITY
-We implement industry-standard security measures including HTTPS encryption, secure authentication tokens, and access controls. However, no internet transmission is 100% secure. You use this platform at your own risk. We cannot guarantee the absolute security of your data.
+Withdrawing consent does not undo processing that already happened, and it does not reach data a third party has already received. Section 6 explains that limit.
 
-7. DATA RETENTION
-We retain your data for as long as your account is active. You may request deletion by contacting us. Deletion may take up to 30 days and may not cover data already processed by third-party AI systems.
+5. WHO ELSE RECEIVES YOUR DATA
+We use other companies to run the service. Each of them has its own privacy policy and its own security practices, and we do not control what they do once data reaches them.
+• Supabase. Database, accounts and authentication. Receives everything stored in your account.
+• Vercel. Hosting and content delivery. Receives your IP address and request data.
+• Groq. Large language model processing, currently llama-3.1-8b-instant. Receives the text of check-ins and symptom notes when a summary or classification is generated.
+• Resend. Sends account email such as the signup confirmation. Receives your email address.
+• Jitsi and 8x8. Video consultations, if you use one. Receives the call itself.
+• OpenStreetMap Nominatim and OSRM. Address lookup and driving directions. Receives location during an emergency.
+• MapLibre and map tile providers. Draws the map. Receives the area you are looking at.
 
-8. NOT A COVERED ENTITY
-Relay Arc is a care coordination communication tool. We are not a HIPAA-covered entity or business associate in the traditional sense. While we take your health information seriously, this platform does not carry HIPAA compliance guarantees. Do not use this platform as the sole record of your medical information.
+We do not sell personal information, and we do not share it for cross-context behavioural advertising. If you are a California resident, that means there is nothing for you to opt out of on that front.
 
-9. CHILDREN
-This platform is strictly for users aged 18 and over. We do not knowingly collect information from minors. If you believe a minor has created an account, contact us immediately.
+6. AUTOMATED PROCESSING AND ITS LIMITS
+Some features send your text to Groq to produce a summary or a suggested category. Two limits are worth stating plainly:
+• Output from a language model can be wrong. It is not a medical opinion and no clinical decision should rest on it.
+• Once text has been sent to a third-party model provider we cannot retrieve or delete it. Do not type anything into a check-in that you would not want to leave your device.
 
-10. YOUR RIGHTS
-You may request access to, correction of, or deletion of your personal data by contacting us. We will respond within 30 days.
+The part of the app that decides how urgent something is does not use a language model. It is arithmetic on published thresholds, it runs on your phone, and it produces the same answer every time.
 
-11. CHANGES
-We may update this policy at any time. Continued use of the app constitutes acceptance of the updated policy.
+7. INTERNATIONAL TRANSFERS
+Our providers operate servers outside your country, including in the United States. Where the law requires a safeguard for that transfer, we rely on the standard contractual terms those providers offer. If you would rather your data did not leave your region, do not create an account. The emergency card works without one.
 
-12. CONTACT
-For privacy concerns: 5satadruroy@gmail.com`
+8. STORAGE ON YOUR DEVICE
+We use your browser storage rather than tracking cookies. Specifically:
+• An authentication token, so you stay signed in.
+• Emergency card contents and form drafts, so a half-finished card survives a reload.
+• Small preferences such as the last screen you used.
+
+We do not use advertising cookies and we do not run third-party analytics or tracking pixels. You can clear this at any time through your browser settings, which will sign you out.
+
+9. HOW LONG WE KEEP IT
+• Account and medical data: while your account exists, and for up to 30 days after you delete it, so an accidental deletion can be undone.
+• Emergency records: kept while the account exists, because a history of past events is clinically useful.
+• Server logs: about 30 days.
+• Anything already sent to a third-party provider: governed by that provider, and outside our control.
+
+10. SECURITY, STATED HONESTLY
+Data is encrypted in transit with HTTPS, access is controlled by row-level database rules, and authentication uses short-lived tokens. No system is perfectly secure and we are not going to claim otherwise. If we discover a breach affecting your data, we will tell affected users and any regulator we are required to notify, without undue delay.
+
+11. HIPAA
+Relay Arc is not a HIPAA covered entity and not a business associate. If your clinician uses this to coordinate your care, their obligations are theirs and not ours. Do not treat this app as your official medical record. Keep that with your clinician.
+
+12. YOUR RIGHTS
+Whatever region you are in, you can ask us to:
+• Show you what we hold about you.
+• Correct anything wrong.
+• Delete your account and its data.
+• Send you a copy in a portable format.
+• Stop processing, or withdraw consent.
+• Object to a particular use.
+
+Write to ${CONTACT}. We will not charge you, and we will not treat you differently for asking. If you are in the UK or EU you can also complain to your data protection authority, and if you are in California you can use an authorised agent.
+
+13. CHILDREN
+This app is built for people with heart rhythm and dysautonomia conditions, and those conditions affect teenagers. Some clinical thresholds in the app are specific to ages 12 to 19, so pretending the service is adults only would be dishonest.
+
+You must be at least 13 to hold an account. If you are under 18, a parent or guardian has to set the account up and stay involved in how it is used. We do not knowingly collect data from anyone under 13. If you believe a child under 13 has an account, write to us and we will delete it.
+
+14. CHANGES
+If we change this policy in a way that materially affects you, we will say so in the app rather than quietly updating this page. The date at the top always reflects the current version.
+
+15. CONTACT
+${CONTACT}`
 
 export const TERMS_OF_SERVICE = `TERMS OF SERVICE
-Last updated: May 2026
+Last updated: September 2026
 
-PLEASE READ THESE TERMS CAREFULLY. BY ACCESSING OR USING RELAY ARC, YOU AGREE TO BE BOUND BY THESE TERMS IN FULL. IF YOU DO NOT AGREE, DO NOT USE THIS PLATFORM.
+Please read this. Using Relay Arc means you accept it. If you do not accept it, do not use the app.
 
-1. NOT A MEDICAL SERVICE — EMERGENCY DISCLAIMER
-RELAY ARC IS NOT AN EMERGENCY SERVICE. IN ANY LIFE-THREATENING SITUATION, CALL 911 (OR YOUR LOCAL EMERGENCY NUMBER) IMMEDIATELY. DO NOT RELY ON THIS APP DURING A MEDICAL EMERGENCY. Response times through this platform are not guaranteed. The SOS feature is a supplemental communication tool only and does not replace emergency medical services.
+1. THIS IS NOT AN EMERGENCY SERVICE
+Relay Arc does not send an ambulance and cannot summon help on your behalf. In a life-threatening situation, call your local emergency number first. Nothing in this app is a reason to delay that call.
 
-2. NOT MEDICAL ADVICE
-Relay Arc does not provide medical advice, diagnosis, or treatment. All content generated by the AI assistant, care team, or any feature of this platform is for informational and care coordination purposes only. Always consult a licensed medical professional for medical decisions. Nothing on this platform should be construed as medical advice.
+The SOS feature notifies contacts you chose and prepares information for a hospital. It depends on your phone, your signal and other people answering, and none of that is guaranteed.
 
-3. NOT A MEDICAL DEVICE
-Relay Arc is not a medical device and is not regulated or approved by the FDA or any other regulatory authority. It is a communication and care coordination tool only.
+2. NOT MEDICAL ADVICE, AND NOT A DIAGNOSIS
+Relay Arc does not diagnose anything and does not tell you what treatment you need. It is decision support. It organises information you provide, applies published clinical thresholds to it, and shows you the result along with the reasoning. A licensed clinician makes medical decisions, not this app and not you on the basis of this app alone.
 
-4. ELIGIBILITY
-You must be at least 18 years old to use Relay Arc. By accepting these Terms, you represent and warrant that you are 18 or older. Users under 18 are strictly prohibited.
+3. NOT A REGULATED MEDICAL DEVICE
+Relay Arc has not been reviewed, cleared or approved by the FDA or any other regulator. It is not certified and it is not clinically validated. It is built to sit within the clinical decision support exclusion, which means it always shows the basis for what it says so a clinician can independently review it.
 
-5. ACCOUNT SECURITY
-You are responsible for maintaining the confidentiality of your login credentials. You are fully responsible for all activity that occurs under your account. Notify us immediately if you suspect unauthorised access. We are not liable for any loss resulting from unauthorised use of your account.
+4. WHO CAN USE IT
+You must be at least 13. If you are under 18, a parent or guardian must set up the account and supervise its use, and by accepting these terms that adult accepts them too.
 
-6. ACCEPTABLE USE
-You agree not to:
-• Use this platform for any unlawful purpose
-• Attempt to hack, reverse engineer, or disrupt the platform
-• Submit false or misleading health information
-• Impersonate any person or entity
-• Transmit viruses, malware, or malicious code
-• Use automated tools to access or scrape the platform
+5. YOUR ACCOUNT
+Keep your password to yourself. You are responsible for what happens under your account. Tell us if you think someone else has got into it.
 
-7. DISCLAIMER OF WARRANTIES
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, RELAY ARC IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, RELIABILITY, OR NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE PLATFORM WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF HARMFUL COMPONENTS.
+6. ACCURACY IS ON YOU
+The app is only as good as what you put into it. If your blood type, allergies or medication list is wrong, the information sent to a hospital will be wrong. Keep it current, and check it after any change to your medication.
 
-8. LIMITATION OF LIABILITY
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL RELAY ARC, ITS OWNERS, OPERATORS, AFFILIATES, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO: LOSS OF LIFE, PERSONAL INJURY, DELAYED EMERGENCY RESPONSE, MISSED MEDICATION REMINDERS, DATA LOSS, LOSS OF PROFITS, OR ANY OTHER DAMAGES ARISING FROM OR RELATED TO YOUR USE OF OR INABILITY TO USE THIS PLATFORM, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+7. WHAT YOU MAY NOT DO
+• Use it for anything unlawful.
+• Break into it, take it apart, or try to disrupt it.
+• Enter false medical information, or information about someone who has not agreed.
+• Pretend to be someone else, including a clinician or a hospital.
+• Scrape it or hammer it with automated traffic.
 
-OUR TOTAL CUMULATIVE LIABILITY TO YOU FOR ANY CLAIMS ARISING FROM OR RELATED TO THESE TERMS OR THE PLATFORM SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO USE THE PLATFORM IN THE 12 MONTHS PRECEDING THE CLAIM, OR (B) USD $0.
+8. IT IS FREE, AND IT IS PROVIDED AS IS
+Relay Arc costs nothing and there is nothing to buy. It is provided as is and as available, with no warranty of any kind, including no warranty that it will be accurate, reliable, uninterrupted or fit for a particular purpose.
 
-9. INDEMNIFICATION
-You agree to defend, indemnify, and hold harmless Relay Arc and its owners, operators, affiliates, employees, and agents from and against any claims, liabilities, damages, losses, costs, and expenses (including reasonable legal fees) arising out of or related to: (a) your use of the platform; (b) your violation of these Terms; (c) your violation of any third-party rights; or (d) any inaccurate health or personal information you provide.
+9. LIMITS ON OUR LIABILITY
+To the fullest extent the law allows, we are not liable for indirect, incidental, special or consequential loss arising from your use of the app or your inability to use it. Our total liability for any claim is capped at zero, which reflects the fact that you have paid nothing.
 
-10. HEALTH INFORMATION ACCURACY
-You are solely responsible for the accuracy of all health information you enter. We are not liable for any consequences arising from inaccurate, incomplete, or misleading information you provide.
+Nothing here limits liability that cannot be limited by law, which in many places includes death or personal injury caused by negligence, and fraud. Where your local consumer law gives you rights that these terms cannot remove, those rights still apply.
 
-11. AI-GENERATED CONTENT
-AI-generated summaries and responses are automated and may be inaccurate. Do not make medical decisions based solely on AI-generated content. We are not liable for any harm arising from reliance on AI-generated content.
+10. AUTOMATED CONTENT
+Some summaries are produced by a language model and may be wrong. Read them before relying on them, and never act on one in place of advice from a clinician.
 
-12. SERVICE AVAILABILITY
-We do not guarantee uninterrupted access to the platform. We may suspend or terminate the platform at any time without notice. We are not liable for any consequences of service unavailability.
+11. AVAILABILITY
+This runs on free infrastructure and is maintained by one person. It can go down, and it may change or stop. Do not build a care plan that depends on it being up.
 
-13. TERMINATION
-We reserve the right to suspend or terminate your account at any time, for any reason, without notice or liability.
+12. ENDING IT
+You can delete your account whenever you like. We can suspend an account that is being used to break these terms, or to put someone at risk.
 
-14. GOVERNING LAW
-These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Relay Arc operates, without regard to conflict of law provisions.
+13. GOVERNING LAW AND DISPUTES
+These terms are governed by the laws of the operator's place of residence, and disputes will be heard by the courts there, unless your local consumer law gives you the right to bring a claim where you live, in which case that right applies.
 
-15. DISPUTE RESOLUTION
-Any disputes arising from these Terms or your use of the platform shall first be attempted to be resolved through good-faith negotiation. If unresolved, disputes shall be submitted to binding arbitration rather than litigation, to the maximum extent permitted by law.
+We would much rather sort a problem out by email than in a court. Write to ${CONTACT} first and we will make a genuine attempt to resolve it.
 
-16. SEVERABILITY
-If any provision of these Terms is found to be unenforceable, the remaining provisions shall remain in full force and effect.
+14. THE REST
+If any part of this is unenforceable, the rest still stands. These terms and the Privacy Policy are the whole agreement between us. If we change them in a way that materially affects you, we will say so in the app.
 
-17. ENTIRE AGREEMENT
-These Terms, together with the Privacy Policy, constitute the entire agreement between you and Relay Arc regarding the platform.
-
-18. CHANGES
-We reserve the right to modify these Terms at any time. Your continued use of the platform following any changes constitutes your acceptance of the new Terms.
-
-19. CONTACT
-For questions about these Terms: 5satadruroy@gmail.com`
+15. CONTACT
+${CONTACT}`

@@ -83,7 +83,7 @@ export default function RightsPage() {
             return (
               <button key={c.code} onClick={() => setCountry(c.code)} style={{
                 fontFamily: mono, fontSize: 11, letterSpacing: 1, fontWeight: 700,
-                padding: '9px 14px', borderRadius: 999, cursor: 'pointer',
+                padding: '9px 14px', borderRadius: 8, cursor: 'pointer',
                 border: `1px solid ${on ? WHITE : RULE}`,
                 background: on ? WHITE : 'transparent', color: on ? INK : ON,
               }}>

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Loader2, Mail, Lock } from 'lucide-react'
+import { ArrowLeft, KeyRound, Loader2, Lock, Mail } from 'lucide-react'
 
 const NURSE_CODE = 'relay-nurse-2026'
 
@@ -77,7 +77,7 @@ export default function NurseLogin() {
           </div>
 
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6F6D65] text-sm">🔑</span>
+            <KeyRound size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6F6D65]" />
             <input
               type="password"
               placeholder="Care team access code"

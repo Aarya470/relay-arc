@@ -408,7 +408,7 @@ export default function CareTeamDashboard() {
         {!Object.keys(summaries).length && (
           <motion.button whileTap={{ scale: 0.97 }} onClick={generateSummaries} disabled={generating}
             style={{ width: '100%', marginTop: '12px', background: 'rgba(86,128,78,0.1)', border: '1px solid rgba(86,128,78,0.25)', color: '#42623C', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            {generating ? '🤖 Analyzing patients...' : '🤖 Run AI analysis on all patients'}
+            {generating ? 'Checking patients...' : 'Run a check across all patients'}
           </motion.button>
         )}
       </div>

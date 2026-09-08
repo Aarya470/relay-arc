@@ -256,7 +256,7 @@ export default function Emergency() {
                     background: on ? T1 : 'transparent',
                     color: on ? '#FFFFFF' : T3,
                     border: `1px solid ${on ? T1 : BORDER}`,
-                    padding: '5px 11px', borderRadius: '999px',
+                    padding: '5px 11px', borderRadius: '6px',
                     fontFamily: 'var(--font-mono, monospace)',
                     fontSize: '11px', fontWeight: 700, letterSpacing: '0.5px',
                     cursor: 'pointer', minHeight: '30px',

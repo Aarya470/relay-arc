@@ -2,7 +2,7 @@ import LegalDocument from '@/components/LegalDocument'
 import { TERMS_OF_SERVICE } from '@/lib/legal'
 
 export const metadata = {
-  title: 'Terms of service — Relay Arc',
+  title: 'Terms of service: Relay Arc',
   description: 'Terms governing use of Relay Arc, including emergency and medical disclaimers.',
 }
 

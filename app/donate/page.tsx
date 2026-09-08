@@ -126,7 +126,7 @@ export default function Donate() {
         </div>
 
         <p style={{ color: T3, fontFamily: mono, fontSize: '11.5px', lineHeight: 1.7, marginTop: '28px' }}>
-          Every donation goes to development and infrastructure. Questions. 5satadruroy@gmail.com
+          Every donation goes to development and hosting. Questions to relay.arc.org@gmail.com
         </p>
       </motion.div>
     </div>

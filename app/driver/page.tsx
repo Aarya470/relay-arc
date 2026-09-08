@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, MapPin, Navigation, Loader2, AlertCircle } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Car, Loader2, MapPin, Navigation } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function DriverDashboard() {
@@ -76,7 +76,7 @@ export default function DriverDashboard() {
   if (accepted) return (
     <div style={{ minHeight: '100vh', background: '#B3DDAC', padding: '56px 20px 20px' }}>
       <div style={{ background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.2)', borderRadius: '20px', padding: '24px', textAlign: 'center', marginBottom: '16px' }}>
-        <span style={{ fontSize: '48px', display: 'block', marginBottom: '12px' }}>🚗</span>
+        <Car size={40} style={{ display: 'block', margin: '0 auto 12px' }} />
         <p style={{ color: '#42623C', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>Ride accepted</p>
         <p style={{ color: '#5C5A52', fontSize: '14px' }}>You are helping save a life</p>
       </div>
@@ -142,7 +142,7 @@ export default function DriverDashboard() {
       <div style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
         {requests.length === 0 ? (
           <div style={{ textAlign: 'center', paddingTop: '60px' }}>
-            <span style={{ fontSize: '48px', display: 'block', marginBottom: '16px' }}>🚗</span>
+            <Car size={40} style={{ display: 'block', margin: '0 auto 16px' }} />
             <p style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>No requests nearby</p>
             <p style={{ color: '#6F6D65', fontSize: '13px' }}>Check back soon — requests update in real time</p>
           </div>
@@ -196,7 +196,7 @@ export default function DriverDashboard() {
                     disabled={accepting === req.id}
                     style={{ width: '100%', background: '#DC2626', border: 'none', padding: '14px', color: '#141413', fontWeight: 700, fontSize: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                   >
-                    {accepting === req.id ? <Loader2 size={16} className="animate-spin"/> : '🚗 Accept — I can drive them'}
+                    {accepting === req.id ? <Loader2 size={16} className="animate-spin"/> : 'Accept, I can drive them'}
                   </motion.button>
                 </motion.div>
               ))}

@@ -79,7 +79,7 @@ export default function AppointmentSummary() {
           </motion.button>
           <div>
             <h1 style={{ color: '#EDEAE0', fontWeight: 800, fontSize: '20px', letterSpacing: '-0.5px' }}>Appointment Summary</h1>
-            <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '12px' }}>AI-generated for your next visit</p>
+            <p style={{ color: 'rgba(237,234,224,0.3)', fontSize: '12px' }}>Drafted automatically. Read it before your visit</p>
           </div>
         </div>
       </div>

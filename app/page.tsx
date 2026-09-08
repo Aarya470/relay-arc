@@ -434,12 +434,17 @@ export default function Home() {
     { title: 'Nurses & care teams',   color: ACCENT, body: 'One dashboard for every patient, with flags, check-in history, scheduling and video calls.' },
   ]
 
+  // Facts about the app, not statistics about the world. Every line here can be
+  // checked against the code or the pricing, which is the test any number on a
+  // homepage should have to pass. The figures that used to run here were
+  // unsourced, and one of them was a performance claim nothing measures.
   const tickerItems = [
-    ['3.8M', 'cardiac deaths a year in India'],
-    ['45 min', 'average ambulance wait in Mumbai traffic'],
-    ['10 min', 'window to prevent brain damage after arrest'],
-    ['65%', 'of rural India lives 30 km+ from a hospital'],
-    ['<60 s', 'from SOS to a hospital matched and briefed'],
+    ['Free', 'no charge, and nothing to buy later'],
+    ['No signal needed', 'the decision runs on your phone'],
+    ['No account', 'for the emergency card'],
+    ['Nothing uploaded', 'the card is made and kept on your device'],
+    ['94 KB', 'the triage model ships inside the app'],
+    ['Nonprofit', 'not a company, and not for sale'],
   ]
   const Ticker = () => (
     <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>

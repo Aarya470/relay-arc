@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Loader2, Mail, Lock, User } from 'lucide-react'
+import { ArrowLeft, KeyRound, Loader2, Lock, Mail, User } from 'lucide-react'
 
 export default function CareTeamLogin() {
   const [mode, setMode] = useState<'login' | 'signup'>('login')
@@ -97,7 +97,7 @@ export default function CareTeamLogin() {
         </div>
 
         <div style={{ position: 'relative' }}>
-          <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔑</span>
+          <KeyRound size={15} color="#6F6D65" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
           <input type="password" placeholder="Care team access code" value={code} onChange={e => setCode(e.target.value)}
             style={{ width: '100%', background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>

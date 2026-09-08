@@ -155,12 +155,12 @@ export default function LegalModal() {
               onClick={canAccept ? handleAccept : undefined}
               style={{
                 width: '100%',
-                background: canAccept ? 'linear-gradient(135deg, #5C8B74, #3D6B58)' : 'rgba(26,40,32,0.08)',
-                color: canAccept ? '#FFFFFF' : 'rgba(26,40,32,0.25)',
+                background: canAccept ? '#D97757' : 'rgba(20,20,19,0.08)',
+                color: canAccept ? '#141413' : 'rgba(20,20,19,0.30)',
                 fontWeight: 800, fontSize: '15px',
                 padding: '16px', borderRadius: '14px', border: 'none',
                 cursor: canAccept ? 'pointer' : 'default',
-                boxShadow: canAccept ? '0 8px 24px rgba(92,139,116,0.25)' : 'none',
+                boxShadow: 'none',
                 transition: 'all 0.2s ease',
               }}
             >
