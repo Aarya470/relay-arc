@@ -32,6 +32,18 @@ export default function Login() {
   // who has tried to sign up hit that.
   const [sentTo, setSentTo] = useState<string | null>(null)
   const [resending, setResending] = useState(false)
+  const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({})
+
+  // Validation is checked here rather than left to the server. A typo should
+  // cost nothing, and Supabase's own errors are written for developers.
+  // The email test is deliberately loose: anything stricter starts rejecting
+  // addresses that are perfectly valid, and the confirmation email is the real
+  // test of whether an address exists.
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())
+  const passwordValid = password.length >= 8
+  const canSubmit = emailValid && (isSignUp ? passwordValid : password.length > 0)
+  const emailError = touched.email && email.length > 0 && !emailValid
+  const passwordError = touched.password && isSignUp && password.length > 0 && !passwordValid
   const router = useRouter()
 
   /**
@@ -238,7 +250,7 @@ export default function Login() {
         </AnimatePresence>
         <p style={{ color: T2, fontSize: '14px', lineHeight: 1.55, marginBottom: '36px' }}>
           {isSignUp
-            ? 'Blood type, medications, allergies — ready before an emergency needs them.'
+            ? 'Blood type, medications and allergies, ready before an emergency needs them.'
             : 'Sign in to your dashboard.'}
         </p>
 
@@ -253,11 +265,22 @@ export default function Login() {
               placeholder="you@example.com"
               value={email}
               onFocus={() => setFocused('email')}
-              onBlur={() => setFocused(null)}
+              onBlur={() => { setFocused(null); setTouched(t => ({ ...t, email: true })) }}
               onChange={e => setEmail(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAuth()}
-              style={inputStyle('email')}
+              onKeyDown={e => e.key === 'Enter' && canSubmit && handleAuth()}
+              autoComplete="email"
+              inputMode="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              aria-invalid={emailError || undefined}
+              aria-describedby={emailError ? 'email-error' : undefined}
+              style={{ ...inputStyle('email'), borderColor: emailError ? RED : undefined }}
             />
+            {emailError && (
+              <p id="email-error" role="alert" style={{ color: RED, fontSize: '12px', marginTop: '6px', fontWeight: 500 }}>
+                That does not look like an email address.
+              </p>
+            )}
           </div>
 
           <div>
@@ -270,10 +293,13 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onFocus={() => setFocused('password')}
-                onBlur={() => setFocused(null)}
+                onBlur={() => { setFocused(null); setTouched(t => ({ ...t, password: true })) }}
                 onChange={e => setPassword(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleAuth()}
-                style={{ ...inputStyle('password'), paddingRight: '48px' }}
+                onKeyDown={e => e.key === 'Enter' && canSubmit && handleAuth()}
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                aria-invalid={passwordError || undefined}
+                aria-describedby={passwordError ? 'password-error' : undefined}
+                style={{ ...inputStyle('password'), paddingRight: '48px', borderColor: passwordError ? RED : undefined }}
               />
               <button
                 type="button"
@@ -283,21 +309,23 @@ export default function Login() {
                 {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
               </button>
             </div>
-            {isSignUp && password.length > 0 && password.length < 8 && (
-              <p style={{ color: RED, fontSize: '12px', marginTop: '6px', fontWeight: 500 }}>At least 8 characters required</p>
+            {passwordError && (
+              <p id="password-error" role="alert" style={{ color: RED, fontSize: '12px', marginTop: '6px', fontWeight: 500 }}>
+                Use at least 8 characters.
+              </p>
             )}
           </div>
 
           <motion.button
             whileTap={{ scale: 0.985 }}
             onClick={handleAuth}
-            disabled={loading}
+            disabled={loading || !canSubmit}
             style={{
               width: '100%', background: T1, color: 'white',
               fontWeight: 600, fontSize: '15px', borderRadius: '11px', border: 'none',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              cursor: (loading || !canSubmit) ? 'not-allowed' : 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              marginTop: '6px', opacity: loading ? 0.7 : 1, transition: 'opacity 0.15s',
+              marginTop: '6px', opacity: (loading || !canSubmit) ? 0.55 : 1, transition: 'opacity 0.15s',
               height: '50px', fontFamily: 'inherit',
             }}>
             {loading

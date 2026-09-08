@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,6 +11,9 @@ const supabase = createClient(
 )
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(clientKey(req, 'checkin'), 20, 60000)
+  if (!limited.ok) return tooManyRequests(limited)
+
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
   try {
     // Auth check

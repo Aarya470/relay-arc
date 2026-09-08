@@ -21,6 +21,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,6 +43,9 @@ interface Reading {
 }
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(clientKey(req, 'health-ingest'), 60, 60000)
+  if (!limited.ok) return tooManyRequests(limited)
+
   try {
     let body: any
     try { body = await req.json() } catch {

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Plus_Jakarta_Sans, Nunito, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
@@ -44,6 +44,16 @@ const code = JetBrains_Mono({
   display: 'swap',
   weight: ['400', '500', '600', '700'],
 })
+
+// Without this a phone lays the page out at 980px and shrinks it, which is why
+// a site can look "not mobile friendly" even when every breakpoint is correct.
+// maximumScale is deliberately left alone: capping zoom locks out anyone who
+// needs to enlarge text, and this is a medical app.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#57945C',
+}
 
 export const metadata: Metadata = {
   // Driven by NEXT_PUBLIC_SITE_URL so attaching a custom domain does not require

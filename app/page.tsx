@@ -92,10 +92,6 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button onClick={() => router.push('/card')} className="desktop-only nav-link"
-              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
-              Emergency card
-            </button>
             <button onClick={() => router.push('/features')} className="desktop-only nav-link"
               style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Features
@@ -112,9 +108,9 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
               style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Sign in
             </button>
-            <button onClick={onGetStarted}
+            <button onClick={() => router.push('/card')}
               style={{ background: ORANGE, color: INK, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', borderRadius: '0px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
-              Get started
+              Make a card
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
               style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }} className="mobile-menu-btn">
@@ -630,7 +626,7 @@ export default function Home() {
                 Two minutes to set up. Ready for paramedics after that.
               </p>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: ORANGE, color: INK, padding: '15px 32px', borderRadius: '0px', fontWeight: 600, fontSize: '15.5px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: ON, padding: '15px 32px', borderRadius: '0px', fontWeight: 700, fontSize: '15.5px', border: `2px solid ${ON}`, cursor: 'pointer', fontFamily: 'inherit' }}>
                 Set up your profile, it is free <ArrowRight size={15}/>
               </button>
             </div>

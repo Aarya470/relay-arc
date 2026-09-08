@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,6 +13,9 @@ const supabase = createClient(
 const VALID_TYPES = ['chest_pain', 'unconscious', 'breathing', 'pots', 'stroke', 'mecfs', 'other'] as const
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(clientKey(req, 'classify'), 30, 60000)
+  if (!limited.ok) return tooManyRequests(limited)
+
   try {
     if (!process.env.GROQ_API_KEY) {
       return NextResponse.json({ error: 'GROQ_API_KEY not configured' }, { status: 503 })

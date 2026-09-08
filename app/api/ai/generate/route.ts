@@ -25,6 +25,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,6 +40,9 @@ const medList = (meds: Med[] | null | undefined) =>
   (meds || []).map(m => [m.name, m.dose].filter(Boolean).join(' ')).filter(Boolean).join(', ') || 'none'
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(clientKey(req, 'ai-generate'), 20, 60000)
+  if (!limited.ok) return tooManyRequests(limited)
+
   try {
     if (!process.env.GROQ_API_KEY) {
       return NextResponse.json({ error: 'Generation is not configured' }, { status: 503 })
