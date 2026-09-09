@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
+import { CHAT_MODEL } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,7 +62,7 @@ Return ONLY a JSON array with exactly 3 objects. Each object must have:
 Example: [{"type":"positive","icon":"heart","text":"Your resting heart rate improved by 4 bpm this week."}]`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
+      model: CHAT_MODEL,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 512,

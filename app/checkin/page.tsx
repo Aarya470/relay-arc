@@ -111,7 +111,7 @@ export default function Checkin() {
       }
     } catch (err: any) {
       console.error('Checkin AI error:', err)
-      toast.error('Could not reach the AI right now — please try again')
+      toast.error('Could not reach the check-in assistant. Your answers are still saved.')
       setMessages(prev => prev.slice(0, -1))
       setInput(userMsg)
     }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
+import { CHAT_MODEL } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,7 +43,7 @@ Example format:
 {"timeline":[{"week":"Week 1-2","title":"Initial Recovery","normal":["Rest is normal"],"watchout":["Chest pain"],"todo":["Walk 5 min daily"],"isCurrent":false}]}`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
+      model: CHAT_MODEL,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.1,
       max_tokens: 2000,

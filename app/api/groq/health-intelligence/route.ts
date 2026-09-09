@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
+import { CHAT_MODEL } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -191,7 +192,7 @@ Return ONLY valid JSON:
 }`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
+      model: CHAT_MODEL,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.2,
       max_tokens: 600,

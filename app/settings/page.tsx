@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, LogOut, User, Phone, Calendar, Stethoscope, ChevronRight, History, Shield, Activity } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
+import DateField from '@/components/DateField'
 
 const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 
@@ -121,14 +122,29 @@ export default function Settings() {
               {editing === f.key ? (
                 <div style={{ padding: '16px 0' }}>
                   <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1.2px', fontFamily: 'var(--font-mono, monospace)' }}>{f.label}</p>
-                  <input
-                    type={f.inputType}
-                    autoFocus
-                    value={editValue}
-                    onChange={e => setEditValue(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && saveEdit()}
-                    style={{ ...inputStyle, marginBottom: '10px' }}
-                  />
+                  {/* Date of birth was still a native <input type="date"> here,
+                      so editing your birthday from settings gave you the OS
+                      spinner that onboarding was moved off. Same control in
+                      both places now. */}
+                  {f.inputType === 'date' ? (
+                    <div style={{ marginBottom: '10px' }}>
+                      <DateField
+                        id={`settings-${f.key}`}
+                        label=""
+                        value={editValue}
+                        onChange={setEditValue}
+                      />
+                    </div>
+                  ) : (
+                    <input
+                      type={f.inputType}
+                      autoFocus
+                      value={editValue}
+                      onChange={e => setEditValue(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && saveEdit()}
+                      style={{ ...inputStyle, marginBottom: '10px' }}
+                    />
+                  )}
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <motion.button whileTap={{ scale: 0.97 }} onClick={saveEdit} disabled={saving}
                       style={{ flex: 1, background: '#141413', color: 'white', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '10px', border: 'none', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>

@@ -80,11 +80,32 @@ export default function DateField({
   const error = useMemo(() => {
     if (!d && !m && !y) return null            // empty is not an error, it is unfilled
     if (!d || !m || !y) return null            // mid-typing, do not scold
+    // Wait for all four digits before judging the year. Checking earlier meant
+    // the field went red and shouted "Year must be between 1900 and 2026" after
+    // the first keystroke of every single year anyone ever typed, because "1" is
+    // indeed less than 1900. It looked broken, and it was the app's fault.
+    if (y.length < 4) return null
     const yi = Number(y), mi = Number(m), di = Number(d)
     if (yi < minYear || yi > hiY) return `Year must be between ${minYear} and ${hiY}`
     if (di > daysInMonth(yi, mi)) return `${MONTHS[mi - 1]} ${yi} only has ${daysInMonth(yi, mi)} days`
     return null
   }, [d, m, y, minYear, hiY])
+
+  // THE BUG THIS FIXES, because it is not obvious from the code.
+  //
+  // The day is padded to two digits on blur, and maxLength is 2. So once a day
+  // has been entered the field is FULL, and the browser silently discards every
+  // further keystroke. Tap the day, type a number, and nothing happens. The year
+  // behaves the same way once it holds four digits.
+  //
+  // On a desktop you can rescue yourself by selecting the text first. On a phone
+  // tapping an input just places a caret, so the field is simply dead, which is
+  // exactly what people meant by "it does not let me type".
+  //
+  // Selecting the contents on focus makes the first keystroke replace what is
+  // there, which is how every segmented date field behaves and what people
+  // already expect.
+  const selectAll = (e: React.FocusEvent<HTMLInputElement>) => e.currentTarget.select()
 
   // Push upward only when the date is complete and valid, so a half-typed year
   // never lands in the database as 0002-05-14.
@@ -132,7 +153,9 @@ export default function DateField({
               (document.getElementById(`${id}-month`) as HTMLSelectElement | null)?.focus()
             }
           }}
+          onFocus={selectAll}
           onBlur={() => { if (d.length === 1) setD(d.padStart(2, '0')) }}
+          autoComplete="bday-day"
           style={{ ...seg, borderRight: `1px solid ${BORDER}` }}
           aria-label="Day"
         />
@@ -162,6 +185,16 @@ export default function DateField({
           maxLength={4}
           value={y}
           onChange={e => setY(e.target.value.replace(/\D/g, '').slice(0, 4))}
+          onFocus={selectAll}
+          // Backspace on an empty year goes back to the month, so correcting a
+          // date is one continuous motion rather than a hunt for the right box.
+          onKeyDown={e => {
+            if (e.key === 'Backspace' && y === '') {
+              e.preventDefault()
+              ;(document.getElementById(`${id}-month`) as HTMLSelectElement | null)?.focus()
+            }
+          }}
+          autoComplete="bday-year"
           style={seg}
           aria-label="Year"
         />

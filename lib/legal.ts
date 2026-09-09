@@ -69,7 +69,7 @@ Withdrawing consent does not undo processing that already happened, and it does 
 We use other companies to run the service. Each of them has its own privacy policy and its own security practices, and we do not control what they do once data reaches them.
 • Supabase. Database, accounts and authentication. Receives everything stored in your account.
 • Vercel. Hosting and content delivery. Receives your IP address and request data.
-• Groq. Large language model processing, currently llama-3.1-8b-instant. Receives the text of check-ins and symptom notes when a summary or classification is generated.
+• Groq. Large language model processing, currently openai/gpt-oss-20b. Receives the text of check-ins and symptom notes when a summary or classification is generated.
 • Resend. Sends account email such as the signup confirmation. Receives your email address.
 • Jitsi and 8x8. Video consultations, if you use one. Receives the call itself.
 • OpenStreetMap Nominatim and OSRM. Address lookup and driving directions. Receives location during an emergency.
