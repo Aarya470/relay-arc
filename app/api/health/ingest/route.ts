@@ -84,8 +84,15 @@ export async function POST(req: NextRequest) {
       switch (r.type) {
         case 'heart_rate':         row.heart_rate = r.value;              break
         case 'blood_pressure':     row.systolic = r.systolic; row.diastolic = r.diastolic; break
-        case 'oxygen_saturation':  row.oxygen_saturation = r.value;       break
-        case 'respiratory_rate':   row.respiratory_rate = r.value;        break
+        // These two are the column names the rest of the app uses. This route
+        // was writing oxygen_saturation and respiratory_rate, which do not
+        // exist, and PostgREST rejects the whole insert when any key has no
+        // column. So every Apple Health sync failed with a 500, and because the
+        // Shortcut swallows the response nobody found out. The dashboard, the
+        // manual vitals form and the risk engine all read oxygen_sat and
+        // resp_rate.
+        case 'oxygen_saturation':  row.oxygen_sat = r.value;              break
+        case 'respiratory_rate':   row.resp_rate = r.value;               break
         case 'steps':              row.steps = r.value;                   break
         case 'hrv':                row.hrv_ms = r.value;                  break
         case 'weight':             row.weight_kg = r.value;               break
