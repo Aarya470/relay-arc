@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import webpush from 'web-push'
+import { authedClient } from '@/lib/supabase-route'
 
-const supabase = createClient(
+// Kept only for calls that are genuinely anonymous. Anything that reads or
+// writes a user's rows must go through the request-scoped client instead, or
+// RLS sees no user. See lib/supabase-route.ts.
+const anonSupabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
@@ -14,10 +18,10 @@ webpush.setVapidDetails(
 )
 
 export async function POST(req: NextRequest) {
-  const token = req.headers.get('authorization')?.replace('Bearer ', '')
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-  if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const auth = await authedClient(req)
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status })
+  const { supabase } = auth
+  const user = { id: auth.userId }
 
   const { emergencyId, emergencyType, patientName, hospitalName } = await req.json()
 

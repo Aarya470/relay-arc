@@ -3,10 +3,14 @@ import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 import { CHAT_MODEL } from '@/lib/model'
+import { authedClient } from '@/lib/supabase-route'
 
 export const dynamic = 'force-dynamic'
 
-const supabase = createClient(
+// Kept only for calls that are genuinely anonymous. Anything that reads or
+// writes a user's rows must go through the request-scoped client instead, or
+// RLS sees no user. See lib/supabase-route.ts.
+const anonSupabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
@@ -62,10 +66,10 @@ export async function POST(req: NextRequest) {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
     // Auth
-    const token = req.headers.get('authorization')?.replace('Bearer ', '')
-    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-    if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const auth = await authedClient(req)
+    if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status })
+    const { supabase } = auth
+    const user = { id: auth.userId }
 
     const since30d = new Date(Date.now() - 30 * 86_400_000).toISOString()
 
