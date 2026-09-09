@@ -193,7 +193,8 @@ Return ONLY valid JSON:
   "recommendation": <one specific, actionable thing the patient should do TODAY, max 90 chars>,
   "alertCareTeam": <true|false>,
   "alertReason": <specific reason if alerting care team, null if not alerting, max 80 chars>
-}`
+}
+Never use em dashes or semicolons. Use short plain sentences.`
 
     const completion = await groq.chat.completions.create({
       model: CHAT_MODEL,

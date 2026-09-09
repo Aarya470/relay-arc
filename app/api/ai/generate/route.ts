@@ -86,7 +86,8 @@ export async function POST(req: NextRequest) {
       const { data: p } = await supabase.from('profiles').select(PROFILE_COLS).eq('id', user.id).single()
       if (!p) return NextResponse.json({ text: '' })
       system = 'You are an emergency medicine assistant. Write a 2-3 sentence clinical handoff note for ER staff. Be specific, clinical, and actionable. Focus on the condition and emergency type.'
-      prompt = `Patient has ${p.diagnosis || 'no known diagnosis on file'}. Current emergency: ${label}. Allergies: ${p.allergies || 'none known'}. Current medications: ${medList(p.medications)}.`
+      prompt = `Patient has ${p.diagnosis || 'no known diagnosis on file'}. Current emergency: ${label}. Allergies: ${p.allergies || 'none known'}. Current medications: ${medList(p.medications)}.
+Never use em dashes or semicolons. Use short plain sentences.`
       maxTokens = 180
     }
 

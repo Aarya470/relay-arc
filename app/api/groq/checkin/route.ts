@@ -40,7 +40,8 @@ export async function POST(req: NextRequest) {
       ...REASONING_TEXT,
         messages: [{
           role: 'user',
-          content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual.\n\nConversation:\n${fullConvo}`
+          content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual.\n\nConversation:\n${fullConvo}
+Never use em dashes or semicolons. Use short plain sentences.`
         }],
         temperature: 0.2
       })

@@ -59,7 +59,8 @@ Return ONLY a JSON array with exactly 3 objects. Each object must have:
 - "icon": one of "heart", "trend", "pill", "star", "alert"
 - "text": the insight text (max 80 chars, specific and actionable)
 
-Example: [{"type":"positive","icon":"heart","text":"Your resting heart rate improved by 4 bpm this week."}]`
+Example: [{"type":"positive","icon":"heart","text":"Your resting heart rate improved by 4 bpm this week."}]
+Never use em dashes or semicolons. Use short plain sentences.`
 
     const completion = await groq.chat.completions.create({
       model: CHAT_MODEL,

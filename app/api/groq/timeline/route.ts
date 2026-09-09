@@ -40,7 +40,8 @@ Patient: Conditions: ${profile.diagnosis || 'cardiac condition'}, Surgery: ${pro
 Each phase object must have: "week" (string), "title" (string), "normal" (string array), "watchout" (string array), "todo" (string array), "isCurrent" (boolean, true for the phase matching current week).
 
 Example format:
-{"timeline":[{"week":"Week 1-2","title":"Initial Recovery","normal":["Rest is normal"],"watchout":["Chest pain"],"todo":["Walk 5 min daily"],"isCurrent":false}]}`
+{"timeline":[{"week":"Week 1-2","title":"Initial Recovery","normal":["Rest is normal"],"watchout":["Chest pain"],"todo":["Walk 5 min daily"],"isCurrent":false}]}
+Never use em dashes or semicolons. Use short plain sentences.`
 
     const completion = await groq.chat.completions.create({
       model: CHAT_MODEL,

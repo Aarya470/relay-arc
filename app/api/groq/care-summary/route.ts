@@ -51,7 +51,9 @@ Return JSON:
 
 Score 8-10: active emergency, worsening symptoms, missed meds + bad check-ins
 Score 5-7: some concerns, monitor closely
-Score 1-4: stable, no major issues`
+Score 1-4: stable, no major issues
+
+Never use em dashes or semicolons. Use short plain sentences.`
 
     const completion = await groq.chat.completions.create({
       model: CHAT_MODEL,
