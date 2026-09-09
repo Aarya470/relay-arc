@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL } from '@/lib/model'
+import { CHAT_MODEL, REASONING_JSON } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -45,6 +45,8 @@ export async function POST(req: NextRequest) {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
     const response = await groq.chat.completions.create({
       model: CHAT_MODEL,
+      ...REASONING_JSON,
+      response_format: { type: 'json_object' as const },
       temperature: 0,
       messages: [
         {
@@ -62,7 +64,6 @@ Respond ONLY with valid JSON, no other text: {"type":"chest_pain","confidence":"
         },
         { role: 'user', content: `Spoken description: "${transcript}"` },
       ],
-      max_tokens: 60,
     })
 
     const raw = response.choices[0]?.message?.content || ''

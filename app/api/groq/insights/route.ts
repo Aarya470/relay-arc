@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL } from '@/lib/model'
+import { CHAT_MODEL, REASONING_JSON } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -63,9 +63,9 @@ Example: [{"type":"positive","icon":"heart","text":"Your resting heart rate impr
 
     const completion = await groq.chat.completions.create({
       model: CHAT_MODEL,
+      ...REASONING_JSON,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
-      max_tokens: 512,
     })
 
     const text = completion.choices[0].message.content || ''

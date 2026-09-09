@@ -24,6 +24,43 @@
 // is one place to change, and one place that explains why.
 export const CHAT_MODEL = 'openai/gpt-oss-20b'
 
+// THE REPLACEMENT IS A REASONING MODEL, AND THAT IS NOT A DROP-IN SWAP.
+//
+// llama-3.1-8b-instant answered directly. gpt-oss-20b thinks first, and those
+// reasoning tokens are spent from the same completion budget as the answer. So
+// a route that worked fine with max_tokens: 512 now spends the budget thinking
+// and gets cut off before it finishes, or never starts the answer at all.
+//
+// That is exactly what happened when the model was swapped. Two routes came
+// back broken and I had to test them to find it:
+//   /api/groq/insights            512 tokens  ->  truncated mid-JSON
+//   /api/groq/health-intelligence 600 tokens  ->  content came back EMPTY
+//
+// The third failure was the worst. /api/groq/classify-emergency has a fallback
+// of { type: 'other', confidence: 'low' } when it cannot parse a reply, so
+// "crushing chest pain and I cannot breathe" was classified as "other" with low
+// confidence. It failed silently and safely-looking, which is the most
+// dangerous shape a bug can have in a triage path.
+//
+// reasoning_effort 'low' keeps the thinking short, include_reasoning false
+// keeps it out of the payload, and the token budget is set well above the size
+// of any JSON these routes ask for.
+//
+// Groq's guidance also says to avoid system prompts with these models and put
+// instructions in the user message. Worth knowing before touching the prompts.
+export const REASONING_JSON = {
+  reasoning_effort: 'low' as const,
+  include_reasoning: false,
+  max_completion_tokens: 2000,
+}
+
+/** Same, for routes that return prose rather than JSON. */
+export const REASONING_TEXT = {
+  reasoning_effort: 'low' as const,
+  include_reasoning: false,
+  max_completion_tokens: 1200,
+}
+
 /**
  * Groq's recommended replacement for llama-3.1-8b-instant, per their own
  * migration table. Same role: fast, cheap, good enough for summarising a

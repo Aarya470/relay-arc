@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL } from '@/lib/model'
+import { CHAT_MODEL, REASONING_TEXT } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,6 +55,7 @@ Score 1-4: stable, no major issues`
 
     const completion = await groq.chat.completions.create({
       model: CHAT_MODEL,
+      ...REASONING_TEXT,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.2
     })

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL } from '@/lib/model'
+import { CHAT_MODEL, REASONING_TEXT } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
         .join('\n')
       const completion = await groq.chat.completions.create({
         model: CHAT_MODEL,
+      ...REASONING_TEXT,
         messages: [{
           role: 'user',
           content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual.\n\nConversation:\n${fullConvo}`
@@ -59,6 +60,7 @@ Rules:
 
     const completion = await groq.chat.completions.create({
       model: CHAT_MODEL,
+      ...REASONING_TEXT,
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages.map((m: any) => ({
