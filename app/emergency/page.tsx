@@ -156,7 +156,7 @@ export default function Emergency() {
       const text = finalText || ''
       if (text.trim().length > 2) classifyAndGo(text.trim())
     }
-    rec.onerror = () => { setListening(false); toast.error('Microphone unavailable — tap an option below') }
+    rec.onerror = () => { setListening(false); toast.error('Microphone unavailable. Tap an option below') }
     setTranscript('')
     setListening(true)
     rec.start()
@@ -176,12 +176,12 @@ export default function Emergency() {
       if (user) {
         await supabase.from('emergencies').update({ status: 'resolved' }).eq('user_id', user.id).eq('status', 'active')
         const { data, error } = await supabase.from('emergencies').insert({ user_id: user.id, emergency_type: type, status: 'active' }).select().single()
-        if (error) { toast.error(`Could not log emergency — call ${emg.number} now`) }
+        if (error) { toast.error(`Could not log emergency. Call ${emg.number} now`) }
         else { emergencyId = data?.id || '' }
       }
       router.push(`/emergency/routing?type=${type}&id=${emergencyId}`)
     } catch {
-      toast.error(`Something went wrong — call ${emg.number} now`)
+      toast.error(`Something went wrong. Call ${emg.number} now`)
       setLoading(false)
       setSelected('')
     }

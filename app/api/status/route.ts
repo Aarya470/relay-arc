@@ -75,7 +75,7 @@ export async function GET() {
   checks.push({ name: 'AI triage (Groq key)', group: 'Config', critical: true, ok: cfg('GROQ_API_KEY'), ms: null, detail: cfg('GROQ_API_KEY') ? 'configured' : 'missing' })
   checks.push({ name: 'Push notifications (VAPID)', group: 'Config', critical: false, ok: cfg('VAPID_PRIVATE_KEY') && cfg('NEXT_PUBLIC_VAPID_KEY'), ms: null, detail: cfg('VAPID_PRIVATE_KEY') ? 'configured' : 'missing' })
   checks.push({ name: 'Service role (ER board)', group: 'Config', critical: true, ok: cfg('SUPABASE_SERVICE_ROLE_KEY'), ms: null, detail: cfg('SUPABASE_SERVICE_ROLE_KEY') ? 'configured' : 'missing' })
-  checks.push({ name: 'Operations portal key', group: 'Config', critical: false, ok: cfg('ADMIN_PORTAL_KEY'), ms: null, detail: cfg('ADMIN_PORTAL_KEY') ? 'configured' : 'not set — /admin locked' })
+  checks.push({ name: 'Operations portal key', group: 'Config', critical: false, ok: cfg('ADMIN_PORTAL_KEY'), ms: null, detail: cfg('ADMIN_PORTAL_KEY') ? 'configured' : 'not set. /admin locked' })
   checks.push({ name: 'Live traffic (TomTom)', group: 'Config', critical: false, ok: cfg('NEXT_PUBLIC_TOMTOM_KEY'), ms: null, detail: cfg('NEXT_PUBLIC_TOMTOM_KEY') ? 'live traffic active' : 'using time-of-day model' })
 
   const criticalDown = checks.filter(c => c.critical && !c.ok).length

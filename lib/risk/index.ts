@@ -111,10 +111,10 @@ export interface RiskAssessment {
 }
 
 const DISCLAIMER =
-  'Decision support based on a partial NEWS2 score (4 of 7 parameters — no temperature, consciousness level, or supplemental-oxygen status). It can under-estimate risk and is not a diagnosis. If you feel unsafe, seek emergency care regardless of what this says.'
+  'Decision support based on a partial NEWS2 score (4 of 7 parameters. No temperature, consciousness level, or supplemental-oxygen status). It can under-estimate risk and is not a diagnosis. If you feel unsafe, seek emergency care regardless of what this says.'
 
 const NEWS2_BASIS = 'NEWS2 (Royal College of Physicians) vital-sign subscore'
-const BASELINE_BASIS = 'personal-baseline heuristic for POTS/ME-CFS — not part of NEWS2, not independently validated'
+const BASELINE_BASIS = 'personal-baseline heuristic for POTS/ME-CFS. Not part of NEWS2, not independently validated'
 
 // ─── NEWS2 parameter subscores ────────────────────────────────────────────────
 // Transcribed from the published NEWS2 table. Each returns 0–3.
@@ -507,22 +507,22 @@ export function assessRisk(samples: VitalsSample[], opts: AssessOptions = {}): R
 
   const advice =
     level === 'high'
-      ? 'These readings meet the threshold for urgent clinical assessment. Contact emergency services or get to an emergency department now — do not wait to see if it settles.'
+      ? 'These readings meet the threshold for urgent clinical assessment. Contact emergency services or get to an emergency department now. Do not wait to see if it settles.'
       : level === 'medium'
         ? redFlag
           ? 'One reading is far enough outside the normal range to need same-day review. Contact your care team now, and treat any worsening as an emergency.'
           : 'Contact your care team today and log vitals again in a few hours. Rest, hydrate, and avoid exertion until this settles.'
-        : 'Nothing in the measured vitals needs action. Keep logging — the baseline is what makes the next change detectable.'
+        : 'Nothing in the measured vitals needs action. Keep logging. The baseline is what makes the next change detectable.'
 
   const partial = missing.length > 0
   const age = typeof opts.ageYears === 'number' ? opts.ageYears : null
   const pediatricCaveat = age != null && age < 16
 
   let disclaimer = partial
-    ? `Decision support based on a partial NEWS2 score (${measured.length} of 7 parameters — missing ${missing.join(', ')}). It can under-estimate risk and is not a diagnosis. If you feel unsafe, seek emergency care regardless of what this says.`
+    ? `Decision support based on a partial NEWS2 score (${measured.length} of 7 parameters. Missing ${missing.join(', ')}). It can under-estimate risk and is not a diagnosis. If you feel unsafe, seek emergency care regardless of what this says.`
     : 'Decision support based on a complete NEWS2 observation set. It is not a diagnosis. If you feel unsafe, seek emergency care regardless of what this says.'
   if (pediatricCaveat) {
-    disclaimer += ' NEWS2 is designed for adults aged 16 and over and is not validated in children — paediatric practice uses PEWS. Treat this score as indicative only.'
+    disclaimer += ' NEWS2 is designed for adults aged 16 and over and is not validated in children. Paediatric practice uses PEWS. Treat this score as indicative only.'
   }
 
   return {

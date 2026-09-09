@@ -64,7 +64,7 @@ export default function DemoLauncher() {
             ['Your location', 'Fixed to Andheri East instead of device GPS'],
             ['Candidate hospitals', 'Three real Mumbai cardiac centres, real coordinates'],
             ['The drive', 'Position advances along the real route at ~50 km/h'],
-            ['Everything else', 'Genuinely live — routing, records, alerts, realtime room'],
+            ['Everything else', 'Genuinely live. Routing, records, alerts, realtime room'],
           ].map(([k, v]) => (
             <div key={k} style={{ display: 'flex', gap: '14px', padding: '12px 0', borderBottom: `1px solid ${BORDER}`, alignItems: 'baseline' }}>
               <span style={{ color: T1, fontSize: '13.5px', fontWeight: 700, width: '150px', flexShrink: 0 }}>{k}</span>

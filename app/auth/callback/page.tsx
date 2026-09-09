@@ -79,7 +79,7 @@ export default function AuthCallback() {
       if (cancelled) return
       setState('error')
       setMessage(
-        'This page did not receive a confirmation token. That usually means the link was opened a second time — a confirmation link only works once. Try signing in.'
+        'This page did not receive a confirmation token. That usually means the link was opened a second time. A confirmation link only works once. Try signing in.'
       )
     }
 

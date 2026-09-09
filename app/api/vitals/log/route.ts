@@ -65,22 +65,38 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Could not save vitals' }, { status: 500 })
     }
 
-    // Check for critical values and log alert
+    // Check for critical values and record the alert.
     const criticalAlerts = isCritical(vitals)
     if (criticalAlerts.length > 0) {
-      // Log alert to DB so care team can see it
-      await supabase.from('vitals_alerts').insert({
+      // The result of this insert is now checked, because the message below
+      // used to promise something this code cannot guarantee.
+      //
+      // It previously said "Your care team has been notified" unconditionally,
+      // with the insert fired as .then(() => {}) so any failure was discarded.
+      // Telling someone with a heart rate of 142 that their care team knows,
+      // when the row was never written, is the most harmful sentence in this
+      // file: it is a reason to sit down and wait instead of calling anyone.
+      //
+      // Recording the alert is also not the same as delivering it. Nothing here
+      // sends a push or an email, so the honest claim is that it has been
+      // flagged for the care team, not that anyone has seen it.
+      const { error: alertError } = await supabase.from('vitals_alerts').insert({
         user_id: user.id,
         alerts: criticalAlerts,
         vitals,
         created_at: new Date().toISOString(),
-      }).then(() => {})
+      })
+
+      if (alertError) console.error('Vitals alert insert failed:', alertError)
 
       return NextResponse.json({
         saved: true,
         critical: true,
         alerts: criticalAlerts,
-        message: 'Vitals saved — critical values detected. Your care team has been notified.',
+        flagged: !alertError,
+        message: alertError
+          ? 'Saved, and these readings are outside the safe range. Flagging them for your care team did not work, so tell someone yourself. If you feel unwell, call emergency services.'
+          : 'Saved, and these readings are outside the safe range. They have been flagged for your care team. If you feel unwell, call emergency services rather than waiting for a reply.',
       })
     }
 

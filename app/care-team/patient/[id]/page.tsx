@@ -218,7 +218,7 @@ export default function PatientDetail() {
     await supabase.from('appointments').update({ status: 'completed' }).eq('id', appointmentId)
     setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
     setActiveCall(null)
-    toast.success('Call ended — appointment marked complete')
+    toast.success('Call ended. Appointment marked complete')
   }
 
   const isJoinable = (a: any) => {
@@ -351,7 +351,7 @@ export default function PatientDetail() {
 
           {/* Priority badge */}
           <div style={{ background: priorityBg, border: `1px solid ${priorityBorder}`, borderRadius: '14px', padding: '8px 14px', textAlign: 'center', flexShrink: 0 }}>
-            <p style={{ color: priorityColor, fontWeight: 900, fontSize: '22px', lineHeight: 1, margin: 0 }}>{score || '—'}</p>
+            <p style={{ color: priorityColor, fontWeight: 900, fontSize: '22px', lineHeight: 1, margin: 0 }}>{score || '. '}</p>
             <p style={{ color: priorityColor, opacity: 0.6, fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', margin: 0, marginTop: '2px' }}>Priority</p>
           </div>
         </div>

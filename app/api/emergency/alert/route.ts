@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     other: 'Emergency',
   }
 
-  const title = `🚨 EMERGENCY — ${patientName || 'Patient'}`
+  const title = `🚨 EMERGENCY. ${patientName || 'Patient'}`
   const body = `${EMERGENCY_LABELS[emergencyType] || emergencyType}${hospitalName ? ` · Routing to ${hospitalName}` : ''}`
 
   let sent = 0

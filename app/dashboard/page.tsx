@@ -558,7 +558,7 @@ export default function Dashboard() {
             </div>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => toast('Care team call — coming soon')}
+              onClick={() => toast('Care team call. Coming soon')}
               style={{
                 background: GREEN, color: '#FFFFFF',
                 fontWeight: 700, fontSize: '13px',
@@ -873,7 +873,7 @@ export default function Dashboard() {
             {
               label: 'Emergency contacts',
               sub: emergencyContacts.length > 0
-                ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''} — notified on SOS`
+                ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''}. Notified on SOS`
                 : 'No contacts added',
               href: '/emergency-contacts',
               icon: <Users size={15} color={RED}/>,

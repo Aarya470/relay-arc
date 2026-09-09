@@ -57,7 +57,7 @@ export default function MedicalProfile() {
     const text = buildShareText(profile)
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'Medical Profile — ' + profile?.full_name, text })
+        await navigator.share({ title: 'Medical Profile. ' + profile?.full_name, text })
         return
       } catch {}
     }
@@ -65,7 +65,7 @@ export default function MedicalProfile() {
       await navigator.clipboard.writeText(text)
       toast.success('Medical profile copied to clipboard')
     } catch {
-      toast.error('Could not copy — try again')
+      toast.error('Could not copy. Try again')
     }
   }
 
@@ -102,7 +102,7 @@ export default function MedicalProfile() {
           Medical profile · show to responders
         </p>
         <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.05 }}>
-          {profile?.full_name || '—'}
+          {profile?.full_name || '. '}
         </h1>
         <p style={{ color: '#5C5A52', fontSize: '13px', marginTop: '8px' }}>
           {age !== null ? `${age} years` : 'DOB not set'}
@@ -117,7 +117,7 @@ export default function MedicalProfile() {
           <div>
             <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Blood type</p>
             <p style={{ color: '#A33417', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
-              {profile?.blood_type || '—'}
+              {profile?.blood_type || '. '}
             </p>
           </div>
           <div>

@@ -54,7 +54,7 @@ Rules:
 - Max 2 short sentences per message
 - Warm and encouraging — like texting a caring friend
 - Ask one simple question at a time
-- If they mention chest pain, feeling faint, or trouble breathing say: "That sounds serious — please tap the SOS button right now."
+- If they mention chest pain, feeling faint, or trouble breathing say: "That sounds serious. Please tap the SOS button right now."
 - After 4-5 exchanges, wrap up warmly and end with [CHECKIN_COMPLETE]`
 
     const completion = await groq.chat.completions.create({

@@ -76,7 +76,7 @@ export default function HospitalPortal() {
       setIncoming(json.incoming)
       ;(json.incoming || []).forEach((x: Incoming) => knownIds.current.add(x.id))
     } catch {
-      setError('Could not connect — check your network.')
+      setError('Could not connect. Check your network.')
     }
     setLoading(false)
   }, [])
@@ -242,7 +242,7 @@ export default function HospitalPortal() {
               <Minus size={15} color={T2}/>
             </button>
             <span style={{ color: T1, fontFamily: MONO, fontSize: '22px', fontWeight: 800, minWidth: '36px', textAlign: 'center' }}>
-              {partner.beds_free ?? '—'}
+              {partner.beds_free ?? '. '}
             </span>
             <button onClick={() => saveStatus({ beds_free: (partner.beds_free ?? 0) + 1 })} aria-label="More beds"
               style={{ width: '38px', height: '38px', borderRadius: '10px', border: `1.5px solid ${BORDER}`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -21,7 +21,7 @@ export async function registerPushNotifications(userId: string) {
     if (!sub) {
       const vapidKey = process.env.NEXT_PUBLIC_VAPID_KEY
       if (!vapidKey) {
-        console.warn('NEXT_PUBLIC_VAPID_KEY not set — push notifications disabled')
+        console.warn('NEXT_PUBLIC_VAPID_KEY not set. Push notifications disabled')
         return
       }
       sub = await reg.pushManager.subscribe({

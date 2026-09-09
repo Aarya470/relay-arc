@@ -69,7 +69,7 @@ export default function Settings() {
       // Show what actually went wrong. "Could not save — try again" sent me
       // hunting for a network fault when the real message named the column and
       // the bad value.
-      toast.error(error.message || 'Could not save — try again')
+      toast.error(error.message || 'Could not save. Try again')
     } else {
       setProfile((prev: any) => ({ ...prev, [editing]: next }))
       toast.success('Saved')

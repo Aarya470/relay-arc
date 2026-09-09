@@ -108,7 +108,7 @@ export default function Login() {
         // possibility rather than letting them assume they typed it wrong.
         toast.error(
           /invalid login credentials/i.test(error.message)
-            ? 'That email and password did not match. If you have just signed up, confirm your email first — the link is in your inbox.'
+            ? 'That email and password did not match. If you have just signed up, confirm your email first. The link is in your inbox.'
             : error.message
         )
       } else {
@@ -125,7 +125,7 @@ export default function Login() {
       if (e instanceof Error && e.message === 'TIMEOUT') {
         toast.error(
           isSignUp
-            ? 'The server did not respond in time. Your account may still have been created — check your email for a confirmation link, and try signing in before signing up again.'
+            ? 'The server did not respond in time. Your account may still have been created. Check your email for a confirmation link, and try signing in before signing up again.'
             : 'The server did not respond in time. Check your connection and try again.'
         )
       } else {

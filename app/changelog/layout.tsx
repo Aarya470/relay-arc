@@ -11,11 +11,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Changelog and corrections — Relay Arc',
+  title: 'Changelog and corrections. Relay Arc',
   description: 'Every change to Relay Arc, dated, including the mistakes: an exposed API key, a contaminated benchmark, a silent database bug. A changelog with no failures in it is marketing.',
   alternates: { canonical: '/changelog' },
   openGraph: {
-    title: 'Changelog and corrections — Relay Arc',
+    title: 'Changelog and corrections. Relay Arc',
     description: 'Every change to Relay Arc, dated, including the mistakes: an exposed API key, a contaminated benchmark, a silent database bug. A changelog with no failures in it is marketing.',
     url: '/changelog',
     type: 'website',

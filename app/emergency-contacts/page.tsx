@@ -57,7 +57,7 @@ export default function EmergencyContacts() {
     if (!user) return
     const { error } = await supabase.from('profiles').update({ emergency_contacts: updated }).eq('id', user.id)
     if (error) {
-      toast.error('Could not save contacts — try again')
+      toast.error('Could not save contacts. Try again')
       return false
     }
     return true

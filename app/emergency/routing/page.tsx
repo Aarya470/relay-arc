@@ -235,12 +235,12 @@ function RoutingPage() {
 
   const shareLive = async () => {
     const id = activeEmergencyId.current
-    if (!id) { toast.error('Live link not ready yet — try again in a moment'); return }
+    if (!id) { toast.error('Live link not ready yet. Try again in a moment'); return }
     const url = `${window.location.origin}/emergency/live/${id}`
     if (typeof navigator.share === 'function') {
-      try { await navigator.share({ title: 'Live emergency status — Relay Arc', url }); return } catch {}
+      try { await navigator.share({ title: 'Live emergency status. Relay Arc', url }); return } catch {}
     }
-    try { await navigator.clipboard.writeText(url); toast.success('Live status link copied — send it to family') }
+    try { await navigator.clipboard.writeText(url); toast.success('Live status link copied. Send it to family') }
     catch { toast.error('Could not copy the link') }
   }
 
@@ -308,7 +308,7 @@ function RoutingPage() {
     ch.subscribe((status: string) => {
       if (status === 'SUBSCRIBED') {
         ch.track({ role: 'patient', name: 'Patient' })
-        pushEvt('SOS active — hospital routing started')
+        pushEvt('SOS active. Hospital routing started')
       }
     })
     let watch: number | null = null
@@ -361,7 +361,7 @@ function RoutingPage() {
         if (json.connected) {
           setErConnected(json.partnerName || hospital.name)
           erIncomingId.current = json.incomingId || ''
-          pushEvt(`${json.partnerName || 'Hospital'} ER notified — patient on their dispatch board`)
+          pushEvt(`${json.partnerName || 'Hospital'} ER notified. Patient on their dispatch board`)
         }
       } catch {}
     }
@@ -466,7 +466,7 @@ function RoutingPage() {
           },
           () => {
             // Geolocation denied or failed — do NOT fall back to hardcoded coordinates
-            setLocationError('Location unavailable — please call emergency services directly')
+            setLocationError('Location unavailable. Please call emergency services directly')
             setLoading(false)
             alertCareTeam(userId)
           },
@@ -485,7 +485,7 @@ function RoutingPage() {
     if (!userId) { setCareTeamAlerted(true); return }
     try {
       // Send push notification to the patient themselves (care team will see it via Supabase Realtime)
-      await sendPushNotification(userId, 'Emergency alert sent', 'Your care team has been notified and can see your emergency.')
+      await sendPushNotification(userId, 'Emergency alert sent', 'Your emergency is now visible to your care team.')
     } catch (e) {
       console.error('Care team alert failed:', e)
     }
@@ -526,10 +526,10 @@ function RoutingPage() {
       }).select().single()
       if (error || !data) throw error
       rideIdRef.current = data.id
-      pushEvt('Community driver requested — searching nearby')
+      pushEvt('Community driver requested. Searching nearby')
     } catch {
       setRide('none')
-      toast.error('Could not request a ride — ask family or call an ambulance')
+      toast.error('Could not request a ride. Ask family or call an ambulance')
     }
   }
 
@@ -555,7 +555,7 @@ function RoutingPage() {
         if (data && (data.status === 'accepted' || data.driver_name)) {
           setRide('accepted')
           setRideDriver(data.driver_name || 'A community driver')
-          pushEvt(`Driver ${data.driver_name || 'accepted'} — on their way to the patient`)
+          pushEvt(`Driver ${data.driver_name || 'accepted'}. On their way to the patient`)
           try { navigator.vibrate?.([200, 100, 200]) } catch {}
         }
       } catch {}
@@ -592,9 +592,9 @@ function RoutingPage() {
     } catch { /* fall through — user still leaves */ }
 
     if (!serverConfirmed) {
-      toast.error('Cancelled on this device, but the server did not confirm — your care team may still see it as active.')
+      toast.error('Cancelled on this device, but the server did not confirm. Your care team may still see it as active.')
     }
-    pushEvt('Emergency cancelled — patient reports safe')
+    pushEvt('Emergency cancelled. Patient reports safe')
     if (erIncomingId.current) {
       try {
         const { data: { session } } = await supabase.auth.getSession()
@@ -804,7 +804,7 @@ function RoutingPage() {
                 {hospital.partner.accepting ? '✓ Accepting now' : '⚠ Diverting'}
                 {hospital.partner.cathLab === true ? ' · cath lab open' : ''}
                 {hospital.partner.bedsFree != null ? ` · ${hospital.partner.bedsFree} beds` : ''}
-                {' — reported by facility'}
+                {'. Reported by facility'}
               </p>
             )}
             {erConnected && (
@@ -917,7 +917,7 @@ function RoutingPage() {
             : <Loader2 size={16} color={T.textMuted} className="animate-spin" style={{ flexShrink: 0 }} />
           }
           <p style={{ fontSize: '14px', fontWeight: 600, color: careTeamAlerted ? T.green : T.textSec }}>
-            {careTeamAlerted ? 'Care team alerted — they can see your emergency' : 'Alerting your care team…'}
+            {careTeamAlerted ? 'Your emergency is visible to your care team' : 'Alerting your care team…'}
           </p>
         </div>
 

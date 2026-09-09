@@ -443,7 +443,7 @@ export default function Medications() {
             <div style={{ display: 'flex', gap: '10px' }}>
               <div style={{ flex: '0 0 auto', background: BG, borderRadius: '10px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '90px', border: `1px solid ${BORDER}` }}>
                 <p style={{ color: T1, fontSize: '24px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '-1px', lineHeight: 1 }}>
-                  {streak >= 2 ? `${streak}d` : '—'}
+                  {streak >= 2 ? `${streak}d` : '. '}
                 </p>
                 <p style={{ color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.6px', marginTop: '2px' }}>
                   {streak >= 2 ? 'streak' : 'no streak'}

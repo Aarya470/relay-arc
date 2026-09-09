@@ -11,11 +11,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'The engineering behind Relay Arc — run it yourself',
+  title: 'The engineering behind Relay Arc. Run it yourself',
   description: 'A 94 KB on-device triage classifier with calibrated abstention, and a deterministic NEWS2 deterioration score containing no AI. Both engines run live in your browser, no signup. Includes the benchmark our own model loses.',
   alternates: { canonical: '/engineering' },
   openGraph: {
-    title: 'The engineering behind Relay Arc — run it yourself',
+    title: 'The engineering behind Relay Arc. Run it yourself',
     description: 'A 94 KB on-device triage classifier with calibrated abstention, and a deterministic NEWS2 deterioration score containing no AI. Both engines run live in your browser, no signup. Includes the benchmark our own model loses.',
     url: '/engineering',
     type: 'website',

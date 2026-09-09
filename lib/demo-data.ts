@@ -21,7 +21,7 @@ const now = Date.now()
 const ago = (mins: number) => new Date(now - mins * 60_000).toISOString()
 const daysAgo = (d: number) => new Date(now - d * 86_400_000).toISOString()
 
-export const DEMO_BANNER = 'Demo — synthetic data. Not real patients.'
+export const DEMO_BANNER = 'Demo. Synthetic data. Not real patients.'
 
 // ── Hospital board ──────────────────────────────────────────────────────────
 export const DEMO_PARTNER = {
@@ -137,7 +137,7 @@ export const DEMO_SUMMARIES: Record<string, { patient_id: string; summary: strin
   // R. Example is the deteriorating patient, so they sort to the top.
   'demo-p2': {
     patient_id: 'demo-p2',
-    summary: 'Orthostatic symptoms worsening. Resting pulse is 40 bpm above this patient\'s own baseline and oxygen saturation has dropped to 94%. Vitals score NEWS2 6 — same-day review.',
+    summary: 'Orthostatic symptoms worsening. Resting pulse is 40 bpm above this patient\'s own baseline and oxygen saturation has dropped to 94%. Vitals score NEWS2 6. same-day review.',
     priority_score: 9,
     created_at: ago(20),
   },
@@ -149,7 +149,7 @@ export const DEMO_SUMMARIES: Record<string, { patient_id: string; summary: strin
   },
   'demo-p1': {
     patient_id: 'demo-p1',
-    summary: 'Stable post-MI patient, adherent to medication. One episode of exertional chest tightness this week that resolved with rest — worth reviewing at the next appointment.',
+    summary: 'Stable post-MI patient, adherent to medication. One episode of exertional chest tightness this week that resolved with rest. Worth reviewing at the next appointment.',
     priority_score: 2,
     created_at: ago(60),
   },

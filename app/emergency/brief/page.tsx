@@ -105,7 +105,7 @@ function BriefContent() {
 
   const buildPlainText = () => {
     const meds = (profile?.medications || [])
-      .map(m => `  • ${m.name} ${m.dose} — ${m.frequency}`)
+      .map(m => `  • ${m.name} ${m.dose}. ${m.frequency}`)
       .join('\n') || '  • None on file'
     const contact = profile?.emergency_contacts?.[0]
     const contactLine = contact
@@ -114,7 +114,7 @@ function BriefContent() {
 
     return [
       '═══════════════════════════════',
-      'ER MEDICAL BRIEF — SHOW TO STAFF',
+      'ER MEDICAL BRIEF. SHOW TO STAFF',
       '═══════════════════════════════',
       '',
       `PATIENT: ${profile?.full_name || 'Unknown'}`,
@@ -159,7 +159,7 @@ function BriefContent() {
       toast.success('Brief copied to clipboard')
       setTimeout(() => setCopied(false), 2500)
     } catch {
-      toast.error('Copy failed — please screenshot this screen')
+      toast.error('Copy failed. Please screenshot this screen')
     }
   }
 
@@ -274,7 +274,7 @@ function BriefContent() {
                   />
                   <span className="text-sm" style={{ color: '#141413' }}>
                     <span className="font-semibold">{m.name}</span>
-                    {m.dose && ` — ${m.dose}`}
+                    {m.dose && `. ${m.dose}`}
                     {m.frequency && (
                       <span style={{ color: '#5C5A52' }}> · {m.frequency}</span>
                     )}

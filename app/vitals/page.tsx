@@ -353,7 +353,7 @@ export default function VitalsPage() {
       if (!res.ok) {
         toast.error(data.error || 'Could not save vitals')
       } else if (data.critical) {
-        toast.error(`${data.alerts[0]} — care team notified`)
+        toast.error(`${data.alerts[0]}. Flagged for your care team`)
         await refreshHistory()
         setVitals({ heart_rate: '', systolic: '', diastolic: '', oxygen_sat: '', resp_rate: '' })
       } else {
@@ -367,7 +367,7 @@ export default function VitalsPage() {
         }).catch(() => { /* silent */ })
       }
     } catch {
-      toast.error('Network error — try again')
+      toast.error('Network error. Try again')
     }
     setSaving(false)
   }
@@ -424,7 +424,7 @@ export default function VitalsPage() {
               <input
                 type="number" min="20" max="250"
                 style={{ ...inputStyle, borderColor: vitals.heart_rate ? 'rgba(163,52,23,0.35)' : '#98C890' }}
-                placeholder="—" value={vitals.heart_rate}
+                placeholder=". " value={vitals.heart_rate}
                 onChange={e => setVitals(p => ({ ...p, heart_rate: e.target.value }))}
               />
               <span style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>bpm</span>
@@ -446,14 +446,14 @@ export default function VitalsPage() {
               <input
                 type="number" min="50" max="260"
                 style={{ ...inputStyle, borderColor: vitals.systolic ? 'rgba(86,128,78,0.35)' : '#98C890', width: '62px', fontSize: '18px' }}
-                placeholder="—" value={vitals.systolic}
+                placeholder=". " value={vitals.systolic}
                 onChange={e => setVitals(p => ({ ...p, systolic: e.target.value }))}
               />
               <span style={{ color: '#6F6D65', fontSize: '16px', fontWeight: 300 }}>/</span>
               <input
                 type="number" min="30" max="160"
                 style={{ ...inputStyle, borderColor: vitals.diastolic ? 'rgba(86,128,78,0.35)' : '#98C890', width: '62px', fontSize: '18px' }}
-                placeholder="—" value={vitals.diastolic}
+                placeholder=". " value={vitals.diastolic}
                 onChange={e => setVitals(p => ({ ...p, diastolic: e.target.value }))}
               />
             </div>
@@ -474,7 +474,7 @@ export default function VitalsPage() {
               <input
                 type="number" min="50" max="100"
                 style={{ ...inputStyle, borderColor: vitals.oxygen_sat ? 'rgba(86,128,78,0.35)' : '#98C890' }}
-                placeholder="—" value={vitals.oxygen_sat}
+                placeholder=". " value={vitals.oxygen_sat}
                 onChange={e => setVitals(p => ({ ...p, oxygen_sat: e.target.value }))}
               />
               <span style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>%</span>
@@ -496,7 +496,7 @@ export default function VitalsPage() {
               <input
                 type="number" min="4" max="60"
                 style={{ ...inputStyle, borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : '#98C890' }}
-                placeholder="—" value={vitals.resp_rate}
+                placeholder=". " value={vitals.resp_rate}
                 onChange={e => setVitals(p => ({ ...p, resp_rate: e.target.value }))}
               />
               <span style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>/min</span>

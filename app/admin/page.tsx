@@ -145,7 +145,7 @@ export default function AdminPartners() {
       <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
         <input value={query} onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && searchHospital()}
-          placeholder="Search the hospital — 'Lilavati Hospital Mumbai'"
+          placeholder="Search the hospital. 'Lilavati Hospital Mumbai'"
           style={{ flex: 1, background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '10px', padding: '12px 14px', color: T1, fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}/>
         <button onClick={searchHospital} disabled={searching} aria-label="Search"
           style={{ width: '46px', borderRadius: '10px', background: T1, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -240,7 +240,7 @@ export default function AdminPartners() {
             }}>{a.actor}</span>
             <span style={{ color: T2, fontSize: '13px', lineHeight: 1.5 }}>
               <strong style={{ color: T1, fontWeight: 700 }}>{a.action.replace(/_/g, ' ')}</strong>
-              {a.detail ? ` — ${a.detail}` : ''}
+              {a.detail ? `. ${a.detail}` : ''}
             </span>
           </div>
         ))}

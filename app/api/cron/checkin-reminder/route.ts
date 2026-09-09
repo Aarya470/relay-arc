@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
   const isMorning = hour === 8
   const title = isMorning ? 'Good morning! Time for your check-in' : 'Daily check-in reminder'
   const body = isMorning
-    ? 'Start your day right — complete your daily health check-in.'
+    ? 'Start your day right. Complete your daily health check-in.'
     : "You haven't completed your daily check-in yet. Tap to do it now."
 
   let sent = 0

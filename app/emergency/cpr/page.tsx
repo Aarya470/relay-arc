@@ -135,8 +135,8 @@ export default function CprCoach() {
           {[
             ['01', 'Lay them flat on their back', 'On a hard surface. Kneel beside their chest.'],
             ['02', 'Heel of your hand on the center of the chest', 'Other hand on top, fingers interlocked, arms straight.'],
-            ['03', 'Push hard and fast — 5 cm deep', 'Use your body weight. Let the chest fully rise between pushes.'],
-            ['04', 'Do not stop until help arrives', 'Swap with someone every 2 minutes if you can. Broken ribs are OK — stopping is not.'],
+            ['03', 'Push hard and fast. 5 cm deep', 'Use your body weight. Let the chest fully rise between pushes.'],
+            ['04', 'Do not stop until help arrives', 'Swap with someone every 2 minutes if you can. Broken ribs are OK. Stopping is not.'],
           ].map(([num, title, body]) => (
             <div key={num} style={{ display: 'flex', gap: '16px', padding: '15px 0', borderBottom: `1px solid ${BORDER}`, alignItems: 'baseline' }}>
               <span style={{ color: RED, fontFamily: MONO, fontSize: '12px', fontWeight: 700, flexShrink: 0 }}>{num}</span>

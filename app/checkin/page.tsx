@@ -95,7 +95,7 @@ export default function Checkin() {
         if (user) {
           await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
           toast.success('Check-in saved')
-          sendPushNotification(user.id, 'Check-in complete', 'Your daily check-in has been saved. Your care team has been notified.')
+          sendPushNotification(user.id, 'Check-in complete', 'Your daily check-in has been saved.')
 
           // Trigger health intelligence analysis in background (fire-and-forget)
           // This will auto-alert the care team if patterns are dangerous
@@ -274,7 +274,7 @@ export default function Checkin() {
               <Check size={24} color="white" strokeWidth={2.5} />
             </div>
             <p style={{ color: T1, fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
-            <p style={{ color: T2, fontSize: '12px', marginBottom: '20px', lineHeight: 1.5 }}>Your responses have been saved and your care team has been notified</p>
+            <p style={{ color: T2, fontSize: '12px', marginBottom: '20px', lineHeight: 1.5 }}>Your responses have been saved. Your care team can see them next time they open their dashboard</p>
             <div style={{ display: 'flex', gap: '8px' }}>
               <motion.button
                 whileTap={{ scale: 0.97, y: 1 }} transition={spring}

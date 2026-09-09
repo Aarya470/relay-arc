@@ -67,7 +67,7 @@ function CopyButton({ value }: { value: string }) {
       setTimeout(() => setCopied(false), 2000)
       toast.success('Copied to clipboard')
     } catch {
-      toast.error('Could not copy — please copy manually')
+      toast.error('Could not copy. Please copy manually')
     }
   }
   return (
@@ -140,7 +140,7 @@ export default function ConnectHealth() {
     if (!user) { setRefreshing(false); return }
     const newToken = crypto.randomUUID().replace(/-/g, '')
     const { error } = await supabase.from('profiles').update({ health_ingest_token: newToken }).eq('id', user.id)
-    if (!error) { setToken(newToken); toast.success('New API key generated — update your Shortcut') }
+    if (!error) { setToken(newToken); toast.success('New API key generated. Update your Shortcut') }
     setRefreshing(false)
   }
 
@@ -235,7 +235,7 @@ export default function ConnectHealth() {
                 border: `1px solid ${BORDER}`,
               }}>
                 <code style={{ color: T1, fontSize: '12px', fontFamily: 'var(--font-code, monospace)', wordBreak: 'break-all', flex: 1 }}>
-                  {token || '—'}
+                  {token || '. '}
                 </code>
                 {token && <CopyButton value={token}/>}
               </div>

@@ -270,7 +270,7 @@ export default function Appointments() {
     setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
     setActiveCall(null)
     setUpcomingMeeting(null)
-    toast.success('Call ended — appointment marked complete')
+    toast.success('Call ended. Appointment marked complete')
   }
 
   const close = () => { setShowRequest(false); setSelectedDay(null); setSelectedTime('9:00 AM'); setConcern('') }

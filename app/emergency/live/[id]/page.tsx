@@ -248,7 +248,7 @@ export default function RelayRoomPage() {
               style={{ width: '8px', height: '8px', background: 'white' }}/>
           ) : <CheckCircle size={14} color="white"/>}
           <span style={{ color: 'white', fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700 }}>
-            {isActive ? `Live · ${typeLabel}` : 'Resolved — they are safe'}
+            {isActive ? `Live · ${typeLabel}` : 'Resolved. They are safe'}
           </span>
         </div>
         <span style={{ color: 'white', fontFamily: MONO, fontSize: '14px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
@@ -375,7 +375,7 @@ export default function RelayRoomPage() {
                 value={taskInput}
                 onChange={e => setTaskInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addTask()}
-                placeholder="Add something — 'bring her meds bag'"
+                placeholder="Add something. 'bring her meds bag'"
                 style={{ flex: 1, background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '10px', padding: '12px 14px', color: T1, fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}
               />
               <button onClick={addTask} aria-label="Add task"
@@ -392,7 +392,7 @@ export default function RelayRoomPage() {
               </a>
               <button onClick={() => setShowQr(q => !q)}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '10px', cursor: 'pointer', fontFamily: 'inherit' }}>
-                <QrCode size={15}/> {showQr ? 'Hide QR' : 'Show QR — let others scan in'}
+                <QrCode size={15}/> {showQr ? 'Hide QR' : 'Show QR. Let others scan in'}
               </button>
               {showQr && qrSvg && (
                 <div style={{ display: 'flex', justifyContent: 'center', padding: '6px 0 12px' }}>

@@ -29,7 +29,7 @@ const PROTOCOLS: Record<string, Protocol> = {
     steps: [
       'Rest completely for 24–48 hours. No physical exertion.',
       'Avoid stress, heavy meals, and caffeine.',
-      'Stay hydrated — sip water steadily.',
+      'Stay hydrated. Sip water steadily.',
       'Monitor your heart rate if you have a device.',
       'Follow up with a cardiologist within 48 hours.',
       'Do not drive until cleared by a doctor.',
@@ -45,31 +45,31 @@ const PROTOCOLS: Record<string, Protocol> = {
   },
   stroke: {
     description:
-      'You experienced stroke-like symptoms. Even if they resolved, this may have been a TIA (transient ischemic attack) — a warning sign of a future stroke.',
+      'You experienced stroke-like symptoms. Even if they resolved, this may have been a TIA (transient ischemic attack). A warning sign of a future stroke.',
     steps: [
-      'Rest and do not drive — not today.',
+      'Rest and do not drive. Not today.',
       'Monitor for any return of symptoms.',
       'Take any prescribed antiplatelet or anticoagulant medications as directed.',
       'Stay calm and lie down if you feel dizzy.',
-      'Go to the ER or call your neurologist immediately — even if you feel fine.',
+      'Go to the ER or call your neurologist immediately. Even if you feel fine.',
       'A TIA requires urgent evaluation within 24 hours.',
     ],
     warnings: [
       'Face drooping or numbness on one side',
       'Sudden arm weakness or inability to raise both arms',
-      'Speech difficulty — slurring or inability to speak',
+      'Speech difficulty. Slurring or inability to speak',
       'Sudden severe headache unlike any before',
       'Vision loss or blurring in one or both eyes',
     ],
-    followUpNote: 'This may be a TIA. Seek neurological evaluation urgently — do not wait.',
+    followUpNote: 'This may be a TIA. Seek neurological evaluation urgently. Do not wait.',
   },
   pots: {
     description:
       'A POTS (Postural Orthostatic Tachycardia Syndrome) episode causes your heart rate to spike and blood pressure to drop when upright, leading to dizziness, fainting, and fatigue.',
     steps: [
-      'Lie flat immediately — elevate legs if possible.',
+      'Lie flat immediately. Elevate legs if possible.',
       'Drink 500–1000 mL of water or electrolytes slowly.',
-      'Add salt — a salty snack or electrolyte drink helps.',
+      'Add salt. A salty snack or electrolyte drink helps.',
       'Avoid standing for at least 30–60 minutes.',
       'Rest for the remainder of the day.',
       'Wear compression garments if you have them.',
@@ -86,15 +86,15 @@ const PROTOCOLS: Record<string, Protocol> = {
   },
   mecfs: {
     description:
-      'A ME/CFS post-exertional malaise (PEM) crash means your body has exceeded its energy envelope. Recovery requires complete rest — pushing through will worsen symptoms significantly.',
+      'A ME/CFS post-exertional malaise (PEM) crash means your body has exceeded its energy envelope. Recovery requires complete rest. Pushing through will worsen symptoms significantly.',
     steps: [
-      'Stop all activity immediately — physical and cognitive.',
+      'Stop all activity immediately. Physical and cognitive.',
       'Rest in a dark, quiet room. Reduce light and sound stimulation.',
       'Avoid screens if possible. If needed, use the dimmest setting.',
-      'Sip water or electrolytes — small amounts frequently.',
-      'Do not "push through" — this is a physiological crash, not fatigue.',
+      'Sip water or electrolytes. Small amounts frequently.',
+      'Do not "push through". This is a physiological crash, not fatigue.',
       'Rest for at least 24–48 hours before any gentle activity.',
-      'Reassess slowly — introduce activity in tiny increments only.',
+      'Reassess slowly. Introduce activity in tiny increments only.',
     ],
     warnings: [
       'Symptoms significantly worsening beyond your usual crash',
@@ -114,7 +114,7 @@ const PROTOCOLS: Record<string, Protocol> = {
       'Remove or move away from any triggers (smoke, strong smells, dust).',
       'Breathe slowly through pursed lips to control breathing.',
       'Monitor oxygen levels with a pulse oximeter if available.',
-      'Rest for the remainder of the day — avoid exertion.',
+      'Rest for the remainder of the day. Avoid exertion.',
       'Follow up with your pulmonologist or GP within 24–48 hours.',
     ],
     warnings: [
@@ -128,10 +128,10 @@ const PROTOCOLS: Record<string, Protocol> = {
   },
   unconscious: {
     description:
-      'Loss of consciousness or collapse — even briefly — requires a medical evaluation. This could indicate a cardiac, neurological, or autonomic cause.',
+      'Loss of consciousness or collapse. Even briefly. Requires a medical evaluation. This could indicate a cardiac, neurological, or autonomic cause.',
     steps: [
       'Seek medical evaluation now even if you feel completely better.',
-      'Do not drive — you should not be alone today.',
+      'Do not drive. You should not be alone today.',
       'Rest lying down and avoid getting up suddenly.',
       'Have someone stay with you for the next 12–24 hours.',
       'Avoid alcohol, heavy meals, or hot baths.',
@@ -144,15 +144,15 @@ const PROTOCOLS: Record<string, Protocol> = {
       'Inability to move a limb or speak clearly',
       'Sudden severe headache',
     ],
-    followUpNote: 'Return to the ER within hours for an ECG and evaluation — this cannot wait for a routine appointment.',
+    followUpNote: 'Return to the ER within hours for an ECG and evaluation. This cannot wait for a routine appointment.',
   },
   other: {
     description:
       'You experienced an urgent health event. Until the cause is identified, it is important to rest, monitor your symptoms, and follow up with your care team.',
     steps: [
       'Rest and avoid physical exertion.',
-      'Stay hydrated — drink water steadily.',
-      'Note your symptoms — write down timing, severity, and any triggers.',
+      'Stay hydrated. Drink water steadily.',
+      'Note your symptoms. write down timing, severity, and any triggers.',
       'Do not drive if you feel unwell.',
       'Contact your doctor within 24 hours to report the event.',
       'Follow any specific guidance given by emergency services or hospital staff.',

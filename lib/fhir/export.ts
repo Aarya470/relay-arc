@@ -167,7 +167,7 @@ const vitalCategory = [{
 function patientResource(p: ProfileInput): Res {
   const res: Res = {
     resourceType: 'Patient',
-    text: narrative(`${p.full_name?.trim() || 'Unnamed patient'} — record supplied by the patient via Relay Arc.`),
+    text: narrative(`${p.full_name?.trim() || 'Unnamed patient'}. Record supplied by the patient via Relay Arc.`),
     active: true,
   }
   if (nonEmpty(p.full_name)) res.name = [humanName(p.full_name)]
@@ -222,7 +222,7 @@ function medicationResources(
     const dosageText = [m.dose, m.frequency].filter(nonEmpty).join(', ')
     const res: Res = {
       resourceType: 'MedicationStatement',
-      text: narrative(`Medication: ${name}${dosageText ? ` — ${dosageText}` : ''} (patient-reported).`),
+      text: narrative(`Medication: ${name}${dosageText ? `. ${dosageText}` : ''} (patient-reported).`),
       status: 'active',
       medicationCodeableConcept: { text: name },
       subject: { reference: patientRef },

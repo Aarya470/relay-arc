@@ -29,22 +29,22 @@ export const VOICE_LANGS: VoiceLang[] = [
     id: 'en',
     chip: 'EN',
     locale: 'en-IN',
-    speak: 'Speak it instead — tap and talk',
-    listening: "Listening — describe what's happening",
+    speak: 'Speak it instead. Tap and talk',
+    listening: "Listening. Describe what's happening",
   },
   {
     id: 'hi',
     chip: 'हिंदी',
     locale: 'hi-IN',
-    speak: 'बोलकर बताएं — दबाएं और बोलें',
-    listening: 'सुन रहे हैं — क्या हो रहा है बताएं',
+    speak: 'बोलकर बताएं, दबाएं और बोलें',
+    listening: 'सुन रहे हैं, क्या हो रहा है बताएं',
   },
   {
     id: 'mr',
     chip: 'मराठी',
     locale: 'mr-IN',
-    speak: 'बोलून सांगा — दाबा आणि बोला',
-    listening: 'ऐकत आहोत — काय होत आहे सांगा',
+    speak: 'बोलून सांगा, दाबा आणि बोला',
+    listening: 'ऐकत आहोत, काय होत आहे सांगा',
   },
 ]
 

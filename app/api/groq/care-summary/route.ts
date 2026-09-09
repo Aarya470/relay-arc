@@ -44,7 +44,7 @@ Medication adherence: ${adherence !== null && adherence !== undefined ? `${adher
 Return JSON:
 {
   "priority_score": number 1-10,
-  "short_note": "one short sentence — what the care team needs to know right now",
+  "short_note": "one short sentence. What the care team needs to know right now",
   "status": "stable" | "monitor" | "urgent",
   "summary": "2-3 sentence clinical summary"
 }

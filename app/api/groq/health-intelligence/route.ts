@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
       : 'No symptom logs in 30 days.'
 
     const checkinContext = checkinCount > 0
-      ? `${checkinCount} check-ins in last 30 days. Last check-in ${daysSinceLastCheckin < 1 ? 'today' : `${Math.round(daysSinceLastCheckin)} days ago`}. Recent summaries: ${(checkins || []).slice(0, 5).map(c => c.summary || c.mood || '—').join(' | ')}`
+      ? `${checkinCount} check-ins in last 30 days. Last check-in ${daysSinceLastCheckin < 1 ? 'today' : `${Math.round(daysSinceLastCheckin)} days ago`}. Recent summaries: ${(checkins || []).slice(0, 5).map(c => c.summary || c.mood || '. ').join(' | ')}`
       : 'No check-ins in 30 days.'
 
     const medsContext = adherence !== null

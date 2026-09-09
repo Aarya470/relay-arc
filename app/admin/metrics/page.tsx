@@ -117,7 +117,7 @@ export default function AdminMetrics() {
           </div>
           <div style={{ background: '#FFF', border: `2px solid ${INK}`, padding: '24px' }}>
             <p style={{ color: h.day30_retention_pct == null ? INK3 : h.day30_retention_pct >= 40 ? GREEN : WARN, fontSize: '68px', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 }}>
-              {h.day30_retention_pct == null ? '—' : `${h.day30_retention_pct}%`}
+              {h.day30_retention_pct == null ? '. ' : `${h.day30_retention_pct}%`}
             </p>
             <p style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginTop: '12px' }}>
               Day-30 retention
@@ -131,7 +131,7 @@ export default function AdminMetrics() {
         </div>
 
         {/* ── funnel ──────────────────────────────────────────────────────── */}
-        <Section title="Onboarding funnel — where people stop">
+        <Section title="Onboarding funnel. Where people stop">
           {Object.entries(data.funnel).map(([k, v]) => {
             const pct = Math.round((v / funnelMax) * 100)
             return (

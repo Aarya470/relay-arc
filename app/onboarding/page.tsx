@@ -195,7 +195,7 @@ export default function Onboarding() {
               <div>{label('Phone')}<input type="tel" style={inputStyle} placeholder="+1 555 000 0000" value={form.phone} onChange={e => update('phone', e.target.value)}/></div>
 
               <div>
-                {label('Blood type — critical for responders')}
+                {label('Blood type. Critical for responders')}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
                   {BLOOD_TYPES.map(bt => {
                     const active = form.blood_type === bt
@@ -275,7 +275,7 @@ export default function Onboarding() {
 
               <DateField
                 id="surgery"
-                label="Surgery date — if applicable"
+                label="Surgery date. If applicable"
                 hint="Leave blank if this does not apply to you."
                 value={form.surgery_date}
                 onChange={v => update('surgery_date', v)}
@@ -330,7 +330,7 @@ export default function Onboarding() {
                     <div key={i} style={{ borderLeft: `2px solid ${BORDER}`, paddingLeft: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       <input style={inputStyle} placeholder="Medication name" value={m.name} onChange={e => updateMed(i, 'name', e.target.value)}/>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                        <input style={inputStyle} placeholder="Dose — 50mg" value={m.dose} onChange={e => updateMed(i, 'dose', e.target.value)}/>
+                        <input style={inputStyle} placeholder="Dose. 50mg" value={m.dose} onChange={e => updateMed(i, 'dose', e.target.value)}/>
                         <input style={inputStyle} placeholder="Frequency" value={m.frequency} onChange={e => updateMed(i, 'frequency', e.target.value)}/>
                       </div>
                     </div>

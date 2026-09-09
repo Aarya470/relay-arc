@@ -264,7 +264,7 @@ export default function CareTeamDashboard() {
     setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
     setActiveCall(null)
     setUpcomingMeeting(null)
-    toast.success('Call ended — appointment marked complete')
+    toast.success('Call ended. Appointment marked complete')
   }
 
   const confirmAppointment = async (id: string) => {
@@ -435,7 +435,7 @@ export default function CareTeamDashboard() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                     <Clock size={13} color="#A87200"/>
                     <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px', flex: 1 }}>
-                      {patient?.full_name || 'Patient'} — <span style={{ color: '#A87200' }}>Pending</span>
+                      {patient?.full_name || 'Patient'}. <span style={{ color: '#A87200' }}>Pending</span>
                     </p>
                   </div>
                   {a.scheduled_at && (
@@ -838,7 +838,7 @@ export default function CareTeamDashboard() {
                   </div>
                 ) : (
                   <span style={{ background: `${color}15`, border: `1px solid ${color}25`, color, fontSize: '10px', padding: '3px 8px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 600 }}>
-                    {overdueM ? 'Monitor' : sum ? getStatusLabel(score) : '—'}
+                    {overdueM ? 'Monitor' : sum ? getStatusLabel(score) : '. '}
                   </span>
                 )}
                 <ChevronRight size={14} color="#6F6D65"/>
