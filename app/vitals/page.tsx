@@ -353,7 +353,32 @@ export default function VitalsPage() {
       if (!res.ok) {
         toast.error(data.error || 'Could not save vitals')
       } else if (data.critical) {
-        toast.error(`${data.alerts[0]}. Flagged for your care team`)
+        // THREE THINGS WERE WRONG HERE, and all three showed up only by saving a
+        // genuinely bad set of readings through the real form.
+        //
+        // 1. It read data.alerts[0] and dropped the rest. Entering 142 bpm,
+        //    188/112, 90% and 32 breaths a minute produced five alerts and the
+        //    screen named one of them. Someone reading that toast would think
+        //    their heart rate was the only thing out of range.
+        //
+        // 2. It printed "Flagged for your care team" no matter what. The route
+        //    already returns `flagged`, false when writing the alert row failed,
+        //    precisely so this claim is not made when it is not true. The client
+        //    ignored the field and claimed it anyway, which is the same bug that
+        //    was fixed on the server, still live one layer up.
+        //
+        // 3. It threw away data.message, which is the sentence that says to call
+        //    emergency services rather than wait for a reply. That sentence is
+        //    the entire reason the message exists.
+        //
+        // The server owns the wording now. Every alert is listed, and the toast
+        // does not time out, because a four second toast is the wrong container
+        // for readings this far out of range.
+        toast.error(data.alerts.join('. '), {
+          description: data.message,
+          duration: Infinity,
+          closeButton: true,
+        })
         await refreshHistory()
         setVitals({ heart_rate: '', systolic: '', diastolic: '', oxygen_sat: '', resp_rate: '' })
       } else {
@@ -422,7 +447,7 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number" min="20" max="250"
+                type="number" min="20" max="250" aria-label="Heart rate in beats per minute"
                 style={{ ...inputStyle, borderColor: vitals.heart_rate ? 'rgba(163,52,23,0.35)' : '#98C890' }}
                 placeholder=". " value={vitals.heart_rate}
                 onChange={e => setVitals(p => ({ ...p, heart_rate: e.target.value }))}
@@ -444,14 +469,14 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <input
-                type="number" min="50" max="260"
+                type="number" min="50" max="260" aria-label="Systolic blood pressure"
                 style={{ ...inputStyle, borderColor: vitals.systolic ? 'rgba(86,128,78,0.35)' : '#98C890', width: '62px', fontSize: '18px' }}
                 placeholder=". " value={vitals.systolic}
                 onChange={e => setVitals(p => ({ ...p, systolic: e.target.value }))}
               />
               <span style={{ color: '#6F6D65', fontSize: '16px', fontWeight: 300 }}>/</span>
               <input
-                type="number" min="30" max="160"
+                type="number" min="30" max="160" aria-label="Diastolic blood pressure"
                 style={{ ...inputStyle, borderColor: vitals.diastolic ? 'rgba(86,128,78,0.35)' : '#98C890', width: '62px', fontSize: '18px' }}
                 placeholder=". " value={vitals.diastolic}
                 onChange={e => setVitals(p => ({ ...p, diastolic: e.target.value }))}
@@ -472,7 +497,7 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number" min="50" max="100"
+                type="number" min="50" max="100" aria-label="Oxygen saturation as a percentage"
                 style={{ ...inputStyle, borderColor: vitals.oxygen_sat ? 'rgba(86,128,78,0.35)' : '#98C890' }}
                 placeholder=". " value={vitals.oxygen_sat}
                 onChange={e => setVitals(p => ({ ...p, oxygen_sat: e.target.value }))}
@@ -494,7 +519,7 @@ export default function VitalsPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number" min="4" max="60"
+                type="number" min="4" max="60" aria-label="Respiratory rate in breaths per minute"
                 style={{ ...inputStyle, borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : '#98C890' }}
                 placeholder=". " value={vitals.resp_rate}
                 onChange={e => setVitals(p => ({ ...p, resp_rate: e.target.value }))}

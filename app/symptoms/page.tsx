@@ -70,9 +70,27 @@ interface SliderProps {
   value: number
   onChange: (v: number) => void
   inverted: boolean
+  label: string
 }
 
-function SymptomSlider({ value, onChange, inverted }: SliderProps) {
+// WHAT WAS WRONG WITH THIS CONTROL
+//
+// It was a plain <div> with pointer handlers. That meant three things, and this
+// is the only way to answer the one question the page asks:
+//
+//   1. It could not be focused, so a keyboard never reached it. Tab went from
+//      the back link straight past all five ratings to the note box. There was
+//      no way to record a symptom without a mouse or a touchscreen.
+//   2. It had no role and no value, so assistive tech announced nothing at all.
+//      Not a wrong number, nothing.
+//   3. The only thing that took a pointer event was the 8px track. The thumb is
+//      22px but carries pointerEvents: 'none', so the real target was an eight
+//      pixel high line. This app is for people who are dizzy, shaky or about to
+//      faint. Eight pixels is not a target they can hit.
+//
+// It is now a real slider: focusable, announced, arrow keys, Home and End, and
+// a 24px transparent hit area over an unchanged 8px line.
+function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const dragging = useRef(false)
 
@@ -95,6 +113,23 @@ function SymptomSlider({ value, onChange, inverted }: SliderProps) {
   }
   const onPointerUp = () => { dragging.current = false }
 
+  const clamp = (n: number) => Math.max(0, Math.min(10, n))
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const key = e.key
+    let next: number | null = null
+    if (key === 'ArrowRight' || key === 'ArrowUp') next = clamp(value + 1)
+    else if (key === 'ArrowLeft' || key === 'ArrowDown') next = clamp(value - 1)
+    else if (key === 'PageUp') next = clamp(value + 2)
+    else if (key === 'PageDown') next = clamp(value - 2)
+    else if (key === 'Home') next = 0
+    else if (key === 'End') next = 10
+    if (next === null) return
+    // Arrow keys scroll the page by default, which would move the view out from
+    // under the control the person is adjusting.
+    e.preventDefault()
+    onChange(next)
+  }
+
   const pct = (value / 10) * 100
   const color = valueColor(value, inverted)
   const fill = sliderFillColor(value, inverted)
@@ -104,6 +139,17 @@ function SymptomSlider({ value, onChange, inverted }: SliderProps) {
       {/* track */}
       <div
         ref={trackRef}
+        role="slider"
+        tabIndex={0}
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={10}
+        aria-valuenow={value}
+        // Without this a screen reader reads "5", which on a page of five
+        // sliders says nothing about what five means. The wording matches the
+        // heading people can see.
+        aria-valuetext={inverted ? `${value} out of 10 energy` : `${value} out of 10 severity`}
+        onKeyDown={onKeyDown}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -115,8 +161,22 @@ function SymptomSlider({ value, onChange, inverted }: SliderProps) {
           background: '#EDEAE0',
           cursor: 'pointer',
           touchAction: 'none',
+          outlineOffset: '6px',
         }}
       >
+        {/* The grabbable area, 24px tall per WCAG target size, sitting over the
+            8px line without changing how the line looks. Pointer events land
+            here and bubble to the track handlers above. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: 0, right: 0,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            height: '24px',
+          }}
+        />
         {/* filled portion */}
         <motion.div
           animate={{ width: `${pct}%` }}
@@ -451,6 +511,7 @@ export default function SymptomsPage() {
                     value={v}
                     onChange={val => handleChange(m.key, val)}
                     inverted={m.inverted}
+                    label={m.label}
                   />
                 </motion.div>
               )
@@ -483,6 +544,11 @@ export default function SymptomsPage() {
             Note (optional)
           </label>
           <textarea
+            // The visible "Note (optional)" is a <label> with nothing tying it
+            // to this box, so the only name it had was the placeholder, and a
+            // placeholder disappears the moment anyone starts typing.
+            aria-label="Note, optional. Up to 200 characters."
+            maxLength={200}
             value={note}
             onChange={e => setNote(e.target.value.slice(0, 200))}
             placeholder="Any extra detail to share with your care team…"

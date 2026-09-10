@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Phone, ChevronRight, Loader2, CheckCircle, Shield, X, Share2, FileText, MessageSquare, Navigation2 } from 'lucide-react'
+import { Phone, ChevronRight, Loader2, CheckCircle, AlertTriangle, Shield, X, Share2, FileText, MessageSquare, Navigation2 } from 'lucide-react'
 import { findNearbyHospitals, formatDistance, estimateTime, etaText, trafficLabel, formatEtaMin, fresh, trafficMultiplier, Hospital } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
@@ -195,6 +195,9 @@ function RoutingPage() {
   const [hospital, setHospital] = useState<Hospital | null>(null)
   const [nearbyHospitals, setNearbyHospitals] = useState<Hospital[]>([])
   const [careTeamAlerted, setCareTeamAlerted] = useState(false)
+  // Whether an emergencies row actually exists. Null while that is still being
+  // worked out, so the screen never guesses in either direction.
+  const [recorded, setRecorded] = useState<boolean | null>(null)
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [showAll, setShowAll] = useState(false)
@@ -333,7 +336,7 @@ function RoutingPage() {
     }
   }, [roomId])
 
-  useEffect(() => { if (careTeamAlerted) pushEvt('Care team alerted') }, [careTeamAlerted])
+  useEffect(() => { if (careTeamAlerted) pushEvt(recorded ? 'Emergency recorded' : 'Emergency could not be recorded') }, [careTeamAlerted, recorded])
 
   // ── Connected hospitals: put this patient on the ER's dispatch board ──────
   useEffect(() => {
@@ -481,11 +484,41 @@ function RoutingPage() {
     load()
   }, [type])
 
+  // WHAT THIS USED TO CLAIM, AND WHY IT WAS THE WORST BUG IN THE APP
+  //
+  // It ran setCareTeamAlerted(true) no matter what happened, including the very
+  // first line, where there is no signed-in user at all and therefore nothing to
+  // alert anybody about. The screen then showed a green tick and the sentence
+  // "Your emergency is visible to your care team".
+  //
+  // Almost none of that was reliably true:
+  //   - The push call returns 404 "No subscription found" unless the person has
+  //     already granted notification permission and registered a subscription.
+  //     For most people it has never succeeded once. sendPushNotification logs
+  //     the failure and swallows it, so the caller never learned.
+  //   - The emergency_contact_alerts rows are only written when the profile
+  //     actually holds contacts, and writing a row is not sending anything. The
+  //     comment in the old code said so and the screen said otherwise.
+  //   - The one thing that is genuinely true is that the emergencies row was
+  //     inserted on the previous screen, so a care team member who has Relay Arc
+  //     open sees it over Realtime. That is a record existing, not a person
+  //     having been reached.
+  //
+  // Someone having a cardiac event reads a green tick as "help knows". That is a
+  // reason to sit still and wait. This now reports only what happened, and the
+  // one instruction that is always right stays on screen either way.
   const alertCareTeam = async (userId?: string) => {
-    if (!userId) { setCareTeamAlerted(true); return }
+    // The previous screen puts the inserted emergency id in the query string and
+    // leaves it empty when the insert failed or nobody was signed in. That is
+    // the only evidence here that a record exists at all.
+    setCareTeamAlerted(true)
+    if (!emergencyId) { setRecorded(false); return }
+    setRecorded(true)
+    if (!userId) return
     try {
-      // Send push notification to the patient themselves (care team will see it via Supabase Realtime)
-      await sendPushNotification(userId, 'Emergency alert sent', 'Your emergency is now visible to your care team.')
+      // Best effort. It reaches the person's own devices if any of them are
+      // subscribed, and does nothing at all if none are.
+      await sendPushNotification(userId, 'Emergency recorded', 'Your emergency is showing on your care team dashboard.')
     } catch (e) {
       console.error('Care team alert failed:', e)
     }
@@ -651,9 +684,34 @@ function RoutingPage() {
           letterSpacing: '0.5px',
           textTransform: 'uppercase',
         }}>
-          Alerting care team…
+          Recording this emergency…
         </p>
       </div>
+
+      {/* The call button belongs on this screen too.
+          Finding a hospital waits on the browser location prompt, and the
+          getCurrentPosition timeout is ten seconds, so someone who has just
+          tapped "chest pain" can sit in front of a spinner for that long. The
+          screen before this one leads with a full width call button and the
+          screen after it has one. Taking it away in between, during the exact
+          part of the flow where the app is doing nothing visible, is the worst
+          possible moment to hide it. Timed in the browser with location
+          blocked: ten seconds of spinner and no way to call. */}
+      <motion.a
+        href={`tel:${emg.number}`}
+        whileTap={{ scale: 0.98 }}
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
+          background: T.red, color: 'white',
+          padding: '20px', borderRadius: '14px',
+          fontWeight: 900, fontSize: '20px', letterSpacing: '-0.3px',
+          textDecoration: 'none', minHeight: '64px',
+          width: 'calc(100% - 40px)', maxWidth: '480px',
+        }}
+      >
+        <Phone size={22} color="white" />
+        Call {emg.label} now
+      </motion.a>
     </div>
   )
 
@@ -910,15 +968,34 @@ function RoutingPage() {
         style={{ flex: 1, padding: '22px 20px 44px' }}
       >
 
-        {/* Care team status — flat line */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '26px' }}>
-          {careTeamAlerted
-            ? <CheckCircle size={16} color={T.green} style={{ flexShrink: 0 }} />
-            : <Loader2 size={16} color={T.textMuted} className="animate-spin" style={{ flexShrink: 0 }} />
+        {/* Care team status.
+            Three states, and each one says only what is true. The old version
+            had one state, showed a green tick every time, and told the person
+            their care team could see them even when nothing had been written
+            anywhere. See alertCareTeam above. */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '26px' }}>
+          {!careTeamAlerted
+            ? <Loader2 size={16} color={T.textMuted} className="animate-spin" style={{ flexShrink: 0, marginTop: '2px' }} />
+            : recorded
+              ? <CheckCircle size={16} color={T.green} style={{ flexShrink: 0, marginTop: '2px' }} />
+              : <AlertTriangle size={16} color={T.red} style={{ flexShrink: 0, marginTop: '2px' }} />
           }
-          <p style={{ fontSize: '14px', fontWeight: 600, color: careTeamAlerted ? T.green : T.textSec }}>
-            {careTeamAlerted ? 'Your emergency is visible to your care team' : 'Alerting your care team…'}
-          </p>
+          <div>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: !careTeamAlerted ? T.textSec : recorded ? T.green : T.red }}>
+              {!careTeamAlerted
+                ? 'Recording this emergency'
+                : recorded
+                  ? 'Recorded and showing on your care team dashboard'
+                  : 'This emergency could not be recorded'}
+            </p>
+            {careTeamAlerted && (
+              <p style={{ fontSize: '12.5px', color: T.textSec, marginTop: '3px', lineHeight: 1.45 }}>
+                {recorded
+                  ? 'Nobody has confirmed they have seen it. Call emergency services if you need help now.'
+                  : 'Nothing was saved and nobody has been told. Call emergency services now.'}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* ── Notify family ─────────────────────────────────────────────────── */}

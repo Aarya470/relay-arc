@@ -369,6 +369,10 @@ export default function Checkin() {
             transition={spring}
             onClick={sendMessage}
             disabled={loading || !input.trim()}
+            // The button holds an icon and nothing else, so without this it has
+            // no accessible name at all and a screen reader announces it as
+            // "button". It is the only way to send a message on this page.
+            aria-label={loading ? 'Sending your answer' : 'Send'}
             style={{
               width: '44px', height: '44px',
               background: input.trim() ? ACCENT : BG,
