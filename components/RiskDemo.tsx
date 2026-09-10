@@ -16,7 +16,7 @@ import {
 
 const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
 const BORDER = '#98C890', BG2 = '#B3DDAC'
-const RED = '#A33417', AMBER = '#A87200', GREEN = '#42623C'
+const RED = '#A33417', AMBER = '#7C5200', GREEN = '#42623C'
 const mono = 'var(--font-mono, monospace)'
 
 interface Param {

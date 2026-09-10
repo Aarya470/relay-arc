@@ -65,7 +65,7 @@ const T = {
   greenSoft:   'rgba(86,128,78,0.12)',
   blue:        '#42623C',
   blueSoft:    'rgba(86,128,78,0.12)',
-  amber:       '#A87200',
+  amber:       '#7C5200',
 } as const
 
 // ─── Cancel confirm sheet — shared between error and main view ─────────────────

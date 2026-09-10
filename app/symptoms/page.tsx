@@ -38,7 +38,7 @@ const METRICS: Metric[] = [
 function valueColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return '#42623C'
-  if (normalized <= 6) return '#A87200'
+  if (normalized <= 6) return '#7C5200'
   return '#A33417'
 }
 
@@ -52,7 +52,7 @@ function valueBg(value: number, inverted: boolean): string {
 function sliderFillColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return 'linear-gradient(90deg, #42623C, #42623C)'
-  if (normalized <= 6) return 'linear-gradient(90deg, #42623C, #A87200)'
+  if (normalized <= 6) return 'linear-gradient(90deg, #42623C, #7C5200)'
   return 'linear-gradient(90deg, #42623C, #A33417)'
 }
 
@@ -588,7 +588,7 @@ export default function SymptomsPage() {
                 padding: '12px 14px',
                 marginBottom: '16px',
                 fontSize: '13px',
-                color: '#A87200',
+                color: '#7C5200',
                 fontWeight: 500,
               }}
             >

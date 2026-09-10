@@ -28,7 +28,7 @@ const VITAL_RANGES = {
   systolic:   { low: 70, high: 200, normal: [90, 140] as [number,number], unit: 'mmHg', label: 'Systolic BP',  icon: Activity, color: '#42623C' },
   diastolic:  { low: 40, high: 130, normal: [60, 90]  as [number,number], unit: 'mmHg', label: 'Diastolic BP', icon: Activity, color: '#42623C' },
   oxygen_sat: { low: 85, high: 100, normal: [95, 100] as [number,number], unit: '%',    label: 'O₂ Sat',       icon: Droplets, color: '#42623C' },
-  resp_rate:  { low: 8,  high: 40,  normal: [12, 20]  as [number,number], unit: '/min', label: 'Resp. Rate',   icon: Wind,     color: '#A87200' },
+  resp_rate:  { low: 8,  high: 40,  normal: [12, 20]  as [number,number], unit: '/min', label: 'Resp. Rate',   icon: Wind,     color: '#7C5200' },
 }
 
 type VitalKey = keyof typeof VITAL_RANGES
@@ -46,7 +46,7 @@ function statusForValue(key: string, val: number | null) {
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
   ok:    { bg: 'rgba(86,128,78,0.12)',   border: 'rgba(86,128,78,0.25)',   text: '#42623C' },
   high:  { bg: 'rgba(163,52,23,0.12)',   border: 'rgba(163,52,23,0.28)',   text: '#A33417' },
-  low:   { bg: 'rgba(168,114,0,0.12)',  border: 'rgba(168,114,0,0.28)', text: '#A87200' },
+  low:   { bg: 'rgba(168,114,0,0.12)',  border: 'rgba(168,114,0,0.28)', text: '#7C5200' },
   empty: { bg: '#F2F0E8', border: '#F2F0E8', text: '#5C5A52' },
 }
 
@@ -510,7 +510,7 @@ export default function VitalsPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(168,114,0,0.12)', border: '1px solid rgba(168,114,0,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Wind size={14} color="#A87200"/>
+                <Wind size={14} color="#7C5200"/>
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>

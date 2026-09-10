@@ -69,7 +69,7 @@ export default function DriverDashboard() {
 
   if (loading) return (
     <div style={{ minHeight: '100vh', background: '#B3DDAC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Loader2 size={32} color="#A87200" className="animate-spin"/>
+      <Loader2 size={32} color="#7C5200" className="animate-spin"/>
     </div>
   )
 
@@ -91,7 +91,7 @@ export default function DriverDashboard() {
             const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.pickup_lat}&destlng=${accepted.pickup_lng}&destname=${encodeURIComponent(accepted.patient_name)}`
             router.push(url)
           }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#A87200', color: '#FFFFFF', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', width: '100%' }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#7C5200', color: '#FFFFFF', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', width: '100%' }}
         >
           <Navigation size={16}/> Navigate to patient
         </motion.button>
@@ -176,7 +176,7 @@ export default function DriverDashboard() {
                       </p>
                     </div>
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'flex-start' }}>
-                      <MapPin size={13} color="#A87200" style={{ flexShrink: 0, marginTop: '2px' }}/>
+                      <MapPin size={13} color="#7C5200" style={{ flexShrink: 0, marginTop: '2px' }}/>
                       <div>
                         <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.pickup_address}</p>

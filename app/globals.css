@@ -13,14 +13,19 @@
       (ink on orange is 5.90:1). Never use it as text or an icon on a light
       background. --crit is the warm accent that is legible on light.
 
-   2. Emergency and warning must differ in LUMINANCE, not just hue, or they are
-      the same colour to a greyscale printer and to a red-green colourblind
-      user — about 8% of men, and this is a medical interface. The original pair
-      came out at 1.00:1, i.e. identical brightness. --crit and --warn are now
-      1.66:1 apart, and both still pass on cream.
+   2. Emergency and warning would ideally differ in LUMINANCE, not just hue, or
+      they are the same colour to a greyscale printer and to a red-green
+      colourblind user, about 8% of men, and this is a medical interface. That
+      held while the page was cream. It does not hold now, and pretending
+      otherwise in a comment would be worse than saying so: on #B3DDAC every
+      colour that clears 4.5:1 lands in the same narrow luminance band, so
+      --crit, --warn and --green-deep are within 1.01:1 of each other. The
+      reasoning and the arithmetic are next to --warn below.
 
-   Colour is never the only signal: alerts also carry a text level and a numeric
-   point badge.
+   Which makes the last rule the load-bearing one rather than a nicety. COLOUR
+   IS NEVER THE ONLY SIGNAL. Every alert and every status also carries the level
+   in words, and on the risk panels a numeric point badge as well. That is what
+   a greyscale printer and a colourblind reader are actually relying on here.
    ────────────────────────────────────────────────────────────────────────── */
 :root {
   /* Backgrounds — koala green, a tint of --green rather than a neutral.
@@ -117,9 +122,37 @@
   --crit-dim:  #8F2E14;
   --crit-soft: rgba(163,52,23,0.08);
 
-  /* Warning / watch — --warn for fills (1.66:1 clear of --crit),
-     --warn-text for text on light (5.14:1) */
-  --warn:      #A87200;
+  /* Warning / watch.
+     --warn is #7C5200, moved down from #A87200 for a reason worth writing out.
+
+     #A87200 is 2.73:1 on the green page and 4.14:1 on a white panel. It failed
+     the small-text minimum on both, and it was being used as a text and icon
+     colour in 35 places: the health score trajectory, the vitals trend badges,
+     the triage severity scale, the care team priority column. --warn-text
+     already existed at #7C5200 precisely so this would not happen, and nothing
+     used it.
+
+     THE THREE STATUS COLOURS ARE NOW THE SAME BRIGHTNESS, AND THAT IS THE
+     TRADE, NOT AN OVERSIGHT. To clear 4.5:1 on #B3DDAC a colour has to be
+     about as dark as #7A5300, and --crit (#A33417, 4.53:1) and --green-deep
+     (#42623C, 4.55:1) are already sitting there. Measured against each other
+     the three now differ by 1.00:1 and 1.01:1. The note at the top of this file
+     warns about exactly that, and it is unavoidable: this background is not
+     light enough to carry three status colours that all pass AA and stay
+     distinct in luminance. Contrast is the requirement, mutual separation is
+     the convenience, so contrast wins.
+
+     WHAT THAT MEANS FOR ANYONE ADDING A STATUS. Colour can no longer carry the
+     meaning by itself, so every status must also say what it is in words.
+     Checked at the time of the change: the health score prints Stable,
+     Declining or Critical, the vitals trend prints Normal, High or Low, the
+     triage scale prints Mild, Moderate and Severe, and the care team column
+     prints Urgent, Monitor or Stable. Adding a fourth state that is only a
+     colour would break this, and WCAG 1.4.1 besides.
+
+     #A87200 remains only in the rgba soft fills below, which sit behind text
+     rather than being text. */
+  --warn:      #7C5200;
   --warn-text: #7C5200;
   --warn-soft: rgba(168,114,0,0.10);
 
@@ -132,7 +165,7 @@
   --blue:      #42623C;
   --blue-dim:  #344D2F;
   --blue-soft: rgba(86,128,78,0.09);
-  --amber:      #A87200;
+  --amber:      #7C5200;
   --amber-soft: rgba(168,114,0,0.10);
 
   /* ── The green page ───────────────────────────────────────────────────────

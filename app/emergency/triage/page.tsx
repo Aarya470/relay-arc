@@ -12,7 +12,7 @@ type Outcome = 'call911' | 'high' | 'monitor'
 
 function getPainColor(n: number): string {
   if (n <= 5) return '#42623C'
-  if (n <= 8) return '#A87200'
+  if (n <= 8) return '#7C5200'
   return '#A33417'
 }
 
@@ -177,7 +177,7 @@ export default function TriagePage() {
                   <span style={{ color: '#5C5A52', fontSize: '10px' }}>1–5 mild</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A87200' }} />
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#7C5200' }} />
                   <span style={{ color: '#5C5A52', fontSize: '10px' }}>6–8 moderate</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -362,9 +362,9 @@ export default function TriagePage() {
                   <motion.div
                     animate={{ opacity: [1, 0.3, 1] }}
                     transition={{ duration: 1.2, repeat: Infinity }}
-                    style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#A87200', flexShrink: 0 }}
+                    style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#7C5200', flexShrink: 0 }}
                   />
-                  <span style={{ color: '#A87200', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                  <span style={{ color: '#7C5200', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
                     High Urgency
                   </span>
                 </div>

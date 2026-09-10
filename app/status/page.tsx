@@ -10,7 +10,7 @@ const T3 = '#C8D4C9'
 const BORDER = '#7EB382'
 const RED = '#A33417'
 const GREEN = '#42623C'
-const AMBER = '#A87200'
+const AMBER = '#7C5200'
 const MONO = 'var(--font-mono, monospace)'
 
 interface Check { name: string; group: string; ok: boolean; ms: number | null; detail: string; critical: boolean }

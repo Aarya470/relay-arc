@@ -253,7 +253,7 @@ export default function PatientDetail() {
   }
 
   const score = summary?.priority_score || 0
-  const priorityColor = score >= 8 ? '#A33417' : score >= 5 ? '#A87200' : '#42623C'
+  const priorityColor = score >= 8 ? '#A33417' : score >= 5 ? '#7C5200' : '#42623C'
   const priorityBg = score >= 8 ? 'rgba(163,52,23,0.12)' : score >= 5 ? 'rgba(168,114,0,0.12)' : 'rgba(86,128,78,0.12)'
   const priorityBorder = score >= 8 ? 'rgba(163,52,23,0.28)' : score >= 5 ? 'rgba(168,114,0,0.28)' : 'rgba(86,128,78,0.28)'
 
@@ -482,7 +482,7 @@ export default function PatientDetail() {
                 >
                   <span style={{ color: '#5C5A52', fontSize: '12px', flexShrink: 0 }}>{item.label}</span>
                   <span style={{
-                    color: (item as any).red ? '#A33417' : (item as any).amber ? '#A87200' : '#141413',
+                    color: (item as any).red ? '#A33417' : (item as any).amber ? '#7C5200' : '#141413',
                     fontSize: '12px',
                     fontWeight: 500,
                     maxWidth: '60%',
@@ -747,7 +747,7 @@ export default function PatientDetail() {
               const statusColor = appt.status === 'confirmed' ? '#42623C'
                 : appt.status === 'declined' ? '#A33417'
                 : appt.status === 'completed' ? '#42623C'
-                : '#A87200'
+                : '#7C5200'
               const statusBg = appt.status === 'confirmed' ? 'rgba(86,128,78,0.08)'
                 : appt.status === 'declined' ? 'rgba(163,52,23,0.08)'
                 : appt.status === 'completed' ? 'rgba(86,128,78,0.08)'

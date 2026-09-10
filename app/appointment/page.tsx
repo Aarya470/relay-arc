@@ -66,7 +66,7 @@ export default function AppointmentSummary() {
   const stats = [
     { label: 'Check-ins', value: checkins.length, color: '#42623C', bg: 'rgba(86,128,78,0.07)', border: 'rgba(86,128,78,0.15)', Icon: MessageSquare },
     { label: 'Emergencies', value: emergencies.length, color: '#A33417', bg: 'rgba(163,52,23,0.07)', border: 'rgba(163,52,23,0.15)', Icon: AlertTriangle },
-    { label: 'Medications', value: profile?.medications?.length || 0, color: '#A87200', bg: 'rgba(168,114,0,0.07)', border: 'rgba(168,114,0,0.15)', Icon: Pill },
+    { label: 'Medications', value: profile?.medications?.length || 0, color: '#7C5200', bg: 'rgba(168,114,0,0.07)', border: 'rgba(168,114,0,0.15)', Icon: Pill },
   ]
 
   return (
@@ -101,7 +101,7 @@ export default function AppointmentSummary() {
         {/* Generate / Summary */}
         {!summary ? (
           <motion.button whileTap={{ scale: 0.97 }} onClick={generateSummary} disabled={generating}
-            style={{ background: 'rgba(168,114,0,0.08)', border: '1px solid rgba(168,114,0,0.22)', color: '#A87200', fontWeight: 700, fontSize: '15px', padding: '20px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            style={{ background: 'rgba(168,114,0,0.08)', border: '1px solid rgba(168,114,0,0.22)', color: '#7C5200', fontWeight: 700, fontSize: '15px', padding: '20px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             {generating
               ? <><RefreshCw size={16} className="animate-spin"/> Generating...</>
               : <><Sparkles size={16}/> Generate AI Summary</>
@@ -112,7 +112,7 @@ export default function AppointmentSummary() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <div style={{ width: '22px', height: '22px', borderRadius: '6px', background: 'rgba(168,114,0,0.12)', border: '1px solid rgba(168,114,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Sparkles size={11} color="#A87200"/>
+                  <Sparkles size={11} color="#7C5200"/>
                 </div>
                 <p style={{ color: 'rgba(237,234,224,0.4)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Summary</p>
               </div>

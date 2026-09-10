@@ -309,7 +309,7 @@ export default function CareTeamDashboard() {
 
   const getStatusColor = (score: number) => {
     if (score >= 8) return '#A33417'
-    if (score >= 5) return '#A87200'
+    if (score >= 5) return '#7C5200'
     return '#42623C'
   }
 
@@ -412,7 +412,7 @@ export default function CareTeamDashboard() {
           {[
             { label: 'Total', value: patients.length, color: '#141413' },
             { label: 'Urgent', value: sortedPatients.filter(p => activeEmergencies.some(e => e.user_id === p.id) || (summaries[p.id]?.priority_score || 0) >= 8).length, color: '#A33417' },
-            { label: 'Monitor', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 8 && (sc >= 5 || hasOverdueMeds(p, medLogs)) }).length, color: '#A87200' },
+            { label: 'Monitor', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 8 && (sc >= 5 || hasOverdueMeds(p, medLogs)) }).length, color: '#7C5200' },
             { label: 'Stable', value: sortedPatients.filter(p => { const isEm = activeEmergencies.some(e => e.user_id === p.id); const sc = summaries[p.id]?.priority_score || 0; return !isEm && sc < 5 && !hasOverdueMeds(p, medLogs) }).length, color: '#42623C' },
           ].map((stat, i) => (
             <div key={i} style={{ flex: 1, background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
@@ -450,9 +450,9 @@ export default function CareTeamDashboard() {
               return (
                 <div key={a.id} style={{ background: 'rgba(168,114,0,0.06)', border: '1px solid rgba(168,114,0,0.2)', borderRadius: '14px', padding: '14px', marginBottom: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <Clock size={13} color="#A87200"/>
+                    <Clock size={13} color="#7C5200"/>
                     <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px', flex: 1 }}>
-                      {patient?.full_name || 'Patient'}. <span style={{ color: '#A87200' }}>Pending</span>
+                      {patient?.full_name || 'Patient'}. <span style={{ color: '#7C5200' }}>Pending</span>
                     </p>
                   </div>
                   {a.scheduled_at && (
@@ -805,9 +805,9 @@ export default function CareTeamDashboard() {
               {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <p style={{ color: hasActiveEmergency ? '#A33417' : appointments.some(a => a.patient_id === patient.id && a.status === 'pending') ? '#A87200' : 'white', fontWeight: hasActiveEmergency ? 800 : 600, fontSize: '14px' }}>{patient.full_name}</p>
+                  <p style={{ color: hasActiveEmergency ? '#A33417' : appointments.some(a => a.patient_id === patient.id && a.status === 'pending') ? '#7C5200' : 'white', fontWeight: hasActiveEmergency ? 800 : 600, fontSize: '14px' }}>{patient.full_name}</p>
                   {appointments.some(a => a.patient_id === patient.id && a.status === 'pending') && (
-                    <span style={{ background: 'rgba(168,114,0,0.15)', color: '#A87200', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
+                    <span style={{ background: 'rgba(168,114,0,0.15)', color: '#7C5200', fontSize: '9px', padding: '2px 6px', borderRadius: '20px', fontFamily: 'monospace', fontWeight: 700, flexShrink: 0 }}>
                       APPT REQUEST
                     </span>
                   )}

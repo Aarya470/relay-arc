@@ -35,7 +35,7 @@ const BG_DEEP = '#95D08B'
 const ACCENT = '#42623C'
 const RED    = '#A33417'
 const GREEN  = '#42623C'
-const AMBER  = '#A87200'
+const AMBER  = '#7C5200'
 const ORANGE = '#D97757'   // FILL ONLY. 2.96:1 on light, so always dark ink on top
 
 const mono = 'var(--font-mono, monospace)'
@@ -286,7 +286,7 @@ function PhoneMockup() {
 // ─── Dispatch log data ────────────────────────────────────────────────────────
 const LOG = [
   { t: '19:42:07', d: '+0:00', title: 'SOS held for three seconds', body: '“Chest pain, sweating”. Typed by her son while she sat down.', color: '#A33417' },
-  { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#A87200' },
+  { t: '19:42:19', d: '+0:12', title: 'Cardiac event classified', body: 'Profile, medications and allergy list pulled automatically. No forms.', color: '#7C5200' },
   { t: '19:42:31', d: '+0:24', title: 'Hospital matched by capability', body: 'Lilavati: cath lab available, 4.2 km. Family car routed, 11 minutes.', color: '#42623C' },
   { t: '19:42:44', d: '+0:37', title: 'ER brief on the intake desk', body: 'Blood type, allergies, meds, chief complaint. Before the car leaves the lane.', color: '#42623C' },
   { t: '19:53:58', d: '+11:51', title: 'Arrival', body: 'No history recital in a hallway. Straight through triage to the lab.', color: '#42623C' },

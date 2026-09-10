@@ -8,7 +8,7 @@ import { IsoBox, IsoTile, IsoPath, IsoGrid, IsoPin, iso } from './Iso'
 
 const INK = '#141413', INK3 = '#5C5A52', BORDER = '#98C890'
 const GREEN = '#56804E', GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#A87200'
+const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#7C5200'
 const CREAM = '#B3DDAC'
 const mono = 'var(--font-mono, monospace)'
 

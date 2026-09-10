@@ -16,7 +16,7 @@ import { BarChart, StepChart, Donut } from '@/components/viz/Chart'
 const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52'
 const BORDER = '#98C890', CREAM = '#B3DDAC'
 const GREEN = '#56804E', GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#A87200'
+const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#7C5200'
 const mono = 'var(--font-mono, monospace)'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
 

@@ -12,6 +12,20 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return
   if (event.request.method !== 'GET') return
 
+  // API responses are never cached and never replayed.
+  //
+  // The rule below caches every same-origin GET that succeeds and serves it
+  // back on the next failure, which is right for a page and wrong for an
+  // endpoint. A cached /api/ response comes back with status 200 and no hint
+  // of its age, so the app treats a reading from last week as the answer to
+  // the question it just asked. On this app that could be a health
+  // intelligence summary or a vitals history standing in for current data
+  // while the person is offline and cannot tell.
+  //
+  // A page rendering from cache is a stale page, which is the point of an
+  // offline kit. An endpoint answering from cache is a lie about freshness.
+  if (url.pathname.startsWith('/api/')) return
+
   // Immutable build assets: cache-first
   if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/icon')) {
     event.respondWith(
@@ -39,16 +53,36 @@ self.addEventListener('fetch', (event) => {
       if (hit) return hit
       // For navigation requests, return a minimal offline page
       if (event.request.mode === 'navigate') {
+        // THIS PAGE WAS STILL IN THE OLD PALETTE AND STILL SAID 911.
+        //
+        // Two things were wrong with it, and both only show up when somebody is
+        // offline, which is when nobody is looking.
+        //
+        // It painted #F4F5F7 grey and #D91414 red with a star mark, the scheme
+        // the app used before the green rebrand. So the one screen a person
+        // sees when their signal drops looked like a different application.
+        //
+        // Worse, it hardcoded "always call 911 directly". Every other surface
+        // resolves the number from the timezone, because this project is
+        // India-first and 911 is not the number there. The offline screen was
+        // telling somebody in Pune or Berlin to dial a number that does not
+        // answer, at the exact moment the app had nothing else to offer them.
+        // Inlined here rather than imported because a service worker cannot
+        // reach lib/. Keep it in step with lib/emergency-number.ts.
+        const tz = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || '' } catch { return '' } })()
+        const emg =
+          (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta') ? '108'
+          : tz.startsWith('America/')   ? '911'
+          : tz.startsWith('Europe/')    ? '112'
+          : tz.startsWith('Australia/') ? '000'
+          : '112'
         return new Response(
           `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline · Relay Arc</title></head>
-<body style="background:#F4F5F7;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;font-family:-apple-system,sans-serif;text-align:center">
-<div style="width:64px;height:64px;border-radius:20px;background:#D91414;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L15 9H21L16 13.5L18 21L12 17L6 21L8 13.5L3 9H9L12 2Z" fill="#FFFFFF"/></svg>
-</div>
-<h2 style="color:#0E1218;font-size:22px;font-weight:900;letter-spacing:-0.8px;margin:0 0 8px">You're offline</h2>
-<p style="color:#5B6371;font-size:14px;margin:0 0 24px;line-height:1.6;max-width:260px">Check your connection, then try again.</p>
-<button onclick="location.reload()" style="background:#D91414;color:white;font-weight:700;font-size:14px;padding:14px 28px;border-radius:14px;border:none;cursor:pointer;">Try again</button>
-<p style="margin-top:16px;color:#9AA2AD;font-size:12px">In an emergency, always call 911 directly</p>
+<body style="background:#B3DDAC;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;text-align:center">
+<a href="tel:${emg}" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#A33417;color:#FFFFFF;font-weight:900;font-size:20px;letter-spacing:-0.3px;text-decoration:none;padding:20px 28px;border-radius:14px;min-height:64px;width:100%;max-width:320px;margin-bottom:28px">Call ${emg} now</a>
+<h2 style="color:#141413;font-size:22px;font-weight:800;letter-spacing:-0.6px;margin:0 0 8px">You are offline</h2>
+<p style="color:#5C5A52;font-size:14px;margin:0 0 24px;line-height:1.6;max-width:280px">Check your connection, then try again. Your emergency card and medical profile still work without signal.</p>
+<button onclick="location.reload()" style="background:#FFFFFF;color:#141413;font-weight:700;font-size:14px;padding:14px 28px;border-radius:14px;border:1px solid #98C890;cursor:pointer;font-family:inherit;min-height:48px">Try again</button>
 </body></html>`,
           { headers: { 'Content-Type': 'text/html' } }
         )
