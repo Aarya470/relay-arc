@@ -69,7 +69,7 @@ export default function TriageDemo() {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
       }}>
         <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-          Running in your browser — type anything
+          Running in your browser. Type anything
         </span>
         <span style={{ color: T3, fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.2px', textTransform: 'uppercase' }}>
           no network calls
@@ -144,7 +144,7 @@ export default function TriageDemo() {
               }}/>
             </div>
             <p style={{ color: T3, fontFamily: mono, fontSize: '10px', letterSpacing: '0.8px', marginBottom: '18px' }}>
-              the marked line = {ABSTAIN_THRESHOLD} abstention gate — below it we ask the cloud instead of guessing
+              the marked line = {ABSTAIN_THRESHOLD} abstention gate. Below it we ask the cloud instead of guessing
             </p>
 
             {/* what drove it */}
@@ -163,7 +163,7 @@ export default function TriageDemo() {
                 </div>
               ) : (
                 <p style={{ color: T3, fontSize: '13px', marginBottom: '14px' }}>
-                  nothing it recognises — which is exactly why it abstains
+                  nothing it recognises, which is exactly why it abstains
                 </p>
               )}
 

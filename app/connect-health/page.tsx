@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Copy, Check, ChevronRight, Heart, Activity, Zap, AlertCircle, RefreshCw } from 'lucide-react'
 import { toast } from 'sonner'
+import { SITE_URL } from '@/lib/site'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG      = '#B3DDAC'
@@ -144,7 +145,7 @@ export default function ConnectHealth() {
     setRefreshing(false)
   }
 
-  const ingestUrl = (typeof window !== 'undefined' ? window.location.origin : 'https://relay-arc.vercel.app') + '/api/health/ingest'
+  const ingestUrl = (typeof window !== 'undefined' ? window.location.origin : SITE_URL) + '/api/health/ingest'
 
   return (
     <div style={{ minHeight: '100dvh', background: BG, paddingBottom: '32px' }}>

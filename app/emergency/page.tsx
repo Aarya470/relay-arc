@@ -216,7 +216,7 @@ export default function Emergency() {
               What&apos;s happening?
             </h1>
             <p style={{ color: T2, fontSize: '14.5px', marginTop: '6px', fontWeight: 500 }}>
-              Tap one — response starts immediately.
+              Tap one. Response starts immediately.
             </p>
           </div>
           <button
@@ -316,7 +316,7 @@ export default function Emergency() {
               padding: '11px 13px', marginTop: '-6px',
             }}>
             <p style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>
-              Suggested — starting in a moment
+              Suggested, starting in a moment
             </p>
             <p style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{pending.label}</p>
             {heard && heard.evidence.length > 0 && (
@@ -325,7 +325,7 @@ export default function Emergency() {
               </p>
             )}
             <p style={{ color: T2, fontSize: '12px', lineHeight: 1.5, marginTop: '6px' }}>
-              Not right? Pick the correct one below — that overrides this.
+              Not right? Pick the correct one below. That overrides this.
             </p>
           </motion.div>
         )}

@@ -160,7 +160,7 @@ export default function EmergencyStatus() {
         <div style={{ background: 'rgba(163,52,23,0.06)', border: '1px solid rgba(163,52,23,0.18)', borderRadius: '16px', padding: '16px' }}>
           <p style={{ color: 'rgba(163,52,23,0.70)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>If anything changes</p>
           <p style={{ color: '#5C5A52', fontSize: '13px', lineHeight: 1.6 }}>
-            If chest pain starts, breathing becomes difficult, or the patient loses consciousness — stay on the line with 911.
+            If chest pain starts, breathing becomes difficult, or the patient loses consciousness, stay on the line with 911.
           </p>
           <motion.button
             whileTap={{ scale: 0.97 }}

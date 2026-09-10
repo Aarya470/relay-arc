@@ -125,7 +125,7 @@ export default function AuthCallback() {
             </p>
             <p style={{ color: T2, fontSize: 15, lineHeight: 1.6, marginBottom: 26 }}>
               Taking you to set up your profile now. That is where the blood type, allergies and
-              medications go — the things that get sent ahead of you.
+              medications go, the things that get sent ahead of you.
             </p>
             <button
               onClick={() => router.push('/onboarding')}

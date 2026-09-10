@@ -177,7 +177,7 @@ export default function AdminPartners() {
         </div>
       )}
       <p style={{ color: T3, fontSize: '11.5px', lineHeight: 1.6, marginBottom: '34px' }}>
-        Coordinates come from OpenStreetMap so dispatch matching (&lt;400m) works automatically. Share the generated code with the facility — they sign in at /hospital.
+        Coordinates come from OpenStreetMap so dispatch matching (&lt;400m) works automatically. Share the generated code with the facility. They sign in at /hospital.
       </p>
 
       {/* ── Partners ── */}

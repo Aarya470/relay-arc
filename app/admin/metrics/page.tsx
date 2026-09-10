@@ -68,7 +68,7 @@ export default function AdminMetrics() {
       <div style={{ width: '100%', maxWidth: '380px' }}>
         <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '12px', marginBottom: '20px' }}>
           <span style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-            Relay metrics — private
+            Relay metrics: private
           </span>
         </div>
         <input
@@ -95,7 +95,7 @@ export default function AdminMetrics() {
 
         <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '12px', marginBottom: '36px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
           <span style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-            Relay metrics — private
+            Relay metrics: private
           </span>
           <button onClick={() => load(key)} style={{ background: 'none', border: 'none', color: INK3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', cursor: 'pointer', padding: 0 }}>
             {loading ? 'refreshing…' : 'refresh'}

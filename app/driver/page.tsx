@@ -144,7 +144,7 @@ export default function DriverDashboard() {
           <div style={{ textAlign: 'center', paddingTop: '60px' }}>
             <Car size={40} style={{ display: 'block', margin: '0 auto 16px' }} />
             <p style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>No requests nearby</p>
-            <p style={{ color: '#6F6D65', fontSize: '13px' }}>Check back soon — requests update in real time</p>
+            <p style={{ color: '#6F6D65', fontSize: '13px' }}>Check back soon. Requests update in real time</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

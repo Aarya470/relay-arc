@@ -192,14 +192,14 @@ export default function HospitalPortal() {
 
       {/* ── Live capacity ── */}
       <p style={{ color: T3, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '4px' }}>
-        Live capacity — visible to patients being routed
+        Live capacity, visible to patients being routed
       </p>
       <div style={{ borderTop: `1px solid ${T1}`, marginBottom: '34px' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: `1px solid ${BORDER}` }}>
           <div>
             <p style={{ color: T1, fontSize: '15.5px', fontWeight: 700 }}>Accepting emergency patients</p>
-            <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>Turn off to divert — Relay ranks you down immediately</p>
+            <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>Turn off to divert. Relay ranks you down immediately</p>
           </div>
           <button onClick={() => saveStatus({ accepting: !partner.accepting })}
             style={{ width: '120px', padding: '11px 0', borderRadius: '10px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 800, fontSize: '13px', letterSpacing: '0.3px', background: partner.accepting ? GREEN : RED, color: 'white' }}>

@@ -234,7 +234,7 @@ export default function MeetingAlert() {
                 try {
                   const reg = await navigator.serviceWorker?.ready
                   reg?.showNotification(`Time to take ${med.name}`, {
-                    body: `${med.dose} — tap to confirm on the Medications page.`,
+                    body: `${med.dose}. Tap to confirm on the Medications page.`,
                     icon: '/icon-192.png',
                     data: { url: '/medications' },
                   } as any)

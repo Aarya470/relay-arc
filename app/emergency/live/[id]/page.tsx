@@ -266,7 +266,7 @@ export default function RelayRoomPage() {
             {data?.patientFirstName} needs you here<span style={{ color: RED }}>.</span>
           </h1>
           <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.6, marginBottom: '28px' }}>
-            Join to see their live location, what&apos;s happening, and how you can help — together with everyone else.
+            Join to see their live location, what&apos;s happening, and how you can help, together with everyone else.
           </p>
           <p style={{ color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: MONO, marginBottom: '8px' }}>Your name</p>
           <input
@@ -320,7 +320,7 @@ export default function RelayRoomPage() {
                 </span>
               ))}
               {people.length <= 1 && (
-                <span style={{ color: T3, fontSize: '12.5px' }}>You&apos;re the first one here — share the link.</span>
+                <span style={{ color: T3, fontSize: '12.5px' }}>You&apos;re the first one here. Share the link.</span>
               )}
             </div>
 
@@ -346,7 +346,7 @@ export default function RelayRoomPage() {
 
             {/* ── Shared tasks ── */}
             <p style={{ color: T3, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '4px' }}>
-              How to help — shared with everyone
+              How to help, shared with everyone
             </p>
             <div style={{ borderTop: `1px solid ${T1}`, marginBottom: '14px' }}>
               {tasks.map(t => (

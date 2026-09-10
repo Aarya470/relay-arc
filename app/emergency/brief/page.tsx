@@ -374,7 +374,7 @@ function BriefContent() {
             </p>
           ) : (
             <p className="text-sm" style={{ color: '#6F6D65' }}>
-              Note unavailable — use profile data above.
+              Note unavailable. Use profile data above.
             </p>
           )}
           <p className="text-xs mt-2" style={{ color: '#6F6D65' }}>

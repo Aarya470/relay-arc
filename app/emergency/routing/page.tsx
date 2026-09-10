@@ -923,7 +923,7 @@ function RoutingPage() {
                 </button>
                 <button onClick={requestRide}
                   style={{ flex: 1.4, background: T.blue, border: 'none', color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '13px 8px', borderRadius: '11px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
-                  I need a ride — alert drivers
+                  I need a ride. Alert drivers
                 </button>
               </div>
             )}
@@ -1068,7 +1068,7 @@ function RoutingPage() {
               </>
             ) : (
               <p style={{ color: T.textMuted, fontSize: '13.5px', padding: '13px 0', borderTop: `1px solid ${T.border}` }}>
-                No emergency contacts saved — add them in Settings for one-tap alerts.
+                No emergency contacts saved. Add them in Settings so you can text everyone at once.
               </p>
             )}
           </div>
@@ -1078,7 +1078,7 @@ function RoutingPage() {
         {profile && (profile.blood_type || profile.allergies || (profile.medications?.length > 0)) && (
           <div style={{ marginBottom: '30px' }}>
             <p style={{ color: T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '4px' }}>
-              First responder info — show this screen
+              First responder info. Show this screen
             </p>
             <div style={{ borderTop: `2px solid ${T.red}` }}>
               {profile.blood_type && (

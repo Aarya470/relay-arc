@@ -32,6 +32,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Download, Printer, Trash2, Check } from 'lucide-react'
+// The wallet card and the lock-screen image both printed relay-arc.vercel.app,
+// which is the address this site used before the domain existed. That string is
+// baked into a PNG somebody puts on their phone's lock screen and into a card
+// they fold into a wallet, so it is the one place a stale URL survives longest
+// and the one place a paramedic might actually read it. lib/site.ts already
+// holds the canonical origin for exactly this reason.
+import { SITE_URL } from '@/lib/site'
 
 const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65'
 const CREAM = '#B3DDAC', BORDER = '#98C890', WHITE = '#FFFFFF'
@@ -191,7 +198,7 @@ export default function EmergencyCard() {
       // Safety line, always present, never optional.
       g.fillStyle = INK3; g.font = `600 30px ${F.mono}`
       g.fillText('CALL EMERGENCY SERVICES FIRST', M, 2210)
-      g.fillText('relay-arc.vercel.app', M, 2256)
+      g.fillText(SITE_URL.replace(/^https?:\/\//, ''), M, 2256)
 
       // Explicit generic: `new Promise(...)` alone infers Promise<unknown>.
       const blob = await new Promise<Blob | null>(res => cv.toBlob(res, 'image/png'))
@@ -469,7 +476,7 @@ export default function EmergencyCard() {
           </tbody>
         </table>
         <p style={{ margin: '4pt 0 0', color: INK, fontFamily: mono, fontSize: '5pt', fontWeight: 700, letterSpacing: '0.6pt' }}>
-          CALL EMERGENCY SERVICES FIRST · relay-arc.vercel.app
+          CALL EMERGENCY SERVICES FIRST · {SITE_URL.replace(/^https?:\/\//, '')}
         </p>
       </div>
     </div>

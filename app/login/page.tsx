@@ -203,7 +203,7 @@ export default function Login() {
                 Nothing arrived?
               </p>
               <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.6 }}>
-                Check the spam folder first — that is where it usually is. Then check the address above
+                Check the spam folder first. That is where it usually is. Then check the address above
                 for a typo.
               </p>
             </div>

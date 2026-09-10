@@ -78,7 +78,7 @@ export default function CprCoach() {
 
       {/* Call {emg.label} banner — always first */}
       <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 900, fontSize: '18px', padding: '18px', textDecoration: 'none', flexShrink: 0 }}>
-        <Phone size={19} strokeWidth={2.5}/> Call {emg.label} first — put it on speaker
+        <Phone size={19} strokeWidth={2.5}/> Call {emg.label} first, then put it on speaker
       </a>
 
       <div style={{ flex: 1, padding: '20px 20px 36px', display: 'flex', flexDirection: 'column' }}>
@@ -125,7 +125,7 @@ export default function CprCoach() {
               fontWeight: 700, fontSize: '16.5px', padding: '17px', borderRadius: '12px',
               cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px',
             }}>
-            {running ? <><Square size={16}/> Stop the beat</> : <><Play size={17}/> Start the beat — {BPM} BPM</>}
+            {running ? <><Square size={16}/> Stop the beat</> : <><Play size={17}/> Start the beat at {BPM} BPM</>}
           </button>
           <p style={{ color: T3, fontSize: '12px', marginTop: '10px' }}>Every 30 pushes you&apos;ll hear a higher tone.</p>
         </div>

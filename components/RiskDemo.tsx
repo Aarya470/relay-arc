@@ -65,7 +65,7 @@ export default function RiskDemo() {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
       }}>
         <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-          Drag a vital — same code that alerts real users
+          Drag a vital. Same code that alerts real users
         </span>
         <span style={{ color: T3, fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.2px', textTransform: 'uppercase' }}>
           deterministic
@@ -147,7 +147,7 @@ export default function RiskDemo() {
 
             <div style={{ background: BG2, padding: '12px 14px' }}>
               <p style={{ color: T3, fontFamily: mono, fontSize: '9.5px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '7px' }}>
-                Why — every point traced to a measurement
+                Why: every point traced to a measurement
               </p>
               {result.signals.length ? result.signals.map(s => (
                 <div key={s.code} style={{ display: 'flex', gap: '9px', alignItems: 'baseline', marginBottom: '3px' }}>
@@ -161,7 +161,7 @@ export default function RiskDemo() {
 
             <p style={{ color: T3, fontFamily: mono, fontSize: '10px', lineHeight: 1.6, marginTop: '12px', letterSpacing: '0.3px' }}>
               {result.partial
-                ? `Partial NEWS2 — ${result.coverage.measured.length} of 7 parameters. Missing ${result.coverage.missing.join(', ')}, so it can under-estimate risk.`
+                ? `Partial NEWS2, ${result.coverage.measured.length} of 7 parameters. Missing ${result.coverage.missing.join(', ')}, so it can under-estimate risk.`
                 : 'Complete NEWS2 observation set, all 7 parameters.'} Decision support, not a diagnosis.
             </p>
           </div>

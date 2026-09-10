@@ -51,7 +51,7 @@ export default function DemoLauncher() {
         </h1>
         <p style={{ color: T2, fontSize: '15px', lineHeight: 1.65, marginBottom: '30px' }}>
           A live demo can&apos;t rely on GPS in a conference room or a hospital being nearby.
-          Demo mode pins the scenario to a Mumbai corridor and simulates the drive — everything
+          Demo mode pins the scenario to a Mumbai corridor and simulates the drive. Everything
           else runs for real: hospital ranking, the ER brief, Guardian escalation, the Relay Room,
           and the CPR coach.
         </p>
@@ -100,7 +100,7 @@ export default function DemoLauncher() {
 
         {signedIn === false && (
           <p style={{ color: RED, fontSize: '13px', lineHeight: 1.6, marginTop: '14px' }}>
-            You are not signed in — sign in first so the demo can use a real medical profile,
+            You are not signed in. Sign in first so the demo can use a real medical profile,
             the ER brief and the care-team alert.
           </p>
         )}

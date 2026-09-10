@@ -22,6 +22,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
+import { SITE_URL } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -117,7 +118,7 @@ export async function POST(req: NextRequest) {
 
     // Trigger background health intelligence analysis (non-blocking)
     // We don't await this — fire and forget so the Shortcut gets a fast response
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://relay-arc.vercel.app'}/api/groq/health-intelligence`, {
+    fetch(`${process.env.NEXT_PUBLIC_APP_URL || SITE_URL}/api/groq/health-intelligence`, {
       method: 'POST',
       headers: { 'x-internal-user-id': userId },
     }).catch(() => { /* silent */ })

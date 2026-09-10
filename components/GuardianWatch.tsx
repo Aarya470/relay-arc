@@ -155,13 +155,13 @@ export default function GuardianWatch({
           <motion.p
             animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 0.8, repeat: Infinity }}
             style={{ color: 'white', fontFamily: MONO, fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '14px' }}>
-            ⚠ Guardian alert — no response
+            ⚠ Guardian alert: no response
           </motion.p>
           <h1 style={{ color: 'white', fontSize: '32px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.05, marginBottom: '10px' }}>
             {profile?.full_name || 'This person'} may be unresponsive.
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '15px', lineHeight: 1.6, marginBottom: '24px' }}>
-            Active emergency: {typeLabel}. If you found this phone, please help — everything you need is below.
+            Active emergency: {typeLabel}. If you found this phone, please help. Everything you need is below.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
@@ -204,7 +204,7 @@ export default function GuardianWatch({
 
           <button onClick={() => { onEvent?.('Patient responded. Alarm stopped'); respond() }}
             style={{ marginTop: 'auto', background: 'none', border: 'none', color: 'rgba(255,255,255,0.75)', fontSize: '14px', fontWeight: 600, padding: '14px', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-            I&apos;m OK — stop the alarm
+            I&apos;m OK. Stop the alarm
           </button>
         </motion.div>
       )}

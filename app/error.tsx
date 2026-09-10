@@ -27,7 +27,7 @@ export default function ErrorBoundary({ error, reset }: { error: Error & { diges
         This screen failed to load<span style={{ color: '#A33417' }}>.</span>
       </h1>
       <p style={{ color: '#5C5A52', fontSize: '14.5px', lineHeight: 1.6, marginBottom: '28px' }}>
-        If you are in an emergency right now, do not wait for this app — call {emg.label}.
+        If you are in an emergency right now, do not wait for this app. Call {emg.label}.
       </p>
 
       <a href={`tel:${emg.number}`}

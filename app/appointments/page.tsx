@@ -484,7 +484,7 @@ export default function Appointments() {
                           <TimeScrollPicker value={selectedTime} onChange={setSelectedTime} />
                           {scheduledInPast && (
                             <p style={{ color: '#A33417', fontSize: '12px', marginTop: '8px', textAlign: 'center' }}>
-                              This time has already passed — pick a future time
+                              This time has already passed. Pick a future time
                             </p>
                           )}
                         </motion.div>

@@ -734,7 +734,7 @@ export default function Dashboard() {
             measurements and nothing else. It does not show a risk level, a NEWS2
             score, or advice about what to do, because a deterioration
             classification presented to a patient rather than a clinician meets the
-            FDA device definition — see docs/INTENDED_USE.md §3 and §6.
+            FDA device definition. See docs/INTENDED_USE.md §3 and §6.
             The score IS still computed; it is routed to the care-team surfaces,
             where the audience is a clinician and Criterion 3 is satisfied.
             The engine's level is used here only to decide whether the readings are
@@ -771,7 +771,7 @@ export default function Dashboard() {
 
                 <p style={{ color: T2, fontSize: '12px', lineHeight: 1.6 }}>
                   Your care team can see these readings. Relay Arc does not assess
-                  whether they are serious — only a clinician can.
+                  whether they are serious. Only a clinician can.
                 </p>
                 <p style={{
                   color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',

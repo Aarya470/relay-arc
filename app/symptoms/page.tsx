@@ -752,7 +752,7 @@ export default function SymptomsPage() {
               textAlign: 'center',
             }}>
               <p style={{ fontSize: '14px', color: '#6F6D65', margin: 0 }}>
-                No logs yet — tap "Log symptoms" to start tracking.
+                No logs yet. Tap "Log symptoms" to start tracking.
               </p>
             </div>
           ) : (

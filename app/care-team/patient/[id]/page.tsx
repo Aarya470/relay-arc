@@ -560,7 +560,7 @@ export default function PatientDetail() {
             {emergencies.length > 0 && (
               <div style={{ background: '#FFFFFF', border: '1px solid rgba(163,52,23,0.18)', borderRadius: '16px', padding: '18px' }}>
                 <p style={{ color: 'rgba(163,52,23,0.7)', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '14px' }}>
-                  Emergency history — {emergencies.length} events
+                  Emergency history: {emergencies.length} events
                 </p>
                 {emergencies.slice(0, 5).map((e, i) => (
                   <div

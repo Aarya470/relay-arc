@@ -613,7 +613,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
       </div>
       <p style={{ color: T1, fontSize: '24px', fontWeight: 800, letterSpacing: '-0.6px' }}>You have arrived<span style={{ color: GREEN }}>.</span></p>
       <p style={{ color: T2, fontSize: '14px', textAlign: 'center', lineHeight: 1.55, maxWidth: '280px' }}>
-        {hospital.name} — the ER already has your brief.
+        {hospital.name}. The ER already has your brief.
       </p>
     </div>
   )
@@ -653,7 +653,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
                 <div style={{ minWidth: 0 }}>
                   <p style={{ color: 'white', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.6px', lineHeight: 1.1 }}>Arriving now</p>
                   <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '14px', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {hospital.name} — head for the emergency entrance
+                    {hospital.name}. Head for the emergency entrance
                   </p>
                 </div>
               </div>

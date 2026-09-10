@@ -300,7 +300,7 @@ export default function TriagePage() {
                     style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#A33417', flexShrink: 0 }}
                   />
                   <span style={{ color: '#A33417', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                    Critical — Act Now
+                    Critical. Act now
                   </span>
                 </div>
                 <h2 style={{ color: '#141413', fontSize: '22px', fontWeight: 900, letterSpacing: '-0.5px', marginBottom: '8px', lineHeight: 1.2 }}>

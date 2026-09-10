@@ -345,7 +345,7 @@ export default function Onboarding() {
               </div>
 
               <p style={{ color: T3, fontSize: '12.5px', lineHeight: 1.6, borderTop: `1px solid ${BORDER}`, paddingTop: '14px' }}>
-                Everything here goes into your medical profile — shown to paramedics and sent ahead to the ER when you hold SOS. You can edit it any time in Settings.
+                Everything here goes into your medical profile, shown to paramedics and sent ahead to the ER when you hold SOS. You can edit it any time in Settings.
               </p>
 
               <div style={{ display: 'flex', gap: '10px' }}>
