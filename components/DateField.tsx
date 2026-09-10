@@ -116,10 +116,18 @@ export default function DateField({
   // only and working for real ones.
   const selectAll = (e: React.FocusEvent<HTMLInputElement>) => {
     const el = e.currentTarget
-    requestAnimationFrame(() => {
-      // Guard against the field having been unmounted or blurred in the meantime.
+    // Immediately, which is what a keyboard focus needs.
+    el.select()
+    // And again on the next macrotask, which is what a click or tap needs,
+    // because mouseup lands after focus and collapses the selection to a caret.
+    //
+    // setTimeout rather than requestAnimationFrame. rAF is tied to rendering and
+    // does not fire in a backgrounded tab, which I found the hard way: the whole
+    // fix silently did nothing while I was testing it through an unfocused tab.
+    // A field people rely on should not depend on whether the tab is painting.
+    setTimeout(() => {
       if (document.activeElement === el) el.select()
-    })
+    }, 0)
   }
 
   // Push upward only when the date is complete and valid, so a half-typed year
