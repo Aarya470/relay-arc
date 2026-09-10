@@ -73,6 +73,9 @@ export default function JitsiMeeting({ roomId, displayName, onEnd }: Props) {
       <div ref={containerRef} style={{ flex: 1 }} />
       <button
         onClick={handleEnd}
+        // The only way out of a fullscreen video call, and it was announced as
+        // "button" with no name.
+        aria-label="Leave this call"
         style={{
           position: 'absolute', top: 16, left: 16, zIndex: 201,
           background: 'rgba(0,0,0,0.55)', border: '1px solid rgba(255,255,255,0.15)',

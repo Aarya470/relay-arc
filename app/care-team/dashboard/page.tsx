@@ -379,11 +379,13 @@ export default function CareTeamDashboard() {
           </div>
           <div style={{ display: 'flex', gap: '8px' }}>
             <motion.button whileTap={{ scale: 0.9 }} onClick={generateSummaries} disabled={generating}
+              aria-label={generating ? 'Refreshing patient summaries' : 'Refresh patient summaries'}
               style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(86,128,78,0.1)', border: '1px solid rgba(86,128,78,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <RefreshCw size={15} color="#42623C" className={generating ? 'animate-spin' : ''}/>
             </motion.button>
             <motion.button whileTap={{ scale: 0.9 }}
               onClick={async () => { await supabase.auth.signOut(); router.push('/care-team/login') }}
+              aria-label="Sign out"
               style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F2F0E8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <LogOut size={15} color="#5C5A52"/>
             </motion.button>

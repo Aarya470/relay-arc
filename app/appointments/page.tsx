@@ -69,9 +69,30 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
       <div style={{ position: 'absolute', top: ITEM_H, left: 12, right: 12, height: ITEM_H, background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', borderRadius: '10px', pointerEvents: 'none', zIndex: 1 }} />
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: ITEM_H * 1.1, background: 'linear-gradient(to bottom, #FFFFFF 25%, transparent)', pointerEvents: 'none', zIndex: 2 }} />
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: ITEM_H * 1.1, background: 'linear-gradient(to top, #FFFFFF 25%, transparent)', pointerEvents: 'none', zIndex: 2 }} />
+      {/* A scrolling wheel of <div>s with click handlers had no name, no role
+          and no keyboard path. Arrow keys happened to scroll the container,
+          which happened to fire handleScroll and change the time, so it half
+          worked by accident and announced nothing while doing it. It is a
+          listbox now, and the arrow keys move the selection on purpose. */}
       <div
         ref={ref}
+        role="listbox"
+        tabIndex={0}
+        aria-label="Appointment time"
+        aria-activedescendant={`time-opt-${ALL_TIMES.indexOf(value)}`}
         onScroll={handleScroll}
+        onKeyDown={e => {
+          const i = ALL_TIMES.indexOf(value)
+          let n = -1
+          if (e.key === 'ArrowDown') n = Math.min(ALL_TIMES.length - 1, i + 1)
+          else if (e.key === 'ArrowUp') n = Math.max(0, i - 1)
+          else if (e.key === 'Home') n = 0
+          else if (e.key === 'End') n = ALL_TIMES.length - 1
+          if (n < 0) return
+          e.preventDefault()
+          onChange(ALL_TIMES[n])
+          ref.current?.scrollTo({ top: n * ITEM_H, behavior: 'smooth' })
+        }}
         style={{ height: '100%', overflowY: 'scroll', scrollSnapType: 'y mandatory', paddingTop: ITEM_H, paddingBottom: ITEM_H, scrollbarWidth: 'none' } as React.CSSProperties}
       >
         {ALL_TIMES.map((t, i) => {
@@ -79,6 +100,9 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
           return (
             <div
               key={t}
+              id={`time-opt-${i}`}
+              role="option"
+              aria-selected={sel}
               style={{ height: ITEM_H, scrollSnapAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
               onClick={() => { onChange(t); ref.current?.scrollTo({ top: i * ITEM_H, behavior: 'smooth' }) }}
             >
@@ -109,11 +133,11 @@ function CalendarPicker({ selectedDay, onSelect }: { selectedDay: Date | null; o
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={prevMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={prevMonth} aria-label="Previous month" style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <ChevronLeft size={15} color="#5C5A52" />
         </motion.button>
         <p style={{ color: '#141413', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>{MONTHS[viewMonth]} {viewYear}</p>
-        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={nextMonth} style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <motion.button whileTap={{ scale: 0.88 }} transition={spring} onClick={nextMonth} aria-label="Next month" style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <ChevronRight size={15} color="#5C5A52" />
         </motion.button>
       </div>
@@ -435,7 +459,7 @@ export default function Appointments() {
                   <p style={{ color: '#141413', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.4px' }}>
                     Schedule appointment
                   </p>
-                  <button onClick={close} style={{ background: '#F2F0E8', border: '1px solid #D8D4C8', borderRadius: '8px', width: '32px', height: '32px', cursor: 'pointer', color: '#5C5A52', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <button onClick={close} aria-label="Close" style={{ background: '#F2F0E8', border: '1px solid #D8D4C8', borderRadius: '8px', width: '32px', height: '32px', cursor: 'pointer', color: '#5C5A52', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <X size={16} />
                   </button>
                 </div>

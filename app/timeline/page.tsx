@@ -115,6 +115,7 @@ export default function Timeline() {
             </div>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={forceRefresh} disabled={generating}
+            aria-label={generating ? 'Rebuilding your timeline' : 'Rebuild timeline'}
             style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.20)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <motion.div animate={generating ? { rotate: 360 } : { rotate: 0 }} transition={generating ? { duration: 1, repeat: Infinity, ease: 'linear' } : {}}>
               <RefreshCw size={14} color="#42623C" />
