@@ -114,19 +114,35 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
   const onPointerUp = () => { dragging.current = false }
 
   const clamp = (n: number) => Math.max(0, Math.min(10, n))
+
+  // HOLDING AN ARROW KEY USED TO MOVE THIS BY EXACTLY ONE AND THEN STOP.
+  //
+  // The handler computed `value + 1` from the prop. Key repeat fires around
+  // thirty times a second, and React batches, so every keydown in a batch read
+  // the same stale `value` and every one of them computed the same answer.
+  // Press and hold to go from 0 to 8 and you land on 1.
+  //
+  // This ref carries the latest intended value across a batch, so repeats
+  // compound. It resyncs whenever the prop actually changes, which covers the
+  // pointer path and a parent reset.
+  const pending = useRef(value)
+  useEffect(() => { pending.current = value }, [value])
+
   const onKeyDown = (e: React.KeyboardEvent) => {
     const key = e.key
+    const from = pending.current
     let next: number | null = null
-    if (key === 'ArrowRight' || key === 'ArrowUp') next = clamp(value + 1)
-    else if (key === 'ArrowLeft' || key === 'ArrowDown') next = clamp(value - 1)
-    else if (key === 'PageUp') next = clamp(value + 2)
-    else if (key === 'PageDown') next = clamp(value - 2)
+    if (key === 'ArrowRight' || key === 'ArrowUp') next = clamp(from + 1)
+    else if (key === 'ArrowLeft' || key === 'ArrowDown') next = clamp(from - 1)
+    else if (key === 'PageUp') next = clamp(from + 2)
+    else if (key === 'PageDown') next = clamp(from - 2)
     else if (key === 'Home') next = 0
     else if (key === 'End') next = 10
     if (next === null) return
     // Arrow keys scroll the page by default, which would move the view out from
     // under the control the person is adjusting.
     e.preventDefault()
+    pending.current = next
     onChange(next)
   }
 
