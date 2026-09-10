@@ -105,12 +105,32 @@ export default function DateField({
   // Selecting the contents on focus makes the first keystroke replace what is
   // there, which is how every segmented date field behaves and what people
   // already expect.
-  const selectAll = (e: React.FocusEvent<HTMLInputElement>) => e.currentTarget.select()
+  // Deferred on purpose. Calling select() directly in onFocus does nothing for
+  // anyone using a mouse or a touchscreen, which is everyone: focus fires on
+  // mousedown, the selection is made, and then mouseup places the caret and
+  // collapses it again. Verified in the browser, where the field ended up with
+  // selectionStart === selectionEnd === 4 and typing still did nothing.
+  //
+  // A frame later the caret placement has already happened, so the selection
+  // sticks. This is the difference between the fix working for keyboard users
+  // only and working for real ones.
+  const selectAll = (e: React.FocusEvent<HTMLInputElement>) => {
+    const el = e.currentTarget
+    requestAnimationFrame(() => {
+      // Guard against the field having been unmounted or blurred in the meantime.
+      if (document.activeElement === el) el.select()
+    })
+  }
 
   // Push upward only when the date is complete and valid, so a half-typed year
   // never lands in the database as 0002-05-14.
   useEffect(() => {
-    if (d && m && y && !error) {
+    // y.length === 4 is load-bearing, not belt and braces. Suppressing the
+    // year error until four digits are typed (so the field stops going red on
+    // the first keystroke) means `error` is null mid-year, and without this
+    // check a half-typed year would push a malformed value like "1-05-23" to
+    // the parent. In settings that is what Save would hand to a date column.
+    if (d && m && y.length === 4 && !error) {
       const iso = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`
       if (iso !== value) onChange(iso)
     } else if (!d && !m && !y && value) {
