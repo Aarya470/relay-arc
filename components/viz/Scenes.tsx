@@ -43,7 +43,7 @@ export function DispatchScene() {
     [0.8, 5.6, 1.2, 1, 0.7], [4.8, 6.4, 1.4, 1, 1.0], [6.6, 1.4, 1, 1.2, 0.9],
   ]
   return (
-    <Frame vb="-260 -120 520 340" label="Dispatch — the nearest is not the chosen one">
+    <Frame vb="-260 -120 520 340" label="Dispatch: the nearest is not the chosen one">
       <g transform="translate(0,0)">
         <IsoGrid n={8} s={S} color={INK} opacity={0.13}/>
 
@@ -88,7 +88,7 @@ export function DispatchScene() {
 export function OnDeviceScene() {
   const S = 34
   return (
-    <Frame vb="-250 -150 500 330" label="Triage — the cloud is optional, not on the path">
+    <Frame vb="-250 -150 500 330" label="Triage: the cloud is optional, not on the path">
       <IsoGrid n={6} s={S} color={INK} opacity={0.1}/>
 
       {/* phone slab */}

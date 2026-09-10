@@ -279,9 +279,18 @@ export default function TransportRequest() {
                 transition={spring}
                 onClick={async () => {
                   if (!request?.id) return
-                  await supabase.from('transport_requests')
+                  // This said "Request cancelled" without reading the result.
+                  // If the update failed the row stayed pending and a community
+                  // driver could still be on the way to someone who had been
+                  // told the request was off.
+                  const { error } = await supabase.from('transport_requests')
                     .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
                     .eq('id', request.id)
+                  if (error) {
+                    console.error('transport cancel failed:', error)
+                    toast.error('Could not cancel. The request is still active, so a driver may still be on the way.')
+                    return
+                  }
                   toast.success('Request cancelled')
                   setStep('type')
                   setRequest(null)

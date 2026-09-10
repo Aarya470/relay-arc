@@ -103,18 +103,46 @@ export default function Medications() {
     load()
   }, [])
 
+  // EVERY WRITE ON THIS PAGE USED TO IGNORE ITS RESULT.
+  //
+  // The pattern was the same each time: change the state, tell the person it
+  // worked, fire the query, never look at what came back. When a write failed
+  // the screen and the database quietly disagreed, and the screen was the
+  // convincing one. Reload and the change is gone.
+  //
+  // On a medication list that is not a cosmetic problem. The same array feeds
+  // the emergency card and the ER handoff brief, so a drug someone believes
+  // they deleted keeps being shown to clinicians, and a drug they believe they
+  // added is missing when it matters. Doses marked as taken were inserted into
+  // medication_logs unchecked, which is what the adherence figure on this page
+  // is calculated from.
+  //
+  // Every one of them now reverts the screen and says what happened.
+  const saveMeds = async (next: any[]): Promise<boolean> => {
+    const { error } = await supabase.from('profiles').update({ medications: next }).eq('id', userId)
+    if (error) console.error('medications update failed:', error)
+    return !error
+  }
+
   const toggleTaken = async (medIndex: number, timeIndex: number) => {
     const key = `${medIndex}-${timeIndex}`
     const med = medications[medIndex]
-    const newTaken = { ...taken, [key]: !taken[key] }
-    setTaken(newTaken)
-    if (!taken[key]) {
-      toast.success(`${med.name} marked as taken`)
+    const wasTaken = taken[key]
+    setTaken({ ...taken, [key]: !wasTaken })
+    if (!wasTaken) {
       const nowIso = new Date().toISOString()
-      await supabase.from('medication_logs').insert({
+      const { error } = await supabase.from('medication_logs').insert({
         user_id: userId, medication_name: med.name, dose: med.dose, taken_at: nowIso
       })
+      if (error) {
+        // Put the tick back. Leaving it on would mean the dose looks recorded
+        // on this screen and is absent from the adherence figure underneath it.
+        setTaken(t => ({ ...t, [key]: false }))
+        toast.error(`Could not record ${med.name}. Tap again in a moment.`)
+        return
+      }
       setAllLogs(prev => [...prev, { medication_name: med.name, dose: med.dose, taken_at: nowIso, user_id: userId }])
+      toast.success(`${med.name} marked as taken`)
     }
   }
 
@@ -122,12 +150,15 @@ export default function Medications() {
     if (!newMed.name.trim()) { toast.error('Enter medication name'); return }
     setSaving(true)
     const updated = [...medications, { ...newMed }]
-    const { error } = await supabase.from('profiles').update({ medications: updated }).eq('id', userId)
-    if (!error) {
+    if (await saveMeds(updated)) {
       setMedications(updated)
       setNewMed({ name: '', dose: '', frequency: 'Once daily', times: ['Morning'] })
       setShowAdd(false)
       toast.success('Medication added')
+    } else {
+      // There was no else. The sheet stayed open, the button stopped spinning,
+      // and nothing at all was said.
+      toast.error('Could not save this medication. Your list has not changed.')
     }
     setSaving(false)
   }
@@ -137,26 +168,42 @@ export default function Medications() {
     const confirmed = window.confirm(`Remove ${med.name}? This cannot be undone.`)
     if (!confirmed) return
     const updated = medications.filter((_, i) => i !== index)
-    await supabase.from('profiles').update({ medications: updated }).eq('id', userId)
-    setMedications(updated)
-    toast.success(`${med.name} removed`)
+    if (await saveMeds(updated)) {
+      setMedications(updated)
+      toast.success(`${med.name} removed`)
+    } else {
+      toast.error(`Could not remove ${med.name}. It is still on your list and on your emergency card.`)
+    }
   }
 
+  // These two also mutated state in place. `const updated = [...medications]`
+  // copies the outer array but not the medication objects inside it, so
+  // `updated[i].times = ...` and `.times.splice(...)` were editing the very
+  // objects React was holding. React compares by reference, so the re-render
+  // could be skipped, and there was no untouched previous value left to put
+  // back if the save failed. Rebuilt immutably.
   const addTime = async (medIndex: number, time: string) => {
-    const updated = [...medications]
-    if (!updated[medIndex].times.includes(time)) {
-      updated[medIndex].times = [...updated[medIndex].times, time]
-      setMedications(updated)
-      await supabase.from('profiles').update({ medications: updated }).eq('id', userId)
-    }
     setAddingTime(null)
+    if (medications[medIndex].times.includes(time)) return
+    const updated = medications.map((m, i) =>
+      i === medIndex ? { ...m, times: [...m.times, time] } : m
+    )
+    setMedications(updated)
+    if (!await saveMeds(updated)) {
+      setMedications(medications)
+      toast.error('Could not add that time. Try again.')
+    }
   }
 
   const removeTime = async (medIndex: number, timeIndex: number) => {
-    const updated = [...medications]
-    updated[medIndex].times.splice(timeIndex, 1)
-    setMedications([...updated])
-    await supabase.from('profiles').update({ medications: updated }).eq('id', userId)
+    const updated = medications.map((m, i) =>
+      i === medIndex ? { ...m, times: m.times.filter((_: string, j: number) => j !== timeIndex) } : m
+    )
+    setMedications(updated)
+    if (!await saveMeds(updated)) {
+      setMedications(medications)
+      toast.error('Could not remove that time. Try again.')
+    }
   }
 
   const totalDoses  = medications.reduce((acc, m) => acc + (m.times?.length || 1), 0)

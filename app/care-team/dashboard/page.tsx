@@ -260,24 +260,39 @@ export default function CareTeamDashboard() {
   }
 
   const handleMeetingEnd = async (appointmentId: string) => {
-    await supabase.from('appointments').update({ status: 'completed' }).eq('id', appointmentId)
-    setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
+    // The update result was thrown away and the toast claimed the appointment
+    // had been marked complete either way. It then stayed on screen as
+    // completed until the next reload put it back to confirmed.
+    const { error } = await supabase.from('appointments').update({ status: 'completed' }).eq('id', appointmentId)
     setActiveCall(null)
     setUpcomingMeeting(null)
+    if (error) {
+      console.error('appointment complete failed:', error)
+      toast.error('Call ended, but the appointment could not be marked complete.')
+      return
+    }
+    setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
     toast.success('Call ended. Appointment marked complete')
   }
 
-  const confirmAppointment = async (id: string) => {
-    await supabase.from('appointments').update({ status: 'confirmed' }).eq('id', id)
-    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'confirmed' } : a))
-    toast.success('Appointment confirmed')
+  // Both of these told the clinician the decision had gone through without
+  // checking. The patient's screen reads from the same row, so a failed write
+  // meant one side believing an appointment was confirmed and the other side
+  // still waiting to hear.
+  const setAppointmentStatus = async (id: string, status: 'confirmed' | 'declined') => {
+    const { error } = await supabase.from('appointments').update({ status }).eq('id', id)
+    if (error) {
+      console.error('appointment status update failed:', error)
+      toast.error(`Could not ${status === 'confirmed' ? 'confirm' : 'decline'} this appointment. The patient has not been told.`)
+      return
+    }
+    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status } : a))
+    if (status === 'confirmed') toast.success('Appointment confirmed')
+    else toast('Appointment declined')
   }
 
-  const declineAppointment = async (id: string) => {
-    await supabase.from('appointments').update({ status: 'declined' }).eq('id', id)
-    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'declined' } : a))
-    toast('Appointment declined')
-  }
+  const confirmAppointment = (id: string) => setAppointmentStatus(id, 'confirmed')
+  const declineAppointment = (id: string) => setAppointmentStatus(id, 'declined')
 
   const dismissEmergency = async (emergencyId: string) => {
     await supabase.from('emergencies').update({ status: 'resolved' }).eq('id', emergencyId)

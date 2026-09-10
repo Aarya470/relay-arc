@@ -128,21 +128,39 @@ export default function PatientDetail() {
     return false
   }
 
+  // This said "Reminder sent for <medication>" whatever happened. The push it
+  // relies on returns 404 for any patient who has not registered a device for
+  // notifications, which is most of them, and the failure went to the console.
+  // A nurse would tick it off believing the patient had been told.
   const sendMedReminder = async (medName: string) => {
-    await supabase.from('patient_notes').insert({
+    const { error } = await supabase.from('patient_notes').insert({
       patient_id: patientId,
       care_team_id: careTeamMember?.id,
       note_type: 'med_reminder',
       content: medName,
     })
-    // Also fire a real background push so patient is notified even if app is closed
-    await sendPushNotification(
+    if (error) {
+      toast.error(`Could not record the reminder for ${medName}. Nothing was sent.`)
+      return
+    }
+
+    const push = await sendPushNotification(
       patientId,
       'Medication reminder from your care team',
       `Please take your ${medName}. Tap to open the app.`
     )
     setReminderSent(prev => ({ ...prev, [medName]: true }))
-    toast.success(`Reminder sent for ${medName}`)
+
+    if (push === 'sent') {
+      toast.success(`Reminder for ${medName} sent to their device`)
+    } else if (push === 'no-subscription') {
+      // Still worth doing. The note is on their record and shows next time they
+      // open the app. It just did not reach them now, and saying so is the
+      // difference between a nurse moving on and a nurse picking up the phone.
+      toast(`Reminder for ${medName} added to their record. They have no device set up for notifications, so it will not reach them until they open the app.`)
+    } else {
+      toast.error(`Reminder for ${medName} is on their record but the notification did not go through. Contact them another way.`)
+    }
   }
 
   const addNote = async () => {

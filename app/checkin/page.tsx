@@ -93,8 +93,16 @@ export default function Checkin() {
 
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
-          await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
-          toast.success('Check-in saved')
+          // "Check-in saved" was said without looking at the insert. A whole
+          // conversation someone had just worked through could fail to save
+          // while the screen congratulated them on finishing it.
+          const { error: saveError } = await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
+          if (saveError) {
+            console.error('checkin insert failed:', saveError)
+            toast.error('Your answers could not be saved. Nothing from this check-in was kept.')
+          } else {
+            toast.success('Check-in saved')
+          }
           sendPushNotification(user.id, 'Check-in complete', 'Your daily check-in has been saved.')
 
           // Trigger health intelligence analysis in background (fire-and-forget)

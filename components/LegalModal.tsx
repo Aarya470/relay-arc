@@ -76,9 +76,9 @@ export default function LegalModal() {
   const content = isPrivacy ? PRIVACY_POLICY : TERMS_OF_SERVICE
   const title = isPrivacy ? 'Privacy Policy' : 'Terms of Service'
   const subtitle = isPrivacy
-    ? 'Step 1 of 2 — read our Privacy Policy then tap Accept.'
-    : 'Step 2 of 2 — read our Terms of Service then tap Accept.'
-  const buttonLabel = isPrivacy ? 'I accept the Privacy Policy' : 'I accept the Terms of Service — Continue'
+    ? 'Step 1 of 2. Read our Privacy Policy then tap Accept.'
+    : 'Step 2 of 2. Read our Terms of Service then tap Accept.'
+  const buttonLabel = isPrivacy ? 'I accept the Privacy Policy' : 'I accept the Terms of Service and want to continue'
 
   return (
     <AnimatePresence mode="wait">

@@ -290,10 +290,18 @@ export default function Appointments() {
   }
 
   const handleMeetingEnd = async (appointmentId: string) => {
-    await supabase.from('appointments').update({ status: 'completed' }).eq('id', appointmentId)
-    setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
+    // The update result was thrown away and the toast claimed the appointment
+    // had been marked complete either way. It then stayed on screen as
+    // completed until the next reload put it back to confirmed.
+    const { error } = await supabase.from('appointments').update({ status: 'completed' }).eq('id', appointmentId)
     setActiveCall(null)
     setUpcomingMeeting(null)
+    if (error) {
+      console.error('appointment complete failed:', error)
+      toast.error('Call ended, but the appointment could not be marked complete.')
+      return
+    }
+    setAppointments(prev => prev.map(a => a.id === appointmentId ? { ...a, status: 'completed' } : a))
     toast.success('Call ended. Appointment marked complete')
   }
 

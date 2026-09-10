@@ -283,11 +283,18 @@ export default function MeetingAlert() {
   }, [userId, skip, profile])
 
   const handleMeetingEnd = async (apptId: string) => {
-    await supabase.from('appointments').update({ status: 'completed' }).eq('id', apptId)
+    // Unchecked update, confident toast. Same fix as the other three copies of
+    // this handler.
+    const { error } = await supabase.from('appointments').update({ status: 'completed' }).eq('id', apptId)
     setActiveCall(null)
     setShowModal(false)
     setUpcomingAppt(null)
-    toast.success('Call ended — appointment marked complete')
+    if (error) {
+      console.error('appointment complete failed:', error)
+      toast.error('Call ended, but the appointment could not be marked complete.')
+      return
+    }
+    toast.success('Call ended. Appointment marked complete')
   }
 
   const handleReschedule = async () => {
