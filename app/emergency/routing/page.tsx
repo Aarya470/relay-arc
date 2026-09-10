@@ -802,7 +802,7 @@ function RoutingPage() {
           cursor: 'pointer',
         }}
       >
-        I&apos;m safe — cancel emergency
+        I&apos;m safe, cancel this emergency
       </motion.button>
 
       <CancelConfirmSheet
@@ -1203,7 +1203,7 @@ function RoutingPage() {
             onClick={() => setShowCancelConfirm(true)}
             style={{ background: 'none', color: T.textMuted, fontWeight: 500, fontSize: '13.5px', padding: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
           >
-            I&apos;m safe — <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>cancel this emergency</span>
+            I&apos;m safe. <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>Cancel this emergency</span>
           </button>
         </div>
       </motion.div>

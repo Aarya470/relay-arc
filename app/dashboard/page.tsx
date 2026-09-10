@@ -18,6 +18,7 @@ interface HealthIntelligence {
   alertCareTeam: boolean
   alertReason: string | null
   dataQuality: 'rich' | 'partial' | 'sparse'
+  alertDelivery: 'recorded' | 'no-care-team' | 'failed' | null
 }
 import { toast } from 'sonner'
 // lib/risk is pure and dependency-free, so it is safe in the client bundle —
@@ -190,7 +191,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           {/* Prediction inline */}
           {intel.prediction && (
             <p style={{ color: T2, fontSize: '13px', lineHeight: 1.6, marginBottom: '10px' }}>
-              <span style={{ color: ACCENT, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px' }}>Next 48h —</span>
+              <span style={{ color: ACCENT, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px' }}>Next 48h</span>
               {intel.prediction}
             </p>
           )}
@@ -198,16 +199,27 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           {/* Recommendation */}
           {intel.recommendation && (
             <p style={{ color: GREEN, fontSize: '13px', fontWeight: 600, lineHeight: 1.55 }}>
-              <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px', opacity: 0.7 }}>Today —</span>
+              <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px', opacity: 0.7 }}>Today</span>
               {intel.recommendation}
             </p>
           )}
 
-          {/* Care team alert */}
+          {/* Care team flag.
+              This printed "Care team alerted: <reason>" off the model's own
+              boolean. Whether anything reached anybody depends on there being a
+              care team row with a push token and on the insert working, and the
+              route now says which of those happened. See alertDelivery in
+              app/api/groq/health-intelligence/route.ts. */}
           {intel.alertCareTeam && intel.alertReason && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${BORDER}` }}>
-              <AlertTriangle size={13} color={RED} strokeWidth={2.2} style={{ flexShrink: 0 }}/>
-              <p style={{ color: RED, fontSize: '12px', fontWeight: 600, margin: 0 }}>Care team alerted: {intel.alertReason}</p>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${BORDER}` }}>
+              <AlertTriangle size={13} color={RED} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: '2px' }}/>
+              <p style={{ color: RED, fontSize: '12px', fontWeight: 600, margin: 0, lineHeight: 1.5 }}>
+                {intel.alertDelivery === 'recorded'
+                  ? `Flagged for your care team: ${intel.alertReason}`
+                  : intel.alertDelivery === 'no-care-team'
+                    ? `Worth raising with someone: ${intel.alertReason}. Nobody is set up as your care team, so this has not gone to anyone.`
+                    : `Worth raising with someone: ${intel.alertReason}. Passing this to your care team did not work, so tell them yourself.`}
+              </p>
             </div>
           )}
         </>
@@ -873,7 +885,11 @@ export default function Dashboard() {
             {
               label: 'Emergency contacts',
               sub: emergencyContacts.length > 0
-                ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''}. Notified on SOS`
+                // "Notified on SOS" was not true. Nothing sends them anything.
+                // The SOS screen writes a record and offers a text message the
+                // person taps to send themselves, so the honest version names
+                // what is actually there.
+                ? `${emergencyContacts.length} contact${emergencyContacts.length > 1 ? 's' : ''}. Ready to text from the SOS screen`
                 : 'No contacts added',
               href: '/emergency-contacts',
               icon: <Users size={15} color={RED}/>,

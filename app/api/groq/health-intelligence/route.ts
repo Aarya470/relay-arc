@@ -25,6 +25,17 @@ export interface HealthIntelligence {
   alertCareTeam: boolean
   alertReason: string | null
   dataQuality: 'rich' | 'partial' | 'sparse'      // how much data was available
+  // What this route actually managed to do about alertCareTeam.
+  //
+  // The dashboard used to print "Care team alerted: <reason>" straight off the
+  // alertCareTeam boolean, which is a thing the language model decided, not a
+  // thing that happened. Recording an alert needs a care_team_members row with
+  // a push token and an insert that succeeds, and neither was reported back. On
+  // an account with no care team at all the card still said they had been
+  // alerted.
+  //
+  // null means no alert was called for.
+  alertDelivery: 'recorded' | 'no-care-team' | 'failed' | null
 }
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -224,6 +235,8 @@ Never use em dashes or semicolons. Use short plain sentences.`
     // Validate & clamp
     const validTrajectories = new Set(['improving', 'stable', 'declining', 'critical'])
     const intelligence: HealthIntelligence = {
+      // Set below, once the alert has either been recorded or not.
+      alertDelivery:  null,
       score:          Math.max(0, Math.min(100, Math.round(parsed.score ?? 50))),
       trajectory:     validTrajectories.has(parsed.trajectory) ? parsed.trajectory : 'stable',
       headline:       String(parsed.headline ?? '').slice(0, 100),
@@ -235,7 +248,8 @@ Never use em dashes or semicolons. Use short plain sentences.`
       dataQuality,
     }
 
-    // Auto-alert care team if AI says to
+    // Flag the care team if the model asked for it, and report what happened.
+    intelligence.alertDelivery = null
     if (intelligence.alertCareTeam && intelligence.alertReason) {
       try {
         const { data: careTeam } = await supabase
@@ -244,18 +258,22 @@ Never use em dashes or semicolons. Use short plain sentences.`
           .eq('patient_id', user.id)
           .not('push_token', 'is', null)
 
-        if (careTeam && careTeam.length > 0) {
-          // Insert alert record
-          await supabase.from('care_team_alerts').insert({
+        if (!careTeam || careTeam.length === 0) {
+          intelligence.alertDelivery = 'no-care-team'
+        } else {
+          const { error } = await supabase.from('care_team_alerts').insert({
             patient_id: user.id,
             type: 'health_intelligence',
             severity: intelligence.trajectory === 'critical' ? 'high' : 'medium',
             message: intelligence.alertReason,
             data: { score: intelligence.score, trajectory: intelligence.trajectory },
           })
+          intelligence.alertDelivery = error ? 'failed' : 'recorded'
+          if (error) console.error('care_team_alerts insert failed:', error)
         }
-      } catch {
-        // Don't fail the response if alert insert fails
+      } catch (e) {
+        console.error('care team alert failed:', e)
+        intelligence.alertDelivery = 'failed'
       }
     }
 
