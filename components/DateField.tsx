@@ -154,7 +154,25 @@ export default function DateField({
             }
           }}
           onFocus={selectAll}
-          onBlur={() => { if (d.length === 1) setD(d.padStart(2, '0')) }}
+          // THE BUG THAT ACTUALLY BROKE DATE ENTRY. Typing "14" produced "01".
+          //
+          // This used to read `d` from the enclosing render:
+          //     onBlur={() => { if (d.length === 1) setD(d.padStart(2, '0')) }}
+          //
+          // Typing the second digit does two things in the same tick. onChange
+          // calls setD("14"), and because the field is now full, focus moves to
+          // the month, which fires blur. React has not re-rendered yet, so `d`
+          // inside blur is still "1" from the previous render. It sees length 1,
+          // pads, and calls setD("01"), which lands after setD("14") and wins.
+          //
+          // So every two-digit day silently became a zero plus its first digit.
+          // 14 became 01, 23 became 02, 31 became 03. Single-digit days were
+          // fine, which is why this survived: 7 advances immediately and blur
+          // pads the same value it already holds.
+          //
+          // The functional updater reads the committed state instead of a
+          // captured copy, so there is no stale value to overwrite with.
+          onBlur={() => setD(prev => (prev.length === 1 ? prev.padStart(2, '0') : prev))}
           autoComplete="bday-day"
           style={{ ...seg, borderRight: `1px solid ${BORDER}` }}
           aria-label="Day"
