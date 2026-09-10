@@ -700,7 +700,7 @@ export default function Dashboard() {
                 fontFamily: 'var(--font-mono, monospace)',
               }}>SOS</p>
               <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: '12px', marginTop: '10px', fontWeight: 500, letterSpacing: '0.2px' }}>
-                Tap to start · Your care team is notified instantly
+                Tap to start · Finds a hospital and prepares your details
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
