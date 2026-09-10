@@ -11,7 +11,7 @@ const ON     = '#FFFFFF'   // large type on the green only
 const ON_3   = '#E6EBE6'
 const T1     = '#141413'   // inside the panel
 const T2     = '#5C5A52'
-const T3     = '#6F6D65'
+const T3     = '#5C5A52'
 const BORDER = '#DCE6D6'
 const RED    = '#A33417'
 

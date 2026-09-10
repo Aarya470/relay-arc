@@ -388,7 +388,7 @@ function CardLabel({
       style={{
         fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
         letterSpacing: '0.13em', marginBottom: noMargin ? '0' : '8px',
-        color: danger ? '#A33417' : '#6F6D65',
+        color: danger ? '#A33417' : '#5C5A52',
       }}
     >
       {children}

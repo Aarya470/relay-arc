@@ -57,7 +57,7 @@ const T = {
   border:      '#F2F0E8',
   textPrimary: '#141413',
   textSec:     '#5C5A52',
-  textMuted:   '#6F6D65',
+  textMuted:   '#5C5A52',
   red:         '#A33417',
   redSoft:     'rgba(163,52,23,0.12)',
   redGlow:     'none',

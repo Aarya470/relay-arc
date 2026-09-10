@@ -8,7 +8,7 @@
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 
-const INK = '#FFFFFF', INK2 = '#5C5A52', INK3 = '#6F6D65'
+const INK = '#FFFFFF', INK2 = '#5C5A52', INK3 = '#5C5A52'
 const BORDER = '#7EB382', CREAM = '#4B8150'
 const GREEN_DEEP = '#C8D4C9', ORANGE = '#D97757', CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'

@@ -75,7 +75,7 @@ export default function NurseDashboard() {
               <ArrowLeft size={16} className="text-[#5C5A52]"/>
             </motion.button>
             <div>
-              <p className="text-[#6F6D65] font-mono text-xs uppercase tracking-wider">
+              <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider">
                 {selected ? 'Patient detail' : 'Care team'}
               </p>
               <h1 className="text-[#141413] font-bold text-xl">
@@ -90,7 +90,7 @@ export default function NurseDashboard() {
               </span>
             )}
             {!selected && (
-              <span className="bg-[#F2F0E8] border border-[#98C890] text-[#6F6D65] text-xs px-2.5 py-1 rounded-full font-mono">
+              <span className="bg-[#F2F0E8] border border-[#98C890] text-[#5C5A52] text-xs px-2.5 py-1 rounded-full font-mono">
                 {patients.length} pts
               </span>
             )}
@@ -142,7 +142,7 @@ export default function NurseDashboard() {
             <IntendedUse/>
 
             {/* Patient list */}
-            <p className="text-[#6F6D65] font-mono text-xs uppercase tracking-wider px-1">All patients</p>
+            <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider px-1">All patients</p>
             {patients.map((patient, i) => {
               const patientCheckins = getCheckins(patient.id)
               const hasEmergency = getEmergency(patient.id)
@@ -161,7 +161,7 @@ export default function NurseDashboard() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[#141413] font-semibold text-sm truncate">{patient.full_name}</p>
-                    <p className="text-[#6F6D65] text-xs truncate">{patient.diagnosis}</p>
+                    <p className="text-[#5C5A52] text-xs truncate">{patient.diagnosis}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${
@@ -177,7 +177,7 @@ export default function NurseDashboard() {
             {patients.length === 0 && (
               <div className="text-center py-12">
                 <User size={32} className="text-[#C6CBD3] mx-auto mb-3"/>
-                <p className="text-[#6F6D65] text-sm">No patients yet</p>
+                <p className="text-[#5C5A52] text-sm">No patients yet</p>
               </div>
             )}
 
@@ -199,7 +199,7 @@ export default function NurseDashboard() {
                 </div>
                 <div>
                   <h2 className="text-[#141413] font-bold text-lg">{selected.full_name}</h2>
-                  <p className="text-[#6F6D65] text-xs font-mono">{selected.diagnosis}</p>
+                  <p className="text-[#5C5A52] text-xs font-mono">{selected.diagnosis}</p>
                 </div>
               </div>
 
@@ -211,7 +211,7 @@ export default function NurseDashboard() {
                   { label: 'Surgery', value: formatDate(selected.surgery_date) },
                 ].map((item, i) => (
                   <div key={i} className="bg-[#B3DDAC] rounded-xl p-2.5">
-                    <p className="text-[#6F6D65] font-mono text-xs uppercase tracking-wider mb-1">{item.label}</p>
+                    <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-1">{item.label}</p>
                     <p className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-[#A33417]' : 'text-[#5C5A52]'}`}>
                       {item.value}
                     </p>
@@ -227,7 +227,7 @@ export default function NurseDashboard() {
                   key={t}
                   onClick={() => setTab(t)}
                   className={`flex-1 py-2 rounded-xl text-xs font-medium transition capitalize ${
-                    tab === t ? 'bg-white text-[#141413] shadow-sm' : 'text-[#6F6D65] hover:text-[#5C5A52]'
+                    tab === t ? 'bg-white text-[#141413] shadow-sm' : 'text-[#5C5A52] hover:text-[#5C5A52]'
                   }`}
                 >
                   {t}
@@ -239,7 +239,7 @@ export default function NurseDashboard() {
             {tab === 'overview' && (
               <div className="space-y-3">
                 <div className="bg-white border border-[#98C890] rounded-2xl p-4">
-                  <p className="text-[#6F6D65] font-mono text-xs uppercase tracking-wider mb-3">Emergency contacts</p>
+                  <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">Emergency contacts</p>
                   {selected.emergency_contacts?.map((c: any, i: number) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-[#EDEAE0] last:border-0">
                       <div className="w-8 h-8 rounded-xl bg-[#56804E]/10 flex items-center justify-center text-[#42623C] text-xs font-bold">
@@ -247,7 +247,7 @@ export default function NurseDashboard() {
                       </div>
                       <div>
                         <p className="text-[#141413] text-sm">{c.name}</p>
-                        <p className="text-[#6F6D65] text-xs">{c.relationship} · {c.phone}</p>
+                        <p className="text-[#5C5A52] text-xs">{c.relationship} · {c.phone}</p>
                       </div>
                     </div>
                   ))}
@@ -257,11 +257,11 @@ export default function NurseDashboard() {
 
             {tab === 'checkins' && (
               <div className="bg-white border border-[#98C890] rounded-2xl p-4">
-                <p className="text-[#6F6D65] font-mono text-xs uppercase tracking-wider mb-3">Check-in history</p>
-                {getCheckins(selected.id).length === 0 && <p className="text-[#6F6D65] text-sm">No check-ins yet</p>}
+                <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">Check-in history</p>
+                {getCheckins(selected.id).length === 0 && <p className="text-[#5C5A52] text-sm">No check-ins yet</p>}
                 {getCheckins(selected.id).slice(0, 10).map((c, i) => (
                   <div key={i} className="py-2.5 border-b border-[#EDEAE0] last:border-0">
-                    <p className="text-[#6F6D65] font-mono text-xs mb-1">{new Date(c.created_at).toLocaleString()}</p>
+                    <p className="text-[#5C5A52] font-mono text-xs mb-1">{new Date(c.created_at).toLocaleString()}</p>
                     <p className="text-[#5C5A52] text-xs leading-relaxed">{c.summary}</p>
                   </div>
                 ))}
@@ -270,15 +270,15 @@ export default function NurseDashboard() {
 
             {tab === 'medications' && (
               <div className="bg-white border border-[#98C890] rounded-2xl p-4">
-                <p className="text-[#6F6D65] font-mono text-xs uppercase tracking-wider mb-3">Medications</p>
-                {selected.medications?.length === 0 && <p className="text-[#6F6D65] text-sm">No medications</p>}
+                <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">Medications</p>
+                {selected.medications?.length === 0 && <p className="text-[#5C5A52] text-sm">No medications</p>}
                 {selected.medications?.map((m: any, i: number) => (
                   <div key={i} className="flex justify-between items-center py-2.5 border-b border-[#EDEAE0] last:border-0">
                     <div>
                       <p className="text-[#141413] text-sm font-medium">{m.name}</p>
-                      <p className="text-[#6F6D65] text-xs">{m.frequency}</p>
+                      <p className="text-[#5C5A52] text-xs">{m.frequency}</p>
                     </div>
-                    <span className="text-[#6F6D65] font-mono text-xs">{m.dose}</span>
+                    <span className="text-[#5C5A52] font-mono text-xs">{m.dose}</span>
                   </div>
                 ))}
               </div>

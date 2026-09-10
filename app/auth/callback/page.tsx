@@ -26,7 +26,7 @@ import { supabase } from '@/lib/supabase'
 import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from 'lucide-react'
 import Mark from '@/components/Mark'
 
-const T1 = '#141413', T2 = '#5C5A52', T3 = '#6F6D65'
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
 const ACCENT = '#42623C', RED = '#A33417', BORDER = '#98C890'
 const mono = 'var(--font-mono, monospace)'
 

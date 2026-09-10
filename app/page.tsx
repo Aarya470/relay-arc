@@ -10,7 +10,7 @@ import Mark from '@/components/Mark'
 // ─── Design tokens — shared with the app ─────────────────────────────────────
 const T1     = '#141413'
 const T2     = '#5C5A52'
-const T3     = '#6F6D65'
+const T3     = '#5C5A52'
 const BORDER = '#98C890'
 // ─── The green page ─────────────────────────────────────────────────────────
 // #57945C. White on it is 3.62:1, which clears the 3:1 bar for LARGE type only

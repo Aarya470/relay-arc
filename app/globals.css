@@ -55,23 +55,42 @@
   --border-mid:    #84BD7A;
   --border-strong: #66AD59;
 
-  /* Text — 12.16:1, 4.56:1, 3.42:1 on the green background. These stay
-     neutral on purpose: tinting them green as well would leave nothing on the
-     page that is not the brand colour, and body copy is not where personality
-     belongs in an app people read during a medical emergency.
+  /* Text — 12.16:1 and 4.56:1 on the green background. These stay neutral on
+     purpose: tinting them green as well would leave nothing on the page that is
+     not the brand colour, and body copy is not where personality belongs in an
+     app people read during a medical emergency.
 
-     --text-3 has been darkened once per background change: #8A8780 on cream,
-     #84827A, #7E7C74, and #6F6D65 here. Each step is whatever value puts it
-     back at its intended 3.40:1, because a decorative tone that drifts lighter
-     every time the page moves ends up illegible by accident. It does not clear
-     4.5:1 on any of these backgrounds, so it must not be used for anything a
-     person has to read to use the page.
+     THERE USED TO BE A THIRD TIER AND IT IS GONE. --text-3 was #6F6D65, which
+     is 3.42:1 on this background. The rule written here said it "must not be
+     used for anything a person has to read to use the page", and the rule was
+     the only thing keeping it honest. A contrast pass over the running app
+     found it on, among others:
+
+       the hospital being routed to, on the SOS screen
+       the distance to that hospital
+       "Open there instead", which is a link
+       "No emergency contacts saved. Add them in Settings"
+       the 1-5 mild / 6-8 moderate / 9-10 severe legend on the triage scale
+
+     Every one of those is something a person has to read, four of them during
+     an emergency, and one of them is interactive. A token whose safe use
+     depends on 230 call sites each remembering a rule is not a safe token.
+
+     Darkening it was not an option either. On #B3DDAC nothing lighter than
+     about #5B5953 reaches 4.5:1, so a third tier that passes would have been
+     indistinguishable from --text-2 anyway. The green page background is simply
+     not light enough to carry three levels of grey. So there are two, and the
+     recessive feel of the old third tier now comes from type: 10px uppercase
+     mono with wide letterspacing, which reads as a label without needing to be
+     faint.
 
      --text-2 at 4.56:1 is the tightest pairing in the system. Anything that
      darkens the page further has to darken this with it. */
   --text:   #141413;
   --text-2: #5C5A52;
-  --text-3: #6F6D65;
+  /* Kept as an alias so any stylesheet still naming it lands on a value that
+     passes, rather than silently falling back to inherited colour. */
+  --text-3: #5C5A52;
 
   /* Koala green — brand. --green for fills and large text (3.02:1),
      --green-deep for body text and white-on-green buttons (4.55:1 / 6.90:1).

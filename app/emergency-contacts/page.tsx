@@ -153,8 +153,8 @@ export default function EmergencyContacts() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>{contact.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                    <span style={{ color: '#6F6D65', fontSize: '12px' }}>{contact.relationship}</span>
-                    <span style={{ color: '#6F6D65', fontSize: '12px' }}>·</span>
+                    <span style={{ color: '#5C5A52', fontSize: '12px' }}>{contact.relationship}</span>
+                    <span style={{ color: '#5C5A52', fontSize: '12px' }}>·</span>
                     <motion.a
                       href={`tel:${contact.phone}`}
                       whileTap={{ scale: 0.96 }}
@@ -201,9 +201,9 @@ export default function EmergencyContacts() {
           <motion.button
             whileTap={{ scale: 0.99 }}
             onClick={() => setShowAdd(true)}
-            style={{ width: '100%', background: 'transparent', border: '1.5px dashed #C9CED6', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#6F6D65', fontSize: '14px', fontWeight: 500 }}
+            style={{ width: '100%', background: 'transparent', border: '1.5px dashed #C9CED6', borderRadius: '16px', padding: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: '#5C5A52', fontSize: '14px', fontWeight: 500 }}
           >
-            <Plus size={15} color="#6F6D65"/>
+            <Plus size={15} color="#5C5A52"/>
             Add emergency contact
           </motion.button>
         )}
@@ -254,7 +254,7 @@ export default function EmergencyContacts() {
                         fontSize: '12px', fontWeight: 600, cursor: 'pointer',
                         background: newContact.relationship === r ? 'rgba(86,128,78,0.15)' : '#F2F0E8',
                         borderColor: newContact.relationship === r ? 'rgba(86,128,78,0.4)' : '#98C890',
-                        color: newContact.relationship === r ? '#42623C' : '#6F6D65',
+                        color: newContact.relationship === r ? '#42623C' : '#5C5A52',
                       }}
                     >
                       {r}

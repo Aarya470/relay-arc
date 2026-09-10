@@ -5,7 +5,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
     <html lang="en">
       <body style={{ margin: 0, background: '#FFFFFF', fontFamily: '-apple-system, system-ui, sans-serif' }}>
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px', maxWidth: '420px', margin: '0 auto' }}>
-          <p style={{ color: '#6F6D65', fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', margin: '0 0 10px' }}>
+          <p style={{ color: '#5C5A52', fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', margin: '0 0 10px' }}>
             Relay Arc: critical error
           </p>
           <h1 style={{ color: '#141413', fontSize: '28px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.1, margin: '0 0 10px' }}>

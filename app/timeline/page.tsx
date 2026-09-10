@@ -111,7 +111,7 @@ export default function Timeline() {
             </motion.button>
             <div>
               <h1 style={{ color: '#141413', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.7px' }}>Recovery Timeline</h1>
-              <p style={{ color: '#6F6D65', fontSize: '12px' }}>{cachedDate ? 'Generated today' : 'Personalized for you'}</p>
+              <p style={{ color: '#5C5A52', fontSize: '12px' }}>{cachedDate ? 'Generated today' : 'Personalized for you'}</p>
             </div>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={forceRefresh} disabled={generating}
@@ -173,10 +173,10 @@ export default function Timeline() {
                           <span style={{ background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '99px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>DONE</span>
                         )}
                       </div>
-                      <p style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
+                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
                     </div>
                     <motion.div animate={{ rotate: expanded === index ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ flexShrink: 0 }}>
-                      <ChevronDown size={15} color="#6F6D65" />
+                      <ChevronDown size={15} color="#5C5A52" />
                     </motion.div>
                   </motion.button>
                   <AnimatePresence>
@@ -185,7 +185,7 @@ export default function Timeline() {
                         transition={{ duration: 0.22 }} style={{ overflow: 'hidden' }}>
                         <div style={{ padding: '14px 16px 16px', borderTop: '1px solid #98C890', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                           {[
-                            { label: "What's normal", items: phase.normal, color: '#5C5A52', dot: '#6F6D65' },
+                            { label: "What's normal", items: phase.normal, color: '#5C5A52', dot: '#5C5A52' },
                             { label: 'Watch out for', items: phase.watchout, color: '#A33417', dot: '#A33417' },
                             { label: 'What to do', items: phase.todo, color: '#42623C', dot: '#42623C' },
                           ].map((section, si) => (
@@ -210,7 +210,7 @@ export default function Timeline() {
         </div>
         {!generating && timeline.length === 0 && (
           <div style={{ textAlign: 'center', padding: '56px 0' }}>
-            <p style={{ color: '#6F6D65', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
+            <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
             <button onClick={forceRefresh} style={{ color: '#42623C', fontSize: '13px', fontWeight: 700, background: 'none', border: '1px solid rgba(86,128,78,0.30)', borderRadius: '10px', padding: '8px 16px', cursor: 'pointer' }}>
               Try again
             </button>

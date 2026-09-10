@@ -40,7 +40,7 @@ import { ArrowLeft, Download, Printer, Trash2, Check } from 'lucide-react'
 // holds the canonical origin for exactly this reason.
 import { SITE_URL } from '@/lib/site'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52'
 const CREAM = '#B3DDAC', BORDER = '#98C890', WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757', CRIT = '#A33417'

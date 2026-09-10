@@ -70,7 +70,7 @@ export default function CareTeamLogin() {
         {mode === 'signup' && (
           <>
             <div style={{ position: 'relative' }}>
-              <User size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#6F6D65' }}/>
+              <User size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#5C5A52' }}/>
               <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)}
                 style={{ width: '100%', background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
             </div>
@@ -85,19 +85,19 @@ export default function CareTeamLogin() {
         )}
 
         <div style={{ position: 'relative' }}>
-          <Mail size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#6F6D65' }}/>
+          <Mail size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#5C5A52' }}/>
           <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)}
             style={{ width: '100%', background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <div style={{ position: 'relative' }}>
-          <Lock size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#6F6D65' }}/>
+          <Lock size={15} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#5C5A52' }}/>
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}
             style={{ width: '100%', background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>
 
         <div style={{ position: 'relative' }}>
-          <KeyRound size={15} color="#6F6D65" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
+          <KeyRound size={15} color="#5C5A52" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
           <input type="password" placeholder="Care team access code" value={code} onChange={e => setCode(e.target.value)}
             style={{ width: '100%', background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px 16px 16px 44px', color: '#141413', fontSize: '14px', outline: 'none' }}/>
         </div>

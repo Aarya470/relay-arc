@@ -51,39 +51,39 @@ export default function NurseLogin() {
         </div>
 
         <h1 className="text-[#141413] text-3xl font-bold mb-1">Care team login</h1>
-        <p className="text-[#6F6D65] text-sm mb-8">Access requires a valid care team code</p>
+        <p className="text-[#5C5A52] text-sm mb-8">Access requires a valid care team code</p>
 
         <div className="space-y-3">
           <div className="relative">
-            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6F6D65]"/>
+            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5C5A52]"/>
             <input
               type="email"
               placeholder="Email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#6F6D65] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
-            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6F6D65]"/>
+            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5C5A52]"/>
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#6F6D65] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
-            <KeyRound size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6F6D65]" />
+            <KeyRound size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5C5A52]" />
             <input
               type="password"
               placeholder="Care team access code"
               value={code}
               onChange={e => setCode(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#6F6D65] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 

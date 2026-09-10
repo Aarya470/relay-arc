@@ -78,10 +78,10 @@ export default function HistoryPage() {
       {/* Header */}
       <div style={{ padding: '56px 20px 0' }}>
         <button onClick={() => router.push('/dashboard')}
-          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#6F6D65', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#5C5A52', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
           <ArrowLeft size={14}/> Dashboard
         </button>
-        <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Health history</p>
+        <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Health history</p>
         <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, marginBottom: '24px' }}>
           Your record
         </h1>
@@ -99,7 +99,7 @@ export default function HistoryPage() {
                 marginBottom: '-1px', fontFamily: 'inherit',
               }}
             >
-              <span style={{ color: tab === key ? '#141413' : '#6F6D65', fontSize: '14px', fontWeight: tab === key ? 700 : 500 }}>
+              <span style={{ color: tab === key ? '#141413' : '#5C5A52', fontSize: '14px', fontWeight: tab === key ? 700 : 500 }}>
                 {label}
               </span>
               <span style={{ color: tab === key ? (key === 'emergencies' ? '#A33417' : '#42623C') : '#C4BFB0', fontSize: '12px', fontFamily: mono, fontWeight: 700 }}>
@@ -116,7 +116,7 @@ export default function HistoryPage() {
             <motion.div key="checkins" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               {checkins.length === 0 ? (
                 <div style={{ padding: '48px 0' }}>
-                  <p style={{ color: '#6F6D65', fontSize: '14px', marginBottom: '10px' }}>No check-ins yet.</p>
+                  <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '10px' }}>No check-ins yet.</p>
                   <button onClick={() => router.push('/checkin')}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#42623C', fontSize: '14px', fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
                     Start your first check-in →
@@ -125,7 +125,7 @@ export default function HistoryPage() {
               ) : (
                 Object.entries(checkinGroups).map(([date, items]) => (
                   <div key={date} style={{ marginBottom: '28px' }}>
-                    <p style={{ color: '#6F6D65', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
+                    <p style={{ color: '#5C5A52', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
                       {date}
                     </p>
                     <div style={{ borderTop: '1px solid #98C890' }}>
@@ -175,12 +175,12 @@ export default function HistoryPage() {
             <motion.div key="emergencies" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               {emergencies.length === 0 ? (
                 <div style={{ padding: '48px 0' }}>
-                  <p style={{ color: '#6F6D65', fontSize: '14px' }}>No emergency events. Good.</p>
+                  <p style={{ color: '#5C5A52', fontSize: '14px' }}>No emergency events. Good.</p>
                 </div>
               ) : (
                 Object.entries(emergencyGroups).map(([date, items]) => (
                   <div key={date} style={{ marginBottom: '28px' }}>
-                    <p style={{ color: '#6F6D65', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
+                    <p style={{ color: '#5C5A52', fontSize: '10.5px', fontFamily: mono, textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '4px' }}>
                       {date}
                     </p>
                     <div style={{ borderTop: '1px solid #98C890' }}>

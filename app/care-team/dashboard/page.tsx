@@ -417,7 +417,7 @@ export default function CareTeamDashboard() {
           ].map((stat, i) => (
             <div key={i} style={{ flex: 1, background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
               <p style={{ color: stat.color, fontWeight: 700, fontSize: '18px' }}>{stat.value}</p>
-              <p style={{ color: '#6F6D65', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</p>
+              <p style={{ color: '#5C5A52', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</p>
             </div>
           ))}
         </div>
@@ -456,7 +456,7 @@ export default function CareTeamDashboard() {
                     </p>
                   </div>
                   {a.scheduled_at && (
-                    <p style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'monospace', marginBottom: '10px' }}>
+                    <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'monospace', marginBottom: '10px' }}>
                       {parseTS(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                     </p>
                   )}
@@ -492,7 +492,7 @@ export default function CareTeamDashboard() {
                       </span>
                     )}
                   </div>
-                  <p style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'monospace', marginBottom: joinable ? '10px' : 0 }}>
+                  <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'monospace', marginBottom: joinable ? '10px' : 0 }}>
                     {parseTS(a.scheduled_at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                   </p>
                   {joinable && (
@@ -624,19 +624,19 @@ export default function CareTeamDashboard() {
                         <div style={{ padding: '10px 14px', background: 'rgba(163,52,23,0.05)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           {patient?.blood_type && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              <span style={{ color: '#6F6D65', fontSize: '11px', width: '80px', flexShrink: 0 }}>Blood type</span>
+                              <span style={{ color: '#5C5A52', fontSize: '11px', width: '80px', flexShrink: 0 }}>Blood type</span>
                               <span style={{ color: '#A33417', fontWeight: 800, fontSize: '18px', fontFamily: 'monospace' }}>{patient.blood_type}</span>
                             </div>
                           )}
                           {patient?.allergies && (
                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                              <span style={{ color: '#6F6D65', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Allergies</span>
+                              <span style={{ color: '#5C5A52', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Allergies</span>
                               <span style={{ color: '#8F2E14', fontWeight: 600, fontSize: '12px', lineHeight: 1.5 }}>{patient.allergies}</span>
                             </div>
                           )}
                           {patient?.medications?.length > 0 && (
                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                              <span style={{ color: '#6F6D65', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Medications</span>
+                              <span style={{ color: '#5C5A52', fontSize: '11px', width: '80px', flexShrink: 0, paddingTop: '2px' }}>Medications</span>
                               <span style={{ color: '#5C5A52', fontSize: '11px', lineHeight: 1.6 }}>
                                 {patient.medications.slice(0, 3).map((m: any) => m.name || m).join(', ')}
                               </span>
@@ -653,7 +653,7 @@ export default function CareTeamDashboard() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
                         <MapPin size={13} color="#A33417" style={{ flexShrink: 0 }}/>
                         <div style={{ minWidth: 0 }}>
-                          <p style={{ color: '#6F6D65', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1px' }}>Routing to</p>
+                          <p style={{ color: '#5C5A52', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1px' }}>Routing to</p>
                           <p style={{ color: '#141413', fontWeight: 600, fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{emergency.hospital_name}</p>
                         </div>
                       </div>
@@ -674,7 +674,7 @@ export default function CareTeamDashboard() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <MapPin size={13} color="#42623C" style={{ flexShrink: 0 }}/>
                         <div>
-                          <p style={{ color: '#6F6D65', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1px' }}>Last known location</p>
+                          <p style={{ color: '#5C5A52', fontSize: '9px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1px' }}>Last known location</p>
                           <p style={{ color: '#5C5A52', fontFamily: 'monospace', fontSize: '11px' }}>
                             {Number(emergency.patient_lat).toFixed(5)}, {Number(emergency.patient_lng).toFixed(5)}
                           </p>
@@ -729,7 +729,7 @@ export default function CareTeamDashboard() {
                       <div style={{
                         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                         background: '#F2F0E8', border: '1px solid #98C890',
-                        color: '#6F6D65', fontWeight: 600, fontSize: '12px', padding: '10px 8px',
+                        color: '#5C5A52', fontWeight: 600, fontSize: '12px', padding: '10px 8px',
                         borderRadius: '10px',
                       }}>
                         <Phone size={13}/>
@@ -762,7 +762,7 @@ export default function CareTeamDashboard() {
       <div style={{ padding: '16px' }}>
         {sortedPatients.length === 0 && (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
-            <p style={{ color: '#6F6D65', fontSize: '14px' }}>No patients yet</p>
+            <p style={{ color: '#5C5A52', fontSize: '14px' }}>No patients yet</p>
           </div>
         )}
 
@@ -828,7 +828,7 @@ export default function CareTeamDashboard() {
                     {sum.priority_reason}
                   </p>
                 ) : (
-                  <p style={{ color: '#6F6D65', fontSize: '12px' }}>
+                  <p style={{ color: '#5C5A52', fontSize: '12px' }}>
                     {patient.diagnosis?.split(',')[0]} · {lastCheckin ? `Last check-in ${new Date(lastCheckin.created_at).toLocaleDateString()}` : 'No check-ins yet'}
                   </p>
                 )}
@@ -858,7 +858,7 @@ export default function CareTeamDashboard() {
                     {overdueM ? 'Monitor' : sum ? getStatusLabel(score) : '. '}
                   </span>
                 )}
-                <ChevronRight size={14} color="#6F6D65"/>
+                <ChevronRight size={14} color="#5C5A52"/>
               </div>
             </motion.button>
           )

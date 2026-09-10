@@ -124,7 +124,7 @@ export default function TransportRequest() {
           <ArrowLeft size={16} color="#5C5A52"/>
         </motion.button>
         <div>
-          <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
+          <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
           <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '20px', letterSpacing: '-0.4px' }}>Request a Ride</h1>
         </div>
       </div>
@@ -196,7 +196,7 @@ export default function TransportRequest() {
                 <p style={{ color: '#42623C', fontSize: '12px', fontWeight: 500 }}>{address}</p>
               </div>
 
-              <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>
+              <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>
                 Select hospital
               </p>
 
@@ -216,13 +216,13 @@ export default function TransportRequest() {
                   >
                     <div>
                       <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px', marginBottom: '2px' }}>{h.name}</p>
-                      <p style={{ color: '#6F6D65', fontSize: '11px' }}>{h.address}</p>
+                      <p style={{ color: '#5C5A52', fontSize: '11px' }}>{h.address}</p>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '12px' }}>
                       <p style={{ color: '#42623C', fontWeight: 700, fontSize: '14px', fontFamily: 'var(--font-mono, monospace)' }}>
                         {Math.round((h.distance || 0) / 1000 / 50 * 60)} min
                       </p>
-                      <p style={{ color: '#6F6D65', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
+                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
                         {((h.distance || 0) / 1000).toFixed(1)} km
                       </p>
                     </div>
@@ -238,7 +238,7 @@ export default function TransportRequest() {
                 style={{
                   width: '100%',
                   background: selectedHospital ? '#A33417' : '#F2F0E8',
-                  color: selectedHospital ? 'white' : '#6F6D65',
+                  color: selectedHospital ? 'white' : '#5C5A52',
                   fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none',
                   cursor: selectedHospital ? 'pointer' : 'not-allowed',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
@@ -265,7 +265,7 @@ export default function TransportRequest() {
                 Nearby community members are being notified. Someone will accept your request shortly.
               </p>
               <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px', textAlign: 'left', marginBottom: '24px' }}>
-                <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Request details</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Request details</p>
                 <p style={{ color: '#141413', fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>{request?.hospital_name}</p>
                 <p style={{ color: '#5C5A52', fontSize: '12px' }}>{request?.pickup_address}</p>
               </div>
@@ -313,7 +313,7 @@ export default function TransportRequest() {
                 <p style={{ color: '#5C5A52', fontSize: '13px' }}>They are on their way to you</p>
               </div>
               <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px', marginBottom: '10px' }}>
-                <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Your driver</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Your driver</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#42623C', fontWeight: 700, fontSize: '18px', flexShrink: 0 }}>
                     {request?.driver_name?.[0]}
@@ -333,7 +333,7 @@ export default function TransportRequest() {
                 )}
               </div>
               <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px' }}>
-                <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Heading to</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Heading to</p>
                 <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>{request?.hospital_name}</p>
               </div>
             </motion.div>

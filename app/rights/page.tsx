@@ -27,7 +27,7 @@ import { rightsFor, guessCountry, COUNTRIES, type Country } from '@/lib/rights'
 
 // Ink tones. These are for text INSIDE the white cards, which is most of this
 // page, so they are unchanged.
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52'
 const WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757'

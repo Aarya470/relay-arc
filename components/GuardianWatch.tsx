@@ -127,7 +127,7 @@ export default function GuardianWatch({
           style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(20,20,19,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
         >
           <div style={{ background: '#FFFFFF', borderRadius: '18px', padding: '28px 24px', width: '100%', maxWidth: '360px', textAlign: 'center' }}>
-            <p style={{ color: '#6F6D65', fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '14px' }}>
+            <p style={{ color: '#5C5A52', fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '14px' }}>
               Guardian check
             </p>
             <p style={{ color: T1, fontSize: '24px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.15, marginBottom: '6px' }}>

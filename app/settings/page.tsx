@@ -102,26 +102,26 @@ export default function Settings() {
       {/* Header */}
       <div style={{ padding: '56px 20px 22px' }}>
         <button onClick={() => router.push('/dashboard')}
-          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#6F6D65', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#5C5A52', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
           <ArrowLeft size={14}/> Dashboard
         </button>
-        <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>Settings</p>
+        <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>Settings</p>
         <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1 }}>
           {profile?.full_name?.split(' ')[0] || 'Profile'}
         </h1>
-        <p style={{ color: '#6F6D65', fontSize: '13px', marginTop: '8px' }}>{profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}</p>
+        <p style={{ color: '#5C5A52', fontSize: '13px', marginTop: '8px' }}>{profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}</p>
       </div>
 
       <div style={{ padding: '0 20px' }}>
 
         {/* Profile fields — flat rows */}
-        <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Profile</p>
+        <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Profile</p>
         <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
           {fields.map(f => (
             <div key={f.key} style={{ borderBottom: '1px solid #98C890' }}>
               {editing === f.key ? (
                 <div style={{ padding: '16px 0' }}>
-                  <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1.2px', fontFamily: 'var(--font-mono, monospace)' }}>{f.label}</p>
+                  <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1.2px', fontFamily: 'var(--font-mono, monospace)' }}>{f.label}</p>
                   {/* Date of birth was still a native <input type="date"> here,
                       so editing your birthday from settings gave you the OS
                       spinner that onboarding was moved off. Same control in
@@ -162,7 +162,7 @@ export default function Settings() {
                   onClick={() => startEdit(f.key, f.value)}
                   style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'baseline', gap: '16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  <p style={{ color: '#6F6D65', fontSize: '13px', width: '110px', flexShrink: 0 }}>{f.label}</p>
+                  <p style={{ color: '#5C5A52', fontSize: '13px', width: '110px', flexShrink: 0 }}>{f.label}</p>
                   <p style={{ flex: 1, color: f.value ? '#141413' : '#C4BFB0', fontSize: '14.5px', fontWeight: f.value ? 600 : 400 }}>{f.value || 'Tap to add'}</p>
                   <ChevronRight size={13} color="#C4BFB0" style={{ alignSelf: 'center' }}/>
                 </motion.button>
@@ -172,7 +172,7 @@ export default function Settings() {
         </div>
 
         {/* Data — flat rows */}
-        <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Data</p>
+        <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Data</p>
         <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
           {[
             { label: 'Health history', sub: 'Past check-ins and emergencies', path: '/history' },
@@ -187,7 +187,7 @@ export default function Settings() {
             >
               <div style={{ flex: 1 }}>
                 <p style={{ color: (item as any).red ? '#A33417' : '#141413', fontWeight: 600, fontSize: '14.5px' }}>{item.label}</p>
-                <p style={{ color: '#6F6D65', fontSize: '12.5px', marginTop: '2px' }}>{item.sub}</p>
+                <p style={{ color: '#5C5A52', fontSize: '12.5px', marginTop: '2px' }}>{item.sub}</p>
               </div>
               <ChevronRight size={13} color="#C4BFB0"/>
             </motion.button>
@@ -195,7 +195,7 @@ export default function Settings() {
         </div>
 
         {/* Account */}
-        <p style={{ color: '#6F6D65', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Account</p>
+        <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Account</p>
         <div style={{ borderTop: '1px solid #98C890' }}>
           <motion.button
             whileTap={{ scale: 0.995 }}

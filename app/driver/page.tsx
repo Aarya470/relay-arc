@@ -82,9 +82,9 @@ export default function DriverDashboard() {
       </div>
 
       <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px', marginBottom: '12px' }}>
-        <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
+        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.patient_name}</p>
-        <p style={{ color: '#6F6D65', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
+        <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => {
@@ -98,9 +98,9 @@ export default function DriverDashboard() {
       </div>
 
       <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px' }}>
-        <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Then take to</p>
+        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Then take to</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.hospital_name}</p>
-        <p style={{ color: '#6F6D65', fontSize: '13px', marginBottom: '12px' }}>
+        <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>
           Emergency: {accepted.emergency_type?.replace('_', ' ')}
         </p>
         <motion.button
@@ -129,11 +129,11 @@ export default function DriverDashboard() {
           <ArrowLeft size={16} color="#5C5A52"/>
         </motion.button>
         <div>
-          <p style={{ color: '#6F6D65', fontFamily: 'monospace', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
+          <p style={{ color: '#5C5A52', fontFamily: 'monospace', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
           <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '20px' }}>Help someone now</h1>
         </div>
         <div style={{ marginLeft: 'auto', background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8', border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#98C890'}`, borderRadius: '20px', padding: '4px 10px' }}>
-          <p style={{ color: requests.length > 0 ? '#A33417' : '#6F6D65', fontFamily: 'monospace', fontSize: '11px' }}>
+          <p style={{ color: requests.length > 0 ? '#A33417' : '#5C5A52', fontFamily: 'monospace', fontSize: '11px' }}>
             {requests.length} pending
           </p>
         </div>
@@ -144,11 +144,11 @@ export default function DriverDashboard() {
           <div style={{ textAlign: 'center', paddingTop: '60px' }}>
             <Car size={40} style={{ display: 'block', margin: '0 auto 16px' }} />
             <p style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>No requests nearby</p>
-            <p style={{ color: '#6F6D65', fontSize: '13px' }}>Check back soon. Requests update in real time</p>
+            <p style={{ color: '#5C5A52', fontSize: '13px' }}>Check back soon. Requests update in real time</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <p style={{ color: '#6F6D65', fontSize: '12px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+            <p style={{ color: '#5C5A52', fontSize: '12px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
               Active requests
             </p>
             <AnimatePresence>
@@ -171,21 +171,21 @@ export default function DriverDashboard() {
                       <p style={{ color: '#A33417', fontWeight: 600, fontSize: '13px' }}>
                         {req.emergency_type?.replace('_', ' ')} emergency
                       </p>
-                      <p style={{ color: '#6F6D65', fontSize: '11px', marginLeft: 'auto', fontFamily: 'monospace' }}>
+                      <p style={{ color: '#5C5A52', fontSize: '11px', marginLeft: 'auto', fontFamily: 'monospace' }}>
                         {new Date(req.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'flex-start' }}>
                       <MapPin size={13} color="#A87200" style={{ flexShrink: 0, marginTop: '2px' }}/>
                       <div>
-                        <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
+                        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.pickup_address}</p>
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                       <AlertCircle size={13} color="#42623C" style={{ flexShrink: 0, marginTop: '2px' }}/>
                       <div>
-                        <p style={{ color: '#6F6D65', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Hospital</p>
+                        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Hospital</p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.hospital_name}</p>
                       </div>
                     </div>

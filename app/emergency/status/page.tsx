@@ -72,7 +72,7 @@ export default function EmergencyStatus() {
             <ArrowLeft size={16} color="#5C5A52" />
           </motion.button>
           <div>
-            <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Status</p>
+            <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Status</p>
             <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>All systems responding</h1>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function EmergencyStatus() {
             <div style={{ flex: 1 }}>
               <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
               <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>{action.detail}</p>
-              <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', marginTop: '5px' }}>{time}</p>
+              <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', marginTop: '5px' }}>{time}</p>
             </div>
           </motion.div>
         ))}
@@ -130,7 +130,7 @@ export default function EmergencyStatus() {
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>Turn right onto County Rd</p>
-            <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
+            <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
           </div>
           <span style={{ background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.25)', color: '#42623C', fontSize: '11px', padding: '5px 10px', borderRadius: '20px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
         </div>
@@ -138,7 +138,7 @@ export default function EmergencyStatus() {
         {/* Contacts */}
         {profile?.emergency_contacts && (
           <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '16px', padding: '16px' }}>
-            <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Contacts notified</p>
+            <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Contacts notified</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {profile.emergency_contacts.map((c: any, i: number) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -147,7 +147,7 @@ export default function EmergencyStatus() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ color: '#141413', fontSize: '13px', fontWeight: 600 }}>{c.name}</p>
-                    <p style={{ color: '#6F6D65', fontSize: '11px' }}>{c.relationship}</p>
+                    <p style={{ color: '#5C5A52', fontSize: '11px' }}>{c.relationship}</p>
                   </div>
                   <span style={{ color: '#42623C', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700 }}>Notified</span>
                 </div>

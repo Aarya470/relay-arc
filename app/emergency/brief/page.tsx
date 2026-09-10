@@ -222,7 +222,7 @@ function BriefContent() {
         <Section>
           <SectionLabel>PATIENT</SectionLabel>
           <p className="text-xl font-bold" style={{ color: '#141413' }}>
-            {profile?.full_name || <span style={{ color: '#6F6D65' }}>Unknown</span>}
+            {profile?.full_name || <span style={{ color: '#5C5A52' }}>Unknown</span>}
           </p>
           {profile?.date_of_birth && (
             <p className="text-sm mt-0.5" style={{ color: '#5C5A52' }}>
@@ -255,7 +255,7 @@ function BriefContent() {
               {profile.allergies}
             </p>
           ) : (
-            <p className="text-base" style={{ color: '#6F6D65' }}>
+            <p className="text-base" style={{ color: '#5C5A52' }}>
               None known
             </p>
           )}
@@ -283,7 +283,7 @@ function BriefContent() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm" style={{ color: '#6F6D65' }}>
+            <p className="text-sm" style={{ color: '#5C5A52' }}>
               None on file
             </p>
           )}
@@ -354,7 +354,7 @@ function BriefContent() {
               </p>
             </div>
           ) : (
-            <p className="text-sm" style={{ color: '#6F6D65' }}>
+            <p className="text-sm" style={{ color: '#5C5A52' }}>
               None on file
             </p>
           )}
@@ -373,11 +373,11 @@ function BriefContent() {
               {clinicalNote}
             </p>
           ) : (
-            <p className="text-sm" style={{ color: '#6F6D65' }}>
+            <p className="text-sm" style={{ color: '#5C5A52' }}>
               Note unavailable. Use profile data above.
             </p>
           )}
-          <p className="text-xs mt-2" style={{ color: '#6F6D65' }}>
+          <p className="text-xs mt-2" style={{ color: '#5C5A52' }}>
             AI-generated · verify with patient or records
           </p>
         </Section>
@@ -455,7 +455,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="text-xs font-bold uppercase tracking-widest mb-1.5"
-      style={{ color: '#6F6D65', letterSpacing: '0.13em' }}
+      style={{ color: '#5C5A52', letterSpacing: '0.13em' }}
     >
       {children}
     </p>

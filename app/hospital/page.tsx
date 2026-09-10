@@ -6,7 +6,7 @@ import { DEMO_PARTNER, DEMO_INCOMING, DEMO_BANNER } from '@/lib/demo-data'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
-const T3 = '#6F6D65'
+const T3 = '#5C5A52'
 const BORDER = '#98C890'
 const ACCENT = '#42623C'
 const RED = '#A33417'

@@ -7,7 +7,7 @@
 // benchmark, never invented shapes.
 import { useEffect, useRef, useState } from 'react'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#6F6D65', BORDER = '#98C890'
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52', BORDER = '#98C890'
 const mono = 'var(--font-mono, monospace)'
 
 /** Reveal on scroll — the bars grow once, when they come into view. */

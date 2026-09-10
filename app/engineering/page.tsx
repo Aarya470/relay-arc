@@ -20,7 +20,7 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
   loading: () => <DemoSkeleton label="loading the scorer…" />,
 })
 
-const T1 = '#FFFFFF', T2 = '#5C5A52', T3 = '#6F6D65'
+const T1 = '#FFFFFF', T2 = '#5C5A52', T3 = '#5C5A52'
 const BORDER = '#7EB382', BG2 = '#3A6440'
 const RED = '#A33417', ACCENT = '#42623C'
 const ORANGE = '#D97757'   // fill only. dark ink on top

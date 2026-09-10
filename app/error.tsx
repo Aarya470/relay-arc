@@ -20,7 +20,7 @@ export default function ErrorBoundary({ error, reset }: { error: Error & { diges
         <span style={{ color: '#141413', fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
       </div>
 
-      <p style={{ color: '#6F6D65', fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '10px' }}>
+      <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '10px' }}>
         Something broke
       </p>
       <h1 style={{ color: '#141413', fontSize: '30px', fontWeight: 800, letterSpacing: '-1.1px', lineHeight: 1.1, marginBottom: '10px' }}>
