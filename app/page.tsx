@@ -702,9 +702,9 @@ export default function Home() {
                 </button>
                 <a href="/login" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', padding: '5px 0', marginBottom: '2px' }}>Sign in</a>
                 <a href="/login?signup=1" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', padding: '5px 0', marginBottom: '2px' }}>Create account</a>
-                <a href="/donate" style={{ display: 'block', color: '#FF6B5E', fontSize: '13px', fontWeight: 700, textDecoration: 'none', marginBottom: '10px' }}>Donate</a>
+                <a href="/donate" style={{ display: 'block', color: '#FF6B5E', fontSize: '13px', fontWeight: 700, textDecoration: 'none', padding: '5px 0', marginBottom: '2px' }}>Donate</a>
                 <a href="/demo" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', padding: '5px 0', marginBottom: '2px' }}>Live demo</a>
-                <a href="/status" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none' }}>System status</a>
+                <a href="/status" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', padding: '5px 0' }}>System status</a>
                 {/* Renders nothing until lib/social.ts has a URL. */}
                 <div style={{ marginTop: '14px' }}><FollowLinks tone="dark" variant="inline"/></div>
               </div>
@@ -713,8 +713,8 @@ export default function Home() {
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.14)', paddingTop: '22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' }}>
               <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px', fontFamily: mono }}>© {new Date().getFullYear()} Relay Arc</p>
-              <a href="/privacy" style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Privacy</a>
-              <a href="/terms" style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Terms</a>
+              <a href="/privacy" style={{ display: 'inline-block', padding: '5px 0', color: 'rgba(255,255,255,0.45)', fontSize: '12px', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Privacy</a>
+              <a href="/terms" style={{ display: 'inline-block', padding: '5px 0', color: 'rgba(255,255,255,0.45)', fontSize: '12px', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Terms</a>
             </div>
             <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px' }}>
               Not a substitute for emergency services. In immediate danger, call your local emergency number.
