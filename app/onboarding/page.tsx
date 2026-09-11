@@ -132,7 +132,15 @@ export default function Onboarding() {
     borderRadius: '10px',
     padding: '13px 16px',
     color: T1,
-    fontSize: '15px',
+    // 16px, not 15 or 14, and it is not a taste decision.
+    //
+    // Mobile Safari zooms the whole page in when a focused form control has a
+    // font size below 16px. Every text field in this app sat at 14 or 15, so on
+    // an iPhone tapping any of them jumped the layout and left the person
+    // pinching back out afterwards. Signup, onboarding, emergency contacts, the
+    // check-in box, the symptom note and every field on the no-account
+    // emergency card all did it. Measured across the running app.
+    fontSize: '16px',
     outline: 'none',
     fontFamily: 'inherit',
   }

@@ -17,7 +17,15 @@ const inputStyle: React.CSSProperties = {
   borderRadius: '12px',
   padding: '14px 16px',
   color: '#141413',
-  fontSize: '14px',
+    // 16px, not 15 or 14, and it is not a taste decision.
+    //
+    // Mobile Safari zooms the whole page in when a focused form control has a
+    // font size below 16px. Every text field in this app sat at 14 or 15, so on
+    // an iPhone tapping any of them jumped the layout and left the person
+    // pinching back out afterwards. Signup, onboarding, emergency contacts, the
+    // check-in box, the symptom note and every field on the no-account
+    // emergency card all did it. Measured across the running app.
+  fontSize: '16px',
   outline: 'none',
   fontFamily: 'inherit',
   boxSizing: 'border-box',

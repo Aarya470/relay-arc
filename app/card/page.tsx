@@ -226,7 +226,15 @@ export default function EmergencyCard() {
   }
   const input: CSSProperties = {
     width: '100%', padding: '11px 13px', border: `1px solid ${BORDER}`, background: WHITE,
-    color: INK, fontSize: '15px', fontFamily: 'inherit', borderRadius: 0, outline: 'none',
+        // 16px, not 15 or 14, and it is not a taste decision.
+    //
+    // Mobile Safari zooms the whole page in when a focused form control has a
+    // font size below 16px. Every text field in this app sat at 14 or 15, so on
+    // an iPhone tapping any of them jumped the layout and left the person
+    // pinching back out afterwards. Signup, onboarding, emergency contacts, the
+    // check-in box, the symptom note and every field on the no-account
+    // emergency card all did it. Measured across the running app.
+color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 0, outline: 'none',
   }
   const btn = (primary = false): CSSProperties => ({
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
@@ -252,7 +260,7 @@ export default function EmergencyCard() {
 
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px', position: 'sticky', top: 0, background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(8px)', zIndex: 40 }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-          <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+          <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '4px 0' }}>
             <ArrowLeft size={15}/> Relay Arc
           </button>
           {saved && hasAnything && (

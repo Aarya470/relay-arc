@@ -158,7 +158,15 @@ export default function Login() {
     borderRadius: '10px',
     padding: '13px 16px',
     color: T1,
-    fontSize: '15px',
+    // 16px, not 15 or 14, and it is not a taste decision.
+    //
+    // Mobile Safari zooms the whole page in when a focused form control has a
+    // font size below 16px. Every text field in this app sat at 14 or 15, so on
+    // an iPhone tapping any of them jumped the layout and left the person
+    // pinching back out afterwards. Signup, onboarding, emergency contacts, the
+    // check-in box, the symptom note and every field on the no-account
+    // emergency card all did it. Measured across the running app.
+    fontSize: '16px',
     outline: 'none',
     transition: 'border-color 0.15s',
     boxSizing: 'border-box',
@@ -335,7 +343,7 @@ export default function Login() {
 
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T2, fontSize: '13.5px', fontFamily: 'inherit', textAlign: 'left', padding: 0, marginTop: '4px' }}>
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T2, fontSize: '13.5px', fontFamily: 'inherit', textAlign: 'left', padding: '6px 0', marginTop: '0px' }}>
             {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
             <span style={{ color: T1, fontWeight: 700, borderBottom: `1px solid ${BORDER}`, paddingBottom: '1px' }}>
               {isSignUp ? 'Sign in' : 'Create one'}
@@ -349,7 +357,7 @@ export default function Login() {
         <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '40px', paddingTop: '18px' }}>
           <button
             onClick={() => router.push('/care-team/login')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, fontSize: '12px', fontFamily: mono, letterSpacing: '0.4px', padding: 0 }}>
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, fontSize: '12px', fontFamily: mono, letterSpacing: '0.4px', padding: '6px 0' }}>
             Care team portal →
           </button>
         </div>

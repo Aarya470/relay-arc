@@ -365,7 +365,9 @@ export default function Checkin() {
               borderRadius: '14px',
               padding: '12px 16px',
               color: T1,
-              fontSize: '14px',
+              // 16px so mobile Safari does not zoom the page on focus. See the
+              // note in app/login/page.tsx.
+              fontSize: '16px',
               outline: 'none',
               transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
               fontFamily: 'inherit',

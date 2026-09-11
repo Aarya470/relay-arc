@@ -574,7 +574,8 @@ export default function SymptomsPage() {
               border: '1.5px solid #98C890',
               borderRadius: '10px',
               padding: '10px 12px',
-              fontSize: '14px',
+              // 16px so mobile Safari does not zoom on focus. See app/login.
+              fontSize: '16px',
               color: '#141413',
               background: '#B3DDAC',
               resize: 'none',

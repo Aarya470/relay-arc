@@ -502,7 +502,7 @@ export default function Home() {
                 </div>
 
                 <p style={{ color: T3, fontSize: '13px' }}>
-                  Two minutes, no account, nothing uploaded. · <button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: 0, color: T2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${BORDER}` }}>Watch one emergency, timed</button> · <a href="/demo" style={{ color: T2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Live demo</a>
+                  Two minutes, no account, nothing uploaded. · <button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: '4px 0', color: T2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${BORDER}` }}>Watch one emergency, timed</button> · <a href="/demo" style={{ display: 'inline-block', padding: '4px 0', color: T2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Live demo</a>
                 </p>
               </div>
 
@@ -542,7 +542,7 @@ export default function Home() {
           <div style={{ background: PANEL_2, borderRadius: '10px', padding: '11px 14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / What it does</span>
             <button onClick={() => router.push('/features')}
-              style={{ background: 'none', border: 'none', color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', cursor: 'pointer', padding: 0, borderBottom: `2px solid ${T1}` }}>
+              style={{ background: 'none', border: 'none', color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', cursor: 'pointer', padding: '5px 0', borderBottom: `2px solid ${T1}` }}>
               All five, in detail →
             </button>
           </div>
@@ -685,25 +685,25 @@ export default function Home() {
                 <p style={{ color: 'rgba(255,255,255,0.38)', fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Product</p>
                 {[['features', 'Features'], ['log', 'How it works']].map(([id, label]) => (
                   <button key={id} onClick={() => scrollTo(id)}
-                    style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                    style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0', marginBottom: '2px' }}>
                     {label}
                   </button>
                 ))}
                 <button onClick={() => router.push('/changelog')}
-                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0', marginBottom: '2px' }}>
                   Changelog
                 </button>
               </div>
               <div>
                 <p style={{ color: 'rgba(255,255,255,0.38)', fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '14px' }}>Company</p>
                 <button onClick={() => scrollTo('mission')}
-                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, marginBottom: '10px' }}>
+                  style={{ display: 'block', background: 'none', border: 'none', color: 'rgba(255,255,255,0.72)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0', marginBottom: '2px' }}>
                   Mission
                 </button>
-                <a href="/login" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Sign in</a>
-                <a href="/login?signup=1" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Create account</a>
+                <a href="/login" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', padding: '5px 0', marginBottom: '2px' }}>Sign in</a>
+                <a href="/login?signup=1" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', padding: '5px 0', marginBottom: '2px' }}>Create account</a>
                 <a href="/donate" style={{ display: 'block', color: '#FF6B5E', fontSize: '13px', fontWeight: 700, textDecoration: 'none', marginBottom: '10px' }}>Donate</a>
-                <a href="/demo" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', marginBottom: '10px' }}>Live demo</a>
+                <a href="/demo" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none', padding: '5px 0', marginBottom: '2px' }}>Live demo</a>
                 <a href="/status" style={{ display: 'block', color: 'rgba(255,255,255,0.72)', fontSize: '13px', textDecoration: 'none' }}>System status</a>
                 {/* Renders nothing until lib/social.ts has a URL. */}
                 <div style={{ marginTop: '14px' }}><FollowLinks tone="dark" variant="inline"/></div>

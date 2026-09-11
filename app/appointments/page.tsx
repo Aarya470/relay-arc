@@ -504,7 +504,7 @@ export default function Appointments() {
 
                 <textarea value={concern} onChange={e => setConcern(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
                   placeholder="What would you like to discuss? (optional)"
-                  style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${focused ? 'rgba(86,128,78,0.50)' : '#98C890'}`, borderRadius: '14px', padding: '14px 16px', color: '#141413', fontSize: '14px', outline: 'none', resize: 'none', minHeight: '80px', marginBottom: '14px', fontFamily: 'inherit', transition: 'border-color 0.18s ease' }} />
+                  style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${focused ? 'rgba(86,128,78,0.50)' : '#98C890'}`, borderRadius: '14px', padding: '14px 16px', color: '#141413', fontSize: '16px', outline: 'none', resize: 'none', minHeight: '80px', marginBottom: '14px', fontFamily: 'inherit', transition: 'border-color 0.18s ease' }} />
 
                 <motion.button whileTap={canSubmit ? { scale: 0.97, y: 1 } : {}} transition={spring} onClick={request} disabled={!canSubmit}
                   style={{ width: '100%', background: !canSubmit ? '#F2F0E8' : '#42623C', color: !canSubmit ? '#5C5A52' : '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: canSubmit ? 'pointer' : 'default', boxShadow: canSubmit ? '0 8px 24px rgba(86,128,78,0.28)' : 'none', transition: 'all 0.2s ease', letterSpacing: '-0.1px' }}>
