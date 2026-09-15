@@ -20,7 +20,16 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
   loading: () => <DemoSkeleton label="loading the scorer…" />,
 })
 
-const T1 = '#FFFFFF', T2 = '#5C5A52', T3 = '#5C5A52'
+// THE PAGE GREEN, AND WHY IT IS THIS ONE.
+// This page used to be #4B8150. A contrast audit against the running site found
+// body copy on it at 1.50:1, which is not a near miss, it is unreadable, and it
+// had been shipping. The arithmetic is unforgiving: on #4B8150 the only colour
+// that reaches the 4.5:1 small-text minimum is pure white, at 4.61, and on
+// #57945C nothing reaches it at all, white included, at 3.62. A dark green page
+// cannot carry small text, full stop.
+// #B3DDAC is the page colour the text tokens were tuned against: ink is
+// 12.16:1 on it and the secondary grey 4.56:1. See app/globals.css.
+const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
 const BORDER = '#7EB382', BG2 = '#3A6440'
 const RED = '#A33417', ACCENT = '#42623C'
 const ORANGE = '#D97757'   // fill only. dark ink on top
@@ -101,7 +110,7 @@ export default function Engineering() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#4B8150', minHeight: '100dvh' }}>
+    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
 
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
       <header style={{

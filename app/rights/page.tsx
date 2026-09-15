@@ -32,12 +32,21 @@ const WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757'
 
-// The dark page, and text ON it.
-const PAGE = '#4B8150'
-const ON = '#FFFFFF'          // 4.61:1. and the ceiling, see globals.css
-const ON_3 = '#C8D4C9'        // 3.01:1, meta only
-const RULE = '#7EB382'        // hairline on dark; a dark rule vanishes here
-const CORAL = '#F2C8BC'       // ORANGE is 1.53:1 on this page and unusable as text
+// The page, and text ON it.
+// THE PAGE GREEN, AND WHY IT IS THIS ONE.
+// This page used to be #4B8150. A contrast audit against the running site found
+// body copy on it at 1.50:1, which is not a near miss, it is unreadable, and it
+// had been shipping. The arithmetic is unforgiving: on #4B8150 the only colour
+// that reaches the 4.5:1 small-text minimum is pure white, at 4.61, and on
+// #57945C nothing reaches it at all, white included, at 3.62. A dark green page
+// cannot carry small text, full stop.
+// #B3DDAC is the page colour the text tokens were tuned against: ink is
+// 12.16:1 on it and the secondary grey 4.56:1. See app/globals.css.
+const PAGE = '#B3DDAC'
+const ON = '#141413'          // ink, 12.16:1
+const ON_3 = '#5C5A52'        // 4.56:1, passes for body text now
+const RULE = '#7EB382'        // hairline, non-text
+const CORAL = '#A33417'       // ORANGE is 2.96:1 on light and unusable as text
 
 // A light tint for the block inside each white card. This is the job the old
 // CREAM constant used to do, kept separate now that the page itself is dark.

@@ -8,9 +8,18 @@
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 
-const INK = '#FFFFFF', INK2 = '#5C5A52', INK3 = '#5C5A52'
+// THE PAGE GREEN, AND WHY IT IS THIS ONE.
+// This page used to be #4B8150. A contrast audit against the running site found
+// body copy on it at 1.50:1, which is not a near miss, it is unreadable, and it
+// had been shipping. The arithmetic is unforgiving: on #4B8150 the only colour
+// that reaches the 4.5:1 small-text minimum is pure white, at 4.61, and on
+// #57945C nothing reaches it at all, white included, at 3.62. A dark green page
+// cannot carry small text, full stop.
+// #B3DDAC is the page colour the text tokens were tuned against: ink is
+// 12.16:1 on it and the secondary grey 4.56:1. See app/globals.css.
+const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52'
 const BORDER = '#7EB382', CREAM = '#4B8150'
-const GREEN_DEEP = '#C8D4C9', ORANGE = '#D97757', CRIT = '#A33417'
+const GREEN_DEEP = '#42623C', ORANGE = '#D97757', CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 
 type Kind = 'shipped' | 'fixed' | 'honest'
@@ -24,7 +33,7 @@ interface Entry {
 
 const KIND: Record<Kind, { label: string; color: string }> = {
   shipped: { label: 'SHIPPED', color: GREEN_DEEP },
-  fixed:   { label: 'FIXED',   color: '#F2C8BC' },
+  fixed:   { label: 'FIXED',   color: '#A33417' },
   honest:  { label: 'CORRECTION', color: CRIT },
 }
 
@@ -110,7 +119,7 @@ const ENTRIES: Entry[] = [
 export default function Changelog() {
   const router = useRouter()
   return (
-    <div style={{ background: '#4B8150', minHeight: '100dvh' }}>
+    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px' }}>
         <div style={{ maxWidth: '820px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>

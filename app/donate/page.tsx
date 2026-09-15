@@ -6,9 +6,18 @@ import { ArrowLeft, Copy, Check, ExternalLink } from 'lucide-react'
 import Mark from '@/components/Mark'
 
 // ─── Design tokens — shared with the homepage ────────────────────────────────
-const T1 = '#FFFFFF'
-const T2 = '#FFFFFF'
-const T3 = '#C8D4C9'
+// THE PAGE GREEN, AND WHY IT IS THIS ONE.
+// This page used to be #4B8150. A contrast audit against the running site found
+// body copy on it at 1.50:1, which is not a near miss, it is unreadable, and it
+// had been shipping. The arithmetic is unforgiving: on #4B8150 the only colour
+// that reaches the 4.5:1 small-text minimum is pure white, at 4.61, and on
+// #57945C nothing reaches it at all, white included, at 3.62. A dark green page
+// cannot carry small text, full stop.
+// #B3DDAC is the page colour the text tokens were tuned against: ink is
+// 12.16:1 on it and the secondary grey 4.56:1. See app/globals.css.
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#5C5A52'
 const BORDER = '#7EB382'
 const RED    = '#A33417'
 const GREEN  = '#42623C'
@@ -38,7 +47,7 @@ export default function Donate() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#4B8150' }}>
+    <div style={{ minHeight: '100dvh', background: '#B3DDAC' }}>
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: '#D97757', zIndex: 10 }}/>
 
       <motion.div
