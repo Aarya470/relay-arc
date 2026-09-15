@@ -123,7 +123,7 @@ export default function Engineering() {
       }}>
         <div style={{ ...WRAP, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
           <button onClick={() => router.push('/')}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0' }}>
             <ArrowLeft size={15}/> Relay Arc
           </button>
           <button onClick={() => router.push('/login?signup=1')}

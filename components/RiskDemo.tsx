@@ -114,8 +114,11 @@ export default function RiskDemo() {
               </div>
               <input
                 type="range" min={p.min} max={p.max} value={val}
+                aria-label={`${p.label} in ${p.unit}`}
                 onChange={e => setV(prev => ({ ...prev, [p.key]: Number(e.target.value) }))}
-                style={{ width: '100%', accentColor: pts > 0 ? pointColor(pts) : T1, margin: 0 }}
+                // 24px tall so it clears the pointer target minimum. The visible
+                // track is drawn by the browser and stays thin.
+                style={{ width: '100%', height: '24px', accentColor: pts > 0 ? pointColor(pts) : T1, margin: 0 }}
               />
               <p style={{ color: T3, fontFamily: mono, fontSize: '9.5px', letterSpacing: '0.6px', marginTop: '2px' }}>
                 {p.bands}

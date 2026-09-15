@@ -47,7 +47,7 @@ const ENTRIES: Entry[] = [
   {
     date: '2026-08-13', kind: 'shipped',
     title: 'A FHIR export that validates',
-    body: 'Hospitals running certified EHRs are required to expose FHIR APIs, so that is the interface worth building against. Relay can now produce a FHIR R4 Bundle of a person\u2019s own record with real LOINC codes. It exports and deliberately does not import: receiving records from a hospital would make Relay a HIPAA business associate and trigger a great deal more than we can currently honour. Worth recording how the first version failed \u2014 it used an invented identifier scheme, the tests passed, the types were fine, the build was green, and the HL7 reference validator returned seventeen errors because none of the internal references resolved. It now returns zero.',
+    body: 'Hospitals running certified EHRs are required to expose FHIR APIs, so that is the interface worth building against. Relay can now produce a FHIR R4 Bundle of a person\u2019s own record with real LOINC codes. It exports and deliberately does not import: receiving records from a hospital would make Relay a HIPAA business associate and trigger a great deal more than we can currently honour. Worth recording how the first version failed. It used an invented identifier scheme, the tests passed, the types were fine, the build was green, and the HL7 reference validator returned seventeen errors because none of the internal references resolved. It now returns zero.',
   },
   {
     date: '2026-08-12', kind: 'shipped',
@@ -122,10 +122,10 @@ export default function Changelog() {
     <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px' }}>
         <div style={{ maxWidth: '820px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+          <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0' }}>
             <ArrowLeft size={15}/> Relay Arc
           </button>
-          <button onClick={() => router.push('/engineering')} style={{ background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+          <button onClick={() => router.push('/engineering')} style={{ background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0' }}>
             Technology
           </button>
         </div>

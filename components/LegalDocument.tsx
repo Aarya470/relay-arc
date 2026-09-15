@@ -45,7 +45,7 @@ export default function LegalDocument({ kicker, title, body }: { kicker: string;
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '64px 24px 80px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '48px' }}>
           <button onClick={() => router.push('/')}
-            style={{ display: 'flex', alignItems: 'center', gap: '9px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '9px', background: 'none', border: 'none', cursor: 'pointer', padding: '5px 0' }}>
             <Mark size={26} />
             <span style={{ color: ON, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
           </button>
@@ -114,8 +114,8 @@ export default function LegalDocument({ kicker, title, body }: { kicker: string;
         })}
 
         <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '36px', paddingTop: '20px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-          <a href="/privacy" style={{ color: T2, fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Privacy policy</a>
-          <a href="/terms" style={{ color: T2, fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Terms of service</a>
+          <a href="/privacy" style={{ display: 'inline-block', padding: '5px 0', color: T2, fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Privacy policy</a>
+          <a href="/terms" style={{ display: 'inline-block', padding: '5px 0', color: T2, fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Terms of service</a>
           <a href={`mailto:${CONTACT}`} style={{ color: T2, fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Contact</a>
         </div>
         </div>

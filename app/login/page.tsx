@@ -180,8 +180,8 @@ export default function Login() {
         style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '88px', paddingBottom: '48px' }}>
 
         {/* Brand */}
-        <button onClick={() => router.push('/')}
-          style={{ display: 'flex', alignItems: 'center', gap: '9px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '56px' }}>
+        <button onClick={() => router.push('/')} aria-label="Relay Arc home"
+          style={{ display: 'flex', alignItems: 'center', gap: '9px', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', marginBottom: '52px' }}>
           <Mark size={26} />
           <span style={{ color: T1, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}>Relay Arc</span>
         </button>

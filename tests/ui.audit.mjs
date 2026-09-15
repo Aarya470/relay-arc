@@ -67,6 +67,11 @@ const AUDIT = `(() => {
     if (el.children.length) continue
     const t = (el.textContent || '').trim(); if (t.length < 2) continue
     if (!vis(el)) continue
+    // Text inside an SVG sits on a <rect fill=...>, which is not a CSS
+    // background, so walking DOM ancestors finds whatever is behind the SVG and
+    // reports a contrast the reader never experiences. The logo monogram is ink
+    // on an orange rect at 5.90:1 and was being reported as 1:1.
+    if (el.closest('svg')) continue
     const cs = getComputedStyle(el); const fg = parse(cs.color); if (!fg) continue
     const bg = bgOf(el)
     const L1 = lum(fg), L2 = lum(bg)

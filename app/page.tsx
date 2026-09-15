@@ -85,7 +85,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
           <div style={{ display: 'flex', alignItems: 'center', gap: '26px' }} className="desktop-nav">
             {links.map(([id, label]) => (
               <button key={id} onClick={() => scrollTo(id)} className="nav-link"
-                style={{ background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+                style={{ background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '6px 0' }}>
                 {label}
               </button>
             ))}
@@ -113,6 +113,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
               Make a card
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}
               style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }} className="mobile-menu-btn">
               {menuOpen ? <X size={20} color={T1}/> : <Menu size={20} color={T1}/>}
             </button>
