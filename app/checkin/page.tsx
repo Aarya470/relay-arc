@@ -131,7 +131,7 @@ export default function Checkin() {
 
   const AIAvatar = ({ size = 28 }: { size?: number }) => (
     <div style={{
-      width: size, height: size, borderRadius: '8px', flexShrink: 0,
+      width: size, height: size, borderRadius: '2px', flexShrink: 0,
       background: ACCENT,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
@@ -191,7 +191,7 @@ export default function Checkin() {
           display: 'flex', alignItems: 'center', gap: '5px',
           background: GREEN_DIM,
           border: `1px solid rgba(86,128,78,0.18)`,
-          borderRadius: '99px',
+          borderRadius: '2px',
           padding: '4px 10px',
         }}>
           <motion.div
@@ -244,7 +244,7 @@ export default function Checkin() {
               border: `1px solid ${BORDER}`,
               boxShadow: SHADOW,
               padding: '13px 16px',
-              borderRadius: '5px 18px 18px 18px',
+              borderRadius: '0px',
               display: 'flex', gap: '5px', alignItems: 'center',
             }}>
               {[0, 1, 2].map(i => (
@@ -267,7 +267,7 @@ export default function Checkin() {
             style={{
               background: GREEN_DIM,
               border: `1px solid rgba(86,128,78,0.18)`,
-              borderRadius: '16px',
+              borderRadius: '0px',
               padding: '28px 20px',
               textAlign: 'center',
               margin: '8px 0',
@@ -290,7 +290,7 @@ export default function Checkin() {
                 style={{
                   flex: 1, background: SURFACE, color: T1,
                   fontWeight: 700, fontSize: '13px',
-                  padding: '13px 16px', borderRadius: '12px',
+                  padding: '13px 16px', borderRadius: '0px',
                   border: `1px solid ${BORDER}`, cursor: 'pointer',
                 }}
               >
@@ -302,7 +302,7 @@ export default function Checkin() {
                 style={{
                   flex: 1, background: ACCENT, color: '#FFFFFF',
                   fontWeight: 700, fontSize: '13px',
-                  padding: '13px 16px', borderRadius: '12px',
+                  padding: '13px 16px', borderRadius: '0px',
                   border: 'none', cursor: 'pointer',
                 }}
               >
@@ -328,7 +328,7 @@ export default function Checkin() {
                 flexShrink: 0,
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                borderRadius: '99px',
+                borderRadius: '2px',
                 padding: '8px 15px',
                 color: T2, fontSize: '12px', fontWeight: 500,
                 cursor: 'pointer', whiteSpace: 'nowrap',
@@ -362,7 +362,7 @@ export default function Checkin() {
               flex: 1,
               background: BG,
               border: `1.5px solid ${focused ? ACCENT : BORDER}`,
-              borderRadius: '14px',
+              borderRadius: '0px',
               padding: '12px 16px',
               color: T1,
               // 16px so mobile Safari does not zoom the page on focus. See the
@@ -386,7 +386,7 @@ export default function Checkin() {
             style={{
               width: '44px', height: '44px',
               background: input.trim() ? ACCENT : BG,
-              borderRadius: '12px',
+              borderRadius: '0px',
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
               cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center',

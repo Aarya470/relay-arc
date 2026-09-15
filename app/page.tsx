@@ -203,12 +203,12 @@ function PhoneMockup() {
           {/* greeting */}
           <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px' }}>Good morning</p>
           <p style={{ color: T1, fontSize: '26px', fontWeight: 800, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '8px' }}>Asha</p>
-          <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '5px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '2px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
             Post-CABG
           </span>
 
           {/* SOS */}
-          <div style={{ background: RED, borderRadius: '18px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', animation: 'sos-pulse-lp 2.8s ease-in-out infinite' }}>
+          <div style={{ background: RED, borderRadius: '0px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', animation: 'sos-pulse-lp 2.8s ease-in-out infinite' }}>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '7.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontFamily: mono, fontWeight: 700, marginBottom: '6px' }}>Emergency response</p>
               <p style={{ color: 'white', fontSize: '32px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.9, fontFamily: mono }}>SOS</p>
@@ -221,12 +221,12 @@ function PhoneMockup() {
 
           {/* two cards */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
-            <div style={{ background: GREEN, borderRadius: '14px', padding: '12px' }}>
+            <div style={{ background: GREEN, borderRadius: '0px', padding: '12px' }}>
               <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Done</p>
               <p style={{ color: 'white', fontSize: '24px', fontWeight: 900, lineHeight: 0.9, marginBottom: '8px' }}>✓</p>
               <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '8.5px', fontWeight: 500 }}>Today complete</p>
             </div>
-            <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '14px', padding: '12px' }}>
+            <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '0px', padding: '12px' }}>
               <p style={{ color: ACCENT, fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Recovery</p>
               <p style={{ color: T1, fontSize: '24px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 0.9, marginBottom: '8px' }}>6</p>
               <p style={{ color: T3, fontSize: '8.5px', fontWeight: 500 }}>weeks post-surgery</p>
@@ -234,7 +234,7 @@ function PhoneMockup() {
           </div>
 
           {/* health score */}
-          <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '14px', padding: '12px 14px' }}>
+          <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '0px', padding: '12px 14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
               <p style={{ color: T3, fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono }}>Health score</p>
               <span style={{ color: GREEN, fontSize: '9.5px', fontWeight: 600 }}>Improving</span>
@@ -463,7 +463,7 @@ export default function Home() {
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }}>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px', background: PANEL_2, padding: '10px 14px', borderRadius: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px', background: PANEL_2, padding: '10px 14px', borderRadius: '2px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ width: '7px', height: '7px', background: CORAL, display: 'inline-block', animation: 'dot-blink 1.6s ease-in-out infinite' }}/>
                 <span style={{ color: T2, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }}>
@@ -491,7 +491,7 @@ export default function Home() {
             </h1>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
-              <div style={{ background: PANEL_2, borderRadius: '18px', padding: '28px 28px 32px', marginBottom: '90px' }} className="hero-copy">
+              <div style={{ background: PANEL_2, borderRadius: '0px', padding: '28px 28px 32px', marginBottom: '90px' }} className="hero-copy">
                 {/* The old line read "It works out what is happening, finds a
                      hospital that can treat it, and sends your medical details
                      ahead." Three verbs, same tense, same length, one after the
@@ -544,7 +544,7 @@ export default function Home() {
       {/* ── SEE IT, DON'T READ IT ────────────────────────────────────── */}
       <section id="log" style={{ padding: '96px 24px 100px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ background: PANEL_2, borderRadius: '10px', padding: '11px 14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+          <div style={{ background: PANEL_2, borderRadius: '2px', padding: '11px 14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>01 / How it works</span>
             <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>The same emergency, twice</span>
           </div>
@@ -558,7 +558,7 @@ export default function Home() {
       {/* ── WHAT IT DOES — four lines, no reading ─────────────────────── */}
       <section id="features" style={{ padding: '0 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ background: PANEL_2, borderRadius: '10px', padding: '11px 14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
+          <div style={{ background: PANEL_2, borderRadius: '2px', padding: '11px 14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / What it does</span>
             <button onClick={() => router.push('/features')}
               style={{ background: 'none', border: 'none', color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', cursor: 'pointer', padding: '5px 0', borderBottom: `2px solid ${T1}` }}>
@@ -577,7 +577,7 @@ export default function Home() {
               ['Your family gets the address', 'And the route to it, in one tap.'],
               ['Two minutes a day', 'Enough to catch a bad week while it is still only a bad week.'],
             ].map(([title, body], i) => (
-              <div key={i} style={{ background: PANEL, borderRadius: '14px', padding: '18px 18px 20px' }}>
+              <div key={i} style={{ background: PANEL, borderRadius: '0px', padding: '18px 18px 20px' }}>
                 <span style={{ color: RED, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
                 <h3 style={{ color: T1, fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em', margin: '10px 0 8px', lineHeight: 1.15 }}>{title}</h3>
                 <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55 }}>{body}</p>
@@ -648,7 +648,7 @@ export default function Home() {
               <h2 style={{ color: ON, fontSize: 'clamp(34px, 5vw, 58px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
                 A paramedic can read it<br/>without your passcode<span style={{ color: CORAL }}>.</span>
               </h2>
-              <p style={{ color: INK, background: PANEL_2, borderRadius: '12px', padding: '14px 16px', fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
+              <p style={{ color: INK, background: PANEL_2, borderRadius: '0px', padding: '14px 16px', fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
                 Two minutes to fill in. After that it sits on your lock screen and works
                 whether or not you are awake to explain anything.
               </p>

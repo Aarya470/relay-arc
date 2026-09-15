@@ -155,7 +155,7 @@ export default function Login() {
     width: '100%',
     background: '#FFFFFF',
     border: `1.5px solid ${focused === field ? T1 : BORDER}`,
-    borderRadius: '10px',
+    borderRadius: '2px',
     padding: '13px 16px',
     color: T1,
     // 16px, not 15 or 14, and it is not a taste decision.
@@ -220,7 +220,7 @@ export default function Login() {
               onClick={resend}
               disabled={resending}
               style={{
-                width: '100%', padding: '14px', borderRadius: '10px', border: `1.5px solid ${BORDER}`,
+                width: '100%', padding: '14px', borderRadius: '2px', border: `1.5px solid ${BORDER}`,
                 background: '#FFFFFF', color: T1, fontWeight: 700, fontSize: '14.5px',
                 cursor: resending ? 'default' : 'pointer', fontFamily: 'inherit',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -233,7 +233,7 @@ export default function Login() {
             <button
               onClick={() => { setSentTo(null); setIsSignUp(false); setPassword('') }}
               style={{
-                width: '100%', marginTop: 10, padding: '13px', borderRadius: '10px', border: 'none',
+                width: '100%', marginTop: 10, padding: '13px', borderRadius: '2px', border: 'none',
                 background: 'transparent', color: T2, fontWeight: 600, fontSize: '14px',
                 cursor: 'pointer', fontFamily: 'inherit',
               }}
@@ -330,7 +330,7 @@ export default function Login() {
             disabled={loading || !canSubmit}
             style={{
               width: '100%', background: T1, color: 'white',
-              fontWeight: 600, fontSize: '15px', borderRadius: '11px', border: 'none',
+              fontWeight: 600, fontSize: '15px', borderRadius: '2px', border: 'none',
               cursor: (loading || !canSubmit) ? 'not-allowed' : 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               marginTop: '6px', opacity: (loading || !canSubmit) ? 0.55 : 1, transition: 'opacity 0.15s',

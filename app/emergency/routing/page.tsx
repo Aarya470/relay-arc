@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { DEMO, demoOn } from '@/lib/demo'
+import { notch } from '@/lib/shape'
 
 const Nav = dynamic(() => import('@/components/Navigation'), { ssr: false })
 const GuardianWatch = dynamic(() => import('@/components/GuardianWatch'), { ssr: false })
@@ -104,7 +105,7 @@ function CancelConfirmSheet({
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
             style={{
               background: T.card,
-              borderRadius: '24px 24px 0 0',
+              borderRadius: '0px',
               border: `1px solid ${T.border}`,
               borderBottom: 'none',
               padding: '28px 20px 52px',
@@ -138,7 +139,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: '#F2F0E8',
-                  borderRadius: '14px',
+                  borderRadius: '0px',
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
                   fontWeight: 700,
@@ -159,7 +160,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: `#A33417`,
-                  borderRadius: '14px',
+                  borderRadius: '0px',
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
                   fontWeight: 700,
@@ -703,7 +704,7 @@ function RoutingPage() {
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
           background: T.red, color: 'white',
-          padding: '20px', borderRadius: '14px',
+          padding: '20px', clipPath: notch(16),
           fontWeight: 900, fontSize: '20px', letterSpacing: '-0.3px',
           textDecoration: 'none', minHeight: '64px',
           width: 'calc(100% - 40px)', maxWidth: '480px',
@@ -775,7 +776,7 @@ function RoutingPage() {
           fontWeight: 800,
           fontSize: '17px',
           padding: '17px 0',
-          borderRadius: '16px',
+          borderRadius: '0px',
           textDecoration: 'none',
           boxShadow: T.redGlow,
           width: '100%',
@@ -797,7 +798,7 @@ function RoutingPage() {
           fontWeight: 500,
           fontSize: '13px',
           padding: '11px 24px',
-          borderRadius: '12px',
+          borderRadius: '0px',
           border: `1px solid #98C890`,
           cursor: 'pointer',
         }}
@@ -828,7 +829,7 @@ function RoutingPage() {
             style={{ width: '8px', height: '8px', background: T.red, flexShrink: 0 }}
           />
           <span style={{ color: T.red, fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {isDemo && <span style={{ background: T.textPrimary, color: 'white', padding: '2px 6px', borderRadius: '4px', marginRight: '7px' }}>DEMO</span>}
+            {isDemo && <span style={{ background: T.textPrimary, color: 'white', padding: '2px 6px', borderRadius: '2px', marginRight: '7px' }}>DEMO</span>}
             Active emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
           </span>
         </div>
@@ -895,7 +896,7 @@ function RoutingPage() {
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
             width: '100%', background: T.red, color: 'white',
-            padding: '17px', borderRadius: '12px', border: 'none',
+            padding: '17px', clipPath: notch(14), border: 'none',
             fontWeight: 800, fontSize: '16.5px', letterSpacing: '-0.2px',
             cursor: 'pointer', fontFamily: 'inherit', marginTop: '16px', minHeight: '56px',
           }}
@@ -918,11 +919,11 @@ function RoutingPage() {
             {ride === 'none' && (
               <div style={{ display: 'flex', gap: '9px' }}>
                 <button onClick={() => setRide('dismissed')}
-                  style={{ flex: 1, background: 'none', border: `1.5px solid ${T.border}`, color: T.textSec, fontWeight: 600, fontSize: '13.5px', padding: '13px 8px', borderRadius: '11px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                  style={{ flex: 1, background: 'none', border: `1.5px solid ${T.border}`, color: T.textSec, fontWeight: 600, fontSize: '13.5px', padding: '13px 8px', borderRadius: '2px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
                   I have a driver
                 </button>
                 <button onClick={requestRide}
-                  style={{ flex: 1.4, background: T.blue, border: 'none', color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '13px 8px', borderRadius: '11px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                  style={{ flex: 1.4, background: T.blue, border: 'none', color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '13px 8px', borderRadius: '2px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
                   I need a ride. Alert drivers
                 </button>
               </div>
@@ -1030,7 +1031,7 @@ function RoutingPage() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px',
                     background: T.blue, color: 'white',
                     fontWeight: 700, fontSize: '15px',
-                    padding: '16px', borderRadius: '12px',
+                    padding: '16px', borderRadius: '0px',
                     textDecoration: 'none', minHeight: '54px',
                   }}
                 >
@@ -1059,7 +1060,7 @@ function RoutingPage() {
                     const svg = qr.createSvgTag({ cellSize: 4, margin: 2 })
                     return (
                       <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
-                        <div style={{ width: '164px', border: `1px solid ${T.border}`, borderRadius: '10px', padding: '10px', background: 'white' }}
+                        <div style={{ width: '164px', border: `1px solid ${T.border}`, borderRadius: '2px', padding: '10px', background: 'white' }}
                           dangerouslySetInnerHTML={{ __html: svg.replace('<svg ', '<svg style="width:100%;height:auto;display:block" ') }}/>
                       </div>
                     )
@@ -1159,7 +1160,7 @@ function RoutingPage() {
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
               background: T.red, color: 'white',
-              padding: '17px', borderRadius: '12px',
+              padding: '17px', clipPath: notch(14),
               fontWeight: 800, fontSize: '17px',
               textDecoration: 'none', minHeight: '56px', letterSpacing: '-0.1px',
             }}
@@ -1175,7 +1176,7 @@ function RoutingPage() {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 background: 'none', color: T.red,
-                padding: '15px', borderRadius: '12px',
+                padding: '15px', borderRadius: '0px',
                 fontWeight: 700, fontSize: '14.5px',
                 border: `1.5px solid ${T.red}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
               }}
@@ -1190,7 +1191,7 @@ function RoutingPage() {
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               background: 'none', color: T.textPrimary,
-              padding: '15px', borderRadius: '12px',
+              padding: '15px', borderRadius: '0px',
               fontWeight: 700, fontSize: '14.5px',
               border: `1.5px solid ${T.textPrimary}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
             }}
@@ -1237,7 +1238,7 @@ function RoutingPage() {
                   {fmtElapsed(elapsed)}
                 </span>
                 <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
-                  style={{ background: '#B3DDAC', border: `1px solid ${T.border}`, borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  style={{ background: '#B3DDAC', border: `1px solid ${T.border}`, borderRadius: '2px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <X size={16} color={T.textSec}/>
                 </button>
               </div>

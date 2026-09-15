@@ -2,6 +2,7 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { Home, MessageCircle, LayoutList, Activity, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { octagon } from '@/lib/shape'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const ACCENT  = '#42623C'
@@ -62,7 +63,7 @@ export default function BottomNav() {
               position: 'absolute',
               inset: '4px 10%',
               background: 'rgba(86,128,78,0.07)',
-              borderRadius: '10px',
+              borderRadius: '2px',
             }}
             transition={{ type: 'spring', stiffness: 500, damping: 36 }}
           />
@@ -137,7 +138,9 @@ export default function BottomNav() {
           <div style={{
             width: '48px',
             height: '48px',
-            borderRadius: '50%',
+            // Stop-sign octagon. The one control on this bar that is not a plain
+            // icon, findable by outline when somebody cannot focus on a label.
+            clipPath: octagon(),
             background: RED,
             display: 'flex',
             alignItems: 'center',

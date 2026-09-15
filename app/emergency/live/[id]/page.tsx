@@ -274,10 +274,10 @@ export default function RelayRoomPage() {
             onChange={e => setName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && join()}
             placeholder="Raj"
-            style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '10px', padding: '13px 16px', color: T1, fontSize: '15px', outline: 'none', fontFamily: 'inherit', marginBottom: '12px' }}
+            style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '2px', padding: '13px 16px', color: T1, fontSize: '15px', outline: 'none', fontFamily: 'inherit', marginBottom: '12px' }}
           />
           <button onClick={join} disabled={!name.trim()}
-            style={{ width: '100%', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '15px', borderRadius: '11px', border: 'none', cursor: name.trim() ? 'pointer' : 'default', opacity: name.trim() ? 1 : 0.5, fontFamily: 'inherit', minHeight: '52px' }}>
+            style={{ width: '100%', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '15px', borderRadius: '2px', border: 'none', cursor: name.trim() ? 'pointer' : 'default', opacity: name.trim() ? 1 : 0.5, fontFamily: 'inherit', minHeight: '52px' }}>
             Join the room
           </button>
         </div>
@@ -293,8 +293,8 @@ export default function RelayRoomPage() {
               </div>
             )}
             {loc?.hName && (
-              <div style={{ position: 'absolute', bottom: '10px', left: '10px', right: '10px', background: 'rgba(255,255,255,0.95)', border: `1px solid ${BORDER}`, borderRadius: '10px', padding: '9px 13px', display: 'flex', alignItems: 'center', gap: '9px' }}>
-                <span style={{ width: '14px', height: '14px', background: RED, borderRadius: '4px', color: 'white', fontSize: '11px', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, flexShrink: 0 }}>+</span>
+              <div style={{ position: 'absolute', bottom: '10px', left: '10px', right: '10px', background: 'rgba(255,255,255,0.95)', border: `1px solid ${BORDER}`, borderRadius: '2px', padding: '9px 13px', display: 'flex', alignItems: 'center', gap: '9px' }}>
+                <span style={{ width: '14px', height: '14px', background: RED, borderRadius: '2px', color: 'white', fontSize: '11px', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, flexShrink: 0 }}>+</span>
                 <p style={{ color: T1, fontSize: '12.5px', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   Heading to {loc.hName}
                 </p>
@@ -311,7 +311,7 @@ export default function RelayRoomPage() {
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
                   background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#B3DDAC',
                   border: `1px solid ${p.role === 'patient' ? 'rgba(163,52,23,0.25)' : BORDER}`,
-                  borderRadius: '8px', padding: '5px 10px',
+                  borderRadius: '2px', padding: '5px 10px',
                 }}>
                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: p.role === 'patient' ? RED : GREEN }}/>
                   <span style={{ color: p.role === 'patient' ? RED : T1, fontSize: '12.5px', fontWeight: 600 }}>
@@ -352,7 +352,7 @@ export default function RelayRoomPage() {
               {tasks.map(t => (
                 <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: `1px solid ${BORDER}` }}>
                   <button onClick={() => toggleDone(t.id)} aria-label="Toggle done"
-                    style={{ width: '22px', height: '22px', borderRadius: '7px', flexShrink: 0, background: t.done ? GREEN : 'none', border: `1.5px solid ${t.done ? GREEN : '#C9CED6'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    style={{ width: '22px', height: '22px', borderRadius: '2px', flexShrink: 0, background: t.done ? GREEN : 'none', border: `1.5px solid ${t.done ? GREEN : '#C9CED6'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                     {t.done && <Check size={13} color="white" strokeWidth={3}/>}
                   </button>
                   <div style={{ flex: 1, minWidth: 0 }}>
@@ -363,7 +363,7 @@ export default function RelayRoomPage() {
                   </div>
                   {!t.done && (
                     <button onClick={() => claimTask(t.id)}
-                      style={{ background: t.claimedBy === name ? 'rgba(86,128,78,0.08)' : 'none', border: `1.5px solid ${t.claimedBy === name ? ACCENT : BORDER}`, color: t.claimedBy === name ? ACCENT : T2, fontSize: '12px', fontWeight: 700, padding: '7px 12px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
+                      style={{ background: t.claimedBy === name ? 'rgba(86,128,78,0.08)' : 'none', border: `1.5px solid ${t.claimedBy === name ? ACCENT : BORDER}`, color: t.claimedBy === name ? ACCENT : T2, fontSize: '12px', fontWeight: 700, padding: '7px 12px', borderRadius: '2px', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
                       {t.claimedBy === name ? 'Mine' : t.claimedBy ? 'Taken' : 'I\u2019ll do it'}
                     </button>
                   )}
@@ -376,10 +376,10 @@ export default function RelayRoomPage() {
                 onChange={e => setTaskInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addTask()}
                 placeholder="Add something. 'bring her meds bag'"
-                style={{ flex: 1, background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '10px', padding: '12px 14px', color: T1, fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}
+                style={{ flex: 1, background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '2px', padding: '12px 14px', color: T1, fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}
               />
               <button onClick={addTask} aria-label="Add task"
-                style={{ width: '46px', borderRadius: '10px', background: T1, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                style={{ width: '46px', borderRadius: '2px', background: T1, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Plus size={17} color="white"/>
               </button>
             </div>
@@ -387,7 +387,7 @@ export default function RelayRoomPage() {
             {/* ── Footer actions ── */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <a href={`tel:${emg.number}`}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px', borderRadius: '12px', textDecoration: 'none', minHeight: '54px' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px', borderRadius: '0px', textDecoration: 'none', minHeight: '54px' }}>
                 <Phone size={17} strokeWidth={2.5}/> Call {emg.label}
               </a>
               <button onClick={() => setShowQr(q => !q)}
@@ -396,7 +396,7 @@ export default function RelayRoomPage() {
               </button>
               {showQr && qrSvg && (
                 <div style={{ display: 'flex', justifyContent: 'center', padding: '6px 0 12px' }}>
-                  <div style={{ width: '176px', border: `1px solid ${BORDER}`, borderRadius: '10px', padding: '10px', background: 'white' }}
+                  <div style={{ width: '176px', border: `1px solid ${BORDER}`, borderRadius: '2px', padding: '10px', background: 'white' }}
                     dangerouslySetInnerHTML={{ __html: qrSvg.replace('<svg ', '<svg style="width:100%;height:auto;display:block" ') }}/>
                 </div>
               )}

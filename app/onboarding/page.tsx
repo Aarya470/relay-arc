@@ -129,7 +129,7 @@ export default function Onboarding() {
     width: '100%',
     background: '#FFFFFF',
     border: `1.5px solid ${BORDER}`,
-    borderRadius: '10px',
+    borderRadius: '2px',
     padding: '13px 16px',
     color: T1,
     // 16px, not 15 or 14, and it is not a taste decision.
@@ -151,13 +151,13 @@ export default function Onboarding() {
 
   const primaryBtn: React.CSSProperties = {
     flex: 1, background: T1, color: 'white', fontWeight: 600, padding: '15px',
-    borderRadius: '11px', border: 'none', cursor: 'pointer',
+    borderRadius: '2px', border: 'none', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
     fontSize: '15px', fontFamily: 'inherit', minHeight: '50px',
   }
   const ghostBtn: React.CSSProperties = {
     flex: 1, background: 'none', border: `1.5px solid ${BORDER}`, color: T2,
-    fontWeight: 500, padding: '15px', borderRadius: '11px', cursor: 'pointer',
+    fontWeight: 500, padding: '15px', borderRadius: '2px', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
     fontSize: '15px', fontFamily: 'inherit', minHeight: '50px',
   }
@@ -210,7 +210,7 @@ export default function Onboarding() {
                     return (
                       <button key={bt} onClick={() => update('blood_type', active ? '' : bt)}
                         style={{
-                          padding: '12px 0', borderRadius: '10px', cursor: 'pointer',
+                          padding: '12px 0', borderRadius: '2px', cursor: 'pointer',
                           background: active ? T1 : 'none',
                           border: `1.5px solid ${active ? T1 : BORDER}`,
                           color: active ? 'white' : T1,
@@ -268,7 +268,7 @@ export default function Onboarding() {
                         <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>{c.desc}</p>
                       </div>
                       <div style={{
-                        width: '22px', height: '22px', borderRadius: '7px', flexShrink: 0,
+                        width: '22px', height: '22px', borderRadius: '2px', flexShrink: 0,
                         background: active ? ACCENT : 'none',
                         border: `1.5px solid ${active ? ACCENT : '#C9CED6'}`,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',

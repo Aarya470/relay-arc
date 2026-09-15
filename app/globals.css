@@ -196,12 +196,18 @@
   --on-3:      #E6EBE6;   /* 3:1, large decorative type only */
   --coral:     #F9E6E0;
 
-  /* Radius scale */
-  --r-xs: 6px;
-  --r-sm: 10px;
-  --r:    16px;
-  --r-lg: 22px;
-  --r-xl: 32px;
+  /* Radius. Two values, and the reasoning is in lib/shape.ts.
+     There used to be five here and twenty-two more scattered across 45 files as
+     inline styles, which is how everything on screen ended up shaped like
+     everything else: almost every one of them landed in the 8 to 16 band, so
+     the whole product read as one softly rounded rectangle repeated.
+     --r is square. --r-sm is 2px, enough that two borders meeting at a corner
+     do not look like a rendering fault. Anything that needs to be a different
+     shape gets a real shape from lib/shape.ts rather than a different number
+     here: notch() for emergency surfaces, octagon() for SOS, 50% for the
+     handful of things that are genuinely circles. */
+  --r-sm: 2px;
+  --r:    0px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }

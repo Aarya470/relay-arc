@@ -57,7 +57,7 @@ export default function LegalDocument({ kicker, title, body }: { kicker: string;
         {/* Everything from here down is prose at 14.5px, so it lives on a
             panel. Emergency disclaimer first, stated up front rather than
             buried at the bottom where nobody reads it. */}
-        <div style={{ background: PANEL, borderRadius: '18px', padding: '28px 26px 30px' }}>
+        <div style={{ background: PANEL, borderRadius: '0px', padding: '28px 26px 30px' }}>
         <div style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '16px', marginBottom: '36px' }}>
           <p style={{ color: RED, fontFamily: MONO, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '7px' }}>
             Read this first
@@ -67,7 +67,7 @@ export default function LegalDocument({ kicker, title, body }: { kicker: string;
             situation, call {emg.label} immediately. Do not rely on this app.
           </p>
           <a href={`tel:${emg.number}`}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: RED, color: 'white', fontWeight: 700, fontSize: '14px', padding: '11px 18px', borderRadius: '10px', textDecoration: 'none' }}>
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: RED, color: 'white', fontWeight: 700, fontSize: '14px', padding: '11px 18px', borderRadius: '2px', textDecoration: 'none' }}>
             <Phone size={14} strokeWidth={2.5}/> Call {emg.label}
           </a>
         </div>

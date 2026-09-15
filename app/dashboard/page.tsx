@@ -20,6 +20,7 @@ interface HealthIntelligence {
   dataQuality: 'rich' | 'partial' | 'sparse'
   alertDelivery: 'recorded' | 'no-care-team' | 'failed' | null
 }
+import { notch, octagon } from '@/lib/shape'
 import { toast } from 'sonner'
 // lib/risk is pure and dependency-free, so it is safe in the client bundle —
 // unlike the old crash-risk module, which pulled in groq-sdk.
@@ -157,9 +158,9 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
 
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ height: '80px', borderRadius: '8px', background: BORDER, width: '40%', opacity: 0.5 }}/>
-          <div style={{ height: '16px', borderRadius: '4px', background: BORDER, width: '80%', opacity: 0.4 }}/>
-          <div style={{ height: '16px', borderRadius: '4px', background: BORDER, width: '65%', opacity: 0.3 }}/>
+          <div style={{ height: '80px', borderRadius: '2px', background: BORDER, width: '40%', opacity: 0.5 }}/>
+          <div style={{ height: '16px', borderRadius: '2px', background: BORDER, width: '80%', opacity: 0.4 }}/>
+          <div style={{ height: '16px', borderRadius: '2px', background: BORDER, width: '65%', opacity: 0.3 }}/>
         </div>
       ) : intel && cfg ? (
         <>
@@ -307,7 +308,7 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
         {loading ? (
           [1, 2, 3].map(i => (
             <div key={i} style={{
-              height: '14px', borderRadius: '4px',
+              height: '14px', borderRadius: '2px',
               background: BORDER, opacity: 0.5,
               marginBottom: '12px', width: `${60 + i * 12}%`,
             }}/>
@@ -506,7 +507,7 @@ export default function Dashboard() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {[80, 160, 80, 80, 80].map((h, i) => (
-        <div key={i} style={{ height: `${h}px`, borderRadius: '16px', background: '#98C890', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: `${h}px`, borderRadius: '0px', background: '#98C890', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
     </div>
   )
@@ -530,7 +531,7 @@ export default function Dashboard() {
       style={{
         background: SURFACE,
         border: `1px solid ${BORDER}`,
-        borderRadius: '16px',
+        borderRadius: '0px',
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
         ...style,
@@ -574,7 +575,7 @@ export default function Dashboard() {
               style={{
                 background: GREEN, color: '#FFFFFF',
                 fontWeight: 700, fontSize: '13px',
-                padding: '9px 16px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                padding: '9px 16px', borderRadius: '2px', border: 'none', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}>
               <Video size={13}/> Join
@@ -603,7 +604,7 @@ export default function Dashboard() {
                     background: ACCENT_DIM,
                     color: ACCENT,
                     fontSize: '10px', fontWeight: 700,
-                    padding: '3px 8px', borderRadius: '6px',
+                    padding: '3px 8px', borderRadius: '2px',
                     fontFamily: 'var(--font-mono, monospace)',
                     letterSpacing: '0.8px', textTransform: 'uppercase',
                     border: `1px solid rgba(86,128,78,0.14)`,
@@ -620,7 +621,7 @@ export default function Dashboard() {
                 display: 'flex', alignItems: 'center', gap: '5px',
                 background: 'rgba(168,114,0,0.08)',
                 border: '1px solid rgba(168,114,0,0.14)',
-                borderRadius: '99px', padding: '5px 10px',
+                borderRadius: '2px', padding: '5px 10px',
               }}>
                 <Flame size={12} color={AMBER}/>
                 <span style={{ color: AMBER, fontSize: '12px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)' }}>{streak}</span>
@@ -630,7 +631,7 @@ export default function Dashboard() {
               whileTap={{ scale: 0.9 }}
               onClick={() => router.push('/settings')}
               style={{
-                width: '36px', height: '36px', borderRadius: '10px',
+                width: '36px', height: '36px', borderRadius: '2px',
                 background: SURFACE, border: `1px solid ${BORDER}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer',
@@ -649,7 +650,7 @@ export default function Dashboard() {
         {installPrompt && (
           <motion.div variants={fadeUp}
             style={{
-              background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '16px',
+              background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '0px',
               padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px',
               boxShadow: SHADOW,
             }}>
@@ -661,7 +662,7 @@ export default function Dashboard() {
               onClick={async () => { installPrompt.prompt(); const { outcome } = await installPrompt.userChoice; if (outcome === 'accepted') setInstallPrompt(null) }}
               style={{
                 background: ACCENT, color: 'white', fontWeight: 700, fontSize: '12px',
-                padding: '8px 14px', borderRadius: '9px', border: 'none', cursor: 'pointer', flexShrink: 0,
+                padding: '8px 14px', borderRadius: '2px', border: 'none', cursor: 'pointer', flexShrink: 0,
               }}>
               Install
             </button>
@@ -684,7 +685,11 @@ export default function Dashboard() {
             style={{
               width: '100%',
               background: RED,
-              borderRadius: '24px',
+              // Chamfered rather than rounded. Every other surface on this screen
+              // is a square panel now, so the cut corners are what make the one
+              // control you might need in a hurry look unlike the rest of the
+              // page from the corner of your eye. See lib/shape.ts.
+              clipPath: notch(18),
               padding: '28px 24px',
               border: 'none',
               cursor: 'pointer',
@@ -716,11 +721,12 @@ export default function Dashboard() {
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+              {/* An octagon, because that is the stop sign, and it is the only
+                  shape in this app that means emergency. Nothing else wears it. */}
               <div style={{
                 width: '60px', height: '60px',
-                borderRadius: '50%',
-                background: 'rgba(255,255,255,0.20)',
-                border: '2px solid rgba(255,255,255,0.30)',
+                clipPath: octagon(),
+                background: 'rgba(255,255,255,0.22)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <Phone size={24} color="white" strokeWidth={2}/>
@@ -747,7 +753,7 @@ export default function Dashboard() {
               style={{
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                borderRadius: '14px', padding: '14px 16px',
+                borderRadius: '0px', padding: '14px 16px',
                 display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
               <TrendingDown size={15} color={T3} style={{ marginTop: '2px', flexShrink: 0 }}/>
@@ -796,7 +802,7 @@ export default function Dashboard() {
             style={{
               background: checkinToday ? GREEN : SURFACE,
               border: checkinToday ? 'none' : `1px solid ${BORDER}`,
-              borderRadius: '20px',
+              borderRadius: '0px',
               padding: '20px 18px 18px',
               textAlign: 'left',
               cursor: 'pointer',
@@ -829,7 +835,7 @@ export default function Dashboard() {
             onClick={() => router.push('/timeline')}
             style={{
               background: SURFACE,
-              borderRadius: '20px',
+              borderRadius: '0px',
               border: `1px solid ${BORDER}`,
               padding: '20px 18px 18px',
               textAlign: 'left',
@@ -969,7 +975,7 @@ export default function Dashboard() {
                 {meds.map((med: any, i: number) => (
                   <div key={i} style={{
                     background: BG, border: `1px solid ${BORDER}`,
-                    borderRadius: '8px', padding: '6px 11px',
+                    borderRadius: '2px', padding: '6px 11px',
                     display: 'flex', alignItems: 'baseline', gap: '6px',
                   }}>
                     <span style={{ color: T1, fontSize: '13px', fontWeight: 600 }}>{med.name}</span>
@@ -991,12 +997,12 @@ export default function Dashboard() {
             style={{
               background: 'rgba(86,128,78,0.04)',
               border: `1px solid rgba(86,128,78,0.10)`,
-              borderRadius: '14px', padding: '14px 16px',
+              borderRadius: '0px', padding: '14px 16px',
               cursor: 'pointer', width: '100%',
               display: 'flex', alignItems: 'center', gap: '12px',
             }}>
             <div style={{
-              width: '36px', height: '36px', borderRadius: '10px',
+              width: '36px', height: '36px', borderRadius: '2px',
               background: ACCENT, flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>

@@ -359,7 +359,7 @@ export default function MeetingAlert() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{ width: '100%', background: '#FFFFFF', borderRadius: '28px 28px 0 0', padding: '20px 20px 48px', maxHeight: '92dvh', overflowY: 'auto' }}
+              style={{ width: '100%', background: '#FFFFFF', borderRadius: '0px', padding: '20px 20px 48px', maxHeight: '92dvh', overflowY: 'auto' }}
             >
               <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(26,40,32,0.1)', margin: '0 auto 20px' }} />
 
@@ -392,7 +392,7 @@ export default function MeetingAlert() {
 
                   <motion.button whileTap={rescheduleDay && !submitting ? { scale: 0.97, y: 1 } : {}} onClick={handleReschedule}
                     disabled={!rescheduleDay || submitting}
-                    style={{ width: '100%', background: rescheduleDay && !submitting ? 'linear-gradient(135deg,#5C8B74,#3D6B58)' : 'rgba(26,40,32,0.07)', color: rescheduleDay && !submitting ? 'white' : 'rgba(26,40,32,0.3)', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '14px', border: 'none', cursor: rescheduleDay ? 'pointer' : 'default', boxShadow: rescheduleDay ? '0 8px 24px rgba(92,139,116,0.24)' : 'none', transition: 'all 0.2s ease' }}>
+                    style={{ width: '100%', background: rescheduleDay && !submitting ? 'linear-gradient(135deg,#5C8B74,#3D6B58)' : 'rgba(26,40,32,0.07)', color: rescheduleDay && !submitting ? 'white' : 'rgba(26,40,32,0.3)', fontWeight: 800, fontSize: '15px', padding: '16px', borderRadius: '0px', border: 'none', cursor: rescheduleDay ? 'pointer' : 'default', boxShadow: rescheduleDay ? '0 8px 24px rgba(92,139,116,0.24)' : 'none', transition: 'all 0.2s ease' }}>
                     {submitting ? 'Sending request...' : 'Confirm reschedule'}
                   </motion.button>
                 </>
@@ -418,13 +418,13 @@ export default function MeetingAlert() {
                   </div>
 
                   <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setActiveCall(upcomingAppt)}
-                    style={{ width: '100%', background: 'linear-gradient(135deg,#5C8B74,#3D6B58)', color: 'white', fontWeight: 800, fontSize: '16px', padding: '18px', borderRadius: '16px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, boxShadow: '0 8px 28px rgba(92,139,116,0.3)', marginBottom: 10 }}>
+                    style={{ width: '100%', background: 'linear-gradient(135deg,#5C8B74,#3D6B58)', color: 'white', fontWeight: 800, fontSize: '16px', padding: '18px', borderRadius: '0px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, boxShadow: '0 8px 28px rgba(92,139,116,0.3)', marginBottom: 10 }}>
                     <Video size={18} />
                     Join meeting
                   </motion.button>
 
                   <motion.button whileTap={{ scale: 0.97, y: 1 }} transition={spring} onClick={() => setShowReschedule(true)}
-                    style={{ width: '100%', background: 'rgba(26,40,32,0.04)', color: 'rgba(26,40,32,0.55)', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '14px', border: '1.5px solid rgba(26,40,32,0.08)', cursor: 'pointer' }}>
+                    style={{ width: '100%', background: 'rgba(26,40,32,0.04)', color: 'rgba(26,40,32,0.55)', fontWeight: 700, fontSize: '15px', padding: '16px', borderRadius: '0px', border: '1.5px solid rgba(26,40,32,0.08)', cursor: 'pointer' }}>
                     Reschedule
                   </motion.button>
                 </>

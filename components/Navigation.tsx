@@ -606,7 +606,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
       alignItems: 'center', justifyContent: 'center',
       padding: '24px', gap: '14px'
     }}>
-      <div style={{ width: '68px', height: '68px', borderRadius: '18px', background: 'rgba(86,128,78,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '68px', height: '68px', borderRadius: '0px', background: 'rgba(86,128,78,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <svg aria-hidden focusable={false} width="30" height="30" viewBox="0 0 24 24" fill="none" stroke={GREEN} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
         </svg>
@@ -627,7 +627,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
         <div style={{
           position: 'absolute', top: preview ? '10px' : '104px', left: '12px', zIndex: 520,
           background: T1, color: 'white', fontFamily: MONO, fontSize: '9.5px', fontWeight: 700,
-          letterSpacing: '1.4px', textTransform: 'uppercase', padding: '5px 9px', borderRadius: '5px',
+          letterSpacing: '1.4px', textTransform: 'uppercase', padding: '5px 9px', borderRadius: '2px',
         }}>
           Demo · simulated drive
         </div>
@@ -638,7 +638,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
           {/* ── Maneuver banner ─────────────────────────────────────────────── */}
           <div style={{
             position: 'absolute', top: '12px', left: '12px', right: '12px', zIndex: 500,
-            background: arriving ? GREEN : T1, borderRadius: '18px',
+            background: arriving ? GREEN : T1, borderRadius: '0px',
             padding: '16px 18px',
             boxShadow: '0 10px 34px rgba(20,20,19,0.35)',
           }}>
@@ -688,7 +688,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
                 position: 'absolute', right: '14px', bottom: '96px', zIndex: 500,
                 display: 'flex', alignItems: 'center', gap: '8px',
                 background: '#FFFFFF', border: `1.5px solid ${ACCENT}`, color: ACCENT,
-                borderRadius: '99px', padding: '11px 16px', cursor: 'pointer',
+                borderRadius: '2px', padding: '11px 16px', cursor: 'pointer',
                 fontFamily: 'inherit', fontWeight: 700, fontSize: '13.5px',
                 boxShadow: '0 6px 20px rgba(20,20,19,0.2)',
               }}>
@@ -700,7 +700,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
           {showSteps && (
             <div style={{
               position: 'absolute', left: '12px', right: '12px', bottom: '86px', zIndex: 600,
-              background: '#FFFFFF', border: `1px solid ${BORDER}`, borderRadius: '16px',
+              background: '#FFFFFF', border: `1px solid ${BORDER}`, borderRadius: '0px',
               maxHeight: '46%', overflowY: 'auto', boxShadow: '0 12px 40px rgba(20,20,19,0.25)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 16px', borderBottom: `1px solid ${BORDER}`, position: 'sticky', top: 0, background: '#FFFFFF' }}>
@@ -734,7 +734,7 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             position: 'absolute', bottom: '14px', left: '12px', right: '12px', zIndex: 500,
             background: 'rgba(255,255,255,0.96)',
             backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
-            border: `1px solid ${BORDER}`, borderRadius: '18px',
+            border: `1px solid ${BORDER}`, borderRadius: '0px',
             padding: '13px 16px',
             boxShadow: '0 8px 28px rgba(20,20,19,0.16)',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
@@ -759,11 +759,11 @@ export default function Navigation({ hospital, preview = false, demo = false }: 
             </div>
             <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
               <button onClick={() => setShowSteps(s => !s)} aria-label="All directions"
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: showSteps ? 'rgba(86,128,78,0.08)' : '#B3DDAC', border: `1px solid ${showSteps ? 'rgba(86,128,78,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '0px', background: showSteps ? 'rgba(86,128,78,0.08)' : '#B3DDAC', border: `1px solid ${showSteps ? 'rgba(86,128,78,0.2)' : BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 <List size={17} color={showSteps ? ACCENT : T2}/>
               </button>
               <button onClick={() => setMuted(m => !m)} aria-label={muted ? 'Unmute voice guidance' : 'Mute voice guidance'}
-                style={{ width: '42px', height: '42px', borderRadius: '12px', background: muted ? '#B3DDAC' : 'rgba(86,128,78,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(86,128,78,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                style={{ width: '42px', height: '42px', borderRadius: '0px', background: muted ? '#B3DDAC' : 'rgba(86,128,78,0.08)', border: `1px solid ${muted ? BORDER : 'rgba(86,128,78,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 {muted ? <VolumeX size={17} color={T3}/> : <Volume2 size={17} color={ACCENT}/>}
               </button>
             </div>

@@ -31,11 +31,11 @@ export default function ErrorBoundary({ error, reset }: { error: Error & { diges
       </p>
 
       <a href={`tel:${emg.number}`}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#A33417', color: 'white', fontWeight: 800, fontSize: '17px', padding: '18px', borderRadius: '12px', textDecoration: 'none', minHeight: '58px', marginBottom: '10px' }}>
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#A33417', color: 'white', fontWeight: 800, fontSize: '17px', padding: '18px', borderRadius: '0px', textDecoration: 'none', minHeight: '58px', marginBottom: '10px' }}>
         <Phone size={19} strokeWidth={2.5}/> Call {emg.label} now
       </a>
       <button onClick={reset}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px', background: 'none', color: '#141413', fontWeight: 700, fontSize: '14.5px', padding: '15px', borderRadius: '12px', border: '1.5px solid #141413', cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px', marginBottom: '10px' }}>
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px', background: 'none', color: '#141413', fontWeight: 700, fontSize: '14.5px', padding: '15px', borderRadius: '0px', border: '1.5px solid #141413', cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px', marginBottom: '10px' }}>
         <RefreshCw size={15}/> Try this screen again
       </button>
       <a href="/dashboard"
