@@ -30,7 +30,10 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
 // #B3DDAC is the page colour the text tokens were tuned against: ink is
 // 12.16:1 on it and the secondary grey 4.56:1. See app/globals.css.
 const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
-const BORDER = '#7EB382', BG2 = '#3A6440'
+// BG2 was #3A6440, a dark inner panel built for the dark page. Once the page
+// went light it kept its dark fill while the text on it stayed ink and grey,
+// which measured 2.70:1 and 1.01:1. A light tint of the page restores both.
+const BORDER = '#7EB382', BG2 = '#CEE9C9'
 const RED = '#A33417', ACCENT = '#42623C'
 const ORANGE = '#D97757'   // fill only. dark ink on top
 const mono = 'var(--font-mono, monospace)'

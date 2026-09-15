@@ -378,7 +378,10 @@ function EmergencyRace() {
           {panel('With Relay', '#3DDC97', RIGHT_EVENTS, rightSec, t >= 12500 ? '#3DDC97' : 'rgba(255,255,255,0.7)', rightStatus, 'race-right')}
         </div>
       </div>
-      <p style={{ color: '#C8D4C9', fontSize: '11.5px', fontFamily: mono, marginTop: '12px' }}>
+      {/* Was #C8D4C9 directly on the page green, 2.37:1. Nothing light enough
+          to read passes on this background at 11.5px, so the caption moves onto
+          a panel and takes the ink colour with it. */}
+      <p style={{ color: INK, background: PANEL_2, padding: '8px 12px', fontSize: '11.5px', fontFamily: mono, marginTop: '12px', display: 'inline-block' }}>
         Simulated, not real footage. The timings are illustrative and are not measured results.
       </p>
     </div>
@@ -671,7 +674,7 @@ export default function Home() {
                 <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-end', borderBottom: `1px solid ${RULE}`, paddingBottom: '16px', marginBottom: '14px' }}>
                   <div>
                     <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Blood type</p>
-                    <p style={{ color: CORAL, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>B+</p>
+                    <p style={{ color: RED, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.85, margin: 0 }}>B+</p>
                   </div>
                   <div>
                     <p style={{ color: T3, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>Age</p>
@@ -683,7 +686,10 @@ export default function Home() {
                   </div>
                 </div>
                 <div style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '11px', marginBottom: '14px' }}>
-                  <p style={{ color: CORAL, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '3px' }}>Critical. allergies</p>
+                  {/* CORAL is a tint for use ON the red band. On the white ID card it was
+                      1.21:1, which is close to invisible, and this is the blood type and
+                      the allergy header on a medical card. */}
+                  <p style={{ color: RED, fontFamily: mono, fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '3px' }}>Critical. allergies</p>
                   <p style={{ color: T1, fontSize: '13px', fontWeight: 700, margin: 0 }}>Penicillin · Sulfa drugs</p>
                 </div>
                 <p style={{ color: T3, fontFamily: mono, fontSize: '10px', margin: 0 }}>post-CABG · metoprolol 50mg · updated today</p>
