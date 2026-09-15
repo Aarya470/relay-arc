@@ -83,12 +83,12 @@ const ENTRIES: Entry[] = [
   {
     date: '2026-07-30', kind: 'shipped',
     title: 'Hindi and Marathi, at zero accuracy cost',
-    body: 'Voice SOS recognised en-US only, so a Hindi speaker\'s emergency was transcribed as nonsense before any classifier saw it. Rather than train separate models, Hindi and Marathi terms. in both Devanagari and romanised form. are normalised onto the same English tokens the model already learned. Ninety-eight examples added, cross-validation accuracy unchanged at 0.891. The vocabulary was written from general knowledge and still needs native-speaker review; that caveat is in the corpus.',
+    body: 'Voice SOS recognised en-US only, so a Hindi speaker\'s emergency was transcribed as nonsense before any classifier saw it. Rather than train separate models, Hindi and Marathi terms, in both Devanagari and romanised form, are normalised onto the same English tokens the model already learned. Ninety-eight examples added, cross-validation accuracy unchanged at 0.891. The vocabulary was written from general knowledge and still needs native-speaker review. That caveat is in the corpus.',
   },
   {
     date: '2026-07-29', kind: 'honest',
     title: 'Published a benchmark where a competitor beats us',
-    body: 'Our on-device classifier scores 85.7% against llama-3.1-8b-instant\'s 96.4% on 28 unseen phrasings. That table is on the technology page with the competitor listed above us. The argument is not that we are more accurate. it is that every case ours got wrong, it declined to answer rather than guessing, so roughly 61% of emergencies resolve on-device with no errors and the rest escalate. An earlier version of this benchmark showed us winning 100% to 0%; that result was wrong, caused by a contaminated evaluation set and by counting the competitor\'s rate-limit errors as wrong answers. It was thrown out.',
+    body: 'Our on-device classifier scores 85.7% against llama-3.1-8b-instant\'s 96.4% on 28 unseen phrasings. That table is on the technology page with the competitor listed above us. The argument is not that we are more accurate. It is that every case ours got wrong, it declined to answer rather than guessing, so roughly 61% of emergencies resolve on-device with no errors and the rest escalate. An earlier version of this benchmark showed us winning 100% to 0%. That result was wrong, caused by a contaminated evaluation set and by counting the competitor\'s rate-limit errors as wrong answers. It was thrown out.',
   },
   {
     date: '2026-07-29', kind: 'shipped',

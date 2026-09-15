@@ -152,7 +152,7 @@ const PROTOCOLS: Record<string, Protocol> = {
     steps: [
       'Rest and avoid physical exertion.',
       'Stay hydrated. Drink water steadily.',
-      'Note your symptoms. write down timing, severity, and any triggers.',
+      'Note your symptoms, writing down timing, severity, and any triggers.',
       'Do not drive if you feel unwell.',
       'Contact your doctor within 24 hours to report the event.',
       'Follow any specific guidance given by emergency services or hospital staff.',

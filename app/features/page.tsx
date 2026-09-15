@@ -108,7 +108,7 @@ export default function Features() {
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
           <Head n="01" title="Emergency triage" right="what is wrong"/>
-          <H2>It decides before it asks anyone&apos;s permission. or their network.</H2>
+          <H2>It decides before it asks anyone&apos;s permission, or their network.</H2>
           <P>
             Say what is happening, or tap a type. The classifier runs on the phone, so a basement, a
             lift or a rural road makes no difference. The cloud model is a fallback for genuinely

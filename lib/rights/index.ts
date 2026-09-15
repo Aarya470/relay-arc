@@ -81,7 +81,7 @@ const US: RightsPack = {
       id: 'emtala_stabilise',
       title: 'If they cannot treat you, they have to arrange the transfer',
       body:
-        'Once an emergency condition is found, the hospital has to stabilise it. If they do not have what you need. A catheterisation lab, a stroke unit. They must arrange an appropriate transfer to somewhere that does. Sending you away untreated to find your own way is the violation.',
+        'Once an emergency condition is found, the hospital has to stabilise it. If they do not have what you need, a catheterisation lab or a stroke unit, they must arrange an appropriate transfer to somewhere that does. Sending you away untreated to find your own way is the violation.',
       limit:
         'The obligation ends once you are stable. After that point they can discharge you, and a stabilised patient is not the same as a treated one.',
       basis: 'EMTALA, 42 U.S.C. §1395dd(b)–(c)',

@@ -144,8 +144,8 @@ export default function Engineering() {
             what it said. In an emergency all three of those happen at once.
           </P>
           <P wide>
-            So the four things Relay depends on in the worst moment. Deciding what is wrong, deciding
-            how urgent it is, deciding which hospital, and getting you there. Are ours. They run on
+            So the four things Relay leans on in the worst moment, deciding what is wrong, how urgent
+            it is, which hospital, and getting you there, are all ours. They run on
             the device, they explain themselves, and they work with no network. Below are two of them,
             running in this browser tab right now. Type into them. Break them.
           </P>

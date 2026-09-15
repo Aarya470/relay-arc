@@ -285,7 +285,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 0, outline: '
         </h1>
         <p style={{ color: INK2, fontSize: '16.5px', lineHeight: 1.65, maxWidth: '660px', marginBottom: '14px' }}>
           Fill this in once. You get a lock-screen image and a printable wallet card.
-          Both work with no signal, no app and no battery on anyone else&apos;s phone. 
+          Both work with no signal, no app and no battery on anyone else&apos;s phone,
           because a locked screen shows its wallpaper to whoever picks it up.
         </p>
         <p style={{ color: INK2, fontSize: '15px', lineHeight: 1.65, maxWidth: '660px' }}>

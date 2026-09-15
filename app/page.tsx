@@ -475,15 +475,34 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 style={{ color: ON, fontSize: 'clamp(44px, 8.6vw, 104px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.045em', marginBottom: '40px', maxWidth: '980px' }}>
+            {/* THE FIRST THING ANYONE SAW WAS AN UNFINISHED SENTENCE.
+                Measured at 1440px, before: the headline rendered on three lines,
+                not two. At 104px "The closest hospital is not" is about 1156px
+                wide, wider than the 980px maxWidth, so it wrapped and left "not"
+                stranded on a line by itself. The third line then ran from x=160
+                to x=1121, and the phone mockup sits at x=771 with zIndex 5 on
+                top of it. So the last two words were painted over. The page
+                opened on "The closest hospital is not always the right".
+                86px keeps the intended two-line break inside the container, and
+                the z-index here means that even if a future change brings the
+                two back into contact, the words win and the picture loses. */}
+            <h1 style={{ color: ON, fontSize: 'clamp(40px, 6.6vw, 86px)', fontWeight: 800, lineHeight: 0.98, letterSpacing: '-0.045em', marginBottom: '40px', maxWidth: '1120px', position: 'relative', zIndex: 6 }}>
               The closest hospital is not<br/>always the right one<span style={{ color: ON_3 }}>.</span>
             </h1>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
               <div style={{ background: PANEL_2, borderRadius: '18px', padding: '28px 28px 32px', marginBottom: '90px' }} className="hero-copy">
+                {/* The old line read "It works out what is happening, finds a
+                     hospital that can treat it, and sends your medical details
+                     ahead." Three verbs, same tense, same length, one after the
+                     other. That cadence is the tell people mean when they say
+                     copy sounds machine-written, and it was on the first
+                     paragraph of the site. Sentences here now run 4, 20, 7 and
+                     6 words. */}
                 <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
-                  One button. It works out what is happening, finds a hospital that can treat it,
-                  and sends your medical details ahead. It works with no signal.
+                  Hold the button down. Your phone decides what is happening and picks a hospital
+                  equipped to treat it rather than one that is merely close. Blood type, medicines
+                  and allergies go on ahead. None of this needs a signal.
                 </p>
 
                 {/* The card is the primary action deliberately. Asking a first-time
@@ -506,7 +525,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div style={{ position: 'relative', zIndex: 5, marginBottom: '-64px', marginTop: '-120px' }} className="phone-col">
+              <div style={{ position: 'relative', zIndex: 5, marginBottom: '-64px', marginTop: '-40px' }} className="phone-col">
                 <PhoneMockup/>
               </div>
             </div>
@@ -548,10 +567,15 @@ export default function Home() {
           </div>
           <div className="simple-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '40px 36px' }}>
             {[
-              ['Finds a hospital that can treat it', 'A heart attack needs a cath lab. The closest ER may not have one.'],
-              ['Sends your details ahead', 'Blood type, medicines and allergies, there before you are.'],
-              ['Gets your family there', 'Your location and directions, shared in one tap.'],
-              ['Checks in with you daily', 'Two minutes a day, so a bad week shows up early.'],
+              // All four headings used to start with a present-tense verb and run
+              // to about the same length. Perfect parallelism across a list is
+              // something people notice without being able to name it. These now
+              // take four different shapes on purpose: a verb, a noun subject, a
+              // possessive, and a fragment whose sentence finishes in the body.
+              ['Finds a hospital that can treat it', 'A heart attack needs a cath lab. The closest ER may not have one, and the transfer spends the only minutes that mattered.'],
+              ['The ER reads your file first', 'Blood type, medicines and allergies, there before you are.'],
+              ['Your family gets the address', 'And the route to it, in one tap.'],
+              ['Two minutes a day', 'Enough to catch a bad week while it is still only a bad week.'],
             ].map(([title, body], i) => (
               <div key={i} style={{ background: PANEL, borderRadius: '14px', padding: '18px 18px 20px' }}>
                 <span style={{ color: RED, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
@@ -602,14 +626,16 @@ export default function Home() {
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>04 / Mission</span>
           </div>
           <h2 style={{ color: T1, fontSize: 'clamp(36px, 5.2vw, 64px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.98, marginBottom: '24px' }}>
-            Relay,<br/>not Revive<span style={{ color: '#FFFFFF' }}>.</span>
+            Most places do not<br/>get eight minutes<span style={{ color: '#FFFFFF' }}>.</span>
           </h2>
           <p style={{ color: 'rgba(20,20,19,0.78)', fontSize: '17px', lineHeight: 1.65, maxWidth: '540px', marginBottom: '14px' }}>
-            Most of the world does not get an ambulance in eight minutes. This was built for
-            those places first.
+            Eight minutes is the ambulance response time rich cities design around. Most of the
+            world has never had it. This was built for those places first rather than adapted
+            for them afterwards.
           </p>
           <p style={{ color: T1, fontSize: '20px', lineHeight: 1.5, fontWeight: 800, letterSpacing: '-0.01em', maxWidth: '540px' }}>
-            No one should have to think before getting help.
+            Which is why it has to work on a cheap phone with no signal. That one constraint
+            decided almost everything else.
           </p>
         </div>
       </section>
@@ -620,14 +646,15 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '64px', alignItems: 'center' }} className="cta-grid">
             <div>
               <h2 style={{ color: ON, fontSize: 'clamp(34px, 5vw, 58px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
-                Your profile could<br/>save your life<span style={{ color: CORAL }}>.</span>
+                A paramedic can read it<br/>without your passcode<span style={{ color: CORAL }}>.</span>
               </h2>
               <p style={{ color: INK, background: PANEL_2, borderRadius: '12px', padding: '14px 16px', fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
-                Two minutes to set up. Ready for paramedics after that.
+                Two minutes to fill in. After that it sits on your lock screen and works
+                whether or not you are awake to explain anything.
               </p>
               <button onClick={() => router.push('/login?signup=1')}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: ON, padding: '15px 32px', borderRadius: '0px', fontWeight: 700, fontSize: '15.5px', border: `2px solid ${ON}`, cursor: 'pointer', fontFamily: 'inherit' }}>
-                Set up your profile, it is free <ArrowRight size={15}/>
+                Set up your profile. It is free <ArrowRight size={15}/>
               </button>
             </div>
 
