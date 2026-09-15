@@ -7,6 +7,7 @@ import MeetingAlert from '@/components/MeetingAlert'
 import LegalModal from '@/components/LegalModal'
 import Analytics from '@/components/Analytics'
 import { SITE_URL } from '@/lib/site'
+import Motion from '@/components/Motion'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -98,13 +99,15 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
       </head>
       <body className={`${jakarta.variable} ${mono.variable} ${code.variable} ${jakarta.className}`}>
-        <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
-          {children}
-          <LegalModal />
-        <Analytics />
-          <MeetingAlert />
-          <Toaster position="top-center" richColors />
-        </div>
+        <Motion>
+          <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
+            {children}
+            <LegalModal />
+            <Analytics />
+            <MeetingAlert />
+            <Toaster position="top-center" richColors />
+          </div>
+        </Motion>
       </body>
     </html>
   )
