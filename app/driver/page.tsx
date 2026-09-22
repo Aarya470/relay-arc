@@ -75,13 +75,13 @@ export default function DriverDashboard() {
 
   if (accepted) return (
     <div style={{ minHeight: '100vh', background: '#B3DDAC', padding: '56px 20px 20px' }}>
-      <div style={{ background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.2)', borderRadius: '0px', padding: '24px', textAlign: 'center', marginBottom: '16px' }}>
+      <div style={{ background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.2)', borderRadius: '8px', padding: '24px', textAlign: 'center', marginBottom: '16px' }}>
         <Car size={40} style={{ display: 'block', margin: '0 auto 12px' }} />
         <p style={{ color: '#42623C', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>Ride accepted</p>
         <p style={{ color: '#5C5A52', fontSize: '14px' }}>You are helping save a life</p>
       </div>
 
-      <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '0px', padding: '16px', marginBottom: '12px' }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
         <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.patient_name}</p>
         <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
@@ -91,13 +91,13 @@ export default function DriverDashboard() {
             const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.pickup_lat}&destlng=${accepted.pickup_lng}&destname=${encodeURIComponent(accepted.patient_name)}`
             router.push(url)
           }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#7C5200', color: '#FFFFFF', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '0px', border: 'none', cursor: 'pointer', width: '100%' }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#7C5200', color: '#FFFFFF', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '8px', border: 'none', cursor: 'pointer', width: '100%' }}
         >
           <Navigation size={16}/> Navigate to patient
         </motion.button>
       </div>
 
-      <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '0px', padding: '16px' }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '8px', padding: '16px' }}>
         <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Then take to</p>
         <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.hospital_name}</p>
         <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>
@@ -109,7 +109,7 @@ export default function DriverDashboard() {
             const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.hospital_lat}&destlng=${accepted.hospital_lng}&destname=${encodeURIComponent(accepted.hospital_name)}`
             router.push(url)
           }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#DC2626', color: '#141413', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '0px', border: 'none', cursor: 'pointer', width: '100%' }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#DC2626', color: '#141413', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '8px', border: 'none', cursor: 'pointer', width: '100%' }}
         >
           <Navigation size={16}/> Navigate to hospital
         </motion.button>
@@ -124,7 +124,7 @@ export default function DriverDashboard() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => router.push('/dashboard')}
-          style={{ width: '36px', height: '36px', borderRadius: '2px', background: '#F2F0E8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{ width: '36px', height: '36px', borderRadius: '6px', background: '#F2F0E8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           <ArrowLeft size={16} color="#5C5A52"/>
         </motion.button>
@@ -132,7 +132,7 @@ export default function DriverDashboard() {
           <p style={{ color: '#5C5A52', fontFamily: 'monospace', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
           <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '20px' }}>Help someone now</h1>
         </div>
-        <div style={{ marginLeft: 'auto', background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8', border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#98C890'}`, borderRadius: '0px', padding: '4px 10px' }}>
+        <div style={{ marginLeft: 'auto', background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8', border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#98C890'}`, borderRadius: '8px', padding: '4px 10px' }}>
           <p style={{ color: requests.length > 0 ? '#A33417' : '#5C5A52', fontFamily: 'monospace', fontSize: '11px' }}>
             {requests.length} pending
           </p>
@@ -159,7 +159,7 @@ export default function DriverDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ delay: i * 0.05 }}
-                  style={{ background: '#FFFFFF', border: '1px solid rgba(163,52,23,0.2)', borderRadius: '0px', overflow: 'hidden' }}
+                  style={{ background: '#FFFFFF', border: '1px solid rgba(163,52,23,0.2)', borderRadius: '8px', overflow: 'hidden' }}
                 >
                   <div style={{ padding: '14px', borderBottom: '1px solid #98C890' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>

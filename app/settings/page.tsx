@@ -14,14 +14,14 @@ const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 const card: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1px solid #98C890',
-  borderRadius: '0px',
+  borderRadius: '8px',
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
   border: '1px solid #D8D4C8',
-  borderRadius: '0px',
+  borderRadius: '8px',
   padding: '14px 16px',
   color: '#141413',
     // 16px, not 15 or 14, and it is not a taste decision.
@@ -93,7 +93,7 @@ export default function Settings() {
 
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '0px', background: '#F2F0E8' }}/>)}
+      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '8px', background: '#F2F0E8' }}/>)}
     </div>
   )
 
@@ -155,11 +155,11 @@ export default function Settings() {
                   )}
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <motion.button whileTap={{ scale: 0.97 }} onClick={saveEdit} disabled={saving}
-                      style={{ flex: 1, background: '#141413', color: 'white', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '2px', border: 'none', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
+                      style={{ flex: 1, background: '#141413', color: 'white', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '6px', border: 'none', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
                       {saving ? 'Saving…' : 'Save'}
                     </motion.button>
                     <motion.button whileTap={{ scale: 0.97 }} onClick={() => setEditing(null)}
-                      style={{ flex: 1, background: 'none', border: '1px solid #D8D4C8', color: '#5C5A52', fontWeight: 500, fontSize: '13px', padding: '12px', borderRadius: '2px', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
+                      style={{ flex: 1, background: 'none', border: '1px solid #D8D4C8', color: '#5C5A52', fontWeight: 500, fontSize: '13px', padding: '12px', borderRadius: '6px', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
                       Cancel
                     </motion.button>
                   </div>

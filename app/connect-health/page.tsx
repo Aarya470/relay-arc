@@ -79,7 +79,7 @@ function CopyButton({ value }: { value: string }) {
         display: 'flex', alignItems: 'center', gap: '6px',
         background: copied ? GREEN_DIM : ACCENT_DIM,
         border: `1px solid ${copied ? 'rgba(86,128,78,0.2)' : 'rgba(86,128,78,0.2)'}`,
-        borderRadius: '2px',
+        borderRadius: '6px',
         padding: '7px 13px',
         cursor: 'pointer',
         color: copied ? GREEN : ACCENT,
@@ -163,7 +163,7 @@ export default function ConnectHealth() {
           whileTap={{ scale: 0.9 }}
           onClick={() => router.back()}
           style={{
-            width: '34px', height: '34px', borderRadius: '2px',
+            width: '34px', height: '34px', borderRadius: '6px',
             background: BG, border: `1px solid ${BORDER}`,
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0,
@@ -177,7 +177,7 @@ export default function ConnectHealth() {
           </p>
         </div>
         {connected && (
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px', background: GREEN_DIM, border: '1px solid rgba(86,128,78,0.2)', borderRadius: '2px', padding: '4px 10px' }}>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px', background: GREEN_DIM, border: '1px solid rgba(86,128,78,0.2)', borderRadius: '6px', padding: '4px 10px' }}>
             <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: GREEN }}/>
             <span style={{ color: GREEN, fontSize: '10px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>SYNCED</span>
           </div>
@@ -190,7 +190,7 @@ export default function ConnectHealth() {
 
         {/* What gets synced */}
         <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '0px', overflow: 'hidden', boxShadow: SHADOW }}>
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', overflow: 'hidden', boxShadow: SHADOW }}>
           <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
             <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
               What gets synced
@@ -199,7 +199,7 @@ export default function ConnectHealth() {
           <div style={{ padding: '12px 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
             {SUPPORTED.map((s, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 0' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '2px', background: ACCENT_DIM, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: ACCENT_DIM, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <s.icon size={11} color={ACCENT} strokeWidth={2}/>
                 </div>
                 <span style={{ color: T2, fontSize: '12px', fontWeight: 500 }}>{s.label}</span>
@@ -211,7 +211,7 @@ export default function ConnectHealth() {
         {/* API key */}
         {!loading && (
           <motion.div variants={fadeUp}
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '0px', overflow: 'hidden', boxShadow: SHADOW }}>
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', overflow: 'hidden', boxShadow: SHADOW }}>
             <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
                 Your API key
@@ -232,7 +232,7 @@ export default function ConnectHealth() {
             <div style={{ padding: '14px 16px' }}>
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
-                background: BG, borderRadius: '2px', padding: '12px 14px',
+                background: BG, borderRadius: '6px', padding: '12px 14px',
                 border: `1px solid ${BORDER}`,
               }}>
                 <code style={{ color: T1, fontSize: '12px', fontFamily: 'var(--font-code, monospace)', wordBreak: 'break-all', flex: 1 }}>
@@ -249,14 +249,14 @@ export default function ConnectHealth() {
 
         {/* Endpoint URL */}
         <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '0px', overflow: 'hidden', boxShadow: SHADOW }}>
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', overflow: 'hidden', boxShadow: SHADOW }}>
           <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
             <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
               Endpoint URL
             </span>
           </div>
           <div style={{ padding: '14px 16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', background: BG, borderRadius: '2px', padding: '12px 14px', border: `1px solid ${BORDER}` }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', background: BG, borderRadius: '6px', padding: '12px 14px', border: `1px solid ${BORDER}` }}>
               <code style={{ color: T1, fontSize: '11px', fontFamily: 'var(--font-code, monospace)', wordBreak: 'break-all', flex: 1 }}>
                 {ingestUrl}
               </code>
@@ -267,7 +267,7 @@ export default function ConnectHealth() {
 
         {/* Steps */}
         <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '0px', overflow: 'hidden', boxShadow: SHADOW }}>
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', overflow: 'hidden', boxShadow: SHADOW }}>
           <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
             <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
               Setup guide
@@ -304,7 +304,7 @@ export default function ConnectHealth() {
                         background: ACCENT,
                         color: '#FFFFFF',
                         fontWeight: 700, fontSize: '12px',
-                        padding: '9px 15px', borderRadius: '2px',
+                        padding: '9px 15px', borderRadius: '6px',
                         textDecoration: 'none',
                       }}>
                       {step.cta}
@@ -322,7 +322,7 @@ export default function ConnectHealth() {
             display: 'flex', gap: '10px', alignItems: 'flex-start',
             padding: '12px 14px',
             background: SURFACE, border: `1px solid ${BORDER}`,
-            borderRadius: '0px', boxShadow: SHADOW,
+            borderRadius: '8px', boxShadow: SHADOW,
           }}>
           <AlertCircle size={13} color={T3} style={{ flexShrink: 0, marginTop: '2px' }}/>
           <p style={{ color: T2, fontSize: '12px', lineHeight: 1.55, margin: 0 }}>

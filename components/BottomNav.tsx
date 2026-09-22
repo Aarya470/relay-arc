@@ -63,7 +63,7 @@ export default function BottomNav() {
               position: 'absolute',
               inset: '4px 10%',
               background: 'rgba(86,128,78,0.07)',
-              borderRadius: '2px',
+              borderRadius: '6px',
             }}
             transition={{ type: 'spring', stiffness: 500, damping: 36 }}
           />

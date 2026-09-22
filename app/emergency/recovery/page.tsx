@@ -305,7 +305,7 @@ function RecoveryContent() {
             href="tel:"
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              width: '100%', padding: '12px', borderRadius: '0px',
+              width: '100%', padding: '12px', borderRadius: '8px',
               fontSize: '14px', fontWeight: 600, textDecoration: 'none',
               background: '#42623C', color: '#B3DDAC',
             }}
@@ -321,7 +321,7 @@ function RecoveryContent() {
             onClick={() => router.push('/emergency/history')}
             style={{
               flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              padding: '12px', borderRadius: '0px',
+              padding: '12px', borderRadius: '8px',
               background: '#F2F0E8', border: '1px solid #D8D4C8',
               color: '#5C5A52', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
             }}
@@ -332,7 +332,7 @@ function RecoveryContent() {
           <button
             onClick={() => router.push('/dashboard')}
             style={{
-              flex: 1, padding: '12px', borderRadius: '0px',
+              flex: 1, padding: '12px', borderRadius: '8px',
               background: '#42623C', border: 'none',
               color: '#fff', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
               
@@ -365,7 +365,7 @@ function Card({
         border: highlight
           ? '1px solid rgba(163,52,23,0.22)'
           : '1px solid #98C890',
-        borderRadius: '0px',
+        borderRadius: '8px',
         padding: '16px',
       }}
     >

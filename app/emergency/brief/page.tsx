@@ -391,7 +391,7 @@ function BriefContent() {
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               color: '#5C5A52',
-              borderRadius: '0px',
+              borderRadius: '8px',
             }}
           >
             Back
@@ -402,7 +402,7 @@ function BriefContent() {
             style={{
               background: copied ? '#42623C' : '#42623C',
               color: copied ? '#B3DDAC' : '#fff',
-              borderRadius: '0px',
+              borderRadius: '8px',
               border: 'none',
               boxShadow: copied ? '0 4px 20px rgba(86,128,78,0.28)' : '0 4px 20px rgba(86,128,78,0.28)',
             }}
@@ -443,7 +443,7 @@ function Section({
         border: highlight
           ? '1px solid rgba(163,52,23,0.22)'
           : '1px solid #98C890',
-        borderRadius: '0px',
+        borderRadius: '8px',
       }}
     >
       {children}

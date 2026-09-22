@@ -234,13 +234,13 @@ export default function EmergencyCard() {
     // pinching back out afterwards. Signup, onboarding, emergency contacts, the
     // check-in box, the symptom note and every field on the no-account
     // emergency card all did it. Measured across the running app.
-color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 0, outline: 'none',
+color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 8, outline: 'none',
   }
   const btn = (primary = false): CSSProperties => ({
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
     padding: '13px 20px', border: primary ? 'none' : `1px solid ${BORDER}`,
     background: primary ? ORANGE : WHITE, color: INK, fontSize: '14px', fontWeight: 700,
-    fontFamily: 'inherit', cursor: 'pointer', borderRadius: 0,
+    fontFamily: 'inherit', cursor: 'pointer', borderRadius: 8,
   })
 
   return (

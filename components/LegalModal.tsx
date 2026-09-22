@@ -103,7 +103,7 @@ export default function LegalModal() {
           style={{
             width: '100%', maxWidth: '430px',
             background: '#FAFAF8',
-            borderRadius: '0px',
+            borderRadius: '8px',
             display: 'flex', flexDirection: 'column',
             maxHeight: '92dvh',
             overflow: 'hidden',
@@ -158,7 +158,7 @@ export default function LegalModal() {
                 background: canAccept ? '#D97757' : 'rgba(20,20,19,0.08)',
                 color: canAccept ? '#141413' : 'rgba(20,20,19,0.30)',
                 fontWeight: 800, fontSize: '15px',
-                padding: '16px', borderRadius: '0px', border: 'none',
+                padding: '16px', borderRadius: '8px', border: 'none',
                 cursor: canAccept ? 'pointer' : 'default',
                 boxShadow: 'none',
                 transition: 'all 0.2s ease',

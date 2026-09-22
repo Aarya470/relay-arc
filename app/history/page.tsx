@@ -63,7 +63,7 @@ export default function HistoryPage() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px' }}>
       {[1,2,3,4,5].map(i => (
-        <Skeleton key={i} style={{ height: '48px', borderRadius: '2px', background: '#F2F0E8', marginBottom: '8px' }}/>
+        <Skeleton key={i} style={{ height: '48px', borderRadius: '6px', background: '#F2F0E8', marginBottom: '8px' }}/>
       ))}
     </div>
   )

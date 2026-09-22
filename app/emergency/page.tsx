@@ -223,7 +223,7 @@ export default function Emergency() {
           <button
             onClick={() => router.push('/dashboard')}
             aria-label="Close emergency mode"
-            style={{ width: '44px', height: '44px', borderRadius: '2px', background: SURFACE, border: `1px solid ${BORDER}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            style={{ width: '44px', height: '44px', borderRadius: '6px', background: SURFACE, border: `1px solid ${BORDER}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <X size={17} color={T2}/>
           </button>
         </div>
@@ -259,7 +259,7 @@ export default function Emergency() {
                     background: on ? T1 : 'transparent',
                     color: on ? '#FFFFFF' : T3,
                     border: `1px solid ${on ? T1 : BORDER}`,
-                    padding: '5px 11px', borderRadius: '2px',
+                    padding: '5px 11px', borderRadius: '6px',
                     fontFamily: 'var(--font-mono, monospace)',
                     fontSize: '11px', fontWeight: 700, letterSpacing: '0.5px',
                     cursor: 'pointer', minHeight: '30px',
@@ -283,7 +283,7 @@ export default function Emergency() {
               background: listening ? RED_DIM : '#FFFFFF',
               border: `1.5px solid ${listening ? RED : T1}`,
               color: listening ? RED : T1,
-              padding: '17px', borderRadius: '0px',
+              padding: '17px', borderRadius: '8px',
               fontWeight: 700, fontSize: '16px',
               cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px',
               transition: 'all 0.15s ease',

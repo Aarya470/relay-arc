@@ -83,7 +83,7 @@ export default function RiskDemo() {
                   background: on ? T1 : 'transparent', color: on ? '#FFFFFF' : T2,
                   border: `1px solid ${on ? T1 : BORDER}`, padding: '5px 10px',
                   fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '0.4px',
-                  cursor: 'pointer', borderRadius: 0,
+                  cursor: 'pointer', borderRadius: 8,
                 }}>
                 {s.label}
               </button>
