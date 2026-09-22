@@ -150,11 +150,11 @@ export default function HospitalPortal() {
           onChange={e => setCode(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && connect(code.trim())}
           placeholder="LILAVATI-4321"
-          style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '6px', padding: '13px 16px', color: T1, fontSize: '15px', outline: 'none', fontFamily: MONO, marginBottom: '12px' }}
+          style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '14px', padding: '13px 16px', color: T1, fontSize: '15px', outline: 'none', fontFamily: MONO, marginBottom: '12px' }}
         />
         {error && <p style={{ color: RED, fontSize: '13px', marginBottom: '10px' }}>{error}</p>}
         <button onClick={() => connect(code.trim())} disabled={loading || !code.trim()}
-          style={{ width: '100%', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '15px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px', opacity: loading || !code.trim() ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          style={{ width: '100%', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px', opacity: loading || !code.trim() ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
           {loading ? <Loader2 size={16} className="animate-spin"/> : 'Open the board'}
         </button>
         <p style={{ color: T3, fontSize: '12px', lineHeight: 1.6, marginTop: '18px' }}>
@@ -202,7 +202,7 @@ export default function HospitalPortal() {
             <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>Turn off to divert. Relay ranks you down immediately</p>
           </div>
           <button onClick={() => saveStatus({ accepting: !partner.accepting })}
-            style={{ width: '120px', padding: '11px 0', borderRadius: '6px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 800, fontSize: '13px', letterSpacing: '0.3px', background: partner.accepting ? GREEN : RED, color: 'white' }}>
+            style={{ width: '120px', padding: '11px 0', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 800, fontSize: '13px', letterSpacing: '0.3px', background: partner.accepting ? GREEN : RED, color: 'white' }}>
             {partner.accepting ? 'ACCEPTING' : 'DIVERTING'}
           </button>
         </div>
@@ -220,7 +220,7 @@ export default function HospitalPortal() {
             <div style={{ display: 'flex', gap: '6px' }}>
               {[true, false].map(v => (
                 <button key={String(v)} onClick={() => saveStatus({ [key]: v } as any)}
-                  style={{ padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, fontSize: '13px',
+                  style={{ padding: '10px 16px', borderRadius: '14px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, fontSize: '13px',
                     background: partner[key] === v ? (v ? GREEN : RED) : 'none',
                     color: partner[key] === v ? 'white' : T2,
                     border: partner[key] === v ? 'none' : `1.5px solid ${BORDER}` }}>
@@ -238,14 +238,14 @@ export default function HospitalPortal() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <button onClick={() => saveStatus({ beds_free: Math.max(0, (partner.beds_free ?? 0) - 1) })} aria-label="Fewer beds"
-              style={{ width: '38px', height: '38px', borderRadius: '6px', border: `1.5px solid ${BORDER}`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ width: '38px', height: '38px', borderRadius: '14px', border: `1.5px solid ${BORDER}`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Minus size={15} color={T2}/>
             </button>
             <span style={{ color: T1, fontFamily: MONO, fontSize: '22px', fontWeight: 800, minWidth: '36px', textAlign: 'center' }}>
               {partner.beds_free ?? '. '}
             </span>
             <button onClick={() => saveStatus({ beds_free: (partner.beds_free ?? 0) + 1 })} aria-label="More beds"
-              style={{ width: '38px', height: '38px', borderRadius: '6px', border: `1.5px solid ${BORDER}`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ width: '38px', height: '38px', borderRadius: '14px', border: `1.5px solid ${BORDER}`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Plus size={15} color={T2}/>
             </button>
           </div>
@@ -276,12 +276,12 @@ export default function HospitalPortal() {
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 {p.live_url && (
                   <a href={p.live_url} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: ACCENT, fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: `1.5px solid rgba(86,128,78,0.3)`, borderRadius: '6px', padding: '8px 12px' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', color: ACCENT, fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: `1.5px solid rgba(86,128,78,0.3)`, borderRadius: '14px', padding: '8px 12px' }}>
                     Live room <ExternalLink size={12}/>
                   </a>
                 )}
                 <button onClick={() => markIncoming(p.id, 'arrived')}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: GREEN, color: 'white', fontSize: '13px', fontWeight: 700, border: 'none', borderRadius: '6px', padding: '9px 13px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: GREEN, color: 'white', fontSize: '13px', fontWeight: 700, border: 'none', borderRadius: '14px', padding: '9px 13px', cursor: 'pointer', fontFamily: 'inherit' }}>
                   <Check size={13}/> Arrived
                 </button>
               </div>

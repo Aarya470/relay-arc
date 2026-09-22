@@ -158,9 +158,9 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
 
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ height: '80px', borderRadius: '6px', background: BORDER, width: '40%', opacity: 0.5 }}/>
-          <div style={{ height: '16px', borderRadius: '6px', background: BORDER, width: '80%', opacity: 0.4 }}/>
-          <div style={{ height: '16px', borderRadius: '6px', background: BORDER, width: '65%', opacity: 0.3 }}/>
+          <div style={{ height: '80px', borderRadius: '14px', background: BORDER, width: '40%', opacity: 0.5 }}/>
+          <div style={{ height: '16px', borderRadius: '14px', background: BORDER, width: '80%', opacity: 0.4 }}/>
+          <div style={{ height: '16px', borderRadius: '14px', background: BORDER, width: '65%', opacity: 0.3 }}/>
         </div>
       ) : intel && cfg ? (
         <>
@@ -308,7 +308,7 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
         {loading ? (
           [1, 2, 3].map(i => (
             <div key={i} style={{
-              height: '14px', borderRadius: '6px',
+              height: '14px', borderRadius: '14px',
               background: BORDER, opacity: 0.5,
               marginBottom: '12px', width: `${60 + i * 12}%`,
             }}/>
@@ -507,7 +507,7 @@ export default function Dashboard() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {[80, 160, 80, 80, 80].map((h, i) => (
-        <div key={i} style={{ height: `${h}px`, borderRadius: '8px', background: '#98C890', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: `${h}px`, borderRadius: '20px', background: '#98C890', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
     </div>
   )
@@ -531,7 +531,7 @@ export default function Dashboard() {
       style={{
         background: SURFACE,
         border: `1px solid ${BORDER}`,
-        borderRadius: '8px',
+        borderRadius: '20px',
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
         ...style,
@@ -575,7 +575,7 @@ export default function Dashboard() {
               style={{
                 background: GREEN, color: '#FFFFFF',
                 fontWeight: 700, fontSize: '13px',
-                padding: '9px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer',
+                padding: '9px 16px', borderRadius: '14px', border: 'none', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}>
               <Video size={13}/> Join
@@ -604,7 +604,7 @@ export default function Dashboard() {
                     background: ACCENT_DIM,
                     color: ACCENT,
                     fontSize: '10px', fontWeight: 700,
-                    padding: '3px 8px', borderRadius: '6px',
+                    padding: '3px 8px', borderRadius: '14px',
                     fontFamily: 'var(--font-mono, monospace)',
                     letterSpacing: '0.8px', textTransform: 'uppercase',
                     border: `1px solid rgba(86,128,78,0.14)`,
@@ -621,7 +621,7 @@ export default function Dashboard() {
                 display: 'flex', alignItems: 'center', gap: '5px',
                 background: 'rgba(168,114,0,0.08)',
                 border: '1px solid rgba(168,114,0,0.14)',
-                borderRadius: '6px', padding: '5px 10px',
+                borderRadius: '14px', padding: '5px 10px',
               }}>
                 <Flame size={12} color={AMBER}/>
                 <span style={{ color: AMBER, fontSize: '12px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)' }}>{streak}</span>
@@ -631,7 +631,7 @@ export default function Dashboard() {
               whileTap={{ scale: 0.9 }}
               onClick={() => router.push('/settings')}
               style={{
-                width: '36px', height: '36px', borderRadius: '6px',
+                width: '36px', height: '36px', borderRadius: '14px',
                 background: SURFACE, border: `1px solid ${BORDER}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer',
@@ -650,7 +650,7 @@ export default function Dashboard() {
         {installPrompt && (
           <motion.div variants={fadeUp}
             style={{
-              background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px',
+              background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px',
               padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px',
               boxShadow: SHADOW,
             }}>
@@ -662,7 +662,7 @@ export default function Dashboard() {
               onClick={async () => { installPrompt.prompt(); const { outcome } = await installPrompt.userChoice; if (outcome === 'accepted') setInstallPrompt(null) }}
               style={{
                 background: ACCENT, color: 'white', fontWeight: 700, fontSize: '12px',
-                padding: '8px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', flexShrink: 0,
+                padding: '8px 14px', borderRadius: '14px', border: 'none', cursor: 'pointer', flexShrink: 0,
               }}>
               Install
             </button>
@@ -753,7 +753,7 @@ export default function Dashboard() {
               style={{
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                borderRadius: '8px', padding: '14px 16px',
+                borderRadius: '20px', padding: '14px 16px',
                 display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
               <TrendingDown size={15} color={T3} style={{ marginTop: '2px', flexShrink: 0 }}/>
@@ -802,7 +802,7 @@ export default function Dashboard() {
             style={{
               background: checkinToday ? GREEN : SURFACE,
               border: checkinToday ? 'none' : `1px solid ${BORDER}`,
-              borderRadius: '8px',
+              borderRadius: '20px',
               padding: '20px 18px 18px',
               textAlign: 'left',
               cursor: 'pointer',
@@ -835,7 +835,7 @@ export default function Dashboard() {
             onClick={() => router.push('/timeline')}
             style={{
               background: SURFACE,
-              borderRadius: '8px',
+              borderRadius: '20px',
               border: `1px solid ${BORDER}`,
               padding: '20px 18px 18px',
               textAlign: 'left',
@@ -975,7 +975,7 @@ export default function Dashboard() {
                 {meds.map((med: any, i: number) => (
                   <div key={i} style={{
                     background: BG, border: `1px solid ${BORDER}`,
-                    borderRadius: '6px', padding: '6px 11px',
+                    borderRadius: '14px', padding: '6px 11px',
                     display: 'flex', alignItems: 'baseline', gap: '6px',
                   }}>
                     <span style={{ color: T1, fontSize: '13px', fontWeight: 600 }}>{med.name}</span>
@@ -997,12 +997,12 @@ export default function Dashboard() {
             style={{
               background: 'rgba(86,128,78,0.04)',
               border: `1px solid rgba(86,128,78,0.10)`,
-              borderRadius: '8px', padding: '14px 16px',
+              borderRadius: '20px', padding: '14px 16px',
               cursor: 'pointer', width: '100%',
               display: 'flex', alignItems: 'center', gap: '12px',
             }}>
             <div style={{
-              width: '36px', height: '36px', borderRadius: '6px',
+              width: '36px', height: '36px', borderRadius: '14px',
               background: ACCENT, flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>

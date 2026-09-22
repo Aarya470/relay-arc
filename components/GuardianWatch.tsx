@@ -126,7 +126,7 @@ export default function GuardianWatch({
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(20,20,19,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
         >
-          <div style={{ background: '#FFFFFF', borderRadius: '8px', padding: '28px 24px', width: '100%', maxWidth: '360px', textAlign: 'center' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '20px', padding: '28px 24px', width: '100%', maxWidth: '360px', textAlign: 'center' }}>
             <p style={{ color: '#5C5A52', fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '14px' }}>
               Guardian check
             </p>
@@ -140,7 +140,7 @@ export default function GuardianWatch({
               {countdown}
             </p>
             <button onClick={respond}
-              style={{ width: '100%', background: '#42623C', color: 'white', fontWeight: 800, fontSize: '18px', padding: '18px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', minHeight: '62px' }}>
+              style={{ width: '100%', background: '#42623C', color: 'white', fontWeight: 800, fontSize: '18px', padding: '18px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', minHeight: '62px' }}>
               <Check size={20} strokeWidth={2.5}/> I&apos;m OK
             </button>
           </div>
@@ -165,16 +165,16 @@ export default function GuardianWatch({
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
-            <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: RED, fontWeight: 900, fontSize: '19px', padding: '19px', borderRadius: '8px', textDecoration: 'none', minHeight: '62px' }}>
+            <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: RED, fontWeight: 900, fontSize: '19px', padding: '19px', borderRadius: '20px', textDecoration: 'none', minHeight: '62px' }}>
               <Phone size={20} strokeWidth={2.5}/> Call {emg.label} now
             </a>
             {contacts.length > 0 && (
-              <a href={smsHref()} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '8px', textDecoration: 'none', minHeight: '56px' }}>
+              <a href={smsHref()} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '20px', textDecoration: 'none', minHeight: '56px' }}>
                 <MessageSquare size={17}/> Text their family the location
               </a>
             )}
             <button onClick={() => router.push('/emergency/cpr')}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '56px' }}>
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '20px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '56px' }}>
               <HeartPulse size={17}/> Not breathing? CPR guide
             </button>
           </div>

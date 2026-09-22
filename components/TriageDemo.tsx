@@ -89,7 +89,7 @@ export default function TriageDemo() {
                 color: text === p.text ? '#FFFFFF' : T2,
                 border: `1px solid ${text === p.text ? T1 : BORDER}`,
                 padding: '5px 10px', fontFamily: mono, fontSize: '10.5px',
-                fontWeight: 700, letterSpacing: '0.4px', cursor: 'pointer', borderRadius: 8,
+                fontWeight: 700, letterSpacing: '0.4px', cursor: 'pointer', borderRadius: 20,
               }}>
               {p.label}
             </button>
@@ -103,7 +103,7 @@ export default function TriageDemo() {
           placeholder="describe an emergency…"
           style={{
             width: '100%', boxSizing: 'border-box', padding: '15px 16px',
-            border: `1.5px solid ${T1}`, borderRadius: 8, background: '#FFFFFF',
+            border: `1.5px solid ${T1}`, borderRadius: 20, background: '#FFFFFF',
             color: T1, fontSize: '16px', fontWeight: 600, fontFamily: 'inherit',
             outline: 'none', marginBottom: '18px',
           }}

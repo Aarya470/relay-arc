@@ -109,7 +109,7 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
               Sign in
             </button>
             <button onClick={() => router.push('/card')}
-              style={{ background: ORANGE, color: INK, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', borderRadius: '8px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
+              style={{ background: ORANGE, color: INK, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', borderRadius: '20px', cursor: 'pointer', border: 'none', fontFamily: 'inherit' }}>
               Make a card
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
@@ -204,12 +204,12 @@ function PhoneMockup() {
           {/* greeting */}
           <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px' }}>Good morning</p>
           <p style={{ color: T1, fontSize: '26px', fontWeight: 800, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '8px' }}>Asha</p>
-          <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '6px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '14px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
             Post-CABG
           </span>
 
           {/* SOS */}
-          <div style={{ background: RED, borderRadius: '8px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', animation: 'sos-pulse-lp 2.8s ease-in-out infinite' }}>
+          <div style={{ background: RED, borderRadius: '20px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', animation: 'sos-pulse-lp 2.8s ease-in-out infinite' }}>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '7.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontFamily: mono, fontWeight: 700, marginBottom: '6px' }}>Emergency response</p>
               <p style={{ color: 'white', fontSize: '32px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.9, fontFamily: mono }}>SOS</p>
@@ -222,12 +222,12 @@ function PhoneMockup() {
 
           {/* two cards */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
-            <div style={{ background: GREEN, borderRadius: '8px', padding: '12px' }}>
+            <div style={{ background: GREEN, borderRadius: '20px', padding: '12px' }}>
               <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Done</p>
               <p style={{ color: 'white', fontSize: '24px', fontWeight: 900, lineHeight: 0.9, marginBottom: '8px' }}>✓</p>
               <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '8.5px', fontWeight: 500 }}>Today complete</p>
             </div>
-            <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '12px' }}>
+            <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '20px', padding: '12px' }}>
               <p style={{ color: ACCENT, fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Recovery</p>
               <p style={{ color: T1, fontSize: '24px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 0.9, marginBottom: '8px' }}>6</p>
               <p style={{ color: T3, fontSize: '8.5px', fontWeight: 500 }}>weeks post-surgery</p>
@@ -235,7 +235,7 @@ function PhoneMockup() {
           </div>
 
           {/* health score */}
-          <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '12px 14px' }}>
+          <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '20px', padding: '12px 14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
               <p style={{ color: T3, fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono }}>Health score</p>
               <span style={{ color: GREEN, fontSize: '9.5px', fontWeight: 600 }}>Improving</span>
@@ -244,7 +244,7 @@ function PhoneMockup() {
               <p style={{ color: GREEN, fontSize: '34px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 0.85 }}>82</p>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', paddingBottom: '2px' }}>
                 {[9, 12, 8, 14, 13, 17, 20].map((h, i) => (
-                  <div key={i} style={{ width: '5px', height: `${h}px`, borderRadius: '6px', background: i === 6 ? GREEN : BORDER }}/>
+                  <div key={i} style={{ width: '5px', height: `${h}px`, borderRadius: '14px', background: i === 6 ? GREEN : BORDER }}/>
                 ))}
               </div>
             </div>
@@ -256,7 +256,7 @@ function PhoneMockup() {
       {/* floating detail cards — outside the screen, clipping only the bezel */}
       <div className="float-card" style={{
         position: 'absolute', top: '52px', right: '-128px', zIndex: 6,
-        background: 'white', border: `1px solid ${T1}`, borderRadius: '8px',
+        background: 'white', border: `1px solid ${T1}`, borderRadius: '20px',
         padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '176px',
       }}>
@@ -269,7 +269,7 @@ function PhoneMockup() {
 
       <div className="float-card" style={{
         position: 'absolute', bottom: '38px', left: '-136px', zIndex: 6,
-        background: 'white', border: `1px solid ${T1}`, borderRadius: '8px',
+        background: 'white', border: `1px solid ${T1}`, borderRadius: '20px',
         padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '172px',
       }}>
@@ -355,7 +355,7 @@ function EmergencyRace() {
         ))}
       </div>
       <div style={{ marginTop: '18px' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: status.bg, borderRadius: '8px', padding: '6px 12px' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: status.bg, borderRadius: '20px', padding: '6px 12px' }}>
           <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: status.color, animation: status.label === 'Still en route' || status.label === 'SOS active' ? 'dot-blink 1.1s infinite' : 'none' }}/>
           <span style={{ color: status.color, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase' }}>{status.label}</span>
         </span>
@@ -365,7 +365,7 @@ function EmergencyRace() {
 
   return (
     <div>
-      <div style={{ background: T1, borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
+      <div style={{ background: T1, borderRadius: '20px', overflow: 'hidden', position: 'relative' }}>
         <Noise opacity={0.04}/>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <span style={{ color: 'rgba(255,255,255,0.5)', fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase' }}>Two families · same chest pain · 19:42 on a Tuesday</span>
@@ -467,7 +467,7 @@ export default function Home() {
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }}>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px', background: PANEL_2, padding: '10px 14px', borderRadius: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '30px', background: PANEL_2, padding: '10px 14px', borderRadius: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ width: '7px', height: '7px', background: CORAL, display: 'inline-block', animation: 'dot-blink 1.6s ease-in-out infinite' }}/>
                 <span style={{ color: T2, fontSize: '11.5px', fontFamily: mono, letterSpacing: '1px', textTransform: 'uppercase' }}>
@@ -495,7 +495,7 @@ export default function Home() {
             </h1>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
-              <div style={{ background: PANEL_2, borderRadius: '8px', padding: '28px 28px 32px', marginBottom: '90px' }} className="hero-copy">
+              <div style={{ background: PANEL_2, borderRadius: '20px', padding: '28px 28px 32px', marginBottom: '90px' }} className="hero-copy">
                 {/* The old line read "It works out what is happening, finds a
                      hospital that can treat it, and sends your medical details
                      ahead." Three verbs, same tense, same length, one after the
@@ -515,7 +515,7 @@ export default function Home() {
                     minutes and the profile is offered as the upgrade. */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap', marginBottom: '32px' }}>
                   <button onClick={() => router.push('/card')}
-                    style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: INK, fontWeight: 700, fontSize: '15px', padding: '14px 28px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: INK, fontWeight: 700, fontSize: '15px', padding: '14px 28px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
                     Make an emergency card <span style={{ fontFamily: mono }}>→</span>
                   </button>
                   <button onClick={() => router.push('/login?signup=1')}
@@ -548,7 +548,7 @@ export default function Home() {
       {/* ── SEE IT, DON'T READ IT ────────────────────────────────────── */}
       <section id="log" style={{ padding: '96px 24px 100px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ background: PANEL_2, borderRadius: '6px', padding: '11px 14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+          <div style={{ background: PANEL_2, borderRadius: '14px', padding: '11px 14px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>01 / How it works</span>
             <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>The same emergency, twice</span>
           </div>
@@ -562,7 +562,7 @@ export default function Home() {
       {/* ── WHAT IT DOES — four lines, no reading ─────────────────────── */}
       <section id="features" style={{ padding: '0 24px 110px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <div style={{ background: PANEL_2, borderRadius: '6px', padding: '11px 14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
+          <div style={{ background: PANEL_2, borderRadius: '14px', padding: '11px 14px', marginBottom: '44px', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'baseline' }}>
             <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>02 / What it does</span>
             <button onClick={() => router.push('/features')}
               style={{ background: 'none', border: 'none', color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', cursor: 'pointer', padding: '5px 0', borderBottom: `2px solid ${T1}` }}>
@@ -581,7 +581,7 @@ export default function Home() {
               ['Your family gets the address', 'And the route to it, in one tap.'],
               ['Two minutes a day', 'Enough to catch a bad week while it is still only a bad week.'],
             ].map(([title, body], i) => (
-              <div key={i} style={{ background: PANEL, borderRadius: '8px', padding: '18px 18px 20px' }}>
+              <div key={i} style={{ background: PANEL, borderRadius: '20px', padding: '18px 18px 20px' }}>
                 <span style={{ color: RED, fontFamily: mono, fontSize: '11px', fontWeight: 700 }}>{String(i + 1).padStart(2, '0')}</span>
                 <h3 style={{ color: T1, fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em', margin: '10px 0 8px', lineHeight: 1.15 }}>{title}</h3>
                 <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55 }}>{body}</p>
@@ -652,19 +652,19 @@ export default function Home() {
               <h2 style={{ color: ON, fontSize: 'clamp(34px, 5vw, 58px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '18px' }}>
                 A paramedic can read it<br/>without your passcode<span style={{ color: CORAL }}>.</span>
               </h2>
-              <p style={{ color: INK, background: PANEL_2, borderRadius: '8px', padding: '14px 16px', fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
+              <p style={{ color: INK, background: PANEL_2, borderRadius: '20px', padding: '14px 16px', fontSize: '16px', lineHeight: 1.65, marginBottom: '32px', maxWidth: '420px' }}>
                 Two minutes to fill in. After that it sits on your lock screen and works
                 whether or not you are awake to explain anything.
               </p>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: ON, padding: '15px 32px', borderRadius: '8px', fontWeight: 700, fontSize: '15.5px', border: `2px solid ${ON}`, cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: ON, padding: '15px 32px', borderRadius: '20px', fontWeight: 700, fontSize: '15.5px', border: `2px solid ${ON}`, cursor: 'pointer', fontFamily: 'inherit' }}>
                 Set up your profile. It is free <ArrowRight size={15}/>
               </button>
             </div>
 
             {/* Medical ID card — what the profile actually looks like */}
             <div style={{ transform: 'rotate(-1.5deg)', maxWidth: '360px', justifySelf: 'center' }} className="id-card">
-              <div style={{ background: PANEL, border: `1.5px solid ${T1}`, borderRadius: '6px', padding: '22px 24px', boxShadow: '10px 10px 0 rgba(20,20,19,0.14)' }}>
+              <div style={{ background: PANEL, border: `1.5px solid ${T1}`, borderRadius: '14px', padding: '22px 24px', boxShadow: '10px 10px 0 rgba(20,20,19,0.14)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', marginBottom: '18px' }}>
                   <p style={{ color: T3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', margin: 0, flex: 1 }}>
                     Medical profile

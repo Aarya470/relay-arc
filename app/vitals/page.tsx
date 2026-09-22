@@ -13,7 +13,7 @@ const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 const inputStyle: React.CSSProperties = {
   width: '72px', background: '#FFFFFF', border: '1.5px solid #D8D4C8',
-  borderRadius: '6px', padding: '12px', color: '#141413', fontSize: '22px',
+  borderRadius: '14px', padding: '12px', color: '#141413', fontSize: '22px',
   fontWeight: 800, outline: 'none', fontFamily: 'inherit', textAlign: 'center',
   letterSpacing: '-0.5px', boxSizing: 'border-box',
 }
@@ -177,7 +177,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       style={{
         background: '#FFFFFF',
         border: '1px solid #98C890',
-        borderRadius: '8px',
+        borderRadius: '20px',
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
@@ -188,7 +188,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
-            width: '30px', height: '30px', borderRadius: '6px',
+            width: '30px', height: '30px', borderRadius: '14px',
             background: `${meta.color}18`, border: `1px solid ${meta.color}30`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
@@ -198,7 +198,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
         </div>
         <span style={{
           background: ss.bg, border: `1px solid ${ss.border}`, color: ss.text,
-          fontSize: '10px', fontWeight: 800, padding: '3px 9px', borderRadius: '6px',
+          fontSize: '10px', fontWeight: 800, padding: '3px 9px', borderRadius: '14px',
           fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.5px',
         }}>
           {statusLabel}
@@ -259,7 +259,7 @@ function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v
   return (
     <div style={{
       display: 'flex', gap: '3px',
-      background: '#F2F0E8', borderRadius: '6px', padding: '3px',
+      background: '#F2F0E8', borderRadius: '14px', padding: '3px',
       border: '1px solid #98C890',
     }}>
       {opts.map(opt => (
@@ -267,7 +267,7 @@ function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v
           key={opt}
           onClick={() => onChange(opt)}
           style={{
-            flex: 1, padding: '6px 0', borderRadius: '6px', border: 'none', cursor: 'pointer',
+            flex: 1, padding: '6px 0', borderRadius: '14px', border: 'none', cursor: 'pointer',
             fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700,
             background: value === opt ? '#42623C' : 'transparent',
             color: value === opt ? '#FFFFFF' : '#5C5A52',
@@ -431,13 +431,13 @@ export default function VitalsPage() {
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
         {/* Entry grid */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '8px', padding: '16px' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '16px' }}>
           <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Today's readings</p>
 
           {/* Heart rate */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #EDEAE0', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '6px', background: 'rgba(163,52,23,0.12)', border: '1px solid rgba(163,52,23,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(163,52,23,0.12)', border: '1px solid rgba(163,52,23,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Heart size={14} color="#A33417"/>
               </div>
               <div>
@@ -459,7 +459,7 @@ export default function VitalsPage() {
           {/* Blood pressure */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #EDEAE0', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '6px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Activity size={14} color="#42623C"/>
               </div>
               <div>
@@ -487,7 +487,7 @@ export default function VitalsPage() {
           {/* O2 sat */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #EDEAE0', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '6px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Droplets size={14} color="#42623C"/>
               </div>
               <div>
@@ -509,7 +509,7 @@ export default function VitalsPage() {
           {/* Resp rate */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '6px', background: 'rgba(168,114,0,0.12)', border: '1px solid rgba(168,114,0,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(168,114,0,0.12)', border: '1px solid rgba(168,114,0,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Wind size={14} color="#7C5200"/>
               </div>
               <div>
@@ -546,7 +546,7 @@ export default function VitalsPage() {
                   return (
                     <span key={key} style={{
                       background: s.bg, border: `1px solid ${s.border}`, color: s.text,
-                      fontSize: '11px', fontWeight: 700, padding: '5px 11px', borderRadius: '6px',
+                      fontSize: '11px', fontWeight: 700, padding: '5px 11px', borderRadius: '14px',
                       fontFamily: 'var(--font-mono, monospace)',
                     }}>
                       {r?.label}: {val} {r?.unit} {status === 'high' ? 'H' : status === 'low' ? 'L' : ''}
@@ -565,7 +565,7 @@ export default function VitalsPage() {
           style={{
             background: '#42623C',
             color: '#FFFFFF',
-            fontWeight: 800, fontSize: '15px', padding: '17px', borderRadius: '8px',
+            fontWeight: 800, fontSize: '15px', padding: '17px', borderRadius: '20px',
             border: 'none', cursor: saving ? 'not-allowed' : 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             opacity: saving ? 0.65 : 1,
@@ -586,7 +586,7 @@ export default function VitalsPage() {
             }}>Trends</p>
             {[1, 2, 3].map(i => (
               <Skeleton key={i} style={{
-                height: '140px', borderRadius: '8px',
+                height: '140px', borderRadius: '20px',
                 background: '#FFFFFF', marginBottom: '10px',
               }}/>
             ))}
@@ -621,7 +621,7 @@ export default function VitalsPage() {
             ) : (
               <div style={{
                 background: '#FFFFFF', border: '1px solid #98C890',
-                borderRadius: '8px', padding: '36px 16px', textAlign: 'center',
+                borderRadius: '20px', padding: '36px 16px', textAlign: 'center',
               }}>
                 <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 700 }}>
                   No data for {timeRange} view

@@ -71,7 +71,7 @@ export default function MedicalProfile() {
 
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px' }}>
-      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '60px', borderRadius: '8px', background: '#F2F0E8', marginBottom: '10px' }}/>)}
+      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '60px', borderRadius: '20px', background: '#F2F0E8', marginBottom: '10px' }}/>)}
     </div>
   )
 
@@ -221,7 +221,7 @@ export default function MedicalProfile() {
 
         {/* Share */}
         <motion.button whileTap={{ scale: 0.98 }} onClick={handleShare}
-          style={{ width: '100%', background: '#141413', color: 'white', fontWeight: 600, fontSize: '14.5px', padding: '0 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '52px', fontFamily: 'inherit' }}>
+          style={{ width: '100%', background: '#141413', color: 'white', fontWeight: 600, fontSize: '14.5px', padding: '0 20px', borderRadius: '20px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '52px', fontFamily: 'inherit' }}>
           <Share2 size={15}/>
           Share with first responders
         </motion.button>

@@ -75,7 +75,7 @@ export default function StatusPage() {
               {(data.checks as Check[]).filter(c => c.group === g).map(c => (
                 <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: '13px', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
                   <span style={{
-                    width: '20px', height: '20px', borderRadius: '6px', flexShrink: 0,
+                    width: '20px', height: '20px', borderRadius: '14px', flexShrink: 0,
                     background: c.ok ? GREEN : c.critical ? RED : AMBER,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>

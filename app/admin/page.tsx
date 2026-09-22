@@ -117,10 +117,10 @@ export default function AdminPartners() {
         <p style={{ color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: MONO, marginBottom: '8px' }}>Admin key</p>
         <input type="password" value={key} onChange={e => setKey(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && connect()}
-          style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '6px', padding: '13px 16px', color: T1, fontSize: '15px', outline: 'none', fontFamily: MONO, marginBottom: '12px' }}/>
+          style={{ width: '100%', background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '14px', padding: '13px 16px', color: T1, fontSize: '15px', outline: 'none', fontFamily: MONO, marginBottom: '12px' }}/>
         {error && <p style={{ color: RED, fontSize: '13px', marginBottom: '10px', lineHeight: 1.5 }}>{error}</p>}
         <button onClick={connect} disabled={loading || !key.trim()}
-          style={{ width: '100%', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '15px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px', opacity: loading || !key.trim() ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          style={{ width: '100%', background: T1, color: 'white', fontWeight: 600, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px', opacity: loading || !key.trim() ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
           {loading ? <Loader2 size={16} className="animate-spin"/> : 'Open operations'}
         </button>
       </div>
@@ -146,14 +146,14 @@ export default function AdminPartners() {
         <input value={query} onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && searchHospital()}
           placeholder="Search the hospital. 'Lilavati Hospital Mumbai'"
-          style={{ flex: 1, background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '6px', padding: '12px 14px', color: T1, fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}/>
+          style={{ flex: 1, background: '#FFFFFF', border: `1.5px solid ${BORDER}`, borderRadius: '14px', padding: '12px 14px', color: T1, fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}/>
         <button onClick={searchHospital} disabled={searching} aria-label="Search"
-          style={{ width: '46px', borderRadius: '6px', background: T1, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          style={{ width: '46px', borderRadius: '14px', background: T1, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           {searching ? <Loader2 size={16} color="white" className="animate-spin"/> : <Search size={16} color="white"/>}
         </button>
       </div>
       {hits.length > 0 && !picked && (
-        <div style={{ border: `1px solid ${BORDER}`, borderRadius: '6px', overflow: 'hidden', marginBottom: '10px' }}>
+        <div style={{ border: `1px solid ${BORDER}`, borderRadius: '14px', overflow: 'hidden', marginBottom: '10px' }}>
           {hits.map((h, i) => (
             <button key={i}
               onClick={() => setPicked({ name: h.display_name.split(',')[0], lat: parseFloat(h.lat), lng: parseFloat(h.lon) })}
@@ -165,13 +165,13 @@ export default function AdminPartners() {
         </div>
       )}
       {picked && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', border: `1.5px solid ${ACCENT}`, borderRadius: '6px', padding: '12px 14px', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', border: `1.5px solid ${ACCENT}`, borderRadius: '14px', padding: '12px 14px', marginBottom: '10px' }}>
           <div>
             <p style={{ color: T1, fontSize: '14px', fontWeight: 700 }}>{picked.name}</p>
             <p style={{ color: T3, fontSize: '11.5px', fontFamily: MONO, marginTop: '2px' }}>{picked.lat.toFixed(5)}, {picked.lng.toFixed(5)}</p>
           </div>
           <button onClick={create} disabled={creating}
-            style={{ display: 'flex', alignItems: 'center', gap: '7px', background: T1, color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '11px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '7px', background: T1, color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '11px 16px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
             {creating ? <Loader2 size={14} className="animate-spin"/> : <Plus size={14}/>} Onboard + generate code
           </button>
         </div>
@@ -205,16 +205,16 @@ export default function AdminPartners() {
               </div>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
                 <button onClick={() => copy(p.access_code)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#B3DDAC', border: `1px solid ${BORDER}`, borderRadius: '6px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#B3DDAC', border: `1px solid ${BORDER}`, borderRadius: '14px', padding: '7px 11px', cursor: 'pointer', fontFamily: MONO, fontSize: '12px', fontWeight: 700, color: T1 }}>
                   {copied === p.access_code ? <Check size={12} color={GREEN}/> : <Copy size={12} color={T3}/>}
                   {p.access_code}
                 </button>
                 <button onClick={() => regen(p.id)} aria-label="Rotate code" title="Rotate access code"
-                  style={{ width: '32px', height: '32px', borderRadius: '6px', border: `1px solid ${BORDER}`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ width: '32px', height: '32px', borderRadius: '14px', border: `1px solid ${BORDER}`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <RefreshCw size={13} color={T2}/>
                 </button>
                 <button onClick={() => remove(p.id)} aria-label="Remove facility"
-                  style={{ width: '32px', height: '32px', borderRadius: '6px', border: `1px solid rgba(163,52,23,0.3)`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ width: '32px', height: '32px', borderRadius: '14px', border: `1px solid rgba(163,52,23,0.3)`, background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Trash2 size={13} color={RED}/>
                 </button>
               </div>

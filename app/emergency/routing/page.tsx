@@ -105,7 +105,7 @@ function CancelConfirmSheet({
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
             style={{
               background: T.card,
-              borderRadius: '8px',
+              borderRadius: '20px',
               border: `1px solid ${T.border}`,
               borderBottom: 'none',
               padding: '28px 20px 52px',
@@ -139,7 +139,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: '#F2F0E8',
-                  borderRadius: '8px',
+                  borderRadius: '20px',
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
                   fontWeight: 700,
@@ -160,7 +160,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: `#A33417`,
-                  borderRadius: '8px',
+                  borderRadius: '20px',
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
                   fontWeight: 700,
@@ -776,7 +776,7 @@ function RoutingPage() {
           fontWeight: 800,
           fontSize: '17px',
           padding: '17px 0',
-          borderRadius: '8px',
+          borderRadius: '20px',
           textDecoration: 'none',
           boxShadow: T.redGlow,
           width: '100%',
@@ -798,7 +798,7 @@ function RoutingPage() {
           fontWeight: 500,
           fontSize: '13px',
           padding: '11px 24px',
-          borderRadius: '8px',
+          borderRadius: '20px',
           border: `1px solid #98C890`,
           cursor: 'pointer',
         }}
@@ -829,7 +829,7 @@ function RoutingPage() {
             style={{ width: '8px', height: '8px', background: T.red, flexShrink: 0 }}
           />
           <span style={{ color: T.red, fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {isDemo && <span style={{ background: T.textPrimary, color: 'white', padding: '2px 6px', borderRadius: '6px', marginRight: '7px' }}>DEMO</span>}
+            {isDemo && <span style={{ background: T.textPrimary, color: 'white', padding: '2px 6px', borderRadius: '14px', marginRight: '7px' }}>DEMO</span>}
             Active emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
           </span>
         </div>
@@ -919,11 +919,11 @@ function RoutingPage() {
             {ride === 'none' && (
               <div style={{ display: 'flex', gap: '9px' }}>
                 <button onClick={() => setRide('dismissed')}
-                  style={{ flex: 1, background: 'none', border: `1.5px solid ${T.border}`, color: T.textSec, fontWeight: 600, fontSize: '13.5px', padding: '13px 8px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                  style={{ flex: 1, background: 'none', border: `1.5px solid ${T.border}`, color: T.textSec, fontWeight: 600, fontSize: '13.5px', padding: '13px 8px', borderRadius: '14px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
                   I have a driver
                 </button>
                 <button onClick={requestRide}
-                  style={{ flex: 1.4, background: T.blue, border: 'none', color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '13px 8px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                  style={{ flex: 1.4, background: T.blue, border: 'none', color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '13px 8px', borderRadius: '14px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
                   I need a ride. Alert drivers
                 </button>
               </div>
@@ -1031,7 +1031,7 @@ function RoutingPage() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px',
                     background: T.blue, color: 'white',
                     fontWeight: 700, fontSize: '15px',
-                    padding: '16px', borderRadius: '8px',
+                    padding: '16px', borderRadius: '20px',
                     textDecoration: 'none', minHeight: '54px',
                   }}
                 >
@@ -1060,7 +1060,7 @@ function RoutingPage() {
                     const svg = qr.createSvgTag({ cellSize: 4, margin: 2 })
                     return (
                       <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
-                        <div style={{ width: '164px', border: `1px solid ${T.border}`, borderRadius: '6px', padding: '10px', background: 'white' }}
+                        <div style={{ width: '164px', border: `1px solid ${T.border}`, borderRadius: '14px', padding: '10px', background: 'white' }}
                           dangerouslySetInnerHTML={{ __html: svg.replace('<svg ', '<svg style="width:100%;height:auto;display:block" ') }}/>
                       </div>
                     )
@@ -1176,7 +1176,7 @@ function RoutingPage() {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 background: 'none', color: T.red,
-                padding: '15px', borderRadius: '8px',
+                padding: '15px', borderRadius: '20px',
                 fontWeight: 700, fontSize: '14.5px',
                 border: `1.5px solid ${T.red}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
               }}
@@ -1191,7 +1191,7 @@ function RoutingPage() {
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               background: 'none', color: T.textPrimary,
-              padding: '15px', borderRadius: '8px',
+              padding: '15px', borderRadius: '20px',
               fontWeight: 700, fontSize: '14.5px',
               border: `1.5px solid ${T.textPrimary}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
             }}
@@ -1238,7 +1238,7 @@ function RoutingPage() {
                   {fmtElapsed(elapsed)}
                 </span>
                 <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
-                  style={{ background: '#B3DDAC', border: `1px solid ${T.border}`, borderRadius: '6px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  style={{ background: '#B3DDAC', border: `1px solid ${T.border}`, borderRadius: '14px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <X size={16} color={T.textSec}/>
                 </button>
               </div>

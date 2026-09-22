@@ -253,7 +253,7 @@ export default function Medications() {
   const sheetInputStyle: React.CSSProperties = {
     background: BG,
     border: `1.5px solid ${BORDER}`,
-    borderRadius: '6px',
+    borderRadius: '14px',
     padding: '13px 16px',
     color: T1,
     fontSize: '14px',
@@ -264,7 +264,7 @@ export default function Medications() {
 
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '80px 16px 100px' }}>
-      {[1,2,3].map(i => <div key={i} style={{ height: '112px', borderRadius: '8px', background: '#98C890', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}/>)}
+      {[1,2,3].map(i => <div key={i} style={{ height: '112px', borderRadius: '20px', background: '#98C890', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}/>)}
     </div>
   )
 
@@ -288,7 +288,7 @@ export default function Medications() {
           <motion.button
             whileTap={{ scale: 0.9 }} transition={spring}
             onClick={() => setShowAdd(true)}
-            style={{ width: '36px', height: '36px', borderRadius: '6px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '36px', height: '36px', borderRadius: '14px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <Plus size={16} color={ACCENT}/>
           </motion.button>
@@ -324,14 +324,14 @@ export default function Medications() {
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
                 background: SURFACE,
-                borderRadius: '8px',
+                borderRadius: '20px',
                 padding: '24px 20px 40px',
                 width: '100%', maxHeight: '85dvh', overflowY: 'auto',
                 border: `1px solid ${BORDER}`, borderBottom: 'none',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', marginTop: '-8px' }}>
-                <div style={{ width: '36px', height: '4px', borderRadius: '6px', background: BORDER }}/>
+                <div style={{ width: '36px', height: '4px', borderRadius: '14px', background: BORDER }}/>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <p style={{ color: T1, fontWeight: 800, fontSize: '18px', letterSpacing: '-0.5px' }}>Add medication</p>
@@ -362,7 +362,7 @@ export default function Medications() {
                       <motion.div
                         initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.18, ease: 'easeOut' }}
-                        style={{ overflow: 'hidden', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '6px', marginTop: '4px' }}
+                        style={{ overflow: 'hidden', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '14px', marginTop: '4px' }}
                       >
                         {FREQUENCY_OPTIONS.map(f => (
                           <button key={f} onClick={() => { setNewMed(prev => ({ ...prev, frequency: f })); setShowFreqDropdown(false) }}
@@ -390,7 +390,7 @@ export default function Medications() {
                       <motion.div
                         initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.18, ease: 'easeOut' }}
-                        style={{ overflow: 'hidden', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '6px', marginTop: '4px' }}
+                        style={{ overflow: 'hidden', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '14px', marginTop: '4px' }}
                       >
                         {TIME_OPTIONS.map(t => (
                           <button key={t}
@@ -414,7 +414,7 @@ export default function Medications() {
                   whileTap={{ scale: 0.97, y: 1 }} transition={spring}
                   onClick={addMedication}
                   disabled={saving}
-                  style={{ background: ACCENT, color: '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '15px', borderRadius: '6px', border: 'none', cursor: 'pointer', marginTop: '4px', letterSpacing: '-0.2px' }}
+                  style={{ background: ACCENT, color: '#FFFFFF', fontWeight: 800, fontSize: '15px', padding: '15px', borderRadius: '14px', border: 'none', cursor: 'pointer', marginTop: '4px', letterSpacing: '-0.2px' }}
                 >
                   {saving ? 'Saving...' : 'Add medication'}
                 </motion.button>
@@ -432,7 +432,7 @@ export default function Medications() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, ...spring }}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', marginBottom: '14px', overflow: 'hidden', boxShadow: SHADOW }}
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', marginBottom: '14px', overflow: 'hidden', boxShadow: SHADOW }}
         >
           <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <p style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>Adherence</p>
@@ -488,7 +488,7 @@ export default function Medications() {
 
             {/* Streak + 28-day */}
             <div style={{ display: 'flex', gap: '10px' }}>
-              <div style={{ flex: '0 0 auto', background: BG, borderRadius: '6px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '90px', border: `1px solid ${BORDER}` }}>
+              <div style={{ flex: '0 0 auto', background: BG, borderRadius: '14px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '90px', border: `1px solid ${BORDER}` }}>
                 <p style={{ color: T1, fontSize: '24px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '-1px', lineHeight: 1 }}>
                   {streak >= 2 ? `${streak}d` : '. '}
                 </p>
@@ -523,11 +523,11 @@ export default function Medications() {
 
         {medications.length === 0 && (
           <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <div style={{ width: '56px', height: '56px', borderRadius: '8px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+            <div style={{ width: '56px', height: '56px', borderRadius: '20px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
               <Pill size={22} color={ACCENT}/>
             </div>
             <p style={{ color: T2, fontSize: '14px', marginBottom: '16px' }}>No medications added yet</p>
-            <button onClick={() => setShowAdd(true)} style={{ color: ACCENT, fontSize: '14px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, borderRadius: '6px', padding: '10px 20px', cursor: 'pointer', fontWeight: 700 }}>
+            <button onClick={() => setShowAdd(true)} style={{ color: ACCENT, fontSize: '14px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, borderRadius: '14px', padding: '10px 20px', cursor: 'pointer', fontWeight: 700 }}>
               Add your first medication
             </button>
           </div>
@@ -539,27 +539,27 @@ export default function Medications() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: medIndex * 0.05, ...spring }}
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', marginBottom: '12px', overflow: 'hidden', boxShadow: SHADOW }}
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', marginBottom: '12px', overflow: 'hidden', boxShadow: SHADOW }}
           >
             {/* Med header */}
             <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '20px', background: ACCENT_DIM, border: `1px solid rgba(86,128,78,0.14)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Pill size={16} color={ACCENT}/>
               </div>
               <div style={{ flex: 1 }}>
                 <p style={{ color: T1, fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}>{med.name}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}>
-                  <span style={{ background: BG, border: `1px solid ${BORDER}`, color: T2, fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', fontFamily: 'var(--font-mono, monospace)' }}>{med.dose}</span>
+                  <span style={{ background: BG, border: `1px solid ${BORDER}`, color: T2, fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '14px', fontFamily: 'var(--font-mono, monospace)' }}>{med.dose}</span>
                   <span style={{ color: T3, fontSize: '11px' }}>{med.frequency}</span>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '7px' }}>
                 <button onClick={() => setAddingTime(addingTime === medIndex ? null : medIndex)}
-                  style={{ width: '30px', height: '30px', borderRadius: '6px', background: BG, border: `1px solid ${BORDER}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ width: '30px', height: '30px', borderRadius: '14px', background: BG, border: `1px solid ${BORDER}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Plus size={13} color={T2}/>
                 </button>
                 <button onClick={() => removeMedication(medIndex)}
-                  style={{ width: '30px', height: '30px', borderRadius: '6px', background: RED_DIM, border: `1px solid rgba(163,52,23,0.14)`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ width: '30px', height: '30px', borderRadius: '14px', background: RED_DIM, border: `1px solid rgba(163,52,23,0.14)`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <X size={13} color={RED}/>
                 </button>
               </div>
@@ -576,7 +576,7 @@ export default function Medications() {
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {TIME_OPTIONS.map(t => (
                       <button key={t} onClick={() => addTime(medIndex, t)}
-                        style={{ padding: '6px 12px', background: med.times?.includes(t) ? ACCENT_DIM : SURFACE, border: `1px solid ${med.times?.includes(t) ? 'rgba(86,128,78,0.2)' : BORDER}`, borderRadius: '6px', color: med.times?.includes(t) ? ACCENT : T2, fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                        style={{ padding: '6px 12px', background: med.times?.includes(t) ? ACCENT_DIM : SURFACE, border: `1px solid ${med.times?.includes(t) ? 'rgba(86,128,78,0.2)' : BORDER}`, borderRadius: '14px', color: med.times?.includes(t) ? ACCENT : T2, fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit' }}>
                         {t}
                       </button>
                     ))}
@@ -604,7 +604,7 @@ export default function Medications() {
                       <motion.button
                         whileTap={{ scale: 0.95 }} transition={spring}
                         onClick={() => toggleTaken(medIndex, timeIndex)}
-                        style={{ background: GREEN_DIM, border: `1px solid rgba(86,128,78,0.2)`, color: GREEN, fontSize: '12px', padding: '6px 14px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700 }}
+                        style={{ background: GREEN_DIM, border: `1px solid rgba(86,128,78,0.2)`, color: GREEN, fontSize: '12px', padding: '6px 14px', borderRadius: '14px', cursor: 'pointer', fontWeight: 700 }}
                       >
                         Take
                       </motion.button>

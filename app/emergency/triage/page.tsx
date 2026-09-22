@@ -95,17 +95,17 @@ export default function TriagePage() {
           whileTap={{ scale: 0.9 }}
           transition={spring}
           onClick={() => router.back()}
-          style={{ width: '36px', height: '36px', borderRadius: '6px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{ width: '36px', height: '36px', borderRadius: '14px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           <ArrowLeft size={15} color="#5C5A52" />
         </motion.button>
 
         {/* Progress bar */}
-        <div style={{ flex: 1, margin: '0 14px', height: '4px', borderRadius: '6px', background: '#98C890', overflow: 'hidden' }}>
+        <div style={{ flex: 1, margin: '0 14px', height: '4px', borderRadius: '14px', background: '#98C890', overflow: 'hidden' }}>
           <motion.div
             animate={{ width: `${progressPct}%` }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            style={{ height: '100%', borderRadius: '6px', background: '#42623C' }}
+            style={{ height: '100%', borderRadius: '14px', background: '#42623C' }}
           />
         </div>
 
@@ -154,7 +154,7 @@ export default function TriagePage() {
                     onClick={() => handlePainSelect(n)}
                     style={{
                       height: '56px',
-                      borderRadius: '8px',
+                      borderRadius: '20px',
                       background: pain === n ? getPainBg(n) : '#FFFFFF',
                       border: `1.5px solid ${pain === n ? getPainColor(n) : '#F2F0E8'}`,
                       color: getPainColor(n),
@@ -204,7 +204,7 @@ export default function TriagePage() {
                   onClick={() => handleCanMove(true)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '8px',
+                    borderRadius: '20px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
@@ -222,7 +222,7 @@ export default function TriagePage() {
                   onClick={() => handleCanMove(false)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '8px',
+                    borderRadius: '20px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(163,52,23,0.22)',
                     cursor: 'pointer',
@@ -252,7 +252,7 @@ export default function TriagePage() {
                   onClick={() => handleAlone(false)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '8px',
+                    borderRadius: '20px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
@@ -269,7 +269,7 @@ export default function TriagePage() {
                   onClick={() => handleAlone(true)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '8px',
+                    borderRadius: '20px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(163,52,23,0.22)',
                     cursor: 'pointer',
@@ -288,7 +288,7 @@ export default function TriagePage() {
               <div style={{
                 background: 'rgba(163,52,23,0.08)',
                 border: '1.5px solid rgba(163,52,23,0.25)',
-                borderRadius: '8px',
+                borderRadius: '20px',
                 padding: '24px',
                 marginBottom: '16px',
                 
@@ -318,7 +318,7 @@ export default function TriagePage() {
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
                   background: '#A33417', color: 'white',
-                  padding: '18px', borderRadius: '8px',
+                  padding: '18px', borderRadius: '20px',
                   fontWeight: 900, fontSize: '18px', letterSpacing: '-0.3px',
                   textDecoration: 'none', marginBottom: '12px',
                   
@@ -334,7 +334,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: '8px',
+                  borderRadius: '20px',
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
                   color: '#5C5A52',
@@ -353,7 +353,7 @@ export default function TriagePage() {
               <div style={{
                 background: 'rgba(168,114,0,0.08)',
                 border: '1.5px solid rgba(168,114,0,0.22)',
-                borderRadius: '8px',
+                borderRadius: '20px',
                 padding: '24px',
                 marginBottom: '16px',
                 
@@ -383,7 +383,7 @@ export default function TriagePage() {
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
                   background: '#A33417', color: 'white',
-                  padding: '16px', borderRadius: '8px',
+                  padding: '16px', borderRadius: '20px',
                   fontWeight: 800, fontSize: '16px', letterSpacing: '-0.3px',
                   textDecoration: 'none', marginBottom: '10px',
                   
@@ -399,7 +399,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: '8px',
+                  borderRadius: '20px',
                   background: '#42623C',
                   border: 'none',
                   color: '#B3DDAC',
@@ -419,7 +419,7 @@ export default function TriagePage() {
               <div style={{
                 background: 'rgba(86,128,78,0.07)',
                 border: '1.5px solid rgba(86,128,78,0.20)',
-                borderRadius: '8px',
+                borderRadius: '20px',
                 padding: '24px',
                 marginBottom: '16px',
                 boxShadow: '0 6px 32px rgba(86,128,78,0.08)',
@@ -444,7 +444,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: '8px',
+                  borderRadius: '20px',
                   background: '#42623C',
                   border: 'none',
                   color: '#B3DDAC',
@@ -464,7 +464,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/dashboard')}
                 style={{
                   padding: '16px',
-                  borderRadius: '8px',
+                  borderRadius: '20px',
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
                   color: '#5C5A52',

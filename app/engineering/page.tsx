@@ -127,7 +127,7 @@ export default function Engineering() {
             <ArrowLeft size={15}/> Relay Arc
           </button>
           <button onClick={() => router.push('/login?signup=1')}
-            style={{ background: ORANGE, color: T1, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 8 }}>
+            style={{ background: ORANGE, color: T1, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 20 }}>
             Create your profile
           </button>
         </div>
@@ -459,7 +459,7 @@ export default function Engineering() {
             </p>
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: T1, fontWeight: 700, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 8 }}>
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: T1, fontWeight: 700, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 20 }}>
                 Create your free profile <span style={{ fontFamily: mono }}>→</span>
               </button>
               <button onClick={() => router.push('/demo')}

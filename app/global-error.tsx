@@ -14,10 +14,10 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           <p style={{ color: '#5C5A52', fontSize: '15px', lineHeight: 1.6, margin: '0 0 26px' }}>
             If this is an emergency, call your local emergency number now. 911 in the US, 108 in India, 112 across Europe.
           </p>
-          <a href="tel:112" style={{ display: 'block', textAlign: 'center', background: '#A33417', color: 'white', fontWeight: 800, fontSize: '17px', padding: '18px', borderRadius: '8px', textDecoration: 'none', marginBottom: '10px' }}>
+          <a href="tel:112" style={{ display: 'block', textAlign: 'center', background: '#A33417', color: 'white', fontWeight: 800, fontSize: '17px', padding: '18px', borderRadius: '20px', textDecoration: 'none', marginBottom: '10px' }}>
             Call 112
           </a>
-          <button onClick={reset} style={{ background: 'none', color: '#141413', fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '8px', border: '1.5px solid #141413', cursor: 'pointer', width: '100%' }}>
+          <button onClick={reset} style={{ background: 'none', color: '#141413', fontWeight: 700, fontSize: '15px', padding: '15px', borderRadius: '20px', border: '1.5px solid #141413', cursor: 'pointer', width: '100%' }}>
             Reload the app
           </button>
         </div>

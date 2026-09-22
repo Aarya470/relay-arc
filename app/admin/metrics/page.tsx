@@ -75,7 +75,7 @@ export default function AdminMetrics() {
           value={key} onChange={e => setKey(e.target.value)} type="password"
           onKeyDown={e => e.key === 'Enter' && load(key.trim())}
           placeholder="admin key"
-          style={{ width: '100%', boxSizing: 'border-box', padding: '13px 15px', border: `1.5px solid ${INK}`, borderRadius: 8, fontFamily: mono, fontSize: '15px', outline: 'none', marginBottom: '10px', background: '#FFF' }}
+          style={{ width: '100%', boxSizing: 'border-box', padding: '13px 15px', border: `1.5px solid ${INK}`, borderRadius: 20, fontFamily: mono, fontSize: '15px', outline: 'none', marginBottom: '10px', background: '#FFF' }}
         />
         {err && <p style={{ color: CRIT, fontSize: '13px', marginBottom: '10px' }}>{err}</p>}
         <button onClick={() => load(key.trim())} disabled={loading || !key.trim()}

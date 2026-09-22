@@ -122,7 +122,7 @@ export default function CprCoach() {
               background: running ? '#FFFFFF' : T1,
               color: running ? T1 : 'white',
               border: running ? `1.5px solid ${T1}` : 'none',
-              fontWeight: 700, fontSize: '16.5px', padding: '17px', borderRadius: '8px',
+              fontWeight: 700, fontSize: '16.5px', padding: '17px', borderRadius: '20px',
               cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px',
             }}>
             {running ? <><Square size={16}/> Stop the beat</> : <><Play size={17}/> Start the beat at {BPM} BPM</>}

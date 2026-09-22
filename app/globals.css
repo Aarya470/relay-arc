@@ -205,15 +205,15 @@
      That got fixed by going to 0px everywhere, which fixed the sameness and
      overshot: a page that is nothing but 90 degree corners reads as a form,
      not a product. So there are still only two values, they are just no
-     longer both zero. --r is 8px, for buttons and panels. --r-sm is 6px, for
+     longer both zero. --r is 20px, for buttons and panels. --r-sm is 14px, for
      inputs and inner surfaces, a step lighter so nesting still reads. Anything
      that needs to be a genuinely different shape still gets a real shape from
      lib/shape.ts rather than a different number here: notch() for emergency
      surfaces, octagon() for SOS, 50% for the handful of things that are
      genuinely circles. Those are clip-paths, not radii, so this change does
      not soften them. */
-  --r-sm: 6px;
-  --r:    8px;
+  --r-sm: 14px;
+  --r:    20px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }

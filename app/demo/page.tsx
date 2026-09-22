@@ -77,14 +77,14 @@ export default function DemoLauncher() {
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             width: '100%', background: on ? 'rgba(86,128,78,0.06)' : 'none',
-            border: `1.5px solid ${on ? GREEN : BORDER}`, borderRadius: '8px',
+            border: `1.5px solid ${on ? GREEN : BORDER}`, borderRadius: '20px',
             padding: '15px 18px', cursor: 'pointer', fontFamily: 'inherit', marginBottom: '12px',
           }}>
           <span style={{ color: on ? GREEN : T1, fontWeight: 700, fontSize: '15px' }}>
             {on ? 'Demo mode is ON for this tab' : 'Demo mode is off'}
           </span>
           <span style={{
-            width: '24px', height: '24px', borderRadius: '6px', flexShrink: 0,
+            width: '24px', height: '24px', borderRadius: '14px', flexShrink: 0,
             background: on ? GREEN : 'none', border: `1.5px solid ${on ? GREEN : '#C9CED6'}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
@@ -94,7 +94,7 @@ export default function DemoLauncher() {
 
         <button
           onClick={() => { setDemo(true); router.push('/emergency') }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', background: RED, color: 'white', fontWeight: 800, fontSize: '17px', padding: '18px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px' }}>
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', background: RED, color: 'white', fontWeight: 800, fontSize: '17px', padding: '18px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px' }}>
           <Play size={18}/> Start the demo emergency
         </button>
 

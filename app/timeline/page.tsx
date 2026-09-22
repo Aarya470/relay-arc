@@ -94,7 +94,7 @@ export default function Timeline() {
     return (
       <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 16px 100px', maxWidth: '720px', margin: '0 auto' }}>
         {[1, 2, 3, 4].map((i) => (
-          <Skeleton key={i} style={{ height: '64px', borderRadius: '8px', background: '#F2F0E8', marginBottom: '8px' }} />
+          <Skeleton key={i} style={{ height: '64px', borderRadius: '20px', background: '#F2F0E8', marginBottom: '8px' }} />
         ))}
       </div>
     )
@@ -106,7 +106,7 @@ export default function Timeline() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={() => router.push('/dashboard')}
-              style={{ width: '36px', height: '36px', borderRadius: '6px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ width: '36px', height: '36px', borderRadius: '14px', background: '#F2F0E8', border: '1px solid #D8D4C8', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ArrowLeft size={15} color="#5C5A52" />
             </motion.button>
             <div>
@@ -116,7 +116,7 @@ export default function Timeline() {
           </div>
           <motion.button whileTap={{ scale: 0.9 }} transition={spring} onClick={forceRefresh} disabled={generating}
             aria-label={generating ? 'Rebuilding your timeline' : 'Rebuild timeline'}
-            style={{ width: '36px', height: '36px', borderRadius: '6px', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.20)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            style={{ width: '36px', height: '36px', borderRadius: '14px', background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.20)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <motion.div animate={generating ? { rotate: 360 } : { rotate: 0 }} transition={generating ? { duration: 1, repeat: Infinity, ease: 'linear' } : {}}>
               <RefreshCw size={14} color="#42623C" />
             </motion.div>
@@ -126,7 +126,7 @@ export default function Timeline() {
 
       {generating && (
         <div style={{ padding: '0 20px 16px' }}>
-          <div style={{ background: 'rgba(86,128,78,0.06)', border: '1px solid rgba(86,128,78,0.16)', borderRadius: '8px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ background: 'rgba(86,128,78,0.06)', border: '1px solid rgba(86,128,78,0.16)', borderRadius: '20px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ display: 'flex', gap: '4px' }}>
               {[0, 1, 2].map((i) => (
                 <motion.div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#42623C' }}
@@ -140,7 +140,7 @@ export default function Timeline() {
 
       <div style={{ padding: '0 20px', position: 'relative' }}>
         {timeline.length > 0 && (
-          <div style={{ position: 'absolute', left: '34px', top: '15px', bottom: '15px', width: '2px', background: 'linear-gradient(to bottom, rgba(86,128,78,0.5) 0%, rgba(86,128,78,0.2) 50%, rgba(20,20,19,0.05) 100%)', borderRadius: '6px', zIndex: 0, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', left: '34px', top: '15px', bottom: '15px', width: '2px', background: 'linear-gradient(to bottom, rgba(86,128,78,0.5) 0%, rgba(86,128,78,0.2) 50%, rgba(20,20,19,0.05) 100%)', borderRadius: '14px', zIndex: 0, pointerEvents: 'none' }} />
         )}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', position: 'relative', zIndex: 1 }}>
           {timeline.map((phase, index) => {
@@ -160,17 +160,17 @@ export default function Timeline() {
                       : <Circle size={12} color="#C4BFB0" />}
                   </div>
                 </div>
-                <div style={{ flex: 1, background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '8px', overflow: 'hidden', boxShadow: isCurrent ? '0 6px 24px rgba(86,128,78,0.12)' : '0 2px 8px rgba(20,20,19,0.06)' }}>
+                <div style={{ flex: 1, background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '20px', overflow: 'hidden', boxShadow: isCurrent ? '0 6px 24px rgba(86,128,78,0.12)' : '0 2px 8px rgba(20,20,19,0.06)' }}>
                   <motion.button whileTap={{ scale: 0.99 }} transition={spring} onClick={() => setExpanded(expanded === index ? null : index)}
                     style={{ width: '100%', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
                         <p style={{ color: '#141413', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>{phase.title}</p>
                         {isCurrent && (
-                          <span style={{ background: 'rgba(86,128,78,0.14)', border: '1px solid rgba(86,128,78,0.30)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>NOW</span>
+                          <span style={{ background: 'rgba(86,128,78,0.14)', border: '1px solid rgba(86,128,78,0.30)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '14px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>NOW</span>
                         )}
                         {isPast && (
-                          <span style={{ background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>DONE</span>
+                          <span style={{ background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '14px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>DONE</span>
                         )}
                       </div>
                       <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
@@ -211,7 +211,7 @@ export default function Timeline() {
         {!generating && timeline.length === 0 && (
           <div style={{ textAlign: 'center', padding: '56px 0' }}>
             <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '12px' }}>Could not generate timeline</p>
-            <button onClick={forceRefresh} style={{ color: '#42623C', fontSize: '13px', fontWeight: 700, background: 'none', border: '1px solid rgba(86,128,78,0.30)', borderRadius: '6px', padding: '8px 16px', cursor: 'pointer' }}>
+            <button onClick={forceRefresh} style={{ color: '#42623C', fontSize: '13px', fontWeight: 700, background: 'none', border: '1px solid rgba(86,128,78,0.30)', borderRadius: '14px', padding: '8px 16px', cursor: 'pointer' }}>
               Try again
             </button>
           </div>

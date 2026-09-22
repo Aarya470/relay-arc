@@ -16,11 +16,10 @@
 // So: four radii, and two shapes that are not rectangles at all. Each one means
 // something, and the meaning is the rule for when to use it.
 //
-//   SQUARE   buttons and panels. The default. 8px — enough to read as current
-//            software rather than a spreadsheet, not enough to lose the
-//            decisiveness of a corner. Went to full 0px for a stretch; the
-//            page read as a form, not a product, so it came back.
-//   EDGE     inputs and inner surfaces. 6px, a step lighter than SQUARE so
+//   SQUARE   buttons and panels. The default. 20px — a real, visible curve
+//            rather than a hint of one. Went from 0px to a subtle 8px first;
+//            that read as barely-there on a phone screen, so it went further.
+//   EDGE     inputs and inner surfaces. 14px, a step lighter than SQUARE so
 //            the nesting still reads: an input inside a card is visibly a
 //            different surface, not just a smaller version of the same one.
 //   DOT      50%, and only for things that are actually round: status dots,
@@ -37,8 +36,8 @@
 //            else softened.
 //   octagon() the SOS control, and nothing else. See the note on it below.
 export const SHAPE = {
-  square: '8px',
-  edge: '6px',
+  square: '20px',
+  edge: '14px',
   dot: '50%',
   bar: '99px',
 } as const
