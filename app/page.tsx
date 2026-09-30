@@ -100,6 +100,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
               style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Technology
             </button>
+            <button onClick={() => router.push('/demo')} className="desktop-only nav-link"
+              style={{ background: 'transparent', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Live demo
+            </button>
             <button onClick={() => router.push('/donate')} className="desktop-only"
               style={{ background: 'transparent', border: 'none', color: RED, fontSize: '13.5px', fontWeight: 700, padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
               Donate
@@ -142,6 +146,10 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
             <button onClick={() => router.push('/engineering')}
               style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
               Technology
+            </button>
+            <button onClick={() => router.push('/demo')}
+              style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: T1, fontSize: '15px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
+              Live demo
             </button>
             <button onClick={() => router.push('/donate')}
               style={{ display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', color: RED, fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', padding: '13px 0', borderBottom: `1px solid ${BORDER}` }}>
@@ -525,7 +533,7 @@ export default function Home() {
                 </div>
 
                 <p style={{ color: T3, fontSize: '13px' }}>
-                  Two minutes, no account, nothing uploaded. · <button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: '4px 0', color: T2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${BORDER}` }}>Watch one emergency, timed</button> · <a href="/demo" style={{ display: 'inline-block', padding: '4px 0', color: T2, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>Live demo</a>
+                  Two minutes, no account, nothing uploaded. · <button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: '4px 0', color: T2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${BORDER}` }}>Watch one emergency, timed</button>
                 </p>
               </div>
 
