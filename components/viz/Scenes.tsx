@@ -156,25 +156,28 @@ export function OnDeviceScene() {
  */
 export function RelayScene() {
   const stops = [
-    { t: '0:01', label: 'HOSPITAL ER BOARD', color: GREEN_DEEP, sub: 'bed + team paged' },
-    { t: '0:02', label: 'CARE CIRCLE',       color: ORANGE,     sub: 'live location shared' },
-    { t: '0:03', label: 'DRIVER',            color: INK2,       sub: 'turn-by-turn starts' },
-    { t: '0:41', label: 'ER BRIEF LANDS',    color: CRIT,       sub: 'full record on arrival' },
+    { t: '0:01', label: 'HOSPITAL', label2: 'ER BOARD',   color: GREEN_DEEP, sub: 'bed + team paged' },
+    { t: '0:02', label: 'CARE',     label2: 'CIRCLE',      color: ORANGE,     sub: 'location shared' },
+    { t: '0:03', label: 'DRIVER',   label2: '',            color: INK2,       sub: 'turn-by-turn starts' },
+    { t: '0:41', label: 'ER BRIEF', label2: 'LANDS',        color: CRIT,       sub: 'full record ready' },
   ]
   return (
-    <Frame vb="0 0 560 220" label="Relay"
+    <Frame vb="0 0 600 220" label="Relay"
       caption="One press starts four independent deliveries; the slowest is the full ER brief, and it still lands before the ambulance does.">
-      <Chip x={0} y={94} w={84} h={30} text="SOS" color={CRIT} fill="rgba(163,52,23,0.08)"/>
-      <line x1={84} y1={109} x2={540} y2={109} stroke={LINE} strokeWidth={1.5}/>
+      <Chip x={0} y={94} w={78} h={30} text="SOS" color={CRIT} fill="rgba(163,52,23,0.08)"/>
+      <line x1={78} y1={109} x2={588} y2={109} stroke={LINE} strokeWidth={1.5}/>
       {stops.map((s, i) => {
-        const x = 130 + i * 138
+        const x = 120 + i * 128
         return (
           <g key={s.label}>
             <line x1={x} y1={99} x2={x} y2={119} stroke={s.color} strokeWidth={2}/>
             <circle cx={x} cy={109} r={3.5} fill={s.color}/>
             <text x={x} y={90} textAnchor="middle" style={{ fontFamily: mono, fontSize: '10px', fontWeight: 700 }} fill={s.color}>{s.t}</text>
             <text x={x} y={140} textAnchor="middle" style={{ fontFamily: mono, fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.3px' }} fill={INK}>{s.label}</text>
-            <text x={x} y={155} textAnchor="middle" style={{ fontFamily: mono, fontSize: '8.5px' }} fill={INK3}>{s.sub}</text>
+            {s.label2 && (
+              <text x={x} y={153} textAnchor="middle" style={{ fontFamily: mono, fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.3px' }} fill={INK}>{s.label2}</text>
+            )}
+            <text x={x} y={s.label2 ? 168 : 155} textAnchor="middle" style={{ fontFamily: mono, fontSize: '8.5px' }} fill={INK3}>{s.sub}</text>
           </g>
         )
       })}
