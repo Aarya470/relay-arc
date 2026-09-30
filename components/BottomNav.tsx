@@ -19,6 +19,71 @@ const tabs = [
 
 const HIDE_ON = ['/login', '/onboarding', '/care-team', '/nurse', '/driver', '/transport']
 
+// Hoisted to module scope, deliberately. This used to be defined inside
+// BottomNav()'s render body, which meant it got a brand new function identity
+// on every re-render of any page that embeds <BottomNav /> — and every one of
+// those pages re-renders on things as small as a keystroke in a text input
+// (the AI check-in page, for one). React treats a component whose identity
+// changed as a different component: it force-remounts it, which retriggers
+// framer-motion's shared layoutId animation on the active-tab indicator and
+// makes it visibly flicker/slide on every keystroke. A stable, module-level
+// component keeps the same identity across renders, so the indicator only
+// animates when the active tab actually changes.
+function TabButton({ tab, active, onClick }: {
+  tab: typeof tabs[0]
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <motion.button
+      whileTap={{ scale: 0.88 }}
+      onClick={onClick}
+      aria-label={tab.label}
+      aria-current={active ? 'page' : undefined}
+      style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '3px',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        padding: '8px 4px',
+        position: 'relative',
+      }}
+    >
+      {active && (
+        <motion.div
+          layoutId="nav-indicator"
+          style={{
+            position: 'absolute',
+            inset: '4px 10%',
+            background: 'rgba(86,128,78,0.07)',
+            borderRadius: '14px',
+          }}
+          transition={{ type: 'spring', stiffness: 500, damping: 36 }}
+        />
+      )}
+      <tab.icon
+        size={20}
+        color={active ? ACCENT : T3}
+        strokeWidth={active ? 2.2 : 1.7}
+      />
+      <span style={{
+        fontSize: '10px',
+        fontWeight: active ? 700 : 500,
+        color: active ? ACCENT : T3,
+        letterSpacing: '0.1px',
+        position: 'relative',
+      }}>
+        {tab.label}
+      </span>
+    </motion.button>
+  )
+}
+
 export default function BottomNav() {
   const pathname = usePathname()
   const router   = useRouter()
@@ -33,58 +98,6 @@ export default function BottomNav() {
     href === '/dashboard'
       ? pathname === '/dashboard'
       : pathname === href || pathname.startsWith(href + '/')
-
-  const TabButton = ({ tab }: { tab: typeof tabs[0] }) => {
-    const active = isActive(tab.href)
-    return (
-      <motion.button
-        whileTap={{ scale: 0.88 }}
-        onClick={() => router.push(tab.href)}
-        aria-label={tab.label}
-        aria-current={active ? 'page' : undefined}
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '3px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          padding: '8px 4px',
-          position: 'relative',
-        }}
-      >
-        {active && (
-          <motion.div
-            layoutId="nav-indicator"
-            style={{
-              position: 'absolute',
-              inset: '4px 10%',
-              background: 'rgba(86,128,78,0.07)',
-              borderRadius: '14px',
-            }}
-            transition={{ type: 'spring', stiffness: 500, damping: 36 }}
-          />
-        )}
-        <tab.icon
-          size={20}
-          color={active ? ACCENT : T3}
-          strokeWidth={active ? 2.2 : 1.7}
-        />
-        <span style={{
-          fontSize: '10px',
-          fontWeight: active ? 700 : 500,
-          color: active ? ACCENT : T3,
-          letterSpacing: '0.1px',
-          position: 'relative',
-        }}>
-          {tab.label}
-        </span>
-      </motion.button>
-    )
-  }
 
   return (
     <nav
@@ -110,8 +123,8 @@ export default function BottomNav() {
         height: '62px',
       }}>
 
-        <TabButton tab={tabs[0]} />
-        <TabButton tab={tabs[1]} />
+        <TabButton tab={tabs[0]} active={isActive(tabs[0].href)} onClick={() => router.push(tabs[0].href)} />
+        <TabButton tab={tabs[1]} active={isActive(tabs[1].href)} onClick={() => router.push(tabs[1].href)} />
 
         {/* SOS — center */}
         <motion.a
@@ -160,8 +173,8 @@ export default function BottomNav() {
           }}>SOS</span>
         </motion.a>
 
-        <TabButton tab={tabs[2]} />
-        <TabButton tab={tabs[3]} />
+        <TabButton tab={tabs[2]} active={isActive(tabs[2].href)} onClick={() => router.push(tabs[2].href)} />
+        <TabButton tab={tabs[3]} active={isActive(tabs[3].href)} onClick={() => router.push(tabs[3].href)} />
 
       </div>
     </nav>

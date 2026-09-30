@@ -315,7 +315,7 @@ export default function SymptomsPage() {
     fatigue: 0,
     dizziness: 0,
     shortness_of_breath: 0,
-    energy: 5,
+    energy: 0,
   })
   const [note, setNote] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -384,7 +384,7 @@ export default function SymptomsPage() {
       toast.success('Symptoms logged!')
       setSubmitted(true)
       setNote('')
-      setValues({ chest_pain: 0, fatigue: 0, dizziness: 0, shortness_of_breath: 0, energy: 5 })
+      setValues({ chest_pain: 0, fatigue: 0, dizziness: 0, shortness_of_breath: 0, energy: 0 })
       setTimeout(() => setSubmitted(false), 2000)
       await loadHistory()
     } finally {

@@ -31,7 +31,7 @@ const PAYPAL_URL = 'https://paypal.me/YOUR_PAYPAL_USERNAME'
 // TODO: set your Stripe payment link if you have one; otherwise card goes through PayPal
 const CARD_URL = PAYPAL_URL
 // TODO: set the email or US phone number enrolled with Zelle
-const ZELLE_RECIPIENT = 'your-zelle-email@example.com'
+const ZELLE_RECIPIENT = 'relay.arc.org@gmail.com'
 const ZELLE_NAME = 'Relay Arc'
 
 export default function Donate() {
