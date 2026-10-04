@@ -3,7 +3,13 @@
 //
 // Distinct from /engineering: that page argues the technology is real by letting
 // you run it. This one explains what each feature DOES and how the pieces move,
-// using isometric scenes, flowcharts and charts instead of paragraphs.
+// using flat diagrams, flowcharts and charts instead of paragraphs.
+//
+// COPY AND SHAPE PASS: section numbers, mono uppercase eyebrows, coloured full
+// stops on headlines, pill buttons and aphorisms ("X, never Y", "not X, it is
+// Y") were all things people pointed at as reading machine-made. Headlines now
+// say plainly what the section is about, captions are ordinary sentences, and
+// boxes are square.
 //
 // Everything numeric here comes from the engines or the measured benchmark. The
 // one synthetic figure (the deterioration curve) is labelled as synthetic.
@@ -20,16 +26,10 @@ const ORANGE = '#D97757', CRIT = '#A33417', WARN = '#7C5200'
 const mono = 'var(--font-mono, monospace)'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
 
-function Head({ n, title, right }: { n: string; title: string; right?: string }) {
+function Head({ title }: { n?: string; title: string; right?: string }) {
   return (
-    <div style={{
-      borderTop: `3px solid ${INK}`, paddingTop: '14px', marginBottom: '28px',
-      display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap',
-    }}>
-      <span style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-        {n} / {title}
-      </span>
-      {right && <span style={{ color: INK3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>{right}</span>}
+    <div style={{ borderTop: `2px solid ${INK}`, paddingTop: '12px', marginBottom: '26px' }}>
+      <span style={{ color: INK, fontSize: '14px', fontWeight: 700 }}>{title}</span>
     </div>
   )
 }
@@ -41,16 +41,16 @@ function P({ children }: { children: React.ReactNode }) {
   return <p style={{ color: INK2, fontSize: '16px', lineHeight: 1.7, marginBottom: '18px', maxWidth: '680px' }}>{children}</p>
 }
 function Cap({ children }: { children: React.ReactNode }) {
-  return <p style={{ color: INK3, fontFamily: mono, fontSize: '10px', letterSpacing: '0.9px', lineHeight: 1.6, marginTop: '10px', textTransform: 'uppercase' }}>{children}</p>
+  return <p style={{ color: INK2, fontSize: '13.5px', lineHeight: 1.55, marginTop: '10px', maxWidth: '680px' }}>{children}</p>
 }
 function Grid({ children }: { children: React.ReactNode }) {
   return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', alignItems: 'start' }}>{children}</div>
 }
 function Panel({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ border: `1px solid ${BORDER}`, background: '#FFFFFF' }}>
-      <div style={{ borderBottom: `1px solid ${BORDER}`, padding: '10px 14px', background: CREAM }}>
-        <span style={{ color: INK, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>{label}</span>
+    <div style={{ border: `1px solid ${INK}`, background: '#FFFFFF' }}>
+      <div style={{ borderBottom: `1px solid ${INK}`, padding: '9px 14px' }}>
+        <span style={{ color: INK, fontSize: '13px', fontWeight: 700 }}>{label}</span>
       </div>
       <div style={{ padding: '18px 16px' }}>{children}</div>
     </div>
@@ -72,7 +72,7 @@ export default function Features() {
             <button onClick={() => router.push('/engineering')} style={{ background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '8px 12px' }}>
               Technology
             </button>
-            <button onClick={() => router.push('/login?signup=1')} style={{ background: ORANGE, color: INK, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 20 }}>
+            <button onClick={() => router.push('/login?signup=1')} style={{ background: ORANGE, color: INK, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 4 }}>
               Create your profile
             </button>
           </div>
@@ -82,24 +82,18 @@ export default function Features() {
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section style={{ padding: '78px 24px 0' }}>
         <div style={WRAP}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-            <span style={{ width: '7px', height: '7px', background: ORANGE, display: 'inline-block' }}/>
-            <span style={{ color: INK2, fontFamily: mono, fontSize: '11.5px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              Every feature, and how it actually moves
-            </span>
-          </div>
           <h1 style={{ color: INK, fontSize: 'clamp(38px, 7.4vw, 88px)', fontWeight: 800, lineHeight: 0.96, letterSpacing: '-0.045em', marginBottom: '28px', maxWidth: '940px' }}>
-            One button, and<br/>five things move at once<span style={{ color: CRIT }}>.</span>
+            What happens after<br/>you press SOS
           </h1>
           <P>
-            Pressing SOS starts five separate machines: deciding what is wrong, deciding how urgent it
-            is, choosing a hospital, telling that hospital, and moving the people who need to move. This
-            page takes each one apart.
+            Five things start at once. The phone works out what is wrong and how urgent it is, picks a
+            hospital, sends that hospital your details, and gets your family and a driver moving. Each
+            section below covers one of them.
           </P>
 
           <div style={{ marginTop: '44px' }}>
             <RelayScene/>
-            <Cap>The record reaches all four places from one press · solid lines are pushed automatically, dashed is on demand</Cap>
+            <Cap>Nothing here waits for the step before it. The hospital step only happens if the hospital is a Relay partner.</Cap>
           </div>
         </div>
       </section>
@@ -107,17 +101,17 @@ export default function Features() {
       {/* ── 01 TRIAGE ─────────────────────────────────────────────────────── */}
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
-          <Head n="01" title="Emergency triage" right="what is wrong"/>
-          <H2>It decides before it asks anyone&apos;s permission, or their network.</H2>
+          <Head title="Working out what is wrong"/>
+          <H2>The phone makes the first call, even with no signal.</H2>
           <P>
-            Say what is happening, or tap a type. The classifier runs on the phone, so a basement, a
-            lift or a rural road makes no difference. The cloud model is a fallback for genuinely
-            ambiguous phrasing, never a dependency.
+            You can say what is happening or tap a type. The classifier runs on the phone itself, so it
+            still works in a basement, a lift or out in the country. If the wording is ambiguous it asks
+            a larger cloud model, and if there is no signal for that, it goes with its own best guess.
           </P>
 
           <div style={{ marginBottom: '34px' }}>
             <OnDeviceScene/>
-            <Cap>The model sits inside the app · the cloud link is dashed because it is optional</Cap>
+            <Cap>Most cases finish on the phone. The dashed path is only used when the phone is not confident.</Cap>
           </div>
 
           <Panel label="The decision path">
@@ -133,17 +127,17 @@ export default function Features() {
               edges={[
                 { from: 'sos', to: 'tri' },
                 { from: 'tri', to: 'gate' },
-                { from: 'gate', to: 'act', label: 'YES · 61%' },
-                { from: 'gate', to: 'cloud', label: 'NO · 39%' },
-                { from: 'cloud', to: 'guess', label: 'OFFLINE', dashed: true },
-                { from: 'cloud', to: 'act', label: 'ANSWER' },
+                { from: 'gate', to: 'act', label: 'yes (61%)' },
+                { from: 'gate', to: 'cloud', label: 'no (39%)' },
+                { from: 'cloud', to: 'guess', label: 'no signal', dashed: true },
+                { from: 'cloud', to: 'act', label: 'answer' },
               ]}
             />
           </Panel>
 
           <div style={{ marginTop: '30px' }}>
             <Grid>
-              <Panel label="Time to a decision. Measured">
+              <Panel label="Time to a decision (measured)">
                 <BarChart
                   bars={[
                     { label: 'On-device', value: 0.11, color: GREEN, note: 'no network involved' },
@@ -151,26 +145,26 @@ export default function Features() {
                   ]}
                   format={v => (v < 1 ? `${v} ms` : `${v} ms`)}
                 />
-                <Cap>Bars are linear. the on-device bar is not a rounding error, it is 1,400× shorter</Cap>
+                <Cap>Both bars are on the same linear scale. The on-device one really is about 1,400 times shorter.</Cap>
               </Panel>
-              <Panel label="Where emergencies get settled">
+              <Panel label="Where cases get settled">
                 <Donut value={0.61} label="on device" color={GREEN}
-                  sub="Settled instantly, offline, with no errors on the held-out evaluation. The other 39% are the ambiguous phrasings, and those go to the cloud model. Which is better at exactly those."/>
+                  sub="61% of test cases were settled on the phone, offline, with no errors on the held-out set. The other 39% were the ambiguous ones, and the cloud model handles those better, so they go there."/>
               </Panel>
             </Grid>
           </div>
 
           <div style={{ marginTop: '30px' }}>
-            <Panel label="Accuracy. Including where we lose">
+            <Panel label="Accuracy, including where the cloud model wins">
               <BarChart
                 bars={[
                   { label: 'Llama 3.1 8B (cloud)', value: 96.4, color: INK3, note: 'more accurate than ours on raw classification' },
-                  { label: 'Relay, on-device', value: 85.7, color: GREEN, note: 'every case it got wrong, it abstained on instead of guessing' },
+                  { label: 'Relay, on-device', value: 85.7, color: GREEN, note: 'when it would have been wrong, it handed off instead of guessing' },
                   { label: 'Relay, when confident', value: 100, color: GREEN_DEEP, note: 'the 61% it chooses to answer' },
                 ]}
                 max={100} unit="%"
               />
-              <Cap>28 phrasings the model had never seen · the point is not beating an 8B model, it is knowing when to stay quiet</Cap>
+              <Cap>Tested on 28 phrasings the model had not seen before. The 8B cloud model is more accurate overall. Ours is built to hand off when it is unsure.</Cap>
             </Panel>
           </div>
         </div>
@@ -179,17 +173,17 @@ export default function Features() {
       {/* ── 02 DISPATCH ───────────────────────────────────────────────────── */}
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
-          <Head n="02" title="Hospital dispatch" right="where to go"/>
-          <H2>The closest hospital is often the one that will cost you the most time.</H2>
+          <Head title="Choosing a hospital"/>
+          <H2>The nearest hospital can be the slowest way to get treated.</H2>
           <P>
-            A heart attack needs a catheterisation lab. The emergency room four minutes away that will
-            stabilise you and then arrange a transfer has just spent the only minutes that mattered. So
-            distance is the input we weigh least.
+            A heart attack needs a catheterisation lab. If the nearest ER does not have one, it will
+            stabilise you and then transfer you, and that transfer uses up the minutes that count. So
+            distance gets the least weight in the ranking.
           </P>
 
           <div style={{ marginBottom: '34px' }}>
             <DispatchScene/>
-            <Cap>Solid line is the route taken · dashed is the nearer hospital that was rejected for having no cath lab</Cap>
+            <Cap>An illustrative example. Drive times come from road-network routing. Cath lab and diversion status come from what each hospital reports.</Cap>
           </div>
 
           <Panel label="How a hospital gets chosen">
@@ -206,38 +200,25 @@ export default function Features() {
                 { from: 'c', to: 'eta' },
                 { from: 'eta', to: 'traf' },
                 { from: 'cap', to: 'acc' },
-                { from: 'acc', to: 'rank', label: 'YES' },
+                { from: 'acc', to: 'rank', label: 'yes' },
                 { from: 'traf', to: 'rank' },
               ]}
             />
           </Panel>
 
-          <div style={{ marginTop: '30px' }}>
-            <Panel label="A worked example. Same three hospitals, two ways of ranking">
-              <BarChart
-                bars={[
-                  { label: 'Nearest · no cath lab', value: 4, color: WARN, note: 'ranked first by distance. Then transfers you, and the clock keeps running' },
-                  { label: 'Chosen · cath lab, accepting', value: 11, color: GREEN, note: 'ranked first by us: 7 minutes further, and definitive treatment on arrival' },
-                  { label: 'Third · diverting', value: 9, color: INK3, note: 'closer than the choice, but reported it is not accepting' },
-                ]}
-                max={14} format={v => `${v} min`}
-              />
-              <Cap>Illustrative arrangement · the ETAs come from real road-network routing, the capability and diversion flags from what a partner facility reports</Cap>
-            </Panel>
-          </div>
         </div>
       </section>
 
       {/* ── 03 RISK ───────────────────────────────────────────────────────── */}
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
-          <Head n="03" title="Deterioration risk" right="how urgent"/>
-          <H2>One reading says less than the direction it is moving.</H2>
+          <Head title="How urgent it is"/>
+          <H2>A single reading tells you less than the trend.</H2>
           <P>
-            Log vitals and the score is arithmetic on published thresholds. The vital-sign subscores of
-            NEWS2, the early-warning score used in hospitals to catch deterioration before it becomes an
-            emergency. Same numbers in, same flag out, every time, with every point traced to the
-            reading that produced it.
+            When you log vitals, the score is plain arithmetic on published thresholds: the vital-sign
+            parts of NEWS2, the early-warning score hospitals use to spot patients who are getting worse.
+            The same numbers always give the same result, and every point can be traced back to the
+            reading behind it.
           </P>
 
           <Panel label="Escalation as the score climbs">
@@ -251,7 +232,7 @@ export default function Features() {
               xLabel="consecutive readings"
               yLabel="NEWS2 aggregate"
             />
-            <Cap>Synthetic patient, real thresholds. the bands are NEWS2&apos;s published escalation bands, the curve is illustrative</Cap>
+            <Cap>A made-up patient on real thresholds. The coloured bands are NEWS2&apos;s published escalation levels.</Cap>
           </Panel>
 
           <div style={{ marginTop: '30px' }}>
@@ -266,9 +247,9 @@ export default function Features() {
                   ]}
                   max={3} format={v => `up to +${v}`}
                 />
-                <Cap>Any single parameter scoring 3 escalates on its own, even with a low total</Cap>
+                <Cap>Any one of these scoring 3 escalates on its own, even if the total is low.</Cap>
               </Panel>
-              <Panel label="Two layers, one validated">
+              <Panel label="Two layers, only one of them validated">
                 <Flow
                   nodes={[
                     { id: 'v', col: 0, row: 0, label: 'Vitals logged' },
@@ -279,25 +260,25 @@ export default function Features() {
                   edges={[
                     { from: 'v', to: 'n' },
                     { from: 'n', to: 'o' },
-                    { from: 'b', to: 'o', label: 'CANNOT REACH HIGH', dashed: true, color: INK3 },
+                    { from: 'b', to: 'o', label: 'can never reach high', dashed: true, color: INK3 },
                   ]}
                 />
-                <Cap>The unvalidated layer can raise low to medium and never to high. enforced by a test</Cap>
+                <Cap>The personal baseline is not clinically validated, so it can raise a low score to medium but never to high. A test enforces this.</Cap>
               </Panel>
             </Grid>
           </div>
 
           <div style={{ border: `2px solid ${CRIT}`, padding: '22px', marginTop: '30px' }}>
-            <p style={{ color: CRIT, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px' }}>
-              Stated on every alert
+            <p style={{ color: CRIT, fontSize: '13px', fontWeight: 700, marginBottom: '8px' }}>
+              Shown on every alert
             </p>
             <p style={{ color: INK, fontSize: '15.5px', lineHeight: 1.7, maxWidth: '740px' }}>
-              NEWS2 has seven parameters and Relay now captures all seven. But only when you
-              record them. When any are missing the score reports itself as <strong>partial</strong> and
-              names what is absent. A phone cannot always take your
-              temperature, assess your consciousness level, or know whether you are on supplemental
-              oxygen. A partial score can only ever <strong>under</strong>-estimate risk, which makes it safe as a
-              reason to seek care and unsafe as a reason not to. Decision support, not a diagnosis.
+              NEWS2 uses seven measurements. Relay can record all seven, but only the ones you enter, and
+              a phone cannot take your temperature, judge your level of consciousness, or tell whether you
+              are on oxygen. When anything is missing, the score is marked <strong>partial</strong> and lists
+              what is missing. A partial score can only <strong>under</strong>-estimate risk. If it says high,
+              get help. If it says low, that is not a reason to skip getting help. Relay supports a
+              decision; it does not diagnose.
             </p>
           </div>
         </div>
@@ -306,19 +287,19 @@ export default function Features() {
       {/* ── 04 THE RELAY ──────────────────────────────────────────────────── */}
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
-          <Head n="04" title="The relay" right="who else moves"/>
-          <H2>An emergency is never one person&apos;s problem.</H2>
+          <Head title="Telling everyone else"/>
+          <H2>Your family, the hospital and a driver find out together.</H2>
           <P>
-            The moment SOS fires, a shared room opens. Family see live location and the same countdown.
-            A bystander can take over if you stop responding. If a partner hospital is connected, their
-            emergency board has your blood type, allergies and medications before the car moves. And
-            the app only claims &ldquo;the ER is expecting you&rdquo; when a real facility actually acknowledged.
+            When SOS goes off, a shared room opens. Family see your live location and the same countdown
+            you do. If you stop responding, someone with you can take over. If the hospital is a connected
+            partner, its emergency board gets your blood type, allergies and medications before you set
+            off. The app only says the ER is expecting you once a real person there has confirmed it.
           </P>
 
-          <Panel label="What fires, and in what order">
+          <Panel label="What starts, and what depends on what">
             <Flow
               nodes={[
-                { id: 's', col: 0, row: 0, label: 'SOS', sub: 't = 0s', fill: ORANGE },
+                { id: 's', col: 0, row: 0, label: 'SOS', sub: 'the press', fill: ORANGE },
                 { id: 'r', col: 1, row: 0, label: 'Relay room opens', sub: 'realtime, shared', color: GREEN_DEEP },
                 { id: 'h', col: 2, row: 0, label: 'ER board alerted', sub: 'profile sent ahead', color: GREEN_DEEP },
                 { id: 'c', col: 1, row: 1, label: 'Care circle notified', sub: 'push + live map', color: INK3 },
@@ -330,7 +311,7 @@ export default function Features() {
                 { from: 'r', to: 'h' },
                 { from: 'r', to: 'c' },
                 { from: 'c', to: 'd' },
-                { from: 'g', to: 'r', label: 'ESCALATES', dashed: true, color: WARN },
+                { from: 'g', to: 'r', label: 'escalates', dashed: true, color: WARN },
               ]}
             />
           </Panel>
@@ -340,13 +321,13 @@ export default function Features() {
       {/* ── 05 NAVIGATION ─────────────────────────────────────────────────── */}
       <section style={{ padding: '88px 24px 0' }}>
         <div style={WRAP}>
-          <Head n="05" title="Navigation" right="getting there"/>
-          <H2>Bouncing someone into a map app loses the emergency.</H2>
+          <Head title="Getting there"/>
+          <H2>Directions are built in, so nobody has to switch apps.</H2>
           <P>
-            The second a panicking family member leaves for another application, the hospital briefing,
-            the arrival estimate and the shared room stop travelling with them. So turn-by-turn is built
-            in. Vector tiles, a chase camera, snap-to-route, a wake lock so the screen never dies at a
-            junction, and a night mode.
+            If a frightened family member jumps to a separate maps app, the hospital brief, the arrival
+            time and the shared room get left behind. So turn-by-turn lives inside Relay: vector maps, a
+            camera that follows the car, snap-to-route, a wake lock so the screen stays on at junctions,
+            and a night mode.
           </P>
 
           <Panel label="The navigation loop, every GPS tick">
@@ -361,12 +342,12 @@ export default function Features() {
               edges={[
                 { from: 'g', to: 's' },
                 { from: 's', to: 'j' },
-                { from: 'j', to: 'a', label: 'YES' },
-                { from: 'j', to: 'f', label: 'NO' },
-                { from: 'f', to: 'a', label: 'RETRY' },
+                { from: 'j', to: 'a', label: 'yes' },
+                { from: 'j', to: 'f', label: 'no' },
+                { from: 'f', to: 'a', label: 'retry' },
               ]}
             />
-            <Cap>The full re-scan branch exists because of a real bug. a windowed-only search silently latched onto the wrong part of the line after a GPS jump and under-reported distance by half</Cap>
+            <Cap>The re-scan branch is there because of a real bug: after a GPS jump, the old search locked onto the wrong part of the route and reported about half the real distance.</Cap>
           </Panel>
         </div>
       </section>
@@ -376,19 +357,20 @@ export default function Features() {
         <div style={WRAP}>
           <div style={{ background: ORANGE, padding: 'clamp(30px, 5vw, 56px)' }}>
             <h2 style={{ color: INK, fontSize: 'clamp(28px, 5vw, 54px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '20px', maxWidth: '760px' }}>
-              None of it works if it isn&apos;t set up before you need it<span style={{ color: '#FFFFFF' }}>.</span>
+              Set it up before you need it
             </h2>
             <p style={{ color: 'rgba(20,20,19,0.78)', fontSize: '16px', lineHeight: 1.7, maxWidth: '580px', marginBottom: '26px' }}>
-              A few minutes now is what makes every machine on this page do something useful at 3am.
+              It takes a few minutes. Your profile is what the hospital, your family and the triage model
+              all work from, so it has to exist before the night you need it.
             </p>
             <div style={{ display: 'flex', gap: '18px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: INK, color: '#FFFFFF', fontWeight: 700, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 20 }}>
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: INK, color: '#FFFFFF', fontWeight: 700, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 4 }}>
                 Create your free profile <span style={{ fontFamily: mono }}>→</span>
               </button>
               <button onClick={() => router.push('/engineering')}
                 style={{ background: 'none', border: 'none', color: INK, fontWeight: 700, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${INK}`, paddingBottom: '2px' }}>
-                See the engines running live
+                Try the live technology demos
               </button>
             </div>
           </div>

@@ -119,9 +119,9 @@ export function StepChart({
         ))}
 
         {xLabel && <text x={(w + pad.l) / 2} y={h - 6} textAnchor="middle"
-          style={{ fontFamily: mono, fontSize: '9px', letterSpacing: '1px' }} fill={INK3}>{xLabel.toUpperCase()}</text>}
+          style={{ fontFamily: mono, fontSize: '9px', letterSpacing: '1px' }} fill={INK3}>{xLabel}</text>}
         {yLabel && <text x={10} y={pad.t + 4} textAnchor="start"
-          style={{ fontFamily: mono, fontSize: '9px', letterSpacing: '1px' }} fill={INK3}>{yLabel.toUpperCase()}</text>}
+          style={{ fontFamily: mono, fontSize: '9px', letterSpacing: '1px' }} fill={INK3}>{yLabel}</text>}
       </svg>
     </div>
   )
