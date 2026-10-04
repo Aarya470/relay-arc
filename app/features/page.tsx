@@ -93,7 +93,7 @@ export default function Features() {
 
           <div style={{ marginTop: '44px' }}>
             <RelayScene/>
-            <Cap>Nothing here waits for the step before it. The hospital step only happens if the hospital is a Relay partner.</Cap>
+            <Cap>The hospital step only happens if the hospital is a Relay partner. Everything else happens for everyone.</Cap>
           </div>
         </div>
       </section>

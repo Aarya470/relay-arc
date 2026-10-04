@@ -109,14 +109,14 @@ export function OnDeviceScene() {
       <Box x={180} y={84} w={130} text="Phone's model" color={GREEN_DEEP} fill="rgba(86,128,78,0.10)"/>
 
       <Arrow id="od-a2" d="M310,92 L360,92 L360,40 L410,40" color={GREEN_DEEP}/>
-      <text x={368} y={30} fontSize="10.5" fill={GREEN_DEEP}>confident (61%)</text>
+      <text x={352} y={62} textAnchor="end" fontSize="10.5" fill={GREEN_DEEP}>confident, 61%</text>
       <Box x={414} y={25} w={140} text="Hospital chosen" color={GREEN_DEEP}/>
 
       <Arrow id="od-a3" d="M310,106 L360,106 L360,158 L410,158" color={INK3} dash/>
-      <text x={368} y={184} fontSize="10.5" fill={INK3}>unsure (39%)</text>
+      <text x={352} y={168} textAnchor="end" fontSize="10.5" fill={INK3}>unsure, 39%</text>
       <Box x={414} y={143} w={140} text="Ask cloud model" color={INK3} dash bold={false}/>
 
-      <text x={245} y={136} textAnchor="middle" fontSize="10.5" fill={INK3}>94 KB, no signal needed</text>
+      <text x={245} y={132} textAnchor="middle" fontSize="10.5" fill={INK3}>94 KB, no signal needed</text>
     </Frame>
   )
 }
