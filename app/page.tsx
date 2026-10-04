@@ -479,7 +479,7 @@ export default function Home() {
                      copy sounds machine-written, and it was on the first
                      paragraph of the site. Sentences here now run 4, 20, 7 and
                      6 words. */}
-                <p style={{ color: T2, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
+                <p style={{ color: T1, fontSize: '17px', lineHeight: 1.65, marginBottom: '36px', maxWidth: '470px' }}>
                   Hold the button down. Your phone decides what is happening and picks a hospital
                   equipped to treat it rather than one that is merely close. Blood type, medicines
                   and allergies go on ahead. None of this needs a signal.
@@ -500,8 +500,8 @@ export default function Home() {
                   </button>
                 </div>
 
-                <p style={{ color: T3, fontSize: '13px' }}>
-                  Takes two minutes. No account, and nothing is uploaded.<br/><button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: '4px 0', color: T2, fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${BORDER}`, marginTop: '6px' }}>See the same emergency with and without Relay</button>
+                <p style={{ color: T1, fontSize: '13.5px', lineHeight: 1.7 }}>
+                  Takes two minutes. No account, and nothing is uploaded.<br/><button onClick={() => scrollTo('log')} style={{ background: 'none', border: 'none', padding: '2px 0', color: T1, fontWeight: 700, fontSize: '13.5px', fontFamily: 'inherit', cursor: 'pointer', borderBottom: `1px solid ${T1}`, marginTop: '4px' }}>See the same emergency with and without Relay</button>
                 </p>
               </div>
 
@@ -563,7 +563,7 @@ export default function Home() {
             ].map(([title, body], i) => (
               <div key={i} style={{ borderTop: `1px solid ${T1}`, paddingTop: '14px' }}>
                 <h3 style={{ color: T1, fontSize: '18px', fontWeight: 800, letterSpacing: '-0.02em', margin: '0 0 8px', lineHeight: 1.15 }}>{title}</h3>
-                <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55 }}>{body}</p>
+                <p style={{ color: T1, fontSize: '14px', lineHeight: 1.55 }}>{body}</p>
               </div>
             ))}
           </div>
