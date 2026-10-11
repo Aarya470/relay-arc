@@ -263,7 +263,7 @@ function PhoneMockup() {
 
       {/* floating detail cards — outside the screen, clipping only the bezel */}
       <div className="float-card" style={{
-        position: 'absolute', top: '52px', right: '-128px', zIndex: 6,
+        position: 'absolute', top: '52px', right: '-104px', zIndex: 6,
         background: 'white', border: `1px solid ${T1}`, borderRadius: '4px',
         padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '176px',
@@ -276,7 +276,7 @@ function PhoneMockup() {
       </div>
 
       <div className="float-card" style={{
-        position: 'absolute', bottom: '38px', left: '-136px', zIndex: 6,
+        position: 'absolute', bottom: '38px', left: '-104px', zIndex: 6,
         background: 'white', border: `1px solid ${T1}`, borderRadius: '4px',
         padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
         display: 'flex', alignItems: 'flex-start', gap: '8px', width: '172px',
@@ -447,7 +447,7 @@ export default function Home() {
       <NavBar onSignIn={() => router.push('/login')} onGetStarted={() => router.push('/login?signup=1')}/>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section style={{ padding: '128px 24px 0' }}>
+      <section style={{ padding: '128px 24px 72px' }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }}>
 
@@ -470,8 +470,8 @@ export default function Home() {
               The closest hospital is not<br/>always the right one.
             </h1>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'start' }} className="hero-grid">
-              <div style={{ marginBottom: '90px' }} className="hero-copy">
+            <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '48px', alignItems: 'center' }} className="hero-grid">
+              <div className="hero-copy">
                 {/* The old line read "It works out what is happening, finds a
                      hospital that can treat it, and sends your medical details
                      ahead." Three verbs, same tense, same length, one after the
@@ -505,7 +505,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div style={{ position: 'relative', zIndex: 5, marginBottom: '-64px', marginTop: '-40px' }} className="phone-col">
+              <div style={{ position: 'relative', zIndex: 5, display: 'flex', justifyContent: 'center' }} className="phone-col">
                 <PhoneMockup/>
               </div>
             </div>

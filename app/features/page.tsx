@@ -15,9 +15,9 @@
 // one synthetic figure (the deterioration curve) is labelled as synthetic.
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { DispatchScene, OnDeviceScene, RelayScene } from '@/components/viz/Scenes'
+import { DispatchScene, OnDeviceScene, RelayScene, TrendScene } from '@/components/viz/Scenes'
 import { Flow } from '@/components/viz/Flow'
-import { BarChart, StepChart, Donut } from '@/components/viz/Chart'
+import { BarChart, Donut } from '@/components/viz/Chart'
 
 const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52'
 const BORDER = '#98C890', CREAM = '#B3DDAC'
@@ -221,19 +221,11 @@ export default function Features() {
             reading behind it.
           </P>
 
-          <Panel label="Escalation as the score climbs">
-            <StepChart
-              points={[{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 3 }, { x: 4, y: 4 }, { x: 5, y: 6 }, { x: 6, y: 8 }]}
-              bands={[
-                { from: 0, to: 4, color: GREEN_DEEP, label: 'low 0–4' },
-                { from: 4, to: 6, color: WARN, label: 'medium 5–6' },
-                { from: 6, to: 12, color: CRIT, label: 'high 7+' },
-              ]}
-              xLabel="consecutive readings"
-              yLabel="NEWS2 aggregate"
-            />
-            <Cap>A made-up patient on real thresholds. The coloured bands are NEWS2&apos;s published escalation levels.</Cap>
-          </Panel>
+          <TrendScene/>
+          <Cap>
+            Real NEWS2 thresholds, made-up readings. Readings 3, 4 and 5 each count as low on their own,
+            but put side by side they are already climbing two readings before the score reaches medium.
+          </Cap>
 
           <div style={{ marginTop: '30px' }}>
             <Grid>

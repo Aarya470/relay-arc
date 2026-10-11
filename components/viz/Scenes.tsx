@@ -152,3 +152,59 @@ export function RelayScene() {
     </Frame>
   )
 }
+
+/**
+ * Risk trend: seven readings from one made-up patient against NEWS2's
+ * published bands (low 0–4, medium 5–6, high 7+). Replaces a generic step
+ * chart whose bands were drawn at the wrong boundaries (4 and 6 instead of
+ * between 4/5 and 6/7), whose axis title sat on top of a tick label, and whose
+ * line ran off the right edge. The point of the section is that a single
+ * reading can look fine while the run of readings is clearly heading up, so
+ * every reading is plotted and labelled, and the stretch where each one still
+ * counts as low is marked.
+ */
+export function TrendScene() {
+  const scores = [1, 1, 2, 3, 4, 6, 8]
+  const X0 = 64, DX = 72, Y0 = 222, PER = 20  // score 0 at y=222, 10 at y=22
+  const x = (i: number) => X0 + i * DX
+  const y = (s: number) => Y0 - s * PER
+  const bands = [
+    { from: 0,   to: 4.5, fill: 'rgba(86,128,78,0.12)',  label: 'Low (0–4)',    color: GREEN_DEEP },
+    { from: 4.5, to: 6.5, fill: 'rgba(124,82,0,0.13)',   label: 'Medium (5–6)', color: WARN },
+    { from: 6.5, to: 10,  fill: 'rgba(163,52,23,0.10)',  label: 'High (7+)',    color: CRIT },
+  ]
+  const dot = (s: number) => (s >= 7 ? CRIT : s >= 5 ? WARN : GREEN_DEEP)
+  const path = scores.map((s, i) => `${i ? 'L' : 'M'}${x(i)},${y(s)}`).join(' ')
+  return (
+    <Frame vb="0 0 620 270" title="Seven readings from one made-up patient">
+      {bands.map(b => (
+        <g key={b.label}>
+          <rect x={40} y={y(b.to)} width={480} height={(b.to - b.from) * PER} fill={b.fill}/>
+          <text x={530} y={(y(b.to) + y(b.from)) / 2 + 4} fontSize="11.5" fontWeight={700} fill={b.color}>{b.label}</text>
+        </g>
+      ))}
+      {[0, 2, 4, 6, 8, 10].map(t => (
+        <text key={t} x={32} y={y(t) + 4} textAnchor="end" fontSize="10" fill={INK3}>{t}</text>
+      ))}
+      <line x1={40} y1={Y0} x2={520} y2={Y0} stroke={INK} strokeWidth={1}/>
+      <line x1={40} y1={y(10)} x2={40} y2={Y0} stroke={INK} strokeWidth={1}/>
+
+      {/* the stretch where each reading, taken alone, still says low */}
+      <line x1={x(2)} y1={206} x2={x(4)} y2={206} stroke={INK2} strokeWidth={1}/>
+      <line x1={x(2)} y1={200} x2={x(2)} y2={206} stroke={INK2} strokeWidth={1}/>
+      <line x1={x(4)} y1={200} x2={x(4)} y2={206} stroke={INK2} strokeWidth={1}/>
+      <text x={x(3)} y={218} textAnchor="middle" fontSize="10.5" fill={INK2}>each one alone: low</text>
+
+      <path d={path} fill="none" stroke={INK} strokeWidth={2}/>
+      {scores.map((s, i) => (
+        <g key={i}>
+          <rect x={x(i) - 5} y={y(s) - 5} width={10} height={10} fill={dot(s)}/>
+          <text x={x(i)} y={y(s) - 11} textAnchor="middle" fontSize="11.5" fontWeight={700} fill={INK}>{s}</text>
+          <text x={x(i)} y={240} textAnchor="middle" fontSize="10.5" fill={INK3}>{i + 1}</text>
+        </g>
+      ))}
+      <text x={280} y={262} textAnchor="middle" fontSize="11" fill={INK2}>Reading</text>
+      <text x={12} y={14} fontSize="11" fill={INK2}>NEWS2 score</text>
+    </Frame>
+  )
+}
