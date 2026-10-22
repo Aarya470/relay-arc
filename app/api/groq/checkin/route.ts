@@ -6,6 +6,16 @@ import { CHAT_MODEL, REASONING_TEXT, createChat } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
+// Scripted check-in used only when no language model is reachable.
+const SCRIPT = [
+  'Thanks for telling me. How did you sleep last night?',
+  'Got it. Any dizziness, chest discomfort, or shortness of breath today?',
+  'Okay. Have you taken your medications as planned today?',
+  'Thanks. Anything else you want your care team to know?',
+  'Thank you for checking in today. Take it easy. [CHECKIN_COMPLETE]',
+]
+const SCRIPT_LABELS = ['Feeling', 'Sleep', 'Symptoms', 'Medications', 'Concerns']
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -16,6 +26,7 @@ export async function POST(req: NextRequest) {
   if (!limited.ok) return tooManyRequests(limited)
 
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
+  let parsed: any = null
   try {
     // Auth check
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
@@ -24,6 +35,7 @@ export async function POST(req: NextRequest) {
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
+    parsed = body
     const { messages, profile, mode } = body
 
     if (!messages || !Array.isArray(messages)) {
@@ -79,6 +91,24 @@ Rules:
     return NextResponse.json({ content })
   } catch (e: any) {
     console.error('Groq checkin error:', e)
+    // Every language model unavailable (e.g. all daily token allowances used).
+    // The check-in still has to work: fall back to a short scripted
+    // conversation so the person can finish and the answers are still saved.
+    try {
+      const body = parsed
+      const msgs: any[] = body?.messages || []
+      if (body?.mode === 'summary') {
+        const said = msgs.filter(m => m.role === 'user').map(m => String(m.text).slice(0, 200))
+        return NextResponse.json({ content: said.map((t, i) => `${SCRIPT_LABELS[i] || 'Note'}: ${t}`).join('\n'), fallback: true })
+      }
+      const answered = msgs.filter(m => m.role === 'user').length
+      const last = String(msgs[msgs.length - 1]?.text || '').toLowerCase()
+      if (/chest|faint|pass(ed)? out|can.?t breathe|breath/.test(last)) {
+        return NextResponse.json({ content: 'That sounds serious. Please tap the SOS button right now.', fallback: true })
+      }
+      const next = SCRIPT[Math.min(answered, SCRIPT.length - 1)]
+      return NextResponse.json({ content: next, fallback: true })
+    } catch { /* fall through */ }
     // A provider status code (never a message or a key) so the failure can be
     // diagnosed from the browser instead of only from server logs.
     return NextResponse.json({ error: 'AI unavailable', provider: e?.status ?? null }, { status: 503 })

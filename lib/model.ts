@@ -81,8 +81,43 @@ export const CHAT_MODEL_NOTE = 'openai/gpt-oss-20b, replacing llama-3.1-8b-insta
  * if it keeps happening, recover the text the model actually generated from
  * the error's failed_generation instead of failing the user.
  */
+/**
+ * Models to fall back to, in order, when the primary is rate-limited. On Groq
+ * each model has its OWN daily token allowance, so when gpt-oss-20b's runs out
+ * (HTTP 429 rate_limit_exceeded, "tokens per day") the others still answer.
+ * That exact failure took the daily check-in down on 22 Oct 2026.
+ */
+export const FALLBACK_MODELS = ['openai/gpt-oss-120b', 'qwen/qwen3.8-27b']
+
+function forModel(params: any, model: string) {
+  const p = { ...params, model }
+  if (!model.startsWith('openai/gpt-oss')) { delete p.reasoning_effort; delete p.include_reasoning }
+  return p
+}
+function stripThinking(r: any) {
+  const m = r?.choices?.[0]?.message
+  if (m && typeof m.content === 'string') m.content = m.content.replace(/<think>[\s\S]*?<\/think>/g, '').trim()
+  return r
+}
+
 export async function createChat(groq: any, params: any, attempts = 3): Promise<any> {
+  const models = [params.model, ...FALLBACK_MODELS.filter(m => m !== params.model)]
   let last: any
+  for (const model of models) {
+    try {
+      return stripThinking(await createChatOne(groq, forModel(params, model), attempts))
+    } catch (e: any) {
+      last = e
+      const body = e?.error?.error || e?.error || {}
+      const exhausted = e?.status === 429 || body.code === 'rate_limit_exceeded' || body.code === 'model_decommissioned' || e?.status === 404 || (e?.status >= 500)
+      if (!exhausted) throw e
+      console.warn(`createChat: ${model} unavailable (${e?.status} ${body.code || ''}), trying the next model`)
+    }
+  }
+  throw last
+}
+
+async function createChatOne(groq: any, params: any, attempts = 3): Promise<any> {  let last: any
   for (let i = 0; i < attempts; i++) {
     try {
       return await groq.chat.completions.create(params)
