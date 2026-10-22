@@ -72,6 +72,13 @@ export default function Emergency() {
   // See the comment on classifyAndGo.
   const [pending, setPending] = useState<{ type: string; label: string } | null>(null)
   const [lang, setLang] = useState<LangId>('en')
+  // The clock renders after mount only: the server's time and timezone differ
+  // from the phone's, and rendering it on both threw a React hydration error.
+  const [clock, setClock] = useState('')
+  useEffect(() => {
+    const tick = () => setClock(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
+    tick(); const iv = setInterval(tick, 15000); return () => clearInterval(iv)
+  }, [])
   const recRef = useRef<any>(null)
   const router = useRouter()
   const L = langById(lang)
@@ -230,7 +237,7 @@ export default function Emergency() {
           </span>
         </div>
         <span style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
-          {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {clock}
         </span>
       </div>
 
