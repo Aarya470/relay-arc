@@ -430,6 +430,17 @@ export default function VitalsPage() {
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
+        {/* No device? The phone is the device. */}
+        <button onClick={() => router.push('/check')}
+          style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left', background: '#141413', color: '#FFFFFF', border: 'none', borderRadius: '20px', padding: '16px', cursor: 'pointer', fontFamily: 'inherit' }}>
+          <Heart size={20} color="#FF8A70"/>
+          <span style={{ flex: 1 }}>
+            <span style={{ display: 'block', fontWeight: 800, fontSize: '15px' }}>Measure with your phone</span>
+            <span style={{ display: 'block', fontSize: '12.5px', opacity: 0.8, marginTop: '2px' }}>Pulse from the camera, breathing from the motion sensor, or import Apple Health</span>
+          </span>
+          <span style={{ fontWeight: 800 }}>→</span>
+        </button>
+
         {/* Entry grid */}
         <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '16px' }}>
           <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Today's readings</p>
