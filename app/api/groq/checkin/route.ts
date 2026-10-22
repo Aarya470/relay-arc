@@ -74,8 +74,10 @@ Rules:
 
     const content = completion.choices[0].message.content || ''
     return NextResponse.json({ content })
-  } catch (e) {
+  } catch (e: any) {
     console.error('Groq checkin error:', e)
-    return NextResponse.json({ error: 'AI unavailable' }, { status: 503 })
+    // A provider status code (never a message or a key) so the failure can be
+    // diagnosed from the browser instead of only from server logs.
+    return NextResponse.json({ error: 'AI unavailable', provider: e?.status ?? null }, { status: 503 })
   }
 }

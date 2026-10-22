@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { CHAT_MODEL } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -68,6 +69,22 @@ export async function GET() {
     const { count, error } = await admin.from('hospital_partners').select('id', { count: 'exact', head: true })
     if (error) return { ok: false, detail: error.message.includes('does not exist') ? 'schema not migrated yet' : error.message.slice(0, 60) }
     return { ok: true, detail: `${count ?? 0} partner ${count === 1 ? 'facility' : 'facilities'} onboarded` }
+  }))
+
+  // ── Language model: is the key accepted, and does the model still exist? ──
+  // "Configured" only proved an env var was set. The check-in assistant failed
+  // in production while this page said everything was fine, because a key can
+  // be present and rejected, and a model id can be retired (Groq retired the
+  // previous one on 16 Aug 2026). The models list is free to call.
+  push('Language model (check-in, cloud triage)', 'AI', true, await timed(async () => {
+    const key = process.env.GROQ_API_KEY
+    if (!key) return { ok: false, detail: 'GROQ_API_KEY missing' }
+    const res = await fetch('https://api.groq.com/openai/v1/models', { headers: { Authorization: `Bearer ${key}` }, cache: 'no-store' })
+    if (res.status === 401 || res.status === 403) return { ok: false, detail: `key rejected (HTTP ${res.status})` }
+    if (!res.ok) return { ok: false, detail: `HTTP ${res.status}` }
+    const j = await res.json().catch(() => ({}))
+    const ids: string[] = (j.data || []).map((m: any) => m.id)
+    return ids.includes(CHAT_MODEL) ? { ok: true, detail: `${CHAT_MODEL} available` } : { ok: false, detail: `${CHAT_MODEL} not offered any more` }
   }))
 
   // ── Configuration (no secrets echoed, presence only) ──
