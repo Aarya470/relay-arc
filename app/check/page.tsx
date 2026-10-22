@@ -37,6 +37,7 @@ import {
   scoreConsciousness, scoreSupplementalOxygen, type Acvpu,
 } from '@/lib/risk'
 import { emergencyNumber } from '@/lib/emergency-number'
+import SignalView from '@/components/SignalView'
 
 const PAGE = '#B3DDAC', CARD = '#FFFFFF', T1 = '#141413', T2 = '#4A4840', T3 = '#6E6B5D'
 const LINE = '#98C890', RED = '#A33417', GREEN = '#42623C', AMBER = '#7C5200', ORANGE = '#D97757'
@@ -106,6 +107,10 @@ export default function VitalsCheck() {
   const [elapsed, setElapsed] = useState(0)
   const camRef = useRef<PulseCamera | null>(null)
   const samplesRef = useRef<Sample[]>([])
+  // Raw red values for the signal view (samplesRef holds the inverted copy).
+  const rawPulseRef = useRef<Sample[]>([])
+  const [showRaw, setShowRaw] = useState(false)
+  const [sigVersion, setSigVersion] = useState(0)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const stopPulse = () => { camRef.current?.stop(); camRef.current = null }
@@ -131,23 +136,25 @@ export default function VitalsCheck() {
   }
 
   const startPulse = async () => {
-    setPulseState('starting'); setPulseMsg(''); setPulseEst(null); samplesRef.current = []; setElapsed(0)
+    setPulseState('starting'); setPulseMsg(''); setPulseEst(null); samplesRef.current = []; rawPulseRef.current = []; setElapsed(0)
     try {
       let lastFinger = 0, startT = -1
       camRef.current = await startPulseCamera(f => {
         setFinger(f.finger)
         if (!f.finger) {
           // a lifted finger ruins the window: start the clock again
-          if (f.t - lastFinger > 1) { samplesRef.current = []; startT = -1; setElapsed(0) }
+          if (f.t - lastFinger > 1) { samplesRef.current = []; rawPulseRef.current = []; startT = -1; setElapsed(0) }
           return
         }
         lastFinger = f.t
         if (startT < 0) startT = f.t
         samplesRef.current.push({ t: f.t, v: -f.r })   // invert: blood arriving darkens the frame
+        rawPulseRef.current.push({ t: f.t, v: f.r })
         const secs = f.t - startT
         setElapsed(Math.floor(secs))
         if (samplesRef.current.length % 15 === 0) {
           drawWave()
+          setSigVersion(v => v + 1)
           const win = samplesRef.current.filter(x => x.t > f.t - 20)
           const est = estimateHeartRate(win)
           if (secs >= 12) setPulseEst(est)
@@ -186,6 +193,7 @@ export default function VitalsCheck() {
     const iv = setInterval(() => {
       const left = BREATH_SECONDS - Math.floor((Date.now() - t0) / 1000)
       setBreathLeft(left)
+      setSigVersion(v => v + 1)
       if (left <= 0) {
         clearInterval(iv); motionRef.current?.stop()
         const s = motionSamples.current
@@ -338,6 +346,10 @@ export default function VitalsCheck() {
             {hr.src === 'camera' && <span style={{ fontWeight: 800, fontSize: '20px', color: T1 }}><Check size={18} color={GREEN}/> {hr.v} bpm</span>}
           </div>
           {pulseMsg && <p style={{ color: AMBER, fontSize: '13.5px', marginTop: '10px', lineHeight: 1.5 }}>{pulseMsg}</p>}
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', fontSize: '13px', color: T2, cursor: 'pointer' }}>
+            <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal
+          </label>
+          {showRaw && <SignalView samples={rawPulseRef.current} kind="pulse" version={sigVersion}/>}
           <label style={{ display: 'block', marginTop: '14px', fontSize: '13px', color: T3 }}>Or type it (bpm)
             <input inputMode="numeric" style={{ ...input, marginTop: '4px' }} value={hr.src === 'typed' ? (hr.v ?? '') : ''} placeholder={hr.v != null && hr.src !== 'typed' ? String(hr.v) : 'e.g. 78'}
               onChange={e => { const n = parseInt(e.target.value); setHr(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
@@ -363,6 +375,10 @@ export default function VitalsCheck() {
           {rr.v != null && (rr.src === 'motion' || rr.src === 'taps') && breathState === 'done' &&
             <p style={{ fontWeight: 800, fontSize: '20px', color: T1, marginTop: '10px' }}><Check size={18} color={GREEN}/> {rr.v} breaths/min</p>}
           {breathMsg && <p style={{ color: AMBER, fontSize: '13.5px', marginTop: '10px' }}>{breathMsg}</p>}
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', fontSize: '13px', color: T2, cursor: 'pointer' }}>
+            <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal (phone-on-chest mode)
+          </label>
+          {showRaw && <SignalView samples={motionSamples.current} kind="breath" version={sigVersion}/>}
           <label style={{ display: 'block', marginTop: '14px', fontSize: '13px', color: T3 }}>Or type it (breaths per minute)
             <input inputMode="numeric" style={{ ...input, marginTop: '4px' }} value={rr.src === 'typed' ? (rr.v ?? '') : ''} placeholder={rr.v != null && rr.src !== 'typed' ? String(rr.v) : 'e.g. 16'}
               onChange={e => { const n = parseInt(e.target.value); setRr(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>

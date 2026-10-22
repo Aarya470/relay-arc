@@ -73,6 +73,20 @@ export function detrend(x: number[], hz: number, windowSec: number): number[] {
  * Strongest frequency in [loHz, hiHz], by direct DFT on a fine grid with a Hann
  * window. Returns the frequency and the share of band energy near it.
  */
+/** Power at each frequency in [loHz, hiHz] (Hann window, direct DFT). */
+export function spectrum(x: number[], hz: number, loHz: number, hiHz: number, stepHz = 0.005) {
+  const n = x.length
+  const win = x.map((v, i) => v * (0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1))))
+  const freqs: number[] = [], power: number[] = []
+  for (let f = loHz; f <= hiHz + 1e-9; f += stepHz) {
+    let re = 0, im = 0
+    const w = (2 * Math.PI * f) / hz
+    for (let i = 0; i < n; i++) { re += win[i] * Math.cos(w * i); im -= win[i] * Math.sin(w * i) }
+    freqs.push(f); power.push(re * re + im * im)
+  }
+  return { freqs, power }
+}
+
 export function dominantFrequency(x: number[], hz: number, loHz: number, hiHz: number, stepHz = 0.005) {
   const n = x.length
   const win = x.map((v, i) => v * (0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1))))

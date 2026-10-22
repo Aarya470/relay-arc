@@ -147,6 +147,18 @@ export default function TriageDemo() {
               the marked line = {ABSTAIN_THRESHOLD} abstention gate. Below it we ask the cloud instead of guessing
             </p>
 
+            {/* the two models that voted */}
+            {result.parts && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '18px' }}>
+                {([['Linear model (words)', result.parts.linear], ['Neural network (spelling too)', result.parts.neural]] as const).map(([name, v]) => (
+                  <div key={name} style={{ border: `1px solid ${BORDER}`, padding: '8px 10px' }}>
+                    <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '3px' }}>{name}</p>
+                    <p style={{ color: T1, fontFamily: mono, fontSize: '13px', fontWeight: 700 }}>{LABELS[v.type] || v.type} · {v.confidence.toFixed(3)}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* what drove it */}
             <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '14px' }}>
               <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>
