@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { CHAT_MODEL } from '@/lib/model'
+import { CHAT_MODEL, REASONING_TEXT, createChat } from '@/lib/model'
+import Groq from 'groq-sdk'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +16,8 @@ async function timed(fn: () => Promise<{ ok: boolean; detail: string }>) {
     return { ok: false, detail: (e?.message || 'unreachable').slice(0, 80), ms: Date.now() - t0 }
   }
 }
+
+let chatProbe: { at: number; r: { ok: boolean; detail: string } } | null = null
 
 export async function GET() {
   const checks: Check[] = []
@@ -85,6 +88,30 @@ export async function GET() {
     const j = await res.json().catch(() => ({}))
     const ids: string[] = (j.data || []).map((m: any) => m.id)
     return ids.includes(CHAT_MODEL) ? { ok: true, detail: `${CHAT_MODEL} available` } : { ok: false, detail: `${CHAT_MODEL} not offered any more` }
+  }))
+
+  // ── Language model: a real (tiny) chat call, the same way the check-in
+  // makes one. Listing models only proves the key; this proves a completion
+  // actually comes back. Cached for 10 minutes so the page does not spend
+  // tokens on every view.
+  push('Language model: test chat reply', 'AI', true, await timed(async () => {
+    const now = Date.now()
+    if (chatProbe && now - chatProbe.at < 10 * 60 * 1000) return chatProbe.r
+    let r: { ok: boolean; detail: string }
+    try {
+      const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+      const c = await createChat(groq, {
+        model: CHAT_MODEL, ...REASONING_TEXT, temperature: 0.7,
+        messages: [{ role: 'user', content: 'Reply with one short friendly sentence asking how someone feels today.' }],
+      })
+      const text = c.choices?.[0]?.message?.content || ''
+      r = text.trim() ? { ok: true, detail: `replied (${c.choices[0].finish_reason})` } : { ok: false, detail: `empty reply (${c.choices?.[0]?.finish_reason})` }
+    } catch (e: any) {
+      const body = e?.error?.error || e?.error || {}
+      r = { ok: false, detail: `HTTP ${e?.status ?? '?'} ${body.code || ''} ${String(body.message || e?.message || '').slice(0, 140)}`.trim() }
+    }
+    chatProbe = { at: now, r }
+    return r
   }))
 
   // ── Configuration (no secrets echoed, presence only) ──
