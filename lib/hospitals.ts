@@ -1,3 +1,6 @@
+import { NOT_AN_ER, pciStatus, NJ_PCI_SOURCE } from './nj-pci'
+export { pciStatus }
+export const PCI_SOURCE = NJ_PCI_SOURCE
 export interface PartnerStatus {
   name: string
   accepting: boolean
@@ -23,6 +26,9 @@ export interface Hospital {
   address: string
   distance?: number
   capability?: string
+  /** For chest pain: does this hospital do emergency angioplasty? 'unknown'
+   *  means we could not confirm it, and the screen says so instead of guessing. */
+  pci?: 'yes' | 'no' | 'unknown'
   phone?: string
   etaSec?: number
   etaTrafficSec?: number
@@ -40,6 +46,7 @@ const EMERGENCY_CAPABILITIES: Record<string, { tags: string[]; label: string }> 
   mecfs: { tags: ['hospital', 'clinic'], label: 'Emergency stabilization' },
   other: { tags: ['hospital'], label: 'Emergency care' },
 }
+
 
 function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371000
@@ -155,11 +162,22 @@ export async function findNearbyHospitals(
             el.tags['addr:state']
           ].filter(Boolean).join(', ') || 'Address unavailable',
           distance: haversine(lat, lng, elLat, elLng),
-          capability: capability.label,
           phone: el.tags.phone || ''
         }
       })
-      .filter((h: Hospital) => h.lat && h.lng && h.name)
+      .filter((h: Hospital) => h.lat && h.lng && h.name && !NOT_AN_ER.test(h.name))
+      // Capability is only ever stated when it is known. For chest pain that
+      // means the state's own primary-PCI data; for other emergency types
+      // there is no verified source wired in yet, so nothing is claimed.
+      .map((h: Hospital) => {
+        if (emergencyType !== 'chest_pain') return h
+        const pci = pciStatus(h.name, h.lat, h.lng)
+        return {
+          ...h, pci,
+          capability: pci === 'yes' ? 'Emergency angioplasty (primary PCI)'
+            : pci === 'no' ? 'No emergency angioplasty in state data' : undefined,
+        }
+      })
       .sort((a: Hospital, b: Hospital) => (a.distance || 0) - (b.distance || 0))
       .slice(0, 8)
 
@@ -191,6 +209,14 @@ export async function findNearbyHospitals(
           if (h.partner[capKey] === true) base *= 0.8
           else if (h.partner[capKey] === false) base *= 1.35
         }
+      }
+      // Chest pain: a confirmed primary-PCI hospital beats a nearer one that
+      // would have to transfer; an unconfirmed one is mildly penalised; one the
+      // state data shows does not do emergency angioplasty, heavily.
+      if (emergencyType === 'chest_pain') {
+        if (h.pci === 'yes') base *= 0.75
+        else if (h.pci === 'no') base *= 1.8
+        else base *= 1.2
       }
       return base
     }

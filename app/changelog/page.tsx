@@ -40,6 +40,11 @@ const KIND: Record<Kind, { label: string; color: string }> = {
 // Newest first. Keep this honest — the CORRECTION entries are the point.
 const ENTRIES: Entry[] = [
   {
+    date: '2026-10-21', kind: 'honest',
+    title: 'The dispatch screen was claiming a cath lab for every hospital',
+    body: 'Testing the new far-from-help screen from a rural spot in Burlington County, the app routed a chest-pain patient to a children\'s rehabilitation hospital and printed "Cardiac catheterization lab" under it. The label had been coming from the type of emergency, not from the hospital, so every hospital got it. Capability is now taken from the New Jersey Department of Health cardiac registry (which hospitals performed primary PCI, emergency angioplasty, in January to September 2025), matched to the map by location and name so a separate building on the same campus does not inherit the claim. Facilities without an emergency department are filtered out. Anywhere the data does not cover, the screen says the cath lab is not confirmed instead of guessing, and nothing is claimed for stroke or trauma until there is a verified source for those too.',
+  },
+  {
     date: '2026-10-21', kind: 'shipped',
     title: 'Your phone is the sensor',
     body: 'A new vitals check measures pulse with the phone camera and flash (the same light-absorption principle a pulse oximeter uses) and breathing rate with the motion sensor while the phone rests on the chest, or by tapping once per breath. Every reading carries a signal-quality score, and a noisy recording is refused rather than reported. Readings from Apple Health can be imported from the Health export file, which is read on the phone and never uploaded. All seven NEWS2 measurements are then laid out point by point for a clinician to read; in line with docs/INTENDED_USE.md, the page does not interpret the score for the patient, and the call-911 instruction is unconditional. No smartwatch, no account, nothing to buy. The camera pipeline was tested end to end in a real browser against a synthetic fingertip video with a known 72 bpm pulse, and recovered 72.',

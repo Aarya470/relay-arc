@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, ChevronRight, Loader2, CheckCircle, AlertTriangle, Shield, X, Share2, FileText, MessageSquare, Navigation2 } from 'lucide-react'
-import { findNearbyHospitals, formatDistance, estimateTime, etaText, trafficLabel, formatEtaMin, fresh, trafficMultiplier, Hospital } from '@/lib/hospitals'
+import { findNearbyHospitals, formatDistance, estimateTime, etaText, trafficLabel, formatEtaMin, fresh, trafficMultiplier, Hospital, PCI_SOURCE } from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
@@ -856,7 +856,22 @@ function RoutingPage() {
                 {hospital.address}
               </p>
             )}
-            {hospital.capability && (
+            {hospital.pci === 'yes' && (
+              <p style={{ color: T.green, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+                ✓ {hospital.capability} · {PCI_SOURCE}
+              </p>
+            )}
+            {hospital.pci === 'no' && (
+              <p style={{ color: T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+                ⚠ {hospital.capability}
+              </p>
+            )}
+            {hospital.pci === 'unknown' && (
+              <p style={{ color: T.amber, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+                Cath lab not confirmed for this hospital. Tell 911 it is chest pain
+              </p>
+            )}
+            {hospital.pci === undefined && hospital.capability && hospital.capability !== 'Navigation' && (
               <p style={{ color: T.green, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
                 ✓ {hospital.capability}
               </p>
@@ -875,7 +890,7 @@ function RoutingPage() {
               </p>
             )}
             <p style={{ color: T.textMuted, fontSize: '11.5px', marginTop: '7px' }}>
-              Ranked first: fastest arrival{hospital.partner && fresh(hospital.partner) && hospital.partner.accepting ? ' · confirmed accepting' : ''} · {hospital.capability?.toLowerCase()}
+              Ranked first: fastest arrival{hospital.partner && fresh(hospital.partner) && hospital.partner.accepting ? ' · confirmed accepting' : ''}{hospital.pci === 'yes' ? ' · does emergency angioplasty' : ''}
             </p>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
