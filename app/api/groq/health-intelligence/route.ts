@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL, REASONING_JSON } from '@/lib/model'
+import { CHAT_MODEL, REASONING_JSON, createChat } from '@/lib/model'
 import { authedClient } from '@/lib/supabase-route'
 
 export const dynamic = 'force-dynamic'
@@ -207,7 +207,7 @@ Return ONLY valid JSON:
 }
 Never use em dashes or semicolons. Use short plain sentences.`
 
-    const completion = await groq.chat.completions.create({
+    const completion = await createChat(groq, {
       model: CHAT_MODEL,
       ...REASONING_JSON,
       response_format: { type: 'json_object' as const },

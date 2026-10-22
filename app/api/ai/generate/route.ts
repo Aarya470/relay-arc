@@ -26,7 +26,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL, REASONING_TEXT } from '@/lib/model'
+import { CHAT_MODEL, REASONING_TEXT, createChat } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -140,7 +140,7 @@ Keep everything simple and plain English. No medical jargon.`
     }
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
-    const completion = await groq.chat.completions.create({
+    const completion = await createChat(groq, {
       model: CHAT_MODEL,
       ...REASONING_TEXT,
       messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }],

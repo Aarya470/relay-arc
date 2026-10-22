@@ -67,3 +67,38 @@ export const REASONING_TEXT = {
  * check-in conversation into bullet points.
  */
 export const CHAT_MODEL_NOTE = 'openai/gpt-oss-20b, replacing llama-3.1-8b-instant which Groq shut down on 16 August 2026'
+
+/**
+ * groq.chat.completions.create, hardened for gpt-oss.
+ *
+ * gpt-oss intermittently answers in its "tool call" channel even when no tools
+ * are offered, and Groq rejects that turn with HTTP 400 code tool_use_failed
+ * ("Tool choice is none, but model called a tool"). In testing it hit roughly
+ * one plain chat turn in eight. Every route surfaced it as "could not reach the
+ * assistant", and the daily check-in was the one people noticed.
+ *
+ * Retry that specific failure (it is random, the next sample is usually fine);
+ * if it keeps happening, recover the text the model actually generated from
+ * the error's failed_generation instead of failing the user.
+ */
+export async function createChat(groq: any, params: any, attempts = 3): Promise<any> {
+  let last: any
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await groq.chat.completions.create(params)
+    } catch (e: any) {
+      last = e
+      const body = e?.error?.error || e?.error || {}
+      const isToolGlitch = e?.status === 400 && (body.code === 'tool_use_failed' || String(e?.message || '').includes('tool_use_failed'))
+      if (!isToolGlitch) throw e
+      if (i === attempts - 1) {
+        const gen: string = body.failed_generation || ''
+        // failed_generation looks like {"name": "...", "arguments": <the reply>}
+        const m = gen.match(/"arguments"\s*:\s*"?([\s\S]*?)"?\s*\}\s*$/)
+        const text = (m ? m[1] : gen).replace(/\\n/g, '\n').trim()
+        if (text) return { choices: [{ message: { role: 'assistant', content: text }, finish_reason: 'recovered' }] }
+      }
+    }
+  }
+  throw last
+}

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL, REASONING_JSON } from '@/lib/model'
+import { CHAT_MODEL, REASONING_JSON, createChat } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       : `\n\nThe description was spoken in ${spoken}. It may be in Devanagari script or romanised (Latin letters spelling ${spoken} words). Translate it yourself before classifying. Classify on meaning, never on spelling.`
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
-    const response = await groq.chat.completions.create({
+    const response = await createChat(groq, {
       model: CHAT_MODEL,
       ...REASONING_JSON,
       response_format: { type: 'json_object' as const },

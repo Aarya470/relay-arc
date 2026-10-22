@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
-import { CHAT_MODEL, REASONING_TEXT } from '@/lib/model'
+import { CHAT_MODEL, REASONING_TEXT, createChat } from '@/lib/model'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       const fullConvo = messages
         .map((m: any) => `${m.role === 'user' ? 'Patient' : 'AI'}: ${m.text}`)
         .join('\n')
-      const completion = await groq.chat.completions.create({
+      const completion = await createChat(groq, {
         model: CHAT_MODEL,
       ...REASONING_TEXT,
         messages: [{
@@ -59,11 +59,14 @@ Rules:
 - If they mention chest pain, feeling faint, or trouble breathing say: "That sounds serious. Please tap the SOS button right now."
 - After 4-5 exchanges, wrap up warmly and end with [CHECKIN_COMPLETE]`
 
-    const completion = await groq.chat.completions.create({
+    const completion = await createChat(groq, {
       model: CHAT_MODEL,
       ...REASONING_TEXT,
+      // Instructions go in a leading user turn, not a system message: Groq's
+      // guidance for gpt-oss, and in testing it stopped the stray tool-call
+      // replies that were failing roughly one turn in eight.
       messages: [
-        { role: 'system', content: systemPrompt },
+        { role: 'user', content: systemPrompt + '\n\nStart the check-in.' },
         ...messages.map((m: any) => ({
           role: m.role === 'ai' ? 'assistant' : 'user' as any,
           content: m.text
