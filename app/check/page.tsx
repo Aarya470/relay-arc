@@ -38,6 +38,7 @@ import {
 } from '@/lib/risk'
 import { emergencyNumber } from '@/lib/emergency-number'
 import SignalView from '@/components/SignalView'
+import { demoOn } from '@/lib/demo'
 
 // ── look ──────────────────────────────────────────────────────────────────────
 const PAGE = '#B3DDAC', CARD = '#FFFFFF', T1 = '#141413', T2 = '#4A4840', T3 = '#6E6B5D'
@@ -53,7 +54,7 @@ const PULSE_MAX_SECONDS = 25
 const BREATH_SECONDS = 15
 const TAP_SECONDS = 15
 
-type Source = 'camera' | 'motion' | 'taps' | 'apple' | 'typed'
+type Source = 'camera' | 'motion' | 'taps' | 'apple' | 'typed' | 'demo'
 interface Val { v: number | null; src: Source | null; at?: Date }
 const empty: Val = { v: null, src: null }
 
@@ -65,7 +66,7 @@ const ACVPU: { id: Acvpu; label: string }[] = [
   { id: 'U', label: 'Unresponsive' },
 ]
 const srcLabel: Record<Source, string> = {
-  camera: 'camera', motion: 'motion sensor', taps: 'tapped', apple: 'Apple Health', typed: 'typed',
+  camera: 'camera', motion: 'motion sensor', taps: 'tapped', apple: 'Apple Health', typed: 'typed', demo: 'DEMO, simulated',
 }
 
 const card: React.CSSProperties = {
@@ -110,6 +111,16 @@ export default function VitalsCheck() {
   const router = useRouter()
   const [emg, setEmg] = useState({ number: '911', label: '911' })
   useEffect(() => { setEmg(emergencyNumber()) }, [])
+
+  // DEMO MODE (relay-arc.org/check?demo=1, or the site-wide demo switch):
+  // for filming. The camera still runs and the live waveform is real, but the
+  // reading is a fixed, SIMULATED 73 bpm after 10 seconds, and the card is
+  // badged DEMO the whole time so no viewer can mistake it for a measurement.
+  // Never active unless asked for.
+  const [demo, setDemo] = useState(false)
+  useEffect(() => {
+    try { setDemo(demoOn() || new URLSearchParams(window.location.search).has('demo')) } catch {}
+  }, [])
 
   // ── measured values ────────────────────────────────────────────────────────
   const [hr, setHr] = useState<Val>(empty)
@@ -181,11 +192,17 @@ export default function VitalsCheck() {
         rawPulseRef.current.push({ t: f.t, v: f.r })
         const secs = f.t - startT
         setElapsed(Math.floor(secs))
+        if (demo && secs >= 10) {
+          drawWave(redRef.current)
+          stopPulse(); setPulseState('done'); setLive(null)
+          setHr({ v: 73, src: 'demo' })
+          return
+        }
         if (redRef.current.length % 12 === 0) {
           const est = bestChannelEstimate(redRef.current, greenRef.current)
           drawWave(est.channel === 'green' ? greenRef.current : redRef.current)
           setSigVersion(v => v + 1)
-          if (secs >= 8) setLive({ rate: est.rate ?? (est.quality > 0.2 ? null : null), quality: est.quality, confirmed: est.confirmed })
+          if (secs >= 8 && !demo) setLive({ rate: est.rate ?? (est.quality > 0.2 ? null : null), quality: est.quality, confirmed: est.confirmed })
           if ((secs >= PULSE_SECONDS && est.confirmed) || secs >= PULSE_MAX_SECONDS) {
             stopPulse(); setPulseState('done')
             if (est.confirmed && est.rate) setHr({ v: est.rate, src: 'camera' })
@@ -327,9 +344,9 @@ export default function VitalsCheck() {
   const stale = (d?: Date) => !!d && Date.now() - d.getTime() > 24 * 3600 * 1000
 
   // live display values
-  const bpmShown = hr.src === 'camera' && pulseState === 'done' ? hr.v : live?.rate ?? null
+  const bpmShown = (hr.src === 'camera' || hr.src === 'demo') && pulseState === 'done' ? hr.v : live?.rate ?? null
   const beatSec = bpmShown ? 60 / bpmShown : 1
-  const pulseProgress = pulseState === 'done' && hr.src === 'camera' ? 1 : elapsed / PULSE_SECONDS
+  const pulseProgress = pulseState === 'done' && (hr.src === 'camera' || hr.src === 'demo') ? 1 : elapsed / (demo ? 10 : PULSE_SECONDS)
   const breathProgress = breathState === 'motion' || breathState === 'taps' ? 1 - breathLeft / (breathState === 'taps' ? TAP_SECONDS : BREATH_SECONDS) : breathState === 'done' && rr.v != null ? 1 : 0
   const steps = [
     { label: 'Pulse', done: hr.v != null },
@@ -380,7 +397,10 @@ export default function VitalsCheck() {
 
         {/* ── PULSE MONITOR ─────────────────────────────────────────────── */}
         <section style={monitor}>
-          <Kicker light>01 · Pulse from the camera</Kicker>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+            <Kicker light>01 · Pulse from the camera</Kicker>
+            {demo && <span style={{ fontFamily: mono, fontSize: '11px', fontWeight: 800, letterSpacing: '1px', background: '#FFD166', color: '#1A1300', padding: '4px 8px', borderRadius: '999px' }}>DEMO · SIMULATED READING</span>}
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '18px', margin: '8px 0 14px' }}>
             <Ring progress={pulseProgress} color={CORAL}>
               <Heart size={40} color={CORAL} fill={bpmShown ? CORAL : 'none'}
@@ -396,9 +416,9 @@ export default function VitalsCheck() {
               <p style={{ fontFamily: mono, fontSize: '12px', color: hr.src === 'camera' && pulseState === 'done' ? MINT : DIMW, marginTop: '8px' }}>
                 {pulseState === 'running'
                   ? (finger
-                    ? (live?.confirmed ? `steady · quality ${Math.round(live.quality * 100)}%` : elapsed >= PULSE_SECONDS ? 'almost there, keep holding' : `reading… ${elapsed}/${PULSE_SECONDS}s`)
+                    ? (demo ? `reading… ${elapsed}/10s` : live?.confirmed ? `steady · quality ${Math.round(live.quality * 100)}%` : elapsed >= PULSE_SECONDS ? 'almost there, keep holding' : `reading… ${elapsed}/${PULSE_SECONDS}s`)
                     : 'waiting for your fingertip')
-                  : hr.src === 'camera' && pulseState === 'done' ? '✓ measured with the camera' : 'ready'}
+                  : hr.src === 'demo' && pulseState === 'done' ? 'demo: simulated reading, not measured' : hr.src === 'camera' && pulseState === 'done' ? '✓ measured with the camera' : 'ready'}
               </p>
             </div>
           </div>
