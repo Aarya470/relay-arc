@@ -1,6 +1,6 @@
 // Voice SOS languages.
 //
-// The on-device Relay Triage Engine normalises Hindi and Marathi — in both
+// The on-device Relay Triage Engine normalises Hindi, Marathi and Spanish — in both
 // Devanagari and romanised form — onto the same canonical English tokens it was
 // trained on (see ml/featurize.py MULTILINGUAL). So the classifier itself is
 // language-agnostic; the only thing that has to change per language is the
@@ -10,7 +10,7 @@
 // knowledge and are pending native-speaker review before we lean on them in
 // production. See ml/corpus.py.
 
-export type LangId = 'en' | 'hi' | 'mr'
+export type LangId = 'en' | 'hi' | 'mr' | 'es'
 
 export interface VoiceLang {
   id: LangId
@@ -46,6 +46,15 @@ export const VOICE_LANGS: VoiceLang[] = [
     speak: 'बोलून सांगा, दाबा आणि बोला',
     listening: 'ऐकत आहोत, काय होत आहे सांगा',
   },
+  // Spanish: added for East Windsor and Hightstown. es-US is the acoustic
+  // model for Spanish as spoken in the United States.
+  {
+    id: 'es',
+    chip: 'ES',
+    locale: 'es-US',
+    speak: 'Dígalo en voz alta. Toque y hable',
+    listening: 'Escuchando. Diga qué está pasando',
+  },
 ]
 
 export function langById(id: LangId): VoiceLang {
@@ -63,7 +72,7 @@ export function detectLang(): LangId {
   if (typeof window === 'undefined') return 'en'
   try {
     const saved = localStorage.getItem(STORE_KEY)
-    if (saved === 'en' || saved === 'hi' || saved === 'mr') return saved
+    if (saved === 'en' || saved === 'hi' || saved === 'mr' || saved === 'es') return saved
   } catch { /* private mode */ }
   try {
     const tags = [...(navigator.languages || []), navigator.language || '']
@@ -71,6 +80,7 @@ export function detectLang(): LangId {
       const base = t.toLowerCase().split('-')[0]
       if (base === 'mr') return 'mr'
       if (base === 'hi') return 'hi'
+      if (base === 'es') return 'es'
     }
   } catch { /* ignore */ }
   return 'en'

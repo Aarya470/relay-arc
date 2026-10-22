@@ -1,9 +1,14 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Relay Triage Engine — our own emergency classifier. No API, no network.
 //
-// A multinomial logistic regression over binary n-gram features, trained in
-// ml/train.py and exported to model.json. It runs in ~1ms on-device, works with
-// zero signal, and can explain exactly which words drove the decision.
+// Two models, averaged, both trained from scratch in ml/ and inlined below:
+//   1. a multinomial logistic regression over word and word-pair features,
+//      which can explain exactly which words drove the decision, and
+//   2. a small neural network (1024 hashed inputs -> 32 ReLU -> 7) that also
+//      reads character trigrams, so misspellings and unseen word forms
+//      ("brethe", "respirando") still land near the right class.
+// Both run in well under a millisecond on-device and work with zero signal.
+// English, Hindi, Marathi and Spanish share one canonical feature space.
 //
 // Deliberately NOT a replacement for an LLM everywhere: when confidence is
 // below the abstain threshold, callers should fall back to the language model.
@@ -14,6 +19,8 @@ const model = /*__MODEL__*/ null as any
 
 export type EmergencyType =
   | 'chest_pain' | 'unconscious' | 'breathing' | 'pots' | 'stroke' | 'mecfs' | 'other'
+
+export interface ModelVote { type: EmergencyType; confidence: number }
 
 export interface TriageResult {
   type: EmergencyType
@@ -26,6 +33,8 @@ export interface TriageResult {
   scores: Record<string, number>
   /** Milliseconds spent classifying. */
   ms: number
+  /** What each half of the ensemble said on its own. */
+  parts: { linear: ModelVote; neural: ModelVote }
 }
 
 const CLASSES = model.classes as EmergencyType[]
@@ -38,13 +47,75 @@ const IMMUNE = new Set(model.config.negationImmune as string[])
 const STOP = new Set(model.config.stop as string[])
 const NEG_WINDOW = model.config.negWindow as number
 export const ABSTAIN_THRESHOLD = model.meta.abstainThreshold as number
+
+// ── Neural half ───────────────────────────────────────────────────────────────
+const NN = model.nn as { inputs: number; hidden: number; w1: string; s1: number; b1: number[]; w2: string; s2: number; b2: number[]; temperature: number }
+function decodeInt8(b64: string): Int8Array {
+  // Self-contained base64 decode: no atob/Buffer differences between browser,
+  // Next's server runtime and plain Node.
+  const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+  const clean = b64.replace(/=+$/, '')
+  const out = new Int8Array(Math.floor(clean.length * 3 / 4))
+  let buf = 0, bits = 0, o = 0
+  for (let i = 0; i < clean.length; i++) {
+    buf = (buf << 6) | A.indexOf(clean[i]); bits += 6
+    if (bits >= 8) { bits -= 8; const byte = (buf >> bits) & 0xff; out[o++] = byte > 127 ? byte - 256 : byte }
+  }
+  return out
+}
+const NN_W1 = decodeInt8(NN.w1)
+const NN_W2 = decodeInt8(NN.w2)
+
+/** Mirrors ml/neural.py: fnv1a(). 32-bit FNV-1a over UTF-16 code units. */
+function fnv1a(s: string): number {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0 }
+  return h >>> 0
+}
+
+/** Mirrors ml/neural.py: nn_inputs(). Word features plus character trigrams. */
+export function nnInputs(text: string): number[] {
+  const keys = featurize(text)
+  for (const tok of tokenize(text)) {
+    const w = '#' + tok + '#'
+    for (let i = 0; i + 3 <= w.length; i++) keys.push('c:' + w.slice(i, i + 3))
+  }
+  return Array.from(new Set(keys.map(k => fnv1a(k) % NN.inputs))).sort((a, b) => a - b)
+}
+
+function neuralProbs(text: string): number[] {
+  const H = NN.hidden, K = NN.b2.length
+  const h = NN.b1.slice()
+  for (const j of nnInputs(text)) {
+    const base = j * H
+    for (let u = 0; u < H; u++) h[u] += NN_W1[base + u] * NN.s1
+  }
+  const z = NN.b2.slice()
+  for (let u = 0; u < H; u++) {
+    const a = h[u] > 0 ? h[u] : 0
+    if (a === 0) continue
+    for (let c = 0; c < K; c++) z[c] += a * NN_W2[u * K + c] * NN.s2
+  }
+  // Temperature-scaled: see fit_temperature() in ml/neural.py.
+  return softmax(z.map(v => v / NN.temperature))
+}
 export const MODEL_META = model.meta
+
+// Mirrors ml/featurize.py: fold_accents(). Latin only, so "tórax" matches the
+// Spanish key "torax"; Devanagari is left alone on purpose.
+const ACCENT_FROM = 'áàâäéèêëíìîïóòôöúùûüñç'
+const ACCENT_TO   = 'aaaaeeeeiiiioooouuuunc'
+function foldAccents(t: string): string {
+  let out = ''
+  for (const ch of t) { const i = ACCENT_FROM.indexOf(ch); out += i >= 0 ? ACCENT_TO[i] : ch }
+  return out
+}
 
 /** Mirrors ml/featurize.py: tokenize() */
 function tokenize(text: string): string[] {
   // Devanagari (U+0900–U+097F) is preserved: Hindi and Marathi speech
   // transcription returns it, and stripping it would erase the input entirely.
-  const cleaned = text.toLowerCase().replace(/’/g, "'")
+  const cleaned = foldAccents(text.toLowerCase().replace(/’/g, "'"))
     .replace(/[^a-z0-9'\u0900-\u097f ]+/g, ' ')
   const out: string[] = []
   for (const w of cleaned.split(' ')) {
@@ -97,9 +168,12 @@ export function triage(text: string): TriageResult {
     for (let c = 0; c < z.length; c++) z[c] += row[c]
   }
 
-  const probs = softmax(z)
-  let best = 0
-  for (let c = 1; c < probs.length; c++) if (probs[c] > probs[best]) best = c
+  const lin = softmax(z)
+  const nn = neuralProbs(text)
+  const probs = lin.map((p, c) => (p + nn[c]) / 2)
+  const argmax = (p: number[]) => { let b = 0; for (let c = 1; c < p.length; c++) if (p[c] > p[b]) b = c; return b }
+  const best = argmax(probs)
+  const bl = argmax(lin), bn = argmax(nn)
 
   // Evidence: the terms that pushed hardest toward the winning class, with
   // bigrams preferred over their component unigrams for readability.
@@ -121,5 +195,9 @@ export function triage(text: string): TriageResult {
     evidence,
     scores,
     ms: Math.round((t1 - t0) * 100) / 100,
+    parts: {
+      linear: { type: CLASSES[bl], confidence: Math.round(lin[bl] * 1000) / 1000 },
+      neural: { type: CLASSES[bn], confidence: Math.round(nn[bn] * 1000) / 1000 },
+    },
   }
 }

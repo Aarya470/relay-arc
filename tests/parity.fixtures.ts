@@ -3,97 +3,137 @@ const FIXTURES = [
  {
   "text": "chest is paining and left hand numb",
   "class": "chest_pain",
-  "confidence": 0.9901
+  "confidence": 0.9959
  },
  {
   "text": "no chest pain but cannot breathe",
   "class": "breathing",
-  "confidence": 0.8989
+  "confidence": 0.9462
  },
  {
   "text": "he collapsed and is not responding",
   "class": "unconscious",
-  "confidence": 0.8971
+  "confidence": 0.972
  },
  {
   "text": "giddiness on standing with racing heart",
   "class": "pots",
-  "confidence": 0.9956
+  "confidence": 0.9982
  },
  {
   "text": "face drooping and slurred speech",
   "class": "stroke",
-  "confidence": 0.9695
+  "confidence": 0.9884
  },
  {
   "text": "crashed after shopping trip cannot move",
   "class": "mecfs",
-  "confidence": 0.8837
+  "confidence": 0.9232
  },
  {
   "text": "severe stomach pain and vomiting",
   "class": "other",
-  "confidence": 0.9353
+  "confidence": 0.9714
  },
  {
   "text": "my father is clutching his chest sweating",
   "class": "chest_pain",
-  "confidence": 0.8732
+  "confidence": 0.9428
  },
  {
   "text": "gasping for air inhaler not working",
   "class": "breathing",
-  "confidence": 0.8114
+  "confidence": 0.9418
  },
  {
   "text": "heart rate shot up when i stood",
   "class": "pots",
-  "confidence": 0.7977
+  "confidence": 0.8897
  },
  {
   "text": "\u0938\u0940\u0928\u0947 \u092e\u0947\u0902 \u0926\u0930\u094d\u0926 \u0914\u0930 \u092a\u0938\u0940\u0928\u093e",
   "class": "chest_pain",
-  "confidence": 0.99
+  "confidence": 0.9951
  },
  {
   "text": "seene mein dard aur paseena",
   "class": "chest_pain",
-  "confidence": 0.99
+  "confidence": 0.9951
  },
  {
   "text": "\u0938\u093e\u0902\u0938 \u0928\u0939\u0940\u0902 \u0906 \u0930\u0939\u0940",
   "class": "breathing",
-  "confidence": 0.8146
+  "confidence": 0.9006
  },
  {
   "text": "saans nahi aa rahi",
   "class": "breathing",
-  "confidence": 0.8146
+  "confidence": 0.9006
  },
  {
   "text": "\u0935\u0939 \u092c\u0947\u0939\u094b\u0936 \u0939\u0948",
   "class": "unconscious",
-  "confidence": 0.8076
+  "confidence": 0.9015
  },
  {
   "text": "behosh ho gaya",
   "class": "unconscious",
-  "confidence": 0.8515
+  "confidence": 0.9213
  },
  {
   "text": "\u0916\u0921\u093c\u0947 \u0939\u094b\u0924\u0947 \u0939\u0940 \u091a\u0915\u094d\u0915\u0930 \u0906\u0924\u0947 \u0939\u0948\u0902",
   "class": "pots",
-  "confidence": 0.9481
+  "confidence": 0.9765
  },
  {
   "text": "munh tedha ho gaya",
   "class": "stroke",
-  "confidence": 0.9035
+  "confidence": 0.9498
  },
  {
   "text": "\u092a\u0947\u091f \u092e\u0947\u0902 \u092c\u0939\u0941\u0924 \u0926\u0930\u094d\u0926",
   "class": "other",
-  "confidence": 0.8786
+  "confidence": 0.9451
+ },
+ {
+  "text": "dolor de pecho y sudor fr\u00edo",
+  "class": "chest_pain",
+  "confidence": 0.9937
+ },
+ {
+  "text": "no puedo respirar",
+  "class": "breathing",
+  "confidence": 0.899
+ },
+ {
+  "text": "se desmay\u00f3 y no responde",
+  "class": "unconscious",
+  "confidence": 0.9107
+ },
+ {
+  "text": "me mareo al levantarme",
+  "class": "pots",
+  "confidence": 0.9668
+ },
+ {
+  "text": "tiene la cara torcida",
+  "class": "stroke",
+  "confidence": 0.9012
+ },
+ {
+  "text": "dolor de estomago",
+  "class": "other",
+  "confidence": 0.8084
+ },
+ {
+  "text": "cant brethe",
+  "class": "breathing",
+  "confidence": 0.5094
+ },
+ {
+  "text": "chesst pain and swetting",
+  "class": "chest_pain",
+  "confidence": 0.7092
  }
 ] as const
 export default FIXTURES

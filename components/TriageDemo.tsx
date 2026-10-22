@@ -186,7 +186,7 @@ export default function TriageDemo() {
         {[
           ['examples', String(MODEL_META.trainedExamples)],
           ['cross-val', String(MODEL_META.heldOutAccuracy)],
-          ['weights', '94 KB'],
+          ['weights', '153 KB'],
           ['offline', 'always'],
         ].map(([k, v]) => (
           <span key={k} style={{ fontFamily: mono, fontSize: '10.5px', letterSpacing: '0.8px' }}>

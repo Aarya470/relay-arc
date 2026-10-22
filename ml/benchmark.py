@@ -1,4 +1,5 @@
-"""Head-to-head: Relay Triage Engine vs Groq llama-3.1-8b-instant.
+"""Head-to-head: Relay Triage Engine vs the cloud model the app falls back to
+(openai/gpt-oss-20b on Groq since 16 Aug 2026; llama-3.1-8b-instant before).
 
 Same held-out utterances through both. Measures accuracy and latency. The Groq
 prompt is copied verbatim from app/api/groq/classify-emergency/route.ts so this
@@ -12,7 +13,8 @@ from featurize import features
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CLASSES = ['chest_pain', 'unconscious', 'breathing', 'pots', 'stroke', 'mecfs', 'other']
 
-THRESH = 0.40
+THRESH = 0.60   # the shipped gate (see ml/train.py)
+import neural
 
 def _train(rows, epochs=250, lr=2.6, l2=2e-3):
     vocab, counts = {}, {}
@@ -67,10 +69,33 @@ TRAIN = [(t, l) for t, l in CORPUS if t not in eval_texts]
 print(f'evaluation set: {len(EVAL)} utterances the device model has NEVER seen')
 print(f'device model trained on the remaining {len(TRAIN)} examples\n')
 _vocab, _W, _B = _train(TRAIN)
+# The shipped engine averages the linear model with the temperature-scaled
+# neural model. Fit the temperature on out-of-fold logits INSIDE the training
+# split only, so the evaluation set stays unseen.
+_ytr = np.array([CLASSES.index(l) for _, l in TRAIN])
+_folds = [list(range(i, len(TRAIN), 5)) for i in range(5)]
+_Z, _Y = [], []
+for fi in _folds:
+    tr_i = [i for i in range(len(TRAIN)) if i not in set(fi)]
+    nnp = neural.train(neural.matrix([TRAIN[i][0] for i in tr_i]), _ytr[tr_i], len(CLASSES))
+    _Z.append(neural.logits(nnp, neural.matrix([TRAIN[i][0] for i in fi]))); _Y.append(_ytr[fi])
+_T = neural.fit_temperature(np.concatenate(_Z), np.concatenate(_Y))
+_NN = neural.train(neural.matrix([t for t, _ in TRAIN]), _ytr, len(CLASSES))
+print(f'neural temperature fitted inside the training split: T = {_T:.2f}')
+
+def _predict_ens(text):
+    z = _B.copy()
+    for f in features(text):
+        j = _vocab.get(f)
+        if j is not None: z += _W[j]
+    z = z - z.max(); e = np.exp(z); pl = e / e.sum()
+    pn = neural.predict(_NN, neural.matrix([text]), _T)[0]
+    p = (pl + pn) / 2; i = int(p.argmax())
+    return CLASSES[i], float(p[i])
 
 # ── Relay Triage Engine ──
 t0 = time.perf_counter()
-dev = [_predict(_vocab, _W, _B, t) for t, _ in EVAL]
+dev = [_predict_ens(t) for t, _ in EVAL]
 dev_ms = (time.perf_counter() - t0) * 1000 / len(EVAL)
 dev_correct = sum(1 for (p, _), (_, l) in zip(dev, EVAL) if p == l)
 dev_conf_correct = sum(1 for (p, c), (_, l) in zip(dev, EVAL) if c >= THRESH and p == l)
@@ -119,7 +144,11 @@ def groq_predict(text, tries=4):
 
 def _groq_once(text):
     body = json.dumps({
-        'model': 'llama-3.1-8b-instant', 'temperature': 0, 'max_tokens': 60,
+        # Same model and settings as app/api/groq/classify-emergency/route.ts
+        # (see lib/model.ts: llama-3.1-8b-instant was shut down 16 Aug 2026).
+        'model': 'openai/gpt-oss-20b', 'temperature': 0,
+        'reasoning_effort': 'low', 'include_reasoning': False, 'max_completion_tokens': 2000,
+        'response_format': {'type': 'json_object'},
         'messages': [{'role': 'system', 'content': SYSTEM},
                      {'role': 'user', 'content': f'Spoken description: "{text}"'}],
     }).encode()
@@ -136,8 +165,9 @@ def _groq_once(text):
 if not key:
     print('\nGROQ_API_KEY not found — skipping the cloud comparison.')
 else:
-    print('\nGROQ llama-3.1-8b-instant (cloud)')
+    print('\nGROQ openai/gpt-oss-20b (cloud, the model the app actually calls)')
     ok_n, lat, failed = 0, [], 0
+    _cloud = {}
     errors = []
     for text, label in EVAL:
         t0 = time.perf_counter()
@@ -148,6 +178,7 @@ else:
             failed += 1
             errors.append((text, label, f'API FAILED ({getattr(e, "code", type(e).__name__)})'))
             continue
+        _cloud[text] = p
         if p == label: ok_n += 1
         else: errors.append((text, label, p))
         time.sleep(0.25)   # be a good citizen; also keeps us off the rate limiter
@@ -169,3 +200,12 @@ else:
     for t, l, p, c in dev_errs[:12]:
         gate = 'ABSTAINED -> defers to cloud' if c < THRESH else 'confident'
         print(f'    "{t}"  true={l}  device={p}({c:.2f})  [{gate}]')
+
+    # The system as shipped: phone answers when confident, cloud otherwise.
+    hyb = 0
+    for (p, c), (t, l) in zip(dev, EVAL):
+        final = p if c >= THRESH else _cloud.get(t, p)
+        hyb += final == l
+    print(f'\nSHIPPED SYSTEM (phone when confident, cloud otherwise)')
+    print(f'  accuracy            {hyb}/{len(EVAL)} = {hyb/len(EVAL):.3f}')
+    print(f'  answered on phone   {dev_conf_total}/{len(EVAL)} = {dev_conf_total/len(EVAL):.1%}')

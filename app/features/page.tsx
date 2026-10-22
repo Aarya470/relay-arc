@@ -104,9 +104,12 @@ export default function Features() {
           <Head title="Working out what is wrong"/>
           <H2>The phone makes the first call, even with no signal.</H2>
           <P>
-            You can say what is happening or tap a type. The classifier runs on the phone itself, so it
-            still works in a basement, a lift or out in the country. If the wording is ambiguous it asks
-            a larger cloud model, and if there is no signal for that, it goes with its own best guess.
+            You can say what is happening or tap a type, in English, Spanish, Hindi or Marathi. Two
+            models run on the phone itself and vote: one reads the words, the other is a small neural
+            network that also reads spelling, so a typo or an unfamiliar word form still lands in the
+            right place. It still works in a basement, a lift or out in the country. If the wording is
+            ambiguous it asks a larger cloud model, and if there is no signal for that, it goes with its
+            own best guess.
           </P>
 
           <div style={{ marginBottom: '34px' }}>
@@ -119,7 +122,7 @@ export default function Features() {
               nodes={[
                 { id: 'sos', col: 0, row: 0, label: 'SOS pressed', sub: 'voice or tap', fill: ORANGE },
                 { id: 'tri', col: 1, row: 0, label: 'On-device triage', sub: '0.07 ms · offline', color: GREEN_DEEP },
-                { id: 'gate', col: 2, row: 0, label: 'Confident?', sub: 'threshold 0.40', kind: 'decision', color: INK },
+                { id: 'gate', col: 2, row: 0, label: 'Confident?', sub: 'threshold 0.60', kind: 'decision', color: INK },
                 { id: 'act', col: 3, row: 0, label: 'Dispatch', sub: 'hospital chosen', kind: 'end', color: CRIT },
                 { id: 'cloud', col: 2, row: 1, label: 'Ask cloud model', sub: '3.5 s timeout', color: INK3 },
                 { id: 'guess', col: 3, row: 1, label: 'Best on-device guess', sub: 'never dead-end', color: INK3 },
@@ -127,8 +130,8 @@ export default function Features() {
               edges={[
                 { from: 'sos', to: 'tri' },
                 { from: 'tri', to: 'gate' },
-                { from: 'gate', to: 'act', label: 'yes (61%)' },
-                { from: 'gate', to: 'cloud', label: 'no (39%)' },
+                { from: 'gate', to: 'act', label: 'yes (76%)' },
+                { from: 'gate', to: 'cloud', label: 'no (24%)' },
                 { from: 'cloud', to: 'guess', label: 'no signal', dashed: true },
                 { from: 'cloud', to: 'act', label: 'answer' },
               ]}
@@ -148,8 +151,8 @@ export default function Features() {
                 <Cap>Both bars are on the same linear scale. The on-device one really is about 1,400 times shorter.</Cap>
               </Panel>
               <Panel label="Where cases get settled">
-                <Donut value={0.61} label="on device" color={GREEN}
-                  sub="61% of test cases were settled on the phone, offline, with no errors on the held-out set. The other 39% were the ambiguous ones, and the cloud model handles those better, so they go there."/>
+                <Donut value={0.76} label="on device" color={GREEN}
+                  sub="76% of 49 unseen test phrasings were settled on the phone, offline, with no errors. The other 24% were the ambiguous ones, and the cloud model handles those better, so they go there. Phone and cloud together scored 93.9%."/>
               </Panel>
             </Grid>
           </div>
@@ -158,13 +161,14 @@ export default function Features() {
             <Panel label="Accuracy, including where the cloud model wins">
               <BarChart
                 bars={[
-                  { label: 'Llama 3.1 8B (cloud)', value: 96.4, color: INK3, note: 'more accurate than ours on raw classification' },
+                  { label: 'gpt-oss-20b (cloud)', value: 89.8, color: INK3, note: 'more accurate than ours on raw classification' },
                   { label: 'Relay, on-device', value: 85.7, color: GREEN, note: 'when it would have been wrong, it handed off instead of guessing' },
-                  { label: 'Relay, when confident', value: 100, color: GREEN_DEEP, note: 'the 61% it chooses to answer' },
+                  { label: 'Relay, when confident', value: 100, color: GREEN_DEEP, note: 'the 76% it chooses to answer' },
+                  { label: 'Phone and cloud together', value: 93.9, color: GREEN_DEEP, note: 'the system as shipped: better than either alone' },
                 ]}
                 max={100} unit="%"
               />
-              <Cap>Tested on 28 phrasings the model had not seen before. The 8B cloud model is more accurate overall. Ours is built to hand off when it is unsure.</Cap>
+              <Cap>Tested on 49 phrasings in four languages that neither model had seen. The cloud model is more accurate on its own; ours is built to hand off when it is unsure, which is why the two together beat both.</Cap>
             </Panel>
           </div>
         </div>
@@ -219,6 +223,14 @@ export default function Features() {
             parts of NEWS2, the early-warning score hospitals use to spot patients who are getting worse.
             The same numbers always give the same result, and every point can be traced back to the
             reading behind it.
+          </P>
+          <P>
+            Most families do not own a smartwatch or a pulse oximeter, so the phone becomes the sensor.
+            Pressing a fingertip over the camera and flash measures the pulse from tiny changes in colour
+            as blood arrives with each beat. Resting the phone on the chest lets the motion sensor count
+            breaths. Apple Health readings can be imported on the phone without uploading anything. All
+            seven NEWS2 measurements are then laid out point by point, ready to show a doctor or paramedic.{' '}
+            <a href="/check" style={{ color: '#141413', fontWeight: 700 }}>Try the vitals check →</a>
           </P>
 
           <TrendScene/>

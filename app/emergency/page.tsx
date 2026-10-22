@@ -34,6 +34,29 @@ const TYPES = [
   { id: 'other',       label: 'Other',         desc: 'Something else urgent',                        Icon: Plus        },
 ]
 
+// Spanish screen copy. East Windsor and neighbouring Hightstown have a large
+// Spanish-speaking population, and a person in an emergency should not have to
+// read their second language. Picking ES on this screen switches the speech
+// recogniser AND every word a frightened person has to read here. Hindi and
+// Marathi switch the recogniser only (their screen copy is still to come).
+const ES = {
+  mode: 'Modo de emergencia', demo: 'Demo · modo de emergencia',
+  title: '¿Qué está pasando?', sub: 'Toque una opción. La ayuda empieza de inmediato.',
+  call: (n: string) => `Llamar al ${n} ahora`,
+  suggested: 'Sugerencia, empieza en un momento',
+  notRight: '¿No es correcto? Elija la opción correcta abajo.',
+  starting: 'Iniciando…', severity: '¿No sabe qué tan grave es?', assess: 'Evaluar gravedad →',
+  types: {
+    chest_pain: ['Dolor de pecho', 'Presión, opresión o dolor en el pecho o la mandíbula'],
+    unconscious: ['Inconsciente', 'Se desmayó o no responde'],
+    breathing: ['No puede respirar', 'Falta de aire grave'],
+    pots: ['Episodio de POTS', 'Mareo fuerte, desmayo, corazón acelerado'],
+    stroke: ['Señales de derrame', 'Cara caída, habla arrastrada'],
+    mecfs: ['Recaída grave', 'Agotamiento después del esfuerzo (EM/SFC)'],
+    other: ['Otro', 'Otra urgencia'],
+  } as Record<string, [string, string]>,
+}
+
 export default function Emergency() {
   const [selected, setSelected] = useState('')
   const [isDemo, setIsDemo] = useState(false)
@@ -52,6 +75,9 @@ export default function Emergency() {
   const recRef = useRef<any>(null)
   const router = useRouter()
   const L = langById(lang)
+  const es = lang === 'es'
+  const typeLabel = (id: string, fallback: string) => (es ? ES.types[id]?.[0] : undefined) ?? fallback
+  const typeDesc = (id: string, fallback: string) => (es ? ES.types[id]?.[1] : undefined) ?? fallback
 
   useEffect(() => {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
@@ -83,7 +109,7 @@ export default function Emergency() {
   // that. The call-emergency-services button is unaffected and always available.
   const suggest = (type: string, evidence: string[], source: 'device' | 'cloud') => {
     setHeard({ evidence, source })
-    setPending({ type, label: TYPES.find(t => t.id === type)?.label || type })
+    setPending({ type, label: typeLabel(type, TYPES.find(t => t.id === type)?.label || type) })
     setLoading(false)
   }
 
@@ -200,7 +226,7 @@ export default function Emergency() {
             style={{ width: '8px', height: '8px', background: RED }}
           />
           <span style={{ color: RED, fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700 }}>
-            {isDemo ? 'Demo · emergency mode' : 'Emergency mode'}
+            {isDemo ? (es ? ES.demo : 'Demo · emergency mode') : (es ? ES.mode : 'Emergency mode')}
           </span>
         </div>
         <span style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
@@ -214,10 +240,10 @@ export default function Emergency() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <h1 style={{ color: T1, fontSize: '34px', fontWeight: 900, letterSpacing: '-1.3px', lineHeight: 1.02 }}>
-              What&apos;s happening?
+              {es ? ES.title : 'What\u2019s happening?'}
             </h1>
             <p style={{ color: T2, fontSize: '14.5px', marginTop: '6px', fontWeight: 500 }}>
-              Tap one. Response starts immediately.
+              {es ? ES.sub : 'Tap one. Response starts immediately.'}
             </p>
           </div>
           <button
@@ -242,11 +268,13 @@ export default function Emergency() {
             textDecoration: 'none', minHeight: '68px',
           }}>
           <Phone size={24} strokeWidth={2.5}/>
-          Call {emg.label} now
+          {es ? ES.call(emg.label) : `Call ${emg.label} now`}
         </motion.a>
 
-        {/* Voice SOS — language first, so the recogniser is right before they talk */}
-        {voiceSupported && (
+        {/* Language first, so the recogniser and the screen are right before they
+            talk. Shown even without speech support, because ES also translates
+            this screen. */}
+        {(
           <div style={{ display: 'flex', gap: '6px', marginBottom: '-4px' }}>
             {VOICE_LANGS.map(l => {
               const on = l.id === lang
@@ -319,7 +347,7 @@ export default function Emergency() {
               padding: '11px 13px', marginTop: '-6px',
             }}>
             <p style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>
-              Suggested, starting in a moment
+              {es ? ES.suggested : 'Suggested, starting in a moment'}
             </p>
             <p style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{pending.label}</p>
             {heard && heard.evidence.length > 0 && (
@@ -328,7 +356,7 @@ export default function Emergency() {
               </p>
             )}
             <p style={{ color: T2, fontSize: '12px', lineHeight: 1.5, marginTop: '6px' }}>
-              Not right? Pick the correct one below. That overrides this.
+              {es ? ES.notRight : 'Not right? Pick the correct one below. That overrides this.'}
             </p>
           </motion.div>
         )}
@@ -360,13 +388,13 @@ export default function Emergency() {
                 <type.Icon size={20} color={isSel ? RED : T1} strokeWidth={2} style={{ flexShrink: 0 }}/>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ color: isSel ? RED : T1, fontWeight: 800, fontSize: '17px', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
-                    {type.label}
+                    {typeLabel(type.id, type.label)}
                   </p>
-                  <p style={{ color: T3, fontSize: '13px', lineHeight: 1.4, marginTop: '2px' }}>{type.desc}</p>
+                  <p style={{ color: T3, fontSize: '13px', lineHeight: 1.4, marginTop: '2px' }}>{typeDesc(type.id, type.desc)}</p>
                 </div>
                 {isSel && loading ? (
                   <span style={{ color: RED, fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', flexShrink: 0 }}>
-                    Starting…
+                    {es ? ES.starting : 'Starting…'}
                   </span>
                 ) : (
                   <ChevronRight size={16} color="#C4BFB0" style={{ flexShrink: 0 }}/>
@@ -381,7 +409,12 @@ export default function Emergency() {
           <button
             onClick={() => router.push('/emergency/triage')}
             style={{ color: T2, fontSize: '13.5px', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '10px' }}>
-            Not sure how serious? <span style={{ color: ACCENT, fontWeight: 700 }}>Assess severity →</span>
+            {es ? ES.severity : 'Not sure how serious?'} <span style={{ color: ACCENT, fontWeight: 700 }}>{es ? ES.assess : 'Assess severity →'}</span>
+          </button>
+          <button
+            onClick={() => router.push('/check')}
+            style={{ display: 'block', margin: '0 auto', color: T2, fontSize: '13.5px', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '6px 10px' }}>
+            {es ? 'Medir pulso y respiración con el teléfono' : 'Check pulse and breathing with your phone'} <span style={{ color: ACCENT, fontWeight: 700 }}>→</span>
           </button>
         </div>
       </div>

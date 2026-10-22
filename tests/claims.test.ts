@@ -37,9 +37,9 @@ console.log('\n=== Triage demo presets behave as their labels claim ===')
 
 console.log('\n=== Numbers printed on the page ===')
 {
-  ok('corpus size shown as 495', MODEL_META.trainedExamples === 495, String(MODEL_META.trainedExamples))
-  ok('cross-validation shown as 0.891', Math.abs(Number(MODEL_META.heldOutAccuracy) - 0.891) < 0.002, String(MODEL_META.heldOutAccuracy))
-  ok('abstention gate shown as 0.4', ABSTAIN_THRESHOLD === 0.4, String(ABSTAIN_THRESHOLD))
+  ok('corpus size shown as 576', MODEL_META.trainedExamples === 576, String(MODEL_META.trainedExamples))
+  ok('cross-validation shown as 0.913', Math.abs(Number(MODEL_META.heldOutAccuracy) - 0.913) < 0.002, String(MODEL_META.heldOutAccuracy))
+  ok('abstention gate shown as 0.6', ABSTAIN_THRESHOLD === 0.6, String(ABSTAIN_THRESHOLD))
 }
 
 console.log('\n=== Risk demo scenarios land on the stated levels ===')

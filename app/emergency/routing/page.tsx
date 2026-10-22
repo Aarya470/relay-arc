@@ -10,6 +10,9 @@ import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
 import { emergencyNumber } from '@/lib/emergency-number'
+
+// Drive time at which the screen stops treating driving as the whole plan.
+const FAR_MINUTES = 25
 import { DEMO, demoOn } from '@/lib/demo'
 import { notch } from '@/lib/shape'
 
@@ -889,6 +892,45 @@ function RoutingPage() {
             )}
           </div>
         </div>
+
+        {/* ── Far from help ───────────────────────────────────────────────────
+            Built for exactly the situation that started this project: a family
+            out on a rural road, the nearest hospital that can treat the
+            emergency 40 minutes away. In that case driving there is not the
+            whole answer. Calling 911 first means paramedics start treatment
+            where the patient is or meet the car on the way, and for a heart
+            attack they can warn the cath lab before arrival. And on a rural road
+            there is often no street address to give, so the exact coordinates
+            are shown in large type for the dispatcher. */}
+        {(() => {
+          const eta = formatEtaMin(hospital) ?? (hospital.distance ? Math.round(hospital.distance / 1000 / 50 * 60) : null)
+          if (eta == null || eta < FAR_MINUTES) return null
+          const coords = patientPos ? `${patientPos[0].toFixed(5)}, ${patientPos[1].toFixed(5)}` : null
+          return (
+            <div style={{ border: `2px solid ${T.red}`, padding: '14px', marginTop: '16px' }}>
+              <p style={{ color: T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '6px' }}>
+                Far from help · {eta} min drive
+              </p>
+              <p style={{ color: T.textPrimary, fontSize: '15px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px' }}>
+                Call {emg.label} before you start driving.
+              </p>
+              <p style={{ color: T.textSec, fontSize: '13px', lineHeight: 1.55, marginBottom: '10px' }}>
+                Paramedics can start treatment where you are or meet you on the way, and for a heart attack they can warn the cath lab so the team is ready. Follow the dispatcher&apos;s instructions.
+              </p>
+              <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: T.red, color: '#fff', padding: '13px', fontWeight: 800, textDecoration: 'none', fontSize: '15.5px' }}>
+                <Phone size={17}/> Call {emg.label}
+              </a>
+              {coords && (
+                <button
+                  onClick={() => { try { navigator.clipboard.writeText(coords); toast.success('Location copied') } catch {} }}
+                  style={{ display: 'block', width: '100%', textAlign: 'left', marginTop: '10px', background: 'transparent', border: `1px solid ${T.border}`, padding: '10px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  <span style={{ display: 'block', color: T.textMuted, fontFamily: MONO, fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase' }}>Read this to the dispatcher (tap to copy)</span>
+                  <span style={{ display: 'block', color: T.textPrimary, fontFamily: MONO, fontSize: '19px', fontWeight: 700, marginTop: '3px' }}>{coords}</span>
+                </button>
+              )}
+            </div>
+          )
+        })()}
 
         <motion.button
           onClick={() => setNavMode(true)}

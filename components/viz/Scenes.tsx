@@ -5,7 +5,7 @@
 // rules, sentence-case labels in the body font. The page's own captions sit
 // underneath each one, so the frames carry a short title and nothing else.
 //
-// Numbers here must agree with the rest of the page: 61% of test cases settle
+// Numbers here must agree with the rest of the page: 76% of test cases settle
 // on the phone (see the donut on /features), and the dispatch example uses the
 // same 4 / 9 / 11 minute arrangement the page has always used. The relay
 // diagram shows order, not timings, because nothing measures those timings.
@@ -109,14 +109,14 @@ export function OnDeviceScene() {
       <Box x={180} y={84} w={130} text="Phone's model" color={GREEN_DEEP} fill="rgba(86,128,78,0.10)"/>
 
       <Arrow id="od-a2" d="M310,92 L360,92 L360,40 L410,40" color={GREEN_DEEP}/>
-      <text x={352} y={62} textAnchor="end" fontSize="10.5" fill={GREEN_DEEP}>confident, 61%</text>
+      <text x={352} y={62} textAnchor="end" fontSize="10.5" fill={GREEN_DEEP}>confident, 76%</text>
       <Box x={414} y={25} w={140} text="Hospital chosen" color={GREEN_DEEP}/>
 
       <Arrow id="od-a3" d="M310,106 L360,106 L360,158 L410,158" color={INK3} dash/>
-      <text x={352} y={168} textAnchor="end" fontSize="10.5" fill={INK3}>unsure, 39%</text>
+      <text x={352} y={168} textAnchor="end" fontSize="10.5" fill={INK3}>unsure, 24%</text>
       <Box x={414} y={143} w={140} text="Ask cloud model" color={INK3} dash bold={false}/>
 
-      <text x={245} y={132} textAnchor="middle" fontSize="10.5" fill={INK3}>94 KB, no signal needed</text>
+      <text x={245} y={132} textAnchor="middle" fontSize="10.5" fill={INK3}>2 models, 153 KB, offline</text>
     </Frame>
   )
 }

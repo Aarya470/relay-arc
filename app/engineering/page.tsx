@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { ArrowLeft } from 'lucide-react'
 
-// The triage weights are 94 KB. Load them when someone reaches the demo, not on
+// The triage weights are 153 KB. Load them when someone reaches the demo, not on
 // first paint.
 const TriageDemo = dynamic(() => import('@/components/TriageDemo'), {
   ssr: false,
@@ -163,9 +163,9 @@ export default function Engineering() {
           </P>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '24px', margin: '52px 0 0' }}>
-            <Stat k="triage decision" v="0.07 ms" sub="on-device, no network"/>
+            <Stat k="triage decision" v="0.2 ms" sub="two models, on-device, no network"/>
             <Stat k="risk score" v="0.015 ms" sub="deterministic, reproducible"/>
-            <Stat k="model size" v="94 KB" sub="ships inside the app"/>
+            <Stat k="model size" v="153 KB" sub="both models, inside the app"/>
             <Stat k="API cost per call" v="₹0" sub="for both engines"/>
           </div>
         </div>
@@ -189,18 +189,22 @@ export default function Engineering() {
 
           <H2>How it was actually built</H2>
           <P>
-            Multinomial logistic regression over binary word and word-pair features. Deliberately the
-            most boring model that could work, because a linear model can be asked <em>why</em>. Every
-            decision decomposes into the exact terms that drove it, which is the list you saw above.
+            Two models, averaged. The first is a multinomial logistic regression over word and
+            word-pair features: deliberately the most boring model that could work, because a linear
+            model can be asked <em>why</em>, and every decision decomposes into the exact terms that drove
+            it, which is the list you saw above. The second is a small neural network (1,024 hashed
+            inputs, 32 hidden units) that also reads character trigrams, so a misspelling or a word
+            form it never saw still lands near the right answer. Both are trained from scratch in
+            NumPy, with no ML library.
           </P>
 
           <div style={{ marginBottom: '40px' }}>
             <Step n="01" title="Write the corpus by hand"
-              body="495 labelled utterances in the words people actually use under stress. 'chest is paining', 'he won't wake up', 'crashed after shopping'. Not clinical vocabulary. This is the part with no shortcut."/>
+              body="576 labelled utterances in the words people actually use under stress, in English, Spanish, Hindi and Marathi. 'chest is paining', 'he won't wake up', 'me falta el aire'. Not clinical vocabulary. This is the part with no shortcut."/>
             <Step n="02" title="Featurise with negation handling"
               body="Unigrams and bigrams, plus a negation window: 'no chest pain but I cannot breathe' must not read as chest pain. Terms inside a negator's scope get a NOT_ prefix, with an exemption list for words like 'breath' that stay clinically positive either way."/>
             <Step n="03" title="Train, then prune"
-              body="Gradient descent with L2. Features whose weight lands under 0.02 are dropped. 36 of 1,168. because a weight that small is memorised noise, not signal."/>
+              body="The linear model: gradient descent with L2, then features whose weight lands under 0.02 are dropped as memorised noise. The neural model: Adam, dropout and weight decay, then temperature-scaled so its confidence means something (untuned, it said 0.99 when it was wrong), then quantised to 8-bit weights."/>
             <Step n="04" title="Compile the model into TypeScript"
               body="The trainer emits one self-contained module with the weights inlined and zero imports. Nothing to fetch at runtime, nothing to keep in sync, and the classifier works the first time the app opens on a phone that has never been online."/>
             <Step n="05" title="Prove Python and TypeScript agree"
@@ -211,14 +215,14 @@ export default function Engineering() {
           <div style={{ border: `2px solid ${T1}`, marginBottom: '20px' }}>
             <div style={{ borderBottom: `1px solid ${T1}`, padding: '11px 16px', background: BG2 }}>
               <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-                Head-to-head. 28 phrasings the model had never seen
+                Head-to-head. 49 phrasings the models had never seen
               </span>
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '460px' }}>
                 <thead>
                   <tr>
-                    {['', 'Ours, on-device', 'Llama 3.1 8B'].map((h, i) => (
+                    {['', 'Ours, on-device', 'gpt-oss-20b (cloud)'].map((h, i) => (
                       <th key={h} style={{
                         textAlign: i === 0 ? 'left' : 'right', padding: '11px 16px',
                         borderBottom: `1px solid ${BORDER}`, color: T3, fontFamily: mono,
@@ -229,9 +233,9 @@ export default function Engineering() {
                 </thead>
                 <tbody>
                   {[
-                    ['Accuracy, all cases', '85.7%', '96.4%', 1],
-                    ['Accuracy when confident', '100%', '. ', 0],
-                    ['Median latency', '0.11 ms', '155 ms', 0],
+                    ['Accuracy, all cases', '85.7%', '89.8%', 1],
+                    ['Accuracy when confident (76% of cases)', '100%', '. ', 0],
+                    ['Median latency', '0.2 ms', '467 ms', 0],
                     ['Works with no signal', 'yes', 'no', 0],
                     ['Explains its decision', 'yes', 'no', 0],
                     ['Cost per call', 'zero', 'metered', 0],
@@ -249,17 +253,18 @@ export default function Engineering() {
 
           <div style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '18px', marginBottom: '44px', maxWidth: '720px' }}>
             <p style={{ color: T1, fontSize: '17px', fontWeight: 700, lineHeight: 1.5, marginBottom: '10px' }}>
-              Llama is more accurate than our model, and we are not going to out-classify an 8B model with 495 examples.
+              The cloud model is more accurate than ours on its own. Together they beat both.
             </p>
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.7 }}>
               That is not the claim. The claim is what happened to the cases we got wrong:
               <strong style={{ color: T1 }}> every single one fell below the abstention gate</strong>. The model
-              declined to answer rather than answer badly. So roughly 61% of emergencies are settled
-              on-device, instantly, offline, with no errors on this evaluation. And the remaining 39%
-              go to the language model, which is strong on exactly the ambiguous phrasings a small
-              corpus is weak on. If there is no network, the on-device guess is used rather than
-              dead-ending someone mid-emergency. A model that knows when to shut up is worth more here
-              than one that is slightly more accurate but needs a tower.
+              declined to answer rather than answer badly. So 76% of emergencies are settled
+              on-device, instantly, offline, with no errors on this evaluation, and the remaining 24%
+              go to the cloud model, which is strong on exactly the ambiguous phrasings a small corpus
+              is weak on. The phone and the cloud together scored 93.9%, higher than either alone. If
+              there is no network, the on-device guess is used rather than dead-ending someone
+              mid-emergency. (The cloud model changed on 16 August 2026, when Groq shut down
+              llama-3.1-8b-instant; this table is re-run against its replacement.)
             </p>
           </div>
 
@@ -429,7 +434,7 @@ export default function Engineering() {
 
           <div style={{ marginBottom: '20px' }}>
             {[
-              ['495 examples is a small corpus', 'The triage model improves with data, and the real corpus should come from anonymised production transcripts under consent. Not from us inventing more sentences.'],
+              ['576 examples is a small corpus', 'The triage model improves with data, and the real corpus should come from anonymised production transcripts under consent. Not from us inventing more sentences.'],
               ['Sparse phrasings are unreliable', 'Injury vocabulary is thin, and "other" is a grab-bag class that deserves subdividing. Stroke versus unconscious on speech symptoms still needs more data.'],
               ['NEWS2 is not validated under 16', 'It is built for adults. Paediatric practice uses PEWS instead. The score flags this when age is known, but the underlying instrument is still the adult one.'],
               ['The temperature band table needs a clinician\'s eye', 'Every other row was transcribed from an unambiguous source. For temperature the sources disagreed on alignment, so that row is flagged for confirmation.'],

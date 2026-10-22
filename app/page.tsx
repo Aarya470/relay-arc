@@ -521,7 +521,7 @@ export default function Home() {
       <div style={{ borderTop: `2px solid ${INK}`, borderBottom: `1px solid ${INK}`, background: PANEL_2, padding: '16px 24px' }}>
         <p style={{ maxWidth: '1120px', margin: '0 auto', color: T1, fontSize: '14.5px', lineHeight: 1.6 }}>
           Free, and run as a nonprofit. The emergency card needs no account and stays on your phone.
-          The triage model is 94 KB and works without a signal.
+          The triage models work without a signal, in English, Spanish, Hindi and Marathi.
         </p>
       </div>
 
@@ -559,7 +559,7 @@ export default function Home() {
               ['Finds a hospital that can treat it', 'A heart attack needs a cath lab. The closest ER may not have one, and the transfer spends the only minutes that mattered.'],
               ['The ER reads your file first', 'Blood type, medicines and allergies, there before you are.'],
               ['Your family gets the address', 'And the route to it, in one tap.'],
-              ['Two minutes a day', 'Enough to catch a bad week while it is still only a bad week.'],
+              ['Your phone is the sensor', 'Pulse from the camera, breathing from the motion sensor, scored with NEWS2. No smartwatch needed.'],
             ].map(([title, body], i) => (
               <div key={i} style={{ borderTop: `1px solid ${T1}`, paddingTop: '14px' }}>
                 <h3 style={{ color: T1, fontSize: '18px', fontWeight: 800, letterSpacing: '-0.02em', margin: '0 0 8px', lineHeight: 1.15 }}>{title}</h3>
@@ -580,10 +580,10 @@ export default function Home() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(148px, 1fr))', gap: '28px', marginBottom: '34px' }}>
             {[
-              ['0.07 ms', 'to sort the symptoms', 'on your phone, no signal'],
-              ['94 KB', 'size of the triage model', 'it ships inside the app'],
+              ['0.2 ms', 'to sort the symptoms', 'on your phone, no signal'],
+              ['2 models', 'a neural net and a linear model', 'both run on the phone'],
               ['NEWS2', 'the score hospitals use', 'same inputs, same answer'],
-              ['61%', 'of cases never touch the cloud', 'the rest ask a cloud model'],
+              ['76%', 'of cases never touch the cloud', 'the rest ask a cloud model'],
             ].map(([v, k, sub]) => (
               <div key={k} style={{ borderTop: `2px solid ${T1}`, paddingTop: '10px' }}>
                 <p style={{ color: T1, fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{v}</p>

@@ -310,6 +310,63 @@ add('other', [
     "पोटात दुखत आहे", "मदत हवी", "कुछ समझ नहीं आ रहा",
 ])
 
+# ── Spanish ──────────────────────────────────────────────────────────────────
+# Added for East Windsor and Hightstown, where Spanish is widely spoken at home.
+# Written the way a frightened caller or family member actually says it: short,
+# first person and bystander, with and without accents (people typing on a
+# phone in a panic often drop them). Authored from general knowledge; needs a
+# native-speaker clinical review before real-patient deployment.
+add('chest_pain', [
+    "dolor de pecho", "me duele el pecho", "dolor fuerte en el pecho",
+    "dolor de pecho y sudor frío", "dolor de pecho y sudor frio",
+    "siento presión en el pecho", "opresión en el pecho y el brazo izquierdo",
+    "el dolor me baja por el brazo izquierdo", "dolor en el pecho que sube a la mandíbula",
+    "creo que estoy teniendo un infarto", "mi papá se agarra el pecho",
+    "tiene dolor de pecho y está sudando", "siento un peso en el pecho",
+    "me aprieta el pecho y no se quita", "ataque al corazón",
+    "dolor en el corazón y vómito", "mi esposo tiene dolor de pecho muy fuerte",
+])
+add('breathing', [
+    "no puedo respirar", "no puede respirar", "me falta el aire", "le falta el aire",
+    "me estoy ahogando", "se está ahogando", "dificultad para respirar",
+    "respira con silbido y no puede hablar", "el inhalador no funciona",
+    "ataque de asma muy fuerte", "jadeando y no le alcanza el aire",
+    "se atragantó y no puede respirar", "falta de aire al acostarme",
+    "no puedo respirar bien y tengo los labios morados",
+])
+add('unconscious', [
+    "está inconsciente", "se desmayó y no responde", "no responde", "no reacciona",
+    "se cayó al suelo y no se mueve", "mi mamá se desmayó y no despierta",
+    "no despierta", "está en el piso sin moverse", "se desplomó de repente",
+    "no tiene pulso", "no respira y no responde", "mi abuelo se cayó y no reacciona",
+    "perdió el conocimiento",
+])
+add('pots', [
+    "me mareo al levantarme", "mareo fuerte al ponerme de pie",
+    "el corazón me late muy rápido cuando me paro", "palpitaciones y mareo",
+    "siento que me voy a desmayar al levantarme", "corazón acelerado y mareada",
+    "me mareo cuando estoy parada mucho tiempo", "mareos y el corazón muy rápido",
+    "casi me desmayo al pararme", "se marea cada vez que se levanta",
+])
+add('stroke', [
+    "tiene la cara torcida", "la boca caída de un lado", "no puede hablar bien",
+    "habla arrastrando las palabras", "debilidad en un lado del cuerpo",
+    "el brazo derecho no lo puede mover", "se le durmió un lado de la cara",
+    "creo que es un derrame cerebral", "embolia", "la cara chueca y habla trabada",
+    "de repente no puede levantar el brazo y la cara caída",
+])
+add('mecfs', [
+    "agotamiento extremo después del esfuerzo", "estoy agotada y no me puedo mover",
+    "recaída después de salir de compras", "cansancio extremo no puedo levantarme de la cama",
+    "después del esfuerzo me caí en cama sin poder moverme", "agotado no puedo ni hablar del cansancio",
+    "colapso de energía después de caminar",
+])
+add('other', [
+    "dolor de estómago muy fuerte", "vómito y fiebre", "está sangrando mucho",
+    "dolor de cabeza muy fuerte", "fiebre muy alta", "me caí y me lastimé la pierna",
+    "algo está mal ayuda", "dolor de barriga y vomitando", "le picó una abeja y se hincha",
+])
+
 if __name__ == '__main__':
     from collections import Counter
     print('total examples:', len(CORPUS))

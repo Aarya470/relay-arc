@@ -40,6 +40,26 @@ const KIND: Record<Kind, { label: string; color: string }> = {
 // Newest first. Keep this honest — the CORRECTION entries are the point.
 const ENTRIES: Entry[] = [
   {
+    date: '2026-10-21', kind: 'shipped',
+    title: 'Your phone is the sensor',
+    body: 'A new vitals check measures pulse with the phone camera and flash (the same light-absorption principle a pulse oximeter uses) and breathing rate with the motion sensor while the phone rests on the chest, or by tapping once per breath. Every reading carries a signal-quality score, and a noisy recording is refused rather than reported. Readings from Apple Health can be imported from the Health export file, which is read on the phone and never uploaded. All seven NEWS2 measurements are then laid out point by point for a clinician to read; in line with docs/INTENDED_USE.md, the page does not interpret the score for the patient, and the call-911 instruction is unconditional. No smartwatch, no account, nothing to buy. The camera pipeline was tested end to end in a real browser against a synthetic fingertip video with a known 72 bpm pulse, and recovered 72.',
+  },
+  {
+    date: '2026-10-21', kind: 'shipped',
+    title: 'A neural network joins the triage model, and Spanish joins the languages',
+    body: 'A small neural network (1,024 hashed inputs, 32 hidden units) now votes alongside the logistic regression. It also reads character trigrams, so misspellings still land: on held-out text with typos injected, accuracy went from 64% to 79%. Its raw confidence was badly overconfident, so it is temperature-scaled before averaging. Spanish was added for East Windsor and Hightstown, with an accent-folding step so a panicked phone typist who drops the accents is still understood, and the emergency screen itself now switches to Spanish. Corpus 576 examples, 5-fold cross-validation 91.3% (linear model alone 89.6%).',
+  },
+  {
+    date: '2026-10-21', kind: 'honest',
+    title: 'Benchmark re-run against the cloud model we actually call',
+    body: 'The published head-to-head compared us with llama-3.1-8b-instant, which Groq shut down on 16 August 2026. It is re-run against its replacement, openai/gpt-oss-20b, on 49 unseen phrasings in four languages. The cloud model is still more accurate alone (89.8% against 85.7%), and still slower (467 ms median against 0.2 ms). The phone settles 76% of cases with no errors and hands off the rest, and the two together score 93.9%.',
+  },
+  {
+    date: '2026-10-21', kind: 'shipped',
+    title: 'Far from help',
+    body: 'When the nearest hospital that can treat the emergency is 25 minutes or more away, the routing screen now says to call 911 before starting to drive, explains why (paramedics can start treatment and warn a cath lab before arrival), and shows the exact GPS coordinates in large type, because a rural road often has no street address to give a dispatcher.',
+  },
+  {
     date: '2026-08-13', kind: 'shipped',
     title: 'Patients no longer see a risk score. Clinicians still do.',
     body: 'FDA replaced its Clinical Decision Support guidance in January 2026. Two lines in it matter here: software that gives recommendations to patients or caregivers rather than health professionals meets the definition of a device, and software intended for critical, time-sensitive decisions is not considered to allow independent review of its basis. So the dashboard no longer shows a deterioration level, a NEWS2 number, or advice. It shows you your own readings that sit outside your usual range, says your care team can see them, and says plainly that only a clinician can assess them. The score is still computed and still reaches the care team, where the audience is a clinician. The triage classifier now suggests a category and you confirm it, rather than deciding on its own inference. Which is also just safer, because the category picks which hospital capability is matched. Full reasoning, including the two places a regulator could reasonably disagree with us, is published in docs/INTENDED_USE.md.',

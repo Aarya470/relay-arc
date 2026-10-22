@@ -1,22 +1,34 @@
-evaluation set: 28 utterances the device model has NEVER seen
-device model trained on the remaining 365 examples
+evaluation set: 49 utterances the device model has NEVER seen
+device model trained on the remaining 525 examples
 
+neural temperature fitted inside the training split: T = 1.75
 RELAY TRIAGE ENGINE (on-device)
-  accuracy            24/28 = 0.857
-  confident subset    17/28 covered, accuracy 1.000
-  latency             0.075 ms per call
+  accuracy            42/49 = 0.857
+  confident subset    37/49 covered, accuracy 1.000
+  latency             0.220 ms per call
 
-GROQ llama-3.1-8b-instant (cloud)
-  answered            28/28 calls (0 failed after retries)
-  accuracy (answered) 27/28 = 0.964
-  latency             median 216 ms · p90 356 ms
-  speed difference    on-device is 2865x faster
+GROQ openai/gpt-oss-20b (cloud, the model the app actually calls)
+  answered            49/49 calls (0 failed after retries)
+  accuracy (answered) 44/49 = 0.898
+  latency             median 467 ms · p90 4157 ms
+  speed difference    on-device is 2120x faster
 
   groq misclassifications:
-    "brain fog dizziness racing pulse"  true=pots  groq=other
+    "payback is brutal today"  true=mecfs  groq=other
+    "behosh aur saans nahi"  true=unconscious  groq=breathing
+    "haath sunn ho gaya"  true=stroke  groq=other
+    "severe dizziness no other symptom"  true=other  groq=pots
+    "anaphylaxis"  true=other  groq=breathing
 
   device misclassifications:
-    "she has fainted and is not coming around"  true=unconscious  device=pots(0.38)  [ABSTAINED -> defers to cloud]
-    "cannot get my words out"  true=stroke  device=unconscious(0.32)  [ABSTAINED -> defers to cloud]
-    "words coming out wrong"  true=stroke  device=unconscious(0.33)  [ABSTAINED -> defers to cloud]
-    "twisted my ankle badly"  true=other  device=breathing(0.34)  [ABSTAINED -> defers to cloud]
+    "jawab nahi de raha"  true=unconscious  device=other(0.23)  [ABSTAINED -> defers to cloud]
+    "está en el piso sin moverse"  true=unconscious  device=pots(0.26)  [ABSTAINED -> defers to cloud]
+    "overdose"  true=other  device=pots(0.38)  [ABSTAINED -> defers to cloud]
+    "suffocating feeling"  true=breathing  device=other(0.54)  [ABSTAINED -> defers to cloud]
+    "feel like fainting but conscious"  true=pots  device=unconscious(0.60)  [ABSTAINED -> defers to cloud]
+    "me caí y me lastimé la pierna"  true=other  device=stroke(0.22)  [ABSTAINED -> defers to cloud]
+    "anaphylaxis"  true=other  device=unconscious(0.30)  [ABSTAINED -> defers to cloud]
+
+SHIPPED SYSTEM (phone when confident, cloud otherwise)
+  accuracy            46/49 = 0.939
+  answered on phone   37/49 = 75.5%

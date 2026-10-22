@@ -104,5 +104,31 @@ ok('Devanagari-only input does not throw', (() => { try { triage('अचान�
 ok('very long input does not throw', (() => { try { triage('chest pain '.repeat(400)); return true } catch { return false } })())
 ok('featurize is deterministic', JSON.stringify(featurize('chest pain sweating')) === JSON.stringify(featurize('chest pain sweating')))
 
+
+console.log('\n=== K. Spanish (East Windsor / Hightstown) ===')
+const es: [string, string][] = [
+  ['dolor de pecho y sudor frío', 'chest_pain'],
+  ['me duele mucho el pecho', 'chest_pain'],
+  ['no puedo respirar', 'breathing'],
+  ['se desmayó y no responde', 'unconscious'],
+  ['me mareo al levantarme', 'pots'],
+  ['tiene la cara torcida y no puede hablar', 'stroke'],
+  ['dolor de estomago y vomito', 'other'],
+]
+for (const [text, want] of es) {
+  const r = triage(text)
+  ok(`Spanish: "${text}" → ${want}`, r.type === want, `got ${r.type} (${r.confidence})`)
+}
+ok('accent folding: "tórax" and "torax" featurize identically',
+   JSON.stringify(featurize('dolor de tórax')) === JSON.stringify(featurize('dolor de torax')))
+
+console.log('\n=== L. Neural half: misspellings (top guess; a typo may still abstain to the cloud) ===')
+for (const [text, want] of [['i cant brethe', 'breathing'], ['she colapsed', 'unconscious'], ['dizy when i stand up', 'pots'], ['sudor y dolor de pexo', 'chest_pain'], ['chesst pain and swetting', 'chest_pain']] as [string, string][]) {
+  const r = triage(text)
+  ok(`typo: "${text}" → ${want}`, r.type === want, `got ${r.type} (${r.confidence}) linear=${r.parts.linear.type} neural=${r.parts.neural.type}`)
+}
+const parts = triage('chest pain').parts
+ok('result reports both halves of the ensemble', !!parts.linear.type && !!parts.neural.type, `${parts.linear.type}/${parts.neural.type}`)
+
 console.log(`\n${'='.repeat(52)}\n  ${pass} passed, ${fail} failed\n${'='.repeat(52)}`)
 process.exit(fail > 0 ? 1 : 0)

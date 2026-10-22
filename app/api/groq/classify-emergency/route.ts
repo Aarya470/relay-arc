@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     // This endpoint only runs when the on-device engine abstained, so the input
     // is already unusual phrasing. Telling the model which language was spoken
     // stops it treating romanised Hindi/Marathi as garbled English.
-    const LANG_NAME: Record<string, string> = { hi: 'Hindi', mr: 'Marathi', en: 'English' }
+    const LANG_NAME: Record<string, string> = { hi: 'Hindi', mr: 'Marathi', es: 'Spanish', en: 'English' }
     const spoken = LANG_NAME[lang] || 'English'
     const langHint = spoken === 'English'
       ? ''

@@ -24,28 +24,34 @@ const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } }
 const fadeUp  = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: spring } }
 
+// Two real routes into Apple Health. The old step 1 linked to an iCloud
+// shortcut URL that never existed, so nobody could actually connect.
+//   1. One-off import: Health → Export All Health Data → /check reads the file
+//      on the phone. Works for anyone, no account, nothing uploaded.
+//   2. Daily automatic sync: a Shortcut the person builds in about two minutes
+//      that posts their latest readings to /api/health/ingest with their key.
 const STEPS = [
   {
     num: '01',
-    title: 'Get the Relay Arc shortcut',
-    body: 'Download the Relay Arc Health Sync shortcut from the link below. It will open in the Shortcuts app on your iPhone.',
-    cta: 'Open Shortcut →',
-    ctaHref: 'https://www.icloud.com/shortcuts/relay-arc-health-sync',
+    title: 'Quickest: import your Health export',
+    body: 'In the Health app tap your picture, then Export All Health Data. Open the Relay vitals check and choose the export.zip file. It is read on your phone and nothing is uploaded. Your pulse, oxygen, breathing rate, blood pressure and temperature fill in, and you get a NEWS2 score.',
+    cta: 'Open the vitals check →',
+    ctaHref: '/check',
   },
   {
     num: '02',
-    title: 'Paste your API key',
-    body: 'When you add the shortcut, it will ask for your personal API key (shown below). Copy it and paste it in.',
+    title: 'Daily sync: build the shortcut',
+    body: 'In the Shortcuts app tap +. Add "Find Health Samples", set the type to Heart Rate, sort by latest first, limit 1. Add "Get Contents of URL" with the address shown below, method POST, request body JSON with: api_key = your key below, source = apple_health, and readings = a list containing type heart_rate and value from the Health sample. Repeat the find step for Oxygen Saturation, Respiratory Rate and Blood Pressure if you have them.',
   },
   {
     num: '03',
     title: 'Allow Health access',
-    body: 'The shortcut will request access to Heart Rate, Blood Pressure, and other health metrics. Tap Allow to continue.',
+    body: 'The first time the shortcut runs, iOS asks which Health data it may read. Allow the types you added.',
   },
   {
     num: '04',
-    title: 'Set to run automatically',
-    body: 'In the Shortcuts app, tap Automation → New Automation → Time of Day. Set it to run once daily (e.g. 8am). Select your Relay Arc shortcut. Done.',
+    title: 'Run it every morning',
+    body: 'In Shortcuts tap Automation, then New Automation, then Time of Day. Pick a time, choose your Relay shortcut, and turn off Ask Before Running. Done.',
   },
 ]
 
