@@ -254,7 +254,12 @@ export default function VitalsCheck() {
     heart_rate: hr.v, resp_rate: rr.v, oxygen_sat: spo2.v, systolic: sbp.v,
     temperature_c: tempC, consciousness: acvpu, on_oxygen: onO2,
   }]) : null
-  const level = assessment?.level
+  // The RCP banding itself, computed here from the aggregate and the
+  // single-parameter rule. (assessRisk's own `level` also folds in Relay's
+  // unvalidated personal-baseline layer, which is not part of NEWS2 and must not
+  // be labelled as a NEWS2 band.)
+  const redFlag = rows.some(r => r.pts === 3)
+  const level = total >= 7 ? 'high' : total >= 5 ? 'medium' : redFlag ? 'low-medium (a single parameter scored 3)' : 'low'
 
   // Plain-text handoff a clinician can read in a message or over the phone.
   const share = async () => {
@@ -450,7 +455,7 @@ export default function VitalsCheck() {
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '6px', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '46px', fontWeight: 900, color: T1, lineHeight: 1 }}>{total}</span>
                   <span style={{ fontFamily: mono, fontSize: '12.5px', color: T2 }}>
-                    NEWS2 aggregate · clinical band {level}{assessment.redFlag ? ' · single-parameter 3' : ''}
+                    {`NEWS2 aggregate · RCP band: ${level}`}
                   </span>
                 </div>
                 <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55 }}>
@@ -459,7 +464,7 @@ export default function VitalsCheck() {
                 </p>
                 {assessment.partial && (
                   <p style={{ color: T3, fontSize: '12.5px', lineHeight: 1.5, marginTop: '8px' }}>
-                    Partial: {7 - measuredCount} of NEWS2&apos;s seven measurements are missing, which can only make the total lower than it really is.
+                    {`Partial: ${7 - measuredCount} of NEWS2\u2019s seven measurements ${7 - measuredCount === 1 ? 'is' : 'are'} missing, which can only make the total lower than it really is.`}
                   </p>
                 )}
               </>
@@ -481,7 +486,7 @@ export default function VitalsCheck() {
               </div>
             )}
             <p style={{ fontFamily: mono, fontSize: '11px', color: T3, marginTop: '14px', lineHeight: 1.5 }}>
-              For clinicians: aggregate bands 0–4 low, 5–6 medium, 7+ high; any single parameter scoring 3 is an escalation trigger. Royal College of Physicians, NEWS2 (2017).
+              For clinicians: aggregate 0–4 low (low-medium if any single parameter scores 3), 5–6 medium, 7+ high. Royal College of Physicians, NEWS2 (2017).
               Camera and motion readings are phone estimates, not a medical device. Not a diagnosis.
             </p>
           </div>
