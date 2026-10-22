@@ -793,6 +793,21 @@ export default function Dashboard() {
           )}
         </AnimatePresence>
 
+        {/* Vitals: measure with the phone itself, or log readings by hand.
+            /vitals was only reachable from Settings before. */}
+        <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '10px' }}>
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/check')}
+            style={{ background: T1, border: 'none', borderRadius: '20px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)' }}>Vitals check</p>
+            <p style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: 800, lineHeight: 1.25 }}>Measure pulse and breathing with your phone</p>
+          </motion.button>
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/vitals')}
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
+            <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)' }}>Vitals</p>
+            <p style={{ color: T1, fontSize: '15px', fontWeight: 800, lineHeight: 1.25 }}>Log and see your readings</p>
+          </motion.button>
+        </motion.div>
+
         {/* Check-in + Recovery grid */}
         <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           {/* Check-in card */}
