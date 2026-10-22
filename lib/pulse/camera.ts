@@ -6,7 +6,7 @@
 // and reports the mean colour of the centre of every frame.
 import { fingerPresent } from './index'
 
-export interface FrameStat { t: number; r: number; g: number; b: number; finger: boolean }
+export interface FrameStat { t: number; r: number; g: number; b: number; spread: number; finger: boolean }
 
 export interface PulseCamera {
   stop: () => void
@@ -46,11 +46,13 @@ export async function startPulseCamera(onFrame: (f: FrameStat) => void): Promise
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
       // centre 50% of the frame: the edges of a fingertip leak room light
       const d = ctx.getImageData(10, 7, 20, 16).data
-      let r = 0, g = 0, b = 0
+      let r = 0, g = 0, b = 0, rr = 0
       const n = d.length / 4
-      for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2] }
+      for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; rr += d[i] * d[i] }
       r /= n; g /= n; b /= n
-      onFrame({ t: (performance.now() - t0) / 1000, r, g, b, finger: fingerPresent(r, g, b) })
+      // spatial spread of the red channel: low when a fingertip covers the lens
+      const spread = Math.sqrt(Math.max(0, rr / n - r * r))
+      onFrame({ t: (performance.now() - t0) / 1000, r, g, b, spread, finger: fingerPresent(r, g, b, spread) })
     }
     const v = video as any
     if (typeof v.requestVideoFrameCallback === 'function') v.requestVideoFrameCallback(tick)

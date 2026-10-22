@@ -5,7 +5,7 @@
 // a PPG pulse shape with a harmonic, slow drift from finger pressure, sensor
 // noise and an uneven camera frame rate. The estimator must recover the rate,
 // and must REFUSE to answer on pure noise rather than return a confident number.
-import { estimateHeartRate, estimateBreathRate, breathRateFromTaps, fingerPresent, type Sample } from '../lib/pulse/index.ts'
+import { estimateHeartRate, estimateBreathRate, breathRateFromTaps, fingerPresent, confirmHeartRate, bestChannelEstimate, type Sample } from '../lib/pulse/index.ts'
 
 let pass = 0, fail = 0
 const ok = (name: string, cond: boolean, detail = '') => {
@@ -32,21 +32,34 @@ function ppg(bpm: number, seconds: number, noise: number, fps = 30): Sample[] {
 
 console.log('\n=== Heart rate from a camera-like PPG trace ===')
 for (const bpm of [48, 62, 75, 96, 128, 165]) {
-  const r = estimateHeartRate(ppg(bpm, 20, 0.6))
+  const r = estimateHeartRate(ppg(bpm, 15, 0.6))
   ok(`${bpm} bpm recovered within ±3`, r.ok && r.rate !== null && Math.abs(r.rate - bpm) <= 3, `got ${r.rate} (quality ${r.quality})`)
 }
 {
-  const r = estimateHeartRate(ppg(80, 20, 2.0))
+  const r = estimateHeartRate(ppg(80, 15, 2.0))
   ok('noisier trace (SNR ~0.75) still within ±4', r.ok && Math.abs((r.rate ?? 0) - 80) <= 4, `got ${r.rate} q ${r.quality}`)
 }
 {
-  const noise: Sample[] = []; for (let t = 0; t < 20; t += 1 / 30) noise.push({ t, v: 180 + 3 * gauss() })
+  const noise: Sample[] = []; for (let t = 0; t < 15; t += 1 / 30) noise.push({ t, v: 180 + 3 * gauss() })
   const r = estimateHeartRate(noise)
   ok('pure noise is REFUSED, not reported', !r.ok && r.rate === null, `quality ${r.quality}`)
 }
 {
-  const r = estimateHeartRate(ppg(70, 6, 0.6))
+  const r = estimateHeartRate(ppg(70, 5, 0.6))
   ok('too short a recording asks for more time', !r.ok && /need/.test(r.problem || ''), r.problem)
+}
+
+console.log('\n=== Confirmation: noise must not produce a reading ===')
+{
+  let fa = 0
+  for (let k = 0; k < 100; k++) { const n: Sample[] = []; for (let t = 0; t < 15; t += 1 / 30) n.push({ t, v: 180 + 3 * gauss() }); if (confirmHeartRate(n).confirmed) fa++ }
+  ok('100 pure-noise recordings: at most 3 confirmed', fa <= 3, `${fa} confirmed`)
+  const c = confirmHeartRate(ppg(72, 15, 0.6))
+  ok('a clean 15 s pulse is confirmed at the right rate', c.confirmed && Math.abs((c.rate ?? 0) - 72) <= 3, `${c.rate}`)
+  const red = ppg(90, 15, 0.6).map(x => ({ t: x.t, v: 255 }))   // saturated red: flat
+  const green = ppg(90, 15, 0.6).map(x => ({ t: x.t, v: x.v - 100 }))
+  const b = bestChannelEstimate(red, green)
+  ok('saturated red channel: falls back to green', b.channel === 'green' && b.confirmed && Math.abs((b.rate ?? 0) - 90) <= 3, `${b.channel} ${b.rate}`)
 }
 
 console.log('\n=== Breathing rate from a phone resting on the chest ===')
@@ -59,20 +72,23 @@ function chest(brpm: number, seconds: number, noise: number): Sample[] {
   return out
 }
 for (const br of [8, 12, 16, 22, 28]) {
-  const r = estimateBreathRate(chest(br, 45, 0.01))
+  const r = estimateBreathRate(chest(br, 15, 0.01))
   ok(`${br} breaths/min recovered within ±2`, r.ok && Math.abs((r.rate ?? 0) - br) <= 2, `got ${r.rate} (quality ${r.quality})`)
 }
 {
-  const still: Sample[] = []; for (let t = 0; t < 45; t += 1 / 50) still.push({ t, v: 9.81 + 0.01 * gauss() })
+  const still: Sample[] = []; for (let t = 0; t < 15; t += 1 / 50) still.push({ t, v: 9.81 + 0.01 * gauss() })
   const r = estimateBreathRate(still)
   ok('a phone on a table (no breathing) is REFUSED', !r.ok, `quality ${r.quality}`)
 }
 
 console.log('\n=== Tap counting and finger detection ===')
 ok('15 taps 4 s apart = 15 breaths/min', breathRateFromTaps(Array.from({ length: 15 }, (_, i) => i * 4)) === 15)
-ok('fewer than 4 taps gives no number', breathRateFromTaps([0, 4, 8]) === null)
-ok('red, bright, flash-lit fingertip is detected', fingerPresent(200, 40, 30))
-ok('a room seen through the lens is not a finger', !fingerPresent(120, 110, 100))
+ok('fewer than 3 taps gives no number', breathRateFromTaps([0, 4]) === null)
+ok('red, bright, flash-lit fingertip is detected', fingerPresent(200, 40, 30, 8))
+ok('flash ON, red saturated and green raised: still a finger', fingerPresent(252, 170, 120, 6))
+ok('flash OFF, dim fingertip in room light: still a finger', fingerPresent(42, 18, 14, 5))
+ok('pitch dark is not a finger', !fingerPresent(8, 6, 5, 2))
+ok('a room seen through the lens is not a finger', !fingerPresent(120, 110, 100, 55))
 
 console.log('\n=== Speed (runs every second on a cheap phone) ===')
 {
