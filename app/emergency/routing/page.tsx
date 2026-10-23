@@ -294,6 +294,14 @@ function RoutingPage() {
 
   useEffect(() => { hospitalRef.current = hospital }, [hospital])
 
+  // Family can be texted even with no signal or no session: the contacts saved
+  // on this phone (the cached profile) are enough to build the message. The
+  // signed-in lookup in alertCareTeam replaces these if it succeeds.
+  useEffect(() => {
+    const c = profile?.emergency_contacts
+    if (Array.isArray(c) && c.length > 0) setNotifiedContacts(prev => prev.length ? prev : c)
+  }, [profile])
+
   // ── Relay Room: broadcast location + events to family in realtime ──────────
   const pushEvt = (label: string) => {
     const e = { t: new Date().toISOString(), label }
@@ -419,6 +427,13 @@ function RoutingPage() {
             if (cached) setProfile(JSON.parse(cached))
           } catch {}
         }
+      } else {
+        // No session (signed out, or no signal to check): use the profile saved
+        // on this phone so the brief and family texts still work.
+        try {
+          const cached = localStorage.getItem('relay_offline_profile')
+          if (cached) setProfile(JSON.parse(cached))
+        } catch {}
       }
 
       if (destLat && destLng && destName) {
