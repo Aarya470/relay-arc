@@ -94,7 +94,7 @@ export default function Timeline() {
     return (
       <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 16px 100px', maxWidth: '720px', margin: '0 auto' }}>
         {[1, 2, 3, 4].map((i) => (
-          <Skeleton key={i} style={{ height: '64px', borderRadius: '20px', background: '#F2F0E8', marginBottom: '8px' }} />
+          <Skeleton key={i} style={{ height: '64px', borderRadius: '12px', background: '#F2F0E8', marginBottom: '8px' }} />
         ))}
       </div>
     )
@@ -126,7 +126,7 @@ export default function Timeline() {
 
       {generating && (
         <div style={{ padding: '0 20px 16px' }}>
-          <div style={{ background: 'rgba(86,128,78,0.06)', border: '1px solid rgba(86,128,78,0.16)', borderRadius: '20px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ background: 'rgba(86,128,78,0.06)', border: '1px solid rgba(86,128,78,0.16)', borderRadius: '12px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ display: 'flex', gap: '4px' }}>
               {[0, 1, 2].map((i) => (
                 <motion.div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#42623C' }}
@@ -160,7 +160,7 @@ export default function Timeline() {
                       : <Circle size={12} color="#C4BFB0" />}
                   </div>
                 </div>
-                <div style={{ flex: 1, background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '20px', overflow: 'hidden', boxShadow: isCurrent ? '0 6px 24px rgba(86,128,78,0.12)' : '0 2px 8px rgba(20,20,19,0.06)' }}>
+                <div style={{ flex: 1, background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '12px', overflow: 'hidden', boxShadow: isCurrent ? '0 6px 24px rgba(86,128,78,0.12)' : '0 2px 8px rgba(20,20,19,0.06)' }}>
                   <motion.button whileTap={{ scale: 0.99 }} transition={spring} onClick={() => setExpanded(expanded === index ? null : index)}
                     style={{ width: '100%', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -190,7 +190,7 @@ export default function Timeline() {
                             { label: 'What to do', items: phase.todo, color: '#42623C', dot: '#42623C' },
                           ].map((section, si) => (
                             <div key={si}>
-                              <p style={{ color: section.color, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{section.label}</p>
+                              <p style={{ color: section.color, fontSize: '13px', letterSpacing: '0', marginBottom: '8px' }}>{section.label}</p>
                               {section.items?.map((item: string, ii: number) => (
                                 <div key={ii} style={{ display: 'flex', gap: '10px', marginBottom: '6px', alignItems: 'flex-start' }}>
                                   <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: section.dot, flexShrink: 0, marginTop: '7px' }} />

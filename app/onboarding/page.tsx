@@ -28,9 +28,9 @@ const CONDITIONS = [
 const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
 
 const STEP_META = [
-  { kicker: '01 / 03', title: 'About you',       sub: 'The basics, once.' },
-  { kicker: '02 / 03', title: 'Your condition',  sub: 'This decides which hospital Relay routes you to.' },
-  { kicker: '03 / 03', title: 'Contacts & meds', sub: 'Sent to the ER ahead of you in an emergency.' },
+  { kicker: '03', title: 'About you',       sub: 'The basics, once.' },
+  { kicker: '03', title: 'Your condition',  sub: 'This decides which hospital Relay routes you to.' },
+  { kicker: '03', title: 'Contacts & meds', sub: 'Sent to the ER ahead of you in an emergency.' },
 ]
 
 export default function Onboarding() {
@@ -146,7 +146,7 @@ export default function Onboarding() {
   }
 
   const label = (text: string) => (
-    <p style={{ color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>{text}</p>
+    <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>{text}</p>
   )
 
   const primaryBtn: React.CSSProperties = {
@@ -176,8 +176,8 @@ export default function Onboarding() {
 
         {/* Progress + header */}
         <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '12px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>{meta.kicker}</span>
-          <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase' }}>Profile setup</span>
+          <span style={{ color: T1, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>{meta.kicker}</span>
+          <span style={{ color: T3, fontSize: '13px', letterSpacing: '0' }}>Profile setup</span>
         </div>
         <h1 style={{ color: T1, fontSize: '30px', fontWeight: 800, letterSpacing: '-1.1px', lineHeight: 1.05, marginBottom: '6px' }}>
           {meta.title}<span style={{ color: RED }}>.</span>

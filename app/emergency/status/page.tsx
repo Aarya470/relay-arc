@@ -52,7 +52,7 @@ export default function EmergencyStatus() {
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
           />
-          <span style={{ color: 'white', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: 700 }}>
+          <span style={{ color: 'white', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
             Emergency active
           </span>
         </div>
@@ -72,17 +72,17 @@ export default function EmergencyStatus() {
             <ArrowLeft size={16} color="#5C5A52" />
           </motion.button>
           <div>
-            <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Status</p>
+            <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0' }}>Status</p>
             <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.3px' }}>All systems responding</h1>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(163,52,23,0.10)', border: '1px solid rgba(163,52,23,0.25)', borderRadius: '20px', padding: '6px 12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(163,52,23,0.10)', border: '1px solid rgba(163,52,23,0.25)', borderRadius: '12px', padding: '6px 12px' }}>
           <motion.div
             style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#A33417' }}
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
           />
-          <span style={{ color: '#A33417', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>Live</span>
+          <span style={{ color: '#A33417', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>Live</span>
         </div>
       </div>
 
@@ -100,7 +100,7 @@ export default function EmergencyStatus() {
                 ? 'rgba(86,128,78,0.05)'
                 : 'rgba(86,128,78,0.05)',
               border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.18)' : 'rgba(86,128,78,0.18)'}`,
-              borderRadius: '20px',
+              borderRadius: '12px',
               padding: '14px',
               display: 'flex',
               alignItems: 'flex-start',
@@ -124,7 +124,7 @@ export default function EmergencyStatus() {
         ))}
 
         {/* Nav strip */}
-        <div style={{ background: 'rgba(86,128,78,0.05)', border: '1px solid rgba(86,128,78,0.18)', borderRadius: '20px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ background: 'rgba(86,128,78,0.05)', border: '1px solid rgba(86,128,78,0.18)', borderRadius: '12px', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ width: '36px', height: '36px', borderRadius: '14px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Navigation size={16} color="#42623C" />
           </div>
@@ -132,13 +132,13 @@ export default function EmergencyStatus() {
             <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>Turn right onto County Rd</p>
             <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
           </div>
-          <span style={{ background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.25)', color: '#42623C', fontSize: '11px', padding: '5px 10px', borderRadius: '20px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
+          <span style={{ background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.25)', color: '#42623C', fontSize: '11px', padding: '5px 10px', borderRadius: '12px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
         </div>
 
         {/* Contacts */}
         {profile?.emergency_contacts && (
-          <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '16px' }}>
-            <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>Contacts notified</p>
+          <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '12px', padding: '16px' }}>
+            <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0', marginBottom: '12px' }}>Contacts notified</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {profile.emergency_contacts.map((c: any, i: number) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -157,14 +157,14 @@ export default function EmergencyStatus() {
         )}
 
         {/* Warning */}
-        <div style={{ background: 'rgba(163,52,23,0.06)', border: '1px solid rgba(163,52,23,0.18)', borderRadius: '20px', padding: '16px' }}>
-          <p style={{ color: 'rgba(163,52,23,0.70)', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>If anything changes</p>
+        <div style={{ background: 'rgba(163,52,23,0.06)', border: '1px solid rgba(163,52,23,0.18)', borderRadius: '12px', padding: '16px' }}>
+          <p style={{ color: 'rgba(163,52,23,0.70)', fontSize: '13px', letterSpacing: '0', marginBottom: '8px' }}>If anything changes</p>
           <p style={{ color: '#5C5A52', fontSize: '13px', lineHeight: 1.6 }}>
             If chest pain starts, breathing becomes difficult, or the patient loses consciousness, stay on the line with 911.
           </p>
           <motion.button
             whileTap={{ scale: 0.97 }}
-            style={{ width: '100%', background: '#A33417', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '20px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}
+            style={{ width: '100%', background: '#A33417', color: 'white', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}
             onClick={() => window.location.href = `tel:${emg.number}`}
           >
             <Phone size={16} />

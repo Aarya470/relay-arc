@@ -232,7 +232,7 @@ export default function Emergency() {
             transition={{ duration: 1.0, repeat: Infinity }}
             style={{ width: '8px', height: '8px', background: RED }}
           />
-          <span style={{ color: RED, fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700 }}>
+          <span style={{ color: RED, fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
             {isDemo ? (es ? ES.demo : 'Demo · emergency mode') : (es ? ES.mode : 'Emergency mode')}
           </span>
         </div>
@@ -318,7 +318,7 @@ export default function Emergency() {
               background: listening ? RED_DIM : '#FFFFFF',
               border: `1.5px solid ${listening ? RED : T1}`,
               color: listening ? RED : T1,
-              padding: '17px', borderRadius: '20px',
+              padding: '17px', borderRadius: '12px',
               fontWeight: 700, fontSize: '16px',
               cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px',
               transition: 'all 0.15s ease',
@@ -350,10 +350,10 @@ export default function Emergency() {
           <motion.div
             initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}
             style={{
-              border: `1px solid ${BORDER}`, borderLeft: `3px solid ${T1}`,
+              border: `1px solid ${BORDER}`,
               padding: '11px 13px', marginTop: '-6px',
             }}>
-            <p style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '4px' }}>
+            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>
               {es ? ES.suggested : 'Suggested, starting in a moment'}
             </p>
             <p style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{pending.label}</p>
@@ -400,7 +400,7 @@ export default function Emergency() {
                   <p style={{ color: T3, fontSize: '13px', lineHeight: 1.4, marginTop: '2px' }}>{typeDesc(type.id, type.desc)}</p>
                 </div>
                 {isSel && loading ? (
-                  <span style={{ color: RED, fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', flexShrink: 0 }}>
+                  <span style={{ color: RED, fontSize: '13px', fontWeight: 600, letterSpacing: '0', flexShrink: 0 }}>
                     {es ? ES.starting : 'Starting…'}
                   </span>
                 ) : (

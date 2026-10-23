@@ -126,8 +126,8 @@ export default function GuardianWatch({
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(20,20,19,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
         >
-          <div style={{ background: '#FFFFFF', borderRadius: '20px', padding: '28px 24px', width: '100%', maxWidth: '360px', textAlign: 'center' }}>
-            <p style={{ color: '#5C5A52', fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '12px', padding: '28px 24px', width: '100%', maxWidth: '360px', textAlign: 'center' }}>
+            <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '14px' }}>
               Guardian check
             </p>
             <p style={{ color: T1, fontSize: '24px', fontWeight: 800, letterSpacing: '-0.6px', lineHeight: 1.15, marginBottom: '6px' }}>
@@ -140,7 +140,7 @@ export default function GuardianWatch({
               {countdown}
             </p>
             <button onClick={respond}
-              style={{ width: '100%', background: '#42623C', color: 'white', fontWeight: 800, fontSize: '18px', padding: '18px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', minHeight: '62px' }}>
+              style={{ width: '100%', background: '#42623C', color: 'white', fontWeight: 800, fontSize: '18px', padding: '18px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', minHeight: '62px' }}>
               <Check size={20} strokeWidth={2.5}/> I&apos;m OK
             </button>
           </div>
@@ -154,10 +154,10 @@ export default function GuardianWatch({
         >
           <motion.p
             animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 0.8, repeat: Infinity }}
-            style={{ color: 'white', fontFamily: MONO, fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '14px' }}>
+            style={{ color: 'white', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '14px' }}>
             ⚠ Guardian alert: no response
           </motion.p>
-          <h1 style={{ color: 'white', fontSize: '32px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.05, marginBottom: '10px' }}>
+          <h1 style={{ color: 'white', fontSize: '32px', fontWeight: 900, letterSpacing: '-0.4px', lineHeight: 1.05, marginBottom: '10px' }}>
             {profile?.full_name || 'This person'} may be unresponsive.
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '15px', lineHeight: 1.6, marginBottom: '24px' }}>
@@ -165,23 +165,23 @@ export default function GuardianWatch({
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
-            <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: RED, fontWeight: 900, fontSize: '19px', padding: '19px', borderRadius: '20px', textDecoration: 'none', minHeight: '62px' }}>
+            <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'white', color: RED, fontWeight: 900, fontSize: '19px', padding: '19px', borderRadius: '12px', textDecoration: 'none', minHeight: '62px' }}>
               <Phone size={20} strokeWidth={2.5}/> Call {emg.label} now
             </a>
             {contacts.length > 0 && (
-              <a href={smsHref()} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '20px', textDecoration: 'none', minHeight: '56px' }}>
+              <a href={smsHref()} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '12px', textDecoration: 'none', minHeight: '56px' }}>
                 <MessageSquare size={17}/> Text their family the location
               </a>
             )}
             <button onClick={() => router.push('/emergency/cpr')}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '20px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '56px' }}>
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'rgba(255,255,255,0.16)', border: '1.5px solid rgba(255,255,255,0.7)', color: 'white', fontWeight: 700, fontSize: '15.5px', padding: '16px', borderRadius: '12px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '56px' }}>
               <HeartPulse size={17}/> Not breathing? CPR guide
             </button>
           </div>
 
           {(profile?.blood_type || profile?.allergies) && (
             <div style={{ borderTop: '2px solid rgba(255,255,255,0.5)', paddingTop: '16px', marginBottom: '24px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '10px' }}>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '10px' }}>
                 For paramedics
               </p>
               {profile?.blood_type && (

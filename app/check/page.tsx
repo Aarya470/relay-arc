@@ -138,7 +138,7 @@ export default function VitalsCheck() {
     const pts = y.map((v, i) => [(i / (y.length - 1)) * c.width, c.height / 2 - (v / max) * (c.height / 2 - 10)])
     ctx.strokeStyle = 'rgba(20,20,19,0.06)'; ctx.lineWidth = 2
     for (let gx = 0; gx <= c.width; gx += c.width / 12) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, c.height); ctx.stroke() }
-    ctx.strokeStyle = '#141413'; ctx.lineWidth = 3.5; ctx.lineJoin = 'round'
+    ctx.strokeStyle = '#A33417'; ctx.lineWidth = 3.5; ctx.lineJoin = 'round'
     ctx.beginPath(); pts.forEach(([x, yy], i) => (i ? ctx.lineTo(x, yy) : ctx.moveTo(x, yy))); ctx.stroke()
   }
 
@@ -346,7 +346,7 @@ export default function VitalsCheck() {
         {/* ── Pulse ─────────────────────────────────────────────────────── */}
         <section style={panel}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px' }}>
-            <h2 style={h2}>Pulse</h2>
+            <h2 style={{ ...h2, display: 'flex', alignItems: 'center', gap: '8px' }}><Heart size={19} color={RED} fill={bpmShown ? RED : 'none'}/>Pulse</h2>
             {demo
               ? <span style={{ fontSize: '12px', fontWeight: 700, background: '#FFD166', color: '#1A1300', padding: '3px 8px', borderRadius: '4px' }}>DEMO · simulated reading</span>
               : <span style={{ fontSize: '14px', color: T3 }}>camera + flash</span>}
@@ -354,7 +354,7 @@ export default function VitalsCheck() {
 
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', margin: '10px 0 2px' }}>
             <span style={{ fontSize: '56px', fontWeight: 700, letterSpacing: '-1px', lineHeight: 1, color: bpmShown ? T1 : '#B9B6AA', fontVariantNumeric: 'tabular-nums' }}>
-              {bpmShown ?? '--'}
+              {bpmShown ?? '—'}
             </span>
             <span style={{ fontSize: '17px', fontWeight: 600, color: T3 }}>bpm</span>
           </div>
@@ -367,7 +367,7 @@ export default function VitalsCheck() {
           </p>
 
           <div style={{ height: '3px', background: LINE, borderRadius: '2px', overflow: 'hidden', marginBottom: '10px' }}>
-            <div style={{ height: '100%', width: `${Math.round(Math.min(1, pulseProgress) * 100)}%`, background: T1, transition: 'width 0.3s linear' }}/>
+            <div style={{ height: '100%', width: `${Math.round(Math.min(1, pulseProgress) * 100)}%`, background: RED, transition: 'width 0.3s linear' }}/>
           </div>
           <canvas ref={canvasRef} width={1100} height={200}
             style={{ width: '100%', height: '96px', display: 'block', background: PAPER, border: `1px solid ${LINE}`, borderRadius: '6px' }}/>
@@ -403,12 +403,12 @@ export default function VitalsCheck() {
         {/* ── Breathing ─────────────────────────────────────────────────── */}
         <section style={panel}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px' }}>
-            <h2 style={h2}>Breathing rate</h2>
+            <h2 style={{ ...h2, display: 'flex', alignItems: 'center', gap: '8px' }}><Wind size={19} color={T1}/>Breathing rate</h2>
             <span style={{ fontSize: '14px', color: T3 }}>taps or motion sensor</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', margin: '10px 0 2px' }}>
             <span style={{ fontSize: '56px', fontWeight: 700, letterSpacing: '-1px', lineHeight: 1, color: rr.v != null || breathState === 'taps' ? T1 : '#B9B6AA', fontVariantNumeric: 'tabular-nums' }}>
-              {breathState === 'taps' ? tapCount : rr.v ?? '--'}
+              {breathState === 'taps' ? tapCount : rr.v ?? '—'}
             </span>
             <span style={{ fontSize: '17px', fontWeight: 600, color: T3 }}>{breathState === 'taps' ? 'taps' : 'per min'}</span>
           </div>

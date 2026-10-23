@@ -80,7 +80,7 @@ export default function TriagePage() {
             transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
             style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'white' }}
           />
-          <span style={{ color: 'white', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: 700 }}>
+          <span style={{ color: 'white', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
             Severity Assessment
           </span>
         </div>
@@ -132,7 +132,7 @@ export default function TriagePage() {
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div key="step1" variants={pageVariants} initial="initial" animate="animate" exit="exit" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <h1 style={{ color: '#141413', fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', marginBottom: '6px', lineHeight: 1.1 }}>
+              <h1 style={{ color: '#141413', fontSize: '28px', fontWeight: 900, letterSpacing: '-0.4px', marginBottom: '6px', lineHeight: 1.1 }}>
                 How severe?
               </h1>
               <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '32px' }}>
@@ -154,7 +154,7 @@ export default function TriagePage() {
                     onClick={() => handlePainSelect(n)}
                     style={{
                       height: '56px',
-                      borderRadius: '20px',
+                      borderRadius: '12px',
                       background: pain === n ? getPainBg(n) : '#FFFFFF',
                       border: `1.5px solid ${pain === n ? getPainColor(n) : '#F2F0E8'}`,
                       color: getPainColor(n),
@@ -190,7 +190,7 @@ export default function TriagePage() {
 
           {step === 2 && (
             <motion.div key="step2" variants={pageVariants} initial="initial" animate="animate" exit="exit" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <h1 style={{ color: '#141413', fontSize: '26px', fontWeight: 900, letterSpacing: '-1px', marginBottom: '6px', lineHeight: 1.1 }}>
+              <h1 style={{ color: '#141413', fontSize: '26px', fontWeight: 900, letterSpacing: '-0.4px', marginBottom: '6px', lineHeight: 1.1 }}>
                 Are you conscious and able to move?
               </h1>
               <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '32px' }}>
@@ -204,7 +204,7 @@ export default function TriagePage() {
                   onClick={() => handleCanMove(true)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '20px',
+                    borderRadius: '12px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
@@ -222,7 +222,7 @@ export default function TriagePage() {
                   onClick={() => handleCanMove(false)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '20px',
+                    borderRadius: '12px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(163,52,23,0.22)',
                     cursor: 'pointer',
@@ -238,7 +238,7 @@ export default function TriagePage() {
 
           {step === 3 && (
             <motion.div key="step3" variants={pageVariants} initial="initial" animate="animate" exit="exit" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <h1 style={{ color: '#141413', fontSize: '26px', fontWeight: 900, letterSpacing: '-1px', marginBottom: '6px', lineHeight: 1.1 }}>
+              <h1 style={{ color: '#141413', fontSize: '26px', fontWeight: 900, letterSpacing: '-0.4px', marginBottom: '6px', lineHeight: 1.1 }}>
                 Are you alone?
               </h1>
               <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '32px' }}>
@@ -252,7 +252,7 @@ export default function TriagePage() {
                   onClick={() => handleAlone(false)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '20px',
+                    borderRadius: '12px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
@@ -269,7 +269,7 @@ export default function TriagePage() {
                   onClick={() => handleAlone(true)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: '20px',
+                    borderRadius: '12px',
                     background: '#FFFFFF',
                     border: '1.5px solid rgba(163,52,23,0.22)',
                     cursor: 'pointer',
@@ -288,7 +288,7 @@ export default function TriagePage() {
               <div style={{
                 background: 'rgba(163,52,23,0.08)',
                 border: '1.5px solid rgba(163,52,23,0.25)',
-                borderRadius: '20px',
+                borderRadius: '12px',
                 padding: '24px',
                 marginBottom: '16px',
                 
@@ -299,7 +299,7 @@ export default function TriagePage() {
                     transition={{ duration: 0.9, repeat: Infinity }}
                     style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#A33417', flexShrink: 0 }}
                   />
-                  <span style={{ color: '#A33417', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                  <span style={{ color: '#A33417', fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
                     Critical. Act now
                   </span>
                 </div>
@@ -318,7 +318,7 @@ export default function TriagePage() {
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
                   background: '#A33417', color: 'white',
-                  padding: '18px', borderRadius: '20px',
+                  padding: '18px', borderRadius: '12px',
                   fontWeight: 900, fontSize: '18px', letterSpacing: '-0.3px',
                   textDecoration: 'none', marginBottom: '12px',
                   
@@ -334,7 +334,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: '20px',
+                  borderRadius: '12px',
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
                   color: '#5C5A52',
@@ -353,7 +353,7 @@ export default function TriagePage() {
               <div style={{
                 background: 'rgba(168,114,0,0.08)',
                 border: '1.5px solid rgba(168,114,0,0.22)',
-                borderRadius: '20px',
+                borderRadius: '12px',
                 padding: '24px',
                 marginBottom: '16px',
                 
@@ -364,7 +364,7 @@ export default function TriagePage() {
                     transition={{ duration: 1.2, repeat: Infinity }}
                     style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#7C5200', flexShrink: 0 }}
                   />
-                  <span style={{ color: '#7C5200', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                  <span style={{ color: '#7C5200', fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
                     High Urgency
                   </span>
                 </div>
@@ -383,7 +383,7 @@ export default function TriagePage() {
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
                   background: '#A33417', color: 'white',
-                  padding: '16px', borderRadius: '20px',
+                  padding: '16px', borderRadius: '12px',
                   fontWeight: 800, fontSize: '16px', letterSpacing: '-0.3px',
                   textDecoration: 'none', marginBottom: '10px',
                   
@@ -399,7 +399,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: '20px',
+                  borderRadius: '12px',
                   background: '#42623C',
                   border: 'none',
                   color: '#B3DDAC',
@@ -419,14 +419,14 @@ export default function TriagePage() {
               <div style={{
                 background: 'rgba(86,128,78,0.07)',
                 border: '1.5px solid rgba(86,128,78,0.20)',
-                borderRadius: '20px',
+                borderRadius: '12px',
                 padding: '24px',
                 marginBottom: '16px',
                 boxShadow: '0 6px 32px rgba(86,128,78,0.08)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                   <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#42623C', flexShrink: 0 }} />
-                  <span style={{ color: '#42623C', fontSize: '12px', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                  <span style={{ color: '#42623C', fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
                     Monitor at Home
                   </span>
                 </div>
@@ -444,7 +444,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: '20px',
+                  borderRadius: '12px',
                   background: '#42623C',
                   border: 'none',
                   color: '#B3DDAC',
@@ -464,7 +464,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/dashboard')}
                 style={{
                   padding: '16px',
-                  borderRadius: '20px',
+                  borderRadius: '12px',
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
                   color: '#5C5A52',

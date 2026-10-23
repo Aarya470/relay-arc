@@ -19,7 +19,7 @@ const ACCENT_DIM = 'rgba(86,128,78,0.09)'
 const GREEN   = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const BORDER  = '#98C890'
-const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
+const SHADOW  = 'none'
 
 const spring       = { type: 'spring', stiffness: 380, damping: 24 } as const
 const bubbleSpring = { type: 'spring', stiffness: 320, damping: 28 } as const
@@ -244,7 +244,7 @@ export default function Checkin() {
               border: `1px solid ${BORDER}`,
               boxShadow: SHADOW,
               padding: '13px 16px',
-              borderRadius: '20px',
+              borderRadius: '12px',
               display: 'flex', gap: '5px', alignItems: 'center',
             }}>
               {[0, 1, 2].map(i => (
@@ -267,7 +267,7 @@ export default function Checkin() {
             style={{
               background: GREEN_DIM,
               border: `1px solid rgba(86,128,78,0.18)`,
-              borderRadius: '20px',
+              borderRadius: '12px',
               padding: '28px 20px',
               textAlign: 'center',
               margin: '8px 0',
@@ -290,7 +290,7 @@ export default function Checkin() {
                 style={{
                   flex: 1, background: SURFACE, color: T1,
                   fontWeight: 700, fontSize: '13px',
-                  padding: '13px 16px', borderRadius: '20px',
+                  padding: '13px 16px', borderRadius: '12px',
                   border: `1px solid ${BORDER}`, cursor: 'pointer',
                 }}
               >
@@ -302,7 +302,7 @@ export default function Checkin() {
                 style={{
                   flex: 1, background: ACCENT, color: '#FFFFFF',
                   fontWeight: 700, fontSize: '13px',
-                  padding: '13px 16px', borderRadius: '20px',
+                  padding: '13px 16px', borderRadius: '12px',
                   border: 'none', cursor: 'pointer',
                 }}
               >
@@ -362,7 +362,7 @@ export default function Checkin() {
               flex: 1,
               background: BG,
               border: `1.5px solid ${focused ? ACCENT : BORDER}`,
-              borderRadius: '20px',
+              borderRadius: '12px',
               padding: '12px 16px',
               color: T1,
               // 16px so mobile Safari does not zoom the page on focus. See the
@@ -386,7 +386,7 @@ export default function Checkin() {
             style={{
               width: '44px', height: '44px',
               background: input.trim() ? ACCENT : BG,
-              borderRadius: '20px',
+              borderRadius: '12px',
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
               cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center',

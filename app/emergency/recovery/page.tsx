@@ -217,8 +217,8 @@ function RecoveryContent() {
           transition={spring}
         >
           <p style={{
-            fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
-            letterSpacing: '0.12em', color: '#42623C', marginBottom: '4px',
+            fontSize: '13px', fontWeight: 600,
+            letterSpacing: '0', color: '#42623C', marginBottom: '4px',
           }}>
             Recovery protocol
           </p>
@@ -305,7 +305,7 @@ function RecoveryContent() {
             href="tel:"
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              width: '100%', padding: '12px', borderRadius: '20px',
+              width: '100%', padding: '12px', borderRadius: '12px',
               fontSize: '14px', fontWeight: 600, textDecoration: 'none',
               background: '#42623C', color: '#B3DDAC',
             }}
@@ -321,7 +321,7 @@ function RecoveryContent() {
             onClick={() => router.push('/emergency/history')}
             style={{
               flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              padding: '12px', borderRadius: '20px',
+              padding: '12px', borderRadius: '12px',
               background: '#F2F0E8', border: '1px solid #D8D4C8',
               color: '#5C5A52', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
             }}
@@ -332,7 +332,7 @@ function RecoveryContent() {
           <button
             onClick={() => router.push('/dashboard')}
             style={{
-              flex: 1, padding: '12px', borderRadius: '20px',
+              flex: 1, padding: '12px', borderRadius: '12px',
               background: '#42623C', border: 'none',
               color: '#fff', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
               
@@ -365,7 +365,7 @@ function Card({
         border: highlight
           ? '1px solid rgba(163,52,23,0.22)'
           : '1px solid #98C890',
-        borderRadius: '20px',
+        borderRadius: '12px',
         padding: '16px',
       }}
     >
@@ -386,8 +386,8 @@ function CardLabel({
   return (
     <p
       style={{
-        fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
-        letterSpacing: '0.13em', marginBottom: noMargin ? '0' : '8px',
+        fontSize: '13px', fontWeight: 600,
+        letterSpacing: '0', marginBottom: noMargin ? '0' : '8px',
         color: danger ? '#A33417' : '#5C5A52',
       }}
     >

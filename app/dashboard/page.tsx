@@ -43,7 +43,7 @@ const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER   = '#7C5200'
 const AMBER_DIM = 'rgba(168,114,0,0.08)'
 const BORDER  = '#98C890'
-const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
+const SHADOW  = 'none'
 
 // ── This week types ─────────────────────────────────────────────────────
 interface Insight {
@@ -104,8 +104,8 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
         position: 'absolute', inset: 0,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
-        <span style={{ color, fontSize: '20px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1 }}>{score}</span>
-        <span style={{ color: T3, fontSize: '8px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', marginTop: '1px' }}>/ 100</span>
+        <span style={{ color, fontSize: '20px', fontWeight: 900, letterSpacing: '-0.4px', lineHeight: 1 }}>{score}</span>
+        <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '1px' }}>/ 100</span>
       </div>
     </div>
   )
@@ -148,7 +148,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
     <motion.div variants={fadeUp}>
       {/* Label row */}
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '12px' }}>
-        <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+        <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
           Health score
         </p>
         {intel && cfg && (
@@ -171,7 +171,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
               fontSize: '88px',
               fontFamily: 'inherit',
               fontWeight: 800,
-              letterSpacing: '-4px',
+              letterSpacing: '-1.5px',
               lineHeight: 0.85,
               flexShrink: 0,
             }}>{intel.score}</p>
@@ -192,7 +192,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           {/* Prediction inline */}
           {intel.prediction && (
             <p style={{ color: T2, fontSize: '13px', lineHeight: 1.6, marginBottom: '10px' }}>
-              <span style={{ color: ACCENT, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px' }}>Next 48h</span>
+              <span style={{ color: ACCENT, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginRight: '8px' }}>Next 48h</span>
               {intel.prediction}
             </p>
           )}
@@ -200,7 +200,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           {/* Recommendation */}
           {intel.recommendation && (
             <p style={{ color: GREEN, fontSize: '13px', fontWeight: 600, lineHeight: 1.55 }}>
-              <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px', opacity: 0.7 }}>Today</span>
+              <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginRight: '8px', opacity: 0.7 }}>Today</span>
               {intel.recommendation}
             </p>
           )}
@@ -292,7 +292,7 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
   return (
     <motion.div variants={fadeUp}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-        <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+        <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
           This week
         </p>
         <button
@@ -507,7 +507,7 @@ export default function Dashboard() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: BG, padding: '60px 20px 80px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {[80, 160, 80, 80, 80].map((h, i) => (
-        <div key={i} style={{ height: `${h}px`, borderRadius: '20px', background: '#98C890', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: `${h}px`, borderRadius: '12px', background: '#98C890', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
     </div>
   )
@@ -531,7 +531,7 @@ export default function Dashboard() {
       style={{
         background: SURFACE,
         border: `1px solid ${BORDER}`,
-        borderRadius: '20px',
+        borderRadius: '12px',
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
         ...style,
@@ -545,7 +545,7 @@ export default function Dashboard() {
     <div style={{ minHeight: '100dvh', background: BG, paddingBottom: '80px' }}>
       {isDemo && (
         <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
             {DEMO_BANNER}
           </span>
         </div>
@@ -566,7 +566,7 @@ export default function Dashboard() {
               backdropFilter: 'blur(16px)',
             }}>
             <div>
-              <p style={{ color: T3, fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, marginBottom: '2px' }}>Care Team</p>
+              <p style={{ color: T3, fontSize: '13px', letterSpacing: '0', fontWeight: 600, marginBottom: '2px' }}>Care Team</p>
               <p style={{ color: T1, fontWeight: 700, fontSize: '15px' }}>Your call is ready</p>
             </div>
             <motion.button
@@ -591,10 +591,10 @@ export default function Dashboard() {
         style={{ padding: '56px 20px 20px', maxWidth: '640px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ color: T3, fontSize: '11px', fontWeight: 700, marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1.4px' }}>
+            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, marginBottom: '6px', letterSpacing: '0' }}>
               {greeting} · {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}
             </p>
-            <h1 style={{ color: T1, fontSize: '44px', fontFamily: 'inherit', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.0, marginBottom: '10px' }}>
+            <h1 style={{ color: T1, fontSize: '44px', fontFamily: 'inherit', fontWeight: 800, letterSpacing: '-0.4px', lineHeight: 1.0, marginBottom: '10px' }}>
               {profile?.full_name?.split(' ')[0]}
             </h1>
             {profile?.diagnosis && (
@@ -603,10 +603,9 @@ export default function Dashboard() {
                   <span key={i} style={{
                     background: ACCENT_DIM,
                     color: ACCENT,
-                    fontSize: '10px', fontWeight: 700,
+                    fontSize: '13px', fontWeight: 600,
                     padding: '3px 8px', borderRadius: '14px',
-                    fontFamily: 'var(--font-mono, monospace)',
-                    letterSpacing: '0.8px', textTransform: 'uppercase',
+                    letterSpacing: '0',
                     border: `1px solid rgba(86,128,78,0.14)`,
                   }}>
                     {d.trim()}
@@ -650,7 +649,7 @@ export default function Dashboard() {
         {installPrompt && (
           <motion.div variants={fadeUp}
             style={{
-              background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px',
+              background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px',
               padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px',
               boxShadow: SHADOW,
             }}>
@@ -701,18 +700,16 @@ export default function Dashboard() {
             <div style={{ textAlign: 'left' }}>
               <p style={{
                 color: 'rgba(255,255,255,0.50)',
-                fontSize: '10px',
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
+                fontSize: '13px',
+                letterSpacing: '0',
                 marginBottom: '10px',
-                fontFamily: 'var(--font-mono, monospace)',
-                fontWeight: 700,
+                fontWeight: 600,
               }}>Emergency Response</p>
               <p style={{
                 color: '#FFFFFF',
                 fontSize: '64px',
                 fontWeight: 900,
-                letterSpacing: '-3px',
+                letterSpacing: '-1px',
                 lineHeight: 0.9,
                 fontFamily: 'var(--font-mono, monospace)',
               }}>SOS</p>
@@ -753,7 +750,7 @@ export default function Dashboard() {
               style={{
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                borderRadius: '20px', padding: '14px 16px',
+                borderRadius: '12px', padding: '14px 16px',
                 display: 'flex', alignItems: 'flex-start', gap: '11px',
               }}>
               <TrendingDown size={15} color={T3} style={{ marginTop: '2px', flexShrink: 0 }}/>
@@ -797,13 +794,13 @@ export default function Dashboard() {
             /vitals was only reachable from Settings before. */}
         <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '10px' }}>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/check')}
-            style={{ background: T1, border: 'none', borderRadius: '20px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)' }}>Vitals check</p>
+            style={{ background: T1, border: 'none', borderRadius: '12px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Vitals check</p>
             <p style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: 800, lineHeight: 1.25 }}>Measure pulse and breathing with your phone</p>
           </motion.button>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/vitals')}
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
-            <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)' }}>Vitals</p>
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
+            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Vitals</p>
             <p style={{ color: T1, fontSize: '15px', fontWeight: 800, lineHeight: 1.25 }}>Log and see your readings</p>
           </motion.button>
         </motion.div>
@@ -817,23 +814,23 @@ export default function Dashboard() {
             style={{
               background: checkinToday ? GREEN : SURFACE,
               border: checkinToday ? 'none' : `1px solid ${BORDER}`,
-              borderRadius: '20px',
+              borderRadius: '12px',
               padding: '20px 18px 18px',
               textAlign: 'left',
               cursor: 'pointer',
             }}>
             <p style={{
               color: checkinToday ? 'rgba(255,255,255,0.55)' : T3,
-              fontSize: '10px', fontWeight: 700,
-              letterSpacing: '1.5px', textTransform: 'uppercase',
-              marginBottom: '10px', fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '13px', fontWeight: 600,
+              letterSpacing: '0',
+              marginBottom: '10px',
             }}>{checkinToday ? 'Done' : 'Check in'}</p>
             <p style={{
               color: checkinToday ? '#FFFFFF' : T1,
               fontSize: '52px',
               fontFamily: 'inherit',
               fontWeight: 900,
-              letterSpacing: '-2px',
+              letterSpacing: '-0.8px',
               lineHeight: 0.88,
               marginBottom: '12px',
             }}>
@@ -850,7 +847,7 @@ export default function Dashboard() {
             onClick={() => router.push('/timeline')}
             style={{
               background: SURFACE,
-              borderRadius: '20px',
+              borderRadius: '12px',
               border: `1px solid ${BORDER}`,
               padding: '20px 18px 18px',
               textAlign: 'left',
@@ -858,9 +855,9 @@ export default function Dashboard() {
             }}>
             <p style={{
               color: ACCENT,
-              fontSize: '10px', fontWeight: 700,
-              letterSpacing: '1.5px', textTransform: 'uppercase',
-              marginBottom: '10px', fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '13px', fontWeight: 600,
+              letterSpacing: '0',
+              marginBottom: '10px',
             }}>Recovery</p>
             {weeksSinceSurgery !== null ? (
               <>
@@ -869,7 +866,7 @@ export default function Dashboard() {
                   fontSize: '52px',
                   fontFamily: 'inherit',
                   fontWeight: 900,
-                  letterSpacing: '-2px',
+                  letterSpacing: '-0.8px',
                   lineHeight: 0.88,
                   marginBottom: '12px',
                 }}>{weeksSinceSurgery}</p>
@@ -882,7 +879,7 @@ export default function Dashboard() {
                   fontSize: '36px',
                   fontFamily: 'inherit',
                   fontWeight: 900,
-                  letterSpacing: '-1.5px',
+                  letterSpacing: '-0.6px',
                   lineHeight: 0.95,
                   marginBottom: '10px',
                 }}>Plan</p>
@@ -900,7 +897,7 @@ export default function Dashboard() {
 
         {/* Quick nav list */}
         <motion.div variants={fadeUp}>
-          <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '4px' }}>Your data</p>
+          <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>Your data</p>
           <div style={{ borderTop: `1px solid ${BORDER}` }}>
           {[
             {
@@ -1012,7 +1009,7 @@ export default function Dashboard() {
             style={{
               background: 'rgba(86,128,78,0.04)',
               border: `1px solid rgba(86,128,78,0.10)`,
-              borderRadius: '20px', padding: '14px 16px',
+              borderRadius: '12px', padding: '14px 16px',
               cursor: 'pointer', width: '100%',
               display: 'flex', alignItems: 'center', gap: '12px',
             }}>
@@ -1039,15 +1036,13 @@ export default function Dashboard() {
               onClick={() => router.push('/history')}
               style={{
                 background: 'none', border: 'none',
-                borderLeft: `3px solid ${BORDER}`,
-                paddingLeft: '16px', paddingRight: 0,
+                paddingLeft: 0, paddingRight: 0,
                 paddingTop: '2px', paddingBottom: '2px',
                 cursor: 'pointer', width: '100%', textAlign: 'left', display: 'block',
               }}>
               <p style={{
-                color: T3, fontSize: '10px', fontWeight: 700,
-                letterSpacing: '1.2px', textTransform: 'uppercase',
-                fontFamily: 'var(--font-mono, monospace)',
+                color: T3, fontSize: '13px', fontWeight: 600,
+                letterSpacing: '0',
                 marginBottom: '8px',
               }}>
                 {new Date(checkins[0]?.created_at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}

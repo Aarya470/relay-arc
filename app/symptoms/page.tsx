@@ -277,7 +277,7 @@ function DayCard({ log }: { log: SymptomLog }) {
       width: '80px',
       background: '#FFFFFF',
       border: '1px solid #98C890',
-      borderRadius: '20px',
+      borderRadius: '12px',
       padding: '12px 10px',
       display: 'flex',
       flexDirection: 'column',
@@ -432,7 +432,7 @@ export default function SymptomsPage() {
             <ArrowLeft size={18} color="#5C5A52" strokeWidth={2} />
           </motion.button>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#141413', margin: 0, letterSpacing: '-1px', lineHeight: 1.1 }}>
+            <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#141413', margin: 0, letterSpacing: '-0.4px', lineHeight: 1.1 }}>
               How are you feeling?
             </h1>
             <p style={{ fontSize: '12px', color: '#5C5A52', margin: '2px 0 0' }}>
@@ -452,17 +452,16 @@ export default function SymptomsPage() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '20px',
+            borderRadius: '12px',
             padding: '20px 20px 16px',
             marginBottom: '16px',
           }}
         >
           <p style={{
-            fontSize: '11px',
-            fontWeight: 700,
+            fontSize: '13px',
+            fontWeight: 600,
             color: '#5C5A52',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
+            letterSpacing: '0',
             margin: '0 0 20px',
           }}>
             Rate each symptom (0 – 10)
@@ -543,17 +542,16 @@ export default function SymptomsPage() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '20px',
+            borderRadius: '12px',
             padding: '16px',
             marginBottom: '16px',
           }}
         >
           <label style={{
-            fontSize: '11px',
-            fontWeight: 700,
+            fontSize: '13px',
+            fontWeight: 600,
             color: '#5C5A52',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
+            letterSpacing: '0',
             display: 'block',
             marginBottom: '12px',
           }}>
@@ -601,7 +599,7 @@ export default function SymptomsPage() {
               style={{
                 background: 'rgba(168,114,0,0.12)',
                 border: '1.5px solid rgba(168,114,0,0.3)',
-                borderRadius: '20px',
+                borderRadius: '12px',
                 padding: '12px 14px',
                 marginBottom: '16px',
                 fontSize: '13px',
@@ -625,7 +623,7 @@ export default function SymptomsPage() {
           style={{
             width: '100%',
             height: '54px',
-            borderRadius: '20px',
+            borderRadius: '12px',
             background: submitted ? '#42623C' : '#42623C',
             color: '#FFFFFF',
             border: 'none',
@@ -677,17 +675,16 @@ export default function SymptomsPage() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '20px',
+              borderRadius: '12px',
               padding: '20px',
               marginBottom: '20px',
             }}
           >
             <p style={{
-              fontSize: '11px',
-              fontWeight: 700,
+              fontSize: '13px',
+              fontWeight: 600,
               color: '#5C5A52',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
+              letterSpacing: '0',
               margin: '0 0 18px',
             }}>
               7-day trends
@@ -739,11 +736,10 @@ export default function SymptomsPage() {
         {/* ── history timeline ── */}
         <div style={{ marginBottom: '20px' }}>
           <p style={{
-            fontSize: '11px',
-            fontWeight: 700,
+            fontSize: '13px',
+            fontWeight: 600,
             color: '#5C5A52',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
+            letterSpacing: '0',
             margin: '0 0 14px 2px',
           }}>
             Recent history
@@ -755,7 +751,7 @@ export default function SymptomsPage() {
                   flexShrink: 0, width: '80px', height: '108px',
                   background: '#FFFFFF',
                   border: '1px solid #EDEAE0',
-                  borderRadius: '20px',
+                  borderRadius: '12px',
                   animation: 'pulse 1.5s infinite',
                 }} />
               ))}
@@ -764,7 +760,7 @@ export default function SymptomsPage() {
             <div style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '20px',
+              borderRadius: '12px',
               padding: '28px 20px',
               textAlign: 'center',
             }}>

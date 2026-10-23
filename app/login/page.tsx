@@ -207,7 +207,7 @@ export default function Login() {
             </p>
 
             <div style={{ border: `1px solid ${BORDER}`, borderRadius: 12, padding: '14px 16px', marginBottom: 22 }}>
-              <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: 7 }}>
+              <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: 7 }}>
                 Nothing arrived?
               </p>
               <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.6 }}>
@@ -245,7 +245,7 @@ export default function Login() {
 
         {!sentTo && <>
         {/* Headline */}
-        <p style={{ color: T3, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '12px' }}>
+        <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '12px' }}>
           {isSignUp ? 'New profile' : 'Patient sign-in'}
         </p>
         <AnimatePresence mode="wait">
@@ -265,7 +265,7 @@ export default function Login() {
         {/* Form */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
+            <label style={{ display: 'block', color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>
               Email
             </label>
             <input
@@ -292,7 +292,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label style={{ display: 'block', color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
+            <label style={{ display: 'block', color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>
               Password
             </label>
             <div style={{ position: 'relative' }}>

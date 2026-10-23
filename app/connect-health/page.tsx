@@ -18,7 +18,7 @@ const ACCENT_DIM = 'rgba(86,128,78,0.08)'
 const GREEN   = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const BORDER  = '#98C890'
-const SHADOW  = '0 1px 4px rgba(20,20,19,0.07)'
+const SHADOW  = 'none'
 
 const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } }
@@ -196,9 +196,9 @@ export default function ConnectHealth() {
 
         {/* What gets synced */}
         <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', overflow: 'hidden', boxShadow: SHADOW }}>
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
           <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
-            <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+            <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
               What gets synced
             </span>
           </div>
@@ -217,9 +217,9 @@ export default function ConnectHealth() {
         {/* API key */}
         {!loading && (
           <motion.div variants={fadeUp}
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', overflow: 'hidden', boxShadow: SHADOW }}>
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
             <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+              <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
                 Your API key
               </span>
               <motion.button
@@ -255,9 +255,9 @@ export default function ConnectHealth() {
 
         {/* Endpoint URL */}
         <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', overflow: 'hidden', boxShadow: SHADOW }}>
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
           <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
-            <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+            <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
               Endpoint URL
             </span>
           </div>
@@ -273,9 +273,9 @@ export default function ConnectHealth() {
 
         {/* Steps */}
         <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '20px', overflow: 'hidden', boxShadow: SHADOW }}>
+          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
           <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
-            <span style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)' }}>
+            <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
               Setup guide
             </span>
           </div>
@@ -328,7 +328,7 @@ export default function ConnectHealth() {
             display: 'flex', gap: '10px', alignItems: 'flex-start',
             padding: '12px 14px',
             background: SURFACE, border: `1px solid ${BORDER}`,
-            borderRadius: '20px', boxShadow: SHADOW,
+            borderRadius: '12px', boxShadow: SHADOW,
           }}>
           <AlertCircle size={13} color={T3} style={{ flexShrink: 0, marginTop: '2px' }}/>
           <p style={{ color: T2, fontSize: '12px', lineHeight: 1.55, margin: 0 }}>

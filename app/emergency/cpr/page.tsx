@@ -87,10 +87,10 @@ export default function CprCoach() {
           <ArrowLeft size={14}/> Back
         </button>
 
-        <p style={{ color: T3, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', fontFamily: MONO, marginBottom: '8px' }}>
+        <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>
           Hands-only CPR · for adults
         </p>
-        <h1 style={{ color: T1, fontSize: '30px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.05, marginBottom: '20px' }}>
+        <h1 style={{ color: T1, fontSize: '30px', fontWeight: 800, letterSpacing: '-0.4px', lineHeight: 1.05, marginBottom: '20px' }}>
           Push to the beat<span style={{ color: RED }}>.</span>
         </h1>
 
@@ -110,7 +110,7 @@ export default function CprCoach() {
             <span style={{ color: running ? 'white' : T1, fontFamily: MONO, fontSize: '52px', fontWeight: 800, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
               {running ? count : BPM}
             </span>
-            <span style={{ color: running ? 'rgba(255,255,255,0.75)' : T3, fontFamily: MONO, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase', marginTop: '6px' }}>
+            <span style={{ color: running ? 'rgba(255,255,255,0.75)' : T3, fontSize: '13px', letterSpacing: '0', marginTop: '6px' }}>
               {running ? 'push now' : 'beats / min'}
             </span>
           </motion.div>
@@ -122,7 +122,7 @@ export default function CprCoach() {
               background: running ? '#FFFFFF' : T1,
               color: running ? T1 : 'white',
               border: running ? `1.5px solid ${T1}` : 'none',
-              fontWeight: 700, fontSize: '16.5px', padding: '17px', borderRadius: '20px',
+              fontWeight: 700, fontSize: '16.5px', padding: '17px', borderRadius: '12px',
               cursor: 'pointer', fontFamily: 'inherit', minHeight: '58px',
             }}>
             {running ? <><Square size={16}/> Stop the beat</> : <><Play size={17}/> Start the beat at {BPM} BPM</>}

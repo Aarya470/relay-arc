@@ -247,7 +247,7 @@ export default function RelayRoomPage() {
             <motion.div animate={{ opacity: [1, 0.25, 1] }} transition={{ duration: 1.1, repeat: Infinity }}
               style={{ width: '8px', height: '8px', background: 'white' }}/>
           ) : <CheckCircle size={14} color="white"/>}
-          <span style={{ color: 'white', fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700 }}>
+          <span style={{ color: 'white', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
             {isActive ? `Live · ${typeLabel}` : 'Resolved. They are safe'}
           </span>
         </div>
@@ -259,7 +259,7 @@ export default function RelayRoomPage() {
       {!joined ? (
         /* ── Join gate ── */
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '32px 24px', maxWidth: '400px', margin: '0 auto', width: '100%' }}>
-          <p style={{ color: T3, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '10px' }}>
+          <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '10px' }}>
             Relay room
           </p>
           <h1 style={{ color: T1, fontSize: '28px', fontWeight: 800, letterSpacing: '-0.9px', lineHeight: 1.1, marginBottom: '8px' }}>
@@ -268,7 +268,7 @@ export default function RelayRoomPage() {
           <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.6, marginBottom: '28px' }}>
             Join to see their live location, what&apos;s happening, and how you can help, together with everyone else.
           </p>
-          <p style={{ color: T3, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: MONO, marginBottom: '8px' }}>Your name</p>
+          <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>Your name</p>
           <input
             value={name}
             onChange={e => setName(e.target.value)}
@@ -325,7 +325,7 @@ export default function RelayRoomPage() {
             </div>
 
             {/* ── Live timeline ── */}
-            <p style={{ color: T3, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '4px' }}>
+            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>
               Live timeline
             </p>
             <div style={{ borderTop: `2px solid ${T1}`, marginBottom: '26px' }}>
@@ -345,7 +345,7 @@ export default function RelayRoomPage() {
             </div>
 
             {/* ── Shared tasks ── */}
-            <p style={{ color: T3, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: '4px' }}>
+            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>
               How to help, shared with everyone
             </p>
             <div style={{ borderTop: `1px solid ${T1}`, marginBottom: '14px' }}>
@@ -387,7 +387,7 @@ export default function RelayRoomPage() {
             {/* ── Footer actions ── */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <a href={`tel:${emg.number}`}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px', borderRadius: '20px', textDecoration: 'none', minHeight: '54px' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: RED, color: 'white', fontWeight: 800, fontSize: '16px', padding: '16px', borderRadius: '12px', textDecoration: 'none', minHeight: '54px' }}>
                 <Phone size={17} strokeWidth={2.5}/> Call {emg.label}
               </a>
               <button onClick={() => setShowQr(q => !q)}

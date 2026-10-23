@@ -221,8 +221,8 @@ export default function EmergencyCard() {
   }
 
   const label: CSSProperties = {
-    display: 'block', color: INK3, fontFamily: mono, fontSize: '10px',
-    fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '6px',
+    display: 'block', color: INK3, fontSize: '13px',
+    fontWeight: 600, letterSpacing: '0', marginBottom: '6px',
   }
   const input: CSSProperties = {
     width: '100%', padding: '11px 13px', border: `1px solid ${BORDER}`, background: WHITE,
@@ -264,7 +264,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
             <ArrowLeft size={15}/> Relay Arc
           </button>
           {saved && hasAnything && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: GREEN_DEEP, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: GREEN_DEEP, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
               <Check size={13}/> Saved on this device
             </span>
           )}
@@ -276,7 +276,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
           <span style={{ width: '7px', height: '7px', background: ORANGE, display: 'inline-block' }}/>
-          <span style={{ color: INK2, fontFamily: mono, fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+          <span style={{ color: INK2, fontSize: '13px', letterSpacing: '0' }}>
             No account · nothing sent anywhere
           </span>
         </div>
@@ -299,8 +299,8 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
 
           <div>
             <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginBottom: '22px' }}>
-              <span style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-                01 / What a responder needs
+              <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+                What a responder needs
               </span>
             </div>
 
@@ -341,8 +341,8 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
               </div>
 
               <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginTop: '14px', marginBottom: '4px' }}>
-                <span style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-                  02 / Who to call
+                <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+                  Who to call
                 </span>
               </div>
               {c.contacts.map((ct, i) => (
@@ -367,8 +367,8 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
           {/* ── Live preview ──────────────────────────────────────────────── */}
           <div style={{ position: 'sticky', top: '90px' }}>
             <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginBottom: '22px' }}>
-              <span style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-                03 / Your card
+              <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+                Your card
               </span>
             </div>
 
@@ -390,7 +390,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
 
               {meds.length > 0 && (
                 <div style={{ marginBottom: '15px' }}>
-                  <p style={{ color: INK3, fontFamily: mono, fontSize: '9.5px', fontWeight: 700, letterSpacing: '1.3px', textTransform: 'uppercase', marginBottom: '5px' }}>Medications</p>
+                  <p style={{ color: INK3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '5px' }}>Medications</p>
                   {meds.map((m, i) => <p key={i} style={{ color: INK, fontSize: '14px', fontWeight: 600, lineHeight: 1.5 }}>· {m}</p>)}
                 </div>
               )}
@@ -398,7 +398,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
               {filledContacts.length > 0 && (
                 <>
                   <div style={{ height: '1px', background: BORDER, margin: '18px 0' }}/>
-                  <p style={{ color: INK3, fontFamily: mono, fontSize: '9.5px', fontWeight: 700, letterSpacing: '1.3px', textTransform: 'uppercase', marginBottom: '8px' }}>In an emergency, call</p>
+                  <p style={{ color: INK3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>In an emergency, call</p>
                   {filledContacts.map((ct, i) => (
                     <div key={i} style={{ marginBottom: '9px' }}>
                       <p style={{ color: INK, fontSize: '14.5px', fontWeight: 700 }}>{ct.name || 'Contact'}</p>
@@ -435,8 +435,8 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
 
         {/* ── Upgrade path, offered rather than demanded ───────────────────── */}
         <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginTop: '80px' }}>
-          <span style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-            04 / If you want more than a card
+          <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+            If you want more than a card
           </span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px', marginTop: '24px' }}>
@@ -495,7 +495,7 @@ function Field({ k, v, danger = false }: { k: string; v: string; danger?: boolea
   if (!v) return null
   return (
     <div style={{ marginBottom: '15px' }}>
-      <p style={{ color: INK3, fontFamily: mono, fontSize: '9.5px', fontWeight: 700, letterSpacing: '1.3px', textTransform: 'uppercase', marginBottom: '4px' }}>{k}</p>
+      <p style={{ color: INK3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>{k}</p>
       <p style={{ color: danger ? CRIT : INK, fontSize: '16px', fontWeight: danger ? 800 : 700, lineHeight: 1.35 }}>{v}</p>
     </div>
   )
@@ -504,7 +504,7 @@ function Field({ k, v, danger = false }: { k: string; v: string; danger?: boolea
 function WRow({ k, v, danger = false }: { k: string; v: string; danger?: boolean }) {
   return (
     <tr>
-      <td style={{ color: INK3, fontFamily: mono, fontSize: '5.5pt', fontWeight: 700, letterSpacing: '0.5pt', textTransform: 'uppercase', verticalAlign: 'top', padding: '1pt 6pt 1pt 0', whiteSpace: 'nowrap' }}>{k}</td>
+      <td style={{ color: INK3, fontSize: '5.5pt', fontWeight: 600, letterSpacing: '0', verticalAlign: 'top', padding: '1pt 6pt 1pt 0', whiteSpace: 'nowrap' }}>{k}</td>
       <td style={{ color: danger ? CRIT : INK, fontSize: '7pt', fontWeight: danger ? 800 : 600, lineHeight: 1.25, padding: '1pt 0' }}>{v}</td>
     </tr>
   )

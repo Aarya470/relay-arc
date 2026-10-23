@@ -13,7 +13,7 @@ const mono = 'var(--font-mono, monospace)'
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px', marginTop: '32px' }}>
+    <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px', marginTop: '32px' }}>
       {children}
     </p>
   )
@@ -71,7 +71,7 @@ export default function MedicalProfile() {
 
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px' }}>
-      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '60px', borderRadius: '20px', background: '#F2F0E8', marginBottom: '10px' }}/>)}
+      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '60px', borderRadius: '12px', background: '#F2F0E8', marginBottom: '10px' }}/>)}
     </div>
   )
 
@@ -98,10 +98,10 @@ export default function MedicalProfile() {
             <Share2 size={13}/> Share
           </button>
         </div>
-        <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>
+        <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>
           Medical profile · show to responders
         </p>
-        <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.05 }}>
+        <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-0.4px', lineHeight: 1.05 }}>
           {profile?.full_name || '. '}
         </h1>
         <p style={{ color: '#5C5A52', fontSize: '13px', marginTop: '8px' }}>
@@ -115,20 +115,20 @@ export default function MedicalProfile() {
         {/* Blood type + key facts — big numbers, no cards */}
         <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-end', borderBottom: '1px solid #98C890', padding: '28px 0 22px' }}>
           <div>
-            <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Blood type</p>
-            <p style={{ color: '#A33417', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
+            <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Blood type</p>
+            <p style={{ color: '#A33417', fontSize: '52px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 0.85 }}>
               {profile?.blood_type || '. '}
             </p>
           </div>
           <div>
-            <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Allergies</p>
-            <p style={{ color: allergies.length > 0 ? '#A33417' : '#141413', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
+            <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Allergies</p>
+            <p style={{ color: allergies.length > 0 ? '#A33417' : '#141413', fontSize: '52px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 0.85 }}>
               {allergies.length}
             </p>
           </div>
           <div>
-            <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>Medications</p>
-            <p style={{ color: '#141413', fontSize: '52px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.85 }}>
+            <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Medications</p>
+            <p style={{ color: '#141413', fontSize: '52px', fontWeight: 900, letterSpacing: '-0.8px', lineHeight: 0.85 }}>
               {meds.length}
             </p>
           </div>
@@ -137,7 +137,7 @@ export default function MedicalProfile() {
         {/* Allergies — critical, kept loud */}
         {allergies.length > 0 && (
           <div style={{ borderLeft: '3px solid #A33417', paddingLeft: '14px', marginTop: '24px' }}>
-            <p style={{ color: '#A33417', fontWeight: 700, fontSize: '11px', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '6px' }}>
+            <p style={{ color: '#A33417', fontWeight: 600, fontSize: '13px', letterSpacing: '0', marginBottom: '6px' }}>
               Critical: allergies
             </p>
             <p style={{ color: '#141413', fontSize: '16px', fontWeight: 700, letterSpacing: '-0.2px', lineHeight: 1.5 }}>
@@ -221,7 +221,7 @@ export default function MedicalProfile() {
 
         {/* Share */}
         <motion.button whileTap={{ scale: 0.98 }} onClick={handleShare}
-          style={{ width: '100%', background: '#141413', color: 'white', fontWeight: 600, fontSize: '14.5px', padding: '0 20px', borderRadius: '20px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '52px', fontFamily: 'inherit' }}>
+          style={{ width: '100%', background: '#141413', color: 'white', fontWeight: 600, fontSize: '14.5px', padding: '0 20px', borderRadius: '12px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '52px', fontFamily: 'inherit' }}>
           <Share2 size={15}/>
           Share with first responders
         </motion.button>

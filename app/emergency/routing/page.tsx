@@ -108,7 +108,7 @@ function CancelConfirmSheet({
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
             style={{
               background: T.card,
-              borderRadius: '20px',
+              borderRadius: '12px',
               border: `1px solid ${T.border}`,
               borderBottom: 'none',
               padding: '28px 20px 52px',
@@ -142,7 +142,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: '#F2F0E8',
-                  borderRadius: '20px',
+                  borderRadius: '12px',
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
                   fontWeight: 700,
@@ -163,7 +163,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: `#A33417`,
-                  borderRadius: '20px',
+                  borderRadius: '12px',
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
                   fontWeight: 700,
@@ -683,10 +683,8 @@ function RoutingPage() {
         </p>
         <p style={{
           color: T.textMuted,
-          fontSize: '12px',
-          fontFamily: 'var(--font-mono, monospace)',
-          letterSpacing: '0.5px',
-          textTransform: 'uppercase',
+          fontSize: '13px',
+          letterSpacing: '0',
         }}>
           Recording this emergency…
         </p>
@@ -779,7 +777,7 @@ function RoutingPage() {
           fontWeight: 800,
           fontSize: '17px',
           padding: '17px 0',
-          borderRadius: '20px',
+          borderRadius: '12px',
           textDecoration: 'none',
           boxShadow: T.redGlow,
           width: '100%',
@@ -801,7 +799,7 @@ function RoutingPage() {
           fontWeight: 500,
           fontSize: '13px',
           padding: '11px 24px',
-          borderRadius: '20px',
+          borderRadius: '12px',
           border: `1px solid #98C890`,
           cursor: 'pointer',
         }}
@@ -831,7 +829,7 @@ function RoutingPage() {
             transition={{ duration: 1.1, repeat: Infinity }}
             style={{ width: '8px', height: '8px', background: T.red, flexShrink: 0 }}
           />
-          <span style={{ color: T.red, fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <span style={{ color: T.red, fontSize: '13px', letterSpacing: '0', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {isDemo && <span style={{ background: T.textPrimary, color: 'white', padding: '2px 6px', borderRadius: '14px', marginRight: '7px' }}>DEMO</span>}
             Active emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
           </span>
@@ -845,7 +843,7 @@ function RoutingPage() {
       <div style={{ padding: '20px 20px 18px', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '20px' }}>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ color: T.textMuted, fontFamily: MONO, fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '1.8px', marginBottom: '7px' }}>
+            <p style={{ color: T.textMuted, fontSize: '13px', letterSpacing: '0', marginBottom: '7px' }}>
               Routing to
             </p>
             <p style={{ color: T.textPrimary, fontWeight: 800, fontSize: '22px', letterSpacing: '-0.6px', lineHeight: 1.1, marginBottom: '4px' }}>
@@ -857,27 +855,27 @@ function RoutingPage() {
               </p>
             )}
             {hospital.pci === 'yes' && (
-              <p style={{ color: T.green, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+              <p style={{ color: T.green, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
                 ✓ {hospital.capability} · {PCI_SOURCE}
               </p>
             )}
             {hospital.pci === 'no' && (
-              <p style={{ color: T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+              <p style={{ color: T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
                 ⚠ {hospital.capability}
               </p>
             )}
             {hospital.pci === 'unknown' && (
-              <p style={{ color: T.amber, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+              <p style={{ color: T.amber, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
                 Cath lab not confirmed for this hospital. Tell 911 it is chest pain
               </p>
             )}
             {hospital.pci === undefined && hospital.capability && hospital.capability !== 'Navigation' && (
-              <p style={{ color: T.green, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px' }}>
+              <p style={{ color: T.green, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
                 ✓ {hospital.capability}
               </p>
             )}
             {hospital.partner && fresh(hospital.partner) && (
-              <p style={{ color: hospital.partner.accepting ? T.green : T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginTop: '5px' }}>
+              <p style={{ color: hospital.partner.accepting ? T.green : T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '5px' }}>
                 {hospital.partner.accepting ? '✓ Accepting now' : '⚠ Diverting'}
                 {hospital.partner.cathLab === true ? ' · cath lab open' : ''}
                 {hospital.partner.bedsFree != null ? ` · ${hospital.partner.bedsFree} beds` : ''}
@@ -894,14 +892,14 @@ function RoutingPage() {
             </p>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
-            <p style={{ color: T.red, fontWeight: 800, fontSize: '38px', fontFamily: MONO, lineHeight: 0.9, letterSpacing: '-2px' }}>
+            <p style={{ color: T.red, fontWeight: 800, fontSize: '38px', fontFamily: MONO, lineHeight: 0.9, letterSpacing: '-0.8px' }}>
               {etaText(hospital)}
             </p>
             <p style={{ color: T.textMuted, fontSize: '12px', fontFamily: MONO, marginTop: '5px' }}>
               {formatDistance(hospital.distance || 0)}
             </p>
             {hospital.etaTrafficSec != null && (
-              <p style={{ color: hospital.liveTraffic ? T.green : T.amber, fontSize: '10px', fontFamily: MONO, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              <p style={{ color: hospital.liveTraffic ? T.green : T.amber, fontSize: '13px', marginTop: '4px', letterSpacing: '0' }}>
                 {hospital.liveTraffic ? 'live traffic' : trafficLabel()}
               </p>
             )}
@@ -923,7 +921,7 @@ function RoutingPage() {
           const coords = patientPos ? `${patientPos[0].toFixed(5)}, ${patientPos[1].toFixed(5)}` : null
           return (
             <div style={{ border: `2px solid ${T.red}`, padding: '14px', marginTop: '16px' }}>
-              <p style={{ color: T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '6px' }}>
+              <p style={{ color: T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>
                 Far from help · {eta} min drive
               </p>
               <p style={{ color: T.textPrimary, fontSize: '15px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px' }}>
@@ -939,7 +937,7 @@ function RoutingPage() {
                 <button
                   onClick={() => { try { navigator.clipboard.writeText(coords); toast.success('Location copied') } catch {} }}
                   style={{ display: 'block', width: '100%', textAlign: 'left', marginTop: '10px', background: 'transparent', border: `1px solid ${T.border}`, padding: '10px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  <span style={{ display: 'block', color: T.textMuted, fontFamily: MONO, fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase' }}>Read this to the dispatcher (tap to copy)</span>
+                  <span style={{ display: 'block', color: T.textMuted, fontSize: '13px', letterSpacing: '0' }}>Read this to the dispatcher (tap to copy)</span>
                   <span style={{ display: 'block', color: T.textPrimary, fontFamily: MONO, fontSize: '19px', fontWeight: 700, marginTop: '3px' }}>{coords}</span>
                 </button>
               )}
@@ -969,7 +967,7 @@ function RoutingPage() {
         {/* ── Getting there — solve the vehicle, not just the destination ── */}
         {patientPos && ride !== 'dismissed' && (
           <div style={{ borderTop: `1px solid ${T.border}`, marginTop: '14px', paddingTop: '14px' }}>
-            <p style={{ color: T.textMuted, fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '10px' }}>
+            <p style={{ color: T.textMuted, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '10px' }}>
               Getting there
             </p>
 
@@ -1059,7 +1057,7 @@ function RoutingPage() {
         {/* ── Notify family ─────────────────────────────────────────────────── */}
         {careTeamAlerted && (
           <div style={{ marginBottom: '30px' }}>
-            <p style={{ color: T.textMuted, fontFamily: MONO, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '4px' }}>
+            <p style={{ color: T.textMuted, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>
               Notify family
             </p>
 
@@ -1088,7 +1086,7 @@ function RoutingPage() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px',
                     background: T.blue, color: 'white',
                     fontWeight: 700, fontSize: '15px',
-                    padding: '16px', borderRadius: '20px',
+                    padding: '16px', borderRadius: '12px',
                     textDecoration: 'none', minHeight: '54px',
                   }}
                 >
@@ -1135,14 +1133,14 @@ function RoutingPage() {
         {/* ── First responder info — always visible, no box ─────────────────── */}
         {profile && (profile.blood_type || profile.allergies || (profile.medications?.length > 0)) && (
           <div style={{ marginBottom: '30px' }}>
-            <p style={{ color: T.red, fontFamily: MONO, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '4px' }}>
+            <p style={{ color: T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>
               First responder info. Show this screen
             </p>
             <div style={{ borderTop: `2px solid ${T.red}` }}>
               {profile.blood_type && (
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
                   <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Blood type</span>
-                  <span style={{ color: T.red, fontWeight: 900, fontSize: '34px', fontFamily: MONO, letterSpacing: '-1px', lineHeight: 0.9 }}>
+                  <span style={{ color: T.red, fontWeight: 900, fontSize: '34px', fontFamily: MONO, letterSpacing: '-0.4px', lineHeight: 0.9 }}>
                     {profile.blood_type}
                   </span>
                 </div>
@@ -1172,7 +1170,7 @@ function RoutingPage() {
           <div style={{ marginBottom: '30px' }}>
             <button
               onClick={() => setShowAll(!showAll)}
-              style={{ color: T.textMuted, fontSize: '10px', fontWeight: 700, fontFamily: MONO, background: 'none', border: 'none', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1.6px', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '5px', padding: 0 }}
+              style={{ color: T.textMuted, fontSize: '13px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '5px', padding: 0 }}
             >
               {showAll ? 'Hide other hospitals' : `${nearbyHospitals.length - 1} other hospital${nearbyHospitals.length - 1 > 1 ? 's' : ''} nearby`}
               <ChevronRight size={11} style={{ transform: showAll ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s ease' }}/>
@@ -1233,7 +1231,7 @@ function RoutingPage() {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 background: 'none', color: T.red,
-                padding: '15px', borderRadius: '20px',
+                padding: '15px', borderRadius: '12px',
                 fontWeight: 700, fontSize: '14.5px',
                 border: `1.5px solid ${T.red}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
               }}
@@ -1248,7 +1246,7 @@ function RoutingPage() {
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               background: 'none', color: T.textPrimary,
-              padding: '15px', borderRadius: '20px',
+              padding: '15px', borderRadius: '12px',
               fontWeight: 700, fontSize: '14.5px',
               border: `1.5px solid ${T.textPrimary}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
             }}
@@ -1286,7 +1284,7 @@ function RoutingPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
                 <motion.div animate={{ opacity: [1, 0.25, 1] }} transition={{ duration: 1.1, repeat: Infinity }}
                   style={{ width: '8px', height: '8px', background: T.red }}/>
-                <span style={{ color: T.red, fontFamily: MONO, fontSize: '10.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontWeight: 700 }}>
+                <span style={{ color: T.red, fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
                   Relay navigation
                 </span>
               </div>

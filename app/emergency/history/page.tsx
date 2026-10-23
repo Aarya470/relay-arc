@@ -95,7 +95,7 @@ export default function EmergencyHistoryPage() {
   if (loading) return (
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 40px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {[1, 2, 3].map(i => (
-        <div key={i} style={{ height: '72px', borderRadius: '20px', background: '#F2F0E8', animation: 'pulse 1.5s ease-in-out infinite' }}/>
+        <div key={i} style={{ height: '72px', borderRadius: '12px', background: '#F2F0E8', animation: 'pulse 1.5s ease-in-out infinite' }}/>
       ))}
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
     </div>
@@ -131,7 +131,7 @@ export default function EmergencyHistoryPage() {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 20px', textAlign: 'center' }}
           >
             <div style={{
-              width: '64px', height: '64px', borderRadius: '20px',
+              width: '64px', height: '64px', borderRadius: '12px',
               background: 'rgba(163,52,23,0.10)', border: '1px solid rgba(163,52,23,0.18)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px',
             }}>
@@ -145,7 +145,7 @@ export default function EmergencyHistoryPage() {
               style={{
                 marginTop: '28px', background: '#42623C', color: 'white',
                 fontWeight: 600, fontSize: '14px', padding: '12px 24px',
-                borderRadius: '20px', border: 'none', cursor: 'pointer',
+                borderRadius: '12px', border: 'none', cursor: 'pointer',
                 
               }}
             >
@@ -158,9 +158,8 @@ export default function EmergencyHistoryPage() {
               <motion.div key={month} variants={fadeUp}>
                 {/* Month chip */}
                 <p style={{
-                  color: '#5C5A52', fontSize: '11px', fontWeight: 700,
-                  letterSpacing: '1.2px', textTransform: 'uppercase',
-                  fontFamily: 'var(--font-mono, monospace)',
+                  color: '#5C5A52', fontSize: '13px', fontWeight: 600,
+                  letterSpacing: '0',
                   marginBottom: '10px',
                 }}>
                   {month}
@@ -176,7 +175,7 @@ export default function EmergencyHistoryPage() {
                         style={{
                           background: '#FFFFFF',
                           border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(163,52,23,0.20)'}`,
-                          borderRadius: '20px',
+                          borderRadius: '12px',
                           boxShadow: resolved ? 'none' : '0 2px 16px rgba(163,52,23,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
@@ -186,7 +185,7 @@ export default function EmergencyHistoryPage() {
                       >
                         {/* Icon */}
                         <div style={{
-                          width: '40px', height: '40px', borderRadius: '20px',
+                          width: '40px', height: '40px', borderRadius: '12px',
                           background: resolved ? '#F2F0E8' : 'rgba(163,52,23,0.12)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                         }}>

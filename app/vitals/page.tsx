@@ -177,7 +177,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       style={{
         background: '#FFFFFF',
         border: '1px solid #98C890',
-        borderRadius: '20px',
+        borderRadius: '12px',
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
@@ -198,8 +198,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
         </div>
         <span style={{
           background: ss.bg, border: `1px solid ${ss.border}`, color: ss.text,
-          fontSize: '10px', fontWeight: 800, padding: '3px 9px', borderRadius: '14px',
-          fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '0.5px',
+          fontSize: '13px', fontWeight: 600, padding: '3px 9px', borderRadius: '14px', letterSpacing: '0',
         }}>
           {statusLabel}
         </span>
@@ -224,7 +223,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <div style={{ lineHeight: 1 }}>
           <span style={{
-            color: '#141413', fontWeight: 800, fontSize: '32px', letterSpacing: '-1.2px',
+            color: '#141413', fontWeight: 800, fontSize: '32px', letterSpacing: '-0.5px',
             fontFamily: 'var(--font-mono, monospace)',
           }}>
             {Number.isInteger(latest) ? latest : latest.toFixed(1)}
@@ -239,8 +238,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
         <div style={{ textAlign: 'right' }}>
           <div style={{ color: arrowColor, fontSize: '20px', fontWeight: 700, lineHeight: 1 }}>{arrow}</div>
           <div style={{
-            color: '#5C5A52', fontSize: '10px',
-            fontFamily: 'var(--font-mono, monospace)', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.4px',
+            color: '#5C5A52', fontSize: '13px', marginTop: '3px', letterSpacing: '0',
           }}>
             avg {avg.toFixed(1)} {meta.unit}
           </div>
@@ -410,7 +408,7 @@ export default function VitalsPage() {
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '80px' }}>
       {isDemo && (
         <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
             {DEMO_BANNER}
           </span>
         </div>
@@ -422,17 +420,17 @@ export default function VitalsPage() {
           style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#5C5A52', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
           <ArrowLeft size={14}/> Dashboard
         </button>
-        <p style={{ color: '#5C5A52', fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>
+        <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>
           {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })} · log your readings
         </p>
-        <h1 style={{ color: '#141413', fontWeight: 800, fontSize: '32px', letterSpacing: '-1px', lineHeight: 1 }}>Vitals</h1>
+        <h1 style={{ color: '#141413', fontWeight: 800, fontSize: '32px', letterSpacing: '-0.4px', lineHeight: 1 }}>Vitals</h1>
       </div>
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
         {/* No device? The phone is the device. */}
         <button onClick={() => router.push('/check')}
-          style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left', background: '#141413', color: '#FFFFFF', border: 'none', borderRadius: '20px', padding: '16px', cursor: 'pointer', fontFamily: 'inherit' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left', background: '#141413', color: '#FFFFFF', border: 'none', borderRadius: '12px', padding: '16px', cursor: 'pointer', fontFamily: 'inherit' }}>
           <Heart size={20} color="#FF8A70"/>
           <span style={{ flex: 1 }}>
             <span style={{ display: 'block', fontWeight: 800, fontSize: '15px' }}>Measure with your phone</span>
@@ -442,8 +440,8 @@ export default function VitalsPage() {
         </button>
 
         {/* Entry grid */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '16px' }}>
-          <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Today's readings</p>
+        <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '12px', padding: '16px' }}>
+          <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0', marginBottom: '16px' }}>Today's readings</p>
 
           {/* Heart rate */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #EDEAE0', marginBottom: '14px' }}>
@@ -576,7 +574,7 @@ export default function VitalsPage() {
           style={{
             background: '#42623C',
             color: '#FFFFFF',
-            fontWeight: 800, fontSize: '15px', padding: '17px', borderRadius: '20px',
+            fontWeight: 800, fontSize: '15px', padding: '17px', borderRadius: '12px',
             border: 'none', cursor: saving ? 'not-allowed' : 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             opacity: saving ? 0.65 : 1,
@@ -591,13 +589,12 @@ export default function VitalsPage() {
         {loadingHistory ? (
           <div>
             <p style={{
-              color: '#5C5A52', fontSize: '10px',
-              fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase',
-              letterSpacing: '1px', marginBottom: '12px',
+              color: '#5C5A52', fontSize: '13px',
+              letterSpacing: '0', marginBottom: '12px',
             }}>Trends</p>
             {[1, 2, 3].map(i => (
               <Skeleton key={i} style={{
-                height: '140px', borderRadius: '20px',
+                height: '140px', borderRadius: '12px',
                 background: '#FFFFFF', marginBottom: '10px',
               }}/>
             ))}
@@ -606,8 +603,7 @@ export default function VitalsPage() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <p style={{
-                color: '#5C5A52', fontSize: '10px',
-                fontFamily: 'var(--font-mono, monospace)', textTransform: 'uppercase', letterSpacing: '1px',
+                color: '#5C5A52', fontSize: '13px', letterSpacing: '0',
               }}>Trends</p>
               <div style={{ width: '152px' }}>
                 <TimeRangeSelector value={timeRange} onChange={setTimeRange}/>
@@ -632,7 +628,7 @@ export default function VitalsPage() {
             ) : (
               <div style={{
                 background: '#FFFFFF', border: '1px solid #98C890',
-                borderRadius: '20px', padding: '36px 16px', textAlign: 'center',
+                borderRadius: '12px', padding: '36px 16px', textAlign: 'center',
               }}>
                 <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 700 }}>
                   No data for {timeRange} view
