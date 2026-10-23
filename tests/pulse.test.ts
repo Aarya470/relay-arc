@@ -5,7 +5,7 @@
 // a PPG pulse shape with a harmonic, slow drift from finger pressure, sensor
 // noise and an uneven camera frame rate. The estimator must recover the rate,
 // and must REFUSE to answer on pure noise rather than return a confident number.
-import { estimateHeartRate, estimateBreathRate, breathRateFromTaps, fingerPresent, confirmHeartRate, bestChannelEstimate, type Sample } from '../lib/pulse/index.ts'
+import { estimateHeartRate, estimateBreathRate, breathRateFromTaps, fingerPresent, confirmHeartRate, bestChannelEstimate, approxHeartRate, type Sample } from '../lib/pulse/index.ts'
 
 let pass = 0, fail = 0
 const ok = (name: string, cond: boolean, detail = '') => {
@@ -60,6 +60,16 @@ console.log('\n=== Confirmation: noise must not produce a reading ===')
   const green = ppg(90, 15, 0.6).map(x => ({ t: x.t, v: x.v - 100 }))
   const b = bestChannelEstimate(red, green)
   ok('saturated red channel: falls back to green', b.channel === 'green' && b.confirmed && Math.abs((b.rate ?? 0) - 90) <= 3, `${b.channel} ${b.rate}`)
+}
+
+console.log('\n=== Approximate pulse when the window ends unconfirmed ===')
+{
+  const noisy = ppg(84, 15, 3.5)
+  const a = approxHeartRate(noisy, noisy)
+  ok('very noisy 15 s trace still gives an estimate near the truth', !!a && Math.abs(a.rate - 84) <= 8, `${a?.rate} (${a?.confidence}, q ${a?.quality})`)
+  const clean = approxHeartRate(ppg(66, 15, 0.6), ppg(66, 15, 0.6))
+  ok('clean trace is labelled good confidence', !!clean && clean.confidence === 'good' && Math.abs(clean.rate - 66) <= 3, `${clean?.rate} ${clean?.confidence}`)
+  ok('under 5 s of signal gives no estimate', approxHeartRate(ppg(70, 3, 0.6), []) === null)
 }
 
 console.log('\n=== Breathing rate from a phone resting on the chest ===')

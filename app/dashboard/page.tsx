@@ -24,7 +24,20 @@ import { notch, octagon } from '@/lib/shape'
 import { toast } from 'sonner'
 // lib/risk is pure and dependency-free, so it is safe in the client bundle —
 // unlike the old crash-risk module, which pulled in groq-sdk.
-import { assessRisk, type RiskAssessment, type VitalsSample } from '@/lib/risk'
+import { assessRisk, type RiskAssessment, type VitalsSample, scoreRespRate, scoreSpo2, scoreSystolic, scorePulse, scoreTemperature, scoreConsciousness, scoreSupplementalOxygen } from '@/lib/risk'
+import { collectNews2, type News2Inputs } from '@/lib/news2/sources'
+
+/** NEWS2 aggregate from whatever parameters are known. Same table as /check. */
+function news2Total(n: News2Inputs) {
+  const pts = [
+    n.resp_rate && scoreRespRate(n.resp_rate.value), n.spo2 && scoreSpo2(n.spo2.value),
+    n.on_oxygen && scoreSupplementalOxygen(n.on_oxygen.value), n.temp_c && scoreTemperature(n.temp_c.value),
+    n.systolic && scoreSystolic(n.systolic.value), n.pulse && scorePulse(n.pulse.value),
+    n.acvpu && scoreConsciousness(n.acvpu.value),
+  ].filter((x): x is number => typeof x === 'number')
+  const ats = Object.values(n).map(r => r!.at.getTime())
+  return { total: pts.reduce((a, b) => a + b, 0), count: pts.length, updated: ats.length ? new Date(Math.max(...ats)) : null }
+}
 import { DEMO_PATIENTS, DEMO_CHECKINS, DEMO_VITALS, DEMO_BANNER } from '@/lib/demo-data'
 type CrashRisk = RiskAssessment
 
@@ -399,6 +412,7 @@ export default function Dashboard() {
   const [installPrompt, setInstallPrompt]     = useState<any>(null)
   const [showIosHint, setShowIosHint]         = useState(false)
   const [crashRisk, setCrashRisk]       = useState<CrashRisk | null>(null)
+  const [news2, setNews2] = useState<{ total: number; count: number; updated: Date | null } | null>(null)
   const [isDemo, setIsDemo] = useState(false)
   const router = useRouter()
 
@@ -424,6 +438,8 @@ export default function Dashboard() {
         setProfile(DEMO_PATIENTS[1] as any)
         setCheckins(DEMO_CHECKINS.filter(c => c.user_id === 'demo-p2') as any)
         setCrashRisk(assessRisk(DEMO_VITALS as VitalsSample[]) as any)
+        { const latest = (DEMO_VITALS as any[]).slice().sort((x, y) => +new Date(y.logged_at) - +new Date(x.logged_at))[0]
+          setNews2(news2Total(collectNews2([{ ...latest, logged_at: new Date().toISOString(), source: 'apple_health' }], [{ created_at: new Date().toISOString(), summary: 'Felt a bit confused after standing.' }]))) }
         setLoading(false)
         return
       }
@@ -459,7 +475,7 @@ export default function Dashboard() {
       // so a returning offline user gets the same assessment they had last time.
       supabase
         .from('vitals_logs')
-        .select('heart_rate, systolic, diastolic, oxygen_sat, resp_rate, logged_at')
+        .select('heart_rate, systolic, diastolic, oxygen_sat, resp_rate, logged_at, source')
         .eq('user_id', user.id)
         .gte('logged_at', new Date(Date.now() - 21 * 86400000).toISOString())
         .order('logged_at', { ascending: false })
@@ -473,6 +489,8 @@ export default function Dashboard() {
           if (!use.length) {
             try { use = JSON.parse(localStorage.getItem('relay_offline_vitals') || '[]') } catch {}
           }
+          // Live NEWS2 sheet: phone readings, Apple Watch and today's check-in.
+          setNews2(news2Total(collectNews2((vl || []) as any, (c || []) as any)))
           const risk = assessRisk(use, { checkinDates: (c || []).map((x: any) => x.created_at) })
           if (risk && risk.level !== 'low') setCrashRisk(risk)
         })
@@ -553,7 +571,7 @@ export default function Dashboard() {
 
       {/* Meeting banner */}
       <AnimatePresence>
-        {upcomingMeeting && (
+        {false && upcomingMeeting && (
           <motion.div
             initial={{ y: -56, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -56, opacity: 0 }}
             transition={ease}
@@ -773,8 +791,8 @@ export default function Dashboard() {
                 ) : null}
 
                 <p style={{ color: T2, fontSize: '12px', lineHeight: 1.6 }}>
-                  Your care team can see these readings. Relay Arc does not assess
-                  whether they are serious. Only a clinician can.
+                  Relay Arc does not assess whether these are serious. Only a
+                  clinician can.
                 </p>
                 <p style={{
                   color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',
@@ -790,18 +808,23 @@ export default function Dashboard() {
           )}
         </AnimatePresence>
 
-        {/* Vitals: measure with the phone itself, or log readings by hand.
-            /vitals was only reachable from Settings before. */}
+        {/* Vitals: measure with the phone, and the live NEWS2 sheet. NEWS2 is
+            shown as a number for a clinician to read, labelled as such, with no
+            colour banding or advice (same framing as /check). It updates from
+            phone readings, Apple Watch and what was said in today's check-in. */}
         <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '10px' }}>
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/check')}
             style={{ background: T1, border: 'none', borderRadius: '12px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Vitals check</p>
             <p style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: 800, lineHeight: 1.25 }}>Measure pulse and breathing with your phone</p>
           </motion.button>
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/vitals')}
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
-            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Vitals</p>
-            <p style={{ color: T1, fontSize: '15px', fontWeight: 800, lineHeight: 1.25 }}>Log and see your readings</p>
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/check')}
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', padding: '14px 16px', textAlign: 'left', cursor: 'pointer' }}>
+            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, marginBottom: '2px' }}>NEWS2 for your clinician</p>
+            <p style={{ color: T1, fontSize: '30px', fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>{news2 && news2.count >= 2 ? news2.total : '–'}</p>
+            <p style={{ color: T3, fontSize: '12px', marginTop: '2px' }}>
+              {news2 && news2.count ? `${news2.count} of 7 measured${news2.updated ? `, ${news2.updated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : ''}` : 'Nothing in the last 24 h'}
+            </p>
           </motion.button>
         </motion.div>
 
@@ -932,8 +955,8 @@ export default function Dashboard() {
               iconBg: BG,
             },
             {
-              label: 'Connect Apple Health',
-              sub: 'Auto-sync vitals from your iPhone',
+              label: 'Connect Apple Watch',
+              sub: 'Readings arrive by themselves, nothing to upload',
               href: '/connect-health',
               icon: <Heart size={15} color={ACCENT}/>,
               iconBg: ACCENT_DIM,
@@ -998,33 +1021,6 @@ export default function Dashboard() {
             ) : (
               <p style={{ color: T3, fontSize: '13px' }}>No medications added</p>
             )}
-          </motion.button>
-        </motion.div>
-
-        {/* Care team */}
-        <motion.div variants={fadeUp}>
-          <motion.button
-            whileTap={{ scale: 0.99 }}
-            onClick={() => router.push('/appointments')}
-            style={{
-              background: 'rgba(86,128,78,0.04)',
-              border: `1px solid rgba(86,128,78,0.10)`,
-              borderRadius: '12px', padding: '14px 16px',
-              cursor: 'pointer', width: '100%',
-              display: 'flex', alignItems: 'center', gap: '12px',
-            }}>
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '14px',
-              background: ACCENT, flexShrink: 0,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Video size={15} color="#FFFFFF" strokeWidth={2}/>
-            </div>
-            <div style={{ flex: 1, textAlign: 'left' }}>
-              <p style={{ color: T1, fontWeight: 700, fontSize: '14px', letterSpacing: '-0.2px' }}>Care team</p>
-              <p style={{ color: T3, fontSize: '12px', marginTop: '1px' }}>Schedule or join a call</p>
-            </div>
-            <ChevronRight size={14} color={ACCENT} strokeWidth={2}/>
           </motion.button>
         </motion.div>
 

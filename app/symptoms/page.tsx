@@ -565,7 +565,7 @@ export default function SymptomsPage() {
             maxLength={200}
             value={note}
             onChange={e => setNote(e.target.value.slice(0, 200))}
-            placeholder="Any extra detail to share with your care team…"
+            placeholder="Any extra detail to share with your doctor…"
             rows={3}
             style={{
               width: '100%',

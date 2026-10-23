@@ -1,342 +1,160 @@
 'use client'
-import { useState, useEffect } from 'react'
+// /connect-health — get Apple Watch readings into Relay Arc with nothing to upload.
+//
+// A website cannot read Apple Health directly; Apple only allows that for apps
+// installed on the iPhone. So the iPhone pushes the readings to us instead:
+//   1. Health Auto Export (App Store) has a REST automation that posts new
+//      watch readings to a URL every hour in the background. Setup is pasting
+//      one link. Its automations need the app's premium tier or free trial.
+//   2. Free alternative: an Apple Shortcuts personal automation that posts the
+//      latest heart rate (and optionally oxygen and breathing) on a schedule.
+// Both post to /api/health/ingest with the person's own key in the link. The
+// route accepts either format (lib/health/ingest-parse.ts). Readings land in
+// vitals_logs with source 'apple_health' and feed the NEWS2 sheet.
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Copy, Check, ChevronRight, Heart, Activity, Zap, AlertCircle, RefreshCw } from 'lucide-react'
+import { ArrowLeft, Copy, Check, RefreshCw, Watch } from 'lucide-react'
 import { toast } from 'sonner'
+import { supabase } from '@/lib/supabase'
 import { SITE_URL } from '@/lib/site'
 
-// ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#B3DDAC'
-const SURFACE = '#FFFFFF'
-const T1      = '#141413'
-const T2      = '#5C5A52'
-const T3      = '#5C5A52'
-const ACCENT  = '#42623C'
-const ACCENT_DIM = 'rgba(86,128,78,0.08)'
-const GREEN   = '#42623C'
-const GREEN_DIM = 'rgba(86,128,78,0.08)'
-const BORDER  = '#98C890'
-const SHADOW  = 'none'
+const PAGE = '#B3DDAC', T1 = '#141413', T2 = '#3F3D36', T3 = '#6E6B5D', LINE = '#E4E2DA', GREEN = '#3B5E35'
+const panel: React.CSSProperties = { background: '#FFFFFF', border: '1px solid rgba(20,20,19,0.14)', borderRadius: '10px', padding: '18px', marginBottom: '14px' }
+const h2: React.CSSProperties = { fontSize: '19px', fontWeight: 700, color: T1, margin: 0 }
+const btn = (primary: boolean): React.CSSProperties => ({
+  display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center',
+  background: primary ? T1 : '#FFFFFF', color: primary ? '#FFFFFF' : T1, border: `1.5px solid ${T1}`,
+  borderRadius: '8px', padding: '11px 16px', minHeight: '46px', fontWeight: 700, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit',
+})
 
-const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } }
-const fadeUp  = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: spring } }
-
-// Two real routes into Apple Health. The old step 1 linked to an iCloud
-// shortcut URL that never existed, so nobody could actually connect.
-//   1. One-off import: Health → Export All Health Data → /check reads the file
-//      on the phone. Works for anyone, no account, nothing uploaded.
-//   2. Daily automatic sync: a Shortcut the person builds in about two minutes
-//      that posts their latest readings to /api/health/ingest with their key.
-const STEPS = [
-  {
-    num: '01',
-    title: 'Quickest: import your Health export',
-    body: 'In the Health app tap your picture, then Export All Health Data. Open the Relay vitals check and choose the export.zip file. It is read on your phone and nothing is uploaded. Your pulse, oxygen, breathing rate, blood pressure and temperature fill in, and you get a NEWS2 score.',
-    cta: 'Open the vitals check →',
-    ctaHref: '/check',
-  },
-  {
-    num: '02',
-    title: 'Daily sync: build the shortcut',
-    body: 'In the Shortcuts app tap +. Add "Find Health Samples", set the type to Heart Rate, sort by latest first, limit 1. Add "Get Contents of URL" with the address shown below, method POST, request body JSON with: api_key = your key below, source = apple_health, and readings = a list containing type heart_rate and value from the Health sample. Repeat the find step for Oxygen Saturation, Respiratory Rate and Blood Pressure if you have them.',
-  },
-  {
-    num: '03',
-    title: 'Allow Health access',
-    body: 'The first time the shortcut runs, iOS asks which Health data it may read. Allow the types you added.',
-  },
-  {
-    num: '04',
-    title: 'Run it every morning',
-    body: 'In Shortcuts tap Automation, then New Automation, then Time of Day. Pick a time, choose your Relay shortcut, and turn off Ask Before Running. Done.',
-  },
-]
-
-const SUPPORTED = [
-  { icon: Heart,    label: 'Heart rate' },
-  { icon: Activity, label: 'Blood pressure' },
-  { icon: Zap,      label: 'O₂ saturation' },
-  { icon: Activity, label: 'Respiratory rate' },
-  { icon: Heart,    label: 'Heart rate variability' },
-  { icon: Activity, label: 'Steps' },
-  { icon: Activity, label: 'Weight' },
-]
-
-function CopyButton({ value }: { value: string }) {
-  const [copied, setCopied] = useState(false)
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(value)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-      toast.success('Copied to clipboard')
-    } catch {
-      toast.error('Could not copy. Please copy manually')
-    }
-  }
+function Steps({ items }: { items: React.ReactNode[] }) {
   return (
-    <motion.button
-      whileTap={{ scale: 0.92 }}
-      onClick={copy}
-      style={{
-        display: 'flex', alignItems: 'center', gap: '6px',
-        background: copied ? GREEN_DIM : ACCENT_DIM,
-        border: `1px solid ${copied ? 'rgba(86,128,78,0.2)' : 'rgba(86,128,78,0.2)'}`,
-        borderRadius: '14px',
-        padding: '7px 13px',
-        cursor: 'pointer',
-        color: copied ? GREEN : ACCENT,
-        fontSize: '12px', fontWeight: 700,
-        transition: 'all 0.2s ease',
-        flexShrink: 0,
-      }}>
-      {copied ? <Check size={12}/> : <Copy size={12}/>}
-      {copied ? 'Copied' : 'Copy'}
-    </motion.button>
+    <ol style={{ margin: '10px 0 0', paddingLeft: '20px', color: T2, fontSize: '15px', lineHeight: 1.55 }}>
+      {items.map((it, i) => <li key={i} style={{ marginBottom: '8px' }}>{it}</li>)}
+    </ol>
   )
 }
 
 export default function ConnectHealth() {
-  const [token, setToken]       = useState<string | null>(null)
-  const [loading, setLoading]   = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
-  const [connected, setConnected]   = useState(false)
   const router = useRouter()
+  const [token, setToken] = useState<string | null>(null)
+  const [last, setLast] = useState<Date | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
 
-  const loadToken = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.push('/login'); return }
+  const loadStatus = async (uid: string) => {
+    const { data } = await supabase.from('vitals_logs').select('logged_at, created_at').eq('user_id', uid)
+      .eq('source', 'apple_health').order('created_at', { ascending: false }).limit(1)
+    setLast(data?.[0] ? new Date(data[0].created_at || data[0].logged_at) : null)
+  }
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('health_ingest_token')
-      .eq('id', user.id)
-      .single()
-
-    if (profile?.health_ingest_token) {
-      setToken(profile.health_ingest_token)
-    } else {
-      // Generate and save a new token
-      const newToken = crypto.randomUUID().replace(/-/g, '')
-      const { error } = await supabase
-        .from('profiles')
-        .update({ health_ingest_token: newToken })
-        .eq('id', user.id)
-      if (!error) setToken(newToken)
+  useEffect(() => {
+    let iv: ReturnType<typeof setInterval> | undefined
+    const load = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { router.push('/login'); return }
+      const { data: profile } = await supabase.from('profiles').select('health_ingest_token').eq('id', user.id).single()
+      if (profile?.health_ingest_token) setToken(profile.health_ingest_token)
+      else {
+        const t = crypto.randomUUID().replace(/-/g, '')
+        const { error } = await supabase.from('profiles').update({ health_ingest_token: t }).eq('id', user.id)
+        if (!error) setToken(t)
+      }
+      await loadStatus(user.id)
+      setLoading(false)
+      // keep checking while the page is open, so the first sync shows up live
+      iv = setInterval(() => loadStatus(user.id), 10000)
     }
+    load()
+    return () => { if (iv) clearInterval(iv) }
+  }, [])
 
-    // Check if we have any Apple Health data (vitals with source='apple_health')
-    const { data: vitals } = await supabase
-      .from('vitals_logs')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('source', 'apple_health')
-      .limit(1)
-    setConnected((vitals?.length ?? 0) > 0)
-    setLoading(false)
+  const origin = typeof window !== 'undefined' ? window.location.origin : SITE_URL
+  const link = token ? `${origin}/api/health/ingest?key=${token}` : ''
+
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 2000) }
+    catch { toast.error('Could not copy. Press and hold the link to copy it') }
   }
-
-  useEffect(() => { loadToken() }, [])
-
-  const regenerateToken = async () => {
-    setRefreshing(true)
+  const newKey = async () => {
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setRefreshing(false); return }
-    const newToken = crypto.randomUUID().replace(/-/g, '')
-    const { error } = await supabase.from('profiles').update({ health_ingest_token: newToken }).eq('id', user.id)
-    if (!error) { setToken(newToken); toast.success('New API key generated. Update your Shortcut') }
-    setRefreshing(false)
+    if (!user) return
+    const t = crypto.randomUUID().replace(/-/g, '')
+    const { error } = await supabase.from('profiles').update({ health_ingest_token: t }).eq('id', user.id)
+    if (!error) { setToken(t); toast.success('New link made. The old one no longer works, so paste the new one into your app') }
   }
-
-  const ingestUrl = (typeof window !== 'undefined' ? window.location.origin : SITE_URL) + '/api/health/ingest'
 
   return (
-    <div style={{ minHeight: '100dvh', background: BG, paddingBottom: '32px' }}>
+    <div style={{ background: PAGE, minHeight: '100dvh' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '16px 16px 64px' }}>
+        <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '15px', cursor: 'pointer', padding: '6px 0', fontFamily: 'inherit' }}>
+          <ArrowLeft size={17}/> Back
+        </button>
 
-      {/* Header */}
-      <div style={{
-        padding: '52px 20px 18px',
-        borderBottom: `1px solid ${BORDER}`,
-        background: 'rgba(255,255,255,0.94)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        display: 'flex', alignItems: 'center', gap: '12px',
-      }}>
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => router.back()}
-          style={{
-            width: '34px', height: '34px', borderRadius: '14px',
-            background: BG, border: `1px solid ${BORDER}`,
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}>
-          <ArrowLeft size={15} color={T2}/>
-        </motion.button>
-        <div>
-          <h1 style={{ color: T1, fontWeight: 800, fontSize: '17px', letterSpacing: '-0.4px', margin: 0 }}>Connect Apple Health</h1>
-          <p style={{ color: T3, fontSize: '11px', marginTop: '2px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.4px' }}>
-            Auto-sync vitals from your iPhone
+        <div style={{ margin: '14px 0 18px' }}>
+          <h1 style={{ color: T1, fontSize: '30px', fontWeight: 800, letterSpacing: '-0.4px', lineHeight: 1.15, margin: '0 0 8px' }}>Connect Apple Watch</h1>
+          <p style={{ color: T2, fontSize: '16px', lineHeight: 1.55, margin: 0 }}>
+            Set this up once and your watch&apos;s heart rate, breathing rate, blood oxygen and blood pressure arrive in Relay Arc by
+            themselves, about every hour. Nothing to export or upload. They go straight into your NEWS2 sheet.
           </p>
         </div>
-        {connected && (
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px', background: GREEN_DIM, border: '1px solid rgba(86,128,78,0.2)', borderRadius: '14px', padding: '4px 10px' }}>
-            <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: GREEN }}/>
-            <span style={{ color: GREEN, fontSize: '10px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>SYNCED</span>
+
+        {/* status */}
+        <section style={{ ...panel, display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <Watch size={24} color={last ? GREEN : T3}/>
+          <div style={{ flex: 1 }}>
+            <p style={{ fontSize: '16px', fontWeight: 700, color: last ? GREEN : T1 }}>{loading ? 'Checking…' : last ? 'Connected' : 'Not connected yet'}</p>
+            <p style={{ fontSize: '14px', color: T3 }}>
+              {last ? `Last reading arrived ${last.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}` : 'This updates by itself as soon as the first reading arrives.'}
+            </p>
           </div>
-        )}
+        </section>
+
+        {/* link */}
+        <section style={panel}>
+          <h2 style={h2}>Your sync link</h2>
+          <p style={{ fontSize: '14px', color: T3, margin: '4px 0 10px' }}>This link is private to you, like a password. Paste it into one of the apps below.</p>
+          <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '12.5px', color: T1, background: '#FBFAF6', border: `1px solid ${LINE}`, borderRadius: '6px', padding: '10px 12px', wordBreak: 'break-all' }}>
+            {link || '…'}
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
+            <button style={btn(true)} onClick={copy} disabled={!link}>{copied ? <Check size={17}/> : <Copy size={17}/>} {copied ? 'Copied' : 'Copy link'}</button>
+            <button style={btn(false)} onClick={newKey}><RefreshCw size={16}/> Make a new link</button>
+          </div>
+        </section>
+
+        {/* option 1 */}
+        <section style={panel}>
+          <h2 style={h2}>Easiest: Health Auto Export</h2>
+          <p style={{ fontSize: '14px', color: T3, margin: '4px 0 0' }}>About two minutes, then it runs in the background. Automatic syncing needs the app&apos;s premium tier or its free trial.</p>
+          <Steps items={[
+            <>Install <strong>Health Auto Export – JSON+CSV</strong> from the App Store and allow it to read Health.</>,
+            <>Open <strong>Automations</strong>, tap <strong>New Automation</strong>, choose <strong>REST API</strong>.</>,
+            <>Paste your sync link into <strong>URL</strong>.</>,
+            <>Data type <strong>Health Metrics</strong>. Select <strong>Heart Rate</strong>, <strong>Respiratory Rate</strong>, <strong>Blood Oxygen Saturation</strong> and <strong>Blood Pressure</strong>.</>,
+            <>Export format <strong>JSON</strong>, version <strong>2</strong>, date range <strong>Since Last Sync</strong>, sync every <strong>1 hour</strong>.</>,
+            <>Tap <strong>Manual Export</strong> once. The box at the top of this page turns green.</>,
+          ]}/>
+        </section>
+
+        {/* option 2 */}
+        <section style={panel}>
+          <h2 style={h2}>Free: Apple Shortcuts</h2>
+          <p style={{ fontSize: '14px', color: T3, margin: '4px 0 0' }}>Sends your latest heart rate on a schedule you choose. Uses only Apple&apos;s own apps.</p>
+          <Steps items={[
+            <>In <strong>Shortcuts</strong>, tap <strong>+</strong>. Add <strong>Find Health Samples</strong>: type Heart Rate, sort by Start Date, Latest First, limit 1.</>,
+            <>Add <strong>Get Details of Health Sample</strong> and choose <strong>Value</strong>.</>,
+            <>Add <strong>Get Contents of URL</strong>. Paste your sync link, set Method to <strong>POST</strong>, Request Body <strong>JSON</strong>, and add a field <code>heart_rate</code> set to <strong>Value</strong>.</>,
+            <>Optional: repeat for Oxygen Saturation (field <code>oxygen_sat</code>) and Respiratory Rate (<code>resp_rate</code>).</>,
+            <>Go to <strong>Automation</strong>, tap <strong>+</strong>, <strong>Time of Day</strong>, pick a time, choose this shortcut and <strong>Run Immediately</strong>. Add more times if you want more updates.</>,
+          ]}/>
+        </section>
+
+        <p style={{ fontSize: '13px', color: T3, lineHeight: 1.55 }}>
+          Why a link and not a button: Apple only lets apps installed on the iPhone read Health data, and Relay Arc runs in the browser
+          so it works on any phone. A native iPhone app, which would connect with a single tap, is planned.
+        </p>
       </div>
-
-      <motion.div
-        variants={stagger} initial="hidden" animate="show"
-        style={{ padding: '18px 20px', maxWidth: '640px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-
-        {/* What gets synced */}
-        <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
-          <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
-            <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
-              What gets synced
-            </span>
-          </div>
-          <div style={{ padding: '12px 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-            {SUPPORTED.map((s, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 0' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '14px', background: ACCENT_DIM, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <s.icon size={11} color={ACCENT} strokeWidth={2}/>
-                </div>
-                <span style={{ color: T2, fontSize: '12px', fontWeight: 500 }}>{s.label}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* API key */}
-        {!loading && (
-          <motion.div variants={fadeUp}
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
-            <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
-                Your API key
-              </span>
-              <motion.button
-                whileTap={{ scale: 0.92 }}
-                onClick={regenerateToken}
-                disabled={refreshing}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '5px',
-                  background: 'none', border: 'none', color: T3,
-                  fontSize: '11px', fontWeight: 500, cursor: 'pointer',
-                }}>
-                <RefreshCw size={10} style={{ animation: refreshing ? 'spin 1s linear infinite' : 'none' }}/>
-                Regenerate
-              </motion.button>
-            </div>
-            <div style={{ padding: '14px 16px' }}>
-              <div style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
-                background: BG, borderRadius: '14px', padding: '12px 14px',
-                border: `1px solid ${BORDER}`,
-              }}>
-                <code style={{ color: T1, fontSize: '12px', fontFamily: 'var(--font-code, monospace)', wordBreak: 'break-all', flex: 1 }}>
-                  {token || '. '}
-                </code>
-                {token && <CopyButton value={token}/>}
-              </div>
-              <p style={{ color: T3, fontSize: '11px', marginTop: '8px', lineHeight: 1.5 }}>
-                Keep this private. It identifies your account and cannot be used by anyone else.
-              </p>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Endpoint URL */}
-        <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
-          <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
-            <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
-              Endpoint URL
-            </span>
-          </div>
-          <div style={{ padding: '14px 16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', background: BG, borderRadius: '14px', padding: '12px 14px', border: `1px solid ${BORDER}` }}>
-              <code style={{ color: T1, fontSize: '11px', fontFamily: 'var(--font-code, monospace)', wordBreak: 'break-all', flex: 1 }}>
-                {ingestUrl}
-              </code>
-              <CopyButton value={ingestUrl}/>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Steps */}
-        <motion.div variants={fadeUp}
-          style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', overflow: 'hidden', boxShadow: SHADOW }}>
-          <div style={{ padding: '13px 16px', borderBottom: `1px solid ${BORDER}` }}>
-            <span style={{ color: T3, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
-              Setup guide
-            </span>
-          </div>
-          <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: '0' }}>
-            {STEPS.map((step, i) => (
-              <div
-                key={i}
-                style={{
-                  display: 'flex', gap: '14px',
-                  padding: '14px 0',
-                  borderBottom: i < STEPS.length - 1 ? `1px solid ${BORDER}` : 'none',
-                }}>
-                <span style={{
-                  color: ACCENT,
-                  fontFamily: 'var(--font-mono, monospace)',
-                  fontSize: '10px', fontWeight: 800,
-                  letterSpacing: '0.5px', flexShrink: 0, marginTop: '2px',
-                }}>
-                  {step.num}
-                </span>
-                <div style={{ flex: 1 }}>
-                  <p style={{ color: T1, fontWeight: 700, fontSize: '14px', marginBottom: '5px', letterSpacing: '-0.2px' }}>{step.title}</p>
-                  <p style={{ color: T2, fontSize: '13px', lineHeight: 1.55 }}>{step.body}</p>
-                  {step.cta && step.ctaHref && (
-                    <a
-                      href={step.ctaHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-flex', alignItems: 'center', gap: '5px',
-                        marginTop: '10px',
-                        background: ACCENT,
-                        color: '#FFFFFF',
-                        fontWeight: 700, fontSize: '12px',
-                        padding: '9px 15px', borderRadius: '14px',
-                        textDecoration: 'none',
-                      }}>
-                      {step.cta}
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Privacy note */}
-        <motion.div variants={fadeUp}
-          style={{
-            display: 'flex', gap: '10px', alignItems: 'flex-start',
-            padding: '12px 14px',
-            background: SURFACE, border: `1px solid ${BORDER}`,
-            borderRadius: '12px', boxShadow: SHADOW,
-          }}>
-          <AlertCircle size={13} color={T3} style={{ flexShrink: 0, marginTop: '2px' }}/>
-          <p style={{ color: T2, fontSize: '12px', lineHeight: 1.55, margin: 0 }}>
-            Your health data is sent directly to Relay Arc servers over HTTPS. It is never shared with third parties and is used only to power your AI health intelligence insights.
-          </p>
-        </motion.div>
-
-      </motion.div>
     </div>
   )
 }

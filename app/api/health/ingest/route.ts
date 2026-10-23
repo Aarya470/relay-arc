@@ -1,6 +1,7 @@
 /**
  * POST /api/health/ingest
- * Accepts Apple Health data from an iOS Shortcut.
+ * Accepts Apple Watch / Apple Health data pushed from the iPhone: Health Auto
+ * Export's REST automation, or an iOS Shortcut. Parsing: lib/health/ingest-parse.ts.
  * Expects JSON body with an API key (user-specific token) + readings.
  *
  * Body shape:
@@ -23,6 +24,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 import { SITE_URL } from '@/lib/site'
+import { parseIngestBody } from '@/lib/health/ingest-parse'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,15 +34,11 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-type ReadingType = 'heart_rate' | 'blood_pressure' | 'oxygen_saturation' | 'respiratory_rate' | 'steps' | 'hrv' | 'weight'
-
-interface Reading {
-  type: ReadingType
-  value?: number
-  systolic?: number
-  diastolic?: number
-  unit?: string
-  timestamp?: string
+// The key can arrive three ways, so whichever app sends the data needs the
+// least setup: in the URL (?key=..., one paste in Health Auto Export or a
+// Shortcut), as an X-API-Key header, or as api_key in the JSON body.
+function keyFrom(req: NextRequest, body: any): string | null {
+  return req.nextUrl.searchParams.get('key') || req.headers.get('x-api-key') || body?.api_key || null
 }
 
 export async function POST(req: NextRequest) {
@@ -53,12 +51,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { api_key, source = 'apple_health', readings } = body
-
-    if (!api_key) return NextResponse.json({ error: 'Missing api_key' }, { status: 401 })
-    if (!Array.isArray(readings) || readings.length === 0) {
-      return NextResponse.json({ error: 'No readings provided' }, { status: 400 })
-    }
+    const api_key = keyFrom(req, body)
+    if (!api_key) return NextResponse.json({ error: 'Missing key' }, { status: 401 })
 
     // Look up user by ingest token
     const { data: profile, error: profileErr } = await supabase
@@ -68,47 +62,22 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (profileErr || !profile) {
-      return NextResponse.json({ error: 'Invalid api_key' }, { status: 401 })
+      return NextResponse.json({ error: 'Invalid key' }, { status: 401 })
     }
 
     const userId = profile.id
-    const now = new Date().toISOString()
-
-    // Group readings by timestamp to batch into single vitals_log rows
-    const byTimestamp = new Map<string, Record<string, any>>()
-
-    for (const r of readings as Reading[]) {
-      const ts = r.timestamp || now
-      if (!byTimestamp.has(ts)) byTimestamp.set(ts, { user_id: userId, source, logged_at: ts })
-      const row = byTimestamp.get(ts)!
-
-      switch (r.type) {
-        case 'heart_rate':         row.heart_rate = r.value;              break
-        case 'blood_pressure':     row.systolic = r.systolic; row.diastolic = r.diastolic; break
-        // These two are the column names the rest of the app uses. This route
-        // was writing oxygen_saturation and respiratory_rate, which do not
-        // exist, and PostgREST rejects the whole insert when any key has no
-        // column. So every Apple Health sync failed with a 500, and because the
-        // Shortcut swallows the response nobody found out. The dashboard, the
-        // manual vitals form and the risk engine all read oxygen_sat and
-        // resp_rate.
-        case 'oxygen_saturation':  row.oxygen_sat = r.value;              break
-        case 'respiratory_rate':   row.resp_rate = r.value;               break
-        case 'steps':              row.steps = r.value;                   break
-        case 'hrv':                row.hrv_ms = r.value;                  break
-        case 'weight':             row.weight_kg = r.value;               break
-      }
+    const parsed = parseIngestBody(body)
+    if (parsed.length === 0) {
+      return NextResponse.json({ ok: true, stored: 0, message: 'Nothing usable in that payload (heart rate, breathing, oxygen or blood pressure)' })
     }
+    const rows = parsed.map(r => ({ ...r, user_id: userId, source: 'apple_health' }))
 
-    const rows = Array.from(byTimestamp.values())
-
-    // Upsert vitals — use logged_at as the conflict target to avoid duplicates from repeated syncs
+    // Upsert on (user_id, logged_at) so a watch re-sending the same hour does not duplicate it
     const { error: insertErr } = await supabase
       .from('vitals_logs')
       .upsert(rows, { onConflict: 'user_id,logged_at' })
 
     if (insertErr) {
-      // Fall back to insert (if upsert isn't supported on this schema)
       const { error: fallbackErr } = await supabase.from('vitals_logs').insert(rows)
       if (fallbackErr) {
         console.error('Vitals ingest error:', fallbackErr)
@@ -116,19 +85,13 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Trigger background health intelligence analysis (non-blocking)
-    // We don't await this — fire and forget so the Shortcut gets a fast response
+    // Background health intelligence analysis (fire and forget)
     fetch(`${process.env.NEXT_PUBLIC_APP_URL || SITE_URL}/api/groq/health-intelligence`, {
       method: 'POST',
       headers: { 'x-internal-user-id': userId },
     }).catch(() => { /* silent */ })
 
-    return NextResponse.json({
-      ok: true,
-      stored: rows.length,
-      message: `${readings.length} reading(s) ingested`,
-    })
-
+    return NextResponse.json({ ok: true, stored: rows.length, message: `${rows.length} reading(s) synced` })
   } catch (e: any) {
     console.error('Ingest error:', e)
     return NextResponse.json({ error: e?.message || 'Ingest failed' }, { status: 500 })

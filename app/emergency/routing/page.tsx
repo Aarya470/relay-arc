@@ -1041,7 +1041,7 @@ function RoutingPage() {
               {!careTeamAlerted
                 ? 'Recording this emergency'
                 : recorded
-                  ? 'Recorded and showing on your care team dashboard'
+                  ? 'Emergency recorded'
                   : 'This emergency could not be recorded'}
             </p>
             {careTeamAlerted && (

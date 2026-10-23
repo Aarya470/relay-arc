@@ -11,10 +11,10 @@ const SCRIPT = [
   'Thanks for telling me. How did you sleep last night?',
   'Got it. Any dizziness, chest discomfort, or shortness of breath today?',
   'Okay. Have you taken your medications as planned today?',
-  'Thanks. Anything else you want your care team to know?',
+  'Thanks. Did you check your temperature, oxygen or heart rate today? If so, what were the numbers?',
   'Thank you for checking in today. Take it easy. [CHECKIN_COMPLETE]',
 ]
-const SCRIPT_LABELS = ['Feeling', 'Sleep', 'Symptoms', 'Medications', 'Concerns']
+const SCRIPT_LABELS = ['Feeling', 'Sleep', 'Symptoms', 'Medications', 'Vitals']
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       ...REASONING_TEXT,
         messages: [{
           role: 'user',
-          content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual.\n\nConversation:\n${fullConvo}
+          content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual. If the patient stated any measurement (heart rate, temperature, oxygen level, blood pressure, breathing rate), add a line starting "Vitals:" with the exact numbers and units they gave, for example "Vitals: temperature 100.4 F, oxygen 95%". If they said they feel confused, or that they use oxygen, say that plainly in that line. Never invent or estimate a number they did not say.\n\nConversation:\n${fullConvo}
 Never use em dashes or semicolons. Use short plain sentences.`
         }],
         temperature: 0.2
@@ -68,6 +68,7 @@ Rules:
 - Max 2 short sentences per message
 - Warm and encouraging, like texting a caring friend
 - Ask one simple question at a time
+- Once, near the end, ask if they took their temperature, oxygen or heart rate today and what the numbers were (fine if they didn't)
 - If they mention chest pain, feeling faint, or trouble breathing say: "That sounds serious. Please tap the SOS button right now."
 - After 4-5 exchanges, wrap up warmly and end with [CHECKIN_COMPLETE]`
 

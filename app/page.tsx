@@ -431,7 +431,6 @@ export default function Home() {
     { Icon: TrendingDown, color: AMBER,  title: 'Crash-risk prediction',     body: 'Your last seven check-ins, scanned for the pattern that tends to precede a bad day.' },
     { Icon: Heart,        color: GREEN,  title: 'Daily check-ins',           body: 'A two-minute conversation each morning that quietly builds a clinical record.' },
     { Icon: Pill,         color: GREEN,  title: 'Medication tracking',       body: 'Doses, reminders, a list the ER sees automatically.' },
-    { Icon: Video,        color: ACCENT, title: 'Care-team dashboard',       body: 'Nurses see every patient’s history, vitals and flags. And can schedule video calls.' },
     { Icon: Users,        color: AMBER,  title: 'Caregiver live view',       body: 'Share a link. Your family sees everything, live.' },
   ]
 
@@ -439,7 +438,6 @@ export default function Home() {
     { title: 'Cardiac patients',      color: RED,    body: 'Daily check-ins that catch early warnings, an SOS that moves in seconds, and a medical profile that speaks for you when you can’t.' },
     { title: 'Post-surgery patients', color: AMBER,  body: 'A week by week recovery timeline for your procedure, with what is normal and who to call.' },
     { title: 'Families & caregivers', color: GREEN,  body: 'Live routing the moment it happens, a real-time status feed, and the full history to share with doctors afterwards.' },
-    { title: 'Nurses & care teams',   color: ACCENT, body: 'One dashboard for every patient, with flags, check-in history, scheduling and video calls.' },
   ]
 
   return (

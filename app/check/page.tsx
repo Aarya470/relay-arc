@@ -9,12 +9,14 @@
 //   - pulse from the rear camera and flash (fingertip photoplethysmography),
 //   - breathing rate from the accelerometer, with the phone on the chest,
 //     or by tapping once per breath if the motion sensor is unavailable,
-//   - everything else from Apple Health if the person has it, or by hand.
+//   - everything else from Apple Watch and the daily check-in.
 // Then every one of NEWS2's seven parameters is scored on screen, point by
 // point, so a person (or a paramedic they show it to) can see exactly why.
 //
-// No account is needed and nothing leaves the phone unless the person chooses
-// to save it to their log. Signal maths: lib/pulse. Health import: lib/health.
+// No account is needed. When signed in, phone readings are saved automatically
+// and the NEWS2 table also pulls in Apple Watch readings and anything stated in
+// today's check-in (lib/news2/sources.ts). Nothing is typed in by hand.
+// Signal maths: lib/pulse.
 //
 // REGULATORY FRAMING (docs/INTENDED_USE.md §6): a deterioration risk tier with
 // advice, presented to a patient, is a device function under FDA's January 2026
@@ -25,13 +27,13 @@
 // feel unwell, call 911, whatever the numbers say.
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Heart, Wind, Upload, Phone, Check, Hand } from 'lucide-react'
+import { ArrowLeft, Heart, Wind, Phone, Hand, Watch, MessageCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
-import { bestChannelEstimate, fingerCoach, estimateBreathRate, breathRateFromTaps, detrend, resample, type Sample } from '@/lib/pulse'
+import { bestChannelEstimate, approxHeartRate, fingerCoach, estimateBreathRate, breathRateFromTaps, detrend, resample, type Sample } from '@/lib/pulse'
 import { startPulseCamera, type PulseCamera } from '@/lib/pulse/camera'
 import { requestMotionPermission, startMotion, type MotionReader } from '@/lib/pulse/motion'
-import { importAppleHealth, type HealthSummary } from '@/lib/health/apple'
+import { collectNews2, type News2Inputs, type SourceKind } from '@/lib/news2/sources'
 import {
   assessRisk, scoreRespRate, scoreSpo2, scoreSystolic, scorePulse, scoreTemperature,
   scoreConsciousness, scoreSupplementalOxygen, type Acvpu,
@@ -48,12 +50,11 @@ const mono = 'var(--font-mono, monospace)'
 // 15 seconds per reading. If the pulse is not confirmed by then, the page keeps
 // going for up to 10 more seconds ("almost there") rather than failing.
 const PULSE_SECONDS = 15
-const PULSE_MAX_SECONDS = 25
 const BREATH_SECONDS = 15
 const TAP_SECONDS = 15
 
-type Source = 'camera' | 'motion' | 'taps' | 'apple' | 'typed' | 'demo'
-interface Val { v: number | null; src: Source | null; at?: Date }
+type Source = SourceKind
+interface Val { v: number | null; src: Source | null; at?: Date; approx?: 'fair' | 'rough' }
 const empty: Val = { v: null, src: null }
 
 const ACVPU: { id: Acvpu; label: string }[] = [
@@ -64,7 +65,7 @@ const ACVPU: { id: Acvpu; label: string }[] = [
   { id: 'U', label: 'Unresponsive' },
 ]
 const srcLabel: Record<Source, string> = {
-  camera: 'camera', motion: 'motion sensor', taps: 'tapped', apple: 'Apple Health', typed: 'typed', demo: 'DEMO, simulated',
+  camera: 'phone camera', motion: 'motion sensor', taps: 'tapped', apple: 'Apple Watch', checkin: 'from your check-in', typed: 'typed', demo: 'DEMO, simulated',
 }
 
 const panel: React.CSSProperties = {
@@ -104,8 +105,62 @@ export default function VitalsCheck() {
   const [spo2, setSpo2] = useState<Val>(empty)
   const [sbp, setSbp] = useState<Val>(empty)
   const [tempF, setTempF] = useState<Val>(empty)
-  const [acvpu, setAcvpu] = useState<Acvpu | null>(null)
-  const [onO2, setOnO2] = useState<boolean | null>(null)
+  const [acvpu, setAcvpu] = useState<{ v: Acvpu; src: Source; at?: Date } | null>(null)
+  const [onO2, setOnO2] = useState<{ v: boolean; src: Source; at?: Date } | null>(null)
+
+  // ── everything already known: Apple Watch, saved phone readings, check-in ──
+  // The sheet fills itself from the last 24 hours and refreshes when the page
+  // comes back into view, so a check-in done a minute ago shows up here.
+  const [signedIn, setSignedIn] = useState(false)
+  const [watchLast, setWatchLast] = useState<Date | null>(null)
+  const [checkinLast, setCheckinLast] = useState<Date | null>(null)
+  const applySources = (n: News2Inputs) => {
+    const take = (r: News2Inputs['pulse'], set: (f: (p: Val) => Val) => void) => {
+      if (!r) return
+      set(p => (p.v == null || (p.at && r.at > p.at && p.src !== 'demo')) ? { v: r.value, src: r.source, at: r.at, approx: r.approx } : p)
+    }
+    take(n.pulse, setHr); take(n.resp_rate, setRr); take(n.spo2, setSpo2); take(n.systolic, setSbp)
+    if (n.temp_c) setTempF(p => p.v == null || (p.at && n.temp_c!.at > p.at) ? { v: Math.round((n.temp_c!.value * 9 / 5 + 32) * 10) / 10, src: n.temp_c!.source, at: n.temp_c!.at } : p)
+    if (n.acvpu) setAcvpu({ v: n.acvpu.value, src: n.acvpu.source, at: n.acvpu.at })
+    if (n.on_oxygen) setOnO2({ v: n.on_oxygen.value, src: n.on_oxygen.source, at: n.on_oxygen.at })
+  }
+  useEffect(() => {
+    let alive = true
+    const load = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user || !alive) return
+      setSignedIn(true)
+      const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString()
+      const [v, c] = await Promise.all([
+        supabase.from('vitals_logs').select('heart_rate, resp_rate, oxygen_sat, systolic, source, logged_at').eq('user_id', user.id).gte('logged_at', since).order('logged_at', { ascending: false }).limit(50),
+        supabase.from('checkins').select('summary, created_at').eq('user_id', user.id).gte('created_at', since).order('created_at', { ascending: false }).limit(5),
+      ])
+      if (!alive) return
+      const vit = v.data || [], chk = c.data || []
+      const w = vit.find((r: any) => r.source === 'apple_health')
+      setWatchLast(w ? new Date(w.logged_at) : null)
+      setCheckinLast(chk[0] ? new Date(chk[0].created_at) : null)
+      applySources(collectNews2(vit as any, chk as any))
+    }
+    load()
+    const onFocus = () => { if (document.visibilityState === 'visible') load() }
+    document.addEventListener('visibilitychange', onFocus)
+    return () => { alive = false; document.removeEventListener('visibilitychange', onFocus) }
+  }, [])
+
+  // Phone readings are saved automatically when signed in, so the NEWS2 sheet
+  // on the dashboard and here stay in step. Nothing is typed by hand.
+  const autoSave = async (fields: { heart_rate?: number; resp_rate?: number }, source: 'camera' | 'motion' | 'taps') => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return
+      await fetch('/api/vitals/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ ...fields, source }),
+      })
+    } catch { /* offline: the reading still shows on this page */ }
+  }
 
   // ── camera pulse ───────────────────────────────────────────────────────────
   const [pulseState, setPulseState] = useState<'idle' | 'starting' | 'running' | 'done' | 'error'>('idle')
@@ -146,26 +201,42 @@ export default function VitalsCheck() {
     setPulseState('starting'); setPulseMsg(''); setLive(null); setCoach(null)
     redRef.current = []; greenRef.current = []; rawPulseRef.current = []; setElapsed(0)
     try {
-      let lastFinger = 0, startT = -1, frames = 0
+      // At most 15 seconds of fingertip signal. A lifted finger pauses the
+      // clock rather than restarting it, and when the window ends the page
+      // always gives its best estimate: confirmed if the signal agreed with
+      // itself, otherwise "about N bpm" with how rough it is.
+      let startT = -1, frames = 0, fingerSecs = 0, lastT = -1, done = false
+      const wallStart = performance.now()
+      const finish = () => {
+        if (done) return
+        done = true
+        stopPulse(); setPulseState('done'); setLive(null)
+        const est = bestChannelEstimate(redRef.current, greenRef.current)
+        drawWave(est.channel === 'green' ? greenRef.current : redRef.current)
+        setSigVersion(v => v + 1)
+        if (est.confirmed && est.rate) { setHr({ v: est.rate, src: 'camera', at: new Date() }); autoSave({ heart_rate: est.rate }, 'camera'); return }
+        const guess = approxHeartRate(redRef.current, greenRef.current)
+        if (guess) { setHr({ v: guess.rate, src: 'camera', at: new Date(), approx: guess.confidence === 'good' ? 'fair' : guess.confidence }); autoSave({ heart_rate: guess.rate }, 'camera') }
+        else setPulseMsg('The camera never saw a covered lens for long enough. Lay your fingertip flat over the camera and flash, and try again.')
+      }
       camRef.current = await startPulseCamera(f => {
+        if (done) return
         frames++
         setFinger(f.finger)
         if (frames % 10 === 0) setCoach(f.finger ? null : fingerCoach(f.r, f.g, f.spread))
-        if (!f.finger) {
-          // a lifted finger ruins the window: start again, after a 2 s grace
-          if (f.t - lastFinger > 2 && startT >= 0) {
-            redRef.current = []; greenRef.current = []; rawPulseRef.current = []; startT = -1; setElapsed(0); setLive(null)
-          }
-          return
-        }
-        lastFinger = f.t
+        // give up after 30 s on the clock if a fingertip never settled
+        if ((performance.now() - wallStart) / 1000 > 30) { finish(); return }
+        if (!f.finger) { lastT = -1; return }
         if (startT < 0) startT = f.t
+        if (lastT >= 0) fingerSecs += Math.min(0.2, f.t - lastT)
+        lastT = f.t
         // inverted: blood arriving darkens the frame
         redRef.current.push({ t: f.t, v: -f.r }); greenRef.current.push({ t: f.t, v: -f.g })
         rawPulseRef.current.push({ t: f.t, v: f.r })
-        const secs = f.t - startT
+        const secs = fingerSecs
         setElapsed(Math.floor(secs))
         if (demo && secs >= 10) {
+          done = true
           drawWave(redRef.current)
           stopPulse(); setPulseState('done'); setLive(null)
           setHr({ v: 73, src: 'demo' })
@@ -175,19 +246,18 @@ export default function VitalsCheck() {
           const est = bestChannelEstimate(redRef.current, greenRef.current)
           drawWave(est.channel === 'green' ? greenRef.current : redRef.current)
           setSigVersion(v => v + 1)
-          if (secs >= 8 && !demo) setLive({ rate: est.rate ?? (est.quality > 0.2 ? null : null), quality: est.quality, confirmed: est.confirmed })
-          if ((secs >= PULSE_SECONDS && est.confirmed) || secs >= PULSE_MAX_SECONDS) {
-            stopPulse(); setPulseState('done')
-            if (est.confirmed && est.rate) setHr({ v: est.rate, src: 'camera' })
-            else setPulseMsg('Could not get a steady reading. Rest your hand on a table, cover the lens fully, and keep still.')
+          if (secs >= 6 && !demo) {
+            const g = est.rate ? null : approxHeartRate(redRef.current, greenRef.current)
+            setLive({ rate: est.rate ?? g?.rate ?? null, quality: est.quality, confirmed: est.confirmed })
           }
         }
+        if (secs >= PULSE_SECONDS) finish()
       })
       setTorch(camRef.current.torch)
       setPulseState('running')
     } catch {
       setPulseState('error')
-      setPulseMsg('Camera unavailable. Allow camera access, or type your pulse below.')
+      setPulseMsg('Camera unavailable. Allow camera access in your browser settings and try again.')
     }
   }
 
@@ -219,7 +289,7 @@ export default function VitalsCheck() {
         if (s.length < 50) { setBreathState('idle'); setBreathMsg('No motion data arrived. Use tap counting instead.'); return }
         const est = estimateBreathRate(s)
         setBreathState('done')
-        if (est.ok && est.rate) setRr({ v: est.rate, src: 'motion' })
+        if (est.ok && est.rate) { setRr({ v: est.rate, src: 'motion', at: new Date() }); autoSave({ resp_rate: est.rate }, 'motion') }
         else setBreathMsg('Too much movement to read 15 seconds of breathing. Lie still and try again, or use tap counting.')
       }
     }, 250)
@@ -235,31 +305,10 @@ export default function VitalsCheck() {
         clearInterval(iv)
         const rate = breathRateFromTaps(taps.current)
         setBreathState('done')
-        if (rate) setRr({ v: rate, src: 'taps' })
+        if (rate) { setRr({ v: rate, src: 'taps', at: new Date() }); autoSave({ resp_rate: rate }, 'taps') }
         else setBreathMsg('Not enough taps. Tap once each time the chest rises.')
       }
     }, 200)
-  }
-
-  // ── Apple Health ───────────────────────────────────────────────────────────
-  const [health, setHealth] = useState<HealthSummary | null>(null)
-  const [importing, setImporting] = useState(false)
-  const onHealthFile = async (f: File | undefined) => {
-    if (!f) return
-    setImporting(true)
-    try {
-      const s = await importAppleHealth(f)
-      setHealth(s)
-      const L = s.latest
-      if (L.spo2) setSpo2(p => p.v == null ? { v: L.spo2!.value, src: 'apple', at: L.spo2!.at } : p)
-      if (L.systolic) setSbp(p => p.v == null ? { v: L.systolic!.value, src: 'apple', at: L.systolic!.at } : p)
-      if (L.resp_rate) setRr(p => p.v == null ? { v: L.resp_rate!.value, src: 'apple', at: L.resp_rate!.at } : p)
-      if (L.heart_rate) setHr(p => p.v == null ? { v: L.heart_rate!.value, src: 'apple', at: L.heart_rate!.at } : p)
-      if (L.temp_c) setTempF(p => p.v == null ? { v: Math.round((L.temp_c!.value * 9 / 5 + 32) * 10) / 10, src: 'apple', at: L.temp_c!.at } : p)
-      toast.success(`Read ${s.matched.toLocaleString()} readings from Apple Health, on this phone`)
-    } catch (e: any) {
-      toast.error(e?.message || 'Could not read that file')
-    } finally { setImporting(false) }
   }
 
   // ── NEWS2 ──────────────────────────────────────────────────────────────────
@@ -267,18 +316,18 @@ export default function VitalsCheck() {
   const rows: { name: string; value: string; pts: number | null; src: Source | null; at?: Date }[] = [
     { name: 'Breathing rate', value: rr.v != null ? `${rr.v} /min` : '', pts: rr.v != null ? scoreRespRate(rr.v) : null, src: rr.src, at: rr.at },
     { name: 'Oxygen saturation', value: spo2.v != null ? `${spo2.v}%` : '', pts: spo2.v != null ? scoreSpo2(spo2.v) : null, src: spo2.src, at: spo2.at },
-    { name: 'On extra oxygen', value: onO2 == null ? '' : onO2 ? 'Yes' : 'No', pts: onO2 == null ? null : scoreSupplementalOxygen(onO2), src: onO2 == null ? null : 'typed' },
+    { name: 'On extra oxygen', value: onO2 == null ? '' : onO2.v ? 'Yes' : 'No', pts: onO2 == null ? null : scoreSupplementalOxygen(onO2.v), src: onO2?.src ?? null, at: onO2?.at },
     { name: 'Temperature', value: tempF.v != null ? `${tempF.v} °F (${tempC} °C)` : '', pts: tempC != null ? scoreTemperature(tempC) : null, src: tempF.src, at: tempF.at },
     { name: 'Systolic blood pressure', value: sbp.v != null ? `${sbp.v} mmHg` : '', pts: sbp.v != null ? scoreSystolic(sbp.v) : null, src: sbp.src, at: sbp.at },
-    { name: 'Pulse', value: hr.v != null ? `${hr.v} bpm` : '', pts: hr.v != null ? scorePulse(hr.v) : null, src: hr.src, at: hr.at },
-    { name: 'Alertness', value: acvpu ? ACVPU.find(a => a.id === acvpu)!.label : '', pts: acvpu ? scoreConsciousness(acvpu) : null, src: acvpu ? 'typed' : null },
+    { name: 'Pulse', value: hr.v != null ? `${hr.approx ? 'about ' : ''}${hr.v} bpm` : '', pts: hr.v != null ? scorePulse(hr.v) : null, src: hr.src, at: hr.at },
+    { name: 'Alertness', value: acvpu ? ACVPU.find(a => a.id === acvpu.v)!.label : '', pts: acvpu ? scoreConsciousness(acvpu.v) : null, src: acvpu?.src ?? null, at: acvpu?.at },
   ]
   const measuredCount = rows.filter(r => r.pts != null).length
   const total = rows.reduce((a, r) => a + (r.pts ?? 0), 0)
   const assessment = measuredCount >= 2 ? assessRisk([{
     logged_at: new Date().toISOString(),
     heart_rate: hr.v, resp_rate: rr.v, oxygen_sat: spo2.v, systolic: sbp.v,
-    temperature_c: tempC, consciousness: acvpu, on_oxygen: onO2,
+    temperature_c: tempC, consciousness: acvpu?.v ?? null, on_oxygen: onO2?.v ?? null,
   }]) : null
   // The RCP banding itself, from the aggregate and the single-parameter rule.
   // (assessRisk's own level also folds in Relay's unvalidated personal-baseline
@@ -293,31 +342,15 @@ export default function VitalsCheck() {
       'Camera and motion readings are phone estimates, not a medical device.'].join('\n')
     try {
       if ((navigator as any).share) await (navigator as any).share({ title: 'Vitals check', text })
-      else { await navigator.clipboard.writeText(text); toast.success('Copied. Paste it into a message to your care team') }
+      else { await navigator.clipboard.writeText(text); toast.success('Copied. Paste it into a message to your doctor') }
     } catch { /* cancelled */ }
-  }
-
-  const [saving, setSaving] = useState(false)
-  const save = async () => {
-    setSaving(true)
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) { toast('Sign in to keep a history. Your reading is still shown here.'); return }
-      const res = await fetch('/api/vitals/log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify({ heart_rate: hr.v, resp_rate: rr.v, oxygen_sat: spo2.v, systolic: sbp.v }),
-      })
-      if (!res.ok) throw new Error()
-      toast.success('Saved to your vitals log')
-    } catch { toast.error('Could not save right now') } finally { setSaving(false) }
   }
 
   const when = (d?: Date) => d ? ` · ${d.toLocaleDateString([], { month: 'short', day: 'numeric' })} ${d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : ''
   const stale = (d?: Date) => !!d && Date.now() - d.getTime() > 24 * 3600 * 1000
 
   // live display values
-  const bpmShown = (hr.src === 'camera' || hr.src === 'demo') && pulseState === 'done' ? hr.v : live?.rate ?? null
+  const bpmShown = pulseState === 'running' || pulseState === 'starting' ? live?.rate ?? null : hr.v
   const pulseProgress = pulseState === 'done' && (hr.src === 'camera' || hr.src === 'demo') ? 1 : elapsed / (demo ? 10 : PULSE_SECONDS)
   const breathProgress = breathState === 'motion' || breathState === 'taps' ? 1 - breathLeft / (breathState === 'taps' ? TAP_SECONDS : BREATH_SECONDS) : breathState === 'done' && rr.v != null ? 1 : 0
   const ptsColor = (p: number | null) => p == null ? { bg: '#EEF2EC', fg: T3 } : p >= 3 ? { bg: RED, fg: '#fff' } : p === 2 ? { bg: ORANGE, fg: T1 } : p === 1 ? { bg: '#F4D9A0', fg: T1 } : { bg: '#D6EED0', fg: GREEN }
@@ -335,7 +368,7 @@ export default function VitalsCheck() {
           </h1>
           <p style={{ color: T2, fontSize: '16px', lineHeight: 1.55, margin: 0 }}>
             Your pulse from the camera and your breathing from the motion sensor, 15 seconds each.
-            At the bottom is the NEWS2 table to show a doctor or paramedic. Nothing leaves this phone unless you share it.
+            The NEWS2 table at the bottom also uses your Apple Watch and today&apos;s check-in, and updates by itself.
           </p>
         </div>
 
@@ -354,16 +387,16 @@ export default function VitalsCheck() {
 
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', margin: '10px 0 2px' }}>
             <span style={{ fontSize: '56px', fontWeight: 700, letterSpacing: '-1px', lineHeight: 1, color: bpmShown ? T1 : '#B9B6AA', fontVariantNumeric: 'tabular-nums' }}>
-              {bpmShown ?? '—'}
+              {bpmShown != null && (hr.approx || (pulseState === 'running' && !live?.confirmed)) ? '~' : ''}{bpmShown ?? '—'}
             </span>
             <span style={{ fontSize: '17px', fontWeight: 600, color: T3 }}>bpm</span>
           </div>
           <p style={{ fontSize: '14px', color: hr.src === 'camera' && pulseState === 'done' ? GREEN : T3, margin: '0 0 12px' }}>
             {pulseState === 'running'
               ? (finger
-                ? (demo ? `Reading… ${elapsed} of 10 s` : live?.confirmed ? `Steady signal (quality ${Math.round(live.quality * 100)}%)` : elapsed >= PULSE_SECONDS ? 'Almost there, keep holding' : `Reading… ${elapsed} of ${PULSE_SECONDS} s`)
+                ? (demo ? `Reading… ${elapsed} of 10 s` : live?.confirmed ? `Steady signal, ${elapsed} of ${PULSE_SECONDS} s` : `Reading… ${elapsed} of ${PULSE_SECONDS} s`)
                 : 'Waiting for your fingertip')
-              : hr.src === 'demo' && pulseState === 'done' ? 'Demo: simulated reading, not measured' : hr.src === 'camera' && pulseState === 'done' ? 'Measured with the camera' : 'Not measured yet'}
+              : hr.src === 'demo' && pulseState === 'done' ? 'Demo: simulated reading, not measured' : hr.src === 'camera' && pulseState === 'done' ? (hr.approx ? `Approximate. The signal was ${hr.approx === 'rough' ? 'noisy' : 'a little uneven'}, so treat this as about ${hr.v} bpm, give or take ${hr.approx === 'rough' ? 10 : 5}. Measure again for a steadier reading.` : 'Measured with the camera, steady signal') : hr.v != null && hr.src ? `Latest: ${srcLabel[hr.src]}${when(hr.at)}` : 'Not measured yet'}
           </p>
 
           <div style={{ height: '3px', background: LINE, borderRadius: '2px', overflow: 'hidden', marginBottom: '10px' }}>
@@ -388,9 +421,6 @@ export default function VitalsCheck() {
             {pulseState === 'running'
               ? <button style={btn(false)} onClick={() => { stopPulse(); setPulseState('idle') }}>Stop</button>
               : <button style={btn(true)} onClick={startPulse}><Heart size={17}/> {hr.src === 'camera' ? 'Measure again' : 'Measure pulse'}</button>}
-            <input inputMode="numeric" aria-label="Type pulse instead" style={{ ...input, width: '140px' }}
-              value={hr.src === 'typed' ? (hr.v ?? '') : ''} placeholder="or type bpm"
-              onChange={e => { const n = parseInt(e.target.value); setHr(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
           </div>
           {pulseMsg && <p style={{ color: RED, fontSize: '14px', marginTop: '10px', lineHeight: 1.5 }}>{pulseMsg}</p>}
 
@@ -413,7 +443,7 @@ export default function VitalsCheck() {
             <span style={{ fontSize: '17px', fontWeight: 600, color: T3 }}>{breathState === 'taps' ? 'taps' : 'per min'}</span>
           </div>
           <p style={{ fontSize: '14px', color: rr.v != null ? GREEN : T3, margin: '0 0 12px' }}>
-            {breathState === 'motion' ? `Phone on chest, keep still… ${breathLeft} s` : breathState === 'taps' ? `Tap every breath in… ${breathLeft} s` : rr.v != null ? `Measured (${rr.src ? srcLabel[rr.src] : ''})` : 'Not measured yet'}
+            {breathState === 'motion' ? `Phone on chest, keep still… ${breathLeft} s` : breathState === 'taps' ? `Tap every breath in… ${breathLeft} s` : rr.v != null && rr.src ? `Latest: ${srcLabel[rr.src]}${when(rr.at)}` : 'Not measured yet'}
           </p>
           {(breathState === 'motion' || breathState === 'taps') && (
             <div style={{ height: '3px', background: LINE, borderRadius: '2px', overflow: 'hidden', marginBottom: '12px' }}>
@@ -436,9 +466,6 @@ export default function VitalsCheck() {
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
                 <button style={btn(true)} onClick={startTaps} disabled={breathState === 'motion'}>Count by tapping</button>
                 <button style={btn(false)} onClick={startMotionBreath} disabled={breathState === 'motion'}><Wind size={17}/> Phone on chest</button>
-                <input inputMode="numeric" aria-label="Type breathing rate instead" style={{ ...input, width: '140px' }}
-                  value={rr.src === 'typed' ? (rr.v ?? '') : ''} placeholder="or type /min"
-                  onChange={e => { const n = parseInt(e.target.value); setRr(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
               </div>
             </>
           )}
@@ -449,68 +476,32 @@ export default function VitalsCheck() {
           {showRaw && <div style={{ marginTop: '8px' }}><SignalView samples={motionSamples.current} kind="breath" version={sigVersion}/></div>}
         </section>
 
-        {/* ── Apple Health ──────────────────────────────────────────────── */}
+        {/* ── Also counted ────────────────────────────────────────────── */}
         <section style={panel}>
-          <h2 style={h2}>Apple Health <span style={{ fontWeight: 500, color: T3, fontSize: '15px' }}>(optional)</span></h2>
-          <p style={{ color: T2, fontSize: '15px', lineHeight: 1.55, margin: '6px 0 14px' }}>
-            On iPhone, open Health, tap your picture, then <strong>Export All Health Data</strong> and choose the file here.
-            Readings from an Apple Watch, a cuff or a pulse oximeter fill the gaps. The file is read on this phone and never uploaded.
-          </p>
-          <label style={{ ...btn(false), cursor: importing ? 'wait' : 'pointer' }}>
-            <Upload size={17}/> {importing ? 'Reading…' : health ? 'Choose another export' : 'Choose export.zip'}
-            <input type="file" accept=".zip,.xml,application/zip,text/xml" style={{ display: 'none' }} onChange={e => onHealthFile(e.target.files?.[0])}/>
-          </label>
-          {health && (
-            <div style={{ marginTop: '14px' }}>
-              <p style={{ fontSize: '14px', color: T3 }}>{health.recordsScanned.toLocaleString()} records scanned, {health.matched.toLocaleString()} vital-sign readings</p>
-              {health.dailyHr.length > 3 && (
-                <svg viewBox="0 0 300 80" style={{ width: '100%', height: '80px', marginTop: '8px', background: PAPER, border: `1px solid ${LINE}`, borderRadius: '6px' }}>
-                  {(() => {
-                    const d = health.dailyHr, lo = Math.min(...d.map(x => x.mean)) - 3, hi = Math.max(...d.map(x => x.mean)) + 3
-                    const pts = d.map((x, i) => `${(i / (d.length - 1)) * 280 + 10},${72 - ((x.mean - lo) / (hi - lo)) * 56}`).join(' ')
-                    return <><polyline points={pts} fill="none" stroke={T1} strokeWidth={2} strokeLinejoin="round"/>
-                      <text x="10" y="13" fontSize="9" fill={T3}>daily mean pulse, last {d.length} days</text></>
-                  })()}
-                </svg>
-              )}
-            </div>
-          )}
-        </section>
-
-        {/* ── Other readings ────────────────────────────────────────────── */}
-        <section style={panel}>
-          <h2 style={h2}>Anything else you know</h2>
-          <p style={{ color: T3, fontSize: '14px', margin: '4px 0 12px' }}>Leave blank what you don&apos;t have.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <label style={lbl}>Oxygen saturation (%)
-              <input inputMode="numeric" style={{ ...input, marginTop: '6px' }} value={spo2.v ?? ''} placeholder="pulse oximeter"
-                onChange={e => { const n = parseFloat(e.target.value); setSpo2(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
-            </label>
-            <label style={lbl}>Top blood-pressure number
-              <input inputMode="numeric" style={{ ...input, marginTop: '6px' }} value={sbp.v ?? ''} placeholder="e.g. 118"
-                onChange={e => { const n = parseFloat(e.target.value); setSbp(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
-            </label>
-            <label style={lbl}>Temperature (°F)
-              <input inputMode="decimal" style={{ ...input, marginTop: '6px' }} value={tempF.v ?? ''} placeholder="e.g. 98.6"
-                onChange={e => { const n = parseFloat(e.target.value); setTempF(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
-            </label>
-            <div style={lbl}>On extra oxygen?
-              <div style={{ display: 'flex', marginTop: '6px', border: `1px solid ${LINE2}`, borderRadius: '8px', overflow: 'hidden' }}>
-                {[false, true].map(b => (
-                  <button key={String(b)} onClick={() => setOnO2(b)} style={{ flex: 1, minHeight: '46px', border: 'none', fontFamily: 'inherit', fontSize: '15px', fontWeight: 600, cursor: 'pointer',
-                    background: onO2 === b ? T1 : '#FFFFFF', color: onO2 === b ? '#FFFFFF' : T1 }}>{b ? 'Yes' : 'No'}</button>
-                ))}
+          <h2 style={h2}>Also counted automatically</h2>
+          <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+              <Watch size={20} style={{ flexShrink: 0, marginTop: '2px' }}/>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '15px', fontWeight: 600, color: T1 }}>Apple Watch</p>
+                <p style={{ fontSize: '14px', color: T2, lineHeight: 1.5 }}>
+                  {watchLast ? `Last sync ${watchLast.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. Pulse, oxygen, breathing and blood pressure from your watch fill in below.`
+                    : 'Not connected. Once set up, your watch readings arrive here by themselves, with nothing to upload.'}
+                </p>
+                {!watchLast && <a href="/connect-health" style={{ fontSize: '14px', fontWeight: 700, color: T1 }}>Connect Apple Watch →</a>}
               </div>
             </div>
-          </div>
-          <p style={{ ...lbl, margin: '16px 0 6px' }}>How alert is the person?</p>
-          <div style={{ border: `1px solid ${LINE2}`, borderRadius: '8px', overflow: 'hidden' }}>
-            {ACVPU.map((a, i) => (
-              <button key={a.id} onClick={() => setAcvpu(a.id)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '12px 14px', border: 'none',
-                borderTop: i ? `1px solid ${LINE}` : 'none', background: '#FFFFFF', fontFamily: 'inherit', fontSize: '15px', color: T1, cursor: 'pointer', textAlign: 'left' }}>
-                {a.label}{acvpu === a.id && <Check size={18} color={GREEN}/>}
-              </button>
-            ))}
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', borderTop: `1px solid ${LINE}`, paddingTop: '12px' }}>
+              <MessageCircle size={20} style={{ flexShrink: 0, marginTop: '2px' }}/>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '15px', fontWeight: 600, color: T1 }}>Daily check-in</p>
+                <p style={{ fontSize: '14px', color: T2, lineHeight: 1.5 }}>
+                  {checkinLast ? `Today at ${checkinLast.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. ` : ''}
+                  Anything you tell the check-in, like a temperature, an oxygen reading, feeling confused or being on oxygen, is added to the score.
+                </p>
+                {!checkinLast && signedIn && <a href="/checkin" style={{ fontSize: '14px', fontWeight: 700, color: T1 }}>Do today&apos;s check-in →</a>}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -567,8 +558,7 @@ export default function VitalsCheck() {
             </div>
             {measuredCount > 0 && (
               <div style={{ display: 'flex', gap: '10px', marginTop: '12px', flexWrap: 'wrap' }}>
-                <button style={btn(true)} onClick={share}>Share with my care team</button>
-                <button style={btn(false)} onClick={save} disabled={saving}>{saving ? 'Saving…' : 'Save to my log'}</button>
+                <button style={btn(true)} onClick={share}>Share these readings</button>
               </div>
             )}
             <p style={{ fontSize: '12.5px', color: T3, marginTop: '16px', lineHeight: 1.5 }}>

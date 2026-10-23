@@ -184,7 +184,7 @@ export default function Settings() {
         <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
           {[
             { label: 'Health history', sub: 'Past check-ins and emergencies', path: '/history' },
-            { label: 'Vital signs', sub: 'Log and track HR, BP, O₂', path: '/vitals' },
+            { label: 'Vitals check', sub: 'Pulse, breathing and your NEWS2 sheet', path: '/check' },
             { label: 'Emergency contacts', sub: 'Who to alert in an emergency', path: '/emergency-contacts', red: true },
           ].map(item => (
             <motion.button

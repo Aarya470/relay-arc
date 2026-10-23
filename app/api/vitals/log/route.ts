@@ -39,6 +39,8 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
     const { heart_rate, systolic, diastolic, oxygen_sat, resp_rate } = body
+    // Where the reading came from, so the NEWS2 sheet can say so. Allow-listed.
+    const source = ['camera', 'motion', 'taps', 'manual'].includes(body.source) ? body.source : 'manual'
 
     // Validate numeric values
     const vitals: Record<string, number | null> = {}
@@ -57,6 +59,7 @@ export async function POST(req: NextRequest) {
     const { error: insertError } = await supabase.from('vitals_logs').insert({
       user_id: user.id,
       logged_at: new Date().toISOString(),
+      source,
       ...vitals,
     })
 

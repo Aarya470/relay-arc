@@ -199,6 +199,29 @@ export function bestChannelEstimate(red: Sample[], green: Sample[]): RateEstimat
   return pick ? { ...g, channel: 'green' } : { ...r, channel: 'red' }
 }
 
+/**
+ * Best available pulse estimate from whatever was recorded, even when it is too
+ * noisy to pass the quality gate. Used when the 15 s window ends without a
+ * confirmed reading: the page shows it as "about N bpm" with its confidence,
+ * never as a measured value. Needs at least 5 s of fingertip signal.
+ */
+export type PulseConfidence = 'good' | 'fair' | 'rough'
+export function approxHeartRate(red: Sample[], green: Sample[]): { rate: number; quality: number; confidence: PulseConfidence; channel: 'red' | 'green' } | null {
+  const one = (s: Sample[]) => {
+    if (s.length < 2 || s[s.length - 1].t - s[0].t < 5) return null
+    const x = detrend(resample(s, 30), 30, 1.2)
+    if (x.length < 60) return null
+    const { freq, quality } = dominantFrequency(x, 30, 40 / 60, 200 / 60)
+    return { rate: Math.round(freq * 60), quality: Math.round(quality * 100) / 100 }
+  }
+  const r = one(red), g = one(green)
+  const best = !r ? (g ? { ...g, channel: 'green' as const } : null)
+    : !g || r.quality >= g.quality ? { ...r, channel: 'red' as const } : { ...g, channel: 'green' as const }
+  if (!best) return null
+  const confidence: PulseConfidence = best.quality >= PULSE_MIN_QUALITY ? 'good' : best.quality >= 0.18 ? 'fair' : 'rough'
+  return { ...best, confidence }
+}
+
 /** Plain-language coaching from what the camera sees. */
 export function fingerCoach(meanR: number, meanG: number, spread: number): string | null {
   if (meanR < 18) return 'Too dark. Turn on a light or hold the phone near a lamp'

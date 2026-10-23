@@ -353,14 +353,14 @@ export default function Login() {
 
         </>}
 
-        {/* Care team link */}
-        <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '40px', paddingTop: '18px' }}>
+        {/* Care team link: hidden while the care-team feature is switched off */}
+        {false && <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '40px', paddingTop: '18px' }}>
           <button
             onClick={() => router.push('/care-team/login')}
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, fontSize: '12px', fontFamily: mono, letterSpacing: '0.4px', padding: '6px 0' }}>
             Care team portal →
           </button>
-        </div>
+        </div>}
       </motion.div>
     </div>
   )
