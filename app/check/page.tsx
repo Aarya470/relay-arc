@@ -25,7 +25,7 @@
 // feel unwell, call 911, whatever the numbers say.
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Heart, Wind, Upload, Phone, Check, Hand, Activity } from 'lucide-react'
+import { ArrowLeft, Heart, Wind, Upload, Phone, Check, Hand } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { bestChannelEstimate, fingerCoach, estimateBreathRate, breathRateFromTaps, detrend, resample, type Sample } from '@/lib/pulse'
@@ -41,11 +41,9 @@ import SignalView from '@/components/SignalView'
 import { demoOn } from '@/lib/demo'
 
 // ── look ──────────────────────────────────────────────────────────────────────
-const PAGE = '#B3DDAC', CARD = '#FFFFFF', T1 = '#141413', T2 = '#4A4840', T3 = '#6E6B5D'
-const LINE = '#DDE8DA', RED = '#A33417', GREEN = '#42623C', AMBER = '#7C5200', ORANGE = '#D97757'
-const MON = '#121614', MON2 = '#1C2420', CORAL = '#FF6B57', MINT = '#7FE0A8', DIMW = 'rgba(255,255,255,0.62)'
+const PAGE = '#B3DDAC', T1 = '#141413', T2 = '#3F3D36', T3 = '#6E6B5D'
+const LINE = '#E4E2DA', LINE2 = '#CFCCC1', PAPER = '#FBFAF6', RED = '#A33417', GREEN = '#3B5E35', AMBER = '#7C5200', ORANGE = '#D97757'
 const mono = 'var(--font-mono, monospace)'
-const RADIUS = '22px'
 
 // 15 seconds per reading. If the pulse is not confirmed by then, the page keeps
 // going for up to 10 more seconds ("almost there") rather than failing.
@@ -69,42 +67,20 @@ const srcLabel: Record<Source, string> = {
   camera: 'camera', motion: 'motion sensor', taps: 'tapped', apple: 'Apple Health', typed: 'typed', demo: 'DEMO, simulated',
 }
 
-const card: React.CSSProperties = {
-  background: CARD, borderRadius: RADIUS, padding: '20px', marginBottom: '16px',
-  boxShadow: '0 1px 2px rgba(20,20,19,0.06), 0 8px 24px rgba(20,20,19,0.06)',
+const panel: React.CSSProperties = {
+  background: '#FFFFFF', border: '1px solid rgba(20,20,19,0.14)', borderRadius: '10px', padding: '18px', marginBottom: '14px',
 }
-const monitor: React.CSSProperties = {
-  background: `linear-gradient(180deg, ${MON2} 0%, ${MON} 100%)`, borderRadius: RADIUS, padding: '20px',
-  marginBottom: '16px', color: '#FFFFFF', boxShadow: '0 10px 30px rgba(20,20,19,0.25)',
-}
-const pill = (primary: boolean, tone: string = T1): React.CSSProperties => ({
+const h2: React.CSSProperties = { fontSize: '19px', fontWeight: 700, color: T1, margin: 0, letterSpacing: '-0.1px' }
+const lbl: React.CSSProperties = { fontSize: '14px', color: T2, fontWeight: 600 }
+const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
   display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center',
-  background: primary ? tone : 'transparent', color: primary ? '#FFFFFF' : tone,
-  border: `1.5px solid ${tone}`, borderRadius: '999px', padding: '13px 20px', minHeight: '50px',
-  fontWeight: 800, fontSize: '15.5px', cursor: 'pointer', fontFamily: 'inherit',
+  background: primary ? tone : '#FFFFFF', color: primary ? '#FFFFFF' : tone,
+  border: `1.5px solid ${tone}`, borderRadius: '8px', padding: '12px 18px', minHeight: '48px',
+  fontWeight: 700, fontSize: '15.5px', cursor: 'pointer', fontFamily: 'inherit', boxSizing: 'border-box',
 })
 const input: React.CSSProperties = {
-  width: '100%', border: `1.5px solid ${LINE}`, borderRadius: '14px', padding: '12px 14px',
-  fontSize: '17px', fontFamily: 'inherit', color: T1, background: '#F7FAF6', boxSizing: 'border-box', outline: 'none',
-}
-
-function Kicker({ children, light }: { children: React.ReactNode; light?: boolean }) {
-  return <p style={{ fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase', color: light ? DIMW : T3, marginBottom: '6px' }}>{children}</p>
-}
-
-/** Progress ring with an icon in the middle. */
-function Ring({ progress, color, children, size = 112 }: { progress: number; color: string; children: React.ReactNode; size?: number }) {
-  const r = size / 2 - 7, c = 2 * Math.PI * r
-  return (
-    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(255,255,255,0.10)" strokeWidth={7} fill="none"/>
-        <circle cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={7} fill="none" strokeLinecap="round"
-          strokeDasharray={`${c * Math.min(1, Math.max(0, progress))} ${c}`} style={{ transition: 'stroke-dasharray 0.3s linear' }}/>
-      </svg>
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{children}</div>
-    </div>
-  )
+  width: '100%', border: `1px solid ${LINE2}`, borderRadius: '8px', padding: '11px 12px', minHeight: '48px',
+  fontSize: '16px', fontFamily: 'inherit', color: T1, background: '#FFFFFF', boxSizing: 'border-box', outline: 'none',
 }
 
 export default function VitalsCheck() {
@@ -160,13 +136,10 @@ export default function VitalsCheck() {
     if (y.length < 2) return
     const max = Math.max(...y.map(Math.abs)) || 1
     const pts = y.map((v, i) => [(i / (y.length - 1)) * c.width, c.height / 2 - (v / max) * (c.height / 2 - 10)])
-    const grad = ctx.createLinearGradient(0, 0, 0, c.height)
-    grad.addColorStop(0, 'rgba(255,107,87,0.35)'); grad.addColorStop(1, 'rgba(255,107,87,0)')
-    ctx.beginPath(); pts.forEach(([x, yy], i) => (i ? ctx.lineTo(x, yy) : ctx.moveTo(x, yy)))
-    ctx.lineTo(c.width, c.height); ctx.lineTo(0, c.height); ctx.closePath(); ctx.fillStyle = grad; ctx.fill()
-    ctx.shadowColor = CORAL; ctx.shadowBlur = 12; ctx.strokeStyle = CORAL; ctx.lineWidth = 4; ctx.lineJoin = 'round'
+    ctx.strokeStyle = 'rgba(20,20,19,0.06)'; ctx.lineWidth = 2
+    for (let gx = 0; gx <= c.width; gx += c.width / 12) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, c.height); ctx.stroke() }
+    ctx.strokeStyle = '#141413'; ctx.lineWidth = 3.5; ctx.lineJoin = 'round'
     ctx.beginPath(); pts.forEach(([x, yy], i) => (i ? ctx.lineTo(x, yy) : ctx.moveTo(x, yy))); ctx.stroke()
-    ctx.shadowBlur = 0
   }
 
   const startPulse = async () => {
@@ -345,189 +318,157 @@ export default function VitalsCheck() {
 
   // live display values
   const bpmShown = (hr.src === 'camera' || hr.src === 'demo') && pulseState === 'done' ? hr.v : live?.rate ?? null
-  const beatSec = bpmShown ? 60 / bpmShown : 1
   const pulseProgress = pulseState === 'done' && (hr.src === 'camera' || hr.src === 'demo') ? 1 : elapsed / (demo ? 10 : PULSE_SECONDS)
   const breathProgress = breathState === 'motion' || breathState === 'taps' ? 1 - breathLeft / (breathState === 'taps' ? TAP_SECONDS : BREATH_SECONDS) : breathState === 'done' && rr.v != null ? 1 : 0
-  const steps = [
-    { label: 'Pulse', done: hr.v != null },
-    { label: 'Breathing', done: rr.v != null },
-    { label: 'Score', done: measuredCount >= 2 },
-  ]
-  const ptsColor = (p: number | null) => p == null ? { bg: '#EEF2EC', fg: T3 } : p >= 3 ? { bg: RED, fg: '#fff' } : p === 2 ? { bg: ORANGE, fg: '#fff' } : p === 1 ? { bg: '#F4D9A0', fg: T1 } : { bg: '#D6EED0', fg: GREEN }
+  const ptsColor = (p: number | null) => p == null ? { bg: '#EEF2EC', fg: T3 } : p >= 3 ? { bg: RED, fg: '#fff' } : p === 2 ? { bg: ORANGE, fg: T1 } : p === 1 ? { bg: '#F4D9A0', fg: T1 } : { bg: '#D6EED0', fg: GREEN }
 
   return (
     <div style={{ background: PAGE, minHeight: '100dvh' }}>
-      <style>{`
-        @keyframes rlyBeat { 0%,100% { transform: scale(1) } 12% { transform: scale(1.22) } 24% { transform: scale(0.96) } 36% { transform: scale(1.08) } }
-        @keyframes rlyBreath { 0%,100% { transform: scale(0.72); opacity: .55 } 50% { transform: scale(1); opacity: .95 } }
-        @keyframes rlyTap { 0% { transform: scale(1) } 40% { transform: scale(1.12) } 100% { transform: scale(1) } }
-        @keyframes rlyGlow { 0%,100% { opacity: .45 } 50% { opacity: 1 } }
-      `}</style>
-      <div style={{ maxWidth: '620px', margin: '0 auto', padding: '16px 16px 64px' }}>
-        <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: T1, fontWeight: 700, fontSize: '14px', cursor: 'pointer', padding: '6px 0', fontFamily: 'inherit' }}>
-          <ArrowLeft size={16}/> Back
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '16px 16px 64px' }}>
+        <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '15px', cursor: 'pointer', padding: '6px 0', fontFamily: 'inherit' }}>
+          <ArrowLeft size={17}/> Back
         </button>
 
-        {/* hero */}
-        <div style={{ margin: '10px 0 18px' }}>
-          <Kicker>Vitals check · about a minute</Kicker>
-          <h1 style={{ color: T1, fontSize: '36px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.02, margin: '0 0 10px' }}>
-            Your phone is the medical device
+        <div style={{ margin: '14px 0 20px' }}>
+          <h1 style={{ color: T1, fontSize: '30px', fontWeight: 800, letterSpacing: '-0.4px', lineHeight: 1.15, margin: '0 0 8px' }}>
+            Vitals check
           </h1>
-          <p style={{ color: T2, fontSize: '15.5px', lineHeight: 1.55, margin: 0 }}>
-            The camera reads your pulse and the motion sensor reads your breathing, 15 seconds each.
-            Then every reading is laid out as a NEWS2 score, ready to show a doctor or paramedic.
-            Nothing leaves this phone unless you share it.
+          <p style={{ color: T2, fontSize: '16px', lineHeight: 1.55, margin: 0 }}>
+            Your pulse from the camera and your breathing from the motion sensor, 15 seconds each.
+            At the bottom is the NEWS2 table to show a doctor or paramedic. Nothing leaves this phone unless you share it.
           </p>
-          <div style={{ display: 'flex', gap: '8px', marginTop: '14px', flexWrap: 'wrap' }}>
-            {steps.map((s, i) => (
-              <span key={s.label} style={{
-                display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 12px', borderRadius: '999px',
-                background: s.done ? GREEN : 'rgba(255,255,255,0.7)', color: s.done ? '#fff' : T2, fontSize: '13px', fontWeight: 800,
-              }}>
-                {s.done ? <Check size={14}/> : <span style={{ fontFamily: mono, fontSize: '11px' }}>{i + 1}</span>} {s.label}
-              </span>
-            ))}
-          </div>
         </div>
 
-        <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', background: RED, color: '#fff', padding: '14px', fontWeight: 800, textDecoration: 'none', marginBottom: '16px', borderRadius: '999px', boxShadow: '0 6px 18px rgba(163,52,23,0.25)' }}>
+        <a href={`tel:${emg.number}`} style={{ ...btn(true, RED), width: '100%', marginBottom: '20px', textDecoration: 'none' }}>
           <Phone size={18}/> Feeling very unwell? Call {emg.label} first
         </a>
 
-        {/* ── PULSE MONITOR ─────────────────────────────────────────────── */}
-        <section style={monitor}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-            <Kicker light>01 · Pulse from the camera</Kicker>
-            {demo && <span style={{ fontFamily: mono, fontSize: '11px', fontWeight: 800, letterSpacing: '1px', background: '#FFD166', color: '#1A1300', padding: '4px 8px', borderRadius: '999px' }}>DEMO · SIMULATED READING</span>}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', margin: '8px 0 14px' }}>
-            <Ring progress={pulseProgress} color={CORAL}>
-              <Heart size={40} color={CORAL} fill={bpmShown ? CORAL : 'none'}
-                style={{ animation: bpmShown || (pulseState === 'running' && finger) ? `rlyBeat ${beatSec}s ease-in-out infinite` : 'none' }}/>
-            </Ring>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '64px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.95, color: bpmShown ? '#FFFFFF' : 'rgba(255,255,255,0.25)' }}>
-                  {bpmShown ?? '--'}
-                </span>
-                <span style={{ fontSize: '18px', fontWeight: 800, color: DIMW }}>bpm</span>
-              </div>
-              <p style={{ fontFamily: mono, fontSize: '12px', color: hr.src === 'camera' && pulseState === 'done' ? MINT : DIMW, marginTop: '8px' }}>
-                {pulseState === 'running'
-                  ? (finger
-                    ? (demo ? `reading… ${elapsed}/10s` : live?.confirmed ? `steady · quality ${Math.round(live.quality * 100)}%` : elapsed >= PULSE_SECONDS ? 'almost there, keep holding' : `reading… ${elapsed}/${PULSE_SECONDS}s`)
-                    : 'waiting for your fingertip')
-                  : hr.src === 'demo' && pulseState === 'done' ? 'demo: simulated reading, not measured' : hr.src === 'camera' && pulseState === 'done' ? '✓ measured with the camera' : 'ready'}
-              </p>
-            </div>
+        {/* ── Pulse ─────────────────────────────────────────────────────── */}
+        <section style={panel}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px' }}>
+            <h2 style={h2}>Pulse</h2>
+            {demo
+              ? <span style={{ fontSize: '12px', fontWeight: 700, background: '#FFD166', color: '#1A1300', padding: '3px 8px', borderRadius: '4px' }}>DEMO · simulated reading</span>
+              : <span style={{ fontSize: '14px', color: T3 }}>camera + flash</span>}
           </div>
 
-          <canvas ref={canvasRef} width={1100} height={220}
-            style={{ width: '100%', height: '110px', borderRadius: '14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', display: 'block' }}/>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', margin: '10px 0 2px' }}>
+            <span style={{ fontSize: '56px', fontWeight: 700, letterSpacing: '-1px', lineHeight: 1, color: bpmShown ? T1 : '#B9B6AA', fontVariantNumeric: 'tabular-nums' }}>
+              {bpmShown ?? '--'}
+            </span>
+            <span style={{ fontSize: '17px', fontWeight: 600, color: T3 }}>bpm</span>
+          </div>
+          <p style={{ fontSize: '14px', color: hr.src === 'camera' && pulseState === 'done' ? GREEN : T3, margin: '0 0 12px' }}>
+            {pulseState === 'running'
+              ? (finger
+                ? (demo ? `Reading… ${elapsed} of 10 s` : live?.confirmed ? `Steady signal (quality ${Math.round(live.quality * 100)}%)` : elapsed >= PULSE_SECONDS ? 'Almost there, keep holding' : `Reading… ${elapsed} of ${PULSE_SECONDS} s`)
+                : 'Waiting for your fingertip')
+              : hr.src === 'demo' && pulseState === 'done' ? 'Demo: simulated reading, not measured' : hr.src === 'camera' && pulseState === 'done' ? 'Measured with the camera' : 'Not measured yet'}
+          </p>
+
+          <div style={{ height: '3px', background: LINE, borderRadius: '2px', overflow: 'hidden', marginBottom: '10px' }}>
+            <div style={{ height: '100%', width: `${Math.round(Math.min(1, pulseProgress) * 100)}%`, background: T1, transition: 'width 0.3s linear' }}/>
+          </div>
+          <canvas ref={canvasRef} width={1100} height={200}
+            style={{ width: '100%', height: '96px', display: 'block', background: PAPER, border: `1px solid ${LINE}`, borderRadius: '6px' }}/>
 
           {pulseState !== 'running' && pulseState !== 'starting' && (
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', margin: '14px 0 4px', color: DIMW, fontSize: '14px', lineHeight: 1.5 }}>
-              <Hand size={20} style={{ flexShrink: 0, marginTop: '2px' }}/>
-              <span>Rest your hand on a table. Lay your fingertip <strong style={{ color: '#fff' }}>gently</strong> over the back camera and flash so it is completely covered. Don&apos;t press hard.</span>
-            </div>
+            <p style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', margin: '14px 0 0', color: T2, fontSize: '15px', lineHeight: 1.5 }}>
+              <Hand size={19} style={{ flexShrink: 0, marginTop: '2px' }}/>
+              <span>Rest your hand on a table and lay your fingertip gently over the back camera and flash, so it is fully covered. Don&apos;t press hard.</span>
+            </p>
           )}
           {pulseState === 'running' && (coach || !torch) && (
-            <p style={{ margin: '12px 0 0', padding: '10px 12px', borderRadius: '12px', background: 'rgba(255,107,87,0.12)', color: '#FFD3CA', fontSize: '13.5px', lineHeight: 1.5 }}>
+            <p style={{ margin: '12px 0 0', padding: '10px 12px', borderRadius: '6px', background: '#FBEDE8', color: '#6B2410', fontSize: '14px', lineHeight: 1.5 }}>
               {coach ?? 'This browser cannot switch the flash on. Stand near a bright light, or shine a second phone’s torch behind your finger.'}
             </p>
           )}
 
           <div style={{ display: 'flex', gap: '10px', marginTop: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
             {pulseState === 'running'
-              ? <button style={pill(false, '#FFFFFF')} onClick={() => { stopPulse(); setPulseState('idle') }}>Stop</button>
-              : <button style={{ ...pill(true, CORAL), border: 'none', color: '#1A0E0B' }} onClick={startPulse}><Heart size={18}/> {hr.src === 'camera' ? 'Measure again' : 'Measure pulse · 15 s'}</button>}
-          </div>
-          {pulseMsg && <p style={{ color: '#FFD3CA', fontSize: '13.5px', marginTop: '10px', lineHeight: 1.5 }}>{pulseMsg}</p>}
-
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', marginTop: '16px', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)', flexWrap: 'wrap' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: DIMW, cursor: 'pointer' }}>
-              <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal
-            </label>
-            <input inputMode="numeric" aria-label="Type pulse instead" style={{ ...input, width: '150px', background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)', color: '#fff', fontSize: '15px', padding: '9px 12px' }}
+              ? <button style={btn(false)} onClick={() => { stopPulse(); setPulseState('idle') }}>Stop</button>
+              : <button style={btn(true)} onClick={startPulse}><Heart size={17}/> {hr.src === 'camera' ? 'Measure again' : 'Measure pulse'}</button>}
+            <input inputMode="numeric" aria-label="Type pulse instead" style={{ ...input, width: '140px' }}
               value={hr.src === 'typed' ? (hr.v ?? '') : ''} placeholder="or type bpm"
               onChange={e => { const n = parseInt(e.target.value); setHr(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
           </div>
-          {showRaw && <div style={{ background: '#FFFFFF', borderRadius: '14px', padding: '4px 12px 12px', marginTop: '12px', color: T1 }}><SignalView samples={rawPulseRef.current} kind="pulse" version={sigVersion}/></div>}
+          {pulseMsg && <p style={{ color: RED, fontSize: '14px', marginTop: '10px', lineHeight: 1.5 }}>{pulseMsg}</p>}
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: T2, cursor: 'pointer', marginTop: '14px' }}>
+            <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal
+          </label>
+          {showRaw && <div style={{ marginTop: '8px' }}><SignalView samples={rawPulseRef.current} kind="pulse" version={sigVersion}/></div>}
         </section>
 
-        {/* ── BREATHING MONITOR ─────────────────────────────────────────── */}
-        <section style={{ ...monitor, background: 'linear-gradient(180deg, #1B2731 0%, #121A21 100%)' }}>
-          <Kicker light>02 · Breathing rate</Kicker>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', margin: '8px 0 14px' }}>
-            <Ring progress={breathProgress} color="#8EC5FF">
-              <div style={{
-                width: 58, height: 58, borderRadius: '50%', background: 'radial-gradient(circle, rgba(142,197,255,0.9), rgba(142,197,255,0.2))',
-                animation: breathState === 'motion' ? 'rlyBreath 4s ease-in-out infinite' : breathState === 'taps' ? `rlyTap 0.4s ease-out` : 'none',
-              }} key={breathState === 'taps' ? tapPulse : 'still'}/>
-            </Ring>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '64px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 0.95, color: rr.v != null ? '#FFFFFF' : 'rgba(255,255,255,0.25)' }}>
-                  {breathState === 'taps' ? tapCount : rr.v ?? '--'}
-                </span>
-                <span style={{ fontSize: '18px', fontWeight: 800, color: DIMW }}>{breathState === 'taps' ? 'taps' : '/min'}</span>
-              </div>
-              <p style={{ fontFamily: mono, fontSize: '12px', color: DIMW, marginTop: '8px' }}>
-                {breathState === 'motion' ? `phone on chest · keep still · ${breathLeft}s` : breathState === 'taps' ? `tap every breath in · ${breathLeft}s` : rr.v != null ? `✓ ${rr.src ? srcLabel[rr.src] : ''}` : 'ready'}
-              </p>
-            </div>
+        {/* ── Breathing ─────────────────────────────────────────────────── */}
+        <section style={panel}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px' }}>
+            <h2 style={h2}>Breathing rate</h2>
+            <span style={{ fontSize: '14px', color: T3 }}>taps or motion sensor</span>
           </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', margin: '10px 0 2px' }}>
+            <span style={{ fontSize: '56px', fontWeight: 700, letterSpacing: '-1px', lineHeight: 1, color: rr.v != null || breathState === 'taps' ? T1 : '#B9B6AA', fontVariantNumeric: 'tabular-nums' }}>
+              {breathState === 'taps' ? tapCount : rr.v ?? '--'}
+            </span>
+            <span style={{ fontSize: '17px', fontWeight: 600, color: T3 }}>{breathState === 'taps' ? 'taps' : 'per min'}</span>
+          </div>
+          <p style={{ fontSize: '14px', color: rr.v != null ? GREEN : T3, margin: '0 0 12px' }}>
+            {breathState === 'motion' ? `Phone on chest, keep still… ${breathLeft} s` : breathState === 'taps' ? `Tap every breath in… ${breathLeft} s` : rr.v != null ? `Measured (${rr.src ? srcLabel[rr.src] : ''})` : 'Not measured yet'}
+          </p>
+          {(breathState === 'motion' || breathState === 'taps') && (
+            <div style={{ height: '3px', background: LINE, borderRadius: '2px', overflow: 'hidden', marginBottom: '12px' }}>
+              <div style={{ height: '100%', width: `${Math.round(Math.min(1, breathProgress) * 100)}%`, background: T1, transition: 'width 0.3s linear' }}/>
+            </div>
+          )}
 
           {breathState === 'taps' ? (
             <button onClick={() => { taps.current.push((Date.now() - tapStart.current) / 1000); setTapCount(n => n + 1); setTapPulse(n => n + 1) }}
-              style={{ width: '100%', minHeight: '120px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontFamily: 'inherit',
-                background: 'radial-gradient(circle at 50% 40%, #9DD0FF, #5FA4E8)', color: '#0B1620', fontSize: '22px', fontWeight: 900 }}>
-              Tap each breath · {breathLeft}s
+              key={tapPulse}
+              style={{ width: '100%', minHeight: '128px', borderRadius: '8px', border: `2px solid ${T1}`, cursor: 'pointer', fontFamily: 'inherit',
+                background: '#FFFFFF', color: T1, fontSize: '20px', fontWeight: 700 }}>
+              Tap here each time the chest rises
             </button>
           ) : (
             <>
-              <p style={{ color: DIMW, fontSize: '14px', lineHeight: 1.5, margin: '0 0 12px' }}>
-                Easiest: tap once each time the chest rises. Or lie back and rest the phone flat on the chest for 15 seconds.
+              <p style={{ color: T2, fontSize: '15px', lineHeight: 1.5, margin: '0 0 12px' }}>
+                Easiest is to tap once each time the chest rises. Or lie back and rest the phone flat on the chest for 15 seconds.
               </p>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <button style={{ ...pill(true, '#8EC5FF'), border: 'none', color: '#0B1620' }} onClick={startTaps} disabled={breathState === 'motion'}>Tap to count · 15 s</button>
-                <button style={pill(false, '#FFFFFF')} onClick={startMotionBreath} disabled={breathState === 'motion'}><Wind size={17}/> Phone on chest</button>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+                <button style={btn(true)} onClick={startTaps} disabled={breathState === 'motion'}>Count by tapping</button>
+                <button style={btn(false)} onClick={startMotionBreath} disabled={breathState === 'motion'}><Wind size={17}/> Phone on chest</button>
+                <input inputMode="numeric" aria-label="Type breathing rate instead" style={{ ...input, width: '140px' }}
+                  value={rr.src === 'typed' ? (rr.v ?? '') : ''} placeholder="or type /min"
+                  onChange={e => { const n = parseInt(e.target.value); setRr(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
               </div>
             </>
           )}
-          {breathMsg && <p style={{ color: '#CFE6FF', fontSize: '13.5px', marginTop: '10px', lineHeight: 1.5 }}>{breathMsg}</p>}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', marginTop: '16px', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)', flexWrap: 'wrap' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: DIMW, cursor: 'pointer' }}>
-              <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal
-            </label>
-            <input inputMode="numeric" aria-label="Type breathing rate instead" style={{ ...input, width: '150px', background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)', color: '#fff', fontSize: '15px', padding: '9px 12px' }}
-              value={rr.src === 'typed' ? (rr.v ?? '') : ''} placeholder="or type /min"
-              onChange={e => { const n = parseInt(e.target.value); setRr(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
-          </div>
-          {showRaw && <div style={{ background: '#FFFFFF', borderRadius: '14px', padding: '4px 12px 12px', marginTop: '12px', color: T1 }}><SignalView samples={motionSamples.current} kind="breath" version={sigVersion}/></div>}
+          {breathMsg && <p style={{ color: RED, fontSize: '14px', marginTop: '10px', lineHeight: 1.5 }}>{breathMsg}</p>}
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: T2, cursor: 'pointer', marginTop: '14px' }}>
+            <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal
+          </label>
+          {showRaw && <div style={{ marginTop: '8px' }}><SignalView samples={motionSamples.current} kind="breath" version={sigVersion}/></div>}
         </section>
 
-        {/* ── APPLE HEALTH ──────────────────────────────────────────────── */}
-        <section style={card}>
-          <Kicker>03 · Apple Health (optional)</Kicker>
-          <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.55, margin: '0 0 14px' }}>
-            On iPhone: Health app → your picture → <strong>Export All Health Data</strong>, then choose the file here.
-            Readings from an Apple Watch, a cuff or a pulse oximeter fill the gaps. Read on this phone, never uploaded.
+        {/* ── Apple Health ──────────────────────────────────────────────── */}
+        <section style={panel}>
+          <h2 style={h2}>Apple Health <span style={{ fontWeight: 500, color: T3, fontSize: '15px' }}>(optional)</span></h2>
+          <p style={{ color: T2, fontSize: '15px', lineHeight: 1.55, margin: '6px 0 14px' }}>
+            On iPhone, open Health, tap your picture, then <strong>Export All Health Data</strong> and choose the file here.
+            Readings from an Apple Watch, a cuff or a pulse oximeter fill the gaps. The file is read on this phone and never uploaded.
           </p>
-          <label style={{ ...pill(false), cursor: importing ? 'wait' : 'pointer' }}>
+          <label style={{ ...btn(false), cursor: importing ? 'wait' : 'pointer' }}>
             <Upload size={17}/> {importing ? 'Reading…' : health ? 'Choose another export' : 'Choose export.zip'}
             <input type="file" accept=".zip,.xml,application/zip,text/xml" style={{ display: 'none' }} onChange={e => onHealthFile(e.target.files?.[0])}/>
           </label>
           {health && (
             <div style={{ marginTop: '14px' }}>
-              <p style={{ fontFamily: mono, fontSize: '12px', color: T3 }}>{health.recordsScanned.toLocaleString()} records scanned · {health.matched.toLocaleString()} vital-sign readings</p>
+              <p style={{ fontSize: '14px', color: T3 }}>{health.recordsScanned.toLocaleString()} records scanned, {health.matched.toLocaleString()} vital-sign readings</p>
               {health.dailyHr.length > 3 && (
-                <svg viewBox="0 0 300 80" style={{ width: '100%', height: '80px', marginTop: '8px', background: '#F7FAF6', borderRadius: '12px' }}>
+                <svg viewBox="0 0 300 80" style={{ width: '100%', height: '80px', marginTop: '8px', background: PAPER, border: `1px solid ${LINE}`, borderRadius: '6px' }}>
                   {(() => {
                     const d = health.dailyHr, lo = Math.min(...d.map(x => x.mean)) - 3, hi = Math.max(...d.map(x => x.mean)) + 3
                     const pts = d.map((x, i) => `${(i / (d.length - 1)) * 280 + 10},${72 - ((x.mean - lo) / (hi - lo)) * 56}`).join(' ')
-                    return <><polyline points={pts} fill="none" stroke={RED} strokeWidth={2.5} strokeLinejoin="round"/>
+                    return <><polyline points={pts} fill="none" stroke={T1} strokeWidth={2} strokeLinejoin="round"/>
                       <text x="10" y="13" fontSize="9" fill={T3}>daily mean pulse, last {d.length} days</text></>
                   })()}
                 </svg>
@@ -536,101 +477,101 @@ export default function VitalsCheck() {
           )}
         </section>
 
-        {/* ── THE REST ──────────────────────────────────────────────────── */}
-        <section style={card}>
-          <Kicker>04 · The rest, if you know them</Kicker>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '8px' }}>
-            <label style={{ fontSize: '13px', color: T3, fontWeight: 600 }}>Oxygen saturation (%)
+        {/* ── Other readings ────────────────────────────────────────────── */}
+        <section style={panel}>
+          <h2 style={h2}>Anything else you know</h2>
+          <p style={{ color: T3, fontSize: '14px', margin: '4px 0 12px' }}>Leave blank what you don&apos;t have.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <label style={lbl}>Oxygen saturation (%)
               <input inputMode="numeric" style={{ ...input, marginTop: '6px' }} value={spo2.v ?? ''} placeholder="pulse oximeter"
                 onChange={e => { const n = parseFloat(e.target.value); setSpo2(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
             </label>
-            <label style={{ fontSize: '13px', color: T3, fontWeight: 600 }}>Top blood-pressure number
+            <label style={lbl}>Top blood-pressure number
               <input inputMode="numeric" style={{ ...input, marginTop: '6px' }} value={sbp.v ?? ''} placeholder="e.g. 118"
                 onChange={e => { const n = parseFloat(e.target.value); setSbp(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
             </label>
-            <label style={{ fontSize: '13px', color: T3, fontWeight: 600 }}>Temperature (°F)
+            <label style={lbl}>Temperature (°F)
               <input inputMode="decimal" style={{ ...input, marginTop: '6px' }} value={tempF.v ?? ''} placeholder="e.g. 98.6"
                 onChange={e => { const n = parseFloat(e.target.value); setTempF(isNaN(n) ? empty : { v: n, src: 'typed' }) }}/>
             </label>
-            <div style={{ fontSize: '13px', color: T3, fontWeight: 600 }}>On extra oxygen?
-              <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+            <div style={lbl}>On extra oxygen?
+              <div style={{ display: 'flex', marginTop: '6px', border: `1px solid ${LINE2}`, borderRadius: '8px', overflow: 'hidden' }}>
                 {[false, true].map(b => (
-                  <button key={String(b)} onClick={() => setOnO2(b)} style={{ ...pill(onO2 === b, GREEN), flex: 1, padding: '10px', minHeight: '46px' }}>{b ? 'Yes' : 'No'}</button>
+                  <button key={String(b)} onClick={() => setOnO2(b)} style={{ flex: 1, minHeight: '46px', border: 'none', fontFamily: 'inherit', fontSize: '15px', fontWeight: 600, cursor: 'pointer',
+                    background: onO2 === b ? T1 : '#FFFFFF', color: onO2 === b ? '#FFFFFF' : T1 }}>{b ? 'Yes' : 'No'}</button>
                 ))}
               </div>
             </div>
           </div>
-          <p style={{ fontSize: '13px', color: T3, fontWeight: 600, margin: '16px 0 8px' }}>How alert is the person?</p>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {ACVPU.map(a => (
-              <button key={a.id} onClick={() => setAcvpu(a.id)} style={{ ...pill(acvpu === a.id, GREEN), minHeight: '42px', padding: '9px 14px', fontSize: '14px' }}>
-                {a.label}
+          <p style={{ ...lbl, margin: '16px 0 6px' }}>How alert is the person?</p>
+          <div style={{ border: `1px solid ${LINE2}`, borderRadius: '8px', overflow: 'hidden' }}>
+            {ACVPU.map((a, i) => (
+              <button key={a.id} onClick={() => setAcvpu(a.id)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '12px 14px', border: 'none',
+                borderTop: i ? `1px solid ${LINE}` : 'none', background: '#FFFFFF', fontFamily: 'inherit', fontSize: '15px', color: T1, cursor: 'pointer', textAlign: 'left' }}>
+                {a.label}{acvpu === a.id && <Check size={18} color={GREEN}/>}
               </button>
             ))}
           </div>
         </section>
 
         {/* ── NEWS2 ─────────────────────────────────────────────────────── */}
-        <section style={{ ...card, padding: 0, overflow: 'hidden' }}>
-          <div style={{ background: T1, color: '#fff', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
+        <section style={{ ...panel, padding: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '18px 18px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '10px', borderBottom: `2px solid ${T1}` }}>
             <div>
-              <Kicker light>NEWS2 · for your doctor, nurse or paramedic</Kicker>
-              <span style={{ fontSize: '13px', color: DIMW }}>{measuredCount} of 7 measured</span>
+              <h2 style={h2}>NEWS2 score</h2>
+              <p style={{ fontSize: '14px', color: T3, margin: '2px 0 0' }}>For your doctor, nurse or paramedic. {measuredCount} of 7 measured.</p>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Activity size={18} color={MINT}/>
-              <span style={{ fontSize: '40px', fontWeight: 900, lineHeight: 1 }}>{assessment ? total : '–'}</span>
-            </div>
+            <span style={{ fontSize: '44px', fontWeight: 700, lineHeight: 1, color: T1, fontVariantNumeric: 'tabular-nums' }}>{assessment ? total : '–'}</span>
           </div>
-          <div style={{ padding: '6px 12px' }}>
+          <div style={{ padding: '0 18px' }}>
             {rows.map(r => {
               const c = ptsColor(r.pts)
               return (
-                <div key={r.name} style={{ display: 'grid', gridTemplateColumns: '1fr auto 48px', gap: '10px', alignItems: 'center', padding: '11px 8px', borderBottom: `1px solid ${LINE}` }}>
+                <div key={r.name} style={{ display: 'grid', gridTemplateColumns: '1fr auto 44px', gap: '12px', alignItems: 'center', padding: '11px 0', borderBottom: `1px solid ${LINE}` }}>
                   <div>
-                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: r.pts == null ? T3 : T1 }}>{r.name}</div>
-                    {r.src && <div style={{ fontFamily: mono, fontSize: '11px', color: stale(r.at) ? AMBER : T3 }}>{srcLabel[r.src]}{when(r.at)}{stale(r.at) ? ' · older than a day' : ''}</div>}
+                    <div style={{ fontSize: '15px', fontWeight: 600, color: r.pts == null ? T3 : T1 }}>{r.name}</div>
+                    {r.src && <div style={{ fontSize: '12.5px', color: stale(r.at) ? AMBER : T3 }}>{srcLabel[r.src]}{when(r.at)}{stale(r.at) ? ', older than a day' : ''}</div>}
                   </div>
-                  <div style={{ fontSize: '14.5px', color: T1, textAlign: 'right', fontWeight: 600 }}>{r.value || <span style={{ color: T3, fontWeight: 500 }}>not measured</span>}</div>
-                  <div style={{ textAlign: 'center', fontWeight: 900, fontSize: '15px', padding: '6px 0', borderRadius: '10px', background: c.bg, color: c.fg }}>
+                  <div style={{ fontSize: '15px', color: T1, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{r.value || <span style={{ color: T3 }}>not measured</span>}</div>
+                  <div style={{ textAlign: 'center', fontWeight: 700, fontSize: '15px', padding: '5px 0', borderRadius: '4px', background: c.bg, color: c.fg, fontVariantNumeric: 'tabular-nums' }}>
                     {r.pts == null ? '–' : `+${r.pts}`}
                   </div>
                 </div>
               )
             })}
           </div>
-          <div style={{ padding: '14px 20px 20px' }}>
+          <div style={{ padding: '14px 18px 20px' }}>
             {assessment ? (
               <>
-                <p style={{ fontFamily: mono, fontSize: '12.5px', color: T2, marginBottom: '6px' }}>{`NEWS2 aggregate ${total} · RCP band: ${level}`}</p>
-                <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55 }}>
-                  Every point above comes from the Royal College of Physicians table, so a clinician can check it line by line.
-                  Relay does not interpret this score for you or tell you what is wrong.
+                <p style={{ fontSize: '14px', color: T1, fontWeight: 600, marginBottom: '6px' }}>{`Total ${total}. Royal College of Physicians band: ${level}.`}</p>
+                <p style={{ color: T2, fontSize: '14px', lineHeight: 1.55 }}>
+                  Each point comes from the published NEWS2 table, so a clinician can check it line by line.
+                  Relay Arc does not interpret the score for you or tell you what is wrong.
                 </p>
                 {assessment.partial && (
-                  <p style={{ color: T3, fontSize: '12.5px', lineHeight: 1.5, marginTop: '8px' }}>
-                    {`Partial: ${7 - measuredCount} of NEWS2’s seven measurements ${7 - measuredCount === 1 ? 'is' : 'are'} missing, which can only make the total lower than it really is.`}
+                  <p style={{ color: T3, fontSize: '13.5px', lineHeight: 1.5, marginTop: '8px' }}>
+                    {`${7 - measuredCount} of the seven measurements ${7 - measuredCount === 1 ? 'is' : 'are'} missing, which can only make the total lower than it really is.`}
                   </p>
                 )}
               </>
             ) : (
-              <p style={{ color: T3, fontSize: '14px' }}>Measure at least two things above to lay out a score.</p>
+              <p style={{ color: T3, fontSize: '15px' }}>Measure at least two things above to see a score.</p>
             )}
-            <div style={{ borderRadius: '16px', background: 'rgba(163,52,23,0.06)', border: `1.5px solid ${RED}`, padding: '14px', marginTop: '14px' }}>
-              <p style={{ color: T1, fontSize: '14.5px', fontWeight: 700, lineHeight: 1.45 }}>
-                Whatever these numbers say: if you feel very unwell, are worried, or it is getting worse, call {emg.label}.
+            <div style={{ borderTop: `1px solid ${LINE}`, marginTop: '16px', paddingTop: '14px' }}>
+              <p style={{ color: T1, fontSize: '15px', fontWeight: 600, lineHeight: 1.45 }}>
+                Whatever these numbers say, if you feel very unwell, are worried, or it is getting worse, call {emg.label}.
               </p>
-              <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', background: RED, color: '#fff', padding: '13px', fontWeight: 800, textDecoration: 'none', marginTop: '10px', borderRadius: '999px' }}>
+              <a href={`tel:${emg.number}`} style={{ ...btn(true, RED), width: '100%', marginTop: '10px', textDecoration: 'none' }}>
                 <Phone size={18}/> Call {emg.label}
               </a>
             </div>
             {measuredCount > 0 && (
-              <div style={{ display: 'flex', gap: '10px', marginTop: '14px', flexWrap: 'wrap' }}>
-                <button style={pill(true)} onClick={share}>Share with my care team</button>
-                <button style={pill(false)} onClick={save} disabled={saving}>{saving ? 'Saving…' : 'Save to my log'}</button>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '12px', flexWrap: 'wrap' }}>
+                <button style={btn(true)} onClick={share}>Share with my care team</button>
+                <button style={btn(false)} onClick={save} disabled={saving}>{saving ? 'Saving…' : 'Save to my log'}</button>
               </div>
             )}
-            <p style={{ fontFamily: mono, fontSize: '11px', color: T3, marginTop: '14px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '12.5px', color: T3, marginTop: '16px', lineHeight: 1.5 }}>
               For clinicians: aggregate 0–4 low (low-medium if any single parameter scores 3), 5–6 medium, 7+ high. Royal College of Physicians, NEWS2 (2017).
               Camera and motion readings are phone estimates, not a medical device. Not a diagnosis.
             </p>
