@@ -49,6 +49,8 @@ const mono = 'var(--font-mono, monospace)'
 const STORE_KEY = 'relay-arc:card:v1'
 
 type Contact = { name: string; phone: string }
+/** A personal card: anything else a responder or hospital should know. */
+type Extra = { label: string; value: string }
 type Card = {
   name: string
   dob: string
@@ -59,13 +61,23 @@ type Card = {
   doctor: string
   notes: string
   contacts: Contact[]
+  extras: Extra[]
 }
 
 const EMPTY: Card = {
   name: '', dob: '', blood: '', conditions: '', allergies: '',
   medications: '', doctor: '', notes: '',
   contacts: [{ name: '', phone: '' }, { name: '', phone: '' }],
+  extras: [],
 }
+
+// One-tap starters for the details people most often need to hand over.
+const EXTRA_PRESETS: { label: string; placeholder: string }[] = [
+  { label: 'Insurance', placeholder: 'Provider, member ID, or "No insurance"' },
+  { label: 'Preferred language', placeholder: 'e.g. Spanish, needs an interpreter' },
+  { label: 'Mobility needs', placeholder: 'e.g. Wheelchair user, cannot stand quickly' },
+  { label: 'Trusted caregiver', placeholder: 'Name, relation, phone' },
+]
 
 const BLOOD = ['', 'O+', 'O−', 'A+', 'A−', 'B+', 'B−', 'AB+', 'AB−', 'Unknown']
 
@@ -85,7 +97,7 @@ export default function EmergencyCard() {
       const raw = localStorage.getItem(STORE_KEY)
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<Card>
-        setC({ ...EMPTY, ...parsed, contacts: parsed.contacts?.length ? parsed.contacts : EMPTY.contacts })
+        setC({ ...EMPTY, ...parsed, contacts: parsed.contacts?.length ? parsed.contacts : EMPTY.contacts, extras: Array.isArray(parsed.extras) ? parsed.extras : [] })
       }
     } catch { /* corrupt or unavailable storage is not worth surfacing */ }
     setLoaded(true)
@@ -104,6 +116,11 @@ export default function EmergencyCard() {
   const setContact = (i: number, k: keyof Contact, v: string) =>
     setC(p => ({ ...p, contacts: p.contacts.map((ct, j) => j === i ? { ...ct, [k]: v } : ct) }))
 
+  const addExtra = (label: string) => setC(p => ({ ...p, extras: [...p.extras, { label, value: '' }] }))
+  const setExtra = (i: number, k: keyof Extra, v: string) =>
+    setC(p => ({ ...p, extras: p.extras.map((x, j) => j === i ? { ...x, [k]: v } : x) }))
+  const removeExtra = (i: number) => setC(p => ({ ...p, extras: p.extras.filter((_, j) => j !== i) }))
+  const extras = useMemo(() => c.extras.filter(x => x.value.trim()), [c.extras])
   const meds = useMemo(() => lines(c.medications), [c.medications])
   const filledContacts = useMemo(
     () => c.contacts.filter(ct => ct.name.trim() || ct.phone.trim()), [c.contacts])
@@ -164,6 +181,7 @@ export default function EmergencyCard() {
       row('Blood type', c.blood)
       row('Allergies', c.allergies || 'None reported', Boolean(c.allergies.trim()))
       row('Conditions', c.conditions)
+      for (const x of extras.slice(0, 4)) row(x.label || 'Note', x.value)
 
       if (meds.length) {
         g.fillStyle = INK3; g.font = `700 30px ${F.mono}`
@@ -342,6 +360,38 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
 
               <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginTop: '14px', marginBottom: '4px' }}>
                 <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+                  Personal cards
+                </span>
+                <p style={{ color: INK3, fontSize: '13px', marginTop: '4px' }}>Anything else a paramedic or hospital should know. Add as many as you like.</p>
+              </div>
+              {c.extras.map((x, i) => {
+                const preset = EXTRA_PRESETS.find(p => p.label === x.label)
+                return (
+                  <div key={i}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                      <input aria-label="Card name" value={x.label} onChange={e => setExtra(i, 'label', e.target.value)}
+                        style={{ border: 'none', background: 'none', padding: 0, color: INK3, fontSize: '13px', fontWeight: 600, fontFamily: 'inherit', outline: 'none', marginBottom: '6px', width: '70%' }}/>
+                      <button onClick={() => removeExtra(i)} style={{ background: 'none', border: 'none', color: INK3, fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>Remove</button>
+                    </div>
+                    <input style={input} value={x.value} onChange={e => setExtra(i, 'value', e.target.value)} placeholder={preset?.placeholder || 'Details'}/>
+                  </div>
+                )
+              })}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {EXTRA_PRESETS.filter(p => !c.extras.some(x => x.label === p.label)).map(p => (
+                  <button key={p.label} onClick={() => addExtra(p.label)}
+                    style={{ border: `1px solid ${INK}`, background: WHITE, color: INK, borderRadius: '8px', padding: '8px 12px', fontSize: '14px', fontWeight: 600, fontFamily: 'inherit', cursor: 'pointer' }}>
+                    + {p.label}
+                  </button>
+                ))}
+                <button onClick={() => addExtra('Other')}
+                  style={{ border: `1px dashed ${INK3}`, background: WHITE, color: INK2, borderRadius: '8px', padding: '8px 12px', fontSize: '14px', fontWeight: 600, fontFamily: 'inherit', cursor: 'pointer' }}>
+                  + Your own
+                </button>
+              </div>
+
+              <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginTop: '14px', marginBottom: '4px' }}>
+                <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
                   Who to call
                 </span>
               </div>
@@ -387,6 +437,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
               <Field k="Blood type" v={c.blood}/>
               <Field k="Allergies" v={c.allergies || 'None reported'} danger={Boolean(c.allergies.trim())}/>
               <Field k="Conditions" v={c.conditions}/>
+              {extras.map((x, i) => <Field key={i} k={x.label || 'Note'} v={x.value}/>)}
 
               {meds.length > 0 && (
                 <div style={{ marginBottom: '15px' }}>
@@ -481,6 +532,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
             {meds.length ? <WRow k="Meds" v={meds.join('; ')}/> : null}
             {filledContacts.length ? <WRow k="Call" v={filledContacts.map(x => `${x.name} ${x.phone}`).join(' · ')}/> : null}
             {c.doctor ? <WRow k="Doctor" v={c.doctor}/> : null}
+            {extras.slice(0, 3).map((x, i) => <WRow key={i} k={x.label || 'Note'} v={x.value}/>)}
           </tbody>
         </table>
         <p style={{ margin: '4pt 0 0', color: INK, fontFamily: mono, fontSize: '5pt', fontWeight: 700, letterSpacing: '0.6pt' }}>
