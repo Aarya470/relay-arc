@@ -47,7 +47,7 @@ export default function SignalView({ samples, kind, version }: {
   const cfg = kind === 'pulse'
     ? { hz: 30, det: 1.2, lo: 40 / 60, hi: 200 / 60, win: 10, specWin: 20, unit: 'bpm', raw: 'Raw: mean red brightness of each camera frame', rawColor: '#C0392B' }
     : { hz: 20, det: 12, lo: 6 / 60, hi: 40 / 60, win: 40, specWin: 40, unit: '/min', raw: 'Raw: accelerometer z axis (m/s²)', rawColor: '#2F6FB0' }
-  useEffect(() => {
+  const draw = () => {
     if (samples.length < 10) return
     const tEnd = samples[samples.length - 1].t
     const recent = samples.filter(s => s.t > tEnd - cfg.win)
@@ -61,7 +61,21 @@ export default function SignalView({ samples, kind, version }: {
     const { freqs, power } = spectrum(y, cfg.hz, cfg.lo, cfg.hi, kind === 'pulse' ? 0.01 : 0.005)
     let best = 0; for (let i = 1; i < power.length; i++) if (power[i] > power[best]) best = i
     drawLine(c.current, freqs.map(f => f * 60), power, '#B5651D', { marker: freqs[best] * 60, label: `peak ${Math.round(freqs[best] * 60)} ${cfg.unit}` })
+  }
+  // Redraw on every animation frame while new samples are arriving, so the
+  // traces scroll smoothly instead of jumping a few times a second. When the
+  // recording stops, the loop finds nothing new and does no work.
+  useEffect(() => {
+    let raf = 0, seen = -1
+    const tick = () => {
+      if (samples.length !== seen) { seen = samples.length; draw() }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [samples, kind])
+  useEffect(() => { draw() // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version])
 
   const download = () => {
