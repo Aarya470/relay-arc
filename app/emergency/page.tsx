@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, ChevronRight, Mic } from 'lucide-react'
+import { X, Heart, AlertCircle, Wind, Zap, Brain, Activity, Plus, Phone, ChevronRight, Mic, ArrowRight } from 'lucide-react'
 import { toast } from 'sonner'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { demoOn } from '@/lib/demo'
@@ -67,6 +67,7 @@ export default function Emergency() {
   const [listening, setListening] = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
   const [transcript, setTranscript] = useState('')
+  const [typed, setTyped] = useState('')
   const [heard, setHeard] = useState<{ evidence: string[]; source: 'device' | 'cloud' } | null>(null)
   // A classifier suggestion awaiting the user, rather than an executed decision.
   // See the comment on classifyAndGo.
@@ -336,6 +337,20 @@ export default function Emergency() {
               : L.speak}
           </motion.button>
         )}
+
+        {/* Typing works where speaking does not: a loud room, a quiet one, or no
+            microphone. Same on-device classifier as voice. */}
+        <form onSubmit={e => { e.preventDefault(); const t = typed.trim(); if (t.length > 2 && !loading) classifyAndGo(t) }}
+          style={{ display: 'flex', gap: '8px' }}>
+          <input value={typed} onChange={e => setTyped(e.target.value)} disabled={loading}
+            aria-label={es ? 'Escriba lo que pasa' : 'Type what is happening'}
+            placeholder={es ? 'O escriba lo que pasa' : 'Or type what is happening'}
+            style={{ flex: 1, minWidth: 0, border: `1.5px solid ${T1}`, borderRadius: '12px', padding: '0 14px', minHeight: '54px', fontSize: '16px', fontFamily: 'inherit', color: T1, background: '#FFFFFF', outline: 'none' }}/>
+          <button type="submit" disabled={loading || typed.trim().length < 3} aria-label={es ? 'Enviar' : 'Send'}
+            style={{ width: '54px', minHeight: '54px', borderRadius: '12px', border: 'none', background: typed.trim().length >= 3 ? T1 : '#B9B6AA', color: '#FFFFFF', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <ArrowRight size={20}/>
+          </button>
+        </form>
 
         {heard && !pending && (
           <p style={{ color: T3, fontSize: '12.5px', fontFamily: 'var(--font-mono, monospace)', marginTop: '-6px' }}>
