@@ -7,7 +7,7 @@ handoff: it classifies the emergency, picks the hospital that can actually treat
 condition, sends the patient's medical record ahead, solves transport, and keeps the
 family and the ER on the same live picture.
 
-Live: **https://relay-arc.vercel.app** · Guided demo (no GPS needed): **/demo** ·
+Live: **https://www.relay-arc.org/** · Guided demo (no GPS needed): **/demo** ·
 Live dependency health: **/status**
 
 ---
