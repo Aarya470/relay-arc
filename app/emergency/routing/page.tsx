@@ -733,6 +733,10 @@ function RoutingPage() {
   )
 
   // ── Error state (no hospital found) ───────────────────────────────────────
+  // With no signal the hospital search cannot run, so say that plainly and show
+  // what still works: the call, the location for the dispatcher, and the
+  // responder details saved on this phone.
+  const offline = typeof navigator !== 'undefined' && navigator.onLine === false
   if (!hospital) return (
     <div style={{
       minHeight: '100dvh',
@@ -766,15 +770,17 @@ function RoutingPage() {
           fontWeight: 800,
           letterSpacing: '-0.3px',
         }}>
-          Could not find a hospital
+          {offline ? 'No signal right now' : 'Could not find a hospital'}
         </p>
         <p style={{
           color: T.textSec,
           fontSize: '14px',
           lineHeight: 1.7,
-          maxWidth: '280px',
+          maxWidth: '300px',
         }}>
-          {locationError || 'Please call 911 immediately for emergency assistance.'}
+          {offline
+            ? `Finding a hospital needs internet. Calling ${emg.label} does not. Your details below work with no signal.`
+            : (locationError || 'Please call 911 immediately for emergency assistance.')}
         </p>
       </div>
 
@@ -803,6 +809,36 @@ function RoutingPage() {
         <Phone size={20} strokeWidth={2.5} />
         Call {emg.label} now
       </motion.a>
+
+      {/* Works with no signal: where you are, and what a responder needs */}
+      {patientPos && (
+        <div style={{ width: '100%', maxWidth: '320px', background: '#FFFFFF', border: `1px solid ${T.border}`, borderRadius: '12px', padding: '12px 14px' }}>
+          <p style={{ color: T.textMuted, fontSize: '12.5px', marginBottom: '4px' }}>Your location, read this to the dispatcher</p>
+          <p style={{ color: T.textPrimary, fontSize: '17px', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
+            {patientPos[0].toFixed(5)}, {patientPos[1].toFixed(5)}
+          </p>
+        </div>
+      )}
+      {(() => {
+        const info = responderInfo(profile)
+        if (!info.length) return null
+        return (
+          <div style={{ width: '100%', maxWidth: '320px', background: '#FFFFFF', border: `1px solid ${T.border}`, borderRadius: '12px', padding: '12px 14px' }}>
+            <p style={{ color: T.red, fontSize: '12.5px', fontWeight: 700, marginBottom: '6px' }}>First responder info. Show this screen</p>
+            {info.map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', gap: '12px', padding: '6px 0', borderTop: `1px solid ${T.border}` }}>
+                <span style={{ color: T.textMuted, fontSize: '12.5px', width: '86px', flexShrink: 0 }}>{k}</span>
+                <span style={{ color: k === 'Medications' ? T.textSec : T.red, fontWeight: 700, fontSize: k === 'Blood type' ? '22px' : '14px', lineHeight: 1.3 }}>{v}</span>
+              </div>
+            ))}
+          </div>
+        )
+      })()}
+      {offline && (
+        <a href="/card" style={{ color: T.textPrimary, fontWeight: 700, fontSize: '14px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+          Open my emergency card
+        </a>
+      )}
 
       {/* Cancel ghost */}
       <motion.button
@@ -1340,6 +1376,23 @@ function RoutingPage() {
       />
     </div>
   )
+}
+
+
+// Blood type, allergies and medications from the signed-in profile, or from the
+// no-account emergency card saved on this phone. Both live in localStorage, so
+// this works with no signal.
+function responderInfo(profile: any): [string, string][] {
+  let card: any = null
+  try { card = JSON.parse(localStorage.getItem('relay-arc:card:v1') || 'null') } catch {}
+  const blood = profile?.blood_type || card?.blood || ''
+  const allergies = profile?.allergies || card?.allergies || ''
+  const meds = profile?.medications?.length ? profile.medications.slice(0, 4).map((m: any) => m.name || m).join(', ') : (card?.medications || '')
+  const out: [string, string][] = []
+  if (blood) out.push(['Blood type', blood])
+  if (allergies) out.push(['Allergies', allergies])
+  if (meds) out.push(['Medications', meds])
+  return out
 }
 
 export default function RoutingPageWrapper() {
