@@ -1,4 +1,4 @@
-// The Relay Arc mark: a lowercase r sending a signal.
+// The Relay Arc mark: a lowercase r sending out a signal.
 // A transparent PNG at public/logo-mark.png, cut from the master logo. The full
 // wordmark (mark + "relay arc") is public/logo-wordmark.png.
 type Props = {
