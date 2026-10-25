@@ -1,10 +1,6 @@
 'use client'
-// The deep dive. This is the one page on the site that is meant to be read.
-//
-// The homepage deliberately carries almost no text. Anyone who wants to know
-// whether the technology is real comes here instead — and the argument is made
-// with two demos that run the actual production code in the visitor's browser,
-// not with adjectives.
+// How we built it. Plain-language write-up with two live demos that run the
+// real app code in the browser.
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { ArrowLeft } from 'lucide-react'
@@ -36,7 +32,6 @@ const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
 const BORDER = '#7EB382', BG2 = '#CEE9C9'
 const RED = '#A33417', ACCENT = '#42623C'
 const ORANGE = '#D97757'   // fill only. dark ink on top
-const mono = 'var(--font-mono, monospace)'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
 
 function DemoSkeleton({ label }: { label: string }) {
@@ -45,27 +40,17 @@ function DemoSkeleton({ label }: { label: string }) {
       border: `2px solid ${T1}`, background: BG2, height: '340px',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>
+      <span style={{ color: T3, fontSize: '14px' }}>
         {label}
       </span>
     </div>
   )
 }
 
-function SectionHead({ n, title, right }: { n: string; title: string; right?: string }) {
+function SectionHead({ title }: { title: string }) {
   return (
-    <div style={{
-      borderTop: `3px solid ${T1}`, paddingTop: '14px', marginBottom: '30px',
-      display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap',
-    }}>
-      <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.8px', textTransform: 'uppercase' }}>
-        {n} / {title}
-      </span>
-      {right && (
-        <span style={{ color: T3, fontFamily: mono, fontSize: '11px', letterSpacing: '1.4px', textTransform: 'uppercase' }}>
-          {right}
-        </span>
-      )}
+    <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '14px', marginBottom: '24px' }}>
+      <span style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{title}</span>
     </div>
   )
 }
@@ -90,7 +75,7 @@ function P({ children, wide }: { children: React.ReactNode; wide?: boolean }) {
 function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
     <div style={{ borderTop: `1px solid ${BORDER}`, padding: '16px 0', display: 'flex', gap: '18px' }}>
-      <span style={{ color: T3, fontFamily: mono, fontSize: '11px', fontWeight: 700, minWidth: '26px', paddingTop: '3px' }}>{n}</span>
+      <span style={{ color: T1, fontSize: '15px', fontWeight: 700, minWidth: '22px' }}>{n}.</span>
       <div>
         <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '5px' }}>{title}</p>
         <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65, maxWidth: '620px' }}>{body}</p>
@@ -103,7 +88,7 @@ function Stat({ k, v, sub }: { k: string; v: string; sub?: string }) {
   return (
     <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '10px' }}>
       <p style={{ color: T1, fontSize: 'clamp(24px, 3.4vw, 38px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{v}</p>
-      <p style={{ color: T2, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.3px', textTransform: 'uppercase', marginTop: '7px' }}>{k}</p>
+      <p style={{ color: T2, fontSize: '14px', fontWeight: 600, marginTop: '7px' }}>{k}</p>
       {sub && <p style={{ color: T3, fontSize: '11.5px', lineHeight: 1.5, marginTop: '5px' }}>{sub}</p>}
     </div>
   )
@@ -133,117 +118,105 @@ export default function Engineering() {
         </div>
       </header>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section style={{ padding: '80px 24px 0' }}>
+      {/* top */}
+      <section style={{ padding: '72px 24px 0' }}>
         <div style={WRAP}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '26px' }}>
-            <span style={{ width: '7px', height: '7px', background: RED, display: 'inline-block' }}/>
-            <span style={{ color: T2, fontFamily: mono, fontSize: '11.5px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              Under the hood. Everything on this page runs live
-            </span>
-          </div>
-
+          <p style={{ color: T2, fontSize: '15px', fontWeight: 600, marginBottom: '18px' }}>How we built it</p>
           <h1 style={{
-            color: T1, fontSize: 'clamp(40px, 7.6vw, 92px)', fontWeight: 800,
-            lineHeight: 0.96, letterSpacing: '-0.045em', marginBottom: '32px', maxWidth: '960px',
+            color: T1, fontSize: 'clamp(36px, 6.4vw, 72px)', fontWeight: 800,
+            lineHeight: 1.02, letterSpacing: '-0.03em', marginBottom: '28px', maxWidth: '900px',
           }}>
-            We don&apos;t rent the<br/>parts that matter<span style={{ color: RED }}>.</span>
+            We built the important parts ourselves.
           </h1>
 
           <P wide>
-            Most health apps are a nice interface wrapped around someone else&apos;s API. That is fine
-            until the signal drops, the vendor rate-limits you, or a doctor asks why the software said
-            what it said. In an emergency all three of those happen at once.
+            A lot of health apps send everything to another company&apos;s server and wait for an answer.
+            That breaks when there is no signal, and nobody can explain why the app said what it said.
           </P>
           <P wide>
-            So the four things Relay leans on in the worst moment, deciding what is wrong, how urgent
-            it is, which hospital, and getting you there, are all ours. They run on
-            the device, they explain themselves, and they work with no network. Below are two of them,
-            running in this browser tab right now. Type into them. Break them.
+            So the parts that matter most in an emergency are ours: figuring out what is wrong, how
+            serious it is, which hospital to go to, and the directions to get there. They run on the
+            phone and they work without internet. Two of them are running on this page right now, so
+            you can try them.
           </P>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '24px', margin: '52px 0 0' }}>
-            <Stat k="triage decision" v="0.2 ms" sub="two models, on-device, no network"/>
-            <Stat k="risk score" v="0.015 ms" sub="deterministic, reproducible"/>
-            <Stat k="model size" v="153 KB" sub="both models, inside the app"/>
-            <Stat k="API cost per call" v="₹0" sub="for both engines"/>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '24px', margin: '44px 0 0' }}>
+            <Stat k="to decide what's wrong" v="0.2 ms" sub="on the phone, no internet"/>
+            <Stat k="to score the vitals" v="0.015 ms" sub="same answer every time"/>
+            <Stat k="size of both models" v="153 KB" sub="built into the app"/>
+            <Stat k="cost per use" v="$0" sub="nothing to pay for"/>
           </div>
         </div>
       </section>
 
-      {/* ── 01 TRIAGE ────────────────────────────────────────────────────── */}
-      <section style={{ padding: '92px 24px 0' }}>
+      {/* triage */}
+      <section style={{ padding: '84px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="01" title="Triage engine" right="classification. Ours"/>
-          <H2>It has to decide what&apos;s wrong before it knows if there&apos;s signal.</H2>
+          <SectionHead title="Figuring out what's wrong"/>
+          <H2>It has to work even when there&apos;s no signal.</H2>
           <P>
-            Someone gasping into their phone cannot wait on a round trip, and a basement or a rural
-            road may not offer one. So classification happens first, on the device, in a fraction of a
-            millisecond. And the language model is consulted only when our own model admits it is
-            unsure.
+            Someone who can barely breathe can&apos;t wait for a server, and a basement or a back road
+            may not have signal at all. So the phone reads what you typed or said and decides on its
+            own, almost instantly. It only asks the online AI for help when it isn&apos;t sure.
           </P>
 
           <div style={{ margin: '34px 0 46px' }}>
             <TriageDemo/>
           </div>
 
-          <H2>How it was actually built</H2>
+          <H2>How we made it</H2>
           <P>
-            Two models, averaged. The first is a multinomial logistic regression over word and
-            word-pair features: deliberately the most boring model that could work, because a linear
-            model can be asked <em>why</em>, and every decision decomposes into the exact terms that drove
-            it, which is the list you saw above. The second is a small neural network (1,024 hashed
-            inputs, 32 hidden units) that also reads character trigrams, so a misspelling or a word
-            form it never saw still lands near the right answer. Both are trained from scratch in
-            NumPy, with no ML library.
+            There are two small models and we average their answers. The first one counts which words
+            and word pairs show up. It is simple on purpose, because you can see exactly which words made
+            it decide, like the list above. The second is a small neural network that also looks at
+            pieces of words, so a typo or an unusual spelling still works. We trained both ourselves
+            in Python.
           </P>
 
           <div style={{ marginBottom: '40px' }}>
-            <Step n="01" title="Write the corpus by hand"
-              body="576 labelled utterances in the words people actually use under stress, in English, Spanish, Hindi and Marathi. 'chest is paining', 'he won't wake up', 'me falta el aire'. Not clinical vocabulary. This is the part with no shortcut."/>
-            <Step n="02" title="Featurise with negation handling"
-              body="Unigrams and bigrams, plus a negation window: 'no chest pain but I cannot breathe' must not read as chest pain. Terms inside a negator's scope get a NOT_ prefix, with an exemption list for words like 'breath' that stay clinically positive either way."/>
-            <Step n="03" title="Train, then prune"
-              body="The linear model: gradient descent with L2, then features whose weight lands under 0.02 are dropped as memorised noise. The neural model: Adam, dropout and weight decay, then temperature-scaled so its confidence means something (untuned, it said 0.99 when it was wrong), then quantised to 8-bit weights."/>
-            <Step n="04" title="Compile the model into TypeScript"
-              body="The trainer emits one self-contained module with the weights inlined and zero imports. Nothing to fetch at runtime, nothing to keep in sync, and the classifier works the first time the app opens on a phone that has never been online."/>
-            <Step n="05" title="Prove Python and TypeScript agree"
-              body="A generated fixture file pins what the Python trainer predicted. The TypeScript must reproduce it exactly. Drift between the two would mean the shipped model scores different features than it was trained on. Silently, and only in production."/>
+            <Step n="1" title="We wrote the examples ourselves"
+              body="576 sentences written the way people actually talk when they're scared, in English, Spanish, Hindi and Marathi. 'chest is paining', 'he won't wake up', 'me falta el aire'. Not doctor words."/>
+            <Step n="2" title="We taught it what 'no' means"
+              body="'No chest pain but I can't breathe' should not count as chest pain. Words that come right after 'no' or 'not' are marked so the model knows they were ruled out."/>
+            <Step n="3" title="We trained it and cut the junk"
+              body="After training, words that barely mattered were removed. The neural network was adjusted so that when it says it's 90% sure, it's right about 90% of the time. Before that it said 99% sure even when it was wrong."/>
+            <Step n="4" title="We put the model inside the app"
+              body="The trained model is saved as one TypeScript file. Nothing has to download, so it works the very first time you open the app, even if the phone has never been online."/>
+            <Step n="5" title="We checked both versions match"
+              body="A test makes sure the app gives exactly the same answers as the Python version we trained. If they ever drifted apart, the test fails."/>
           </div>
 
-          {/* the honest benchmark */}
-          <div style={{ border: `2px solid ${T1}`, marginBottom: '20px' }}>
+          <div style={{ border: `2px solid ${T1}`, marginBottom: '20px', borderRadius: 10, overflow: 'hidden' }}>
             <div style={{ borderBottom: `1px solid ${T1}`, padding: '11px 16px', background: BG2 }}>
-              <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-                Head-to-head. 49 phrasings the models had never seen
+              <span style={{ color: T1, fontSize: '14px', fontWeight: 700 }}>
+                Our model vs. a big online AI, on 49 sentences neither had seen
               </span>
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '460px' }}>
                 <thead>
                   <tr>
-                    {['', 'Ours, on-device', 'gpt-oss-20b (cloud)'].map((h, i) => (
+                    {['', 'Ours, on the phone', 'gpt-oss-20b, online'].map((h, i) => (
                       <th key={h} style={{
                         textAlign: i === 0 ? 'left' : 'right', padding: '11px 16px',
-                        borderBottom: `1px solid ${BORDER}`, color: T3, fontFamily: mono,
-                        fontSize: '10px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase',
+                        borderBottom: `1px solid ${BORDER}`, color: T3, fontSize: '13px', fontWeight: 600,
                       }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    ['Accuracy, all cases', '85.7%', '89.8%', 1],
-                    ['Accuracy when confident (76% of cases)', '100%', '. ', 0],
-                    ['Median latency', '0.2 ms', '467 ms', 0],
+                    ['Right answers, all sentences', '85.7%', '89.8%', 1],
+                    ['Right answers when it was sure (76% of sentences)', '100%', '-', 0],
+                    ['Time to answer', '0.2 ms', '467 ms', 0],
                     ['Works with no signal', 'yes', 'no', 0],
-                    ['Explains its decision', 'yes', 'no', 0],
-                    ['Cost per call', 'zero', 'metered', 0],
+                    ['Shows why it decided', 'yes', 'no', 0],
+                    ['Cost', 'free', 'paid per use', 0],
                   ].map(([k, a, b, llamaWins]) => (
                     <tr key={k as string}>
-                      <td style={{ padding: '11px 16px', borderBottom: `1px solid ${BORDER}`, color: T1, fontSize: '13.5px', fontWeight: 600 }}>{k}</td>
-                      <td style={{ padding: '11px 16px', borderBottom: `1px solid ${BORDER}`, textAlign: 'right', fontFamily: mono, fontSize: '13px', fontWeight: 700, color: llamaWins ? T2 : T1 }}>{a}</td>
-                      <td style={{ padding: '11px 16px', borderBottom: `1px solid ${BORDER}`, textAlign: 'right', fontFamily: mono, fontSize: '13px', fontWeight: 700, color: llamaWins ? T1 : T3 }}>{b}</td>
+                      <td style={{ padding: '11px 16px', borderBottom: `1px solid ${BORDER}`, color: T1, fontSize: '14px', fontWeight: 600 }}>{k}</td>
+                      <td style={{ padding: '11px 16px', borderBottom: `1px solid ${BORDER}`, textAlign: 'right', fontSize: '14px', fontWeight: 700, color: llamaWins ? T2 : T1 }}>{a}</td>
+                      <td style={{ padding: '11px 16px', borderBottom: `1px solid ${BORDER}`, textAlign: 'right', fontSize: '14px', fontWeight: 700, color: llamaWins ? T1 : T3 }}>{b}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -253,140 +226,124 @@ export default function Engineering() {
 
           <div style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '18px', marginBottom: '44px', maxWidth: '720px' }}>
             <p style={{ color: T1, fontSize: '17px', fontWeight: 700, lineHeight: 1.5, marginBottom: '10px' }}>
-              The cloud model is more accurate than ours on its own. Together they beat both.
+              The online AI is a little more accurate on its own. Used together, they do better than either.
             </p>
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.7 }}>
-              That is not the claim. The claim is what happened to the cases we got wrong:
-              <strong style={{ color: T1 }}> every single one fell below the abstention gate</strong>. The model
-              declined to answer rather than answer badly. So 76% of emergencies are settled
-              on-device, instantly, offline, with no errors on this evaluation, and the remaining 24%
-              go to the cloud model, which is strong on exactly the ambiguous phrasings a small corpus
-              is weak on. The phone and the cloud together scored 93.9%, higher than either alone. If
-              there is no network, the on-device guess is used rather than dead-ending someone
-              mid-emergency. (The cloud model changed on 16 August 2026, when Groq shut down
-              llama-3.1-8b-instant; this table is re-run against its replacement.)
+              Every sentence our model got wrong was one where it already said it wasn&apos;t sure. So
+              about 3 out of 4 emergencies are decided right on the phone, with no mistakes in this test,
+              and the unsure ones go to the online AI. Together they got 93.9% right. If there&apos;s no
+              internet, the phone&apos;s best guess is used so nobody gets stuck. (The online model
+              changed on 16 August 2026 when Groq retired the old one, so we ran the test again.)
             </p>
           </div>
 
-          {/* the failure */}
-          <div style={{ background: BG2, padding: '26px 24px', marginBottom: '20px' }}>
-            <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
-              Where it went wrong first
+          <div style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: 10 }}>
+            <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '10px' }}>
+              What went wrong the first time
             </p>
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.7, maxWidth: '720px', marginBottom: '14px' }}>
-              The first attempt to grow the corpus made the model <em>worse</em>. Held-out accuracy fell
-              from 86.7% to 78.5%. The cause was that distinctive clinical terms appeared exactly once,
-              so a term would land in the test split having never been seen in training, and a single
-              train/test split was too noisy to notice.
+              When we first added more examples, the model got <em>worse</em>: from 86.7% to 78.5%.
+              Some important words only appeared once, so if that one sentence ended up in the test
+              set, the model had never seen the word.
             </p>
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.7, maxWidth: '720px' }}>
-              Two rules came out of it, and they still hold: every distinctive term needs at least three
-              different phrasings, and accuracy is measured by 5-fold cross-validation rather than one
-              split. A benchmark that flattered us was also thrown out. The first run showed 100% for us
-              and 0% for Groq, which turned out to be a contaminated eval set plus Groq quietly returning
-              errors that were being counted as wrong answers.
+              Now every important word needs at least three different example sentences, and we test
+              five different ways instead of once. We also threw out an early test that said we were
+              100% and Groq was 0%. It was wrong: some test sentences had leaked into training, and
+              Groq errors were being counted as wrong answers.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── 02 RISK ──────────────────────────────────────────────────────── */}
-      <section style={{ padding: '92px 24px 0' }}>
+      {/* risk */}
+      <section style={{ padding: '84px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="02" title="Risk engine" right="deterioration. Ours"/>
-          <H2>A medical flag that can&apos;t explain itself is worthless to a doctor.</H2>
+          <SectionHead title="How serious is it"/>
+          <H2>A warning is only useful if a doctor can check it.</H2>
           <P>
-            This used to be a language model reading free-text check-ins and guessing a risk level. That
-            is the wrong tool. If a patient shows a clinician <em>&ldquo;the app said I was at risk&rdquo;</em>, the
-            clinician has to be able to see which measurement caused it and get the same answer running
-            it again. Ask a model at temperature 0.2 twice and you may get two answers.
+            This used to be an AI reading your daily check-in and guessing. That was a bad idea. If you
+            show a doctor &ldquo;the app said I was at risk,&rdquo; they need to see which reading caused it, and
+            get the same answer if they run it again. An AI can give two different answers to the same
+            question.
           </P>
           <P>
-            So it is now arithmetic on published thresholds. The vital-sign subscores of <strong style={{ color: T1 }}>NEWS2</strong>,
-            the early-warning score used in UK hospitals to catch deterioration. Same vitals, same flag,
-            every time, with every point traced to the reading that earned it.
+            So now it&apos;s simple math using <strong style={{ color: T1 }}>NEWS2</strong>, the warning score
+            hospitals in the UK use to spot patients getting worse. Same vitals in, same answer out,
+            every time, and every point shows which reading it came from.
           </P>
 
           <div style={{ margin: '34px 0 46px' }}>
             <RiskDemo/>
           </div>
 
-          <H2>Two layers, and only one of them is validated</H2>
+          <H2>Two parts, and only one is proven</H2>
           <P>
-            NEWS2 uses absolute thresholds, which is right for acute hospital care and wrong for chronic
-            illness. Someone with ME/CFS whose resting pulse normally sits at 58 and is suddenly at 76
-            scores <strong style={{ color: T1 }}>NEWS2 zero</strong>. Textbook normal. While being 18 bpm into their own crash
-            pattern. So a second layer scores deviation from that person&apos;s own history: pulse against a
-            21-day personal median, narrow pulse pressure, a rising-pulse trend, and gaps in logging,
-            because someone too unwell to log is itself a signal.
+            NEWS2 uses the same cutoffs for everyone. That works in a hospital but can miss people with
+            long-term illness. If your normal resting pulse is 58 and today it&apos;s 76, NEWS2 still says
+            zero. So a second part compares you to your own last three weeks: your pulse against your
+            usual, a rising pulse, and days you didn&apos;t log, because being too sick to log means
+            something too.
           </P>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '22px', marginBottom: '38px' }}>
-            <div style={{ border: `1px solid ${BORDER}`, padding: '20px' }}>
-              <p style={{ color: ACCENT, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '10px' }}>Layer 1. validated</p>
-              <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Partial NEWS2</p>
+            <div style={{ border: `1px solid ${BORDER}`, padding: '20px', borderRadius: 10, background: '#fff' }}>
+              <p style={{ color: ACCENT, fontSize: '13px', fontWeight: 700, marginBottom: '8px' }}>Proven</p>
+              <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>NEWS2</p>
               <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65 }}>
-                Thresholds transcribed from the published table and pinned by 40 boundary-value tests, so
-                nobody can quietly &ldquo;tune&rdquo; a clinical constant. Escalation follows the published bands,
-                including the rule that any single parameter scoring 3 escalates on its own.
+                The cutoffs are copied from the published table and checked by 40 tests, so nobody can
+                change them by accident. It follows the official rules, including that one very bad
+                reading is enough to raise the alarm.
               </p>
             </div>
-            <div style={{ border: `1px solid ${BORDER}`, padding: '20px' }}>
-              <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '10px' }}>Layer 2. heuristic</p>
-              <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Personal baseline</p>
+            <div style={{ border: `1px solid ${BORDER}`, padding: '20px', borderRadius: 10, background: '#fff' }}>
+              <p style={{ color: T3, fontSize: '13px', fontWeight: 700, marginBottom: '8px' }}>Not proven yet</p>
+              <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>Your normal</p>
               <p style={{ color: T2, fontSize: '14px', lineHeight: 1.65 }}>
-                Labelled unvalidated in every signal it emits, and structurally incapable of raising an
-                alert to <em>high</em> on its own. There is a test that throws every baseline signal at the
-                engine at once with NEWS2 at zero and asserts the result is not high.
+                Marked as unproven everywhere it shows up, and it can never raise a <em>high</em> alert on
+                its own. A test checks this by feeding it every warning sign at once with NEWS2 at zero.
               </p>
             </div>
           </div>
 
-          <div style={{ border: `2px solid ${RED}`, padding: '24px', marginBottom: '20px' }}>
-            <p style={{ color: RED, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
-              Said everywhere it appears
+          <div style={{ border: `2px solid ${RED}`, padding: '24px', marginBottom: '20px', borderRadius: 10 }}>
+            <p style={{ color: RED, fontSize: '14px', fontWeight: 700, marginBottom: '10px' }}>
+              We say this everywhere the score appears
             </p>
             <p style={{ color: T1, fontSize: '16px', lineHeight: 1.7, maxWidth: '740px' }}>
-              NEWS2 has seven parameters and all seven are now implemented. Temperature,
-              consciousness level and supplemental-oxygen status were added in July 2026.
-              A reading is only as complete as what was recorded, so the score reports itself as
-              partial whenever a parameter is missing, and names it. A partial
-              score can only ever <strong>under</strong>-estimate risk. Which makes it safe as a prompt to seek
-              care and unsafe as a reason not to. Every result carries that caveat and a list of exactly
-              which vitals were missing, and it is printed under every alert a user sees. It is decision
-              support. It is not a diagnosis, and it is not a substitute for a clinician or an ambulance.
+              NEWS2 uses seven readings and the app supports all seven. If one is missing, the score says
+              which one. A score with missing readings can only come out too low, never too high. So it&apos;s
+              a good reason to get help, but never a reason not to. This is a helper, not a diagnosis, and
+              it does not replace a doctor or 911.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── 03 DISPATCH ──────────────────────────────────────────────────── */}
-      <section style={{ padding: '92px 24px 0' }}>
+      {/* hospital */}
+      <section style={{ padding: '84px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="03" title="Dispatch engine" right="which hospital. Ours"/>
-          <H2>The nearest hospital is frequently the wrong hospital.</H2>
+          <SectionHead title="Picking a hospital"/>
+          <H2>The closest hospital isn&apos;t always the right one.</H2>
           <P>
-            &ldquo;Nearest&rdquo; is a straight line on a map. A cardiac arrest needs a hospital with an open
-            catheterisation lab, not the one 600 metres away that will stabilise and then transfer. 
-            spending the only minutes that mattered. So distance is the input we care about least.
+            For a heart attack you need a hospital that can open the blocked artery, not the small one
+            down the street that will have to send you somewhere else. So distance matters least.
           </P>
 
-          <div style={{ border: `2px solid ${T1}`, marginBottom: '26px' }}>
+          <div style={{ border: `2px solid ${T1}`, marginBottom: '26px', borderRadius: 10, overflow: 'hidden' }}>
             <div style={{ borderBottom: `1px solid ${T1}`, padding: '11px 16px', background: BG2 }}>
-              <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-                What actually goes into the ranking
-              </span>
+              <span style={{ color: T1, fontSize: '14px', fontWeight: 700 }}>What it looks at</span>
             </div>
-            <div style={{ padding: '4px 16px 14px' }}>
+            <div style={{ padding: '4px 16px 14px', background: '#fff' }}>
               {[
-                ['Real drive time', 'One routing-matrix call prices every candidate at once on the actual road network. Not a radius.'],
-                ['Traffic', 'A live-traffic provider re-ranks the top candidates when a key is configured. Without one, a documented time-of-day model applies and the interface says "estimated" rather than implying live data.'],
-                ['Facility capability', 'Cath lab for cardiac, stroke unit for stroke, trauma for unresponsive. A hospital reporting it lacks the relevant capability is pushed down. One reporting it has the capability is pulled up.'],
-                ['Whether they are accepting', 'Partner hospitals report diversion status through a portal. A facility that says it is diverting is penalised hard rather than silently recommended.'],
-                ['Freshness', 'Hospital-reported status older than four hours stops counting. Stale confidence is worse than no confidence.'],
+                ['Real drive time', 'Actual driving time on real roads to every nearby hospital, not just distance.'],
+                ['Traffic', 'Live traffic when available. If not, it uses typical traffic for that time of day and says "estimated".'],
+                ['What they can treat', 'A heart unit for heart problems, a stroke unit for strokes, a trauma center for injuries. Hospitals without the right unit move down the list.'],
+                ['If they are full', 'Partner hospitals can say when their ER is full. Those get pushed down instead of being sent more patients.'],
+                ['How recent', 'Anything a hospital reported more than four hours ago is ignored, because old information can be wrong.'],
               ].map(([k, v]) => (
                 <div key={k} style={{ borderTop: `1px solid ${BORDER}`, padding: '14px 0', display: 'flex', gap: '18px', flexWrap: 'wrap' }}>
-                  <span style={{ color: T1, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '0.6px', minWidth: '170px' }}>{k}</span>
+                  <span style={{ color: T1, fontSize: '14px', fontWeight: 700, minWidth: '170px' }}>{k}</span>
                   <span style={{ color: T2, fontSize: '14px', lineHeight: 1.6, flex: 1, minWidth: '240px' }}>{v}</span>
                 </div>
               ))}
@@ -394,53 +351,47 @@ export default function Engineering() {
           </div>
 
           <P>
-            When a hospital is genuinely connected, their emergency board lights up before the car
-            moves: type, arrival estimate, blood type, allergies, medications. And it only ever says
-            &ldquo;the ER is expecting you&rdquo; when a real partner facility actually acknowledged. Never as
-            decoration. Anything simulated is badged as simulated.
+            When a hospital is connected, its ER screen shows you&apos;re coming before you leave: what
+            happened, when you&apos;ll arrive, blood type, allergies and medicines. The app only says
+            &ldquo;the ER is expecting you&rdquo; when a real partner hospital confirmed it. Anything that
+            is a demo is labeled as a demo.
           </P>
         </div>
       </section>
 
-      {/* ── 04 NAVIGATION ────────────────────────────────────────────────── */}
-      <section style={{ padding: '92px 24px 0' }}>
+      {/* navigation */}
+      <section style={{ padding: '84px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="04" title="Navigation" right="getting there. Ours"/>
-          <H2>Handing someone off to a map app loses the emergency.</H2>
+          <SectionHead title="Directions"/>
+          <H2>Sending you to another map app loses everything.</H2>
           <P>
-            The moment you bounce a panicking family member into another application, the hospital
-            briefing, the arrival estimate and the live emergency room all stop travelling with them. So
-            turn-by-turn is built in: vector tiles, a chase camera, snap-to-route, wake lock so the
-            screen never dies mid-junction, and a night mode.
+            If the app kicks you out to a different map, your hospital info and arrival time get left
+            behind. So directions are built in, with turn-by-turn steps, a screen that stays on while you
+            drive, and a night mode.
           </P>
           <P>
-            The bug worth mentioning was found by our own test rather than a user. After a GPS jump the
-            route-position search only looked in a window around the last known point, so it silently
-            latched onto the wrong part of the line and under-reported distance travelled by half. 4.9 km
-            instead of 9.7. It now falls back to a full scan when the windowed match is poor.
+            One bug we caught with our own tests: after the GPS jumped, the app sometimes matched you to
+            the wrong part of the route and said you had driven 4.9 km when it was really 9.7. Now it
+            double-checks the whole route when that happens.
           </P>
         </div>
       </section>
 
-      {/* ── 05 LIMITS ────────────────────────────────────────────────────── */}
-      <section style={{ padding: '92px 24px 0' }}>
+      {/* limits */}
+      <section style={{ padding: '84px 24px 0' }}>
         <div style={WRAP}>
-          <SectionHead n="05" title="What this can't do yet" right="the honest part"/>
-          <H2>Every number above is measured. Here is what isn&apos;t finished.</H2>
-          <P>
-            A page like this is easy to write dishonestly. The fastest way to check whether anyone is
-            being straight with you is whether they will tell you where their own thing is weak.
-          </P>
+          <SectionHead title="What it can't do yet"/>
+          <H2>Here&apos;s what still needs work.</H2>
 
           <div style={{ marginBottom: '20px' }}>
             {[
-              ['576 examples is a small corpus', 'The triage model improves with data, and the real corpus should come from anonymised production transcripts under consent. Not from us inventing more sentences.'],
-              ['Sparse phrasings are unreliable', 'Injury vocabulary is thin, and "other" is a grab-bag class that deserves subdividing. Stroke versus unconscious on speech symptoms still needs more data.'],
-              ['NEWS2 is not validated under 16', 'It is built for adults. Paediatric practice uses PEWS instead. The score flags this when age is known, but the underlying instrument is still the adult one.'],
-              ['The temperature band table needs a clinician\'s eye', 'Every other row was transcribed from an unambiguous source. For temperature the sources disagreed on alignment, so that row is flagged for confirmation.'],
-              ['The personal-baseline layer is unvalidated', 'It is clinically plausible and carefully bounded, but it has not been tested against outcomes. It stays labelled that way until it has been.'],
-              ['Orthostatic vitals are not captured', 'Lying-versus-standing heart rate is the actual diagnostic signal for POTS, and right now we do not collect it.'],
-              ['The hospital network is small', 'Real drive-time ranking works everywhere. Live capability and diversion status only work where a facility has actually connected, and that is a partnership problem, not a software one.'],
+              ['576 examples is not a lot', 'The model gets better with more real examples. Those should come from real users who agree to share, not from us making up more sentences.'],
+              ['Some topics are thin', 'There are not many injury examples yet, and telling a stroke apart from someone passing out still needs more data.'],
+              ['NEWS2 is made for adults', 'Kids under 16 should use a different score called PEWS. The app warns about this when it knows your age.'],
+              ['One table needs a doctor to check it', 'The sources we used did not agree on the temperature cutoffs, so that part is marked for a doctor to confirm.'],
+              ['"Your normal" is not proven', 'It is careful and limited, but it has not been tested on real patients yet, and it says so.'],
+              ['No sitting-vs-standing pulse yet', 'For conditions like POTS, comparing your pulse lying down and standing up matters. We do not collect that yet.'],
+              ['Few hospitals are connected', 'Drive-time ranking works anywhere. Live "ER is full" updates only work at hospitals that have signed up.'],
             ].map(([k, v]) => (
               <div key={k} style={{ borderTop: `1px solid ${BORDER}`, padding: '16px 0' }}>
                 <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '5px' }}>{k}</p>
@@ -451,25 +402,24 @@ export default function Engineering() {
         </div>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section style={{ padding: '90px 24px 110px' }}>
+      {/* end */}
+      <section style={{ padding: '80px 24px 100px' }}>
         <div style={WRAP}>
-          <div style={{ borderTop: `3px solid ${T1}`, paddingTop: '34px' }}>
-            <h2 style={{ color: T1, fontSize: 'clamp(30px, 5.2vw, 58px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '24px', maxWidth: '820px' }}>
-              None of this matters until it&apos;s set up before you need it<span style={{ color: RED }}>.</span>
+          <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '30px' }}>
+            <h2 style={{ color: T1, fontSize: 'clamp(28px, 4.6vw, 48px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: '20px', maxWidth: '820px' }}>
+              Set it up before you need it.
             </h2>
-            <p style={{ color: T2, fontSize: '16px', lineHeight: 1.7, maxWidth: '620px', marginBottom: '30px' }}>
-              The profile takes a few minutes. It is the part that makes every engine above do anything
-              useful at 3am.
+            <p style={{ color: T2, fontSize: '16px', lineHeight: 1.7, maxWidth: '620px', marginBottom: '28px' }}>
+              Your profile takes a few minutes, and it&apos;s what makes all of this work when it counts.
             </p>
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: ORANGE, color: T1, fontWeight: 700, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 20 }}>
-                Create your free profile <span style={{ fontFamily: mono }}>→</span>
+                style={{ background: T1, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 26px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 10 }}>
+                Make your free profile
               </button>
               <button onClick={() => router.push('/demo')}
-                style={{ background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${T1}`, paddingBottom: '2px' }}>
-                Run a full emergency, indoors
+                style={{ background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, textDecoration: 'underline' }}>
+                Try the demo
               </button>
             </div>
           </div>

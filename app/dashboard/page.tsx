@@ -808,6 +808,20 @@ export default function Dashboard() {
           )}
         </AnimatePresence>
 
+        {/* The two things people do every day, as plain buttons. */}
+        <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <motion.button whileTap={{ scale: 0.98 }} onClick={() => router.push('/checkin')}
+            style={{ background: checkinToday ? SURFACE : T1, color: checkinToday ? T1 : '#FFFFFF', border: `1.5px solid ${T1}`, borderRadius: '10px', padding: '16px 14px', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit' }}>
+            <p style={{ fontSize: '16px', fontWeight: 700 }}>Daily check-in</p>
+            <p style={{ fontSize: '12.5px', opacity: 0.8, marginTop: '3px' }}>{checkinToday ? 'Done today ✓' : 'Chat for 2 minutes'}</p>
+          </motion.button>
+          <motion.button whileTap={{ scale: 0.98 }} onClick={() => router.push('/check')}
+            style={{ background: T1, color: '#FFFFFF', border: `1.5px solid ${T1}`, borderRadius: '10px', padding: '16px 14px', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit' }}>
+            <p style={{ fontSize: '16px', fontWeight: 700 }}>Vitals check</p>
+            <p style={{ fontSize: '12.5px', opacity: 0.8, marginTop: '3px' }}>Pulse and breathing</p>
+          </motion.button>
+        </motion.div>
+
         {/* Today: plain rows, same as "Your data" below. These were four
             coloured tiles; a list is quicker to read and looks less like a
             template. NEWS2 is still shown as a number for a clinician, with
@@ -816,13 +830,9 @@ export default function Dashboard() {
           <p style={{ color: T3, fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Today</p>
           <div style={{ borderTop: `1px solid ${BORDER}` }}>
           {[
-            { label: 'Vitals check', sub: 'Measure pulse and breathing with your phone', right: '', href: '/check' },
             { label: 'NEWS2 for your clinician',
               sub: news2 && news2.count ? `${news2.count} of 7 measured${news2.updated ? `, ${news2.updated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : ''}` : 'Nothing in the last 24 h',
               right: news2 && news2.count >= 2 ? String(news2.total) : '–', href: '/check' },
-            { label: 'Daily check-in',
-              sub: checkinToday ? 'Done today' : streak > 0 ? `Not done yet · ${streak}-day streak` : 'Not done yet',
-              right: checkinToday ? '✓' : '', href: '/checkin' },
             { label: 'Recovery',
               sub: weeksSinceSurgery !== null ? `${weeksSinceSurgery} weeks post-surgery` : 'Your recovery timeline',
               right: '', href: '/timeline' },

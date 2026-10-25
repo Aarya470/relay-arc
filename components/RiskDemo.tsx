@@ -17,7 +17,6 @@ import {
 const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
 const BORDER = '#98C890', BG2 = '#B3DDAC'
 const RED = '#A33417', AMBER = '#7C5200', GREEN = '#42623C'
-const mono = 'var(--font-mono, monospace)'
 
 interface Param {
   key: 'resp_rate' | 'oxygen_sat' | 'systolic' | 'heart_rate'
@@ -39,9 +38,9 @@ const PARAMS: Param[] = [
 
 const SCENARIOS = [
   { label: 'healthy',        v: { resp_rate: 16, oxygen_sat: 98, systolic: 118, heart_rate: 72 } },
-  { label: 'deteriorating',  v: { resp_rate: 22, oxygen_sat: 94, systolic: 105, heart_rate: 115 } },
+  { label: 'getting worse',  v: { resp_rate: 22, oxygen_sat: 94, systolic: 105, heart_rate: 115 } },
   { label: 'critical',       v: { resp_rate: 26, oxygen_sat: 91, systolic: 88,  heart_rate: 135 } },
-  { label: 'one red flag',   v: { resp_rate: 16, oxygen_sat: 90, systolic: 120, heart_rate: 72 } },
+  { label: 'one bad reading',   v: { resp_rate: 16, oxygen_sat: 90, systolic: 120, heart_rate: 72 } },
 ]
 
 const pointColor = (p: number) => (p >= 3 ? RED : p === 2 ? AMBER : p === 1 ? T2 : T3)
@@ -64,11 +63,11 @@ export default function RiskDemo() {
         borderBottom: `1px solid ${T1}`, padding: '11px 16px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
       }}>
-        <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-          Drag a vital. Same code that alerts real users
+        <span style={{ color: T1, fontSize: '10.5px', fontWeight: 700 }}>
+          Move a slider. This is the same code the app uses
         </span>
-        <span style={{ color: T3, fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.2px', textTransform: 'uppercase' }}>
-          deterministic
+        <span style={{ color: T3, fontSize: '10.5px' }}>
+          same answer every time
         </span>
       </div>
 
@@ -82,7 +81,7 @@ export default function RiskDemo() {
                 style={{
                   background: on ? T1 : 'transparent', color: on ? '#FFFFFF' : T2,
                   border: `1px solid ${on ? T1 : BORDER}`, padding: '5px 10px',
-                  fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '0.4px',
+                  fontSize: '10.5px', fontWeight: 700, letterSpacing: '0.4px',
                   cursor: 'pointer', borderRadius: 20,
                 }}>
                 {s.label}
@@ -100,7 +99,7 @@ export default function RiskDemo() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '5px' }}>
                 <span style={{ color: T1, fontSize: '13.5px', fontWeight: 600 }}>{p.label}</span>
                 <span style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-                  <span style={{ color: T1, fontFamily: mono, fontSize: '14px', fontWeight: 700 }}>
+                  <span style={{ color: T1, fontSize: '14px', fontWeight: 700 }}>
                     {val}<span style={{ color: T3, fontSize: '10.5px' }}> {p.unit}</span>
                   </span>
                   <span style={{
@@ -108,7 +107,7 @@ export default function RiskDemo() {
                     background: pts > 0 ? pointColor(pts) : 'transparent',
                     color: pts > 0 ? '#FFFFFF' : T3,
                     border: `1px solid ${pts > 0 ? pointColor(pts) : BORDER}`,
-                    fontFamily: mono, fontSize: '11px', fontWeight: 700, padding: '2px 6px',
+                    fontSize: '11px', fontWeight: 700, padding: '2px 6px',
                   }}>+{pts}</span>
                 </span>
               </div>
@@ -120,7 +119,7 @@ export default function RiskDemo() {
                 // track is drawn by the browser and stays thin.
                 style={{ width: '100%', height: '24px', accentColor: pts > 0 ? pointColor(pts) : T1, margin: 0 }}
               />
-              <p style={{ color: T3, fontFamily: mono, fontSize: '9.5px', letterSpacing: '0.6px', marginTop: '2px' }}>
+              <p style={{ color: T3, fontSize: '9.5px', letterSpacing: '0.6px', marginTop: '2px' }}>
                 {p.bands}
               </p>
             </div>
@@ -134,12 +133,12 @@ export default function RiskDemo() {
               <span style={{ color: levelColor, fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>
                 {result.level}
               </span>
-              <span style={{ color: T2, fontFamily: mono, fontSize: '13px', fontWeight: 700 }}>
+              <span style={{ color: T2, fontSize: '13px', fontWeight: 700 }}>
                 NEWS2 {result.news2}/12
               </span>
               {result.redFlag && (
-                <span style={{ background: RED, color: '#FFFFFF', fontFamily: mono, fontSize: '10px', fontWeight: 700, padding: '3px 8px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                  single-parameter red flag
+                <span style={{ background: RED, color: '#FFFFFF', fontSize: '10px', fontWeight: 700, padding: '3px 8px' }}>
+                  one reading is very bad
                 </span>
               )}
             </div>
@@ -149,12 +148,12 @@ export default function RiskDemo() {
             </p>
 
             <div style={{ background: BG2, padding: '12px 14px' }}>
-              <p style={{ color: T3, fontFamily: mono, fontSize: '9.5px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', marginBottom: '7px' }}>
-                Why: every point traced to a measurement
+              <p style={{ color: T3, fontSize: '9.5px', fontWeight: 700, marginBottom: '7px' }}>
+                Where each point came from
               </p>
               {result.signals.length ? result.signals.map(s => (
                 <div key={s.code} style={{ display: 'flex', gap: '9px', alignItems: 'baseline', marginBottom: '3px' }}>
-                  <span style={{ color: pointColor(s.points), fontFamily: mono, fontSize: '10.5px', fontWeight: 700, minWidth: '16px' }}>+{s.points}</span>
+                  <span style={{ color: pointColor(s.points), fontSize: '10.5px', fontWeight: 700, minWidth: '16px' }}>+{s.points}</span>
                   <span style={{ color: T1, fontSize: '12.5px' }}>{s.label}</span>
                 </div>
               )) : (
@@ -162,10 +161,10 @@ export default function RiskDemo() {
               )}
             </div>
 
-            <p style={{ color: T3, fontFamily: mono, fontSize: '10px', lineHeight: 1.6, marginTop: '12px', letterSpacing: '0.3px' }}>
+            <p style={{ color: T3, fontSize: '10px', lineHeight: 1.6, marginTop: '12px', letterSpacing: '0.3px' }}>
               {result.partial
-                ? `Partial NEWS2, ${result.coverage.measured.length} of 7 parameters. Missing ${result.coverage.missing.join(', ')}, so it can under-estimate risk.`
-                : 'Complete NEWS2 observation set, all 7 parameters.'} Decision support, not a diagnosis.
+                ? `Using ${result.coverage.measured.length} of 7 readings. Missing ${result.coverage.missing.join(', ')}, so the score may be too low.`
+                : 'All 7 readings used.'} A helper, not a diagnosis.
             </p>
           </div>
         )}

@@ -14,7 +14,6 @@ import { triage, featurize, MODEL_META, ABSTAIN_THRESHOLD } from '@/lib/triage'
 const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
 const BORDER = '#98C890', BG2 = '#B3DDAC'
 const CRIT = '#A33417', ACCENT = '#42623C', GREEN = '#42623C'
-const mono = 'var(--font-mono, monospace)'
 
 const LABELS: Record<string, string> = {
   chest_pain: 'Chest pain', unconscious: 'Unconscious', breathing: 'Breathing',
@@ -23,13 +22,13 @@ const LABELS: Record<string, string> = {
 
 // Chosen to show the interesting behaviour, including the failure mode.
 const PRESETS = [
-  { label: 'clear cardiac', text: 'chest is crushing and pain going down my left arm' },
-  { label: 'cardiac arrest', text: 'he collapsed and is not breathing' },
-  { label: 'negation', text: 'no chest pain but i cannot breathe' },
-  { label: 'orthostatic', text: 'heart racing hard when i stand up and dizzy' },
+  { label: 'heart attack', text: 'chest is crushing and pain going down my left arm' },
+  { label: 'collapsed', text: 'he collapsed and is not breathing' },
+  { label: 'says "no"', text: 'no chest pain but i cannot breathe' },
+  { label: 'dizzy standing', text: 'heart racing hard when i stand up and dizzy' },
   // Verified to actually fall below the gate (0.312). If the model is retrained
   // and this starts answering confidently, the label becomes a lie — recheck it.
-  { label: 'abstains', text: 'i dont feel right' },
+  { label: 'not sure', text: 'i dont feel right' },
 ]
 
 export default function TriageDemo() {
@@ -68,11 +67,11 @@ export default function TriageDemo() {
         borderBottom: `1px solid ${T1}`, padding: '11px 16px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
       }}>
-        <span style={{ color: T1, fontFamily: mono, fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.6px', textTransform: 'uppercase' }}>
-          Running in your browser. Type anything
+        <span style={{ color: T1, fontSize: '10.5px', fontWeight: 700 }}>
+          Try it. Type what's happening
         </span>
-        <span style={{ color: T3, fontFamily: mono, fontSize: '10.5px', letterSpacing: '1.2px', textTransform: 'uppercase' }}>
-          no network calls
+        <span style={{ color: T3, fontSize: '10.5px' }}>
+          runs on your device
         </span>
       </div>
 
@@ -88,7 +87,7 @@ export default function TriageDemo() {
                 background: text === p.text ? T1 : 'transparent',
                 color: text === p.text ? '#FFFFFF' : T2,
                 border: `1px solid ${text === p.text ? T1 : BORDER}`,
-                padding: '5px 10px', fontFamily: mono, fontSize: '10.5px',
+                padding: '5px 10px', fontSize: '10.5px',
                 fontWeight: 700, letterSpacing: '0.4px', cursor: 'pointer', borderRadius: 20,
               }}>
               {p.label}
@@ -121,13 +120,13 @@ export default function TriageDemo() {
                   color: abstained ? T3 : T1, fontSize: 'clamp(26px, 5vw, 40px)',
                   fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1,
                 }}>
-                  {abstained ? 'abstains' : LABELS[result.type] || result.type}
+                  {abstained ? 'Not sure' : LABELS[result.type] || result.type}
                 </span>
-                <span style={{ color: T3, fontFamily: mono, fontSize: '13px', fontWeight: 700 }}>
+                <span style={{ color: T3, fontSize: '13px', fontWeight: 700 }}>
                   {conf.toFixed(3)}
                 </span>
               </div>
-              <span style={{ color: ms != null && ms < 1 ? GREEN : T2, fontFamily: mono, fontSize: '12px', fontWeight: 700 }}>
+              <span style={{ color: ms != null && ms < 1 ? GREEN : T2, fontSize: '12px', fontWeight: 700 }}>
                 {ms != null ? `${ms.toFixed(3)} ms on your device` : '—'}
               </span>
             </div>
@@ -143,17 +142,17 @@ export default function TriageDemo() {
                 left: `${ABSTAIN_THRESHOLD * 100}%`, width: '2px', background: CRIT,
               }}/>
             </div>
-            <p style={{ color: T3, fontFamily: mono, fontSize: '10px', letterSpacing: '0.8px', marginBottom: '18px' }}>
-              the marked line = {ABSTAIN_THRESHOLD} abstention gate. Below it we ask the cloud instead of guessing
+            <p style={{ color: T3, fontSize: '10px', letterSpacing: '0.8px', marginBottom: '18px' }}>
+              Below the red line it isn't sure, so it asks the online AI instead of guessing.
             </p>
 
             {/* the two models that voted */}
             {result.parts && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '18px' }}>
-                {([['Linear model (words)', result.parts.linear], ['Neural network (spelling too)', result.parts.neural]] as const).map(([name, v]) => (
+                {([['Model 1 (words)', result.parts.linear], ['Model 2 (spelling too)', result.parts.neural]] as const).map(([name, v]) => (
                   <div key={name} style={{ border: `1px solid ${BORDER}`, padding: '8px 10px' }}>
-                    <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '3px' }}>{name}</p>
-                    <p style={{ color: T1, fontFamily: mono, fontSize: '13px', fontWeight: 700 }}>{LABELS[v.type] || v.type} · {v.confidence.toFixed(3)}</p>
+                    <p style={{ color: T3, fontSize: '10px', fontWeight: 700, marginBottom: '3px' }}>{name}</p>
+                    <p style={{ color: T1, fontSize: '13px', fontWeight: 700 }}>{LABELS[v.type] || v.type} · {v.confidence.toFixed(3)}</p>
                   </div>
                 ))}
               </div>
@@ -161,28 +160,28 @@ export default function TriageDemo() {
 
             {/* what drove it */}
             <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '14px' }}>
-              <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>
-                Evidence it acted on
+              <p style={{ color: T3, fontSize: '10px', fontWeight: 700, marginBottom: '8px' }}>
+                Words it noticed
               </p>
               {result.evidence.length ? (
                 <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '14px' }}>
                   {result.evidence.map(e => (
                     <span key={e} style={{
                       background: 'rgba(86,128,78,0.07)', border: '1px solid rgba(86,128,78,0.16)',
-                      color: ACCENT, fontFamily: mono, fontSize: '11px', fontWeight: 700, padding: '3px 8px',
+                      color: ACCENT, fontSize: '11px', fontWeight: 700, padding: '3px 8px',
                     }}>{e}</span>
                   ))}
                 </div>
               ) : (
                 <p style={{ color: T3, fontSize: '13px', marginBottom: '14px' }}>
-                  nothing it recognises, which is exactly why it abstains
+                  Nothing it recognizes, so it isn't sure.
                 </p>
               )}
 
-              <p style={{ color: T3, fontFamily: mono, fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>
-                Features extracted ({features.length})
+              <p style={{ color: T3, fontSize: '10px', fontWeight: 700, marginBottom: '8px' }}>
+                Everything it looked at ({features.length})
               </p>
-              <p style={{ color: T2, fontFamily: mono, fontSize: '11.5px', lineHeight: 1.7, wordBreak: 'break-word' }}>
+              <p style={{ color: T2, fontSize: '11.5px', lineHeight: 1.7, wordBreak: 'break-word' }}>
                 {features.length ? features.join('  ·  ') : '—'}
               </p>
             </div>
@@ -197,12 +196,12 @@ export default function TriageDemo() {
       }}>
         {[
           ['examples', String(MODEL_META.trainedExamples)],
-          ['cross-val', String(MODEL_META.heldOutAccuracy)],
-          ['weights', '153 KB'],
-          ['offline', 'always'],
+          ['tested accuracy', String(MODEL_META.heldOutAccuracy)],
+          ['size', '153 KB'],
+          ['works offline', 'yes'],
         ].map(([k, v]) => (
-          <span key={k} style={{ fontFamily: mono, fontSize: '10.5px', letterSpacing: '0.8px' }}>
-            <span style={{ color: T3, textTransform: 'uppercase' }}>{k} </span>
+          <span key={k} style={{ fontSize: '13px' }}>
+            <span style={{ color: T3,  }}>{k} </span>
             <span style={{ color: T1, fontWeight: 700 }}>{v}</span>
           </span>
         ))}
