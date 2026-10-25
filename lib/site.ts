@@ -49,6 +49,7 @@ export const PUBLIC_ROUTES: { path: string; priority: number; changeFrequency: '
   { path: '/flare',       priority: 0.9, changeFrequency: 'monthly' },
   { path: '/rights',      priority: 0.9, changeFrequency: 'monthly' },
   { path: '/features',    priority: 0.8, changeFrequency: 'monthly' },
+  { path: '/partners',    priority: 0.6, changeFrequency: 'monthly' },
   { path: '/engineering', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/changelog',   priority: 0.7, changeFrequency: 'weekly'  },
   { path: '/demo',        priority: 0.6, changeFrequency: 'monthly' },

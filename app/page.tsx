@@ -73,7 +73,7 @@ const FEATURES: [string, string][] = [
 
 const PARTNERS: [string, string][] = [
   ['BBSCA', 'Nonprofit that has raised over $1.2M for STEM and humanitarian causes. Has shared Relay Arc with 4,000+ people.'],
-  ['East Windsor Board of Education', 'Working with us to bring Relay Arc into the district.'],
+  ['East Windsor Board of Education', 'In discussion about bringing Relay Arc into the district. Not a formal partnership yet.'],
   ['Aerox Labs', 'AI startup that reviewed our models and methodology.'],
 ]
 
@@ -178,6 +178,7 @@ export default function Home() {
               <strong style={{ color: T1 }}>{t}.</strong> {d}
             </p>
           ))}
+          <a href="/partners" style={{ color: T1, fontSize: '15px', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '3px' }}>All partnerships</a>
         </section>
 
         {/* footer */}
@@ -186,7 +187,7 @@ export default function Home() {
             Relay Arc helps with decisions; it is not a diagnosis. In an emergency, call 911 first.
           </p>
           <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {[['Features', '/features'], ['Engineering', '/engineering'], ['Demo', '/demo'], ['Donate', '/donate'], ['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/status']].map(([l, h]) => (
+            {[['Features', '/features'], ['Engineering', '/engineering'], ['Partnerships', '/partners'], ['Demo', '/demo'], ['Donate', '/donate'], ['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/status']].map(([l, h]) => (
               <a key={h} href={h} style={{ color: T1, textDecoration: 'underline', textUnderlineOffset: '3px' }}>{l}</a>
             ))}
           </div>
