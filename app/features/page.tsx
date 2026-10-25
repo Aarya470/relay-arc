@@ -126,7 +126,7 @@ export default function Features() {
                 { id: 'nn', col: 2, row: 1, label: 'Neural network', sub: '1024 inputs → 32 → 7\ntrained from scratch' },
                 { id: 'avg', col: 3, row: 0, label: 'Average + calibrate', sub: 'confidence scaled\nT = 1.75' },
                 { id: 'gate', col: 4, row: 0, label: 'Sure enough?', sub: '≥ 0.60', kind: 'decision' },
-                { id: 'act', col: 5, row: 0, label: 'Dispatch', sub: '76% of test cases\nall of them correct', kind: 'end' },
+                { id: 'act', col: 3, row: 1, label: 'Dispatch', sub: '76% of test cases\nall of them correct', kind: 'end' },
                 { id: 'cloud', col: 4, row: 1, label: 'Ask cloud model', sub: 'gpt-oss-20b\n3.5 s time limit' },
                 { id: 'guess', col: 4, row: 2, label: 'Best phone guess', sub: 'no signal: never\na dead end' },
               ]}

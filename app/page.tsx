@@ -106,7 +106,7 @@ export default function Home() {
         .hp-wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
         .hp-hero { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: center; padding: 56px 0 64px; }
         .hp-nav-links { display: flex; gap: 22px; align-items: center; }
-        @media (max-width: 480px) { .hp-nav-links { gap: 14px; } .hp-nav-links button { font-size: 14px !important; } }
+        @media (max-width: 480px) { .hp-name { display: none; } .hp-nav-links { gap: 14px; } .hp-nav-links button { font-size: 14px !important; } }
         @media (max-width: 760px) {
           .hp-hero { grid-template-columns: 1fr; gap: 40px; padding: 36px 0 48px; }
           .hp-hide-sm { display: none !important; }
@@ -117,7 +117,7 @@ export default function Home() {
         {/* top bar */}
         <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 0' }}>
           <button onClick={() => router.push('/')} style={{ ...link, display: 'flex', alignItems: 'center', gap: '10px', fontSize: '18px', fontWeight: 800 }}>
-            <Mark size={24}/> Relay Arc
+            <Mark size={24}/> <span className="hp-name">Relay Arc</span>
           </button>
           <div className="hp-nav-links">
             <button onClick={() => router.push('/features')} style={link}>Features</button>
