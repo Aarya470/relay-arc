@@ -120,20 +120,27 @@ export default function Features() {
           <Panel label="The decision path">
             <Flow
               nodes={[
-                { id: 'sos', col: 0, row: 0, label: 'SOS pressed', sub: 'voice or tap', fill: ORANGE },
-                { id: 'tri', col: 1, row: 0, label: 'On-device triage', sub: '0.07 ms · offline', color: GREEN_DEEP },
-                { id: 'gate', col: 2, row: 0, label: 'Confident?', sub: 'threshold 0.60', kind: 'decision', color: INK },
-                { id: 'act', col: 3, row: 0, label: 'Dispatch', sub: 'hospital chosen', kind: 'end', color: CRIT },
-                { id: 'cloud', col: 2, row: 1, label: 'Ask cloud model', sub: '3.5 s timeout', color: INK3 },
-                { id: 'guess', col: 3, row: 1, label: 'Best on-device guess', sub: 'never dead-end', color: INK3 },
+                { id: 'sos', col: 0, row: 0, label: 'SOS pressed', sub: 'spoken or typed\nEN · ES · HI · MR', kind: 'end' },
+                { id: 'feat', col: 1, row: 0, label: 'Read the words', sub: 'words, word pairs and\nletter triples (typos still match)' },
+                { id: 'lin', col: 2, row: 0, label: 'Linear model', sub: 'one weight per word\nshows its evidence' },
+                { id: 'nn', col: 2, row: 1, label: 'Neural network', sub: '1024 inputs → 32 → 7\ntrained from scratch' },
+                { id: 'avg', col: 3, row: 0, label: 'Average + calibrate', sub: 'confidence scaled\nT = 1.75' },
+                { id: 'gate', col: 4, row: 0, label: 'Sure enough?', sub: '≥ 0.60', kind: 'decision' },
+                { id: 'act', col: 5, row: 0, label: 'Dispatch', sub: '76% of test cases\nall of them correct', kind: 'end' },
+                { id: 'cloud', col: 4, row: 1, label: 'Ask cloud model', sub: 'gpt-oss-20b\n3.5 s time limit' },
+                { id: 'guess', col: 4, row: 2, label: 'Best phone guess', sub: 'no signal: never\na dead end' },
               ]}
               edges={[
-                { from: 'sos', to: 'tri' },
-                { from: 'tri', to: 'gate' },
-                { from: 'gate', to: 'act', label: 'yes (76%)' },
-                { from: 'gate', to: 'cloud', label: 'no (24%)' },
-                { from: 'cloud', to: 'guess', label: 'no signal', dashed: true },
+                { from: 'sos', to: 'feat' },
+                { from: 'feat', to: 'lin' },
+                { from: 'feat', to: 'nn' },
+                { from: 'lin', to: 'avg' },
+                { from: 'nn', to: 'avg' },
+                { from: 'avg', to: 'gate' },
+                { from: 'gate', to: 'act', label: 'yes' },
+                { from: 'gate', to: 'cloud', label: 'no' },
                 { from: 'cloud', to: 'act', label: 'answer' },
+                { from: 'cloud', to: 'guess', label: 'offline', dashed: true },
               ]}
             />
           </Panel>
@@ -193,19 +200,27 @@ export default function Features() {
           <Panel label="How a hospital gets chosen">
             <Flow
               nodes={[
-                { id: 'c', col: 0, row: 0, label: 'Candidates', sub: 'all nearby facilities' },
-                { id: 'eta', col: 1, row: 0, label: 'Real drive time', sub: 'one matrix call', color: GREEN_DEEP },
-                { id: 'traf', col: 2, row: 0, label: 'Traffic', sub: 'live, or time-of-day', color: WARN },
-                { id: 'cap', col: 0, row: 1, label: 'Capability', sub: 'cath / stroke / trauma', color: GREEN_DEEP },
-                { id: 'acc', col: 1, row: 1, label: 'Accepting?', sub: 'diversion status', kind: 'decision', color: INK },
-                { id: 'rank', col: 2, row: 1, label: 'Ranked', sub: 'best first', kind: 'end', color: CRIT },
+                { id: 'c', col: 0, row: 0, label: 'Nearby hospitals', sub: 'OpenStreetMap, 50 km\n8 nearest kept', kind: 'end' },
+                { id: 'er', col: 1, row: 0, label: 'Drop non-ERs', sub: 'rehab, psychiatric,\nnursing, surgery centres' },
+                { id: 'eta', col: 2, row: 0, label: 'Real drive time', sub: 'road routing (OSRM)\none call for all 8' },
+                { id: 'traf', col: 3, row: 0, label: 'Traffic', sub: 'live if available,\nelse time of day' },
+                { id: 'cap', col: 3, row: 1, label: 'Can it treat this?', sub: 'NJ DOH heart-attack data\nyes ×0.75 · ? ×1.2 · no ×1.8' },
+                { id: 'acc', col: 2, row: 1, label: 'Hospital status', sub: 'diverting ×2.2\naccepting ×0.85' },
+                { id: 'rank', col: 1, row: 1, label: 'Rank', sub: 'minutes × all factors\nlowest score wins' },
+                { id: 'far', col: 1, row: 2, label: '25 min or more?', kind: 'decision' },
+                { id: 'call', col: 0, row: 2, label: 'Call 911 first', sub: 'GPS shown for the\ndispatcher, then drive' },
+                { id: 'go', col: 2, row: 2, label: 'Go', sub: 'directions, ER brief,\nfamily texted', kind: 'end' },
               ]}
               edges={[
-                { from: 'c', to: 'eta' },
+                { from: 'c', to: 'er' },
+                { from: 'er', to: 'eta' },
                 { from: 'eta', to: 'traf' },
+                { from: 'traf', to: 'cap' },
                 { from: 'cap', to: 'acc' },
-                { from: 'acc', to: 'rank', label: 'yes' },
-                { from: 'traf', to: 'rank' },
+                { from: 'acc', to: 'rank' },
+                { from: 'rank', to: 'far' },
+                { from: 'far', to: 'call', label: 'yes' },
+                { from: 'far', to: 'go', label: 'no' },
               ]}
             />
           </Panel>

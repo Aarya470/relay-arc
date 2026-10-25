@@ -106,6 +106,7 @@ export default function Home() {
         .hp-wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
         .hp-hero { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: center; padding: 56px 0 64px; }
         .hp-nav-links { display: flex; gap: 22px; align-items: center; }
+        @media (max-width: 480px) { .hp-nav-links { gap: 14px; } .hp-nav-links button { font-size: 14px !important; } }
         @media (max-width: 760px) {
           .hp-hero { grid-template-columns: 1fr; gap: 40px; padding: 36px 0 48px; }
           .hp-hide-sm { display: none !important; }
@@ -119,7 +120,8 @@ export default function Home() {
             <Mark size={24}/> Relay Arc
           </button>
           <div className="hp-nav-links">
-            <button onClick={() => router.push('/features')} style={link} className="hp-hide-sm">How it works</button>
+            <button onClick={() => router.push('/features')} style={link}>Features</button>
+            <button onClick={() => router.push('/engineering')} style={link}>Engineering</button>
             <button onClick={() => router.push('/demo')} style={link} className="hp-hide-sm">Demo</button>
             <button onClick={() => router.push('/donate')} style={link} className="hp-hide-sm">Donate</button>
             <button onClick={() => router.push('/login')} style={link}>Sign in</button>
@@ -182,7 +184,7 @@ export default function Home() {
             Relay Arc helps with decisions; it is not a diagnosis. In an emergency, call 911 first.
           </p>
           <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {[['How it works', '/features'], ['Engineering', '/engineering'], ['Demo', '/demo'], ['Donate', '/donate'], ['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/status']].map(([l, h]) => (
+            {[['Features', '/features'], ['Engineering', '/engineering'], ['Demo', '/demo'], ['Donate', '/donate'], ['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/status']].map(([l, h]) => (
               <a key={h} href={h} style={{ color: T1, textDecoration: 'underline', textUnderlineOffset: '3px' }}>{l}</a>
             ))}
           </div>

@@ -808,108 +808,44 @@ export default function Dashboard() {
           )}
         </AnimatePresence>
 
-        {/* Vitals: measure with the phone, and the live NEWS2 sheet. NEWS2 is
-            shown as a number for a clinician to read, labelled as such, with no
-            colour banding or advice (same framing as /check). It updates from
-            phone readings, Apple Watch and what was said in today's check-in. */}
-        <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '10px' }}>
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/check')}
-            style={{ background: T1, border: 'none', borderRadius: '12px', padding: '16px 16px', textAlign: 'left', cursor: 'pointer' }}>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>Vitals check</p>
-            <p style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: 800, lineHeight: 1.25 }}>Measure pulse and breathing with your phone</p>
-          </motion.button>
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => router.push('/check')}
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '12px', padding: '14px 16px', textAlign: 'left', cursor: 'pointer' }}>
-            <p style={{ color: T3, fontSize: '13px', fontWeight: 600, marginBottom: '2px' }}>NEWS2 for your clinician</p>
-            <p style={{ color: T1, fontSize: '30px', fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>{news2 && news2.count >= 2 ? news2.total : '–'}</p>
-            <p style={{ color: T3, fontSize: '12px', marginTop: '2px' }}>
-              {news2 && news2.count ? `${news2.count} of 7 measured${news2.updated ? `, ${news2.updated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : ''}` : 'Nothing in the last 24 h'}
-            </p>
-          </motion.button>
-        </motion.div>
-
-        {/* Check-in + Recovery grid */}
-        <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          {/* Check-in card */}
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={() => router.push('/checkin')}
-            style={{
-              background: checkinToday ? GREEN : SURFACE,
-              border: checkinToday ? 'none' : `1px solid ${BORDER}`,
-              borderRadius: '12px',
-              padding: '20px 18px 18px',
-              textAlign: 'left',
-              cursor: 'pointer',
-            }}>
-            <p style={{
-              color: checkinToday ? 'rgba(255,255,255,0.55)' : T3,
-              fontSize: '13px', fontWeight: 600,
-              letterSpacing: '0',
-              marginBottom: '10px',
-            }}>{checkinToday ? 'Done' : 'Check in'}</p>
-            <p style={{
-              color: checkinToday ? '#FFFFFF' : T1,
-              fontSize: '52px',
-              fontFamily: 'inherit',
-              fontWeight: 900,
-              letterSpacing: '-0.8px',
-              lineHeight: 0.88,
-              marginBottom: '12px',
-            }}>
-              {checkinToday ? '✓' : new Date().getDate()}
-            </p>
-            <p style={{ color: checkinToday ? 'rgba(255,255,255,0.65)' : T3, fontSize: '11px', fontWeight: 500 }}>
-              {checkinToday ? 'Today complete' : streak > 0 ? `${streak}-day streak` : 'Not done yet'}
-            </p>
-          </motion.button>
-
-          {/* Recovery card */}
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={() => router.push('/timeline')}
-            style={{
-              background: SURFACE,
-              borderRadius: '12px',
-              border: `1px solid ${BORDER}`,
-              padding: '20px 18px 18px',
-              textAlign: 'left',
-              cursor: 'pointer',
-            }}>
-            <p style={{
-              color: ACCENT,
-              fontSize: '13px', fontWeight: 600,
-              letterSpacing: '0',
-              marginBottom: '10px',
-            }}>Recovery</p>
-            {weeksSinceSurgery !== null ? (
-              <>
-                <p style={{
-                  color: T1,
-                  fontSize: '52px',
-                  fontFamily: 'inherit',
-                  fontWeight: 900,
-                  letterSpacing: '-0.8px',
-                  lineHeight: 0.88,
-                  marginBottom: '12px',
-                }}>{weeksSinceSurgery}</p>
-                <p style={{ color: T3, fontSize: '11px', fontWeight: 500 }}>weeks post-surgery</p>
-              </>
-            ) : (
-              <>
-                <p style={{
-                  color: T1,
-                  fontSize: '36px',
-                  fontFamily: 'inherit',
-                  fontWeight: 900,
-                  letterSpacing: '-0.6px',
-                  lineHeight: 0.95,
-                  marginBottom: '10px',
-                }}>Plan</p>
-                <p style={{ color: ACCENT, fontSize: '11px', fontWeight: 600 }}>View timeline →</p>
-              </>
-            )}
-          </motion.button>
+        {/* Today: plain rows, same as "Your data" below. These were four
+            coloured tiles; a list is quicker to read and looks less like a
+            template. NEWS2 is still shown as a number for a clinician, with
+            no colour banding or advice (same framing as /check). */}
+        <motion.div variants={fadeUp}>
+          <p style={{ color: T3, fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Today</p>
+          <div style={{ borderTop: `1px solid ${BORDER}` }}>
+          {[
+            { label: 'Vitals check', sub: 'Measure pulse and breathing with your phone', right: '', href: '/check' },
+            { label: 'NEWS2 for your clinician',
+              sub: news2 && news2.count ? `${news2.count} of 7 measured${news2.updated ? `, ${news2.updated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : ''}` : 'Nothing in the last 24 h',
+              right: news2 && news2.count >= 2 ? String(news2.total) : '–', href: '/check' },
+            { label: 'Daily check-in',
+              sub: checkinToday ? 'Done today' : streak > 0 ? `Not done yet · ${streak}-day streak` : 'Not done yet',
+              right: checkinToday ? '✓' : '', href: '/checkin' },
+            { label: 'Recovery',
+              sub: weeksSinceSurgery !== null ? `${weeksSinceSurgery} weeks post-surgery` : 'Your recovery timeline',
+              right: '', href: '/timeline' },
+          ].map(item => (
+            <motion.button
+              key={item.label}
+              whileTap={{ scale: 0.99 }}
+              onClick={() => router.push(item.href)}
+              style={{
+                width: '100%', background: 'none', border: 'none',
+                padding: '14px 0', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '14px',
+                borderBottom: `1px solid ${BORDER}`, fontFamily: 'inherit',
+              }}>
+              <div style={{ flex: 1, textAlign: 'left' }}>
+                <p style={{ color: T1, fontWeight: 600, fontSize: '15px', lineHeight: 1.2 }}>{item.label}</p>
+                <p style={{ color: T3, fontSize: '12.5px', marginTop: '2px' }}>{item.sub}</p>
+              </div>
+              {item.right && <span style={{ color: T1, fontSize: '20px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{item.right}</span>}
+              <ChevronRight size={14} color={T3} strokeWidth={2}/>
+            </motion.button>
+          ))}
+          </div>
         </motion.div>
 
         {/* Health Intelligence */}

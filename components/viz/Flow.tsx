@@ -4,8 +4,7 @@
 // branches with labelled edges — and Mermaid would fight all three.
 import { useInView } from './Chart'
 
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52', BORDER = '#98C890'
-const mono = 'var(--font-mono, monospace)'
+const INK = '#141413', INK2 = '#4A4840'
 
 export interface Node {
   id: string
@@ -29,10 +28,14 @@ export interface Edge {
   color?: string
 }
 
-const CW = 186, CH = 92, GX = 34, GY = 40
+const CW = 196, CH = 104, GX = 40, GY = 44
 
+// Drawn like a figure in a textbook: one ink weight, open arrowheads, white
+// boxes, flowchart-standard shapes (rounded ends for start and finish, a
+// diamond for a decision). No colour coding; the words carry the meaning.
+// A sub-label can hold detail on two lines, split with "\n".
 export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; height?: number }) {
-  const { ref, seen } = useInView<HTMLDivElement>()
+  const { ref } = useInView<HTMLDivElement>()
   const cols = Math.max(...nodes.map(n => n.col)) + 1
   const rows = Math.max(...nodes.map(n => n.row)) + 1
   const W = cols * CW + (cols - 1) * GX
@@ -48,75 +51,71 @@ export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; h
 
   return (
     <div ref={ref} style={{ width: '100%', overflowX: 'auto' }}>
-      <svg viewBox={`-6 -6 ${W + 12} ${H + 12}`} style={{ width: '100%', minWidth: `${Math.min(W, 700)}px`, display: 'block' }} role="img">
+      <svg viewBox={`-8 -8 ${W + 16} ${H + 16}`} style={{ width: '100%', minWidth: `${Math.min(W, 720)}px`, display: 'block', fontFamily: 'inherit' }} role="img">
         <defs>
-          <marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill={INK2}/>
+          <marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M1,1 L9,5 L1,9" fill="none" stroke={INK} strokeWidth="1.4"/>
           </marker>
         </defs>
 
-        {/* edges first so nodes sit on top */}
         {edges.map((e, i) => {
           const a = byId[e.from], b = byId[e.to]
           if (!a || !b) return null
           const pa = at(a), pb = at(b)
-          let d: string
-          if (a.row === b.row) {
-            d = `M${pa.x + CW},${pa.cy} L${pb.x},${pb.cy}`
+          let d: string, lx: number, ly: number, anchor: 'middle' | 'start' = 'middle'
+          if (a.row === b.row && b.col > a.col) {
+            d = `M${pa.x + CW},${pa.cy} L${pb.x - 2},${pb.cy}`; lx = (pa.x + CW + pb.x) / 2; ly = pa.cy - 8
+          } else if (a.row === b.row) {
+            d = `M${pa.x},${pa.cy} L${pb.x + CW + 2},${pb.cy}`; lx = (pa.x + pb.x + CW) / 2; ly = pa.cy - 8
           } else if (a.col === b.col) {
-            d = `M${pa.cx},${pa.y + CH} L${pb.cx},${pb.y}`
+            const down = b.row > a.row
+            d = down ? `M${pa.cx},${pa.y + CH} L${pb.cx},${pb.y - 2}` : `M${pa.cx},${pa.y} L${pb.cx},${pb.y + CH + 2}`
+            lx = pa.cx + 8; ly = (down ? pa.y + CH + pb.y : pb.y + CH + pa.y) / 2 + 4; anchor = 'start'
           } else {
-            // elbow: out the right, down, then in the left
-            const midX = pa.x + CW + GX / 2
-            d = `M${pa.x + CW},${pa.cy} L${midX},${pa.cy} L${midX},${pb.cy} L${pb.x},${pb.cy}`
+            const right = b.col > a.col
+            const sx = right ? pa.x + CW : pa.x
+            const midX = right ? pa.x + CW + GX / 2 : pa.x - GX / 2
+            const ex = right ? pb.x - 2 : pb.x + CW + 2
+            d = `M${sx},${pa.cy} L${midX},${pa.cy} L${midX},${pb.cy} L${ex},${pb.cy}`
+            lx = midX + 6; ly = (pa.cy + pb.cy) / 2; anchor = 'start'
           }
-          const len = 900
           return (
             <g key={i}>
-              <path d={d} fill="none" stroke={e.color || INK2} strokeWidth={1.6}
-                strokeDasharray={e.dashed ? '5 4' : len}
-                strokeDashoffset={e.dashed ? 0 : (seen ? 0 : len)}
-                style={{ transition: 'stroke-dashoffset 1100ms ease-out' }}
-                markerEnd="url(#fl-arrow)"/>
+              <path d={d} fill="none" stroke={INK} strokeWidth={1.3}
+                strokeDasharray={e.dashed ? '5 4' : undefined} markerEnd="url(#fl-arrow)"/>
               {e.label && (
-                <text
-                  x={a.row === b.row ? (pa.x + CW + pb.x) / 2 : pa.cx + 8}
-                  y={a.row === b.row ? pa.cy - 7 : (pa.y + CH + pb.y) / 2}
-                  textAnchor={a.row === b.row ? 'middle' : 'start'}
-                  style={{ fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '0.6px' }}
-                  fill={e.color || INK3}>{e.label}</text>
+                <text x={lx} y={ly} textAnchor={anchor}
+                  style={{ fontSize: '11px', fontStyle: 'italic', paintOrder: 'stroke' }}
+                  stroke="#FFFFFF" strokeWidth={4} strokeLinejoin="round" fill={INK2}>{e.label}</text>
               )}
             </g>
           )
         })}
 
-        {nodes.map((n, i) => {
+        {nodes.map(n => {
           const p = at(n)
-          const stroke = n.color || INK
           const isDec = n.kind === 'decision'
-          const fill = n.fill || '#FFFFFF'
-          const textColor = n.fill ? INK : INK
+          const isEnd = n.kind === 'end'
+          const subs = (n.sub || '').split('\n').filter(Boolean)
+          const top = p.cy - ((subs.length ? 14 : 0) + subs.length * 13) / 2 + 5
           return (
-            <g key={n.id} opacity={seen ? 1 : 0}
-              style={{ transition: `opacity 420ms ease-out ${120 + i * 70}ms` }}>
+            <g key={n.id}>
               {isDec ? (
                 <polygon
                   points={`${p.cx},${p.y} ${p.x + CW},${p.cy} ${p.cx},${p.y + CH} ${p.x},${p.cy}`}
-                  fill={fill} stroke={stroke} strokeWidth={1.6}/>
+                  fill="#FFFFFF" stroke={INK} strokeWidth={1.3}/>
               ) : (
-                <rect x={p.x} y={p.y} width={CW} height={CH} fill={fill}
-                  stroke={stroke} strokeWidth={n.kind === 'end' ? 2.6 : 1.4}/>
+                <rect x={p.x} y={p.y} width={CW} height={CH} rx={isEnd ? CH / 2 : 3} fill="#FFFFFF"
+                  stroke={INK} strokeWidth={isEnd ? 1.8 : 1.3}/>
               )}
-              <text x={p.cx} y={n.sub ? p.cy - 4 : p.cy + 4} textAnchor="middle"
-                style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '-0.01em' }} fill={textColor}>
+              <text x={p.cx} y={top} textAnchor="middle" style={{ fontSize: '13.5px', fontWeight: 700 }} fill={INK}>
                 {n.label}
               </text>
-              {n.sub && (
-                <text x={p.cx} y={p.cy + 15} textAnchor="middle"
-                  style={{ fontFamily: mono, fontSize: '9px', letterSpacing: '0.4px' }} fill={INK2}>
-                  {n.sub}
+              {subs.map((t, k) => (
+                <text key={k} x={p.cx} y={top + 17 + k * 13} textAnchor="middle" style={{ fontSize: '10.5px' }} fill={INK2}>
+                  {t}
                 </text>
-              )}
+              ))}
             </g>
           )
         })}
