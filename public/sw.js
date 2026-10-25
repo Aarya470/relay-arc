@@ -1,7 +1,7 @@
 self.addEventListener('install', () => self.skipWaiting())
 self.addEventListener('activate', () => self.clients.claim())
 
-const CACHE = 'relay-offline-v1'
+const CACHE = 'relay-offline-v1'  // same name: keep what people already cached
 
 // Offline emergency kit: same-origin GETs are cached as you browse, so the
 // SOS screen, medical profile and dashboard keep working with zero signal.
@@ -51,6 +51,13 @@ self.addEventListener('fetch', (event) => {
     }).catch(async () => {
       const hit = await caches.match(event.request)
       if (hit) return hit
+      // A page is the same shell whatever its query string (?type=…&id=…), so
+      // an emergency started offline can still open a routing page cached
+      // under a different id. Pages only: never for anything else.
+      if (event.request.mode === 'navigate') {
+        const shell = await caches.match(event.request, { ignoreSearch: true })
+        if (shell) return shell
+      }
       // For navigation requests, return a minimal offline page
       if (event.request.mode === 'navigate') {
         // THIS PAGE WAS STILL IN THE OLD PALETTE AND STILL SAID 911.
@@ -82,6 +89,7 @@ self.addEventListener('fetch', (event) => {
 <a href="tel:${emg}" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#A33417;color:#FFFFFF;font-weight:900;font-size:20px;letter-spacing:-0.3px;text-decoration:none;padding:20px 28px;border-radius:14px;min-height:64px;width:100%;max-width:320px;margin-bottom:28px">Call ${emg} now</a>
 <h2 style="color:#141413;font-size:22px;font-weight:800;letter-spacing:-0.6px;margin:0 0 8px">You are offline</h2>
 <p style="color:#5C5A52;font-size:14px;margin:0 0 24px;line-height:1.6;max-width:280px">Check your connection, then try again. Your emergency card and medical profile still work without signal.</p>
+<a href="/card" style="display:block;background:#141413;color:#FFFFFF;font-weight:700;font-size:15px;text-decoration:none;padding:15px 28px;border-radius:14px;min-height:48px;width:100%;max-width:320px;margin-bottom:12px">Open my emergency card</a>
 <button onclick="location.reload()" style="background:#FFFFFF;color:#141413;font-weight:700;font-size:14px;padding:14px 28px;border-radius:14px;border:1px solid #98C890;cursor:pointer;font-family:inherit;min-height:48px">Try again</button>
 </body></html>`,
           { headers: { 'Content-Type': 'text/html' } }
