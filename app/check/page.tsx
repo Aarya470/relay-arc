@@ -175,7 +175,6 @@ export default function VitalsCheck() {
   const greenRef = useRef<Sample[]>([])
   const rawPulseRef = useRef<Sample[]>([])
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [showRaw, setShowRaw] = useState(false)
   const [sigVersion, setSigVersion] = useState(0)
 
   const stopPulse = () => { camRef.current?.stop(); camRef.current = null }
@@ -423,11 +422,7 @@ export default function VitalsCheck() {
               : <button style={btn(true)} onClick={startPulse}><Heart size={17}/> {hr.src === 'camera' ? 'Measure again' : 'Measure pulse'}</button>}
           </div>
           {pulseMsg && <p style={{ color: RED, fontSize: '14px', marginTop: '10px', lineHeight: 1.5 }}>{pulseMsg}</p>}
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: T2, cursor: 'pointer', marginTop: '14px' }}>
-            <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal
-          </label>
-          {showRaw && <div style={{ marginTop: '8px' }}><SignalView samples={rawPulseRef.current} kind="pulse" version={sigVersion}/></div>}
+          <div style={{ marginTop: '14px' }}><SignalView samples={rawPulseRef.current} kind="pulse" version={sigVersion}/></div>
         </section>
 
         {/* ── Breathing ─────────────────────────────────────────────────── */}
@@ -470,10 +465,7 @@ export default function VitalsCheck() {
             </>
           )}
           {breathMsg && <p style={{ color: RED, fontSize: '14px', marginTop: '10px', lineHeight: 1.5 }}>{breathMsg}</p>}
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: T2, cursor: 'pointer', marginTop: '14px' }}>
-            <input type="checkbox" checked={showRaw} onChange={e => setShowRaw(e.target.checked)}/> Show the raw signal
-          </label>
-          {showRaw && <div style={{ marginTop: '8px' }}><SignalView samples={motionSamples.current} kind="breath" version={sigVersion}/></div>}
+          <div style={{ marginTop: '14px' }}><SignalView samples={motionSamples.current} kind="breath" version={sigVersion}/></div>
         </section>
 
         {/* ── Also counted ────────────────────────────────────────────── */}
