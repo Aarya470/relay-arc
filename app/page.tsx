@@ -166,128 +166,44 @@ function NavBar({ onSignIn, onGetStarted }: { onSignIn: () => void; onGetStarted
   )
 }
 
-// ─── Phone mockup — mirrors the real dashboard ───────────────────────────────
+// ─── Phone mockup ───────────────────────────────────────────────────────────
+// Deliberately plain: a phone outline and the home screen as it really looks.
+// The earlier version had a dot grid, a dashed route line, floating cards and
+// a soft drop shadow, which read as a generated hero image rather than an app.
 function PhoneMockup() {
+  const row = (label: string, value: string, done = false) => (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '11px 0', borderTop: `1px solid ${BORDER}` }}>
+      <span style={{ color: T1, fontSize: '12.5px', fontWeight: 600 }}>{label}</span>
+      <span style={{ color: done ? GREEN : T3, fontSize: '11.5px', fontWeight: 600 }}>{value}</span>
+    </div>
+  )
   return (
-    <div style={{ position: 'relative', width: 'fit-content', margin: '0 auto' }} className="phone-wrap">
-
-      {/* map-paper dot grid */}
-      <div aria-hidden style={{
-        position: 'absolute', inset: '-70px -120px',
-        backgroundImage: 'radial-gradient(rgba(20,20,19,0.13) 1px, transparent 1px)',
-        backgroundSize: '20px 20px',
-        maskImage: 'radial-gradient(closest-side, black 55%, transparent)',
-        WebkitMaskImage: 'radial-gradient(closest-side, black 55%, transparent)',
-        pointerEvents: 'none',
-      }}/>
-
-      {/* dashed route line, house → hospital */}
-      <svg aria-hidden width="560" height="420" viewBox="0 0 560 420" fill="none"
-        style={{ position: 'absolute', top: '-52px', left: '-160px', pointerEvents: 'none' }} className="route-svg">
-        <path d="M24 396 C 120 380, 150 300, 236 268 S 420 160, 508 60" stroke={RED} strokeWidth="1.6" strokeDasharray="5 7" opacity="0.55"/>
-        <circle cx="24" cy="396" r="5" fill={ACCENT}/>
-        <circle cx="24" cy="396" r="10" fill={ACCENT} opacity="0.15"/>
-        <rect x="496" y="44" width="26" height="26" rx="7" fill={RED}/>
-        <path d="M509 51 v12 M503 57 h12" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
-      </svg>
-
-      <div style={{
-        position: 'relative',
-        width: '308px',
-        borderRadius: '42px',
-        background: T1,
-        padding: '10px',
-        boxShadow: '0 30px 90px rgba(20,20,19,0.18), 0 4px 16px rgba(20,20,19,0.08)',
-      }}>
-        <div style={{ borderRadius: '34px', background: BG2, padding: '18px 16px 22px', overflow: 'hidden' }}>
-
-          {/* status bar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <span style={{ color: T2, fontSize: '11px', fontWeight: 600, fontFamily: mono }}>9:41</span>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {[3, 4, 5].map(h => <div key={h} style={{ width: '3px', height: `${h + 4}px`, borderRadius: '1px', background: T3, alignSelf: 'flex-end' }}/>)}
-            </div>
-          </div>
-
-          {/* greeting */}
-          <p style={{ color: T3, fontSize: '9px', fontWeight: 700, letterSpacing: '1.4px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '4px' }}>Good morning</p>
-          <p style={{ color: T1, fontSize: '26px', fontWeight: 800, letterSpacing: '-0.8px', lineHeight: 1, marginBottom: '8px' }}>Asha</p>
-          <span style={{ display: 'inline-block', background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.14)', color: ACCENT, fontSize: '8px', fontWeight: 700, padding: '3px 7px', borderRadius: '14px', fontFamily: mono, letterSpacing: '0.7px', textTransform: 'uppercase', marginBottom: '14px' }}>
-            Post-CABG
-          </span>
-
-          {/* SOS */}
-          <div style={{ background: RED, borderRadius: '20px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', animation: 'sos-pulse-lp 2.8s ease-in-out infinite' }}>
-            <div>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '7.5px', letterSpacing: '1.6px', textTransform: 'uppercase', fontFamily: mono, fontWeight: 700, marginBottom: '6px' }}>Emergency response</p>
-              <p style={{ color: 'white', fontSize: '32px', fontWeight: 900, letterSpacing: '-1.5px', lineHeight: 0.9, fontFamily: mono }}>SOS</p>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '8.5px', marginTop: '6px', fontWeight: 500 }}>Hold to activate</p>
-            </div>
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '1.5px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Phone size={16} color="white"/>
-            </div>
-          </div>
-
-          {/* two cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
-            <div style={{ background: GREEN, borderRadius: '20px', padding: '12px' }}>
-              <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Done</p>
-              <p style={{ color: 'white', fontSize: '24px', fontWeight: 900, lineHeight: 0.9, marginBottom: '8px' }}>✓</p>
-              <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '8.5px', fontWeight: 500 }}>Today complete</p>
-            </div>
-            <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '20px', padding: '12px' }}>
-              <p style={{ color: ACCENT, fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono, marginBottom: '8px' }}>Recovery</p>
-              <p style={{ color: T1, fontSize: '24px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 0.9, marginBottom: '8px' }}>6</p>
-              <p style={{ color: T3, fontSize: '8.5px', fontWeight: 500 }}>weeks post-surgery</p>
-            </div>
-          </div>
-
-          {/* health score */}
-          <div style={{ background: 'white', border: `1px solid ${BORDER}`, borderRadius: '20px', padding: '12px 14px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-              <p style={{ color: T3, fontSize: '7.5px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: mono }}>Health score</p>
-              <span style={{ color: GREEN, fontSize: '9.5px', fontWeight: 600 }}>Improving</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px' }}>
-              <p style={{ color: GREEN, fontSize: '34px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 0.85 }}>82</p>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', paddingBottom: '2px' }}>
-                {[9, 12, 8, 14, 13, 17, 20].map((h, i) => (
-                  <div key={i} style={{ width: '5px', height: `${h}px`, borderRadius: '14px', background: i === 6 ? GREEN : BORDER }}/>
-                ))}
-              </div>
-            </div>
-          </div>
-
+    <div style={{ width: '280px', margin: '0 auto', borderRadius: '40px', background: '#141413', padding: '9px' }} className="phone-wrap">
+      <div style={{ position: 'relative', borderRadius: '32px', background: BG2, padding: '14px 18px 26px', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', left: '50%', top: '10px', transform: 'translateX(-50%)', width: '78px', height: '22px', borderRadius: '12px', background: '#141413' }}/>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '24px', marginBottom: '22px' }}>
+          <span style={{ color: T1, fontSize: '11.5px', fontWeight: 600 }}>9:41</span>
+          <span style={{ width: '20px', height: '9px', border: `1.2px solid ${T1}`, borderRadius: '3px', display: 'inline-block' }}/>
         </div>
-      </div>
 
-      {/* floating detail cards — outside the screen, clipping only the bezel */}
-      <div className="float-card" style={{
-        position: 'absolute', top: '52px', right: '-104px', zIndex: 6,
-        background: 'white', border: `1px solid ${T1}`, borderRadius: '4px',
-        padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
-        display: 'flex', alignItems: 'flex-start', gap: '8px', width: '176px',
-      }}>
-        <FileText size={13} color={GREEN} style={{ marginTop: '1px', flexShrink: 0 }}/>
-        <div>
-          <p style={{ color: T1, fontSize: '11px', fontWeight: 700, marginBottom: '2px' }}>ER brief sent</p>
-          <p style={{ color: T3, fontSize: '10px', fontFamily: mono }}>City Heart Centre, 0:42</p>
+        <p style={{ color: T3, fontSize: '11px', marginBottom: '2px' }}>Good morning</p>
+        <p style={{ color: T1, fontSize: '24px', fontWeight: 800, lineHeight: 1.1, marginBottom: '18px' }}>Asha</p>
+
+        <div style={{ background: RED, borderRadius: '12px', padding: '18px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+          <div>
+            <p style={{ color: 'white', fontSize: '26px', fontWeight: 800, lineHeight: 1 }}>SOS</p>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '10.5px', marginTop: '5px' }}>Hold to start</p>
+          </div>
+          <Phone size={20} color="white"/>
         </div>
-      </div>
 
-      <div className="float-card" style={{
-        position: 'absolute', bottom: '38px', left: '-104px', zIndex: 6,
-        background: 'white', border: `1px solid ${T1}`, borderRadius: '4px',
-        padding: '10px 13px', boxShadow: '6px 6px 0 #EDEAE0',
-        display: 'flex', alignItems: 'flex-start', gap: '8px', width: '172px',
-      }}>
-        <MapPin size={13} color={ACCENT} style={{ marginTop: '1px', flexShrink: 0 }}/>
-        <div>
-          <p style={{ color: T1, fontSize: '11px', fontWeight: 700, marginBottom: '2px' }}>Cath lab matched</p>
-          <p style={{ color: T3, fontSize: '10px', fontFamily: mono }}>4.2 km · 11 min</p>
-        </div>
-      </div>
+        {row('Daily check-in', 'Done', true)}
+        {row('Vitals check', 'Pulse 72')}
+        {row('Medications', '1 due')}
+        {row('Emergency card', 'Ready', true)}
 
+        <div style={{ width: '90px', height: '4px', borderRadius: '2px', background: '#141413', margin: '22px auto 0', opacity: 0.8 }}/>
+      </div>
     </div>
   )
 }
