@@ -136,7 +136,7 @@ export default function GuardianWatch({
             <p style={{ color: '#5C5A52', fontSize: '13.5px', lineHeight: 1.55, marginBottom: '22px' }}>
               If you don&apos;t answer, Relay will sound an alarm and prepare alerts for your contacts.
             </p>
-            <p style={{ color: RED, fontFamily: MONO, fontSize: '46px', fontWeight: 800, lineHeight: 1, marginBottom: '22px', fontVariantNumeric: 'tabular-nums' }}>
+            <p style={{ color: RED, fontFamily: 'inherit', fontSize: '46px', fontWeight: 800, lineHeight: 1, marginBottom: '22px', fontVariantNumeric: 'tabular-nums' }}>
               {countdown}
             </p>
             <button onClick={respond}
@@ -186,7 +186,7 @@ export default function GuardianWatch({
               </p>
               {profile?.blood_type && (
                 <p style={{ color: 'white', fontSize: '15px', marginBottom: '6px' }}>
-                  Blood type: <strong style={{ fontFamily: MONO, fontSize: '19px' }}>{profile.blood_type}</strong>
+                  Blood type: <strong style={{ fontFamily: 'inherit', fontSize: '19px' }}>{profile.blood_type}</strong>
                 </p>
               )}
               {profile?.allergies && (

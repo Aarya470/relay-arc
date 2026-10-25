@@ -142,7 +142,7 @@ function CalendarPicker({ selectedDay, onSelect }: { selectedDay: Date | null; o
         </motion.button>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '6px' }}>
-        {DAYS.map(d => <p key={d} style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.3px' }}>{d}</p>)}
+        {DAYS.map(d => <p key={d} style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: '#5C5A52', fontFamily: 'inherit', letterSpacing: '0.3px' }}>{d}</p>)}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '3px' }}>
         {cells.map((day, i) => {

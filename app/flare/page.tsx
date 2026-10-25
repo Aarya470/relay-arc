@@ -118,7 +118,7 @@ export default function FlarePage() {
           }}>
             <ArrowLeft size={17} />
           </Link>
-          <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 2, color: CORAL, fontWeight: 700 }}>
+          <div style={{ fontFamily: 'inherit', fontSize: 11, letterSpacing: 2, color: CORAL, fontWeight: 700 }}>
             FLARE CHECK
           </div>
         </div>
@@ -216,7 +216,7 @@ export default function FlarePage() {
               })}
             </div>
 
-            <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 12 }}>
+            <div style={{ fontFamily: 'inherit', fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 12 }}>
               OPTIONAL NUMBERS
             </div>
             <p style={{ color: ON, fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
@@ -245,7 +245,7 @@ export default function FlarePage() {
                     {orthostatic.notes.map((n, i) => (
                       <div key={i} style={{ color: INK2, fontSize: 13, lineHeight: 1.55, marginBottom: 6 }}>{n}</div>
                     ))}
-                    <div style={{ fontFamily: mono, fontSize: 10, color: INK3, lineHeight: 1.5, marginTop: 8 }}>
+                    <div style={{ fontFamily: 'inherit', fontSize: 10, color: INK3, lineHeight: 1.5, marginTop: 8 }}>
                       {BASIS.pots}
                     </div>
                   </div>
@@ -293,7 +293,7 @@ export default function FlarePage() {
 
             {result.next.includes('counter_manoeuvres') && (
               <>
-                <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 10 }}>
+                <div style={{ fontFamily: 'inherit', fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 10 }}>
                   DO THESE IN ORDER
                 </div>
                 <div style={{ display: 'grid', gap: 10, marginBottom: 24 }}>
@@ -310,7 +310,7 @@ export default function FlarePage() {
                         }}
                       >
                         <div style={{
-                          fontFamily: mono, fontSize: 12, fontWeight: 700, flexShrink: 0,
+                          fontFamily: 'inherit', fontSize: 12, fontWeight: 700, flexShrink: 0,
                           color: done ? GREEN_DEEP : ORANGE, marginTop: 2, width: 20,
                         }}>
                           {done ? '✓' : String(i + 1).padStart(2, '0')}
@@ -319,7 +319,7 @@ export default function FlarePage() {
                           <div style={{ fontWeight: 700, fontSize: 15, textDecoration: done ? 'line-through' : 'none' }}>
                             {s.title}
                             {s.holdSeconds && (
-                              <span style={{ fontFamily: mono, fontSize: 11, color: INK3, fontWeight: 400, marginLeft: 8 }}>
+                              <span style={{ fontFamily: 'inherit', fontSize: 11, color: INK3, fontWeight: 400, marginLeft: 8 }}>
                                 {s.holdSeconds}s
                               </span>
                             )}
@@ -330,7 +330,7 @@ export default function FlarePage() {
                     )
                   })}
                 </div>
-                <div style={{ fontFamily: mono, fontSize: 10, color: ON_3, lineHeight: 1.5, marginBottom: 26 }}>
+                <div style={{ fontFamily: 'inherit', fontSize: 10, color: ON_3, lineHeight: 1.5, marginBottom: 26 }}>
                   {BASIS.counter}
                 </div>
               </>
@@ -389,7 +389,7 @@ function Field({ label, hint, value, onChange }: {
         type="number" inputMode="numeric" value={value} onChange={e => onChange(e.target.value)}
         placeholder=". "
         style={{
-          marginTop: 10, width: '100%', fontFamily: mono, fontSize: 20, fontWeight: 700,
+          marginTop: 10, width: '100%', fontFamily: 'inherit', fontSize: 20, fontWeight: 700,
           border: 'none', borderBottom: `1px solid ${BORDER}`, background: 'transparent',
           color: INK, padding: '6px 0', outline: 'none',
         }}
@@ -401,14 +401,14 @@ function Field({ label, hint, value, onChange }: {
 function Mini({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <label style={{ display: 'block' }}>
-      <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: 1, color: INK3, fontWeight: 700 }}>
+      <div style={{ fontFamily: 'inherit', fontSize: 10, letterSpacing: 1, color: INK3, fontWeight: 700 }}>
         {label.toUpperCase()}
       </div>
       <input
         type="number" inputMode="numeric" value={value} onChange={e => onChange(e.target.value)}
         placeholder=". "
         style={{
-          marginTop: 4, width: '100%', fontFamily: mono, fontSize: 19, fontWeight: 700,
+          marginTop: 4, width: '100%', fontFamily: 'inherit', fontSize: 19, fontWeight: 700,
           border: 'none', borderBottom: `1px solid ${BORDER}`, background: 'transparent',
           color: INK, padding: '5px 0', outline: 'none',
         }}

@@ -114,7 +114,7 @@ export default function ConnectHealth() {
         <section style={panel}>
           <h2 style={h2}>Your sync link</h2>
           <p style={{ fontSize: '14px', color: T3, margin: '4px 0 10px' }}>This link is private to you, like a password. Paste it into one of the apps below.</p>
-          <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '12.5px', color: T1, background: '#FBFAF6', border: `1px solid ${LINE}`, borderRadius: '6px', padding: '10px 12px', wordBreak: 'break-all' }}>
+          <div style={{ fontFamily: 'inherit', fontSize: '12.5px', color: T1, background: '#FBFAF6', border: `1px solid ${LINE}`, borderRadius: '6px', padding: '10px 12px', wordBreak: 'break-all' }}>
             {link || '…'}
           </div>
           <div style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>

@@ -165,7 +165,7 @@ export default function MedicalProfile() {
                   <p style={{ color: '#5C5A52', fontSize: '12.5px', marginTop: '2px' }}>{med.frequency || ''}{med.time ? ` · ${med.time}` : ''}</p>
                 )}
               </div>
-              <span style={{ color: '#5C5A52', fontSize: '13px', fontFamily: mono, flexShrink: 0 }}>{med.dose}</span>
+              <span style={{ color: '#5C5A52', fontSize: '13px', fontFamily: 'inherit', flexShrink: 0 }}>{med.dose}</span>
             </div>
           )) : <Empty text="No medications listed"/>}
         </div>
@@ -203,7 +203,7 @@ export default function MedicalProfile() {
                 <p style={{ color: '#5C5A52', fontSize: '12.5px', marginTop: '2px' }}>{c.relationship}</p>
               </div>
               <a href={`tel:${c.phone}`}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#42623C', fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', fontFamily: mono, flexShrink: 0 }}>
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#42623C', fontSize: '13.5px', fontWeight: 600, textDecoration: 'none', fontFamily: 'inherit', flexShrink: 0 }}>
                 <Phone size={12} color="#42623C"/>
                 {c.phone}
               </a>

@@ -357,7 +357,7 @@ export default function Login() {
         {false && <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: '40px', paddingTop: '18px' }}>
           <button
             onClick={() => router.push('/care-team/login')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, fontSize: '12px', fontFamily: mono, letterSpacing: '0.4px', padding: '6px 0' }}>
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: T3, fontSize: '12px', fontFamily: 'inherit', letterSpacing: '0.4px', padding: '6px 0' }}>
             Care team portal →
           </button>
         </div>}

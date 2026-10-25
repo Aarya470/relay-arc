@@ -641,7 +641,7 @@ export default function Dashboard() {
                 borderRadius: '14px', padding: '5px 10px',
               }}>
                 <Flame size={12} color={AMBER}/>
-                <span style={{ color: AMBER, fontSize: '12px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)' }}>{streak}</span>
+                <span style={{ color: AMBER, fontSize: '12px', fontWeight: 800, fontFamily: 'inherit' }}>{streak}</span>
               </div>
             )}
             <motion.button
@@ -706,7 +706,7 @@ export default function Dashboard() {
               // is a square panel now, so the cut corners are what make the one
               // control you might need in a hurry look unlike the rest of the
               // page from the corner of your eye. See lib/shape.ts.
-              clipPath: notch(18),
+              borderRadius: '12px',
               padding: '28px 24px',
               border: 'none',
               cursor: 'pointer',
@@ -729,7 +729,7 @@ export default function Dashboard() {
                 fontWeight: 900,
                 letterSpacing: '-1px',
                 lineHeight: 0.9,
-                fontFamily: 'var(--font-mono, monospace)',
+                fontFamily: 'inherit',
               }}>SOS</p>
               <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: '12px', marginTop: '10px', fontWeight: 500, letterSpacing: '0.2px' }}>
                 Tap to start · Finds a hospital and prepares your details
@@ -740,7 +740,7 @@ export default function Dashboard() {
                   shape in this app that means emergency. Nothing else wears it. */}
               <div style={{
                 width: '60px', height: '60px',
-                clipPath: octagon(),
+                borderRadius: '50%',
                 background: 'rgba(255,255,255,0.22)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
@@ -795,7 +795,7 @@ export default function Dashboard() {
                   clinician can.
                 </p>
                 <p style={{
-                  color: T3, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',
+                  color: T3, fontSize: '10px', fontFamily: 'inherit',
                   marginTop: '7px', lineHeight: 1.5, letterSpacing: '0.2px',
                 }}>
                   If you feel unwell, contact your clinician. In an emergency, call
@@ -1014,7 +1014,7 @@ export default function Dashboard() {
                     display: 'flex', alignItems: 'baseline', gap: '6px',
                   }}>
                     <span style={{ color: T1, fontSize: '13px', fontWeight: 600 }}>{med.name}</span>
-                    {med.dose && <span style={{ color: T3, fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{med.dose}</span>}
+                    {med.dose && <span style={{ color: T3, fontSize: '11px', fontFamily: 'inherit' }}>{med.dose}</span>}
                   </div>
                 ))}
               </div>

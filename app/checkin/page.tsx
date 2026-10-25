@@ -182,7 +182,7 @@ export default function Checkin() {
 
         <div style={{ flex: 1 }}>
           <h1 style={{ color: T1, fontWeight: 800, fontSize: '17px', letterSpacing: '-0.4px', margin: 0 }}>Daily Check-in</h1>
-          <p style={{ color: T3, fontSize: '11px', marginTop: '2px', fontFamily: 'var(--font-mono, monospace)', margin: '2px 0 0', letterSpacing: '0.4px' }}>
+          <p style={{ color: T3, fontSize: '11px', marginTop: '2px', fontFamily: 'inherit', margin: '2px 0 0', letterSpacing: '0.4px' }}>
             {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
           </p>
         </div>
@@ -199,7 +199,7 @@ export default function Checkin() {
             transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
             style={{ width: '5px', height: '5px', borderRadius: '50%', background: GREEN }}
           />
-          <span style={{ color: GREEN, fontSize: '10px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, letterSpacing: '0.5px' }}>LIVE</span>
+          <span style={{ color: GREEN, fontSize: '10px', fontFamily: 'inherit', fontWeight: 700, letterSpacing: '0.5px' }}>LIVE</span>
         </div>
       </div>
 

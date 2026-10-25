@@ -214,7 +214,7 @@ export default function Onboarding() {
                           background: active ? T1 : 'none',
                           border: `1.5px solid ${active ? T1 : BORDER}`,
                           color: active ? 'white' : T1,
-                          fontWeight: 700, fontSize: '14px', fontFamily: mono, letterSpacing: '0.3px',
+                          fontWeight: 700, fontSize: '14px', fontFamily: 'inherit', letterSpacing: '0.3px',
                           transition: 'all 0.12s ease',
                         }}>
                         {bt}

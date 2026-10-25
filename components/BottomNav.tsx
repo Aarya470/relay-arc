@@ -153,7 +153,7 @@ export default function BottomNav() {
             height: '48px',
             // Stop-sign octagon. The one control on this bar that is not a plain
             // icon, findable by outline when somebody cannot focus on a label.
-            clipPath: octagon(),
+            borderRadius: '50%',
             background: RED,
             display: 'flex',
             alignItems: 'center',
@@ -167,7 +167,7 @@ export default function BottomNav() {
             fontWeight: 900,
             color: RED,
             letterSpacing: '1.5px',
-            fontFamily: 'var(--font-mono, monospace)',
+            fontFamily: 'inherit',
             marginTop: '-1px',
             position: 'relative',
           }}>SOS</span>

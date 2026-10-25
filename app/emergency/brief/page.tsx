@@ -241,7 +241,7 @@ function BriefContent() {
           <SectionLabel>BLOOD TYPE</SectionLabel>
           <p
             className="font-black tracking-tight"
-            style={{ color: '#A33417', lineHeight: 1.1, fontSize: '3rem', fontFamily: 'var(--font-mono, monospace)' }}
+            style={{ color: '#A33417', lineHeight: 1.1, fontSize: '3rem', fontFamily: 'inherit' }}
           >
             {profile?.blood_type || '?'}
           </p>

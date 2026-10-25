@@ -424,7 +424,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
 
             <div style={{ border: `1px solid ${BORDER}`, background: CREAM, padding: '26px 24px', marginBottom: '18px' }}>
               <div style={{ width: '58px', height: '5px', background: ORANGE, marginBottom: '16px' }}/>
-              <p style={{ color: INK, fontFamily: mono, fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', marginBottom: '16px' }}>
+              <p style={{ color: INK, fontFamily: 'inherit', fontSize: '11px', fontWeight: 700, letterSpacing: '1.6px', marginBottom: '16px' }}>
                 MEDICAL INFORMATION
               </p>
               <p style={{ color: c.name ? INK : INK3, fontSize: '27px', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
@@ -453,7 +453,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
                   {filledContacts.map((ct, i) => (
                     <div key={i} style={{ marginBottom: '9px' }}>
                       <p style={{ color: INK, fontSize: '14.5px', fontWeight: 700 }}>{ct.name || 'Contact'}</p>
-                      <p style={{ color: GREEN_DEEP, fontFamily: mono, fontSize: '15px', fontWeight: 700 }}>{ct.phone}</p>
+                      <p style={{ color: GREEN_DEEP, fontFamily: 'inherit', fontSize: '15px', fontWeight: 700 }}>{ct.phone}</p>
                     </div>
                   ))}
                 </>
@@ -462,7 +462,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
               {c.doctor && <Field k="Doctor" v={c.doctor}/>}
               {c.notes && <p style={{ color: INK2, fontSize: '13.5px', lineHeight: 1.55, marginTop: '12px' }}>{c.notes}</p>}
 
-              <p style={{ color: INK3, fontFamily: mono, fontSize: '9px', fontWeight: 700, letterSpacing: '1.2px', marginTop: '20px' }}>
+              <p style={{ color: INK3, fontFamily: 'inherit', fontSize: '9px', fontWeight: 700, letterSpacing: '1.2px', marginTop: '20px' }}>
                 CALL EMERGENCY SERVICES FIRST
               </p>
             </div>
@@ -521,7 +521,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
 
       {/* ── Print-only wallet card, 3.375in × 2.125in ─────────────────────── */}
       <div id="wallet" style={{ width: '3.375in', height: '2.125in', border: `1.5pt solid ${INK}`, padding: '9pt 11pt', boxSizing: 'border-box', background: WHITE, overflow: 'hidden' }}>
-        <p style={{ margin: 0, color: INK, fontFamily: mono, fontSize: '5.5pt', fontWeight: 700, letterSpacing: '0.9pt' }}>MEDICAL INFORMATION</p>
+        <p style={{ margin: 0, color: INK, fontFamily: 'inherit', fontSize: '5.5pt', fontWeight: 700, letterSpacing: '0.9pt' }}>MEDICAL INFORMATION</p>
         <p style={{ margin: '2pt 0 0', color: INK, fontSize: '13pt', fontWeight: 800, lineHeight: 1.05 }}>{c.name || 'Name not set'}</p>
         <div style={{ height: '0.6pt', background: INK, margin: '5pt 0' }}/>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '7pt' }}>
@@ -535,7 +535,7 @@ color: INK, fontSize: '16px', fontFamily: 'inherit', borderRadius: 20, outline: 
             {extras.slice(0, 3).map((x, i) => <WRow key={i} k={x.label || 'Note'} v={x.value}/>)}
           </tbody>
         </table>
-        <p style={{ margin: '4pt 0 0', color: INK, fontFamily: mono, fontSize: '5pt', fontWeight: 700, letterSpacing: '0.6pt' }}>
+        <p style={{ margin: '4pt 0 0', color: INK, fontFamily: 'inherit', fontSize: '5pt', fontWeight: 700, letterSpacing: '0.6pt' }}>
           CALL EMERGENCY SERVICES FIRST · {SITE_URL.replace(/^https?:\/\//, '')}
         </p>
       </div>

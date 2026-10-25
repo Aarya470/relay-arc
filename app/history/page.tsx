@@ -102,7 +102,7 @@ export default function HistoryPage() {
               <span style={{ color: tab === key ? '#141413' : '#5C5A52', fontSize: '14px', fontWeight: tab === key ? 700 : 500 }}>
                 {label}
               </span>
-              <span style={{ color: tab === key ? (key === 'emergencies' ? '#A33417' : '#42623C') : '#C4BFB0', fontSize: '12px', fontFamily: mono, fontWeight: 700 }}>
+              <span style={{ color: tab === key ? (key === 'emergencies' ? '#A33417' : '#42623C') : '#C4BFB0', fontSize: '12px', fontFamily: 'inherit', fontWeight: 700 }}>
                 {count}
               </span>
             </button>
@@ -135,7 +135,7 @@ export default function HistoryPage() {
                             onClick={() => setExpanded(expanded === c.id ? null : c.id)}
                             style={{ width: '100%', padding: '13px 0', display: 'flex', alignItems: 'center', gap: '16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
                           >
-                            <span style={{ color: '#141413', fontSize: '13px', fontFamily: mono, fontWeight: 700, flexShrink: 0, width: '72px' }}>
+                            <span style={{ color: '#141413', fontSize: '13px', fontFamily: 'inherit', fontWeight: 700, flexShrink: 0, width: '72px' }}>
                               {parseTS(c.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                             </span>
                             <span style={{ flex: 1, color: '#5C5A52', fontSize: '13.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -186,7 +186,7 @@ export default function HistoryPage() {
                     <div style={{ borderTop: '1px solid #98C890' }}>
                       {(items as Emergency[]).map((e: Emergency) => (
                         <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '13px 0', borderBottom: '1px solid #98C890' }}>
-                          <span style={{ color: '#141413', fontSize: '13px', fontFamily: mono, fontWeight: 700, flexShrink: 0, width: '72px' }}>
+                          <span style={{ color: '#141413', fontSize: '13px', fontFamily: 'inherit', fontWeight: 700, flexShrink: 0, width: '72px' }}>
                             {parseTS(e.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                           </span>
                           <span style={{ flex: 1, color: '#141413', fontSize: '13.5px', fontWeight: 600 }}>

@@ -720,7 +720,7 @@ function RoutingPage() {
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
           background: T.red, color: 'white',
-          padding: '20px', clipPath: notch(16),
+          padding: '20px', borderRadius: '12px',
           fontWeight: 900, fontSize: '20px', letterSpacing: '-0.3px',
           textDecoration: 'none', minHeight: '64px',
           width: 'calc(100% - 40px)', maxWidth: '480px',
@@ -849,7 +849,7 @@ function RoutingPage() {
             Active emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
           </span>
         </div>
-        <span style={{ color: T.red, fontFamily: MONO, fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
+        <span style={{ color: T.red, fontFamily: 'inherit', fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
           {fmtElapsed(elapsed)}
         </span>
       </div>
@@ -907,10 +907,10 @@ function RoutingPage() {
             </p>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
-            <p style={{ color: T.red, fontWeight: 800, fontSize: '38px', fontFamily: MONO, lineHeight: 0.9, letterSpacing: '-0.8px' }}>
+            <p style={{ color: T.red, fontWeight: 800, fontSize: '38px', fontFamily: 'inherit', lineHeight: 0.9, letterSpacing: '-0.8px' }}>
               {etaText(hospital)}
             </p>
-            <p style={{ color: T.textMuted, fontSize: '12px', fontFamily: MONO, marginTop: '5px' }}>
+            <p style={{ color: T.textMuted, fontSize: '12px', fontFamily: 'inherit', marginTop: '5px' }}>
               {formatDistance(hospital.distance || 0)}
             </p>
             {hospital.etaTrafficSec != null && (
@@ -953,7 +953,7 @@ function RoutingPage() {
                   onClick={() => { try { navigator.clipboard.writeText(coords); toast.success('Location copied') } catch {} }}
                   style={{ display: 'block', width: '100%', textAlign: 'left', marginTop: '10px', background: 'transparent', border: `1px solid ${T.border}`, padding: '10px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
                   <span style={{ display: 'block', color: T.textMuted, fontSize: '13px', letterSpacing: '0' }}>Read this to the dispatcher (tap to copy)</span>
-                  <span style={{ display: 'block', color: T.textPrimary, fontFamily: MONO, fontSize: '19px', fontWeight: 700, marginTop: '3px' }}>{coords}</span>
+                  <span style={{ display: 'block', color: T.textPrimary, fontFamily: 'inherit', fontSize: '19px', fontWeight: 700, marginTop: '3px' }}>{coords}</span>
                 </button>
               )}
             </div>
@@ -966,7 +966,7 @@ function RoutingPage() {
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
             width: '100%', background: T.red, color: 'white',
-            padding: '17px', clipPath: notch(14), border: 'none',
+            padding: '17px', borderRadius: '12px', border: 'none',
             fontWeight: 800, fontSize: '16.5px', letterSpacing: '-0.2px',
             cursor: 'pointer', fontFamily: 'inherit', marginTop: '16px', minHeight: '56px',
           }}
@@ -1155,7 +1155,7 @@ function RoutingPage() {
               {profile.blood_type && (
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
                   <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Blood type</span>
-                  <span style={{ color: T.red, fontWeight: 900, fontSize: '34px', fontFamily: MONO, letterSpacing: '-0.4px', lineHeight: 0.9 }}>
+                  <span style={{ color: T.red, fontWeight: 900, fontSize: '34px', fontFamily: 'inherit', letterSpacing: '-0.4px', lineHeight: 0.9 }}>
                     {profile.blood_type}
                   </span>
                 </div>
@@ -1207,10 +1207,10 @@ function RoutingPage() {
                         <p style={{ color: T.textMuted, fontSize: '11.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{h.address}</p>
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <p style={{ color: T.textPrimary, fontWeight: 700, fontSize: '15px', fontFamily: MONO, letterSpacing: '-0.5px' }}>
+                        <p style={{ color: T.textPrimary, fontWeight: 700, fontSize: '15px', fontFamily: 'inherit', letterSpacing: '-0.5px' }}>
                           {etaText(h)}
                         </p>
-                        <p style={{ color: T.textMuted, fontSize: '11px', fontFamily: MONO, marginTop: '2px' }}>
+                        <p style={{ color: T.textMuted, fontSize: '11px', fontFamily: 'inherit', marginTop: '2px' }}>
                           {formatDistance(h.distance || 0)}
                         </p>
                       </div>
@@ -1230,7 +1230,7 @@ function RoutingPage() {
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
               background: T.red, color: 'white',
-              padding: '17px', clipPath: notch(14),
+              padding: '17px', borderRadius: '12px',
               fontWeight: 800, fontSize: '17px',
               textDecoration: 'none', minHeight: '56px', letterSpacing: '-0.1px',
             }}
@@ -1304,7 +1304,7 @@ function RoutingPage() {
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <span style={{ color: T.red, fontFamily: MONO, fontSize: '14px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
+                <span style={{ color: T.red, fontFamily: 'inherit', fontSize: '14px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
                   {fmtElapsed(elapsed)}
                 </span>
                 <button onClick={() => setNavMode(false)} aria-label="Exit navigation"

@@ -251,7 +251,7 @@ export default function RelayRoomPage() {
             {isActive ? `Live · ${typeLabel}` : 'Resolved. They are safe'}
           </span>
         </div>
-        <span style={{ color: 'white', fontFamily: MONO, fontSize: '14px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
+        <span style={{ color: 'white', fontFamily: 'inherit', fontSize: '14px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
           {elapsed}
         </span>
       </div>
@@ -294,7 +294,7 @@ export default function RelayRoomPage() {
             )}
             {loc?.hName && (
               <div style={{ position: 'absolute', bottom: '10px', left: '10px', right: '10px', background: 'rgba(255,255,255,0.95)', border: `1px solid ${BORDER}`, borderRadius: '14px', padding: '9px 13px', display: 'flex', alignItems: 'center', gap: '9px' }}>
-                <span style={{ width: '14px', height: '14px', background: RED, borderRadius: '14px', color: 'white', fontSize: '11px', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, flexShrink: 0 }}>+</span>
+                <span style={{ width: '14px', height: '14px', background: RED, borderRadius: '14px', color: 'white', fontSize: '11px', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', flexShrink: 0 }}>+</span>
                 <p style={{ color: T1, fontSize: '12.5px', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   Heading to {loc.hName}
                 </p>
@@ -336,7 +336,7 @@ export default function RelayRoomPage() {
               )}
               {timeline.map((e, i) => (
                 <div key={i} style={{ display: 'flex', gap: '14px', padding: '11px 0', borderBottom: `1px solid ${BORDER}`, alignItems: 'baseline' }}>
-                  <span style={{ color: T1, fontFamily: MONO, fontSize: '12px', fontWeight: 700, flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
+                  <span style={{ color: T1, fontFamily: 'inherit', fontSize: '12px', fontWeight: 700, flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
                     {new Date(e.t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </span>
                   <span style={{ color: T2, fontSize: '13.5px', lineHeight: 1.5 }}>{e.label}</span>

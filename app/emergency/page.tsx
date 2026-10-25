@@ -237,7 +237,7 @@ export default function Emergency() {
             {isDemo ? (es ? ES.demo : 'Demo · emergency mode') : (es ? ES.mode : 'Emergency mode')}
           </span>
         </div>
-        <span style={{ color: T3, fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
+        <span style={{ color: T3, fontFamily: 'inherit', fontSize: '11px' }}>
           {clock}
         </span>
       </div>
@@ -271,7 +271,7 @@ export default function Emergency() {
             background: RED, color: 'white',
             // Chamfered: the call control wears the same shape everywhere it
             // appears, so it is recognisable before it is readable.
-            padding: '22px', clipPath: notch(16),
+            padding: '22px', borderRadius: '12px',
             fontWeight: 900, fontSize: '22px', letterSpacing: '-0.3px',
             textDecoration: 'none', minHeight: '68px',
           }}>
@@ -296,7 +296,7 @@ export default function Emergency() {
                     color: on ? '#FFFFFF' : T3,
                     border: `1px solid ${on ? T1 : BORDER}`,
                     padding: '5px 11px', borderRadius: '14px',
-                    fontFamily: 'var(--font-mono, monospace)',
+                    fontFamily: 'inherit',
                     fontSize: '11px', fontWeight: 700, letterSpacing: '0.5px',
                     cursor: 'pointer', minHeight: '30px',
                   }}
@@ -353,7 +353,7 @@ export default function Emergency() {
         </form>
 
         {heard && !pending && (
-          <p style={{ color: T3, fontSize: '12.5px', fontFamily: 'var(--font-mono, monospace)', marginTop: '-6px' }}>
+          <p style={{ color: T3, fontSize: '12.5px', fontFamily: 'inherit', marginTop: '-6px' }}>
             {heard.evidence.length > 0 ? `matched: ${heard.evidence.join(' · ')}` : 'starting response'}
             {heard.source === 'device' ? ' · on-device' : ' · assisted'}
           </p>
@@ -373,7 +373,7 @@ export default function Emergency() {
             </p>
             <p style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{pending.label}</p>
             {heard && heard.evidence.length > 0 && (
-              <p style={{ color: T3, fontSize: '11.5px', fontFamily: 'var(--font-mono, monospace)', marginTop: '3px' }}>
+              <p style={{ color: T3, fontSize: '11.5px', fontFamily: 'inherit', marginTop: '3px' }}>
                 heard: {heard.evidence.join(' · ')}{heard.source === 'device' ? ' · on-device' : ' · assisted'}
               </p>
             )}

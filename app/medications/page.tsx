@@ -298,7 +298,7 @@ export default function Medications() {
         <div style={{ borderTop: `1px solid ${BORDER}`, padding: '14px 0 2px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <p style={{ color: T1, fontSize: '13px', fontWeight: 700 }}>{takenCount} of {totalDoses} doses taken</p>
-            <p style={{ color: T3, fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>{Math.round(progress)}%</p>
+            <p style={{ color: T3, fontSize: '11px', fontFamily: 'inherit', letterSpacing: '0.5px' }}>{Math.round(progress)}%</p>
           </div>
           <div style={{ height: '5px', background: BG, borderRadius: '99px', overflow: 'hidden', border: `1px solid ${BORDER}` }}>
             <motion.div
@@ -445,7 +445,7 @@ export default function Medications() {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <p style={{ color: T3, fontSize: '13px', letterSpacing: '0' }}>This week</p>
-                <span style={{ color: weekPct >= 80 ? GREEN : T3, fontSize: '12px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700 }}>{weekPct}%</span>
+                <span style={{ color: weekPct >= 80 ? GREEN : T3, fontSize: '12px', fontFamily: 'inherit', fontWeight: 700 }}>{weekPct}%</span>
               </div>
               <div style={{ display: 'flex', gap: '6px', justifyContent: 'space-between' }}>
                 {weekDots.map((dot, i) => {
@@ -487,7 +487,7 @@ export default function Medications() {
             {/* Streak + 28-day */}
             <div style={{ display: 'flex', gap: '10px' }}>
               <div style={{ flex: '0 0 auto', background: BG, borderRadius: '14px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '90px', border: `1px solid ${BORDER}` }}>
-                <p style={{ color: T1, fontSize: '24px', fontWeight: 800, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '-0.4px', lineHeight: 1 }}>
+                <p style={{ color: T1, fontSize: '24px', fontWeight: 800, fontFamily: 'inherit', letterSpacing: '-0.4px', lineHeight: 1 }}>
                   {streak >= 2 ? `${streak}d` : '. '}
                 </p>
                 <p style={{ color: T3, fontSize: '13px', letterSpacing: '0', marginTop: '2px' }}>
@@ -495,7 +495,7 @@ export default function Medications() {
                 </p>
                 {bestStreak > 0 && (
                   <p style={{ color: T3, fontSize: '10px', marginTop: '4px' }}>
-                    Best: <span style={{ fontFamily: 'var(--font-mono, monospace)', fontWeight: 600, color: T2 }}>{bestStreak}d</span>
+                    Best: <span style={{ fontFamily: 'inherit', fontWeight: 600, color: T2 }}>{bestStreak}d</span>
                   </p>
                 )}
               </div>
@@ -503,7 +503,7 @@ export default function Medications() {
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '6px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
                   <p style={{ color: T3, fontSize: '13px', letterSpacing: '0' }}>28-day rate</p>
-                  <span style={{ color: adherenceColor, fontSize: '14px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700 }}>{adherenceRate}%</span>
+                  <span style={{ color: adherenceColor, fontSize: '14px', fontFamily: 'inherit', fontWeight: 700 }}>{adherenceRate}%</span>
                 </div>
                 <div style={{ height: '6px', background: BG, borderRadius: '99px', overflow: 'hidden', border: `1px solid ${BORDER}` }}>
                   <motion.div
@@ -547,7 +547,7 @@ export default function Medications() {
               <div style={{ flex: 1 }}>
                 <p style={{ color: T1, fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}>{med.name}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}>
-                  <span style={{ background: BG, border: `1px solid ${BORDER}`, color: T2, fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '14px', fontFamily: 'var(--font-mono, monospace)' }}>{med.dose}</span>
+                  <span style={{ background: BG, border: `1px solid ${BORDER}`, color: T2, fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '14px', fontFamily: 'inherit' }}>{med.dose}</span>
                   <span style={{ color: T3, fontSize: '11px' }}>{med.frequency}</span>
                 </div>
               </div>

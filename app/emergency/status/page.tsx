@@ -56,7 +56,7 @@ export default function EmergencyStatus() {
             Emergency active
           </span>
         </div>
-        <span style={{ color: 'rgba(255,255,255,0.70)', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
+        <span style={{ color: 'rgba(255,255,255,0.70)', fontFamily: 'inherit', fontSize: '11px' }}>
           {time}
         </span>
       </div>
@@ -118,7 +118,7 @@ export default function EmergencyStatus() {
             <div style={{ flex: 1 }}>
               <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
               <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>{action.detail}</p>
-              <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '10px', marginTop: '5px' }}>{time}</p>
+              <p style={{ color: '#5C5A52', fontFamily: 'inherit', fontSize: '10px', marginTop: '5px' }}>{time}</p>
             </div>
           </motion.div>
         ))}
@@ -130,9 +130,9 @@ export default function EmergencyStatus() {
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>Turn right onto County Rd</p>
-            <p style={{ color: '#5C5A52', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
+            <p style={{ color: '#5C5A52', fontFamily: 'inherit', fontSize: '11px', marginTop: '2px' }}>In 0.4 miles · 14 min to hospital</p>
           </div>
-          <span style={{ background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.25)', color: '#42623C', fontSize: '11px', padding: '5px 10px', borderRadius: '12px', fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
+          <span style={{ background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.25)', color: '#42623C', fontSize: '11px', padding: '5px 10px', borderRadius: '12px', fontFamily: 'inherit', fontWeight: 700, flexShrink: 0 }}>14 MIN</span>
         </div>
 
         {/* Contacts */}
@@ -149,7 +149,7 @@ export default function EmergencyStatus() {
                     <p style={{ color: '#141413', fontSize: '13px', fontWeight: 600 }}>{c.name}</p>
                     <p style={{ color: '#5C5A52', fontSize: '11px' }}>{c.relationship}</p>
                   </div>
-                  <span style={{ color: '#42623C', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700 }}>Notified</span>
+                  <span style={{ color: '#42623C', fontFamily: 'inherit', fontSize: '11px', fontWeight: 700 }}>Notified</span>
                 </div>
               ))}
             </div>

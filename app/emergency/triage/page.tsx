@@ -84,7 +84,7 @@ export default function TriagePage() {
             Severity Assessment
           </span>
         </div>
-        <span style={{ color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-mono, monospace)', fontSize: '11px' }}>
+        <span style={{ color: 'rgba(255,255,255,0.55)', fontFamily: 'inherit', fontSize: '11px' }}>
           {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
       </div>

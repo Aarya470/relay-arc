@@ -224,13 +224,13 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
         <div style={{ lineHeight: 1 }}>
           <span style={{
             color: '#141413', fontWeight: 800, fontSize: '32px', letterSpacing: '-0.5px',
-            fontFamily: 'var(--font-mono, monospace)',
+            fontFamily: 'inherit',
           }}>
             {Number.isInteger(latest) ? latest : latest.toFixed(1)}
           </span>
           <span style={{
             color: '#5C5A52', fontSize: '11px', marginLeft: '4px',
-            fontFamily: 'var(--font-mono, monospace)',
+            fontFamily: 'inherit',
           }}>
             {meta.unit}
           </span>
@@ -266,7 +266,7 @@ function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v
           onClick={() => onChange(opt)}
           style={{
             flex: 1, padding: '6px 0', borderRadius: '14px', border: 'none', cursor: 'pointer',
-            fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700,
+            fontFamily: 'inherit', fontSize: '11px', fontWeight: 700,
             background: value === opt ? '#42623C' : 'transparent',
             color: value === opt ? '#FFFFFF' : '#5C5A52',
             transition: 'background 0.15s, color 0.15s',
@@ -451,7 +451,7 @@ export default function VitalsPage() {
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Heart rate</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 60–100 bpm</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 60–100 bpm</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -461,7 +461,7 @@ export default function VitalsPage() {
                 placeholder=". " value={vitals.heart_rate}
                 onChange={e => setVitals(p => ({ ...p, heart_rate: e.target.value }))}
               />
-              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>bpm</span>
+              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit', minWidth: '28px' }}>bpm</span>
             </div>
           </div>
 
@@ -473,7 +473,7 @@ export default function VitalsPage() {
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Blood pressure</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 90–140 / 60–90</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 90–140 / 60–90</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -501,7 +501,7 @@ export default function VitalsPage() {
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Oxygen sat.</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 95–100%</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 95–100%</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -511,7 +511,7 @@ export default function VitalsPage() {
                 placeholder=". " value={vitals.oxygen_sat}
                 onChange={e => setVitals(p => ({ ...p, oxygen_sat: e.target.value }))}
               />
-              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>%</span>
+              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit', minWidth: '28px' }}>%</span>
             </div>
           </div>
 
@@ -523,7 +523,7 @@ export default function VitalsPage() {
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'var(--font-mono, monospace)' }}>Normal: 12–20 /min</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 12–20 /min</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -533,7 +533,7 @@ export default function VitalsPage() {
                 placeholder=". " value={vitals.resp_rate}
                 onChange={e => setVitals(p => ({ ...p, resp_rate: e.target.value }))}
               />
-              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)', minWidth: '28px' }}>/min</span>
+              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit', minWidth: '28px' }}>/min</span>
             </div>
           </div>
         </div>
@@ -556,7 +556,7 @@ export default function VitalsPage() {
                     <span key={key} style={{
                       background: s.bg, border: `1px solid ${s.border}`, color: s.text,
                       fontSize: '11px', fontWeight: 700, padding: '5px 11px', borderRadius: '14px',
-                      fontFamily: 'var(--font-mono, monospace)',
+                      fontFamily: 'inherit',
                     }}>
                       {r?.label}: {val} {r?.unit} {status === 'high' ? 'H' : status === 'low' ? 'L' : ''}
                     </span>

@@ -167,13 +167,13 @@ export default function Timeline() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
                         <p style={{ color: '#141413', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>{phase.title}</p>
                         {isCurrent && (
-                          <span style={{ background: 'rgba(86,128,78,0.14)', border: '1px solid rgba(86,128,78,0.30)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '14px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>NOW</span>
+                          <span style={{ background: 'rgba(86,128,78,0.14)', border: '1px solid rgba(86,128,78,0.30)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '14px', fontWeight: 700, fontFamily: 'inherit', letterSpacing: '0.5px' }}>NOW</span>
                         )}
                         {isPast && (
-                          <span style={{ background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '14px', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.5px' }}>DONE</span>
+                          <span style={{ background: 'rgba(86,128,78,0.10)', border: '1px solid rgba(86,128,78,0.22)', color: '#42623C', fontSize: '9px', padding: '2px 8px', borderRadius: '14px', fontWeight: 700, fontFamily: 'inherit', letterSpacing: '0.5px' }}>DONE</span>
                         )}
                       </div>
-                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>{phase.week}</p>
+                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit' }}>{phase.week}</p>
                     </div>
                     <motion.div animate={{ rotate: expanded === index ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ flexShrink: 0 }}>
                       <ChevronDown size={15} color="#5C5A52" />

@@ -197,7 +197,7 @@ export default function EmergencyHistoryPage() {
                           <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>{label}</p>
                           <p style={{
                             color: '#5C5A52', fontSize: '12px', marginTop: '2px',
-                            fontFamily: 'var(--font-mono, monospace)',
+                            fontFamily: 'inherit',
                           }}>
                             {formatDateTime(em.created_at)}
                           </p>
@@ -225,7 +225,7 @@ export default function EmergencyHistoryPage() {
                             </div>
                           )}
                           {resolved && (
-                            <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
+                            <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit' }}>
                               {durationHint(em.created_at)}
                             </span>
                           )}

@@ -219,10 +219,10 @@ export default function TransportRequest() {
                       <p style={{ color: '#5C5A52', fontSize: '11px' }}>{h.address}</p>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '12px' }}>
-                      <p style={{ color: '#42623C', fontWeight: 700, fontSize: '14px', fontFamily: 'var(--font-mono, monospace)' }}>
+                      <p style={{ color: '#42623C', fontWeight: 700, fontSize: '14px', fontFamily: 'inherit' }}>
                         {Math.round((h.distance || 0) / 1000 / 50 * 60)} min
                       </p>
-                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'var(--font-mono, monospace)' }}>
+                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit' }}>
                         {((h.distance || 0) / 1000).toFixed(1)} km
                       </p>
                     </div>

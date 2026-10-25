@@ -107,7 +107,7 @@ export default function CprCoach() {
               marginBottom: '22px',
             }}
           >
-            <span style={{ color: running ? 'white' : T1, fontFamily: MONO, fontSize: '52px', fontWeight: 800, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+            <span style={{ color: running ? 'white' : T1, fontFamily: 'inherit', fontSize: '52px', fontWeight: 800, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
               {running ? count : BPM}
             </span>
             <span style={{ color: running ? 'rgba(255,255,255,0.75)' : T3, fontSize: '13px', letterSpacing: '0', marginTop: '6px' }}>
@@ -139,7 +139,7 @@ export default function CprCoach() {
             ['04', 'Do not stop until help arrives', 'Swap with someone every 2 minutes if you can. Broken ribs are OK. Stopping is not.'],
           ].map(([num, title, body]) => (
             <div key={num} style={{ display: 'flex', gap: '16px', padding: '15px 0', borderBottom: `1px solid ${BORDER}`, alignItems: 'baseline' }}>
-              <span style={{ color: RED, fontFamily: MONO, fontSize: '12px', fontWeight: 700, flexShrink: 0 }}>{num}</span>
+              <span style={{ color: RED, fontFamily: 'inherit', fontSize: '12px', fontWeight: 700, flexShrink: 0 }}>{num}</span>
               <div>
                 <p style={{ color: T1, fontSize: '16px', fontWeight: 700, letterSpacing: '-0.2px', lineHeight: 1.3 }}>{title}</p>
                 <p style={{ color: T2, fontSize: '13.5px', lineHeight: 1.55, marginTop: '3px' }}>{body}</p>
