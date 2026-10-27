@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { Phone } from 'lucide-react'
 import FollowLinks from '@/components/FollowLinks'
+import VideoEmbed from '@/components/VideoEmbed'
 import Mark from '@/components/Mark'
 
 const BG2    = '#B3DDAC'
@@ -124,6 +125,7 @@ export default function Home() {
           <div className="hp-nav-links">
             <button onClick={() => router.push('/features')} style={link}>Features</button>
             <button onClick={() => router.push('/engineering')} style={link}>Engineering</button>
+            <button onClick={() => document.getElementById('video')?.scrollIntoView({ behavior: 'smooth' })} style={link}>Video</button>
             <button onClick={() => router.push('/demo')} style={link} className="hp-hide-sm">Demo</button>
             <button onClick={() => router.push('/donate')} style={link} className="hp-hide-sm">Donate</button>
             <button onClick={() => router.push('/login')} style={link}>Sign in</button>
@@ -148,6 +150,15 @@ export default function Home() {
           </div>
           <PhoneMockup/>
         </div>
+
+        {/* demo video */}
+        <section id="video" style={section}>
+          <h2 style={h2}>See it in 3 minutes</h2>
+          <p style={{ fontSize: '16px', lineHeight: 1.55, color: T2, margin: '-6px 0 18px', maxWidth: '680px' }}>
+            Our 2026 Congressional App Challenge video: a full emergency, start to finish, on a real phone.
+          </p>
+          <VideoEmbed id="ozCUg87GAto" title="Relay Arc, 2026 Congressional App Challenge"/>
+        </section>
 
         {/* what it does */}
         <section style={section}>
@@ -187,7 +198,7 @@ export default function Home() {
             Relay Arc helps with decisions; it is not a diagnosis. In an emergency, call 911 first.
           </p>
           <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {[['Features', '/features'], ['Engineering', '/engineering'], ['Partnerships', '/partners'], ['Demo', '/demo'], ['Donate', '/donate'], ['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/status']].map(([l, h]) => (
+            {[['Video', '#video'], ['Features', '/features'], ['Engineering', '/engineering'], ['Partnerships', '/partners'], ['Demo', '/demo'], ['Donate', '/donate'], ['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/status']].map(([l, h]) => (
               <a key={h} href={h} style={{ color: T1, textDecoration: 'underline', textUnderlineOffset: '3px' }}>{l}</a>
             ))}
           </div>

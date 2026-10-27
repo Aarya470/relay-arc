@@ -26,10 +26,10 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.jit.si https://8x8.vc",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: blob: https://*.supabase.co https://*.openstreetmap.org https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.jit.si",
+      "img-src 'self' data: blob: https://*.supabase.co https://*.openstreetmap.org https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.jit.si https://i.ytimg.com",
       // api.groq.com removed — all Groq calls are now server-side (API routes), not from the browser
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.jit.si wss://*.jit.si https://8x8.vc https://nominatim.openstreetmap.org https://router.project-osrm.org https://routing.openstreetmap.de https://api.tomtom.com https://*.basemaps.cartocdn.com https://*.tile.openstreetmap.org https://tiles.openfreemap.org",
-      "frame-src 'self' https://*.jit.si https://8x8.vc",
+      "frame-src 'self' https://*.jit.si https://8x8.vc https://www.youtube-nocookie.com",
       "media-src 'self' blob: https://*.jit.si",
       "worker-src 'self' blob:",
     ].join('; '),
