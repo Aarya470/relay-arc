@@ -2,8 +2,7 @@
 // /partners: the organisations Relay Arc works with, and exactly where each
 // relationship stands. The East Windsor district is still in discussion, so
 // the page says so plainly rather than implying a signed partnership.
-import { useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
+import SiteHeader from '@/components/SiteHeader'
 
 const T1 = '#141413', T2 = '#3F3D36', RULE = 'rgba(20,20,19,0.18)'
 
@@ -30,13 +29,10 @@ const PARTNERS: Partner[] = [
 ]
 
 export default function Partners() {
-  const router = useRouter()
   return (
     <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+      <SiteHeader/>
       <div style={{ maxWidth: '820px', margin: '0 auto', padding: '20px 20px 80px' }}>
-        <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: T1, fontWeight: 600, fontSize: '15px', cursor: 'pointer', padding: '6px 0', fontFamily: 'inherit' }}>
-          <ArrowLeft size={17}/> Relay Arc
-        </button>
         <h1 style={{ color: T1, fontSize: 'clamp(34px, 6vw, 52px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05, margin: '28px 0 12px' }}>Partnerships</h1>
         <p style={{ color: T2, fontSize: '17px', lineHeight: 1.6, maxWidth: '640px', marginBottom: '28px' }}>
           The organisations we work with, and where each relationship stands.

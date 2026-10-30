@@ -219,8 +219,8 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
             height: '22px',
             borderRadius: '50%',
             background: '#FFFFFF',
-            boxShadow: `0 0 0 2.5px ${color}, 0 2px 8px rgba(20,20,19,0.15)`,
-            transition: 'box-shadow 0.3s',
+            border: `2.5px solid ${color}`,
+            boxSizing: 'border-box',
             pointerEvents: 'none',
           }}
         />

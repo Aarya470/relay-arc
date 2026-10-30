@@ -13,8 +13,8 @@
 //
 // Everything numeric here comes from the engines or the measured benchmark. The
 // one synthetic figure (the deterioration curve) is labelled as synthetic.
+import SiteHeader from '@/components/SiteHeader'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
 import { DispatchScene, OnDeviceScene, RelayScene, TrendScene } from '@/components/viz/Scenes'
 import { Flow } from '@/components/viz/Flow'
 import { BarChart, Donut } from '@/components/viz/Chart'
@@ -63,21 +63,7 @@ export default function Features() {
   return (
     <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
 
-      <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px', position: 'sticky', top: 0, background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(8px)', zIndex: 40 }}>
-        <div style={{ ...WRAP, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-          <button onClick={() => router.push('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0' }}>
-            <ArrowLeft size={15}/> Relay Arc
-          </button>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <button onClick={() => router.push('/engineering')} style={{ background: 'none', border: 'none', color: INK2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '8px 12px' }}>
-              Technology
-            </button>
-            <button onClick={() => router.push('/login?signup=1')} style={{ background: ORANGE, color: INK, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 4 }}>
-              Create your profile
-            </button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader/>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section style={{ padding: '78px 24px 0' }}>
@@ -287,7 +273,7 @@ export default function Features() {
             </Grid>
           </div>
 
-          <div style={{ border: `2px solid ${CRIT}`, padding: '22px', marginTop: '30px' }}>
+          <div style={{ borderLeft: `3px solid ${CRIT}`, padding: '4px 0 4px 18px', marginTop: '30px' }}>
             <p style={{ color: CRIT, fontSize: '13px', fontWeight: 700, marginBottom: '8px' }}>
               Shown on every alert
             </p>
@@ -371,25 +357,24 @@ export default function Features() {
         </div>
       </section>
 
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section style={{ padding: '88px 24px 106px' }}>
+      {/* end */}
+      <section style={{ padding: '80px 24px 100px' }}>
         <div style={WRAP}>
-          <div style={{ background: ORANGE, padding: 'clamp(30px, 5vw, 56px)' }}>
-            <h2 style={{ color: INK, fontSize: 'clamp(28px, 5vw, 54px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '20px', maxWidth: '760px' }}>
-              Set it up before you need it
+          <div style={{ borderTop: `2px solid ${INK}`, paddingTop: '30px' }}>
+            <h2 style={{ color: INK, fontSize: 'clamp(28px, 4.6vw, 48px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: '20px' }}>
+              Set it up before you need it.
             </h2>
-            <p style={{ color: 'rgba(20,20,19,0.78)', fontSize: '16px', lineHeight: 1.7, maxWidth: '580px', marginBottom: '26px' }}>
-              It takes a few minutes. Your profile is what the hospital, your family and the triage model
-              all work from, so it has to exist before the night you need it.
+            <p style={{ color: INK2, fontSize: '16px', lineHeight: 1.7, maxWidth: '620px', marginBottom: '28px' }}>
+              It takes a few minutes, and it is what makes all of this work when it counts.
             </p>
-            <div style={{ display: 'flex', gap: '18px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button onClick={() => router.push('/login?signup=1')}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', background: INK, color: '#FFFFFF', fontWeight: 700, fontSize: '15px', padding: '14px 28px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 4 }}>
-                Create your free profile <span style={{ fontFamily: mono }}>→</span>
+                style={{ background: INK, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 26px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 10 }}>
+                Make your free profile
               </button>
-              <button onClick={() => router.push('/engineering')}
-                style={{ background: 'none', border: 'none', color: INK, fontWeight: 700, fontSize: '14.5px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, borderBottom: `2px solid ${INK}`, paddingBottom: '2px' }}>
-                Try the live technology demos
+              <button onClick={() => router.push('/card')}
+                style={{ background: 'none', border: 'none', color: INK, fontWeight: 600, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', padding: 0, textDecoration: 'underline' }}>
+                Or make an emergency card
               </button>
             </div>
           </div>

@@ -1,9 +1,9 @@
 'use client'
 // How we built it. Plain-language write-up with two live demos that run the
 // real app code in the browser.
+import SiteHeader from '@/components/SiteHeader'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { ArrowLeft } from 'lucide-react'
 
 // The triage weights are 153 KB. Load them when someone reaches the demo, not on
 // first paint.
@@ -31,7 +31,6 @@ const T1 = '#141413', T2 = '#5C5A52', T3 = '#5C5A52'
 // which measured 2.70:1 and 1.01:1. A light tint of the page restores both.
 const BORDER = '#7EB382', BG2 = '#CEE9C9'
 const RED = '#A33417', ACCENT = '#42623C'
-const ORANGE = '#D97757'   // fill only. dark ink on top
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
 
 function DemoSkeleton({ label }: { label: string }) {
@@ -101,22 +100,7 @@ export default function Engineering() {
     <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
 
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
-      <header style={{
-        borderBottom: `1px solid ${BORDER}`, padding: '16px 24px',
-        position: 'sticky', top: 0, background: 'rgba(255,255,255,0.94)',
-        backdropFilter: 'blur(8px)', zIndex: 40,
-      }}>
-        <div style={{ ...WRAP, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-          <button onClick={() => router.push('/')}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', color: T2, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', padding: '5px 0' }}>
-            <ArrowLeft size={15}/> Relay Arc
-          </button>
-          <button onClick={() => router.push('/login?signup=1')}
-            style={{ background: ORANGE, color: T1, fontSize: '13.5px', fontWeight: 700, padding: '9px 18px', border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 20 }}>
-            Create your profile
-          </button>
-        </div>
-      </header>
+      <SiteHeader/>
 
       {/* top */}
       <section style={{ padding: '72px 24px 0' }}>
@@ -306,7 +290,7 @@ export default function Engineering() {
             </div>
           </div>
 
-          <div style={{ border: `2px solid ${RED}`, padding: '24px', marginBottom: '20px', borderRadius: 10 }}>
+          <div style={{ borderLeft: `3px solid ${RED}`, padding: '4px 0 4px 18px', marginBottom: '20px' }}>
             <p style={{ color: RED, fontSize: '14px', fontWeight: 700, marginBottom: '10px' }}>
               We say this everywhere the score appears
             </p>
