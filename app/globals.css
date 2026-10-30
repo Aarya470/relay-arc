@@ -8,7 +8,7 @@
    Every pairing below was checked for WCAG contrast before being adopted, and
    two results shaped the system:
 
-   1. #D97757 on cream is 2.96:1 — it FAILS even the 3:1 bar for large text.
+   1. #E4E4E7 on cream is 2.96:1 — it FAILS even the 3:1 bar for large text.
       So Claude orange is a FILL colour only, always with dark ink on top
       (ink on orange is 5.90:1). Never use it as text or an icon on a light
       background. --crit is the warm accent that is legible on light.
@@ -17,7 +17,7 @@
       they are the same colour to a greyscale printer and to a red-green
       colourblind user, about 8% of men, and this is a medical interface. That
       held while the page was cream. It does not hold now, and pretending
-      otherwise in a comment would be worse than saying so: on #B3DDAC every
+      otherwise in a comment would be worse than saying so: on #FFFFFF every
       colour that clears 4.5:1 lands in the same narrow luminance band, so
       --crit, --warn and --green-deep are within 1.01:1 of each other. The
       reasoning and the arithmetic are next to --warn below.
@@ -32,14 +32,14 @@
      Two separate mistakes got made here, and they are worth writing down
      because both looked like the same complaint.
 
-     First it was too pale. #EFF2E8 had a widest channel gap of 10/255 — green
+     First it was too pale. #F4F4F5 had a widest channel gap of 10/255 — green
      in the stylesheet, neutral to the eye. Deepening it to 45/255 fixed the
      paleness and produced the second problem: it then read as YELLOW, because
      every value in this family sat at hue 77 degrees. At 10/255 nobody could
      see the hue at all, so the yellow was invisible until the colour got deep
      enough to have a hue worth seeing. Saturation exposed it.
 
-     So this is #B3DDAC: hue rotated 77 -> 111 degrees, which is green rather
+     So this is #FFFFFF: hue rotated 77 -> 111 degrees, which is green rather
      than yellow-green, at a 49/255 gap.
 
      The contrast floor still binds. --text-2 is 4.56:1 and --crit 4.53:1
@@ -49,15 +49,15 @@
 
      --text is 12.16:1. White surfaces sit 1.52:1 off the page, which is the
      intended effect: cards lift off it without needing a heavier border. */
-  --bg: #b3ddac;
-  --bg-2: #95d08b;
+  --bg: #FFFFFF;
+  --bg-2: #F4F4F5;
   --surface: #ffffff;
-  --surface-2: #cee9c9;
-  --surface-3: #8fcd84;
+  --surface-2: #F4F4F5;
+  --surface-3: #E4E4E7;
 
   /* Borders */
-  --border: #98c890;
-  --border-mid: #84bd7a;
+  --border: #E4E4E7;
+  --border-mid: #E4E4E7;
   --border-strong: #66ad59;
 
   /* Text — 12.16:1 and 4.56:1 on the green background. These stay neutral on
@@ -81,7 +81,7 @@
      an emergency, and one of them is interactive. A token whose safe use
      depends on 230 call sites each remembering a rule is not a safe token.
 
-     Darkening it was not an option either. On #B3DDAC nothing lighter than
+     Darkening it was not an option either. On #FFFFFF nothing lighter than
      about #5B5953 reaches 4.5:1, so a third tier that passes would have been
      indistinguishable from --text-2 anyway. The green page background is simply
      not light enough to carry three levels of grey. So there are two, and the
@@ -110,10 +110,10 @@
   --green: #56804e;
   --green-deep: #42623c;
   --green-dim: #344d2f;
-  --green-soft: rgba(86, 128, 78, 0.09);
+  --green-soft: rgba(20,20,19, 0.09);
 
   /* Claude orange — FILL ONLY, dark ink on top. See note above. */
-  --orange: #d97757;
+  --orange: #E4E4E7;
   --orange-soft: rgba(217, 119, 87, 0.12);
 
   /* Emergency / critical — 6.51:1 on cream, 6.86:1 with white on it.
@@ -133,7 +133,7 @@
      used it.
 
      THE THREE STATUS COLOURS ARE NOW THE SAME BRIGHTNESS, AND THAT IS THE
-     TRADE, NOT AN OVERSIGHT. To clear 4.5:1 on #B3DDAC a colour has to be
+     TRADE, NOT AN OVERSIGHT. To clear 4.5:1 on #FFFFFF a colour has to be
      about as dark as #7A5300, and --crit (#A33417, 4.53:1) and --green-deep
      (#42623C, 4.55:1) are already sitting there. Measured against each other
      the three now differ by 1.00:1 and 1.01:1. The note at the top of this file
@@ -164,7 +164,7 @@
   --red-glow: none;
   --blue: #42623c;
   --blue-dim: #344d2f;
-  --blue-soft: rgba(86, 128, 78, 0.09);
+  --blue-soft: rgba(20,20,19, 0.09);
   --amber: #7c5200;
   --amber-soft: rgba(168, 114, 0, 0.1);
 
@@ -180,7 +180,7 @@
 
      So the system changed. Only LARGE type sits on the page: white at 3.62:1,
      which clears the 3:1 bar for anything >= 24px, or >= 18.66px bold. All
-     small copy moves onto panels -- #FFFFFF or the softer #EDF4EC -- where ink
+     small copy moves onto panels -- #FFFFFF or the softer #F4F4F5 -- where ink
      is 18.43:1 and 16.46:1, --text-2 clears 6.9:1, and --crit keeps 6.86:1.
 
      That last number is the reason this is the right shape rather than a
@@ -189,11 +189,11 @@
      what the palette needed anyway; the page colour just forced the issue. */
   --page: #57945c;
   --page-2: #3f7345; /* deeper band, 1.55:1 off the page */
-  --page-rule: #9dc6a1; /* hairline on the page */
+  --page-rule: #E4E4E7; /* hairline on the page */
   --panel: #ffffff; /* small copy lives here */
-  --panel-2: #edf4ec; /* softer panel, still 16.46:1 with ink */
+  --panel-2: #F4F4F5; /* softer panel, still 16.46:1 with ink */
   --on: #ffffff; /* LARGE type only -- 3.62:1 */
-  --on-3: #e6ebe6; /* 3:1, large decorative type only */
+  --on-3: #F4F4F5; /* 3:1, large decorative type only */
   --coral: #f9e6e0;
 
   /* Radius. Two values, and the reasoning is in lib/shape.ts.
@@ -261,7 +261,7 @@ pre,
 }
 
 ::selection {
-  background: rgba(86, 128, 78, 0.14);
+  background: rgba(20,20,19, 0.14);
   color: var(--text);
 }
 

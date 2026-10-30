@@ -7,7 +7,7 @@ import { DEMO_PARTNER, DEMO_INCOMING, DEMO_BANNER } from '@/lib/demo-data'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const ACCENT = '#42623C'
 const RED = '#A33417'
 const GREEN = '#42623C'
@@ -192,7 +192,7 @@ export default function HospitalPortal() {
 
   if (!partner)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+      <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
         <div style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '96px' }}>
           <p
             style={{
@@ -294,7 +294,7 @@ export default function HospitalPortal() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         maxWidth: '720px',
         margin: '0 auto',
         width: '100%',
@@ -305,7 +305,7 @@ export default function HospitalPortal() {
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#E4E4E7',
             color: T1,
             padding: '9px 14px',
             margin: '0 -20px 0',
@@ -608,7 +608,7 @@ export default function HospitalPortal() {
                       fontSize: '13px',
                       fontWeight: 700,
                       textDecoration: 'none',
-                      border: `1.5px solid rgba(86,128,78,0.3)`,
+                      border: `1.5px solid rgba(20,20,19,0.3)`,
                       borderRadius: '14px',
                       padding: '8px 12px',
                     }}

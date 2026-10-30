@@ -109,7 +109,7 @@ export default function Timeline() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: '#FFFFFF',
           padding: '80px 16px 100px',
           maxWidth: '720px',
           margin: '0 auto',
@@ -121,7 +121,7 @@ export default function Timeline() {
             style={{
               height: '64px',
               borderRadius: '12px',
-              background: '#F2F0E8',
+              background: '#F4F4F5',
               marginBottom: '8px',
             }}
           />
@@ -134,7 +134,7 @@ export default function Timeline() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         paddingBottom: '100px',
         maxWidth: '720px',
         margin: '0 auto',
@@ -152,8 +152,8 @@ export default function Timeline() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '14px',
-                background: '#F2F0E8',
-                border: '1px solid #D8D4C8',
+                background: '#F4F4F5',
+                border: '1px solid #E4E4E7',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -188,8 +188,8 @@ export default function Timeline() {
               width: '36px',
               height: '36px',
               borderRadius: '14px',
-              background: 'rgba(86,128,78,0.10)',
-              border: '1px solid rgba(86,128,78,0.20)',
+              background: 'rgba(20,20,19,0.10)',
+              border: '1px solid rgba(20,20,19,0.20)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -210,8 +210,8 @@ export default function Timeline() {
         <div style={{ padding: '0 20px 16px' }}>
           <div
             style={{
-              background: 'rgba(86,128,78,0.06)',
-              border: '1px solid rgba(86,128,78,0.16)',
+              background: 'rgba(20,20,19,0.06)',
+              border: '1px solid rgba(20,20,19,0.16)',
               borderRadius: '12px',
               padding: '14px 16px',
               display: 'flex',
@@ -251,7 +251,7 @@ export default function Timeline() {
               bottom: '15px',
               width: '2px',
               background:
-                'linear-gradient(to bottom, rgba(86,128,78,0.5) 0%, rgba(86,128,78,0.2) 50%, rgba(20,20,19,0.05) 100%)',
+                'linear-gradient(to bottom, rgba(20,20,19,0.5) 0%, rgba(20,20,19,0.2) 50%, rgba(20,20,19,0.05) 100%)',
               borderRadius: '14px',
               zIndex: 0,
               pointerEvents: 'none',
@@ -270,13 +270,13 @@ export default function Timeline() {
           {timeline.map((phase, index) => {
             const isCurrent = phase.isCurrent
             const isPast = currentIdx !== -1 && index < currentIdx
-            const dotBorder = isCurrent ? '#42623C' : isPast ? '#42623C' : '#D8D4C8'
+            const dotBorder = isCurrent ? '#42623C' : isPast ? '#42623C' : '#E4E4E7'
             const cardBorder = isCurrent
-              ? 'rgba(86,128,78,0.28)'
+              ? 'rgba(20,20,19,0.28)'
               : isPast
-                ? 'rgba(86,128,78,0.18)'
-                : '#F2F0E8'
-            const cardBg = isCurrent ? 'rgba(86,128,78,0.06)' : '#FFFFFF'
+                ? 'rgba(20,20,19,0.18)'
+                : '#F4F4F5'
+            const cardBg = isCurrent ? 'rgba(20,20,19,0.06)' : '#FFFFFF'
             return (
               <motion.div
                 key={index}
@@ -291,15 +291,15 @@ export default function Timeline() {
                       width: '28px',
                       height: '28px',
                       borderRadius: '50%',
-                      background: '#B3DDAC',
+                      background: '#FFFFFF',
                       border: `2px solid ${dotBorder}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       boxShadow: isCurrent
-                        ? '0 0 14px rgba(86,128,78,0.35)'
+                        ? '0 0 14px rgba(20,20,19,0.35)'
                         : isPast
-                          ? '0 0 8px rgba(86,128,78,0.20)'
+                          ? '0 0 8px rgba(20,20,19,0.20)'
                           : 'none',
                     }}
                   >
@@ -317,7 +317,7 @@ export default function Timeline() {
                         }}
                       />
                     ) : (
-                      <Circle size={12} color="#C4BFB0" />
+                      <Circle size={12} color="#E4E4E7" />
                     )}
                   </div>
                 </div>
@@ -329,7 +329,7 @@ export default function Timeline() {
                     borderRadius: '12px',
                     overflow: 'hidden',
                     boxShadow: isCurrent
-                      ? '0 6px 24px rgba(86,128,78,0.12)'
+                      ? '0 6px 24px rgba(20,20,19,0.12)'
                       : '0 2px 8px rgba(20,20,19,0.06)',
                   }}
                 >
@@ -371,8 +371,8 @@ export default function Timeline() {
                         {isCurrent && (
                           <span
                             style={{
-                              background: 'rgba(86,128,78,0.14)',
-                              border: '1px solid rgba(86,128,78,0.30)',
+                              background: 'rgba(20,20,19,0.14)',
+                              border: '1px solid rgba(20,20,19,0.30)',
                               color: '#42623C',
                               fontSize: '9px',
                               padding: '2px 8px',
@@ -388,8 +388,8 @@ export default function Timeline() {
                         {isPast && (
                           <span
                             style={{
-                              background: 'rgba(86,128,78,0.10)',
-                              border: '1px solid rgba(86,128,78,0.22)',
+                              background: 'rgba(20,20,19,0.10)',
+                              border: '1px solid rgba(20,20,19,0.22)',
                               color: '#42623C',
                               fontSize: '9px',
                               padding: '2px 8px',
@@ -427,7 +427,7 @@ export default function Timeline() {
                         <div
                           style={{
                             padding: '14px 16px 16px',
-                            borderTop: '1px solid #98C890',
+                            borderTop: '1px solid #E4E4E7',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '14px',
@@ -514,7 +514,7 @@ export default function Timeline() {
                 fontSize: '13px',
                 fontWeight: 700,
                 background: 'none',
-                border: '1px solid rgba(86,128,78,0.30)',
+                border: '1px solid rgba(20,20,19,0.30)',
                 borderRadius: '14px',
                 padding: '8px 16px',
                 cursor: 'pointer',

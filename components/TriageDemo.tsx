@@ -6,8 +6,8 @@ import { triage, featurize, MODEL_META, ABSTAIN_THRESHOLD } from '@/lib/triage'
 const T1 = '#141413',
   T2 = '#5C5A52',
   T3 = '#5C5A52'
-const BORDER = '#98C890',
-  BG2 = '#B3DDAC'
+const BORDER = '#E4E4E7',
+  BG2 = '#FFFFFF'
 const CRIT = '#A33417',
   ACCENT = '#42623C',
   GREEN = '#42623C'
@@ -244,8 +244,8 @@ export default function TriageDemo() {
                     <span
                       key={e}
                       style={{
-                        background: 'rgba(86,128,78,0.07)',
-                        border: '1px solid rgba(86,128,78,0.16)',
+                        background: 'rgba(20,20,19,0.07)',
+                        border: '1px solid rgba(20,20,19,0.16)',
                         color: ACCENT,
                         fontSize: '11px',
                         fontWeight: 700,

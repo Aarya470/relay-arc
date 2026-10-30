@@ -6,8 +6,8 @@ import { assessRisk, scoreRespRate, scoreSpo2, scoreSystolic, scorePulse } from 
 const T1 = '#141413',
   T2 = '#5C5A52',
   T3 = '#5C5A52'
-const BORDER = '#98C890',
-  BG2 = '#B3DDAC'
+const BORDER = '#E4E4E7',
+  BG2 = '#FFFFFF'
 const RED = '#A33417',
   AMBER = '#7C5200',
   GREEN = '#42623C'

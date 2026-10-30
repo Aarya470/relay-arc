@@ -79,20 +79,20 @@ import { DEMO_PATIENTS, DEMO_CHECKINS, DEMO_VITALS, DEMO_BANNER } from '@/lib/de
 type CrashRisk = RiskAssessment
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG = '#B3DDAC'
+const BG = '#FFFFFF'
 const SURFACE = '#FFFFFF'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const ACCENT = '#42623C'
-const ACCENT_DIM = 'rgba(86,128,78,0.08)'
+const ACCENT_DIM = 'rgba(20,20,19,0.08)'
 const RED = '#A33417'
 const RED_DIM = 'rgba(163,52,23,0.07)'
 const GREEN = '#42623C'
-const GREEN_DIM = 'rgba(86,128,78,0.08)'
+const GREEN_DIM = 'rgba(20,20,19,0.08)'
 const AMBER = '#7C5200'
 const AMBER_DIM = 'rgba(168,114,0,0.08)'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const SHADOW = 'none'
 
 // ── This week types ─────────────────────────────────────────────────────
@@ -895,7 +895,7 @@ export default function Dashboard() {
             style={{
               height: `${h}px`,
               borderRadius: '12px',
-              background: '#98C890',
+              background: '#E4E4E7',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
           />
@@ -952,7 +952,7 @@ export default function Dashboard() {
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#E4E4E7',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',
@@ -978,8 +978,8 @@ export default function Dashboard() {
               left: 0,
               right: 0,
               zIndex: 100,
-              background: 'rgba(86,128,78,0.06)',
-              borderBottom: `1px solid rgba(86,128,78,0.14)`,
+              background: 'rgba(20,20,19,0.06)',
+              borderBottom: `1px solid rgba(20,20,19,0.14)`,
               padding: '48px 20px 14px',
               display: 'flex',
               alignItems: 'center',
@@ -1075,7 +1075,7 @@ export default function Dashboard() {
                       padding: '3px 8px',
                       borderRadius: '14px',
                       letterSpacing: '0',
-                      border: `1px solid rgba(86,128,78,0.14)`,
+                      border: `1px solid rgba(20,20,19,0.14)`,
                     }}
                   >
                     {d.trim()}

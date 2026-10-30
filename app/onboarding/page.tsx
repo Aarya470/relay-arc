@@ -22,7 +22,7 @@ import Mark from '@/components/Mark'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const ACCENT = '#42623C'
 const RED = '#A33417'
 const mono = 'var(--font-mono, monospace)'
@@ -201,7 +201,7 @@ export default function Onboarding() {
   const meta = STEP_META[step - 1]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
       <div
         style={{ maxWidth: '420px', margin: '0 auto', paddingTop: '56px', paddingBottom: '48px' }}
       >
@@ -364,7 +364,7 @@ export default function Onboarding() {
                         cursor: 'pointer',
                         padding: '14px 4px',
                         minHeight: '58px',
-                        background: active ? 'rgba(86,128,78,0.05)' : 'none',
+                        background: active ? 'rgba(20,20,19,0.05)' : 'none',
                         border: 'none',
                         borderBottom: `1px solid ${BORDER}`,
                         fontFamily: 'inherit',

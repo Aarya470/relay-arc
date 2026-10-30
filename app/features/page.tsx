@@ -37,7 +37,7 @@ const SECTIONS: { title: string; body: string; link?: [string, string] }[] = [
 
 export default function Features() {
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh', color: INK }}>
+    <div style={{ background: '#FFFFFF', minHeight: '100dvh', color: INK }}>
       <SiteHeader />
       <main style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px 80px' }}>
         <h1

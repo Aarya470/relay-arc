@@ -208,7 +208,7 @@ export function OnDeviceScene() {
         w={130}
         text="Phone's model"
         color={GREEN_DEEP}
-        fill="rgba(86,128,78,0.10)"
+        fill="rgba(20,20,19,0.10)"
       />
 
       <Arrow id="od-a2" d="M310,92 L360,92 L360,40 L410,40" color={GREEN_DEEP} />
@@ -297,7 +297,7 @@ export function TrendScene() {
   const x = (i: number) => X0 + i * DX
   const y = (s: number) => Y0 - s * PER
   const bands = [
-    { from: 0, to: 4.5, fill: 'rgba(86,128,78,0.12)', label: 'Low (0–4)', color: GREEN_DEEP },
+    { from: 0, to: 4.5, fill: 'rgba(20,20,19,0.12)', label: 'Low (0–4)', color: GREEN_DEEP },
     { from: 4.5, to: 6.5, fill: 'rgba(124,82,0,0.13)', label: 'Medium (5–6)', color: WARN },
     { from: 6.5, to: 10, fill: 'rgba(163,52,23,0.10)', label: 'High (7+)', color: CRIT },
   ]

@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const RED = '#A33417'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
@@ -30,7 +30,7 @@ export default function DemoLauncher() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
       <div
         style={{
           position: 'fixed',
@@ -186,7 +186,7 @@ export default function DemoLauncher() {
             alignItems: 'center',
             justifyContent: 'space-between',
             width: '100%',
-            background: on ? 'rgba(86,128,78,0.06)' : 'none',
+            background: on ? 'rgba(20,20,19,0.06)' : 'none',
             border: `1.5px solid ${on ? GREEN : BORDER}`,
             borderRadius: '20px',
             padding: '15px 18px',

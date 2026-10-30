@@ -107,7 +107,7 @@ export default function Analytics() {
           onClick={() => dismiss(false)}
           style={{
             background: 'transparent',
-            border: '1px solid #98C890',
+            border: '1px solid #E4E4E7',
             color: '#141413',
             fontWeight: 600,
             fontSize: '13.5px',
@@ -121,7 +121,7 @@ export default function Analytics() {
         <button
           onClick={() => dismiss(true)}
           style={{
-            background: '#D97757',
+            background: '#E4E4E7',
             border: 'none',
             color: '#141413',
             fontWeight: 700,

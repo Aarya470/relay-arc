@@ -16,7 +16,7 @@ export default function SiteHeader() {
       style={{
         borderBottom: '1px solid rgba(20,20,19,0.15)',
         padding: '16px 24px',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
       }}
     >
       <div

@@ -176,7 +176,7 @@ function BriefContent() {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ background: '#B3DDAC' }}
+        style={{ background: '#FFFFFF' }}
       >
         <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#42623C' }} />
       </div>
@@ -188,7 +188,7 @@ function BriefContent() {
   const primaryContact = contacts[0]
 
   return (
-    <div className="min-h-screen" style={{ background: '#B3DDAC' }}>
+    <div className="min-h-screen" style={{ background: '#FFFFFF' }}>
       {/* Red alert header */}
       <div
         className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3"
@@ -412,8 +412,8 @@ function BriefContent() {
             onClick={() => router.back()}
             className="flex-1 py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-70"
             style={{
-              background: '#F2F0E8',
-              border: '1px solid #D8D4C8',
+              background: '#F4F4F5',
+              border: '1px solid #E4E4E7',
               color: '#5C5A52',
               borderRadius: '12px',
             }}
@@ -425,12 +425,12 @@ function BriefContent() {
             className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
             style={{
               background: copied ? '#42623C' : '#42623C',
-              color: copied ? '#B3DDAC' : '#fff',
+              color: copied ? '#FFFFFF' : '#fff',
               borderRadius: '12px',
               border: 'none',
               boxShadow: copied
-                ? '0 4px 20px rgba(86,128,78,0.28)'
-                : '0 4px 20px rgba(86,128,78,0.28)',
+                ? '0 4px 20px rgba(20,20,19,0.28)'
+                : '0 4px 20px rgba(20,20,19,0.28)',
             }}
           >
             {copied ? (
@@ -466,7 +466,7 @@ function Section({
       className="rounded-2xl p-4"
       style={{
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
+        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #E4E4E7',
         borderRadius: '12px',
       }}
     >
@@ -492,7 +492,7 @@ export default function BriefPage() {
       fallback={
         <div
           className="min-h-screen flex items-center justify-center"
-          style={{ background: '#B3DDAC' }}
+          style={{ background: '#FFFFFF' }}
         >
           <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#42623C' }} />
         </div>

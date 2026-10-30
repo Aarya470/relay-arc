@@ -9,16 +9,16 @@ import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG = '#B3DDAC'
+const BG = '#FFFFFF'
 const SURFACE = '#FFFFFF'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const ACCENT = '#42623C'
-const ACCENT_DIM = 'rgba(86,128,78,0.09)'
+const ACCENT_DIM = 'rgba(20,20,19,0.09)'
 const GREEN = '#42623C'
-const GREEN_DIM = 'rgba(86,128,78,0.08)'
-const BORDER = '#98C890'
+const GREEN_DIM = 'rgba(20,20,19,0.08)'
+const BORDER = '#E4E4E7'
 const SHADOW = 'none'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
@@ -265,7 +265,7 @@ export default function Checkin() {
             alignItems: 'center',
             gap: '5px',
             background: GREEN_DIM,
-            border: `1px solid rgba(86,128,78,0.18)`,
+            border: `1px solid rgba(20,20,19,0.18)`,
             borderRadius: '14px',
             padding: '4px 10px',
           }}
@@ -379,7 +379,7 @@ export default function Checkin() {
             transition={{ ...spring, bounce: 0.3 }}
             style={{
               background: GREEN_DIM,
-              border: `1px solid rgba(86,128,78,0.18)`,
+              border: `1px solid rgba(20,20,19,0.18)`,
               borderRadius: '12px',
               padding: '28px 20px',
               textAlign: 'center',
@@ -492,7 +492,7 @@ export default function Checkin() {
         <div
           style={{
             padding: '8px 16px 14px',
-            borderTop: `1px solid ${focused ? 'rgba(86,128,78,0.2)' : BORDER}`,
+            borderTop: `1px solid ${focused ? 'rgba(20,20,19,0.2)' : BORDER}`,
             display: 'flex',
             gap: '8px',
             alignItems: 'center',

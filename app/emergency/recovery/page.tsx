@@ -182,7 +182,7 @@ function RecoveryContent() {
   const protocol = PROTOCOLS[type] || PROTOCOLS.other
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF' }}>
       {/* Green "You're safe" header */}
       <div
         style={{
@@ -194,7 +194,7 @@ function RecoveryContent() {
           gap: '12px',
           padding: '16px',
           background: '#42623C',
-          boxShadow: '0 2px 20px rgba(86,128,78,0.30)',
+          boxShadow: '0 2px 20px rgba(20,20,19,0.30)',
         }}
       >
         <button
@@ -205,7 +205,7 @@ function RecoveryContent() {
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            color: '#B3DDAC',
+            color: '#FFFFFF',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -215,9 +215,9 @@ function RecoveryContent() {
           <ChevronLeft style={{ width: '20px', height: '20px' }} />
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle style={{ width: '20px', height: '20px', color: '#B3DDAC' }} />
+          <CheckCircle style={{ width: '20px', height: '20px', color: '#FFFFFF' }} />
           <span
-            style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#B3DDAC' }}
+            style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#FFFFFF' }}
           >
             You&apos;re safe
           </span>
@@ -287,7 +287,7 @@ function RecoveryContent() {
                     fontSize: '11px',
                     fontWeight: 700,
                     marginTop: '2px',
-                    background: 'rgba(86,128,78,0.15)',
+                    background: 'rgba(20,20,19,0.15)',
                     color: '#42623C',
                   }}
                 >
@@ -364,7 +364,7 @@ function RecoveryContent() {
               fontWeight: 600,
               textDecoration: 'none',
               background: '#42623C',
-              color: '#B3DDAC',
+              color: '#FFFFFF',
             }}
           >
             <Phone style={{ width: '16px', height: '16px' }} />
@@ -384,8 +384,8 @@ function RecoveryContent() {
               gap: '8px',
               padding: '12px',
               borderRadius: '12px',
-              background: '#F2F0E8',
-              border: '1px solid #D8D4C8',
+              background: '#F4F4F5',
+              border: '1px solid #E4E4E7',
               color: '#5C5A52',
               fontSize: '14px',
               fontWeight: 600,
@@ -433,7 +433,7 @@ function Card({
       transition={{ type: 'spring', stiffness: 340, damping: 26, delay }}
       style={{
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
+        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #E4E4E7',
         borderRadius: '12px',
         padding: '16px',
       }}
@@ -477,7 +477,7 @@ export default function RecoveryPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: '#B3DDAC',
+            background: '#FFFFFF',
           }}
         >
           <div

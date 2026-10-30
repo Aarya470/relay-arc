@@ -8,7 +8,7 @@ import { octagon } from '@/lib/shape'
 const ACCENT = '#42623C'
 const RED = '#A33417'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 
 const tabs = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -55,7 +55,7 @@ function TabButton({
           style={{
             position: 'absolute',
             inset: '4px 10%',
-            background: 'rgba(86,128,78,0.07)',
+            background: 'rgba(20,20,19,0.07)',
             borderRadius: '14px',
           }}
           transition={{ type: 'spring', stiffness: 500, damping: 36 }}

@@ -97,14 +97,14 @@ export default function MedicalProfile() {
 
   if (loading)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px' }}>
+      <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '80px 20px 100px' }}>
         {[1, 2, 3, 4].map((i) => (
           <Skeleton
             key={i}
             style={{
               height: '60px',
               borderRadius: '12px',
-              background: '#F2F0E8',
+              background: '#F4F4F5',
               marginBottom: '10px',
             }}
           />
@@ -136,7 +136,7 @@ export default function MedicalProfile() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         paddingBottom: '90px',
         maxWidth: '640px',
         margin: '0 auto',
@@ -227,7 +227,7 @@ export default function MedicalProfile() {
             display: 'flex',
             gap: '40px',
             alignItems: 'flex-end',
-            borderBottom: '1px solid #98C890',
+            borderBottom: '1px solid #E4E4E7',
             padding: '28px 0 22px',
           }}
         >
@@ -335,7 +335,7 @@ export default function MedicalProfile() {
 
         {/* Conditions */}
         <SectionLabel>Conditions</SectionLabel>
-        <div style={{ borderTop: '1px solid #98C890' }}>
+        <div style={{ borderTop: '1px solid #E4E4E7' }}>
           {conditions.length > 0 ? (
             conditions.map((c: string, i: number) => (
               <p
@@ -345,7 +345,7 @@ export default function MedicalProfile() {
                   fontSize: '14.5px',
                   fontWeight: 600,
                   padding: '13px 0',
-                  borderBottom: '1px solid #98C890',
+                  borderBottom: '1px solid #E4E4E7',
                 }}
               >
                 {c}
@@ -358,7 +358,7 @@ export default function MedicalProfile() {
 
         {/* Medications */}
         <SectionLabel>Current medications</SectionLabel>
-        <div style={{ borderTop: '1px solid #98C890' }}>
+        <div style={{ borderTop: '1px solid #E4E4E7' }}>
           {meds.length > 0 ? (
             meds.map((med: any, i: number) => (
               <div
@@ -369,7 +369,7 @@ export default function MedicalProfile() {
                   justifyContent: 'space-between',
                   gap: '16px',
                   padding: '13px 0',
-                  borderBottom: '1px solid #98C890',
+                  borderBottom: '1px solid #E4E4E7',
                 }}
               >
                 <div>
@@ -404,7 +404,7 @@ export default function MedicalProfile() {
         {(profile?.surgery_date || profile?.doctor_name) && (
           <>
             <SectionLabel>Care information</SectionLabel>
-            <div style={{ borderTop: '1px solid #98C890' }}>
+            <div style={{ borderTop: '1px solid #E4E4E7' }}>
               {profile?.surgery_date && (
                 <div
                   style={{
@@ -412,7 +412,7 @@ export default function MedicalProfile() {
                     justifyContent: 'space-between',
                     alignItems: 'baseline',
                     padding: '13px 0',
-                    borderBottom: '1px solid #98C890',
+                    borderBottom: '1px solid #E4E4E7',
                   }}
                 >
                   <span style={{ color: '#5C5A52', fontSize: '13px' }}>Surgery date</span>
@@ -432,7 +432,7 @@ export default function MedicalProfile() {
                     justifyContent: 'space-between',
                     alignItems: 'baseline',
                     padding: '13px 0',
-                    borderBottom: '1px solid #98C890',
+                    borderBottom: '1px solid #E4E4E7',
                   }}
                 >
                   <span style={{ color: '#5C5A52', fontSize: '13px' }}>Primary doctor</span>
@@ -447,7 +447,7 @@ export default function MedicalProfile() {
 
         {/* Emergency contacts */}
         <SectionLabel>Emergency contacts</SectionLabel>
-        <div style={{ borderTop: '1px solid #98C890', marginBottom: '36px' }}>
+        <div style={{ borderTop: '1px solid #E4E4E7', marginBottom: '36px' }}>
           {contacts.length > 0 ? (
             contacts.map((c: any, i: number) => (
               <div
@@ -458,7 +458,7 @@ export default function MedicalProfile() {
                   justifyContent: 'space-between',
                   gap: '16px',
                   padding: '13px 0',
-                  borderBottom: '1px solid #98C890',
+                  borderBottom: '1px solid #E4E4E7',
                 }}
               >
                 <div>

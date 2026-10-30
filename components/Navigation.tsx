@@ -9,7 +9,7 @@ import { trafficMultiplier } from '@/lib/hospitals'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const ACCENT = '#42623C'
 const RED = '#A33417'
 const GREEN = '#42623C'
@@ -19,7 +19,7 @@ const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty'
 const DEMO_ORIGIN: [number, number] = [19.1136, 72.8697] // Andheri East — demo mode only
 
 const USER_ARROW_HTML = `<div style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;">
-  <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(86,128,78,0.55));"></div>
+  <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:36px solid ${ACCENT};filter:drop-shadow(0 3px 8px rgba(20,20,19,0.55));"></div>
   <div style="position:absolute;top:19px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:20px solid white;"></div>
 </div>`
 
@@ -781,7 +781,7 @@ export default function Navigation({
             width: '68px',
             height: '68px',
             borderRadius: '20px',
-            background: 'rgba(86,128,78,0.09)',
+            background: 'rgba(20,20,19,0.09)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1084,7 +1084,7 @@ export default function Navigation({
                     gap: '13px',
                     padding: '12px 16px',
                     borderBottom: `1px solid ${BORDER}`,
-                    background: i === currentStep + 1 ? 'rgba(86,128,78,0.05)' : 'transparent',
+                    background: i === currentStep + 1 ? 'rgba(20,20,19,0.05)' : 'transparent',
                     opacity: i <= currentStep ? 0.4 : 1,
                   }}
                 >
@@ -1183,8 +1183,8 @@ export default function Navigation({
                   width: '42px',
                   height: '42px',
                   borderRadius: '20px',
-                  background: showSteps ? 'rgba(86,128,78,0.08)' : '#B3DDAC',
-                  border: `1px solid ${showSteps ? 'rgba(86,128,78,0.2)' : BORDER}`,
+                  background: showSteps ? 'rgba(20,20,19,0.08)' : '#FFFFFF',
+                  border: `1px solid ${showSteps ? 'rgba(20,20,19,0.2)' : BORDER}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1200,8 +1200,8 @@ export default function Navigation({
                   width: '42px',
                   height: '42px',
                   borderRadius: '20px',
-                  background: muted ? '#B3DDAC' : 'rgba(86,128,78,0.08)',
-                  border: `1px solid ${muted ? BORDER : 'rgba(86,128,78,0.2)'}`,
+                  background: muted ? '#FFFFFF' : 'rgba(20,20,19,0.08)',
+                  border: `1px solid ${muted ? BORDER : 'rgba(20,20,19,0.2)'}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

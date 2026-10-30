@@ -68,7 +68,7 @@ export default function CareTeamLogin() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         padding: '56px 24px 32px',
         display: 'flex',
         flexDirection: 'column',
@@ -81,7 +81,7 @@ export default function CareTeamLogin() {
           width: '36px',
           height: '36px',
           borderRadius: '14px',
-          background: '#F2F0E8',
+          background: '#F4F4F5',
           border: 'none',
           cursor: 'pointer',
           display: 'flex',
@@ -98,8 +98,8 @@ export default function CareTeamLogin() {
           width: '48px',
           height: '48px',
           borderRadius: '20px',
-          background: 'rgba(86,128,78,0.15)',
-          border: '1px solid rgba(86,128,78,0.25)',
+          background: 'rgba(20,20,19,0.15)',
+          border: '1px solid rgba(20,20,19,0.25)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -135,7 +135,7 @@ export default function CareTeamLogin() {
                 style={{
                   width: '100%',
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '16px 16px 16px 44px',
                   color: '#141413',
@@ -150,7 +150,7 @@ export default function CareTeamLogin() {
               style={{
                 width: '100%',
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '20px',
                 padding: '16px',
                 color: '#141413',
@@ -185,7 +185,7 @@ export default function CareTeamLogin() {
             style={{
               width: '100%',
               background: '#FFFFFF',
-              border: '1px solid #98C890',
+              border: '1px solid #E4E4E7',
               borderRadius: '20px',
               padding: '16px 16px 16px 44px',
               color: '#141413',
@@ -214,7 +214,7 @@ export default function CareTeamLogin() {
             style={{
               width: '100%',
               background: '#FFFFFF',
-              border: '1px solid #98C890',
+              border: '1px solid #E4E4E7',
               borderRadius: '20px',
               padding: '16px 16px 16px 44px',
               color: '#141413',
@@ -243,7 +243,7 @@ export default function CareTeamLogin() {
             style={{
               width: '100%',
               background: '#FFFFFF',
-              border: '1px solid #98C890',
+              border: '1px solid #E4E4E7',
               borderRadius: '20px',
               padding: '16px 16px 16px 44px',
               color: '#141413',
@@ -301,7 +301,7 @@ export default function CareTeamLogin() {
 
       <p
         style={{
-          color: '#C4BFB0',
+          color: '#E4E4E7',
           fontSize: '11px',
           textAlign: 'center',
           fontFamily: 'monospace',

@@ -7,11 +7,11 @@ import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { SITE_URL } from '@/lib/site'
 
-const PAGE = '#B3DDAC',
+const PAGE = '#FFFFFF',
   T1 = '#141413',
   T2 = '#3F3D36',
   T3 = '#6E6B5D',
-  LINE = '#E4E2DA',
+  LINE = '#E4E4E7',
   GREEN = '#3B5E35'
 const panel: React.CSSProperties = {
   background: '#FFFFFF',
@@ -209,7 +209,7 @@ export default function ConnectHealth() {
               fontFamily: 'inherit',
               fontSize: '12.5px',
               color: T1,
-              background: '#FBFAF6',
+              background: '#FAFAFA',
               border: `1px solid ${LINE}`,
               borderRadius: '6px',
               padding: '10px 12px',

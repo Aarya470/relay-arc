@@ -6,9 +6,9 @@ export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 const PAGE = '#57945C'
-const PANEL = '#EDF4EC'
+const PANEL = '#F4F4F5'
 const INK = '#141413'
-const ORANGE = '#D97757'
+const ORANGE = '#E4E4E7'
 
 export default function OpengraphImage() {
   return new ImageResponse(

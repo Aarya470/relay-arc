@@ -31,11 +31,11 @@ export default function NurseLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#B3DDAC] px-6 py-12 flex flex-col">
+    <div className="min-h-screen bg-[#FFFFFF] px-6 py-12 flex flex-col">
       <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={() => router.push('/login')}
-        className="w-9 h-9 rounded-xl bg-[#F2F0E8] flex items-center justify-center mb-10 self-start"
+        className="w-9 h-9 rounded-xl bg-[#F4F4F5] flex items-center justify-center mb-10 self-start"
       >
         <ArrowLeft size={16} className="text-[#5C5A52]" />
       </motion.button>
@@ -54,7 +54,7 @@ export default function NurseLogin() {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[#E4E4E7] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 
@@ -65,7 +65,7 @@ export default function NurseLogin() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[#E4E4E7] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 
@@ -79,7 +79,7 @@ export default function NurseLogin() {
               placeholder="Care team access code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[#E4E4E7] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function NurseLogin() {
           </motion.button>
         </div>
 
-        <p className="text-[#C4BFB0] text-xs text-center mt-6">
+        <p className="text-[#E4E4E7] text-xs text-center mt-6">
           Access code: <span className="font-mono">relay-nurse-2026</span>
         </p>
       </motion.div>

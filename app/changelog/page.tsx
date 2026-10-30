@@ -7,10 +7,10 @@ import { ArrowLeft } from 'lucide-react'
 const INK = '#141413',
   INK2 = '#5C5A52',
   INK3 = '#5C5A52'
-const BORDER = '#7EB382',
+const BORDER = '#E4E4E7',
   CREAM = '#4B8150'
 const GREEN_DEEP = '#42623C',
-  ORANGE = '#D97757',
+  ORANGE = '#E4E4E7',
   CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 
@@ -156,7 +156,7 @@ const ENTRIES: Entry[] = [
 export default function Changelog() {
   const router = useRouter()
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div style={{ background: '#FFFFFF', minHeight: '100dvh' }}>
       <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px' }}>
         <div
           style={{

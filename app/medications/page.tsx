@@ -9,19 +9,19 @@ import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG = '#B3DDAC'
+const BG = '#FFFFFF'
 const SURFACE = '#FFFFFF'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const ACCENT = '#42623C'
-const ACCENT_DIM = 'rgba(86,128,78,0.08)'
+const ACCENT_DIM = 'rgba(20,20,19,0.08)'
 const RED = '#A33417'
 const RED_DIM = 'rgba(163,52,23,0.07)'
 const GREEN = '#42623C'
-const GREEN_DIM = 'rgba(86,128,78,0.08)'
+const GREEN_DIM = 'rgba(20,20,19,0.08)'
 const AMBER = '#7C5200'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const SHADOW = 'none'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
@@ -326,7 +326,7 @@ export default function Medications() {
             style={{
               height: '112px',
               borderRadius: '12px',
-              background: '#98C890',
+              background: '#E4E4E7',
               marginBottom: '12px',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -416,7 +416,7 @@ export default function Medications() {
               height: '36px',
               borderRadius: '14px',
               background: ACCENT_DIM,
-              border: `1px solid rgba(86,128,78,0.14)`,
+              border: `1px solid rgba(20,20,19,0.14)`,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -812,7 +812,7 @@ export default function Medications() {
                             : dot.isFuture
                               ? `1.5px dashed ${BORDER}`
                               : isActive
-                                ? `1.5px solid rgba(86,128,78,0.3)`
+                                ? `1.5px solid rgba(20,20,19,0.3)`
                                 : `1.5px solid ${BORDER}`,
                           display: 'flex',
                           alignItems: 'center',
@@ -935,7 +935,7 @@ export default function Medications() {
                 height: '56px',
                 borderRadius: '12px',
                 background: ACCENT_DIM,
-                border: `1px solid rgba(86,128,78,0.14)`,
+                border: `1px solid rgba(20,20,19,0.14)`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -953,7 +953,7 @@ export default function Medications() {
                 color: ACCENT,
                 fontSize: '14px',
                 background: ACCENT_DIM,
-                border: `1px solid rgba(86,128,78,0.14)`,
+                border: `1px solid rgba(20,20,19,0.14)`,
                 borderRadius: '14px',
                 padding: '10px 20px',
                 cursor: 'pointer',
@@ -990,7 +990,7 @@ export default function Medications() {
                   height: '40px',
                   borderRadius: '12px',
                   background: ACCENT_DIM,
-                  border: `1px solid rgba(86,128,78,0.14)`,
+                  border: `1px solid rgba(20,20,19,0.14)`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1093,7 +1093,7 @@ export default function Medications() {
                         style={{
                           padding: '6px 12px',
                           background: med.times?.includes(t) ? ACCENT_DIM : SURFACE,
-                          border: `1px solid ${med.times?.includes(t) ? 'rgba(86,128,78,0.2)' : BORDER}`,
+                          border: `1px solid ${med.times?.includes(t) ? 'rgba(20,20,19,0.2)' : BORDER}`,
                           borderRadius: '14px',
                           color: med.times?.includes(t) ? ACCENT : T2,
                           fontSize: '12px',
@@ -1155,7 +1155,7 @@ export default function Medications() {
                         onClick={() => toggleTaken(medIndex, timeIndex)}
                         style={{
                           background: GREEN_DIM,
-                          border: `1px solid rgba(86,128,78,0.2)`,
+                          border: `1px solid rgba(20,20,19,0.2)`,
                           color: GREEN,
                           fontSize: '12px',
                           padding: '6px 14px',

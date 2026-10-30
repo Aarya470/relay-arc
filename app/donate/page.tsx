@@ -10,7 +10,7 @@ import Mark from '@/components/Mark'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#7EB382'
+const BORDER = '#E4E4E7'
 const RED = '#A33417'
 const GREEN = '#42623C'
 const ACCENT = '#42623C'
@@ -39,7 +39,7 @@ export default function Donate() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF' }}>
       <div
         style={{
           position: 'fixed',
@@ -47,7 +47,7 @@ export default function Donate() {
           left: 0,
           right: 0,
           height: '3px',
-          background: '#D97757',
+          background: '#E4E4E7',
           zIndex: 10,
         }}
       />
@@ -182,7 +182,7 @@ export default function Donate() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '10px',
-              background: '#D97757',
+              background: '#E4E4E7',
               color: '#141413',
               fontWeight: 600,
               fontSize: '14.5px',

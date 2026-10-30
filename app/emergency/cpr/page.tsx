@@ -8,7 +8,7 @@ import { emergencyNumber } from '@/lib/emergency-number'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const RED = '#A33417'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
@@ -99,7 +99,7 @@ export default function CprCoach() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         maxWidth: '560px',
         margin: '0 auto',
         width: '100%',
@@ -189,7 +189,7 @@ export default function CprCoach() {
               width: '170px',
               height: '170px',
               borderRadius: '50%',
-              background: running ? RED : '#B3DDAC',
+              background: running ? RED : '#FFFFFF',
               border: running ? 'none' : `2px solid ${BORDER}`,
               display: 'flex',
               flexDirection: 'column',

@@ -13,7 +13,7 @@ const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
-  border: '1px solid #D8D4C8',
+  border: '1px solid #E4E4E7',
   borderRadius: '12px',
   padding: '14px 16px',
   color: '#141413',
@@ -36,8 +36,8 @@ const RELATIONSHIPS = [
 ]
 
 const AVATAR_COLORS = [
-  { bg: 'rgba(86,128,78,0.15)', border: 'rgba(86,128,78,0.3)', text: '#42623C' },
-  { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
+  { bg: 'rgba(20,20,19,0.15)', border: 'rgba(20,20,19,0.3)', text: '#42623C' },
+  { bg: 'rgba(20,20,19,0.12)', border: 'rgba(20,20,19,0.25)', text: '#42623C' },
   { bg: 'rgba(163,52,23,0.12)', border: 'rgba(163,52,23,0.25)', text: '#A33417' },
   { bg: 'rgba(168,114,0,0.12)', border: 'rgba(168,114,0,0.25)', text: '#7C5200' },
   { bg: 'rgba(20,20,19,0.08)', border: 'rgba(20,20,19,0.18)', text: '#141413' },
@@ -121,14 +121,14 @@ export default function EmergencyContacts() {
 
   if (loading)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 16px 100px' }}>
+      <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '80px 16px 100px' }}>
         {[1, 2, 3].map((i) => (
           <Skeleton
             key={i}
             style={{
               height: '72px',
               borderRadius: '12px',
-              background: '#F2F0E8',
+              background: '#F4F4F5',
               marginBottom: '10px',
             }}
           />
@@ -137,9 +137,9 @@ export default function EmergencyContacts() {
     )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', paddingBottom: '80px' }}>
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #98C890' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #E4E4E7' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -149,8 +149,8 @@ export default function EmergencyContacts() {
               width: '36px',
               height: '36px',
               borderRadius: '14px',
-              background: '#F2F0E8',
-              border: '1px solid #D8D4C8',
+              background: '#F4F4F5',
+              border: '1px solid #E4E4E7',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -181,8 +181,8 @@ export default function EmergencyContacts() {
               width: '36px',
               height: '36px',
               borderRadius: '14px',
-              background: 'rgba(86,128,78,0.15)',
-              border: '1px solid rgba(86,128,78,0.3)',
+              background: 'rgba(20,20,19,0.15)',
+              border: '1px solid rgba(20,20,19,0.3)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -228,7 +228,7 @@ export default function EmergencyContacts() {
                 exit={{ opacity: 0, x: -20 }}
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '12px',
                   padding: '14px 16px',
                   display: 'flex',
@@ -291,8 +291,8 @@ export default function EmergencyContacts() {
                       width: '32px',
                       height: '32px',
                       borderRadius: '14px',
-                      background: '#F2F0E8',
-                      border: '1px solid #D8D4C8',
+                      background: '#F4F4F5',
+                      border: '1px solid #E4E4E7',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
@@ -383,7 +383,7 @@ export default function EmergencyContacts() {
               exit={{ opacity: 0, y: -8 }}
               style={{
                 background: '#FFFFFF',
-                border: '1px solid rgba(86,128,78,0.2)',
+                border: '1px solid rgba(20,20,19,0.2)',
                 borderRadius: '12px',
                 padding: '20px',
               }}
@@ -404,8 +404,8 @@ export default function EmergencyContacts() {
                     width: '30px',
                     height: '30px',
                     borderRadius: '14px',
-                    background: '#F2F0E8',
-                    border: '1px solid #D8D4C8',
+                    background: '#F4F4F5',
+                    border: '1px solid #E4E4E7',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -445,9 +445,9 @@ export default function EmergencyContacts() {
                         fontWeight: 600,
                         cursor: 'pointer',
                         background:
-                          newContact.relationship === r ? 'rgba(86,128,78,0.15)' : '#F2F0E8',
+                          newContact.relationship === r ? 'rgba(20,20,19,0.15)' : '#F4F4F5',
                         borderColor:
-                          newContact.relationship === r ? 'rgba(86,128,78,0.4)' : '#98C890',
+                          newContact.relationship === r ? 'rgba(20,20,19,0.4)' : '#E4E4E7',
                         color: newContact.relationship === r ? '#42623C' : '#5C5A52',
                       }}
                     >

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 const T1 = '#FFFFFF'
 const T2 = '#FFFFFF'
 const T3 = '#C8D4C9'
-const BORDER = '#7EB382'
+const BORDER = '#E4E4E7'
 const RED = '#A33417'
 const GREEN = '#42623C'
 const AMBER = '#7C5200'
@@ -58,7 +58,7 @@ export default function StatusPage() {
           left: 0,
           right: 0,
           height: '3px',
-          background: '#D97757',
+          background: '#E4E4E7',
           zIndex: 10,
         }}
       />

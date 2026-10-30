@@ -56,19 +56,19 @@ export default function NurseDashboard() {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-[#B3DDAC] px-4 py-14 space-y-3">
+      <div className="min-h-screen bg-[#FFFFFF] px-4 py-14 space-y-3">
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-20 w-full rounded-3xl bg-[#F2F0E8]" />
+          <Skeleton key={i} className="h-20 w-full rounded-3xl bg-[#F4F4F5]" />
         ))}
       </div>
     )
 
   return (
-    <div className="min-h-screen bg-[#B3DDAC] pb-8">
+    <div className="min-h-screen bg-[#FFFFFF] pb-8">
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#E4E4E7',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',
@@ -89,13 +89,13 @@ export default function NurseDashboard() {
       )}
 
       {/* Header */}
-      <div className="px-5 pt-14 pb-4 border-b border-[#EDEAE0]">
+      <div className="px-5 pt-14 pb-4 border-b border-[#F4F4F5]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => (selected ? setSelected(null) : router.push('/dashboard'))}
-              className="w-9 h-9 rounded-xl bg-[#F2F0E8] flex items-center justify-center"
+              className="w-9 h-9 rounded-xl bg-[#F4F4F5] flex items-center justify-center"
             >
               <ArrowLeft size={16} className="text-[#5C5A52]" />
             </motion.button>
@@ -115,7 +115,7 @@ export default function NurseDashboard() {
               </span>
             )}
             {!selected && (
-              <span className="bg-[#F2F0E8] border border-[#98C890] text-[#5C5A52] text-xs px-2.5 py-1 rounded-full font-mono">
+              <span className="bg-[#F4F4F5] border border-[#E4E4E7] text-[#5C5A52] text-xs px-2.5 py-1 rounded-full font-mono">
                 {patients.length} pts
               </span>
             )}
@@ -183,7 +183,7 @@ export default function NurseDashboard() {
                   transition={{ delay: i * 0.04 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setSelected(patient)}
-                  className="w-full bg-white border border-[#98C890] rounded-2xl p-4 flex items-center gap-3 hover:border-[#C4BFB0] transition text-left"
+                  className="w-full bg-white border border-[#E4E4E7] rounded-2xl p-4 flex items-center gap-3 hover:border-[#E4E4E7] transition text-left"
                 >
                   <div className="w-10 h-10 rounded-2xl bg-[#56804E]/15 border border-[#56804E]/20 flex items-center justify-center text-[#42623C] font-bold text-sm flex-shrink-0">
                     {patient.full_name?.[0]}
@@ -201,10 +201,10 @@ export default function NurseDashboard() {
                           ? 'bg-[#A33417]'
                           : patientCheckins.length > 0
                             ? 'bg-[#42623C]'
-                            : 'bg-[#D8D4C8]'
+                            : 'bg-[#E4E4E7]'
                       }`}
                     />
-                    <ChevronRight size={14} className="text-[#C4BFB0]" />
+                    <ChevronRight size={14} className="text-[#E4E4E7]" />
                   </div>
                 </motion.button>
               )
@@ -226,7 +226,7 @@ export default function NurseDashboard() {
             className="px-4 py-4 space-y-3"
           >
             {/* Patient header card */}
-            <div className="bg-white border border-[#98C890] rounded-3xl p-4">
+            <div className="bg-white border border-[#E4E4E7] rounded-3xl p-4">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-2xl bg-[#56804E]/15 border border-[#56804E]/20 flex items-center justify-center text-[#42623C] font-bold text-lg">
                   {selected.full_name?.[0]}
@@ -244,7 +244,7 @@ export default function NurseDashboard() {
                   { label: 'Allergies', value: selected.allergies || 'None', red: true },
                   { label: 'Surgery', value: formatDate(selected.surgery_date) },
                 ].map((item, i) => (
-                  <div key={i} className="bg-[#B3DDAC] rounded-xl p-2.5">
+                  <div key={i} className="bg-[#FFFFFF] rounded-xl p-2.5">
                     <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-1">
                       {item.label}
                     </p>
@@ -259,7 +259,7 @@ export default function NurseDashboard() {
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-1 bg-white border border-[#98C890] rounded-2xl p-1">
+            <div className="flex gap-1 bg-white border border-[#E4E4E7] rounded-2xl p-1">
               {['overview', 'checkins', 'medications'].map((t) => (
                 <button
                   key={t}
@@ -278,14 +278,14 @@ export default function NurseDashboard() {
             {/* Tab content */}
             {tab === 'overview' && (
               <div className="space-y-3">
-                <div className="bg-white border border-[#98C890] rounded-2xl p-4">
+                <div className="bg-white border border-[#E4E4E7] rounded-2xl p-4">
                   <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">
                     Emergency contacts
                   </p>
                   {selected.emergency_contacts?.map((c: any, i: number) => (
                     <div
                       key={i}
-                      className="flex items-center gap-3 py-2 border-b border-[#EDEAE0] last:border-0"
+                      className="flex items-center gap-3 py-2 border-b border-[#F4F4F5] last:border-0"
                     >
                       <div className="w-8 h-8 rounded-xl bg-[#56804E]/10 flex items-center justify-center text-[#42623C] text-xs font-bold">
                         {c.name?.[0]}
@@ -303,7 +303,7 @@ export default function NurseDashboard() {
             )}
 
             {tab === 'checkins' && (
-              <div className="bg-white border border-[#98C890] rounded-2xl p-4">
+              <div className="bg-white border border-[#E4E4E7] rounded-2xl p-4">
                 <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">
                   Check-in history
                 </p>
@@ -313,7 +313,7 @@ export default function NurseDashboard() {
                 {getCheckins(selected.id)
                   .slice(0, 10)
                   .map((c, i) => (
-                    <div key={i} className="py-2.5 border-b border-[#EDEAE0] last:border-0">
+                    <div key={i} className="py-2.5 border-b border-[#F4F4F5] last:border-0">
                       <p className="text-[#5C5A52] font-mono text-xs mb-1">
                         {new Date(c.created_at).toLocaleString()}
                       </p>
@@ -324,7 +324,7 @@ export default function NurseDashboard() {
             )}
 
             {tab === 'medications' && (
-              <div className="bg-white border border-[#98C890] rounded-2xl p-4">
+              <div className="bg-white border border-[#E4E4E7] rounded-2xl p-4">
                 <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">
                   Medications
                 </p>
@@ -334,7 +334,7 @@ export default function NurseDashboard() {
                 {selected.medications?.map((m: any, i: number) => (
                   <div
                     key={i}
-                    className="flex justify-between items-center py-2.5 border-b border-[#EDEAE0] last:border-0"
+                    className="flex justify-between items-center py-2.5 border-b border-[#F4F4F5] last:border-0"
                   >
                     <div>
                       <p className="text-[#141413] text-sm font-medium">{m.name}</p>

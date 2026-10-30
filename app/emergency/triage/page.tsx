@@ -17,7 +17,7 @@ function getPainColor(n: number): string {
 }
 
 function getPainBg(n: number): string {
-  if (n <= 5) return 'rgba(86,128,78,0.12)'
+  if (n <= 5) return 'rgba(20,20,19,0.12)'
   if (n <= 8) return 'rgba(168,114,0,0.12)'
   return 'rgba(163,52,23,0.12)'
 }
@@ -70,7 +70,7 @@ export default function TriagePage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -118,8 +118,8 @@ export default function TriagePage() {
             width: '36px',
             height: '36px',
             borderRadius: '14px',
-            background: '#F2F0E8',
-            border: '1px solid #D8D4C8',
+            background: '#F4F4F5',
+            border: '1px solid #E4E4E7',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -136,7 +136,7 @@ export default function TriagePage() {
             margin: '0 14px',
             height: '4px',
             borderRadius: '14px',
-            background: '#98C890',
+            background: '#E4E4E7',
             overflow: 'hidden',
           }}
         >
@@ -159,7 +159,7 @@ export default function TriagePage() {
                   width: isActive ? '18px' : '6px',
                   height: '6px',
                   borderRadius: '3px',
-                  background: isActive || isDone ? '#42623C' : '#D8D4C8',
+                  background: isActive || isDone ? '#42623C' : '#E4E4E7',
                   transition: 'all 0.3s ease',
                 }}
               />
@@ -222,7 +222,7 @@ export default function TriagePage() {
                       height: '56px',
                       borderRadius: '12px',
                       background: pain === n ? getPainBg(n) : '#FFFFFF',
-                      border: `1.5px solid ${pain === n ? getPainColor(n) : '#F2F0E8'}`,
+                      border: `1.5px solid ${pain === n ? getPainColor(n) : '#F4F4F5'}`,
                       color: getPainColor(n),
                       fontSize: '20px',
                       fontWeight: 800,
@@ -311,7 +311,7 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: '12px',
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(86,128,78,0.25)',
+                    border: '1.5px solid rgba(20,20,19,0.25)',
                     cursor: 'pointer',
                     textAlign: 'left',
                     boxShadow: '0 0 0 0 transparent',
@@ -397,7 +397,7 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: '12px',
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(86,128,78,0.25)',
+                    border: '1.5px solid rgba(20,20,19,0.25)',
                     cursor: 'pointer',
                     textAlign: 'left',
                   }}
@@ -545,8 +545,8 @@ export default function TriagePage() {
                 style={{
                   padding: '16px',
                   borderRadius: '12px',
-                  background: '#F2F0E8',
-                  border: '1px solid #D8D4C8',
+                  background: '#F4F4F5',
+                  border: '1px solid #E4E4E7',
                   color: '#5C5A52',
                   fontSize: '14px',
                   fontWeight: 600,
@@ -657,11 +657,11 @@ export default function TriagePage() {
                   borderRadius: '12px',
                   background: '#42623C',
                   border: 'none',
-                  color: '#B3DDAC',
+                  color: '#FFFFFF',
                   fontSize: '15px',
                   fontWeight: 700,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 20px rgba(86,128,78,0.28)',
+                  boxShadow: '0 4px 20px rgba(20,20,19,0.28)',
                 }}
               >
                 Navigate to nearest hospital
@@ -680,12 +680,12 @@ export default function TriagePage() {
             >
               <div
                 style={{
-                  background: 'rgba(86,128,78,0.07)',
-                  border: '1.5px solid rgba(86,128,78,0.20)',
+                  background: 'rgba(20,20,19,0.07)',
+                  border: '1.5px solid rgba(20,20,19,0.20)',
                   borderRadius: '12px',
                   padding: '24px',
                   marginBottom: '16px',
-                  boxShadow: '0 6px 32px rgba(86,128,78,0.08)',
+                  boxShadow: '0 6px 32px rgba(20,20,19,0.08)',
                 }}
               >
                 <div
@@ -743,12 +743,12 @@ export default function TriagePage() {
                   borderRadius: '12px',
                   background: '#42623C',
                   border: 'none',
-                  color: '#B3DDAC',
+                  color: '#FFFFFF',
                   fontSize: '15px',
                   fontWeight: 700,
                   cursor: 'pointer',
                   marginBottom: '10px',
-                  boxShadow: '0 4px 20px rgba(86,128,78,0.26)',
+                  boxShadow: '0 4px 20px rgba(20,20,19,0.26)',
                 }}
               >
                 Go to hospital
@@ -761,8 +761,8 @@ export default function TriagePage() {
                 style={{
                   padding: '16px',
                   borderRadius: '12px',
-                  background: '#F2F0E8',
-                  border: '1px solid #D8D4C8',
+                  background: '#F4F4F5',
+                  border: '1px solid #E4E4E7',
                   color: '#5C5A52',
                   fontSize: '14px',
                   fontWeight: 600,

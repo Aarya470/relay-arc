@@ -14,7 +14,7 @@ const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 const inputStyle: React.CSSProperties = {
   width: '72px',
   background: '#FFFFFF',
-  border: '1.5px solid #D8D4C8',
+  border: '1.5px solid #E4E4E7',
   borderRadius: '14px',
   padding: '12px',
   color: '#141413',
@@ -93,10 +93,10 @@ function statusForValue(key: string, val: number | null) {
 }
 
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
-  ok: { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
+  ok: { bg: 'rgba(20,20,19,0.12)', border: 'rgba(20,20,19,0.25)', text: '#42623C' },
   high: { bg: 'rgba(163,52,23,0.12)', border: 'rgba(163,52,23,0.28)', text: '#A33417' },
   low: { bg: 'rgba(168,114,0,0.12)', border: 'rgba(168,114,0,0.28)', text: '#7C5200' },
-  empty: { bg: '#F2F0E8', border: '#F2F0E8', text: '#5C5A52' },
+  empty: { bg: '#F4F4F5', border: '#F4F4F5', text: '#5C5A52' },
 }
 
 // ─── SparklineInner ───────────────────────────────────────────────────────────
@@ -172,7 +172,7 @@ function SparklineInner({ data, color, width, height, normalRange }: SparklineIn
           y={bandTop}
           width={innerW}
           height={Math.max(0, bandBot - bandTop)}
-          fill="rgba(86,128,78,0.08)"
+          fill="rgba(20,20,19,0.08)"
           rx="2"
         />
       )}
@@ -236,7 +236,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       transition={{ type: 'spring', stiffness: 280, damping: 22 }}
       style={{
         background: '#FFFFFF',
-        border: '1px solid #98C890',
+        border: '1px solid #E4E4E7',
         borderRadius: '12px',
         padding: '16px',
         display: 'flex',
@@ -364,10 +364,10 @@ function TimeRangeSelector({
       style={{
         display: 'flex',
         gap: '3px',
-        background: '#F2F0E8',
+        background: '#F4F4F5',
         borderRadius: '14px',
         padding: '3px',
-        border: '1px solid #98C890',
+        border: '1px solid #E4E4E7',
       }}
     >
       {opts.map((opt) => (
@@ -530,11 +530,11 @@ export default function VitalsPage() {
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', paddingBottom: '80px' }}>
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#E4E4E7',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',
@@ -631,7 +631,7 @@ export default function VitalsPage() {
         <div
           style={{
             background: '#FFFFFF',
-            border: '1px solid #98C890',
+            border: '1px solid #E4E4E7',
             borderRadius: '12px',
             padding: '16px',
           }}
@@ -649,7 +649,7 @@ export default function VitalsPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingBottom: '14px',
-              borderBottom: '1px solid #EDEAE0',
+              borderBottom: '1px solid #F4F4F5',
               marginBottom: '14px',
             }}
           >
@@ -683,7 +683,7 @@ export default function VitalsPage() {
                 aria-label="Heart rate in beats per minute"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.heart_rate ? 'rgba(163,52,23,0.35)' : '#98C890',
+                  borderColor: vitals.heart_rate ? 'rgba(163,52,23,0.35)' : '#E4E4E7',
                 }}
                 placeholder=". "
                 value={vitals.heart_rate}
@@ -709,7 +709,7 @@ export default function VitalsPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingBottom: '14px',
-              borderBottom: '1px solid #EDEAE0',
+              borderBottom: '1px solid #F4F4F5',
               marginBottom: '14px',
             }}
           >
@@ -719,8 +719,8 @@ export default function VitalsPage() {
                   width: '34px',
                   height: '34px',
                   borderRadius: '14px',
-                  background: 'rgba(86,128,78,0.12)',
-                  border: '1px solid rgba(86,128,78,0.20)',
+                  background: 'rgba(20,20,19,0.12)',
+                  border: '1px solid rgba(20,20,19,0.20)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -745,7 +745,7 @@ export default function VitalsPage() {
                 aria-label="Systolic blood pressure"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.systolic ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  borderColor: vitals.systolic ? 'rgba(20,20,19,0.35)' : '#E4E4E7',
                   width: '62px',
                   fontSize: '18px',
                 }}
@@ -761,7 +761,7 @@ export default function VitalsPage() {
                 aria-label="Diastolic blood pressure"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.diastolic ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  borderColor: vitals.diastolic ? 'rgba(20,20,19,0.35)' : '#E4E4E7',
                   width: '62px',
                   fontSize: '18px',
                 }}
@@ -779,7 +779,7 @@ export default function VitalsPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingBottom: '14px',
-              borderBottom: '1px solid #EDEAE0',
+              borderBottom: '1px solid #F4F4F5',
               marginBottom: '14px',
             }}
           >
@@ -789,8 +789,8 @@ export default function VitalsPage() {
                   width: '34px',
                   height: '34px',
                   borderRadius: '14px',
-                  background: 'rgba(86,128,78,0.12)',
-                  border: '1px solid rgba(86,128,78,0.20)',
+                  background: 'rgba(20,20,19,0.12)',
+                  border: '1px solid rgba(20,20,19,0.20)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -813,7 +813,7 @@ export default function VitalsPage() {
                 aria-label="Oxygen saturation as a percentage"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.oxygen_sat ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  borderColor: vitals.oxygen_sat ? 'rgba(20,20,19,0.35)' : '#E4E4E7',
                 }}
                 placeholder=". "
                 value={vitals.oxygen_sat}
@@ -864,7 +864,7 @@ export default function VitalsPage() {
                 aria-label="Respiratory rate in breaths per minute"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : '#98C890',
+                  borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : '#E4E4E7',
                 }}
                 placeholder=". "
                 value={vitals.resp_rate}
@@ -1013,7 +1013,7 @@ export default function VitalsPage() {
               <div
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '12px',
                   padding: '36px 16px',
                   textAlign: 'center',

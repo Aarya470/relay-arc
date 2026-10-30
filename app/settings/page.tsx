@@ -24,14 +24,14 @@ const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 
 const card: React.CSSProperties = {
   background: '#FFFFFF',
-  border: '1px solid #98C890',
+  border: '1px solid #E4E4E7',
   borderRadius: '12px',
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
-  border: '1px solid #D8D4C8',
+  border: '1px solid #E4E4E7',
   borderRadius: '12px',
   padding: '14px 16px',
   color: '#141413',
@@ -108,7 +108,7 @@ export default function Settings() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: '#FFFFFF',
           padding: '80px 20px 100px',
           display: 'flex',
           flexDirection: 'column',
@@ -118,7 +118,7 @@ export default function Settings() {
         {[1, 2, 3, 4].map((i) => (
           <Skeleton
             key={i}
-            style={{ height: '56px', borderRadius: '12px', background: '#F2F0E8' }}
+            style={{ height: '56px', borderRadius: '12px', background: '#F4F4F5' }}
           />
         ))}
       </div>
@@ -153,7 +153,7 @@ export default function Settings() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         paddingBottom: '90px',
         maxWidth: '640px',
         margin: '0 auto',
@@ -221,9 +221,9 @@ export default function Settings() {
         >
           Profile
         </p>
-        <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
+        <div style={{ borderTop: '1px solid #E4E4E7', marginBottom: '32px' }}>
           {fields.map((f) => (
-            <div key={f.key} style={{ borderBottom: '1px solid #98C890' }}>
+            <div key={f.key} style={{ borderBottom: '1px solid #E4E4E7' }}>
               {editing === f.key ? (
                 <div style={{ padding: '16px 0' }}>
                   <p
@@ -287,7 +287,7 @@ export default function Settings() {
                       style={{
                         flex: 1,
                         background: 'none',
-                        border: '1px solid #D8D4C8',
+                        border: '1px solid #E4E4E7',
                         color: '#5C5A52',
                         fontWeight: 500,
                         fontSize: '13px',
@@ -324,14 +324,14 @@ export default function Settings() {
                   <p
                     style={{
                       flex: 1,
-                      color: f.value ? '#141413' : '#C4BFB0',
+                      color: f.value ? '#141413' : '#E4E4E7',
                       fontSize: '14.5px',
                       fontWeight: f.value ? 600 : 400,
                     }}
                   >
                     {f.value || 'Tap to add'}
                   </p>
-                  <ChevronRight size={13} color="#C4BFB0" style={{ alignSelf: 'center' }} />
+                  <ChevronRight size={13} color="#E4E4E7" style={{ alignSelf: 'center' }} />
                 </motion.button>
               )}
             </div>
@@ -350,7 +350,7 @@ export default function Settings() {
         >
           Data
         </p>
-        <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
+        <div style={{ borderTop: '1px solid #E4E4E7', marginBottom: '32px' }}>
           {[
             { label: 'Health history', sub: 'Past check-ins and emergencies', path: '/history' },
             { label: 'Vitals check', sub: 'Pulse, breathing and your NEWS2 sheet', path: '/check' },
@@ -373,7 +373,7 @@ export default function Settings() {
                 gap: '14px',
                 background: 'none',
                 border: 'none',
-                borderBottom: '1px solid #98C890',
+                borderBottom: '1px solid #E4E4E7',
                 cursor: 'pointer',
                 textAlign: 'left',
               }}
@@ -390,7 +390,7 @@ export default function Settings() {
                 </p>
                 <p style={{ color: '#5C5A52', fontSize: '12.5px', marginTop: '2px' }}>{item.sub}</p>
               </div>
-              <ChevronRight size={13} color="#C4BFB0" />
+              <ChevronRight size={13} color="#E4E4E7" />
             </motion.button>
           ))}
         </div>
@@ -407,7 +407,7 @@ export default function Settings() {
         >
           Account
         </p>
-        <div style={{ borderTop: '1px solid #98C890' }}>
+        <div style={{ borderTop: '1px solid #E4E4E7' }}>
           <motion.button
             whileTap={{ scale: 0.995 }}
             onClick={signOut}
@@ -419,7 +419,7 @@ export default function Settings() {
               gap: '10px',
               background: 'none',
               border: 'none',
-              borderBottom: '1px solid #98C890',
+              borderBottom: '1px solid #E4E4E7',
               cursor: 'pointer',
               textAlign: 'left',
             }}

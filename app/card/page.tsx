@@ -11,11 +11,11 @@ import { SITE_URL } from '@/lib/site'
 const INK = '#141413',
   INK2 = '#5C5A52',
   INK3 = '#5C5A52'
-const CREAM = '#B3DDAC',
-  BORDER = '#98C890',
+const CREAM = '#FFFFFF',
+  BORDER = '#E4E4E7',
   WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757',
+const ORANGE = '#E4E4E7',
   CRIT = '#A33417'
 const mono = 'var(--font-mono, monospace)'
 

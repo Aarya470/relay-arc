@@ -102,7 +102,7 @@ export default function EmergencyHistoryPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: '#FFFFFF',
           padding: '80px 20px 40px',
           display: 'flex',
           flexDirection: 'column',
@@ -115,7 +115,7 @@ export default function EmergencyHistoryPage() {
             style={{
               height: '72px',
               borderRadius: '12px',
-              background: '#F2F0E8',
+              background: '#F4F4F5',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
           />
@@ -125,7 +125,7 @@ export default function EmergencyHistoryPage() {
     )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '40px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', paddingBottom: '40px' }}>
       {/* Header */}
       <div
         style={{
@@ -144,8 +144,8 @@ export default function EmergencyHistoryPage() {
             width: '36px',
             height: '36px',
             borderRadius: '14px',
-            background: '#F2F0E8',
-            border: '1px solid #D8D4C8',
+            background: '#F4F4F5',
+            border: '1px solid #E4E4E7',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -260,7 +260,7 @@ export default function EmergencyHistoryPage() {
                         whileTap={{ scale: 0.99 }}
                         style={{
                           background: '#FFFFFF',
-                          border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(163,52,23,0.20)'}`,
+                          border: `1px solid ${resolved ? '#F4F4F5' : 'rgba(163,52,23,0.20)'}`,
                           borderRadius: '12px',
                           boxShadow: resolved ? 'none' : '0 2px 16px rgba(163,52,23,0.08)',
                           padding: '14px 16px',
@@ -275,7 +275,7 @@ export default function EmergencyHistoryPage() {
                             width: '40px',
                             height: '40px',
                             borderRadius: '12px',
-                            background: resolved ? '#F2F0E8' : 'rgba(163,52,23,0.12)',
+                            background: resolved ? '#F4F4F5' : 'rgba(163,52,23,0.12)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -315,13 +315,13 @@ export default function EmergencyHistoryPage() {
                           {resolved ? (
                             <span
                               style={{
-                                background: 'rgba(86,128,78,0.12)',
+                                background: 'rgba(20,20,19,0.12)',
                                 color: '#42623C',
                                 fontSize: '11px',
                                 fontWeight: 600,
                                 padding: '3px 9px',
                                 borderRadius: '14px',
-                                border: '1px solid rgba(86,128,78,0.20)',
+                                border: '1px solid rgba(20,20,19,0.20)',
                               }}
                             >
                               Resolved

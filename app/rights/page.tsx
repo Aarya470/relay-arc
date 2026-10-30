@@ -12,19 +12,19 @@ const INK = '#141413',
   INK3 = '#5C5A52'
 const WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757'
+const ORANGE = '#E4E4E7'
 
 // The page, and text ON it.
-const PAGE = '#B3DDAC'
+const PAGE = '#FFFFFF'
 const ON = '#141413' // ink, 12.16:1
 const ON_3 = '#5C5A52' // 4.56:1, passes for body text now
-const RULE = '#7EB382' // hairline, non-text
+const RULE = '#E4E4E7' // hairline, non-text
 const CORAL = '#A33417' // ORANGE is 2.96:1 on light and unusable as text
 
 // A light tint for the block inside each white card. This is the job the old
 // CREAM constant used to do, kept separate now that the page itself is dark.
 const TINT = '#EDF2E9'
-const BORDER = '#DCE6D6' // card-internal hairline, on white
+const BORDER = '#F4F4F5' // card-internal hairline, on white
 const mono = 'var(--font-mono, monospace)'
 
 export default function RightsPage() {
@@ -199,7 +199,7 @@ export default function RightsPage() {
               {r.action && (
                 <div
                   style={{
-                    background: '#F1F3EC',
+                    background: '#F4F4F5',
                     borderLeft: `2px solid ${GREEN_DEEP}`,
                     borderRadius: 6,
                     padding: '12px 14px',

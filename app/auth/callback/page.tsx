@@ -11,7 +11,7 @@ const T1 = '#141413',
   T3 = '#5C5A52'
 const ACCENT = '#42623C',
   RED = '#A33417',
-  BORDER = '#98C890'
+  BORDER = '#E4E4E7'
 const mono = 'var(--font-mono, monospace)'
 
 type State = 'working' | 'confirmed' | 'error'
@@ -76,7 +76,7 @@ export default function AuthCallback() {
   }, [router])
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
       <div style={{ maxWidth: 380, margin: '0 auto', paddingTop: 88, paddingBottom: 48 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 56 }}>
           <Mark size={26} />

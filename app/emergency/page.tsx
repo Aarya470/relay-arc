@@ -33,7 +33,7 @@ import { notch } from '@/lib/shape'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG = '#FFFFFF'
-const SURFACE = '#B3DDAC'
+const SURFACE = '#FFFFFF'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
@@ -41,7 +41,7 @@ const RED = '#A33417'
 const RED_DIM = 'rgba(163,52,23,0.07)'
 const RED_MID = 'rgba(163,52,23,0.14)'
 const ACCENT = '#42623C'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 
 const TYPES = [
   {
@@ -618,7 +618,7 @@ export default function Emergency() {
                     {es ? ES.starting : 'Starting…'}
                   </span>
                 ) : (
-                  <ChevronRight size={16} color="#C4BFB0" style={{ flexShrink: 0 }} />
+                  <ChevronRight size={16} color="#E4E4E7" style={{ flexShrink: 0 }} />
                 )}
               </motion.button>
             )

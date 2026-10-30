@@ -44,7 +44,7 @@ function valueColor(value: number, inverted: boolean): string {
 
 function valueBg(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
-  if (normalized <= 3) return 'rgba(86,128,78,0.12)'
+  if (normalized <= 3) return 'rgba(20,20,19,0.12)'
   if (normalized <= 6) return 'rgba(168,114,0,0.12)'
   return 'rgba(163,52,23,0.12)'
 }
@@ -156,7 +156,7 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
           position: 'relative',
           height: '8px',
           borderRadius: '14px',
-          background: '#EDEAE0',
+          background: '#F4F4F5',
           cursor: 'pointer',
           touchAction: 'none',
           outlineOffset: '6px',
@@ -272,7 +272,7 @@ function DayCard({ log }: { log: SymptomLog }) {
         flexShrink: 0,
         width: '80px',
         background: '#FFFFFF',
-        border: '1px solid #98C890',
+        border: '1px solid #E4E4E7',
         borderRadius: '12px',
         padding: '12px 10px',
         display: 'flex',
@@ -421,7 +421,7 @@ export default function SymptomsPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         paddingBottom: '80px',
       }}
     >
@@ -434,7 +434,7 @@ export default function SymptomsPage() {
           background: 'rgba(244,245,247,0.92)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          borderBottom: '1px solid #98C890',
+          borderBottom: '1px solid #E4E4E7',
           padding: '0 20px',
         }}
       >
@@ -456,7 +456,7 @@ export default function SymptomsPage() {
               height: '38px',
               borderRadius: '14px',
               background: '#FFFFFF',
-              border: '1px solid #98C890',
+              border: '1px solid #E4E4E7',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -492,7 +492,7 @@ export default function SymptomsPage() {
           transition={{ type: 'spring', stiffness: 320, damping: 28 }}
           style={{
             background: '#FFFFFF',
-            border: '1px solid #98C890',
+            border: '1px solid #E4E4E7',
             borderRadius: '12px',
             padding: '20px 20px 16px',
             marginBottom: '16px',
@@ -611,7 +611,7 @@ export default function SymptomsPage() {
           transition={{ delay: 0.18, type: 'spring', stiffness: 320, damping: 28 }}
           style={{
             background: '#FFFFFF',
-            border: '1px solid #98C890',
+            border: '1px solid #E4E4E7',
             borderRadius: '12px',
             padding: '16px',
             marginBottom: '16px',
@@ -641,13 +641,13 @@ export default function SymptomsPage() {
             rows={3}
             style={{
               width: '100%',
-              border: '1.5px solid #98C890',
+              border: '1.5px solid #E4E4E7',
               borderRadius: '14px',
               padding: '10px 12px',
               // 16px so mobile Safari does not zoom on focus. See app/login.
               fontSize: '16px',
               color: '#141413',
-              background: '#B3DDAC',
+              background: '#FFFFFF',
               resize: 'none',
               outline: 'none',
               fontFamily: 'inherit',
@@ -711,8 +711,8 @@ export default function SymptomsPage() {
             letterSpacing: '0.2px',
             opacity: submitting ? 0.7 : 1,
             boxShadow: submitted
-              ? '0 4px 20px rgba(86,128,78,0.25)'
-              : '0 4px 20px rgba(86,128,78,0.25)',
+              ? '0 4px 20px rgba(20,20,19,0.25)'
+              : '0 4px 20px rgba(20,20,19,0.25)',
           }}
         >
           <AnimatePresence mode="wait">
@@ -751,7 +751,7 @@ export default function SymptomsPage() {
             transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 28 }}
             style={{
               background: '#FFFFFF',
-              border: '1px solid #98C890',
+              border: '1px solid #E4E4E7',
               borderRadius: '12px',
               padding: '20px',
               marginBottom: '20px',
@@ -848,7 +848,7 @@ export default function SymptomsPage() {
                     width: '80px',
                     height: '108px',
                     background: '#FFFFFF',
-                    border: '1px solid #EDEAE0',
+                    border: '1px solid #F4F4F5',
                     borderRadius: '12px',
                     animation: 'pulse 1.5s infinite',
                   }}
@@ -859,7 +859,7 @@ export default function SymptomsPage() {
             <div
               style={{
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '12px',
                 padding: '28px 20px',
                 textAlign: 'center',
@@ -915,7 +915,7 @@ export default function SymptomsPage() {
           50%       { opacity: 0.3; }
         }
         textarea::placeholder { color: #5C5A52; }
-        textarea:focus { border-color: rgba(86,128,78,0.4) !important; box-shadow: 0 0 0 3px rgba(86,128,78,0.08); }
+        textarea:focus { border-color: rgba(20,20,19,0.4) !important; box-shadow: 0 0 0 3px rgba(20,20,19,0.08); }
       `}</style>
     </div>
   )

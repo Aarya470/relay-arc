@@ -14,7 +14,7 @@ const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const ACCENT = '#42623C'
 const RED = '#A33417'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 
 const mono = 'var(--font-mono, monospace)'
 
@@ -150,7 +150,7 @@ export default function Login() {
   })
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}

@@ -81,10 +81,10 @@ const EMERGENCY_LABELS: Record<string, string> = {
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  bg: '#B3DDAC',
+  bg: '#FFFFFF',
   card: '#FFFFFF',
   card2: '#FFFFFF',
-  border: '#F2F0E8',
+  border: '#F4F4F5',
   textPrimary: '#141413',
   textSec: '#5C5A52',
   textMuted: '#5C5A52',
@@ -92,9 +92,9 @@ const T = {
   redSoft: 'rgba(163,52,23,0.12)',
   redGlow: 'none',
   green: '#42623C',
-  greenSoft: 'rgba(86,128,78,0.12)',
+  greenSoft: 'rgba(20,20,19,0.12)',
   blue: '#42623C',
-  blueSoft: 'rgba(86,128,78,0.12)',
+  blueSoft: 'rgba(20,20,19,0.12)',
   amber: '#7C5200',
 } as const
 
@@ -173,7 +173,7 @@ function CancelConfirmSheet({
                 style={{
                   flex: 1,
                   padding: '15px',
-                  background: '#F2F0E8',
+                  background: '#F4F4F5',
                   borderRadius: '12px',
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
@@ -1062,13 +1062,13 @@ function RoutingPage() {
           whileTap={{ scale: 0.97 }}
           onClick={() => setShowCancelConfirm(true)}
           style={{
-            background: '#F2F0E8',
+            background: '#F4F4F5',
             color: T.textMuted,
             fontWeight: 500,
             fontSize: '13px',
             padding: '11px 24px',
             borderRadius: '12px',
-            border: `1px solid #98C890`,
+            border: `1px solid #E4E4E7`,
             cursor: 'pointer',
           }}
         >
@@ -1090,7 +1090,7 @@ function RoutingPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
         overflowX: 'hidden',
@@ -2225,7 +2225,7 @@ function RoutingPage() {
                   onClick={() => setNavMode(false)}
                   aria-label="Exit navigation"
                   style={{
-                    background: '#B3DDAC',
+                    background: '#FFFFFF',
                     border: `1px solid ${T.border}`,
                     borderRadius: '14px',
                     width: '36px',
@@ -2324,7 +2324,7 @@ function responderInfo(profile: any): [string, string][] {
 
 export default function RoutingPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#B3DDAC' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#FFFFFF' }} />}>
       <RoutingPage />
     </Suspense>
   )

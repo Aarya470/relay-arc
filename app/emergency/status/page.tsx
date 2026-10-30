@@ -61,7 +61,7 @@ export default function EmergencyStatus() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
         paddingBottom: '32px',
@@ -97,7 +97,7 @@ export default function EmergencyStatus() {
       <div
         style={{
           padding: '14px 20px',
-          borderBottom: '1px solid #98C890',
+          borderBottom: '1px solid #E4E4E7',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -119,8 +119,8 @@ export default function EmergencyStatus() {
               width: '36px',
               height: '36px',
               borderRadius: '14px',
-              background: '#F2F0E8',
-              border: '1px solid #D8D4C8',
+              background: '#F4F4F5',
+              border: '1px solid #E4E4E7',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -177,8 +177,8 @@ export default function EmergencyStatus() {
             transition={{ delay: i * 0.1 }}
             style={{
               background:
-                action.color === 'green' ? 'rgba(86,128,78,0.05)' : 'rgba(86,128,78,0.05)',
-              border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.18)' : 'rgba(86,128,78,0.18)'}`,
+                action.color === 'green' ? 'rgba(20,20,19,0.05)' : 'rgba(20,20,19,0.05)',
+              border: `1px solid ${action.color === 'green' ? 'rgba(20,20,19,0.18)' : 'rgba(20,20,19,0.18)'}`,
               borderRadius: '12px',
               padding: '14px',
               display: 'flex',
@@ -196,8 +196,8 @@ export default function EmergencyStatus() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 background:
-                  action.color === 'green' ? 'rgba(86,128,78,0.12)' : 'rgba(86,128,78,0.12)',
-                border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.25)' : 'rgba(86,128,78,0.22)'}`,
+                  action.color === 'green' ? 'rgba(20,20,19,0.12)' : 'rgba(20,20,19,0.12)',
+                border: `1px solid ${action.color === 'green' ? 'rgba(20,20,19,0.25)' : 'rgba(20,20,19,0.22)'}`,
               }}
             >
               <CheckCircle size={15} color={action.color === 'green' ? '#42623C' : '#42623C'} />
@@ -224,8 +224,8 @@ export default function EmergencyStatus() {
         {/* Nav strip */}
         <div
           style={{
-            background: 'rgba(86,128,78,0.05)',
-            border: '1px solid rgba(86,128,78,0.18)',
+            background: 'rgba(20,20,19,0.05)',
+            border: '1px solid rgba(20,20,19,0.18)',
             borderRadius: '12px',
             padding: '14px 16px',
             display: 'flex',
@@ -238,8 +238,8 @@ export default function EmergencyStatus() {
               width: '36px',
               height: '36px',
               borderRadius: '14px',
-              background: 'rgba(86,128,78,0.12)',
-              border: '1px solid rgba(86,128,78,0.22)',
+              background: 'rgba(20,20,19,0.12)',
+              border: '1px solid rgba(20,20,19,0.22)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -265,8 +265,8 @@ export default function EmergencyStatus() {
           </div>
           <span
             style={{
-              background: 'rgba(86,128,78,0.12)',
-              border: '1px solid rgba(86,128,78,0.25)',
+              background: 'rgba(20,20,19,0.12)',
+              border: '1px solid rgba(20,20,19,0.25)',
               color: '#42623C',
               fontSize: '11px',
               padding: '5px 10px',
@@ -285,7 +285,7 @@ export default function EmergencyStatus() {
           <div
             style={{
               background: '#FFFFFF',
-              border: '1px solid #98C890',
+              border: '1px solid #E4E4E7',
               borderRadius: '12px',
               padding: '16px',
             }}
@@ -308,8 +308,8 @@ export default function EmergencyStatus() {
                       width: '32px',
                       height: '32px',
                       borderRadius: '14px',
-                      background: 'rgba(86,128,78,0.10)',
-                      border: '1px solid rgba(86,128,78,0.20)',
+                      background: 'rgba(20,20,19,0.10)',
+                      border: '1px solid rgba(20,20,19,0.20)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',

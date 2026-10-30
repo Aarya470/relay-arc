@@ -78,14 +78,14 @@ export default function HistoryPage() {
 
   if (loading)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px' }}>
+      <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '80px 20px 100px' }}>
         {[1, 2, 3, 4, 5].map((i) => (
           <Skeleton
             key={i}
             style={{
               height: '48px',
               borderRadius: '14px',
-              background: '#F2F0E8',
+              background: '#F4F4F5',
               marginBottom: '8px',
             }}
           />
@@ -101,7 +101,7 @@ export default function HistoryPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         paddingBottom: '100px',
         maxWidth: '640px',
         margin: '0 auto',
@@ -154,7 +154,7 @@ export default function HistoryPage() {
         </h1>
 
         {/* Tabs — text + underline */}
-        <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #98C890' }}>
+        <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #E4E4E7' }}>
           {(
             [
               ['checkins', 'Check-ins', checkins.length],
@@ -188,7 +188,7 @@ export default function HistoryPage() {
               </span>
               <span
                 style={{
-                  color: tab === key ? (key === 'emergencies' ? '#A33417' : '#42623C') : '#C4BFB0',
+                  color: tab === key ? (key === 'emergencies' ? '#A33417' : '#42623C') : '#E4E4E7',
                   fontSize: '12px',
                   fontFamily: 'inherit',
                   fontWeight: 700,
@@ -245,9 +245,9 @@ export default function HistoryPage() {
                     >
                       {date}
                     </p>
-                    <div style={{ borderTop: '1px solid #98C890' }}>
+                    <div style={{ borderTop: '1px solid #E4E4E7' }}>
                       {(items as Checkin[]).map((c: Checkin) => (
-                        <div key={c.id} style={{ borderBottom: '1px solid #98C890' }}>
+                        <div key={c.id} style={{ borderBottom: '1px solid #E4E4E7' }}>
                           <button
                             onClick={() => setExpanded(expanded === c.id ? null : c.id)}
                             style={{
@@ -295,7 +295,7 @@ export default function HistoryPage() {
                               transition={{ duration: 0.15 }}
                               style={{ display: 'flex', flexShrink: 0 }}
                             >
-                              <ChevronDown size={13} color="#C4BFB0" />
+                              <ChevronDown size={13} color="#E4E4E7" />
                             </motion.span>
                           </button>
                           <AnimatePresence>
@@ -309,7 +309,7 @@ export default function HistoryPage() {
                               >
                                 <div
                                   style={{
-                                    borderLeft: '2px solid #98C890',
+                                    borderLeft: '2px solid #E4E4E7',
                                     paddingLeft: '14px',
                                     margin: '2px 0 16px 88px',
                                   }}
@@ -363,7 +363,7 @@ export default function HistoryPage() {
                     >
                       {date}
                     </p>
-                    <div style={{ borderTop: '1px solid #98C890' }}>
+                    <div style={{ borderTop: '1px solid #E4E4E7' }}>
                       {(items as Emergency[]).map((e: Emergency) => (
                         <div
                           key={e.id}
@@ -372,7 +372,7 @@ export default function HistoryPage() {
                             alignItems: 'center',
                             gap: '16px',
                             padding: '13px 0',
-                            borderBottom: '1px solid #98C890',
+                            borderBottom: '1px solid #E4E4E7',
                           }}
                         >
                           <span

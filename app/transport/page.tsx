@@ -137,7 +137,7 @@ export default function TransportRequest() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -146,7 +146,7 @@ export default function TransportRequest() {
       <div
         style={{
           padding: '56px 20px 14px',
-          borderBottom: '1px solid #98C890',
+          borderBottom: '1px solid #E4E4E7',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
@@ -162,8 +162,8 @@ export default function TransportRequest() {
             width: '36px',
             height: '36px',
             borderRadius: '14px',
-            background: '#F2F0E8',
-            border: '1px solid #98C890',
+            background: '#F4F4F5',
+            border: '1px solid #E4E4E7',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -216,7 +216,7 @@ export default function TransportRequest() {
                     }}
                     style={{
                       background: '#FFFFFF',
-                      border: '1px solid #98C890',
+                      border: '1px solid #E4E4E7',
                       borderRadius: '12px',
                       padding: '18px 16px',
                       textAlign: 'left',
@@ -265,7 +265,7 @@ export default function TransportRequest() {
               <div
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '12px',
                   padding: '24px 20px',
                   marginBottom: '16px',
@@ -277,8 +277,8 @@ export default function TransportRequest() {
                     width: '56px',
                     height: '56px',
                     borderRadius: '12px',
-                    background: 'rgba(86,128,78,0.10)',
-                    border: '1px solid rgba(86,128,78,0.18)',
+                    background: 'rgba(20,20,19,0.10)',
+                    border: '1px solid rgba(20,20,19,0.18)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -352,8 +352,8 @@ export default function TransportRequest() {
             >
               <div
                 style={{
-                  background: 'rgba(86,128,78,0.08)',
-                  border: '1px solid rgba(86,128,78,0.15)',
+                  background: 'rgba(20,20,19,0.08)',
+                  border: '1px solid rgba(20,20,19,0.15)',
                   borderRadius: '12px',
                   padding: '11px 14px',
                   marginBottom: '16px',
@@ -393,8 +393,8 @@ export default function TransportRequest() {
                     onClick={() => setSelectedHospital(h)}
                     style={{
                       background:
-                        selectedHospital?.id === h.id ? 'rgba(86,128,78,0.10)' : '#FFFFFF',
-                      border: `1px solid ${selectedHospital?.id === h.id ? 'rgba(86,128,78,0.35)' : '#F2F0E8'}`,
+                        selectedHospital?.id === h.id ? 'rgba(20,20,19,0.10)' : '#FFFFFF',
+                      border: `1px solid ${selectedHospital?.id === h.id ? 'rgba(20,20,19,0.35)' : '#F4F4F5'}`,
                       borderRadius: '12px',
                       padding: '14px',
                       textAlign: 'left',
@@ -443,7 +443,7 @@ export default function TransportRequest() {
                 disabled={!selectedHospital || loading}
                 style={{
                   width: '100%',
-                  background: selectedHospital ? '#A33417' : '#F2F0E8',
+                  background: selectedHospital ? '#A33417' : '#F4F4F5',
                   color: selectedHospital ? 'white' : '#5C5A52',
                   fontWeight: 700,
                   fontSize: '15px',
@@ -482,8 +482,8 @@ export default function TransportRequest() {
                   width: '80px',
                   height: '80px',
                   borderRadius: '50%',
-                  background: 'rgba(86,128,78,0.10)',
-                  border: '2px solid rgba(86,128,78,0.20)',
+                  background: 'rgba(20,20,19,0.10)',
+                  border: '2px solid rgba(20,20,19,0.20)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -517,7 +517,7 @@ export default function TransportRequest() {
               <div
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '12px',
                   padding: '16px',
                   textAlign: 'left',
@@ -591,8 +591,8 @@ export default function TransportRequest() {
                 }}
                 style={{
                   marginTop: '24px',
-                  background: '#F2F0E8',
-                  border: '1px solid #D8D4C8',
+                  background: '#F4F4F5',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '12px',
                   padding: '12px 24px',
                   color: '#5C5A52',
@@ -615,8 +615,8 @@ export default function TransportRequest() {
             >
               <div
                 style={{
-                  background: 'rgba(86,128,78,0.06)',
-                  border: '1px solid rgba(86,128,78,0.18)',
+                  background: 'rgba(20,20,19,0.06)',
+                  border: '1px solid rgba(20,20,19,0.18)',
                   borderRadius: '12px',
                   padding: '24px 20px',
                   textAlign: 'center',
@@ -628,8 +628,8 @@ export default function TransportRequest() {
                     width: '56px',
                     height: '56px',
                     borderRadius: '12px',
-                    background: 'rgba(86,128,78,0.12)',
-                    border: '1px solid rgba(86,128,78,0.22)',
+                    background: 'rgba(20,20,19,0.12)',
+                    border: '1px solid rgba(20,20,19,0.22)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -654,7 +654,7 @@ export default function TransportRequest() {
               <div
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '12px',
                   padding: '16px',
                   marginBottom: '10px',
@@ -683,8 +683,8 @@ export default function TransportRequest() {
                       width: '44px',
                       height: '44px',
                       borderRadius: '12px',
-                      background: 'rgba(86,128,78,0.10)',
-                      border: '1px solid rgba(86,128,78,0.18)',
+                      background: 'rgba(20,20,19,0.10)',
+                      border: '1px solid rgba(20,20,19,0.18)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -718,8 +718,8 @@ export default function TransportRequest() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      background: 'rgba(86,128,78,0.08)',
-                      border: '1px solid rgba(86,128,78,0.16)',
+                      background: 'rgba(20,20,19,0.08)',
+                      border: '1px solid rgba(20,20,19,0.16)',
                       borderRadius: '12px',
                       padding: '12px',
                       color: '#42623C',
@@ -735,7 +735,7 @@ export default function TransportRequest() {
               <div
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '12px',
                   padding: '16px',
                 }}

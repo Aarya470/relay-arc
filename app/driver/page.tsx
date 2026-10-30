@@ -79,7 +79,7 @@ export default function DriverDashboard() {
       <div
         style={{
           minHeight: '100vh',
-          background: '#B3DDAC',
+          background: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -91,11 +91,11 @@ export default function DriverDashboard() {
 
   if (accepted)
     return (
-      <div style={{ minHeight: '100vh', background: '#B3DDAC', padding: '56px 20px 20px' }}>
+      <div style={{ minHeight: '100vh', background: '#FFFFFF', padding: '56px 20px 20px' }}>
         <div
           style={{
-            background: 'rgba(86,128,78,0.08)',
-            border: '1px solid rgba(86,128,78,0.2)',
+            background: 'rgba(20,20,19,0.08)',
+            border: '1px solid rgba(20,20,19,0.2)',
             borderRadius: '20px',
             padding: '24px',
             textAlign: 'center',
@@ -112,7 +112,7 @@ export default function DriverDashboard() {
         <div
           style={{
             background: '#FFFFFF',
-            border: '1px solid #98C890',
+            border: '1px solid #E4E4E7',
             borderRadius: '20px',
             padding: '16px',
             marginBottom: '12px',
@@ -165,7 +165,7 @@ export default function DriverDashboard() {
         <div
           style={{
             background: '#FFFFFF',
-            border: '1px solid #98C890',
+            border: '1px solid #E4E4E7',
             borderRadius: '20px',
             padding: '16px',
           }}
@@ -220,7 +220,7 @@ export default function DriverDashboard() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -228,7 +228,7 @@ export default function DriverDashboard() {
       <div
         style={{
           padding: '56px 20px 16px',
-          borderBottom: '1px solid #98C890',
+          borderBottom: '1px solid #E4E4E7',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
@@ -241,7 +241,7 @@ export default function DriverDashboard() {
             width: '36px',
             height: '36px',
             borderRadius: '14px',
-            background: '#F2F0E8',
+            background: '#F4F4F5',
             border: 'none',
             cursor: 'pointer',
             display: 'flex',
@@ -268,8 +268,8 @@ export default function DriverDashboard() {
         <div
           style={{
             marginLeft: 'auto',
-            background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8',
-            border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#98C890'}`,
+            background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F4F4F5',
+            border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#E4E4E7'}`,
             borderRadius: '20px',
             padding: '4px 10px',
           }}
@@ -326,7 +326,7 @@ export default function DriverDashboard() {
                     overflow: 'hidden',
                   }}
                 >
-                  <div style={{ padding: '14px', borderBottom: '1px solid #98C890' }}>
+                  <div style={{ padding: '14px', borderBottom: '1px solid #E4E4E7' }}>
                     <div
                       style={{
                         display: 'flex',

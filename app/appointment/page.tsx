@@ -93,7 +93,7 @@ export default function AppointmentSummary() {
             style={{
               height: '80px',
               borderRadius: '12px',
-              background: '#F2F0E8',
+              background: '#F4F4F5',
               marginBottom: '10px',
             }}
           />
@@ -106,8 +106,8 @@ export default function AppointmentSummary() {
       label: 'Check-ins',
       value: checkins.length,
       color: '#42623C',
-      bg: 'rgba(86,128,78,0.07)',
-      border: 'rgba(86,128,78,0.15)',
+      bg: 'rgba(20,20,19,0.07)',
+      border: 'rgba(20,20,19,0.15)',
       Icon: MessageSquare,
     },
     {
@@ -139,8 +139,8 @@ export default function AppointmentSummary() {
               width: '36px',
               height: '36px',
               borderRadius: '14px',
-              background: '#F2F0E8',
-              border: '1px solid #98C890',
+              background: '#F4F4F5',
+              border: '1px solid #E4E4E7',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -152,7 +152,7 @@ export default function AppointmentSummary() {
           <div>
             <h1
               style={{
-                color: '#EDEAE0',
+                color: '#F4F4F5',
                 fontWeight: 800,
                 fontSize: '20px',
                 letterSpacing: '-0.5px',
@@ -247,7 +247,7 @@ export default function AppointmentSummary() {
           <div
             style={{
               background: '#FFFFFF',
-              border: '1px solid #98C890',
+              border: '1px solid #E4E4E7',
               borderRadius: '12px',
               padding: '18px',
               boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
@@ -294,8 +294,8 @@ export default function AppointmentSummary() {
                   width: '28px',
                   height: '28px',
                   borderRadius: '14px',
-                  background: '#F2F0E8',
-                  border: '1px solid #98C890',
+                  background: '#F4F4F5',
+                  border: '1px solid #E4E4E7',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -322,7 +322,7 @@ export default function AppointmentSummary() {
         <div
           style={{
             background: '#FFFFFF',
-            border: '1px solid #98C890',
+            border: '1px solid #E4E4E7',
             borderRadius: '12px',
             padding: '18px',
             boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
@@ -346,7 +346,7 @@ export default function AppointmentSummary() {
             <div
               key={i}
               style={{
-                borderBottom: i < Math.min(checkins.length, 5) - 1 ? '1px solid #EDEAE0' : 'none',
+                borderBottom: i < Math.min(checkins.length, 5) - 1 ? '1px solid #F4F4F5' : 'none',
                 paddingBottom: i < Math.min(checkins.length, 5) - 1 ? '12px' : 0,
                 marginBottom: i < Math.min(checkins.length, 5) - 1 ? '12px' : 0,
               }}
@@ -359,7 +359,7 @@ export default function AppointmentSummary() {
                     width: '5px',
                     height: '5px',
                     borderRadius: '50%',
-                    background: 'rgba(86,128,78,0.5)',
+                    background: 'rgba(20,20,19,0.5)',
                     flexShrink: 0,
                   }}
                 />

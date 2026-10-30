@@ -32,7 +32,7 @@ const PARTNERS: Partner[] = [
 
 export default function Partners() {
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div style={{ background: '#FFFFFF', minHeight: '100dvh' }}>
       <SiteHeader />
       <div style={{ maxWidth: '820px', margin: '0 auto', padding: '20px 20px 80px' }}>
         <h1

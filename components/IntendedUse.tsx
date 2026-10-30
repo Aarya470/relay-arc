@@ -2,8 +2,8 @@
 // Intended-use labelling for clinician-facing surfaces.
 const INK2 = '#5C5A52',
   INK3 = '#5C5A52'
-const BORDER = '#98C890',
-  CREAM = '#B3DDAC'
+const BORDER = '#E4E4E7',
+  CREAM = '#FFFFFF'
 const mono = 'var(--font-mono, monospace)'
 
 export default function IntendedUse({ compact = false }: { compact?: boolean }) {

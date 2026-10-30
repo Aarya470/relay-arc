@@ -343,20 +343,20 @@ export default function PatientDetail() {
       ? 'rgba(163,52,23,0.12)'
       : score >= 5
         ? 'rgba(168,114,0,0.12)'
-        : 'rgba(86,128,78,0.12)'
+        : 'rgba(20,20,19,0.12)'
   const priorityBorder =
     score >= 8
       ? 'rgba(163,52,23,0.28)'
       : score >= 5
         ? 'rgba(168,114,0,0.28)'
-        : 'rgba(86,128,78,0.28)'
+        : 'rgba(20,20,19,0.28)'
 
   if (loading || !patient)
     return (
       <div
         style={{
           minHeight: '100vh',
-          background: '#B3DDAC',
+          background: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -383,7 +383,7 @@ export default function PatientDetail() {
     )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#B3DDAC', paddingBottom: '48px' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingBottom: '48px' }}>
       {/* Jitsi overlay */}
       <AnimatePresence>
         {activeCall && (
@@ -421,7 +421,7 @@ export default function PatientDetail() {
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '20px',
                 padding: '28px 20px 52px',
                 width: '100%',
@@ -451,8 +451,8 @@ export default function PatientDetail() {
                     width: '32px',
                     height: '32px',
                     borderRadius: '14px',
-                    background: '#F2F0E8',
-                    border: '1px solid #D8D4C8',
+                    background: '#F4F4F5',
+                    border: '1px solid #E4E4E7',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -483,7 +483,7 @@ export default function PatientDetail() {
                 style={{
                   width: '100%',
                   background: '#FFFFFF',
-                  border: '1px solid #D8D4C8',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '13px 16px',
                   color: '#141413',
@@ -513,7 +513,7 @@ export default function PatientDetail() {
                 style={{
                   width: '100%',
                   background: '#FFFFFF',
-                  border: '1px solid #D8D4C8',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '13px 16px',
                   color: '#141413',
@@ -530,7 +530,7 @@ export default function PatientDetail() {
                 disabled={!rescheduleDate}
                 style={{
                   width: '100%',
-                  background: rescheduleDate ? '#42623C' : '#F2F0E8',
+                  background: rescheduleDate ? '#42623C' : '#F4F4F5',
                   color: rescheduleDate ? '#ffffff' : '#5C5A52',
                   fontWeight: 700,
                   fontSize: '15px',
@@ -550,7 +550,7 @@ export default function PatientDetail() {
 
       {/* Header */}
       <div
-        style={{ background: '#FFFFFF', borderBottom: '1px solid #98C890', padding: '56px 20px 0' }}
+        style={{ background: '#FFFFFF', borderBottom: '1px solid #E4E4E7', padding: '56px 20px 0' }}
       >
         {/* Back + name row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
@@ -561,8 +561,8 @@ export default function PatientDetail() {
               width: '38px',
               height: '38px',
               borderRadius: '14px',
-              background: '#F2F0E8',
-              border: '1px solid #D8D4C8',
+              background: '#F4F4F5',
+              border: '1px solid #E4E4E7',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -590,8 +590,8 @@ export default function PatientDetail() {
               <span
                 style={{
                   display: 'inline-block',
-                  background: 'rgba(86,128,78,0.12)',
-                  border: '1px solid rgba(86,128,78,0.25)',
+                  background: 'rgba(20,20,19,0.12)',
+                  border: '1px solid rgba(20,20,19,0.25)',
                   borderRadius: '14px',
                   padding: '2px 9px',
                   color: '#42623C',
@@ -708,8 +708,8 @@ export default function PatientDetail() {
           }}
           style={{
             width: '100%',
-            background: 'rgba(86,128,78,0.10)',
-            border: '1px solid rgba(86,128,78,0.22)',
+            background: 'rgba(20,20,19,0.10)',
+            border: '1px solid rgba(20,20,19,0.22)',
             borderRadius: '20px',
             padding: '12px',
             display: 'flex',
@@ -788,7 +788,7 @@ export default function PatientDetail() {
             <div
               style={{
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '20px',
                 padding: '18px',
               }}
@@ -827,7 +827,7 @@ export default function PatientDetail() {
                       gap: '12px',
                       paddingBottom: i < arr.length - 1 ? '10px' : 0,
                       marginBottom: i < arr.length - 1 ? '10px' : 0,
-                      borderBottom: i < arr.length - 1 ? '1px solid #EDEAE0' : 'none',
+                      borderBottom: i < arr.length - 1 ? '1px solid #F4F4F5' : 'none',
                     }}
                   >
                     <span style={{ color: '#5C5A52', fontSize: '12px', flexShrink: 0 }}>
@@ -856,7 +856,7 @@ export default function PatientDetail() {
             <div
               style={{
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '20px',
                 padding: '18px',
               }}
@@ -886,7 +886,7 @@ export default function PatientDetail() {
                     style={{
                       paddingBottom: '12px',
                       marginBottom: '12px',
-                      borderBottom: '1px solid #EDEAE0',
+                      borderBottom: '1px solid #F4F4F5',
                     }}
                   >
                     <div
@@ -901,8 +901,8 @@ export default function PatientDetail() {
                         <span
                           style={{
                             display: 'inline-block',
-                            background: 'rgba(86,128,78,0.10)',
-                            border: '1px solid rgba(86,128,78,0.20)',
+                            background: 'rgba(20,20,19,0.10)',
+                            border: '1px solid rgba(20,20,19,0.20)',
                             borderRadius: '14px',
                             padding: '2px 8px',
                             color: overdue ? '#A33417' : '#42623C',
@@ -944,8 +944,8 @@ export default function PatientDetail() {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
-                          background: reminderSent[m.name] ? 'rgba(86,128,78,0.10)' : '#F2F0E8',
-                          border: `1px solid ${reminderSent[m.name] ? 'rgba(86,128,78,0.25)' : '#98C890'}`,
+                          background: reminderSent[m.name] ? 'rgba(20,20,19,0.10)' : '#F4F4F5',
+                          border: `1px solid ${reminderSent[m.name] ? 'rgba(20,20,19,0.25)' : '#E4E4E7'}`,
                           borderRadius: '14px',
                           padding: '6px 12px',
                           cursor: reminderSent[m.name] ? 'default' : 'pointer',
@@ -1004,7 +1004,7 @@ export default function PatientDetail() {
                       paddingBottom: '9px',
                       marginBottom: '9px',
                       borderBottom:
-                        i < Math.min(emergencies.length, 5) - 1 ? '1px solid #EDEAE0' : 'none',
+                        i < Math.min(emergencies.length, 5) - 1 ? '1px solid #F4F4F5' : 'none',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1033,7 +1033,7 @@ export default function PatientDetail() {
             <div
               style={{
                 background: '#FFFFFF',
-                border: '1px solid rgba(86,128,78,0.18)',
+                border: '1px solid rgba(20,20,19,0.18)',
                 borderRadius: '20px',
                 padding: '18px',
               }}
@@ -1113,7 +1113,7 @@ export default function PatientDetail() {
               <div
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '18px',
                 }}
@@ -1140,7 +1140,7 @@ export default function PatientDetail() {
                       paddingBottom: '12px',
                       marginBottom: '12px',
                       borderBottom:
-                        i < patient.emergency_contacts.length - 1 ? '1px solid #EDEAE0' : 'none',
+                        i < patient.emergency_contacts.length - 1 ? '1px solid #F4F4F5' : 'none',
                     }}
                   >
                     <div
@@ -1148,8 +1148,8 @@ export default function PatientDetail() {
                         width: '34px',
                         height: '34px',
                         borderRadius: '14px',
-                        background: 'rgba(86,128,78,0.12)',
-                        border: '1px solid rgba(86,128,78,0.20)',
+                        background: 'rgba(20,20,19,0.12)',
+                        border: '1px solid rgba(20,20,19,0.20)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1198,7 +1198,7 @@ export default function PatientDetail() {
                 key={i}
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '16px',
                 }}
@@ -1216,8 +1216,8 @@ export default function PatientDetail() {
                       width: '30px',
                       height: '30px',
                       borderRadius: '14px',
-                      background: 'rgba(86,128,78,0.10)',
-                      border: '1px solid rgba(86,128,78,0.22)',
+                      background: 'rgba(20,20,19,0.10)',
+                      border: '1px solid rgba(20,20,19,0.22)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1301,7 +1301,7 @@ export default function PatientDetail() {
             <div
               style={{
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '20px',
                 padding: '16px',
               }}
@@ -1325,7 +1325,7 @@ export default function PatientDetail() {
                 style={{
                   width: '100%',
                   background: '#FFFFFF',
-                  border: '1px solid #D8D4C8',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '13px 14px',
                   color: '#141413',
@@ -1369,7 +1369,7 @@ export default function PatientDetail() {
                 key={i}
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '14px 16px',
                 }}
@@ -1434,27 +1434,27 @@ export default function PatientDetail() {
                       : '#7C5200'
               const statusBg =
                 appt.status === 'confirmed'
-                  ? 'rgba(86,128,78,0.08)'
+                  ? 'rgba(20,20,19,0.08)'
                   : appt.status === 'declined'
                     ? 'rgba(163,52,23,0.08)'
                     : appt.status === 'completed'
-                      ? 'rgba(86,128,78,0.08)'
+                      ? 'rgba(20,20,19,0.08)'
                       : 'rgba(168,114,0,0.08)'
               const borderColor =
                 appt.status === 'confirmed'
-                  ? 'rgba(86,128,78,0.20)'
+                  ? 'rgba(20,20,19,0.20)'
                   : appt.status === 'declined'
                     ? 'rgba(163,52,23,0.18)'
                     : appt.status === 'completed'
-                      ? 'rgba(86,128,78,0.18)'
+                      ? 'rgba(20,20,19,0.18)'
                       : 'rgba(168,114,0,0.20)'
 
               return (
                 <div
                   key={i}
                   style={{
-                    background: joinable ? 'rgba(86,128,78,0.07)' : statusBg,
-                    border: `1px solid ${joinable ? 'rgba(86,128,78,0.30)' : borderColor}`,
+                    background: joinable ? 'rgba(20,20,19,0.07)' : statusBg,
+                    border: `1px solid ${joinable ? 'rgba(20,20,19,0.30)' : borderColor}`,
                     borderRadius: '20px',
                     padding: '16px',
                   }}
@@ -1522,8 +1522,8 @@ export default function PatientDetail() {
                         onClick={() => confirmAppointment(appt.id)}
                         style={{
                           flex: 1,
-                          background: 'rgba(86,128,78,0.10)',
-                          border: '1px solid rgba(86,128,78,0.22)',
+                          background: 'rgba(20,20,19,0.10)',
+                          border: '1px solid rgba(20,20,19,0.22)',
                           borderRadius: '14px',
                           padding: '9px',
                           display: 'flex',
@@ -1547,8 +1547,8 @@ export default function PatientDetail() {
                         }}
                         style={{
                           flex: 1,
-                          background: 'rgba(86,128,78,0.08)',
-                          border: '1px solid rgba(86,128,78,0.18)',
+                          background: 'rgba(20,20,19,0.08)',
+                          border: '1px solid rgba(20,20,19,0.18)',
                           borderRadius: '14px',
                           padding: '9px',
                           display: 'flex',
@@ -1593,8 +1593,8 @@ export default function PatientDetail() {
                       }}
                       style={{
                         marginTop: '12px',
-                        background: '#F2F0E8',
-                        border: '1px solid #D8D4C8',
+                        background: '#F4F4F5',
+                        border: '1px solid #E4E4E7',
                         borderRadius: '14px',
                         padding: '8px 14px',
                         display: 'flex',
@@ -1668,7 +1668,7 @@ export default function PatientDetail() {
               transition={{ type: 'spring', bounce: 0.1 }}
               style={{
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '20px',
                 padding: '24px 20px 52px',
                 width: '100%',
@@ -1700,8 +1700,8 @@ export default function PatientDetail() {
                     width: '32px',
                     height: '32px',
                     borderRadius: '14px',
-                    background: '#F2F0E8',
-                    border: '1px solid #D8D4C8',
+                    background: '#F4F4F5',
+                    border: '1px solid #E4E4E7',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -1716,7 +1716,7 @@ export default function PatientDetail() {
               <div
                 style={{
                   background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '16px',
                   marginBottom: '12px',
@@ -1738,8 +1738,8 @@ export default function PatientDetail() {
                       } else setCalMonth((m) => m - 1)
                     }}
                     style={{
-                      background: '#F2F0E8',
-                      border: '1px solid #D8D4C8',
+                      background: '#F4F4F5',
+                      border: '1px solid #E4E4E7',
                       borderRadius: '14px',
                       cursor: 'pointer',
                       color: '#5C5A52',
@@ -1761,8 +1761,8 @@ export default function PatientDetail() {
                       } else setCalMonth((m) => m + 1)
                     }}
                     style={{
-                      background: '#F2F0E8',
-                      border: '1px solid #D8D4C8',
+                      background: '#F4F4F5',
+                      border: '1px solid #E4E4E7',
                       borderRadius: '14px',
                       cursor: 'pointer',
                       color: '#5C5A52',
@@ -1839,7 +1839,7 @@ export default function PatientDetail() {
                 <div
                   style={{
                     background: '#FFFFFF',
-                    border: '1px solid #98C890',
+                    border: '1px solid #E4E4E7',
                     borderRadius: '20px',
                     padding: '14px',
                     marginBottom: '12px',
@@ -1875,14 +1875,14 @@ export default function PatientDetail() {
                           borderRadius: '20px',
                           border:
                             selectedTime === t
-                              ? '1px solid rgba(86,128,78,0.40)'
-                              : '1px solid #98C890',
+                              ? '1px solid rgba(20,20,19,0.40)'
+                              : '1px solid #E4E4E7',
                           cursor: 'pointer',
                           fontSize: '12px',
                           fontWeight: 600,
                           whiteSpace: 'nowrap',
                           flexShrink: 0,
-                          background: selectedTime === t ? 'rgba(86,128,78,0.18)' : '#F2F0E8',
+                          background: selectedTime === t ? 'rgba(20,20,19,0.18)' : '#F4F4F5',
                           color: selectedTime === t ? '#42623C' : '#5C5A52',
                         }}
                       >
@@ -1901,7 +1901,7 @@ export default function PatientDetail() {
                 style={{
                   width: '100%',
                   background: '#FFFFFF',
-                  border: '1px solid #D8D4C8',
+                  border: '1px solid #E4E4E7',
                   borderRadius: '20px',
                   padding: '14px 16px',
                   color: '#141413',
@@ -1922,7 +1922,7 @@ export default function PatientDetail() {
                 disabled={!selectedDate}
                 style={{
                   width: '100%',
-                  background: selectedDate ? '#42623C' : '#F2F0E8',
+                  background: selectedDate ? '#42623C' : '#F4F4F5',
                   color: selectedDate ? '#ffffff' : '#5C5A52',
                   fontWeight: 700,
                   fontSize: '15px',

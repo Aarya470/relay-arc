@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 const INK = '#141413',
   INK2 = '#5C5A52',
   INK3 = '#5C5A52',
-  BORDER = '#98C890'
+  BORDER = '#E4E4E7'
 const mono = 'var(--font-mono, monospace)'
 
 /** Reveal on scroll — the bars grow once, when they come into view. */
@@ -82,7 +82,7 @@ export function BarChart({
           <div
             style={{
               height: `${height}px`,
-              background: '#B3DDAC',
+              background: '#FFFFFF',
               border: `1px solid ${BORDER}`,
               position: 'relative',
               overflow: 'hidden',
@@ -258,7 +258,7 @@ export function Donut({
   label,
   sub,
   color,
-  track = '#EDEAE0',
+  track = '#F4F4F5',
   size = 168,
 }: {
   value: number

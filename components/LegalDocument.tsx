@@ -6,14 +6,14 @@ import { emergencyNumber } from '@/lib/emergency-number'
 import { useEffect, useState } from 'react'
 
 // The page green, and why it is this one.
-const PAGE = '#B3DDAC'
+const PAGE = '#FFFFFF'
 const PANEL = '#FFFFFF'
 const ON = '#141413' // ink, 12.16:1 on the light green
 const ON_3 = '#5C5A52'
 const T1 = '#141413' // inside the panel
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#DCE6D6'
+const BORDER = '#F4F4F5'
 const RED = '#A33417'
 
 // A real, reachable address is a legal requirement on both of these documents.
@@ -49,7 +49,7 @@ export default function LegalDocument({
           left: 0,
           right: 0,
           height: '3px',
-          background: '#D97757',
+          background: '#E4E4E7',
           zIndex: 10,
         }}
       />

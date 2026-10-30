@@ -4,8 +4,8 @@
   "description": "Cardiac emergency response \u2014 SOS, hospital routing, and your medical profile, ready when it counts.",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#57945C",
-  "theme_color": "#57945C",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
   "icons": [
     {
       "src": "/icon-192.png",

@@ -34,17 +34,17 @@ import SignalView from '@/components/SignalView'
 import { demoOn } from '@/lib/demo'
 
 // ── look ──────────────────────────────────────────────────────────────────────
-const PAGE = '#B3DDAC',
+const PAGE = '#FFFFFF',
   T1 = '#141413',
   T2 = '#3F3D36',
   T3 = '#6E6B5D'
-const LINE = '#E4E2DA',
+const LINE = '#E4E4E7',
   LINE2 = '#CFCCC1',
-  PAPER = '#FBFAF6',
+  PAPER = '#FAFAFA',
   RED = '#A33417',
   GREEN = '#3B5E35',
   AMBER = '#7C5200',
-  ORANGE = '#D97757'
+  ORANGE = '#E4E4E7'
 const mono = 'var(--font-mono, monospace)'
 
 // 15 seconds per reading. If the pulse is not confirmed by then, the page keeps

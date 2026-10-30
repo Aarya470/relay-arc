@@ -16,17 +16,17 @@ import {
 const INK = '#141413',
   INK2 = '#5C5A52',
   INK3 = '#5C5A52'
-const BORDER = '#DCE6D6',
+const BORDER = '#F4F4F5',
   WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757',
+const ORANGE = '#E4E4E7',
   CRIT = '#A33417'
 
 // The page, and the few things that sit directly on it.
-const PAGE = '#B3DDAC'
+const PAGE = '#FFFFFF'
 const ON = '#141413' // ink, 12.16:1 on the light green
 const ON_3 = '#5C5A52' // 4.56:1, the tightest pairing in the system
-const RULE = '#7EB382' // hairline, non-text
+const RULE = '#E4E4E7' // hairline, non-text
 const CORAL = '#A33417' // warm accent that is legible on light, 4.53:1
 const mono = 'var(--font-mono, monospace)'
 
@@ -276,7 +276,7 @@ export default function FlarePage() {
                     onClick={() => setFeelsLike(id)}
                     style={{
                       textAlign: 'left',
-                      background: on ? '#F1F3EC' : WHITE,
+                      background: on ? '#F4F4F5' : WHITE,
                       border: `1px solid ${on ? GREEN_DEEP : BORDER}`,
                       borderRadius: 14,
                       padding: '14px 16px',
@@ -402,7 +402,7 @@ export default function FlarePage() {
                     ? '#FBEFEC'
                     : result.outcome === 'unclear'
                       ? '#FDF6EC'
-                      : '#F1F3EC',
+                      : '#F4F4F5',
                 border: `1px solid ${result.outcome === 'escalate' ? CRIT : result.outcome === 'unclear' ? ORANGE : GREEN_DEEP}`,
                 borderRadius: 18,
                 padding: 20,

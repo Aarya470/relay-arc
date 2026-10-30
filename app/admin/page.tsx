@@ -5,7 +5,7 @@ import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from 'lucide-re
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const ACCENT = '#42623C'
 const RED = '#A33417'
 const GREEN = '#42623C'
@@ -152,7 +152,7 @@ export default function AdminPartners() {
 
   if (!connected)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+      <div style={{ minHeight: '100dvh', background: '#FFFFFF', padding: '0 24px' }}>
         <div style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '96px' }}>
           <p
             style={{
@@ -250,7 +250,7 @@ export default function AdminPartners() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         maxWidth: '760px',
         margin: '0 auto',
         width: '100%',
@@ -520,7 +520,7 @@ export default function AdminPartners() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: '#B3DDAC',
+                    background: '#FFFFFF',
                     border: `1px solid ${BORDER}`,
                     borderRadius: '14px',
                     padding: '7px 11px',

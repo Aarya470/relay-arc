@@ -23,8 +23,8 @@ const T1 = '#141413',
 // BG2 was #3A6440, a dark inner panel built for the dark page. Once the page
 // went light it kept its dark fill while the text on it stayed ink and grey,
 // which measured 2.70:1 and 1.01:1. A light tint of the page restores both.
-const BORDER = '#7EB382',
-  BG2 = '#CEE9C9'
+const BORDER = '#E4E4E7',
+  BG2 = '#F4F4F5'
 const RED = '#A33417',
   ACCENT = '#42623C'
 const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
@@ -128,7 +128,7 @@ export default function Engineering() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div style={{ background: '#FFFFFF', minHeight: '100dvh' }}>
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
       <SiteHeader />
 

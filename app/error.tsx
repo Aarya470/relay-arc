@@ -25,7 +25,7 @@ export default function ErrorBoundary({
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

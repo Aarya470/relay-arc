@@ -13,7 +13,7 @@ import qrgen from 'qrcode-generator'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const BORDER = '#E4E4E7'
 const ACCENT = '#42623C'
 const RED = '#A33417'
 const GREEN = '#42623C'
@@ -218,7 +218,7 @@ export default function RelayRoomPage() {
       })
       mapRef.current = map
       const pEl = document.createElement('div')
-      pEl.innerHTML = `<div style="width:20px;height:20px;background:${ACCENT};border:3px solid white;border-radius:50%;box-shadow:0 0 0 5px rgba(86,128,78,0.22);"></div>`
+      pEl.innerHTML = `<div style="width:20px;height:20px;background:${ACCENT};border:3px solid white;border-radius:50%;box-shadow:0 0 0 5px rgba(20,20,19,0.22);"></div>`
       patientMarker.current = new maplibregl.Marker({ element: pEl })
         .setLngLat([loc.lng, loc.lat])
         .addTo(map)
@@ -294,7 +294,7 @@ export default function RelayRoomPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -311,7 +311,7 @@ export default function RelayRoomPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: '#FFFFFF',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -330,7 +330,7 @@ export default function RelayRoomPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: '#FFFFFF',
         maxWidth: '640px',
         margin: '0 auto',
         width: '100%',
@@ -563,7 +563,7 @@ export default function RelayRoomPage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#B3DDAC',
+                    background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#FFFFFF',
                     border: `1px solid ${p.role === 'patient' ? 'rgba(163,52,23,0.25)' : BORDER}`,
                     borderRadius: '14px',
                     padding: '5px 10px',
@@ -714,7 +714,7 @@ export default function RelayRoomPage() {
                     <button
                       onClick={() => claimTask(t.id)}
                       style={{
-                        background: t.claimedBy === name ? 'rgba(86,128,78,0.08)' : 'none',
+                        background: t.claimedBy === name ? 'rgba(20,20,19,0.08)' : 'none',
                         border: `1.5px solid ${t.claimedBy === name ? ACCENT : BORDER}`,
                         color: t.claimedBy === name ? ACCENT : T2,
                         fontSize: '12px',

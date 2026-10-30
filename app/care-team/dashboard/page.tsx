@@ -403,7 +403,7 @@ export default function CareTeamDashboard() {
 
   if (loading)
     return (
-      <div style={{ minHeight: '100vh', background: '#B3DDAC', padding: '80px 16px' }}>
+      <div style={{ minHeight: '100vh', background: '#FFFFFF', padding: '80px 16px' }}>
         {[1, 2, 3, 4, 5].map((i) => (
           <Skeleton key={i} className="h-20 w-full rounded-2xl bg-white/5 mb-3" />
         ))}
@@ -411,12 +411,12 @@ export default function CareTeamDashboard() {
     )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#B3DDAC', paddingBottom: '32px' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingBottom: '32px' }}>
       {/* A viewer must never be able to mistake demo fixtures for a real chart. */}
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#E4E4E7',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',
@@ -513,12 +513,12 @@ export default function CareTeamDashboard() {
       </AnimatePresence>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #98C890' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #E4E4E7' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <p
               style={{
-                color: 'rgba(86,128,78,0.7)',
+                color: 'rgba(20,20,19,0.7)',
                 fontFamily: 'monospace',
                 fontSize: '10px',
                 textTransform: 'uppercase',
@@ -542,8 +542,8 @@ export default function CareTeamDashboard() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '14px',
-                background: 'rgba(86,128,78,0.1)',
-                border: '1px solid rgba(86,128,78,0.2)',
+                background: 'rgba(20,20,19,0.1)',
+                border: '1px solid rgba(20,20,19,0.2)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -563,7 +563,7 @@ export default function CareTeamDashboard() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '14px',
-                background: '#F2F0E8',
+                background: '#F4F4F5',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
@@ -613,7 +613,7 @@ export default function CareTeamDashboard() {
               style={{
                 flex: 1,
                 background: '#FFFFFF',
-                border: '1px solid #98C890',
+                border: '1px solid #E4E4E7',
                 borderRadius: '20px',
                 padding: '10px',
                 textAlign: 'center',
@@ -643,8 +643,8 @@ export default function CareTeamDashboard() {
             style={{
               width: '100%',
               marginTop: '12px',
-              background: 'rgba(86,128,78,0.1)',
-              border: '1px solid rgba(86,128,78,0.25)',
+              background: 'rgba(20,20,19,0.1)',
+              border: '1px solid rgba(20,20,19,0.25)',
               color: '#42623C',
               fontWeight: 600,
               fontSize: '13px',
@@ -675,7 +675,7 @@ export default function CareTeamDashboard() {
           <div style={{ padding: '12px 16px 0' }}>
             <p
               style={{
-                color: 'rgba(86,128,78,0.6)',
+                color: 'rgba(20,20,19,0.6)',
                 fontSize: '10px',
                 fontFamily: 'monospace',
                 textTransform: 'uppercase',
@@ -742,8 +742,8 @@ export default function CareTeamDashboard() {
                       onClick={() => confirmAppointment(a.id)}
                       style={{
                         flex: 1,
-                        background: 'rgba(86,128,78,0.12)',
-                        border: '1px solid rgba(86,128,78,0.25)',
+                        background: 'rgba(20,20,19,0.12)',
+                        border: '1px solid rgba(20,20,19,0.25)',
                         borderRadius: '14px',
                         padding: '9px',
                         display: 'flex',
@@ -789,8 +789,8 @@ export default function CareTeamDashboard() {
                 <div
                   key={a.id}
                   style={{
-                    background: joinable ? 'rgba(86,128,78,0.08)' : '#FFFFFF',
-                    border: `1px solid ${joinable ? 'rgba(86,128,78,0.3)' : 'rgba(86,128,78,0.15)'}`,
+                    background: joinable ? 'rgba(20,20,19,0.08)' : '#FFFFFF',
+                    border: `1px solid ${joinable ? 'rgba(20,20,19,0.3)' : 'rgba(20,20,19,0.15)'}`,
                     borderRadius: '20px',
                     padding: '14px',
                     marginBottom: '8px',
@@ -813,8 +813,8 @@ export default function CareTeamDashboard() {
                     {joinable && (
                       <span
                         style={{
-                          background: 'rgba(86,128,78,0.15)',
-                          border: '1px solid rgba(86,128,78,0.3)',
+                          background: 'rgba(20,20,19,0.15)',
+                          border: '1px solid rgba(20,20,19,0.3)',
                           color: '#42623C',
                           fontSize: '9px',
                           fontFamily: 'monospace',
@@ -1253,8 +1253,8 @@ export default function CareTeamDashboard() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        background: 'rgba(86,128,78,0.05)',
-                        border: '1px solid rgba(86,128,78,0.15)',
+                        background: 'rgba(20,20,19,0.05)',
+                        border: '1px solid rgba(20,20,19,0.15)',
                         borderRadius: '14px',
                         padding: '10px 14px',
                       }}
@@ -1320,8 +1320,8 @@ export default function CareTeamDashboard() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '6px',
-                          background: 'rgba(86,128,78,0.1)',
-                          border: '1px solid rgba(86,128,78,0.25)',
+                          background: 'rgba(20,20,19,0.1)',
+                          border: '1px solid rgba(20,20,19,0.25)',
                           color: '#42623C',
                           fontWeight: 700,
                           fontSize: '12px',
@@ -1344,8 +1344,8 @@ export default function CareTeamDashboard() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '6px',
-                          background: 'rgba(86,128,78,0.08)',
-                          border: '1px solid rgba(86,128,78,0.2)',
+                          background: 'rgba(20,20,19,0.08)',
+                          border: '1px solid rgba(20,20,19,0.2)',
                           color: '#42623C',
                           fontWeight: 700,
                           fontSize: '12px',
@@ -1366,8 +1366,8 @@ export default function CareTeamDashboard() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '6px',
-                          background: '#F2F0E8',
-                          border: '1px solid #98C890',
+                          background: '#F4F4F5',
+                          border: '1px solid #E4E4E7',
                           color: '#5C5A52',
                           fontWeight: 600,
                           fontSize: '12px',
@@ -1437,7 +1437,7 @@ export default function CareTeamDashboard() {
               style={{
                 width: '100%',
                 background: hasActiveEmergency ? 'rgba(163,52,23,0.06)' : '#FFFFFF',
-                border: `1px solid ${hasActiveEmergency ? 'rgba(163,52,23,0.3)' : score >= 8 ? 'rgba(163,52,23,0.15)' : '#98C890'}`,
+                border: `1px solid ${hasActiveEmergency ? 'rgba(163,52,23,0.3)' : score >= 8 ? 'rgba(163,52,23,0.15)' : '#E4E4E7'}`,
                 borderRadius: '20px',
                 padding: '14px 16px',
                 marginBottom: '10px',
