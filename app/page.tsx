@@ -153,11 +153,8 @@ export default function Home() {
 
         {/* demo video */}
         <section id="video" style={section}>
-          <h2 style={h2}>See it in 3 minutes</h2>
-          <p style={{ fontSize: '16px', lineHeight: 1.55, color: T2, margin: '-6px 0 18px', maxWidth: '680px' }}>
-            Our 2026 Congressional App Challenge video: a full emergency, start to finish, on a real phone.
-          </p>
-          <VideoEmbed id="ozCUg87GAto" title="Relay Arc, 2026 Congressional App Challenge"/>
+          <h2 style={h2}>A simple demonstration</h2>
+          <VideoEmbed id="ozCUg87GAto" title="Relay Arc demonstration"/>
         </section>
 
         {/* what it does */}
