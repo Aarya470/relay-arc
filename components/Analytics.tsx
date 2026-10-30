@@ -79,8 +79,8 @@ export default function Analytics() {
         right: 0,
         zIndex: 200,
         background: '#FFFFFF',
-        borderTop: '3px solid #141413',
-        padding: '16px 20px',
+        borderTop: '1px solid rgba(20,20,19,0.2)',
+        padding: '10px 16px',
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
@@ -97,9 +97,7 @@ export default function Analytics() {
           maxWidth: '640px',
         }}
       >
-        This site stores your sign-in and any form you are part way through, on your device. It
-        counts page views without recording anything about you, and it loads no trackers and no
-        advertising cookies.{' '}
+        We count page views. No ads, no trackers.{' '}
         <a href="/privacy" style={{ color: '#141413', fontWeight: 700 }}>
           Privacy policy
         </a>
@@ -118,7 +116,7 @@ export default function Analytics() {
             fontFamily: 'inherit',
           }}
         >
-          Do not count my views
+          Don&apos;t count me
         </button>
         <button
           onClick={() => dismiss(true)}
@@ -133,7 +131,7 @@ export default function Analytics() {
             fontFamily: 'inherit',
           }}
         >
-          That is fine
+          OK
         </button>
       </div>
     </div>
