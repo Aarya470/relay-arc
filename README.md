@@ -63,4 +63,3 @@ npm run verify
 The idea, the design decisions, the training phrases, testing on real phones and the
 outreach were done by the Relay Arc team. Much of the code was written with the help of
 an AI coding assistant (Claude, by Anthropic).
-<!-- deploy -->
