@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 webpush.setVapidDetails(
   process.env.VAPID_EMAIL!,
   process.env.NEXT_PUBLIC_VAPID_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
+  process.env.VAPID_PRIVATE_KEY!,
 )
 
 export async function GET(req: NextRequest) {
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
   )
 
   const startOfDay = new Date()
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
       const subscription = JSON.parse(sub.subscription)
       await webpush.sendNotification(
         subscription,
-        JSON.stringify({ title, body, data: { url: '/checkin' } })
+        JSON.stringify({ title, body, data: { url: '/checkin' } }),
       )
       sent++
     } catch {}

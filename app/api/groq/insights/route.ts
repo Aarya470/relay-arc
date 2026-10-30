@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 export async function POST(req: NextRequest) {
@@ -23,29 +23,36 @@ export async function POST(req: NextRequest) {
 
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
     const { checkins, vitals, medicationAdherence } = body
 
-    const checkinSummaries = Array.isArray(checkins) && checkins.length > 0
-      ? checkins.map((c: any) => c.summary || c.mood || 'logged').join('; ')
-      : 'No check-ins this week'
+    const checkinSummaries =
+      Array.isArray(checkins) && checkins.length > 0
+        ? checkins.map((c: any) => c.summary || c.mood || 'logged').join('; ')
+        : 'No check-ins this week'
 
-    const vitalsSummary = Array.isArray(vitals) && vitals.length > 0
-      ? vitals.map((v: any) => {
-          const parts: string[] = []
-          if (v.heart_rate) parts.push(`HR ${v.heart_rate}bpm`)
-          if (v.blood_pressure_systolic && v.blood_pressure_diastolic) parts.push(`BP ${v.blood_pressure_systolic}/${v.blood_pressure_diastolic}`)
-          if (v.weight_kg) parts.push(`${v.weight_kg}kg`)
-          return parts.join(', ') || 'logged'
-        }).join('; ')
-      : 'No vitals logged this week'
+    const vitalsSummary =
+      Array.isArray(vitals) && vitals.length > 0
+        ? vitals
+            .map((v: any) => {
+              const parts: string[] = []
+              if (v.heart_rate) parts.push(`HR ${v.heart_rate}bpm`)
+              if (v.blood_pressure_systolic && v.blood_pressure_diastolic)
+                parts.push(`BP ${v.blood_pressure_systolic}/${v.blood_pressure_diastolic}`)
+              if (v.weight_kg) parts.push(`${v.weight_kg}kg`)
+              return parts.join(', ') || 'logged'
+            })
+            .join('; ')
+        : 'No vitals logged this week'
 
-    const adherencePct = typeof medicationAdherence === 'number'
-      ? Math.round(medicationAdherence)
-      : 'unknown'
+    const adherencePct =
+      typeof medicationAdherence === 'number' ? Math.round(medicationAdherence) : 'unknown'
 
     const prompt = `You are a cardiac recovery health coach. Based on the patient data below, generate exactly 3 personalized insights in JSON format.
 
@@ -73,14 +80,20 @@ Never use em dashes or semicolons. Use short plain sentences.`
 
     let insights: any[]
     try {
-      const stripped = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+      const stripped = text
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim()
       const parsed = JSON.parse(stripped)
-      insights = Array.isArray(parsed) ? parsed : (parsed.insights || [])
+      insights = Array.isArray(parsed) ? parsed : parsed.insights || []
     } catch {
       const start = text.indexOf('[')
       const end = text.lastIndexOf(']')
       if (start === -1 || end < start) {
-        return NextResponse.json({ error: `No JSON array found: ${text.slice(0, 100)}` }, { status: 502 })
+        return NextResponse.json(
+          { error: `No JSON array found: ${text.slice(0, 100)}` },
+          { status: 502 },
+        )
       }
       try {
         insights = JSON.parse(text.slice(start, end + 1))

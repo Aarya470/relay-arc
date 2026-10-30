@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 export async function POST(req: NextRequest) {
@@ -20,7 +20,10 @@ export async function POST(req: NextRequest) {
     // Auth check — must be a care team member
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { data: member } = await supabase
@@ -59,7 +62,7 @@ Never use em dashes or semicolons. Use short plain sentences.`
       model: CHAT_MODEL,
       ...REASONING_TEXT,
       messages: [{ role: 'user', content: prompt }],
-      temperature: 0.2
+      temperature: 0.2,
     })
 
     const text = completion.choices[0].message.content || '{}'

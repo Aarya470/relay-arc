@@ -1,14 +1,4 @@
 // Voice SOS languages.
-//
-// The on-device Relay Triage Engine normalises Hindi, Marathi and Spanish — in both
-// Devanagari and romanised form — onto the same canonical English tokens it was
-// trained on (see ml/featurize.py MULTILINGUAL). So the classifier itself is
-// language-agnostic; the only thing that has to change per language is the
-// speech-recognition locale we hand to the browser, and the label on the button.
-//
-// NOTE: the Hindi and Marathi phrasings in the corpus were authored from general
-// knowledge and are pending native-speaker review before we lean on them in
-// production. See ml/corpus.py.
 
 export type LangId = 'en' | 'hi' | 'mr' | 'es'
 
@@ -58,7 +48,7 @@ export const VOICE_LANGS: VoiceLang[] = [
 ]
 
 export function langById(id: LangId): VoiceLang {
-  return VOICE_LANGS.find(l => l.id === id) || VOICE_LANGS[0]
+  return VOICE_LANGS.find((l) => l.id === id) || VOICE_LANGS[0]
 }
 
 const STORE_KEY = 'relay_voice_lang'
@@ -73,7 +63,9 @@ export function detectLang(): LangId {
   try {
     const saved = localStorage.getItem(STORE_KEY)
     if (saved === 'en' || saved === 'hi' || saved === 'mr' || saved === 'es') return saved
-  } catch { /* private mode */ }
+  } catch {
+    /* private mode */
+  }
   try {
     const tags = [...(navigator.languages || []), navigator.language || '']
     for (const t of tags) {
@@ -82,12 +74,18 @@ export function detectLang(): LangId {
       if (base === 'hi') return 'hi'
       if (base === 'es') return 'es'
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return 'en'
 }
 
 export function rememberLang(id: LangId) {
-  try { localStorage.setItem(STORE_KEY, id) } catch { /* private mode */ }
+  try {
+    localStorage.setItem(STORE_KEY, id)
+  } catch {
+    /* private mode */
+  }
 }
 
 /**
@@ -98,6 +96,6 @@ export function resolveLocale(l: VoiceLang): string {
   if (l.id !== 'en') return l.locale
   if (typeof navigator === 'undefined') return 'en-US'
   const tags = [...(navigator.languages || []), navigator.language || '']
-  const en = tags.find(t => t.toLowerCase().startsWith('en') && t.includes('-'))
+  const en = tags.find((t) => t.toLowerCase().startsWith('en') && t.includes('-'))
   return en || 'en-IN'
 }

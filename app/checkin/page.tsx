@@ -9,52 +9,66 @@ import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const BG      = '#B3DDAC'
+const BG = '#B3DDAC'
 const SURFACE = '#FFFFFF'
-const T1      = '#141413'
-const T2      = '#5C5A52'
-const T3      = '#5C5A52'
-const ACCENT  = '#42623C'
+const T1 = '#141413'
+const T2 = '#5C5A52'
+const T3 = '#5C5A52'
+const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.09)'
-const GREEN   = '#42623C'
+const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
-const BORDER  = '#98C890'
-const SHADOW  = 'none'
+const BORDER = '#98C890'
+const SHADOW = 'none'
 
-const spring       = { type: 'spring', stiffness: 380, damping: 24 } as const
+const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 const bubbleSpring = { type: 'spring', stiffness: 320, damping: 28 } as const
 
 export default function Checkin() {
   const [messages, setMessages] = useState<{ role: string; text: string }[]>([])
-  const [input, setInput]       = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [profile, setProfile]   = useState<any>(null)
-  const [done, setDone]         = useState(false)
-  const [focused, setFocused]   = useState(false)
-  const bottomRef               = useRef<HTMLDivElement>(null)
-  const router                  = useRouter()
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [profile, setProfile] = useState<any>(null)
+  const [done, setDone] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) return
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(data)
-      setMessages([{ role: 'ai', text: `Hey ${data?.full_name?.split(' ')[0] || 'there'}! How are you feeling today?` }])
+      setMessages([
+        {
+          role: 'ai',
+          text: `Hey ${data?.full_name?.split(' ')[0] || 'there'}! How are you feeling today?`,
+        },
+      ])
     }
     load()
   }, [])
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
-  const callGroq = async (msgs: { role: string; text: string }[], mode?: string): Promise<string> => {
-    const { data: { session } } = await supabase.auth.getSession()
+  const callGroq = async (
+    msgs: { role: string; text: string }[],
+    mode?: string,
+  ): Promise<string> => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
     const token = session?.access_token
     if (!token) throw new Error('Not authenticated')
 
     const res = await fetch('/api/groq/checkin', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
         messages: msgs,
         profile: { diagnosis: profile?.diagnosis, medications: profile?.medications },
@@ -82,21 +96,27 @@ export default function Checkin() {
     try {
       const response = await callGroq(newMessages)
       const clean = response.replace('[CHECKIN_COMPLETE]', '').trim()
-      setMessages(prev => [...prev, { role: 'ai', text: clean }])
+      setMessages((prev) => [...prev, { role: 'ai', text: clean }])
 
       if (response.includes('[CHECKIN_COMPLETE]')) {
         const fullConvo = [...newMessages, { role: 'ai', text: clean }]
         let clinicalSummary = clean
         try {
-          clinicalSummary = await callGroq(fullConvo, 'summary') || clean
-        } catch { /* fallback */ }
+          clinicalSummary = (await callGroq(fullConvo, 'summary')) || clean
+        } catch {
+          /* fallback */
+        }
 
-        const { data: { user } } = await supabase.auth.getUser()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
         if (user) {
           // "Check-in saved" was said without looking at the insert. A whole
           // conversation someone had just worked through could fail to save
           // while the screen congratulated them on finishing it.
-          const { error: saveError } = await supabase.from('checkins').insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
+          const { error: saveError } = await supabase
+            .from('checkins')
+            .insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
           if (saveError) {
             console.error('checkin insert failed:', saveError)
             toast.error('Your answers could not be saved. Nothing from this check-in was kept.')
@@ -107,12 +127,16 @@ export default function Checkin() {
 
           // Trigger health intelligence analysis in background (fire-and-forget)
           // This will auto-alert the care team if patterns are dangerous
-          const { data: { session: s } } = await supabase.auth.getSession()
+          const {
+            data: { session: s },
+          } = await supabase.auth.getSession()
           if (s?.access_token) {
             fetch('/api/groq/health-intelligence', {
               method: 'POST',
-              headers: { 'Authorization': `Bearer ${s.access_token}` },
-            }).catch(() => { /* silent — non-critical */ })
+              headers: { Authorization: `Bearer ${s.access_token}` },
+            }).catch(() => {
+              /* silent — non-critical */
+            })
           }
         }
         setDone(true)
@@ -120,7 +144,7 @@ export default function Checkin() {
     } catch (err: any) {
       console.error('Checkin AI error:', err)
       toast.error('Could not reach the check-in assistant. Your answers are still saved.')
-      setMessages(prev => prev.slice(0, -1))
+      setMessages((prev) => prev.slice(0, -1))
       setInput(userMsg)
     }
 
@@ -130,50 +154,77 @@ export default function Checkin() {
   const QUICK_REPLIES = ['Feeling good!', 'A bit tired', 'Not great today', 'Some discomfort']
 
   const AIAvatar = ({ size = 28 }: { size?: number }) => (
-    <div style={{
-      width: size, height: size, borderRadius: '14px', flexShrink: 0,
-      background: ACCENT,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>
+    <div
+      style={{
+        width: size,
+        height: size,
+        borderRadius: '14px',
+        flexShrink: 0,
+        background: ACCENT,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       {/* ECG pulse line */}
-      <svg aria-hidden focusable={false} width={Math.round(size * 0.62)} height={Math.round(size * 0.42)} viewBox="0 0 18 12" fill="none">
-        <path d="M0 6 H3 L5 1 L8 11 L10 4 L12 8 H15 L17 3 L18 6"
-          stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg
+        aria-hidden
+        focusable={false}
+        width={Math.round(size * 0.62)}
+        height={Math.round(size * 0.42)}
+        viewBox="0 0 18 12"
+        fill="none"
+      >
+        <path
+          d="M0 6 H3 L5 1 L8 11 L10 4 L12 8 H15 L17 3 L18 6"
+          stroke="white"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     </div>
   )
 
   return (
-    <div style={{
-      minHeight: '100dvh',
-      background: BG,
-      display: 'flex',
-      flexDirection: 'column',
-      paddingBottom: '80px',
-      maxWidth: '720px',
-      margin: '0 auto',
-      width: '100%',
-    }}>
-
-      {/* Header */}
-      <div style={{
-        padding: '52px 20px 14px',
-        borderBottom: `1px solid ${BORDER}`,
+    <div
+      style={{
+        minHeight: '100dvh',
+        background: BG,
         display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        background: 'rgba(255,255,255,0.92)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-      }}>
+        flexDirection: 'column',
+        paddingBottom: '80px',
+        maxWidth: '720px',
+        margin: '0 auto',
+        width: '100%',
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          padding: '52px 20px 14px',
+          borderBottom: `1px solid ${BORDER}`,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+        }}
+      >
         <button
           onClick={() => router.push('/dashboard')}
           aria-label="Back to dashboard"
           style={{
-            width: '38px', height: '38px',
-            background: 'none', border: 'none',
-            cursor: 'pointer', marginLeft: '-8px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: '38px',
+            height: '38px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            marginLeft: '-8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             flexShrink: 0,
           }}
         >
@@ -181,30 +232,74 @@ export default function Checkin() {
         </button>
 
         <div style={{ flex: 1 }}>
-          <h1 style={{ color: T1, fontWeight: 800, fontSize: '17px', letterSpacing: '-0.4px', margin: 0 }}>Daily Check-in</h1>
-          <p style={{ color: T3, fontSize: '11px', marginTop: '2px', fontFamily: 'inherit', margin: '2px 0 0', letterSpacing: '0.4px' }}>
-            {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
+          <h1
+            style={{
+              color: T1,
+              fontWeight: 800,
+              fontSize: '17px',
+              letterSpacing: '-0.4px',
+              margin: 0,
+            }}
+          >
+            Daily Check-in
+          </h1>
+          <p
+            style={{
+              color: T3,
+              fontSize: '11px',
+              marginTop: '2px',
+              fontFamily: 'inherit',
+              margin: '2px 0 0',
+              letterSpacing: '0.4px',
+            }}
+          >
+            {new Date()
+              .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+              .toUpperCase()}
           </p>
         </div>
 
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '5px',
-          background: GREEN_DIM,
-          border: `1px solid rgba(86,128,78,0.18)`,
-          borderRadius: '14px',
-          padding: '4px 10px',
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            background: GREEN_DIM,
+            border: `1px solid rgba(86,128,78,0.18)`,
+            borderRadius: '14px',
+            padding: '4px 10px',
+          }}
+        >
           <motion.div
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
             style={{ width: '5px', height: '5px', borderRadius: '50%', background: GREEN }}
           />
-          <span style={{ color: GREEN, fontSize: '10px', fontFamily: 'inherit', fontWeight: 700, letterSpacing: '0.5px' }}>LIVE</span>
+          <span
+            style={{
+              color: GREEN,
+              fontSize: '10px',
+              fontFamily: 'inherit',
+              fontWeight: 700,
+              letterSpacing: '0.5px',
+            }}
+          >
+            LIVE
+          </span>
         </div>
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 16px 8px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '20px 16px 8px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+        }}
+      >
         <AnimatePresence initial={false}>
           {messages.map((m, i) => (
             <motion.div
@@ -212,19 +307,28 @@ export default function Checkin() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...bubbleSpring }}
-              style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '8px', alignItems: 'flex-end' }}
+              style={{
+                display: 'flex',
+                justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start',
+                gap: '8px',
+                alignItems: 'flex-end',
+              }}
             >
               {m.role === 'ai' && <AIAvatar />}
-              <div style={{
-                maxWidth: '78%', padding: '11px 15px',
-                borderRadius: m.role === 'user' ? '18px 18px 5px 18px' : '5px 18px 18px 18px',
-                background: m.role === 'user' ? ACCENT : SURFACE,
-                border: m.role === 'user' ? 'none' : `1px solid ${BORDER}`,
-                boxShadow: m.role === 'user' ? 'none' : SHADOW,
-                color: m.role === 'user' ? '#FFFFFF' : T1,
-                fontSize: '14px', lineHeight: 1.6,
-                fontWeight: m.role === 'user' ? 500 : 400,
-              }}>
+              <div
+                style={{
+                  maxWidth: '78%',
+                  padding: '11px 15px',
+                  borderRadius: m.role === 'user' ? '18px 18px 5px 18px' : '5px 18px 18px 18px',
+                  background: m.role === 'user' ? ACCENT : SURFACE,
+                  border: m.role === 'user' ? 'none' : `1px solid ${BORDER}`,
+                  boxShadow: m.role === 'user' ? 'none' : SHADOW,
+                  color: m.role === 'user' ? '#FFFFFF' : T1,
+                  fontSize: '14px',
+                  lineHeight: 1.6,
+                  fontWeight: m.role === 'user' ? 500 : 400,
+                }}
+              >
                 {m.text}
               </div>
             </motion.div>
@@ -239,20 +343,29 @@ export default function Checkin() {
             style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}
           >
             <AIAvatar />
-            <div style={{
-              background: SURFACE,
-              border: `1px solid ${BORDER}`,
-              boxShadow: SHADOW,
-              padding: '13px 16px',
-              borderRadius: '12px',
-              display: 'flex', gap: '5px', alignItems: 'center',
-            }}>
-              {[0, 1, 2].map(i => (
+            <div
+              style={{
+                background: SURFACE,
+                border: `1px solid ${BORDER}`,
+                boxShadow: SHADOW,
+                padding: '13px 16px',
+                borderRadius: '12px',
+                display: 'flex',
+                gap: '5px',
+                alignItems: 'center',
+              }}
+            >
+              {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
                   style={{ width: '5px', height: '5px', borderRadius: '50%', background: T3 }}
                   animate={{ opacity: [0.25, 1, 0.25], y: [0, -3, 0] }}
-                  transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
+                  transition={{
+                    duration: 0.9,
+                    repeat: Infinity,
+                    delay: i * 0.18,
+                    ease: 'easeInOut',
+                  }}
                 />
               ))}
             </div>
@@ -273,37 +386,68 @@ export default function Checkin() {
               margin: '8px 0',
             }}
           >
-            <div style={{
-              width: '52px', height: '52px', borderRadius: '50%',
-              background: GREEN,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 14px',
-            }}>
+            <div
+              style={{
+                width: '52px',
+                height: '52px',
+                borderRadius: '50%',
+                background: GREEN,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 14px',
+              }}
+            >
               <Check size={24} color="white" strokeWidth={2.5} />
             </div>
-            <p style={{ color: T1, fontWeight: 800, fontSize: '16px', marginBottom: '5px', letterSpacing: '-0.3px' }}>Check-in complete</p>
-            <p style={{ color: T2, fontSize: '12px', marginBottom: '20px', lineHeight: 1.5 }}>Your responses have been saved. Anything you mentioned about your vitals is now in your NEWS2 sheet</p>
+            <p
+              style={{
+                color: T1,
+                fontWeight: 800,
+                fontSize: '16px',
+                marginBottom: '5px',
+                letterSpacing: '-0.3px',
+              }}
+            >
+              Check-in complete
+            </p>
+            <p style={{ color: T2, fontSize: '12px', marginBottom: '20px', lineHeight: 1.5 }}>
+              Your responses have been saved. Anything you mentioned about your vitals is now in
+              your NEWS2 sheet
+            </p>
             <div style={{ display: 'flex', gap: '8px' }}>
               <motion.button
-                whileTap={{ scale: 0.97, y: 1 }} transition={spring}
+                whileTap={{ scale: 0.97, y: 1 }}
+                transition={spring}
                 onClick={() => router.push('/history')}
                 style={{
-                  flex: 1, background: SURFACE, color: T1,
-                  fontWeight: 700, fontSize: '13px',
-                  padding: '13px 16px', borderRadius: '12px',
-                  border: `1px solid ${BORDER}`, cursor: 'pointer',
+                  flex: 1,
+                  background: SURFACE,
+                  color: T1,
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  padding: '13px 16px',
+                  borderRadius: '12px',
+                  border: `1px solid ${BORDER}`,
+                  cursor: 'pointer',
                 }}
               >
                 View history
               </motion.button>
               <motion.button
-                whileTap={{ scale: 0.97, y: 1 }} transition={spring}
+                whileTap={{ scale: 0.97, y: 1 }}
+                transition={spring}
                 onClick={() => router.push('/dashboard')}
                 style={{
-                  flex: 1, background: ACCENT, color: '#FFFFFF',
-                  fontWeight: 700, fontSize: '13px',
-                  padding: '13px 16px', borderRadius: '12px',
-                  border: 'none', cursor: 'pointer',
+                  flex: 1,
+                  background: ACCENT,
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  padding: '13px 16px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 Dashboard
@@ -318,7 +462,7 @@ export default function Checkin() {
       {/* Quick replies */}
       {messages.length === 1 && !done && (
         <div style={{ padding: '8px 16px 4px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
-          {QUICK_REPLIES.map(r => (
+          {QUICK_REPLIES.map((r) => (
             <motion.button
               key={r}
               whileTap={{ scale: 0.95 }}
@@ -330,8 +474,11 @@ export default function Checkin() {
                 border: `1px solid ${BORDER}`,
                 borderRadius: '14px',
                 padding: '8px 15px',
-                color: T2, fontSize: '12px', fontWeight: 500,
-                cursor: 'pointer', whiteSpace: 'nowrap',
+                color: T2,
+                fontSize: '12px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
               }}
             >
               {r}
@@ -342,19 +489,23 @@ export default function Checkin() {
 
       {/* Input */}
       {!done && (
-        <div style={{
-          padding: '8px 16px 14px',
-          borderTop: `1px solid ${focused ? 'rgba(86,128,78,0.2)' : BORDER}`,
-          display: 'flex', gap: '8px', alignItems: 'center',
-          background: 'rgba(255,255,255,0.94)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          transition: 'border-color 0.18s ease',
-        }}>
+        <div
+          style={{
+            padding: '8px 16px 14px',
+            borderTop: `1px solid ${focused ? 'rgba(86,128,78,0.2)' : BORDER}`,
+            display: 'flex',
+            gap: '8px',
+            alignItems: 'center',
+            background: 'rgba(255,255,255,0.94)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            transition: 'border-color 0.18s ease',
+          }}
+        >
           <input
             value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && sendMessage()}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             placeholder="How are you feeling..."
@@ -384,20 +535,24 @@ export default function Checkin() {
             // "button". It is the only way to send a message on this page.
             aria-label={loading ? 'Sending your answer' : 'Send'}
             style={{
-              width: '44px', height: '44px',
+              width: '44px',
+              height: '44px',
               background: input.trim() ? ACCENT : BG,
               borderRadius: '12px',
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
               cursor: input.trim() ? 'pointer' : 'default',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               flexShrink: 0,
               transition: 'background 0.15s ease',
             }}
           >
-            {loading
-              ? <Loader2 size={16} color={input.trim() ? '#FFFFFF' : T3} className="animate-spin" />
-              : <Send size={16} color={input.trim() ? '#FFFFFF' : T3} />
-            }
+            {loading ? (
+              <Loader2 size={16} color={input.trim() ? '#FFFFFF' : T3} className="animate-spin" />
+            ) : (
+              <Send size={16} color={input.trim() ? '#FFFFFF' : T3} />
+            )}
           </motion.button>
         </div>
       )}

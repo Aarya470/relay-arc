@@ -1,59 +1,33 @@
 'use client'
 // Flare check — the page that is allowed to say "this is probably not an emergency".
-//
-// WHY THIS EXISTS
-// Every other route in this app funnels toward a hospital. For someone with POTS
-// that default is wrong most of the time: the episode is frightening, the watch
-// says 140, and it resolves on the floor with salt and water. Handing that person
-// a hospital list is not help, and in the United States an avoidable emergency
-// visit is one of the most expensive things a person without money can
-// accidentally buy. The fear of that bill is then itself a reason they hesitate
-// on the night it really is something — so getting this judgement right cuts both
-// ways.
-//
-// WHY IT IS PUBLIC AND HAS NO ACCOUNT
-// Same reasoning as /card. A person mid-episode is not going to create an
-// account, and a link that demands one is a link nobody shares in a support
-// group. Everything here runs on-device against lib/autonomic. Nothing is sent
-// anywhere and there is no server call on this page.
-//
-// THE SAFETY SHAPE
-// Two rules, both visible in the code below rather than left to good intentions.
-//   1. The red-flag screen comes FIRST, before any number is asked for, so no
-//      reassuring measurement can be on screen while someone decides whether
-//      their chest hurts.
-//   2. Emergency services are reachable from every single step, including the
-//      reassuring one. There is no state of this page from which calling for help
-//      is more than one tap away.
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Phone, ChevronRight, AlertTriangle, Check, Info } from 'lucide-react'
 import {
-  RED_FLAGS, COUNTER_STEPS, assessFlare, assessOrthostatic, BASIS,
+  RED_FLAGS,
+  COUNTER_STEPS,
+  assessFlare,
+  assessOrthostatic,
+  BASIS,
   type FlareAssessment,
 } from '@/lib/autonomic'
 
 // Ink tones, for text inside the white cards, which is nearly all of this page.
-const INK = '#141413', INK2 = '#5C5A52', INK3 = '#5C5A52'
-const BORDER = '#DCE6D6', WHITE = '#FFFFFF'
+const INK = '#141413',
+  INK2 = '#5C5A52',
+  INK3 = '#5C5A52'
+const BORDER = '#DCE6D6',
+  WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757', CRIT = '#A33417'
+const ORANGE = '#D97757',
+  CRIT = '#A33417'
 
 // The page, and the few things that sit directly on it.
-// THE PAGE GREEN, AND WHY IT IS THIS ONE.
-// This page used to be #4B8150. A contrast audit against the running site found
-// body copy on it at 1.50:1, which is not a near miss, it is unreadable, and it
-// had been shipping. The arithmetic is unforgiving: on #4B8150 the only colour
-// that reaches the 4.5:1 small-text minimum is pure white, at 4.61, and on
-// #57945C nothing reaches it at all, white included, at 3.62. A dark green page
-// cannot carry small text, full stop.
-// #B3DDAC is the page colour the text tokens were tuned against: ink is
-// 12.16:1 on it and the secondary grey 4.56:1. See app/globals.css.
 const PAGE = '#B3DDAC'
-const ON = '#141413'          // ink, 12.16:1 on the light green
-const ON_3 = '#5C5A52'        // 4.56:1, the tightest pairing in the system
-const RULE = '#7EB382'        // hairline, non-text
-const CORAL = '#A33417'       // warm accent that is legible on light, 4.53:1
+const ON = '#141413' // ink, 12.16:1 on the light green
+const ON_3 = '#5C5A52' // 4.56:1, the tightest pairing in the system
+const RULE = '#7EB382' // hairline, non-text
+const CORAL = '#A33417' // warm accent that is legible on light, 4.53:1
 const mono = 'var(--font-mono, monospace)'
 
 type Step = 'flags' | 'detail' | 'result'
@@ -78,14 +52,15 @@ export default function FlarePage() {
   const [doneSteps, setDoneSteps] = useState<string[]>([])
 
   const toggle = (id: string) =>
-    setFlags(f => (f.includes(id) ? f.filter(x => x !== id) : [...f, id]))
+    setFlags((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id]))
 
   const orthostatic = useMemo(() => {
-    const s = numOrNull(supineHr), st = numOrNull(standingHr)
+    const s = numOrNull(supineHr),
+      st = numOrNull(standingHr)
     if (s == null || st == null) return null
     return assessOrthostatic(
       { supineHr: s, standingHr: st, minutesStanding: Number(minsStanding) || 0 },
-      numOrNull(age)
+      numOrNull(age),
     )
   }, [supineHr, standingHr, minsStanding, age])
 
@@ -103,71 +78,134 @@ export default function FlarePage() {
   // Any red flag skips the questions entirely. Asking someone with stroke signs
   // to type in their resting pulse first would be indefensible.
   const goFromFlags = () => {
-    if (flags.length > 0) { setFeelsLike('usual'); setStep('result') }
-    else setStep('detail')
+    if (flags.length > 0) {
+      setFeelsLike('usual')
+      setStep('result')
+    } else setStep('detail')
   }
 
   return (
     <div style={{ minHeight: '100dvh', background: PAGE, color: INK }}>
       <div style={{ maxWidth: 620, margin: '0 auto', padding: '20px 20px 120px' }}>
-
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
-          <Link href="/" aria-label="Home" style={{
-            width: 38, height: 38, borderRadius: 12, border: `1px solid ${BORDER}`,
-            background: WHITE, display: 'grid', placeItems: 'center', color: INK2, borderColor: WHITE,
-          }}>
+          <Link
+            href="/"
+            aria-label="Home"
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 12,
+              border: `1px solid ${BORDER}`,
+              background: WHITE,
+              display: 'grid',
+              placeItems: 'center',
+              color: INK2,
+              borderColor: WHITE,
+            }}
+          >
             <ArrowLeft size={17} />
           </Link>
-          <div style={{ fontFamily: 'inherit', fontSize: 11, letterSpacing: 2, color: CORAL, fontWeight: 700 }}>
+          <div
+            style={{
+              fontFamily: 'inherit',
+              fontSize: 11,
+              letterSpacing: 2,
+              color: CORAL,
+              fontWeight: 700,
+            }}
+          >
             FLARE CHECK
           </div>
         </div>
 
         {/* Always reachable. Present on every step including the reassuring one. */}
-        <a href="tel:911" style={{
-          display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none',
-          background: WHITE, color: CRIT, borderRadius: 14, padding: '14px 16px', marginBottom: 24,
-          borderLeft: `6px solid ${CRIT}`,
-        }}>
+        <a
+          href="tel:911"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            textDecoration: 'none',
+            background: WHITE,
+            color: CRIT,
+            borderRadius: 14,
+            padding: '14px 16px',
+            marginBottom: 24,
+            borderLeft: `6px solid ${CRIT}`,
+          }}
+        >
           <Phone size={18} />
           <div>
             <div style={{ fontWeight: 800, fontSize: 15 }}>Call emergency services</div>
-            <div style={{ fontSize: 12, opacity: 0.85 }}>Do this first if you are frightened. Nothing below is a reason to wait.</div>
+            <div style={{ fontSize: 12, opacity: 0.85 }}>
+              Do this first if you are frightened. Nothing below is a reason to wait.
+            </div>
           </div>
         </a>
 
         {step === 'flags' && (
           <>
-            <h1 style={{ color: ON, fontSize: 30, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.15, marginBottom: 10 }}>
+            <h1
+              style={{
+                color: ON,
+                fontSize: 30,
+                fontWeight: 800,
+                letterSpacing: -0.8,
+                lineHeight: 1.15,
+                marginBottom: 10,
+              }}
+            >
               Is any of this happening?
             </h1>
             <p style={{ color: ON, fontSize: 15, lineHeight: 1.6, marginBottom: 24 }}>
-              Read the whole list before answering. These are the things that get explained away
-              by people who have felt something similar many times before, and they are also how
-              a serious event looks.
+              Read the whole list before answering. These are the things that get explained away by
+              people who have felt something similar many times before, and they are also how a
+              serious event looks.
             </p>
 
             <div style={{ display: 'grid', gap: 10 }}>
-              {RED_FLAGS.map(f => {
+              {RED_FLAGS.map((f) => {
                 const on = flags.includes(f.id)
                 return (
-                  <button key={f.id} onClick={() => toggle(f.id)} style={{
-                    textAlign: 'left', background: on ? '#FBEFEC' : WHITE,
-                    border: `1px solid ${on ? CRIT : BORDER}`, borderRadius: 14,
-                    padding: '14px 16px', cursor: 'pointer', color: INK,
-                    display: 'flex', gap: 12, alignItems: 'flex-start',
-                  }}>
-                    <div style={{
-                      width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 2,
-                      border: `1.5px solid ${on ? CRIT : BORDER}`, background: on ? CRIT : 'transparent',
-                      display: 'grid', placeItems: 'center',
-                    }}>
+                  <button
+                    key={f.id}
+                    onClick={() => toggle(f.id)}
+                    style={{
+                      textAlign: 'left',
+                      background: on ? '#FBEFEC' : WHITE,
+                      border: `1px solid ${on ? CRIT : BORDER}`,
+                      borderRadius: 14,
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      color: INK,
+                      display: 'flex',
+                      gap: 12,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: 6,
+                        flexShrink: 0,
+                        marginTop: 2,
+                        border: `1.5px solid ${on ? CRIT : BORDER}`,
+                        background: on ? CRIT : 'transparent',
+                        display: 'grid',
+                        placeItems: 'center',
+                      }}
+                    >
                       {on && <Check size={13} color={WHITE} />}
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: 15, lineHeight: 1.4 }}>{f.prompt}</div>
+                      <div style={{ fontWeight: 600, fontSize: 15, lineHeight: 1.4 }}>
+                        {f.prompt}
+                      </div>
                       {on && (
-                        <div style={{ color: CRIT, fontSize: 13, lineHeight: 1.5, marginTop: 6 }}>{f.because}</div>
+                        <div style={{ color: CRIT, fontSize: 13, lineHeight: 1.5, marginTop: 6 }}>
+                          {f.because}
+                        </div>
                       )}
                     </div>
                   </button>
@@ -175,11 +213,25 @@ export default function FlarePage() {
               })}
             </div>
 
-            <button onClick={goFromFlags} style={{
-              width: '100%', marginTop: 22, padding: '16px', borderRadius: 14, border: 'none',
-              background: flags.length ? CRIT : WHITE, color: flags.length ? WHITE : INK, fontWeight: 800, fontSize: 15,
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            }}>
+            <button
+              onClick={goFromFlags}
+              style={{
+                width: '100%',
+                marginTop: 22,
+                padding: '16px',
+                borderRadius: 14,
+                border: 'none',
+                background: flags.length ? CRIT : WHITE,
+                color: flags.length ? WHITE : INK,
+                fontWeight: 800,
+                fontSize: 15,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+              }}
+            >
               {flags.length ? 'See what to do' : 'None of these'}
               <ChevronRight size={17} />
             </button>
@@ -188,27 +240,50 @@ export default function FlarePage() {
 
         {step === 'detail' && (
           <>
-            <h1 style={{ color: ON, fontSize: 30, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.15, marginBottom: 10 }}>
+            <h1
+              style={{
+                color: ON,
+                fontSize: 30,
+                fontWeight: 800,
+                letterSpacing: -0.8,
+                lineHeight: 1.15,
+                marginBottom: 10,
+              }}
+            >
               Does this feel like your usual episodes?
             </h1>
             <p style={{ color: ON, fontSize: 15, lineHeight: 1.6, marginBottom: 22 }}>
-              You know your own pattern better than any score does. This answer counts for more
-              than the numbers underneath it.
+              You know your own pattern better than any score does. This answer counts for more than
+              the numbers underneath it.
             </p>
 
             <div style={{ display: 'grid', gap: 10, marginBottom: 30 }}>
-              {([
-                ['usual', 'Yes, this is familiar', 'It is unpleasant but recognisable.'],
-                ['different', 'No, this feels different', 'Something about it is not like the others.'],
-                ['unsure', 'I cannot tell', 'Honest answer, and a useful one.'],
-              ] as const).map(([id, label, sub]) => {
+              {(
+                [
+                  ['usual', 'Yes, this is familiar', 'It is unpleasant but recognisable.'],
+                  [
+                    'different',
+                    'No, this feels different',
+                    'Something about it is not like the others.',
+                  ],
+                  ['unsure', 'I cannot tell', 'Honest answer, and a useful one.'],
+                ] as const
+              ).map(([id, label, sub]) => {
                 const on = feelsLike === id
                 return (
-                  <button key={id} onClick={() => setFeelsLike(id)} style={{
-                    textAlign: 'left', background: on ? '#F1F3EC' : WHITE,
-                    border: `1px solid ${on ? GREEN_DEEP : BORDER}`, borderRadius: 14,
-                    padding: '14px 16px', cursor: 'pointer', color: INK,
-                  }}>
+                  <button
+                    key={id}
+                    onClick={() => setFeelsLike(id)}
+                    style={{
+                      textAlign: 'left',
+                      background: on ? '#F1F3EC' : WHITE,
+                      border: `1px solid ${on ? GREEN_DEEP : BORDER}`,
+                      borderRadius: 14,
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      color: INK,
+                    }}
+                  >
                     <div style={{ fontWeight: 700, fontSize: 15 }}>{label}</div>
                     <div style={{ color: INK2, fontSize: 13, marginTop: 3 }}>{sub}</div>
                   </button>
@@ -216,7 +291,16 @@ export default function FlarePage() {
               })}
             </div>
 
-            <div style={{ fontFamily: 'inherit', fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 12 }}>
+            <div
+              style={{
+                fontFamily: 'inherit',
+                fontSize: 10,
+                letterSpacing: 1.6,
+                color: ON_3,
+                fontWeight: 700,
+                marginBottom: 12,
+              }}
+            >
               OPTIONAL NUMBERS
             </div>
             <p style={{ color: ON, fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
@@ -225,12 +309,28 @@ export default function FlarePage() {
             </p>
 
             <div style={{ display: 'grid', gap: 12 }}>
-              <Field label="Your normal resting pulse" hint="What it usually reads sitting still on an ordinary day" value={baselineHr} onChange={setBaselineHr} />
-              <Field label="Your resting pulse right now" value={restingHr} onChange={setRestingHr} />
-              <div style={{
-                background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 14, padding: 16,
-              }}>
-                <div style={{ color: INK, fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Lying down, then standing</div>
+              <Field
+                label="Your normal resting pulse"
+                hint="What it usually reads sitting still on an ordinary day"
+                value={baselineHr}
+                onChange={setBaselineHr}
+              />
+              <Field
+                label="Your resting pulse right now"
+                value={restingHr}
+                onChange={setRestingHr}
+              />
+              <div
+                style={{
+                  background: WHITE,
+                  border: `1px solid ${BORDER}`,
+                  borderRadius: 14,
+                  padding: 16,
+                }}
+              >
+                <div style={{ color: INK, fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
+                  Lying down, then standing
+                </div>
                 <div style={{ color: INK2, fontSize: 13, lineHeight: 1.55, marginBottom: 14 }}>
                   Only if you are safe to stand and someone is nearby. Rest lying down first, take
                   your pulse, then stand and take it again.
@@ -243,25 +343,49 @@ export default function FlarePage() {
                 {orthostatic && (
                   <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
                     {orthostatic.notes.map((n, i) => (
-                      <div key={i} style={{ color: INK2, fontSize: 13, lineHeight: 1.55, marginBottom: 6 }}>{n}</div>
+                      <div
+                        key={i}
+                        style={{ color: INK2, fontSize: 13, lineHeight: 1.55, marginBottom: 6 }}
+                      >
+                        {n}
+                      </div>
                     ))}
-                    <div style={{ fontFamily: 'inherit', fontSize: 10, color: INK3, lineHeight: 1.5, marginTop: 8 }}>
+                    <div
+                      style={{
+                        fontFamily: 'inherit',
+                        fontSize: 10,
+                        color: INK3,
+                        lineHeight: 1.5,
+                        marginTop: 8,
+                      }}
+                    >
                       {BASIS.pots}
                     </div>
                   </div>
                 )}
               </div>
-              <Field label="Your age" hint="Changes which threshold applies. The mark is higher between 12 and 19" value={age} onChange={setAge} />
+              <Field
+                label="Your age"
+                hint="Changes which threshold applies. The mark is higher between 12 and 19"
+                value={age}
+                onChange={setAge}
+              />
             </div>
 
             <button
               onClick={() => setStep('result')}
               disabled={!feelsLike}
               style={{
-                width: '100%', marginTop: 22, padding: '16px', borderRadius: 14,
-                background: feelsLike ? WHITE : 'transparent', color: feelsLike ? INK : ON_3,
+                width: '100%',
+                marginTop: 22,
+                padding: '16px',
+                borderRadius: 14,
+                background: feelsLike ? WHITE : 'transparent',
+                color: feelsLike ? INK : ON_3,
                 border: feelsLike ? 'none' : `1px solid ${RULE}`,
-                fontWeight: 800, fontSize: 15, cursor: feelsLike ? 'pointer' : 'default',
+                fontWeight: 800,
+                fontSize: 15,
+                cursor: feelsLike ? 'pointer' : 'default',
               }}
             >
               {feelsLike ? 'Continue' : 'Pick one of the three above'}
@@ -271,29 +395,66 @@ export default function FlarePage() {
 
         {step === 'result' && result && (
           <>
-            <div style={{
-              background: result.outcome === 'escalate' ? '#FBEFEC' : result.outcome === 'unclear' ? '#FDF6EC' : '#F1F3EC',
-              border: `1px solid ${result.outcome === 'escalate' ? CRIT : result.outcome === 'unclear' ? ORANGE : GREEN_DEEP}`,
-              borderRadius: 18, padding: 20, marginBottom: 22,
-            }}>
+            <div
+              style={{
+                background:
+                  result.outcome === 'escalate'
+                    ? '#FBEFEC'
+                    : result.outcome === 'unclear'
+                      ? '#FDF6EC'
+                      : '#F1F3EC',
+                border: `1px solid ${result.outcome === 'escalate' ? CRIT : result.outcome === 'unclear' ? ORANGE : GREEN_DEEP}`,
+                borderRadius: 18,
+                padding: 20,
+                marginBottom: 22,
+              }}
+            >
               <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                {result.outcome === 'escalate'
-                  ? <AlertTriangle size={20} color={CRIT} style={{ flexShrink: 0, marginTop: 3 }} />
-                  : <Info size={20} color={result.outcome === 'unclear' ? ORANGE : GREEN_DEEP} style={{ flexShrink: 0, marginTop: 3 }} />}
-                <h1 style={{ color: INK, fontSize: 23, fontWeight: 800, letterSpacing: -0.5, lineHeight: 1.25 }}>
+                {result.outcome === 'escalate' ? (
+                  <AlertTriangle size={20} color={CRIT} style={{ flexShrink: 0, marginTop: 3 }} />
+                ) : (
+                  <Info
+                    size={20}
+                    color={result.outcome === 'unclear' ? ORANGE : GREEN_DEEP}
+                    style={{ flexShrink: 0, marginTop: 3 }}
+                  />
+                )}
+                <h1
+                  style={{
+                    color: INK,
+                    fontSize: 23,
+                    fontWeight: 800,
+                    letterSpacing: -0.5,
+                    lineHeight: 1.25,
+                  }}
+                >
                   {result.headline}
                 </h1>
               </div>
               <div style={{ marginTop: 14 }}>
                 {result.detail.map((d, i) => (
-                  <p key={i} style={{ color: INK2, fontSize: 14, lineHeight: 1.6, marginBottom: 8 }}>{d}</p>
+                  <p
+                    key={i}
+                    style={{ color: INK2, fontSize: 14, lineHeight: 1.6, marginBottom: 8 }}
+                  >
+                    {d}
+                  </p>
                 ))}
               </div>
             </div>
 
             {result.next.includes('counter_manoeuvres') && (
               <>
-                <div style={{ fontFamily: 'inherit', fontSize: 10, letterSpacing: 1.6, color: ON_3, fontWeight: 700, marginBottom: 10 }}>
+                <div
+                  style={{
+                    fontFamily: 'inherit',
+                    fontSize: 10,
+                    letterSpacing: 1.6,
+                    color: ON_3,
+                    fontWeight: 700,
+                    marginBottom: 10,
+                  }}
+                >
                   DO THESE IN ORDER
                 </div>
                 <div style={{ display: 'grid', gap: 10, marginBottom: 24 }}>
@@ -302,35 +463,78 @@ export default function FlarePage() {
                     return (
                       <button
                         key={s.id}
-                        onClick={() => setDoneSteps(d => done ? d.filter(x => x !== s.id) : [...d, s.id])}
+                        onClick={() =>
+                          setDoneSteps((d) => (done ? d.filter((x) => x !== s.id) : [...d, s.id]))
+                        }
                         style={{
-                          textAlign: 'left', background: WHITE, border: `1px solid ${done ? GREEN_DEEP : BORDER}`,
-                          borderRadius: 14, padding: '14px 16px', cursor: 'pointer', color: INK,
-                          opacity: done ? 0.6 : 1, display: 'flex', gap: 12, alignItems: 'flex-start',
+                          textAlign: 'left',
+                          background: WHITE,
+                          border: `1px solid ${done ? GREEN_DEEP : BORDER}`,
+                          borderRadius: 14,
+                          padding: '14px 16px',
+                          cursor: 'pointer',
+                          color: INK,
+                          opacity: done ? 0.6 : 1,
+                          display: 'flex',
+                          gap: 12,
+                          alignItems: 'flex-start',
                         }}
                       >
-                        <div style={{
-                          fontFamily: 'inherit', fontSize: 12, fontWeight: 700, flexShrink: 0,
-                          color: done ? GREEN_DEEP : ORANGE, marginTop: 2, width: 20,
-                        }}>
+                        <div
+                          style={{
+                            fontFamily: 'inherit',
+                            fontSize: 12,
+                            fontWeight: 700,
+                            flexShrink: 0,
+                            color: done ? GREEN_DEEP : ORANGE,
+                            marginTop: 2,
+                            width: 20,
+                          }}
+                        >
                           {done ? '✓' : String(i + 1).padStart(2, '0')}
                         </div>
                         <div>
-                          <div style={{ fontWeight: 700, fontSize: 15, textDecoration: done ? 'line-through' : 'none' }}>
+                          <div
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 15,
+                              textDecoration: done ? 'line-through' : 'none',
+                            }}
+                          >
                             {s.title}
                             {s.holdSeconds && (
-                              <span style={{ fontFamily: 'inherit', fontSize: 11, color: INK3, fontWeight: 400, marginLeft: 8 }}>
+                              <span
+                                style={{
+                                  fontFamily: 'inherit',
+                                  fontSize: 11,
+                                  color: INK3,
+                                  fontWeight: 400,
+                                  marginLeft: 8,
+                                }}
+                              >
                                 {s.holdSeconds}s
                               </span>
                             )}
                           </div>
-                          <div style={{ color: INK2, fontSize: 14, lineHeight: 1.55, marginTop: 4 }}>{s.body}</div>
+                          <div
+                            style={{ color: INK2, fontSize: 14, lineHeight: 1.55, marginTop: 4 }}
+                          >
+                            {s.body}
+                          </div>
                         </div>
                       </button>
                     )
                   })}
                 </div>
-                <div style={{ fontFamily: 'inherit', fontSize: 10, color: ON_3, lineHeight: 1.5, marginBottom: 26 }}>
+                <div
+                  style={{
+                    fontFamily: 'inherit',
+                    fontSize: 10,
+                    color: ON_3,
+                    lineHeight: 1.5,
+                    marginBottom: 26,
+                  }}
+                >
                   {BASIS.counter}
                 </div>
               </>
@@ -341,30 +545,58 @@ export default function FlarePage() {
                 <Link href="/card" style={linkCard}>
                   <div style={{ fontWeight: 700, fontSize: 15 }}>Make an emergency card first</div>
                   <div style={{ color: INK2, fontSize: 13, marginTop: 3 }}>
-                    Two minutes. Puts your blood type, allergies and medications where a paramedic can read them without unlocking your phone.
+                    Two minutes. Puts your blood type, allergies and medications where a paramedic
+                    can read them without unlocking your phone.
                   </div>
                 </Link>
               )}
               <Link href="/rights" style={linkCard}>
                 <div style={{ fontWeight: 700, fontSize: 15 }}>What an emergency room owes you</div>
                 <div style={{ color: INK2, fontSize: 13, marginTop: 3 }}>
-                  They have to examine you whether or not you can pay, and most hospitals must offer financial assistance if you ask. Worth reading before you need it.
+                  They have to examine you whether or not you can pay, and most hospitals must offer
+                  financial assistance if you ask. Worth reading before you need it.
                 </div>
               </Link>
             </div>
 
-            <button onClick={() => { setStep('flags'); setFlags([]); setFeelsLike(null); setDoneSteps([]) }} style={{
-              width: '100%', padding: '14px', borderRadius: 14, border: `1px solid ${BORDER}`,
-              background: WHITE, color: INK2, fontWeight: 600, fontSize: 14, cursor: 'pointer',
-            }}>
+            <button
+              onClick={() => {
+                setStep('flags')
+                setFlags([])
+                setFeelsLike(null)
+                setDoneSteps([])
+              }}
+              style={{
+                width: '100%',
+                padding: '14px',
+                borderRadius: 14,
+                border: `1px solid ${BORDER}`,
+                background: WHITE,
+                color: INK2,
+                fontWeight: 600,
+                fontSize: 14,
+                cursor: 'pointer',
+              }}
+            >
               Start again
             </button>
 
-            <p style={{ color: ON_3, fontSize: 12, lineHeight: 1.6, marginTop: 22 }}>{result.disclaimer}</p>
+            <p style={{ color: ON_3, fontSize: 12, lineHeight: 1.6, marginTop: 22 }}>
+              {result.disclaimer}
+            </p>
           </>
         )}
 
-        <p style={{ color: ON_3, fontSize: 12, lineHeight: 1.6, marginTop: 30, paddingTop: 20, borderTop: `1px solid ${RULE}` }}>
+        <p
+          style={{
+            color: ON_3,
+            fontSize: 12,
+            lineHeight: 1.6,
+            marginTop: 30,
+            paddingTop: 20,
+            borderTop: `1px solid ${RULE}`,
+          }}
+        >
           Nothing on this page is sent anywhere. There is no account and no server call. What you
           type stays in this browser and disappears when you close the tab.
         </p>
@@ -374,43 +606,104 @@ export default function FlarePage() {
 }
 
 const linkCard: React.CSSProperties = {
-  display: 'block', textDecoration: 'none', color: INK,
-  background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 14, padding: '14px 16px',
+  display: 'block',
+  textDecoration: 'none',
+  color: INK,
+  background: WHITE,
+  border: `1px solid ${BORDER}`,
+  borderRadius: 14,
+  padding: '14px 16px',
 }
 
-function Field({ label, hint, value, onChange }: {
-  label: string; hint?: string; value: string; onChange: (v: string) => void
+function Field({
+  label,
+  hint,
+  value,
+  onChange,
+}: {
+  label: string
+  hint?: string
+  value: string
+  onChange: (v: string) => void
 }) {
   return (
-    <label style={{ display: 'block', background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 14, padding: 16 }}>
+    <label
+      style={{
+        display: 'block',
+        background: WHITE,
+        border: `1px solid ${BORDER}`,
+        borderRadius: 14,
+        padding: 16,
+      }}
+    >
       <div style={{ fontWeight: 700, fontSize: 14 }}>{label}</div>
-      {hint && <div style={{ color: INK2, fontSize: 13, lineHeight: 1.5, marginTop: 3 }}>{hint}</div>}
+      {hint && (
+        <div style={{ color: INK2, fontSize: 13, lineHeight: 1.5, marginTop: 3 }}>{hint}</div>
+      )}
       <input
-        type="number" inputMode="numeric" value={value} onChange={e => onChange(e.target.value)}
+        type="number"
+        inputMode="numeric"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         placeholder=". "
         style={{
-          marginTop: 10, width: '100%', fontFamily: 'inherit', fontSize: 20, fontWeight: 700,
-          border: 'none', borderBottom: `1px solid ${BORDER}`, background: 'transparent',
-          color: INK, padding: '6px 0', outline: 'none',
+          marginTop: 10,
+          width: '100%',
+          fontFamily: 'inherit',
+          fontSize: 20,
+          fontWeight: 700,
+          border: 'none',
+          borderBottom: `1px solid ${BORDER}`,
+          background: 'transparent',
+          color: INK,
+          padding: '6px 0',
+          outline: 'none',
         }}
       />
     </label>
   )
 }
 
-function Mini({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+function Mini({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+}) {
   return (
     <label style={{ display: 'block' }}>
-      <div style={{ fontFamily: 'inherit', fontSize: 10, letterSpacing: 1, color: INK3, fontWeight: 700 }}>
+      <div
+        style={{
+          fontFamily: 'inherit',
+          fontSize: 10,
+          letterSpacing: 1,
+          color: INK3,
+          fontWeight: 700,
+        }}
+      >
         {label.toUpperCase()}
       </div>
       <input
-        type="number" inputMode="numeric" value={value} onChange={e => onChange(e.target.value)}
+        type="number"
+        inputMode="numeric"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         placeholder=". "
         style={{
-          marginTop: 4, width: '100%', fontFamily: 'inherit', fontSize: 19, fontWeight: 700,
-          border: 'none', borderBottom: `1px solid ${BORDER}`, background: 'transparent',
-          color: INK, padding: '5px 0', outline: 'none',
+          marginTop: 4,
+          width: '100%',
+          fontFamily: 'inherit',
+          fontSize: 19,
+          fontWeight: 700,
+          border: 'none',
+          borderBottom: `1px solid ${BORDER}`,
+          background: 'transparent',
+          color: INK,
+          padding: '5px 0',
+          outline: 'none',
         }}
       />
     </label>

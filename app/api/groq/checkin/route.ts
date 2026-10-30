@@ -18,7 +18,7 @@ const SCRIPT_LABELS = ['Feeling', 'Sleep', 'Symptoms', 'Medications', 'Vitals']
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 export async function POST(req: NextRequest) {
@@ -31,7 +31,10 @@ export async function POST(req: NextRequest) {
     // Auth check
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
@@ -49,13 +52,15 @@ export async function POST(req: NextRequest) {
         .join('\n')
       const completion = await createChat(groq, {
         model: CHAT_MODEL,
-      ...REASONING_TEXT,
-        messages: [{
-          role: 'user',
-          content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual. If the patient stated any measurement (heart rate, temperature, oxygen level, blood pressure, breathing rate), add a line starting "Vitals:" with the exact numbers and units they gave, for example "Vitals: temperature 100.4 F, oxygen 95%". If they said they feel confused, or that they use oxygen, say that plainly in that line. Never invent or estimate a number they did not say.\n\nConversation:\n${fullConvo}
-Never use em dashes or semicolons. Use short plain sentences.`
-        }],
-        temperature: 0.2
+        ...REASONING_TEXT,
+        messages: [
+          {
+            role: 'user',
+            content: `Extract clinical observations from this patient check-in for the care team. Write exactly 4-5 bullet points (one per line, no extra text). Each must start with a category label like "Feeling:", "Activity:", "Symptoms:", "Medications:", or "Concerns:". Be specific and factual. If the patient stated any measurement (heart rate, temperature, oxygen level, blood pressure, breathing rate), add a line starting "Vitals:" with the exact numbers and units they gave, for example "Vitals: temperature 100.4 F, oxygen 95%". If they said they feel confused, or that they use oxygen, say that plainly in that line. Never invent or estimate a number they did not say.\n\nConversation:\n${fullConvo}
+Never use em dashes or semicolons. Use short plain sentences.`,
+          },
+        ],
+        temperature: 0.2,
       })
       return NextResponse.json({ content: completion.choices[0].message.content?.trim() || '' })
     }
@@ -81,11 +86,11 @@ Rules:
       messages: [
         { role: 'user', content: systemPrompt + '\n\nStart the check-in.' },
         ...messages.map((m: any) => ({
-          role: m.role === 'ai' ? 'assistant' : 'user' as any,
-          content: m.text
-        }))
+          role: m.role === 'ai' ? 'assistant' : ('user' as any),
+          content: m.text,
+        })),
       ],
-      temperature: 0.7
+      temperature: 0.7,
     })
 
     const content = completion.choices[0].message.content || ''
@@ -99,19 +104,30 @@ Rules:
       const body = parsed
       const msgs: any[] = body?.messages || []
       if (body?.mode === 'summary') {
-        const said = msgs.filter(m => m.role === 'user').map(m => String(m.text).slice(0, 200))
-        return NextResponse.json({ content: said.map((t, i) => `${SCRIPT_LABELS[i] || 'Note'}: ${t}`).join('\n'), fallback: true })
+        const said = msgs.filter((m) => m.role === 'user').map((m) => String(m.text).slice(0, 200))
+        return NextResponse.json({
+          content: said.map((t, i) => `${SCRIPT_LABELS[i] || 'Note'}: ${t}`).join('\n'),
+          fallback: true,
+        })
       }
-      const answered = msgs.filter(m => m.role === 'user').length
+      const answered = msgs.filter((m) => m.role === 'user').length
       const last = String(msgs[msgs.length - 1]?.text || '').toLowerCase()
       if (/chest|faint|pass(ed)? out|can.?t breathe|breath/.test(last)) {
-        return NextResponse.json({ content: 'That sounds serious. Please tap the SOS button right now.', fallback: true })
+        return NextResponse.json({
+          content: 'That sounds serious. Please tap the SOS button right now.',
+          fallback: true,
+        })
       }
       const next = SCRIPT[Math.min(answered, SCRIPT.length - 1)]
       return NextResponse.json({ content: next, fallback: true })
-    } catch { /* fall through */ }
+    } catch {
+      /* fall through */
+    }
     // A provider status code (never a message or a key) so the failure can be
     // diagnosed from the browser instead of only from server logs.
-    return NextResponse.json({ error: 'AI unavailable', provider: e?.status ?? null }, { status: 503 })
+    return NextResponse.json(
+      { error: 'AI unavailable', provider: e?.status ?? null },
+      { status: 503 },
+    )
   }
 }

@@ -10,7 +10,9 @@ let cleanupCounter = 0
 function maybeCleanup() {
   if (++cleanupCounter % 200 !== 0) return
   const now = Date.now()
-  for (const [k, v] of limits) { if (now > v.resetAt) limits.delete(k) }
+  for (const [k, v] of limits) {
+    if (now > v.resetAt) limits.delete(k)
+  }
 }
 
 function rateLimit(ip: string, path: string, max: number, windowMs: number): boolean {
@@ -59,7 +61,7 @@ export function middleware(req: NextRequest) {
   // ── Block suspicious patterns ────────────────────────────────────────────
   const ua = req.headers.get('user-agent') || ''
   const suspiciousUAs = ['sqlmap', 'nikto', 'nessus', 'masscan', 'zgrab', 'nuclei']
-  if (suspiciousUAs.some(s => ua.toLowerCase().includes(s))) {
+  if (suspiciousUAs.some((s) => ua.toLowerCase().includes(s))) {
     return new NextResponse('Forbidden', { status: 403 })
   }
 

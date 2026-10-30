@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 webpush.setVapidDetails(
   process.env.VAPID_EMAIL!,
   process.env.NEXT_PUBLIC_VAPID_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
+  process.env.VAPID_PRIVATE_KEY!,
 )
 
 // This cron runs at 3:00 UTC (8:30 AM IST), 7:30 UTC (1:00 PM IST), 14:30 UTC (8:00 PM IST)
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
   )
 
   // Get current hour in IST (UTC+5:30)
@@ -55,13 +55,13 @@ export async function GET(req: NextRequest) {
   }
 
   // Get profiles with medications to check if they have meds for this time slot
-  const userIds = subscriptions.map(s => s.user_id)
+  const userIds = subscriptions.map((s) => s.user_id)
   const { data: profiles } = await supabase
     .from('profiles')
     .select('id, medications')
     .in('id', userIds)
 
-  const profileMap = new Map(profiles?.map(p => [p.id, p]) || [])
+  const profileMap = new Map(profiles?.map((p) => [p.id, p]) || [])
 
   // Check medication_logs for today to avoid re-reminding users who already took their meds
   const startOfDayIST = new Date(nowIST)
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
     .gte('taken_at', startOfDayUTC.toISOString())
 
   // Build set of (userId, medName) pairs already taken today
-  const takenSet = new Set((todayLogs || []).map(l => `${l.user_id}:${l.medication_name}`))
+  const takenSet = new Set((todayLogs || []).map((l) => `${l.user_id}:${l.medication_name}`))
 
   let sent = 0
   for (const sub of subscriptions) {
@@ -83,14 +83,36 @@ export async function GET(req: NextRequest) {
     if (!meds.length) continue
 
     // Check if this user has any medications for this time slot that haven't been taken
-    const hasPendingMeds = meds.some(med => {
+    const hasPendingMeds = meds.some((med) => {
       const alreadyTaken = takenSet.has(`${sub.user_id}:${med.name}`)
       if (alreadyTaken) return false
       // Check if medication time matches the current slot
       const medTime = (med.time || '').toLowerCase()
-      if (isMorning && (medTime.includes('morning') || medTime.includes('am') || medTime.includes('8:') || medTime.includes('9:'))) return true
-      if (isAfternoon && (medTime.includes('afternoon') || medTime.includes('noon') || medTime.includes('12:') || medTime.includes('1:'))) return true
-      if (isEvening && (medTime.includes('evening') || medTime.includes('night') || medTime.includes('pm') || medTime.includes('8:') || medTime.includes('9:'))) return true
+      if (
+        isMorning &&
+        (medTime.includes('morning') ||
+          medTime.includes('am') ||
+          medTime.includes('8:') ||
+          medTime.includes('9:'))
+      )
+        return true
+      if (
+        isAfternoon &&
+        (medTime.includes('afternoon') ||
+          medTime.includes('noon') ||
+          medTime.includes('12:') ||
+          medTime.includes('1:'))
+      )
+        return true
+      if (
+        isEvening &&
+        (medTime.includes('evening') ||
+          medTime.includes('night') ||
+          medTime.includes('pm') ||
+          medTime.includes('8:') ||
+          medTime.includes('9:'))
+      )
+        return true
       // If no time specified, include in morning slot
       if (isMorning && !medTime) return true
       return false
@@ -102,7 +124,7 @@ export async function GET(req: NextRequest) {
       const subscription = JSON.parse(sub.subscription)
       await webpush.sendNotification(
         subscription,
-        JSON.stringify({ title, body, data: { url: '/medications' } })
+        JSON.stringify({ title, body, data: { url: '/medications' } }),
       )
       sent++
     } catch {}

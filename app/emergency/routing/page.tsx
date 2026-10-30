@@ -4,8 +4,31 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Phone, ChevronRight, Loader2, CheckCircle, AlertTriangle, Shield, X, Share2, FileText, MessageSquare, Navigation2 } from 'lucide-react'
-import { findNearbyHospitals, formatDistance, estimateTime, etaText, trafficLabel, formatEtaMin, fresh, trafficMultiplier, Hospital, PCI_SOURCE } from '@/lib/hospitals'
+import {
+  Phone,
+  ChevronRight,
+  Loader2,
+  CheckCircle,
+  AlertTriangle,
+  Shield,
+  X,
+  Share2,
+  FileText,
+  MessageSquare,
+  Navigation2,
+} from 'lucide-react'
+import {
+  findNearbyHospitals,
+  formatDistance,
+  estimateTime,
+  etaText,
+  trafficLabel,
+  formatEtaMin,
+  fresh,
+  trafficMultiplier,
+  Hospital,
+  PCI_SOURCE,
+} from '@/lib/hospitals'
 import { sendPushNotification } from '@/lib/notifications'
 import { toast } from 'sonner'
 import qrgen from 'qrcode-generator'
@@ -24,7 +47,10 @@ function directionsUrl(h: Hospital) {
 }
 
 function buildSmsHref(contacts: any[], hospital: Hospital | null, emergencyType: string) {
-  const phones = contacts.map((c: any) => c.phone).filter(Boolean).join(',')
+  const phones = contacts
+    .map((c: any) => c.phone)
+    .filter(Boolean)
+    .join(',')
   if (!phones) return '#'
   const typeLabels: Record<string, string> = {
     chest_pain: 'a chest pain emergency',
@@ -55,21 +81,21 @@ const EMERGENCY_LABELS: Record<string, string> = {
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#B3DDAC',
-  card:        '#FFFFFF',
-  card2:       '#FFFFFF',
-  border:      '#F2F0E8',
+  bg: '#B3DDAC',
+  card: '#FFFFFF',
+  card2: '#FFFFFF',
+  border: '#F2F0E8',
   textPrimary: '#141413',
-  textSec:     '#5C5A52',
-  textMuted:   '#5C5A52',
-  red:         '#A33417',
-  redSoft:     'rgba(163,52,23,0.12)',
-  redGlow:     'none',
-  green:       '#42623C',
-  greenSoft:   'rgba(86,128,78,0.12)',
-  blue:        '#42623C',
-  blueSoft:    'rgba(86,128,78,0.12)',
-  amber:       '#7C5200',
+  textSec: '#5C5A52',
+  textMuted: '#5C5A52',
+  red: '#A33417',
+  redSoft: 'rgba(163,52,23,0.12)',
+  redGlow: 'none',
+  green: '#42623C',
+  greenSoft: 'rgba(86,128,78,0.12)',
+  blue: '#42623C',
+  blueSoft: 'rgba(86,128,78,0.12)',
+  amber: '#7C5200',
 } as const
 
 // ─── Cancel confirm sheet — shared between error and main view ─────────────────
@@ -99,7 +125,9 @@ function CancelConfirmSheet({
             display: 'flex',
             alignItems: 'flex-end',
           }}
-          onClick={e => { if (e.target === e.currentTarget) onKeep() }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) onKeep()
+          }}
         >
           <motion.div
             initial={{ y: '100%' }}
@@ -115,21 +143,25 @@ function CancelConfirmSheet({
               width: '100%',
             }}
           >
-            <p style={{
-              color: T.textPrimary,
-              fontWeight: 800,
-              fontSize: '18px',
-              marginBottom: '8px',
-              letterSpacing: '-0.2px',
-            }}>
+            <p
+              style={{
+                color: T.textPrimary,
+                fontWeight: 800,
+                fontSize: '18px',
+                marginBottom: '8px',
+                letterSpacing: '-0.2px',
+              }}
+            >
               Cancel emergency?
             </p>
-            <p style={{
-              color: T.textSec,
-              fontSize: '14px',
-              marginBottom: '28px',
-              lineHeight: 1.65,
-            }}>
+            <p
+              style={{
+                color: T.textSec,
+                fontSize: '14px',
+                marginBottom: '28px',
+                lineHeight: 1.65,
+              }}
+            >
               Only cancel if you are safe and do not need help. This will end your active emergency.
             </p>
 
@@ -188,7 +220,9 @@ function CancelConfirmSheet({
 function RoutingPage() {
   const searchParams = useSearchParams()
   const [emg, setEmg] = useState({ number: '911', label: '911' })
-  useEffect(() => { setEmg(emergencyNumber()) }, [])
+  useEffect(() => {
+    setEmg(emergencyNumber())
+  }, [])
   const router = useRouter()
   const type = searchParams.get('type') || 'other'
   const emergencyId = searchParams.get('id') || ''
@@ -217,7 +251,9 @@ function RoutingPage() {
   const [ride, setRide] = useState<'none' | 'dismissed' | 'searching' | 'accepted'>('none')
   const [erConnected, setErConnected] = useState('')
   const [isDemo, setIsDemo] = useState(false)
-  useEffect(() => { setIsDemo(demoOn()) }, [])
+  useEffect(() => {
+    setIsDemo(demoOn())
+  }, [])
   const erNotifiedFor = useRef('')
   const erIncomingId = useRef('')
   const [rideDriver, setRideDriver] = useState('')
@@ -238,17 +274,28 @@ function RoutingPage() {
     return () => clearInterval(id)
   }, [])
 
-  const fmtElapsed = (s: number) => `+${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
+  const fmtElapsed = (s: number) =>
+    `+${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
 
   const shareLive = async () => {
     const id = activeEmergencyId.current
-    if (!id) { toast.error('Live link not ready yet. Try again in a moment'); return }
+    if (!id) {
+      toast.error('Live link not ready yet. Try again in a moment')
+      return
+    }
     const url = `${window.location.origin}/emergency/live/${id}`
     if (typeof navigator.share === 'function') {
-      try { await navigator.share({ title: 'Live emergency status. Relay Arc', url }); return } catch {}
+      try {
+        await navigator.share({ title: 'Live emergency status. Relay Arc', url })
+        return
+      } catch {}
     }
-    try { await navigator.clipboard.writeText(url); toast.success('Live status link copied. Send it to family') }
-    catch { toast.error('Could not copy the link') }
+    try {
+      await navigator.clipboard.writeText(url)
+      toast.success('Live status link copied. Send it to family')
+    } catch {
+      toast.error('Could not copy the link')
+    }
   }
 
   // Lock the page — prevent back navigation
@@ -277,7 +324,9 @@ function RoutingPage() {
   useEffect(() => {
     const resolveEmergencyId = async () => {
       if (activeEmergencyId.current) return
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) return
       const { data } = await supabase
         .from('emergencies')
@@ -287,26 +336,33 @@ function RoutingPage() {
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
-      if (data) { activeEmergencyId.current = data.id; setRoomId(data.id) }
+      if (data) {
+        activeEmergencyId.current = data.id
+        setRoomId(data.id)
+      }
     }
     resolveEmergencyId()
   }, [])
 
-  useEffect(() => { hospitalRef.current = hospital }, [hospital])
+  useEffect(() => {
+    hospitalRef.current = hospital
+  }, [hospital])
 
   // Family can be texted even with no signal or no session: the contacts saved
   // on this phone (the cached profile) are enough to build the message. The
   // signed-in lookup in alertCareTeam replaces these if it succeeds.
   useEffect(() => {
     const c = profile?.emergency_contacts
-    if (Array.isArray(c) && c.length > 0) setNotifiedContacts(prev => prev.length ? prev : c)
+    if (Array.isArray(c) && c.length > 0) setNotifiedContacts((prev) => (prev.length ? prev : c))
   }, [profile])
 
   // ── Relay Room: broadcast location + events to family in realtime ──────────
   const pushEvt = (label: string) => {
     const e = { t: new Date().toISOString(), label }
     timelineRef.current = [...timelineRef.current.slice(-29), e]
-    try { roomChannel.current?.send({ type: 'broadcast', event: 'evt', payload: e }) } catch {}
+    try {
+      roomChannel.current?.send({ type: 'broadcast', event: 'evt', payload: e })
+    } catch {}
   }
 
   useEffect(() => {
@@ -317,7 +373,11 @@ function RoutingPage() {
     roomChannel.current = ch
     ch.on('broadcast', { event: 'sync-req' }, () => {
       try {
-        ch.send({ type: 'broadcast', event: 'sync', payload: { timeline: timelineRef.current, loc: lastLocRef.current } })
+        ch.send({
+          type: 'broadcast',
+          event: 'sync',
+          payload: { timeline: timelineRef.current, loc: lastLocRef.current },
+        })
       } catch {}
     })
     ch.subscribe((status: string) => {
@@ -328,18 +388,28 @@ function RoutingPage() {
     })
     let watch: number | null = null
     if (navigator.geolocation) {
-      watch = navigator.geolocation.watchPosition(pos => {
-        const now = Date.now()
-        if (now - lastLocSent.current < 8000) return
-        lastLocSent.current = now
-        const h = hospitalRef.current
-        const payload = {
-          lat: pos.coords.latitude, lng: pos.coords.longitude, ts: now,
-          hName: h?.name || '', hLat: h?.lat ?? null, hLng: h?.lng ?? null,
-        }
-        lastLocRef.current = payload
-        try { ch.send({ type: 'broadcast', event: 'loc', payload }) } catch {}
-      }, () => {}, { enableHighAccuracy: true, maximumAge: 5000 })
+      watch = navigator.geolocation.watchPosition(
+        (pos) => {
+          const now = Date.now()
+          if (now - lastLocSent.current < 8000) return
+          lastLocSent.current = now
+          const h = hospitalRef.current
+          const payload = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            ts: now,
+            hName: h?.name || '',
+            hLat: h?.lat ?? null,
+            hLng: h?.lng ?? null,
+          }
+          lastLocRef.current = payload
+          try {
+            ch.send({ type: 'broadcast', event: 'loc', payload })
+          } catch {}
+        },
+        () => {},
+        { enableHighAccuracy: true, maximumAge: 5000 },
+      )
     }
     return () => {
       if (watch !== null) navigator.geolocation.clearWatch(watch)
@@ -348,7 +418,10 @@ function RoutingPage() {
     }
   }, [roomId])
 
-  useEffect(() => { if (careTeamAlerted) pushEvt(recorded ? 'Emergency recorded' : 'Emergency could not be recorded') }, [careTeamAlerted, recorded])
+  useEffect(() => {
+    if (careTeamAlerted)
+      pushEvt(recorded ? 'Emergency recorded' : 'Emergency could not be recorded')
+  }, [careTeamAlerted, recorded])
 
   // ── Connected hospitals: put this patient on the ER's dispatch board ──────
   useEffect(() => {
@@ -358,7 +431,9 @@ function RoutingPage() {
     setErConnected('')
     const notify = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         const token = session?.access_token
         if (!token) return
         const res = await fetch('/api/hospital/incoming', {
@@ -382,7 +457,9 @@ function RoutingPage() {
     }
     notify()
   }, [hospital?.id, roomId, careTeamAlerted])
-  useEffect(() => { if (navMode) pushEvt('Turn-by-turn navigation started') }, [navMode])
+  useEffect(() => {
+    if (navMode) pushEvt('Turn-by-turn navigation started')
+  }, [navMode])
 
   // Live ETA countdown on the ER dispatch board (every 45s while en route)
   useEffect(() => {
@@ -391,17 +468,26 @@ function RoutingPage() {
       const loc = lastLocRef.current
       const h = hospitalRef.current
       if (!erIncomingId.current || !loc || !h) return
-      const dLat = (h.lat - loc.lat) * Math.PI / 180
-      const dLng = (h.lng - loc.lng) * Math.PI / 180
-      const a = Math.sin(dLat/2)**2 + Math.cos(loc.lat*Math.PI/180) * Math.cos(h.lat*Math.PI/180) * Math.sin(dLng/2)**2
-      const meters = 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-      const etaMin = Math.max(1, Math.round(meters / 1000 / 38 * 60 * trafficMultiplier()))
+      const dLat = ((h.lat - loc.lat) * Math.PI) / 180
+      const dLng = ((h.lng - loc.lng) * Math.PI) / 180
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos((loc.lat * Math.PI) / 180) *
+          Math.cos((h.lat * Math.PI) / 180) *
+          Math.sin(dLng / 2) ** 2
+      const meters = 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+      const etaMin = Math.max(1, Math.round((meters / 1000 / 38) * 60 * trafficMultiplier()))
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         if (!session?.access_token) return
         await fetch('/api/hospital/incoming', {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
           body: JSON.stringify({ id: erIncomingId.current, etaMin }),
         })
       } catch {}
@@ -411,7 +497,9 @@ function RoutingPage() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       const userId = user?.id
       if (userId) {
         userIdRef.current = userId
@@ -419,8 +507,12 @@ function RoutingPage() {
           const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
           if (data) {
             setProfile(data)
-            try { localStorage.setItem('relay_offline_profile', JSON.stringify(data)) } catch {}
-          } else { throw new Error('no data') }
+            try {
+              localStorage.setItem('relay_offline_profile', JSON.stringify(data))
+            } catch {}
+          } else {
+            throw new Error('no data')
+          }
         } catch {
           try {
             const cached = localStorage.getItem('relay_offline_profile')
@@ -443,7 +535,7 @@ function RoutingPage() {
           lat: parseFloat(destLat),
           lng: parseFloat(destLng),
           address: '',
-          capability: 'Navigation'
+          capability: 'Navigation',
         })
         setLoading(false)
         alertCareTeam(userId)
@@ -454,17 +546,19 @@ function RoutingPage() {
       if (demoOn()) {
         const [dLat, dLng] = DEMO.origin
         setPatientPos([dLat, dLng])
-        const seeded = DEMO.hospitals.map(h => ({
+        const seeded = DEMO.hospitals.map((h) => ({
           ...h,
           distance: Math.round(Math.hypot((h.lat - dLat) * 111320, (h.lng - dLng) * 105000)),
         })) as Hospital[]
         try {
           const ranked = await findNearbyHospitals(dLat, dLng, type)
-          const byName = new Map(ranked.map(r => [r.name, r]))
-          const merged = seeded.map(h => ({ ...h, ...(byName.get(h.name) || {}) })) as Hospital[]
-          setHospital(merged[0]); setNearbyHospitals(merged)
+          const byName = new Map(ranked.map((r) => [r.name, r]))
+          const merged = seeded.map((h) => ({ ...h, ...(byName.get(h.name) || {}) })) as Hospital[]
+          setHospital(merged[0])
+          setNearbyHospitals(merged)
         } catch {
-          setHospital(seeded[0]); setNearbyHospitals(seeded)
+          setHospital(seeded[0])
+          setNearbyHospitals(seeded)
         }
         setLoading(false)
         alertCareTeam(userId)
@@ -492,7 +586,7 @@ function RoutingPage() {
             setLoading(false)
             alertCareTeam(userId)
           },
-          { enableHighAccuracy: true, timeout: 10000 }
+          { enableHighAccuracy: true, timeout: 10000 },
         )
       } else {
         setLocationError('Geolocation not supported on this device')
@@ -503,57 +597,56 @@ function RoutingPage() {
     load()
   }, [type])
 
-  // WHAT THIS USED TO CLAIM, AND WHY IT WAS THE WORST BUG IN THE APP
-  //
-  // It ran setCareTeamAlerted(true) no matter what happened, including the very
-  // first line, where there is no signed-in user at all and therefore nothing to
-  // alert anybody about. The screen then showed a green tick and the sentence
-  // "Your emergency is visible to your care team".
-  //
-  // Almost none of that was reliably true:
-  //   - The push call returns 404 "No subscription found" unless the person has
-  //     already granted notification permission and registered a subscription.
-  //     For most people it has never succeeded once. sendPushNotification logs
-  //     the failure and swallows it, so the caller never learned.
-  //   - The emergency_contact_alerts rows are only written when the profile
-  //     actually holds contacts, and writing a row is not sending anything. The
-  //     comment in the old code said so and the screen said otherwise.
-  //   - The one thing that is genuinely true is that the emergencies row was
-  //     inserted on the previous screen, so a care team member who has Relay Arc
-  //     open sees it over Realtime. That is a record existing, not a person
-  //     having been reached.
-  //
-  // Someone having a cardiac event reads a green tick as "help knows". That is a
-  // reason to sit still and wait. This now reports only what happened, and the
-  // one instruction that is always right stays on screen either way.
+  // What this used to claim, and why it was the worst bug in the app.
   const alertCareTeam = async (userId?: string) => {
     // The previous screen puts the inserted emergency id in the query string and
     // leaves it empty when the insert failed or nobody was signed in. That is
     // the only evidence here that a record exists at all.
     setCareTeamAlerted(true)
-    if (!emergencyId) { setRecorded(false); return }
+    if (!emergencyId) {
+      setRecorded(false)
+      return
+    }
     setRecorded(true)
     if (!userId) return
     try {
       // Best effort. It reaches the person's own devices if any of them are
       // subscribed, and does nothing at all if none are.
-      await sendPushNotification(userId, 'Emergency recorded', 'Your emergency is showing on your care team dashboard.')
+      await sendPushNotification(
+        userId,
+        'Emergency recorded',
+        'Your emergency is showing on your care team dashboard.',
+      )
     } catch (e) {
       console.error('Care team alert failed:', e)
     }
 
     // Also attempt to SMS-link emergency contacts via the profile (graceful — best effort)
     try {
-      const { data: profileData } = await supabase.from('profiles').select('emergency_contacts, full_name').eq('id', userId).single()
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('emergency_contacts, full_name')
+        .eq('id', userId)
+        .single()
       const contacts: any[] = profileData?.emergency_contacts || []
       if (contacts.length > 0) setNotifiedContacts(contacts)
       if (contacts.length > 0) {
         // Log to emergencies table that contacts were notified (actual SMS requires a backend integration)
-        await supabase.from('emergency_contact_alerts').insert(
-          contacts.map(c => ({ user_id: userId, contact_name: c.name, contact_phone: c.phone, alerted_at: new Date().toISOString() }))
-        ).then(() => {})
+        await supabase
+          .from('emergency_contact_alerts')
+          .insert(
+            contacts.map((c) => ({
+              user_id: userId,
+              contact_name: c.name,
+              contact_phone: c.phone,
+              alerted_at: new Date().toISOString(),
+            })),
+          )
+          .then(() => {})
       }
-    } catch { /* non-critical */ }
+    } catch {
+      /* non-critical */
+    }
 
     setCareTeamAlerted(true)
   }
@@ -563,19 +656,23 @@ function RoutingPage() {
     if (!patientPos || !hospital) return
     setRide('searching')
     try {
-      const { data, error } = await supabase.from('transport_requests').insert({
-        user_id: userIdRef.current || undefined,
-        patient_name: profile?.full_name || 'Relay patient',
-        pickup_lat: patientPos[0],
-        pickup_lng: patientPos[1],
-        pickup_address: 'Live GPS location via Relay SOS',
-        hospital_name: hospital.name,
-        hospital_lat: hospital.lat,
-        hospital_lng: hospital.lng,
-        emergency_type: type,
-        status: 'pending',
-        expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-      }).select().single()
+      const { data, error } = await supabase
+        .from('transport_requests')
+        .insert({
+          user_id: userIdRef.current || undefined,
+          patient_name: profile?.full_name || 'Relay patient',
+          pickup_lat: patientPos[0],
+          pickup_lng: patientPos[1],
+          pickup_address: 'Live GPS location via Relay SOS',
+          hospital_name: hospital.name,
+          hospital_lat: hospital.lat,
+          hospital_lng: hospital.lng,
+          emergency_type: type,
+          status: 'pending',
+          expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+        })
+        .select()
+        .single()
       if (error || !data) throw error
       rideIdRef.current = data.id
       pushEvt('Community driver requested. Searching nearby')
@@ -589,7 +686,8 @@ function RoutingPage() {
     setRide('dismissed')
     if (rideIdRef.current) {
       try {
-        await supabase.from('transport_requests')
+        await supabase
+          .from('transport_requests')
           .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
           .eq('id', rideIdRef.current)
       } catch {}
@@ -600,7 +698,8 @@ function RoutingPage() {
     if (ride !== 'searching' || !rideIdRef.current) return
     const poll = setInterval(async () => {
       try {
-        const { data } = await supabase.from('transport_requests')
+        const { data } = await supabase
+          .from('transport_requests')
           .select('status, driver_name')
           .eq('id', rideIdRef.current)
           .single()
@@ -608,7 +707,9 @@ function RoutingPage() {
           setRide('accepted')
           setRideDriver(data.driver_name || 'A community driver')
           pushEvt(`Driver ${data.driver_name || 'accepted'}. On their way to the patient`)
-          try { navigator.vibrate?.([200, 100, 200]) } catch {}
+          try {
+            navigator.vibrate?.([200, 100, 200])
+          } catch {}
         }
       } catch {}
     }, 5000)
@@ -619,41 +720,59 @@ function RoutingPage() {
     setCancelling(true)
     // Local escape hatch FIRST: even if the server write fails, the dashboard
     // must respect the user's explicit cancel and never bounce them back here.
-    try { sessionStorage.setItem('relay_user_cancelled_until', String(Date.now() + 20 * 60 * 1000)) } catch {}
+    try {
+      sessionStorage.setItem('relay_user_cancelled_until', String(Date.now() + 20 * 60 * 1000))
+    } catch {}
     let serverConfirmed = false
     try {
       let uid = userIdRef.current
       if (!uid) {
-        const { data: { user } } = await supabase.auth.getUser()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
         uid = user?.id || ''
       }
       if (uid) {
-        const { error } = await supabase.from('emergencies')
+        const { error } = await supabase
+          .from('emergencies')
           .update({ status: 'resolved' })
           .eq('user_id', uid)
           .eq('status', 'active')
         if (error) throw error
         // Verify the rows actually flipped — a missing RLS UPDATE policy
         // makes the update silently affect zero rows.
-        const { data: still } = await supabase.from('emergencies')
-          .select('id').eq('user_id', uid).eq('status', 'active').limit(1)
+        const { data: still } = await supabase
+          .from('emergencies')
+          .select('id')
+          .eq('user_id', uid)
+          .eq('status', 'active')
+          .limit(1)
         serverConfirmed = !still || still.length === 0
       } else {
         serverConfirmed = true // nothing to resolve without a user
       }
-    } catch { /* fall through — user still leaves */ }
+    } catch {
+      /* fall through — user still leaves */
+    }
 
     if (!serverConfirmed) {
-      toast.error('Cancelled on this device, but the server did not confirm. Your care team may still see it as active.')
+      toast.error(
+        'Cancelled on this device, but the server did not confirm. Your care team may still see it as active.',
+      )
     }
     pushEvt('Emergency cancelled. Patient reports safe')
     if (erIncomingId.current) {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         if (session?.access_token) {
           fetch('/api/hospital/incoming', {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${session.access_token}`,
+            },
             body: JSON.stringify({ id: erIncomingId.current, status: 'cancelled' }),
           })
         }
@@ -664,48 +783,69 @@ function RoutingPage() {
   }
 
   // ── Loading state ──────────────────────────────────────────────────────────
-  if (loading) return (
-    <div style={{
-      minHeight: '100dvh',
-      background: T.bg,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '24px',
-    }}>
-      {/* Spinner with soft red glow halo */}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{
-          position: 'absolute',
-          width: '72px',
-          height: '72px',
-          borderRadius: '50%',
-          background: T.redSoft,
-          filter: 'blur(12px)',
-        }} />
-        <Loader2 size={38} color={T.red} className="animate-spin" style={{ position: 'relative' }} />
-      </div>
+  if (loading)
+    return (
+      <div
+        style={{
+          minHeight: '100dvh',
+          background: T.bg,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '24px',
+        }}
+      >
+        {/* Spinner with soft red glow halo */}
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              width: '72px',
+              height: '72px',
+              borderRadius: '50%',
+              background: T.redSoft,
+              filter: 'blur(12px)',
+            }}
+          />
+          <Loader2
+            size={38}
+            color={T.red}
+            className="animate-spin"
+            style={{ position: 'relative' }}
+          />
+        </div>
 
-      <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-        <p style={{
-          color: T.textPrimary,
-          fontSize: '16px',
-          fontWeight: 700,
-          letterSpacing: '-0.2px',
-        }}>
-          Finding nearest hospital
-        </p>
-        <p style={{
-          color: T.textMuted,
-          fontSize: '13px',
-          letterSpacing: '0',
-        }}>
-          Recording this emergency…
-        </p>
-      </div>
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <p
+            style={{
+              color: T.textPrimary,
+              fontSize: '16px',
+              fontWeight: 700,
+              letterSpacing: '-0.2px',
+            }}
+          >
+            Finding nearest hospital
+          </p>
+          <p
+            style={{
+              color: T.textMuted,
+              fontSize: '13px',
+              letterSpacing: '0',
+            }}
+          >
+            Recording this emergency…
+          </p>
+        </div>
 
-      {/* The call button belongs on this screen too.
+        {/* The call button belongs on this screen too.
           Finding a hospital waits on the browser location prompt, and the
           getCurrentPosition timeout is ten seconds, so someone who has just
           tapped "chest pain" can sit in front of a spinner for that long. The
@@ -714,219 +854,420 @@ function RoutingPage() {
           part of the flow where the app is doing nothing visible, is the worst
           possible moment to hide it. Timed in the browser with location
           blocked: ten seconds of spinner and no way to call. */}
-      <motion.a
-        href={`tel:${emg.number}`}
-        whileTap={{ scale: 0.98 }}
-        style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
-          background: T.red, color: 'white',
-          padding: '20px', borderRadius: '12px',
-          fontWeight: 900, fontSize: '20px', letterSpacing: '-0.3px',
-          textDecoration: 'none', minHeight: '64px',
-          width: 'calc(100% - 40px)', maxWidth: '480px',
-        }}
-      >
-        <Phone size={22} color="white" />
-        Call {emg.label} now
-      </motion.a>
-    </div>
-  )
+        <motion.a
+          href={`tel:${emg.number}`}
+          whileTap={{ scale: 0.98 }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            background: T.red,
+            color: 'white',
+            padding: '20px',
+            borderRadius: '12px',
+            fontWeight: 900,
+            fontSize: '20px',
+            letterSpacing: '-0.3px',
+            textDecoration: 'none',
+            minHeight: '64px',
+            width: 'calc(100% - 40px)',
+            maxWidth: '480px',
+          }}
+        >
+          <Phone size={22} color="white" />
+          Call {emg.label} now
+        </motion.a>
+      </div>
+    )
 
   // ── Error state (no hospital found) ───────────────────────────────────────
   // With no signal the hospital search cannot run, so say that plainly and show
   // what still works: the call, the location for the dispatcher, and the
   // responder details saved on this phone.
   const offline = typeof navigator !== 'undefined' && navigator.onLine === false
-  if (!hospital) return (
-    <div style={{
-      minHeight: '100dvh',
-      background: T.bg,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '20px',
-      padding: '32px 24px',
-    }}>
-      {/* Red phone icon in glowing circle */}
-      <div style={{
-        width: '72px',
-        height: '72px',
-        borderRadius: '50%',
-        background: T.redSoft,
-        border: `1px solid rgba(163,52,23,0.25)`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: T.redGlow,
-      }}>
-        <Phone size={30} color={T.red} />
-      </div>
-
-      <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <p style={{
-          color: T.red,
-          fontSize: '20px',
-          fontWeight: 800,
-          letterSpacing: '-0.3px',
-        }}>
-          {offline ? 'No signal right now' : 'Could not find a hospital'}
-        </p>
-        <p style={{
-          color: T.textSec,
-          fontSize: '14px',
-          lineHeight: 1.7,
-          maxWidth: '300px',
-        }}>
-          {offline
-            ? `Finding a hospital needs internet. Calling ${emg.label} does not. Your details below work with no signal.`
-            : (locationError || 'Please call 911 immediately for emergency assistance.')}
-        </p>
-      </div>
-
-      {/* Call {emg.label} — red gradient pill with glow */}
-      <motion.a
-        href={`tel:${emg.number}`}
-        whileTap={{ scale: 0.96 }}
+  if (!hospital)
+    return (
+      <div
         style={{
+          minHeight: '100dvh',
+          background: T.bg,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '10px',
-          background: `#A33417`,
-          color: 'white',
-          fontWeight: 800,
-          fontSize: '17px',
-          padding: '17px 0',
-          borderRadius: '12px',
-          textDecoration: 'none',
-          boxShadow: T.redGlow,
-          width: '100%',
-          maxWidth: '320px',
-          letterSpacing: '0.2px',
+          gap: '20px',
+          padding: '32px 24px',
         }}
       >
-        <Phone size={20} strokeWidth={2.5} />
-        Call {emg.label} now
-      </motion.a>
+        {/* Red phone icon in glowing circle */}
+        <div
+          style={{
+            width: '72px',
+            height: '72px',
+            borderRadius: '50%',
+            background: T.redSoft,
+            border: `1px solid rgba(163,52,23,0.25)`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: T.redGlow,
+          }}
+        >
+          <Phone size={30} color={T.red} />
+        </div>
 
-      {/* Works with no signal: where you are, and what a responder needs */}
-      {patientPos && (
-        <div style={{ width: '100%', maxWidth: '320px', background: '#FFFFFF', border: `1px solid ${T.border}`, borderRadius: '12px', padding: '12px 14px' }}>
-          <p style={{ color: T.textMuted, fontSize: '12.5px', marginBottom: '4px' }}>Your location, read this to the dispatcher</p>
-          <p style={{ color: T.textPrimary, fontSize: '17px', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
-            {patientPos[0].toFixed(5)}, {patientPos[1].toFixed(5)}
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <p
+            style={{
+              color: T.red,
+              fontSize: '20px',
+              fontWeight: 800,
+              letterSpacing: '-0.3px',
+            }}
+          >
+            {offline ? 'No signal right now' : 'Could not find a hospital'}
+          </p>
+          <p
+            style={{
+              color: T.textSec,
+              fontSize: '14px',
+              lineHeight: 1.7,
+              maxWidth: '300px',
+            }}
+          >
+            {offline
+              ? `Finding a hospital needs internet. Calling ${emg.label} does not. Your details below work with no signal.`
+              : locationError || 'Please call 911 immediately for emergency assistance.'}
           </p>
         </div>
-      )}
-      {(() => {
-        const info = responderInfo(profile)
-        if (!info.length) return null
-        return (
-          <div style={{ width: '100%', maxWidth: '320px', background: '#FFFFFF', border: `1px solid ${T.border}`, borderRadius: '12px', padding: '12px 14px' }}>
-            <p style={{ color: T.red, fontSize: '12.5px', fontWeight: 700, marginBottom: '6px' }}>First responder info. Show this screen</p>
-            {info.map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', gap: '12px', padding: '6px 0', borderTop: `1px solid ${T.border}` }}>
-                <span style={{ color: T.textMuted, fontSize: '12.5px', width: '86px', flexShrink: 0 }}>{k}</span>
-                <span style={{ color: k === 'Medications' ? T.textSec : T.red, fontWeight: 700, fontSize: k === 'Blood type' ? '22px' : '14px', lineHeight: 1.3 }}>{v}</span>
-              </div>
-            ))}
+
+        {/* Call {emg.label} — red gradient pill with glow */}
+        <motion.a
+          href={`tel:${emg.number}`}
+          whileTap={{ scale: 0.96 }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            background: `#A33417`,
+            color: 'white',
+            fontWeight: 800,
+            fontSize: '17px',
+            padding: '17px 0',
+            borderRadius: '12px',
+            textDecoration: 'none',
+            boxShadow: T.redGlow,
+            width: '100%',
+            maxWidth: '320px',
+            letterSpacing: '0.2px',
+          }}
+        >
+          <Phone size={20} strokeWidth={2.5} />
+          Call {emg.label} now
+        </motion.a>
+
+        {/* Works with no signal: where you are, and what a responder needs */}
+        {patientPos && (
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '320px',
+              background: '#FFFFFF',
+              border: `1px solid ${T.border}`,
+              borderRadius: '12px',
+              padding: '12px 14px',
+            }}
+          >
+            <p style={{ color: T.textMuted, fontSize: '12.5px', marginBottom: '4px' }}>
+              Your location, read this to the dispatcher
+            </p>
+            <p
+              style={{
+                color: T.textPrimary,
+                fontSize: '17px',
+                fontWeight: 800,
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {patientPos[0].toFixed(5)}, {patientPos[1].toFixed(5)}
+            </p>
           </div>
-        )
-      })()}
-      {offline && (
-        <a href="/card" style={{ color: T.textPrimary, fontWeight: 700, fontSize: '14px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-          Open my emergency card
-        </a>
-      )}
+        )}
+        {(() => {
+          const info = responderInfo(profile)
+          if (!info.length) return null
+          return (
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '320px',
+                background: '#FFFFFF',
+                border: `1px solid ${T.border}`,
+                borderRadius: '12px',
+                padding: '12px 14px',
+              }}
+            >
+              <p style={{ color: T.red, fontSize: '12.5px', fontWeight: 700, marginBottom: '6px' }}>
+                First responder info. Show this screen
+              </p>
+              {info.map(([k, v]) => (
+                <div
+                  key={k}
+                  style={{
+                    display: 'flex',
+                    gap: '12px',
+                    padding: '6px 0',
+                    borderTop: `1px solid ${T.border}`,
+                  }}
+                >
+                  <span
+                    style={{ color: T.textMuted, fontSize: '12.5px', width: '86px', flexShrink: 0 }}
+                  >
+                    {k}
+                  </span>
+                  <span
+                    style={{
+                      color: k === 'Medications' ? T.textSec : T.red,
+                      fontWeight: 700,
+                      fontSize: k === 'Blood type' ? '22px' : '14px',
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {v}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )
+        })()}
+        {offline && (
+          <a
+            href="/card"
+            style={{
+              color: T.textPrimary,
+              fontWeight: 700,
+              fontSize: '14px',
+              textDecoration: 'underline',
+              textUnderlineOffset: '3px',
+            }}
+          >
+            Open my emergency card
+          </a>
+        )}
 
-      {/* Cancel ghost */}
-      <motion.button
-        whileTap={{ scale: 0.97 }}
-        onClick={() => setShowCancelConfirm(true)}
-        style={{
-          background: '#F2F0E8',
-          color: T.textMuted,
-          fontWeight: 500,
-          fontSize: '13px',
-          padding: '11px 24px',
-          borderRadius: '12px',
-          border: `1px solid #98C890`,
-          cursor: 'pointer',
-        }}
-      >
-        I&apos;m safe, cancel this emergency
-      </motion.button>
+        {/* Cancel ghost */}
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={() => setShowCancelConfirm(true)}
+          style={{
+            background: '#F2F0E8',
+            color: T.textMuted,
+            fontWeight: 500,
+            fontSize: '13px',
+            padding: '11px 24px',
+            borderRadius: '12px',
+            border: `1px solid #98C890`,
+            cursor: 'pointer',
+          }}
+        >
+          I&apos;m safe, cancel this emergency
+        </motion.button>
 
-      <CancelConfirmSheet
-        show={showCancelConfirm}
-        cancelling={cancelling}
-        onKeep={() => setShowCancelConfirm(false)}
-        onConfirm={cancelEmergency}
-      />
-    </div>
-  )
+        <CancelConfirmSheet
+          show={showCancelConfirm}
+          cancelling={cancelling}
+          onKeep={() => setShowCancelConfirm(false)}
+          onConfirm={cancelEmergency}
+        />
+      </div>
+    )
 
   // ── Main routing view ──────────────────────────────────────────────────────
   const MONO = 'var(--font-mono, monospace)'
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', display: 'flex', flexDirection: 'column', overflowX: 'hidden', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
-
+    <div
+      style={{
+        minHeight: '100dvh',
+        background: '#B3DDAC',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowX: 'hidden',
+        maxWidth: '640px',
+        margin: '0 auto',
+        width: '100%',
+      }}
+    >
       {/* ── Status line ─────────────────────────────────────────────────────── */}
-      <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(163,52,23,0.18)', flexShrink: 0 }}>
+      <div
+        style={{
+          padding: '14px 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottom: '1px solid rgba(163,52,23,0.18)',
+          flexShrink: 0,
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', gap: '9px', minWidth: 0 }}>
           <motion.div
             animate={{ opacity: [1, 0.25, 1] }}
             transition={{ duration: 1.1, repeat: Infinity }}
             style={{ width: '8px', height: '8px', background: T.red, flexShrink: 0 }}
           />
-          <span style={{ color: T.red, fontSize: '13px', letterSpacing: '0', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {isDemo && <span style={{ background: T.textPrimary, color: 'white', padding: '2px 6px', borderRadius: '14px', marginRight: '7px' }}>DEMO</span>}
+          <span
+            style={{
+              color: T.red,
+              fontSize: '13px',
+              letterSpacing: '0',
+              fontWeight: 600,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {isDemo && (
+              <span
+                style={{
+                  background: T.textPrimary,
+                  color: 'white',
+                  padding: '2px 6px',
+                  borderRadius: '14px',
+                  marginRight: '7px',
+                }}
+              >
+                DEMO
+              </span>
+            )}
             Active emergency · {EMERGENCY_LABELS[type] || 'Emergency'}
           </span>
         </div>
-        <span style={{ color: T.red, fontFamily: 'inherit', fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
+        <span
+          style={{
+            color: T.red,
+            fontFamily: 'inherit',
+            fontSize: '15px',
+            fontWeight: 700,
+            letterSpacing: '0.5px',
+            fontVariantNumeric: 'tabular-nums',
+            flexShrink: 0,
+          }}
+        >
           {fmtElapsed(elapsed)}
         </span>
       </div>
 
       {/* ── Hospital — flat header, big numbers ─────────────────────────────── */}
       <div style={{ padding: '20px 20px 18px', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '20px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: '20px',
+          }}
+        >
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ color: T.textMuted, fontSize: '13px', letterSpacing: '0', marginBottom: '7px' }}>
+            <p
+              style={{
+                color: T.textMuted,
+                fontSize: '13px',
+                letterSpacing: '0',
+                marginBottom: '7px',
+              }}
+            >
               Routing to
             </p>
-            <p style={{ color: T.textPrimary, fontWeight: 800, fontSize: '22px', letterSpacing: '-0.6px', lineHeight: 1.1, marginBottom: '4px' }}>
+            <p
+              style={{
+                color: T.textPrimary,
+                fontWeight: 800,
+                fontSize: '22px',
+                letterSpacing: '-0.6px',
+                lineHeight: 1.1,
+                marginBottom: '4px',
+              }}
+            >
               {hospital.name}
             </p>
             {hospital.address && (
-              <p style={{ color: T.textMuted, fontSize: '12.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <p
+                style={{
+                  color: T.textMuted,
+                  fontSize: '12.5px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {hospital.address}
               </p>
             )}
             {hospital.pci === 'yes' && (
-              <p style={{ color: T.green, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
+              <p
+                style={{
+                  color: T.green,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0',
+                  marginTop: '8px',
+                }}
+              >
                 ✓ {hospital.capability} · {PCI_SOURCE}
               </p>
             )}
             {hospital.pci === 'no' && (
-              <p style={{ color: T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
+              <p
+                style={{
+                  color: T.red,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0',
+                  marginTop: '8px',
+                }}
+              >
                 ⚠ {hospital.capability}
               </p>
             )}
             {hospital.pci === 'unknown' && (
-              <p style={{ color: T.amber, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
+              <p
+                style={{
+                  color: T.amber,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0',
+                  marginTop: '8px',
+                }}
+              >
                 Cath lab not confirmed for this hospital. Tell 911 it is chest pain
               </p>
             )}
-            {hospital.pci === undefined && hospital.capability && hospital.capability !== 'Navigation' && (
-              <p style={{ color: T.green, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '8px' }}>
-                ✓ {hospital.capability}
-              </p>
-            )}
+            {hospital.pci === undefined &&
+              hospital.capability &&
+              hospital.capability !== 'Navigation' && (
+                <p
+                  style={{
+                    color: T.green,
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    letterSpacing: '0',
+                    marginTop: '8px',
+                  }}
+                >
+                  ✓ {hospital.capability}
+                </p>
+              )}
             {hospital.partner && fresh(hospital.partner) && (
-              <p style={{ color: hospital.partner.accepting ? T.green : T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginTop: '5px' }}>
+              <p
+                style={{
+                  color: hospital.partner.accepting ? T.green : T.red,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0',
+                  marginTop: '5px',
+                }}
+              >
                 {hospital.partner.accepting ? '✓ Accepting now' : '⚠ Diverting'}
                 {hospital.partner.cathLab === true ? ' · cath lab open' : ''}
                 {hospital.partner.bedsFree != null ? ` · ${hospital.partner.bedsFree} beds` : ''}
@@ -939,18 +1280,45 @@ function RoutingPage() {
               </p>
             )}
             <p style={{ color: T.textMuted, fontSize: '11.5px', marginTop: '7px' }}>
-              Ranked first: fastest arrival{hospital.partner && fresh(hospital.partner) && hospital.partner.accepting ? ' · confirmed accepting' : ''}{hospital.pci === 'yes' ? ' · does emergency angioplasty' : ''}
+              Ranked first: fastest arrival
+              {hospital.partner && fresh(hospital.partner) && hospital.partner.accepting
+                ? ' · confirmed accepting'
+                : ''}
+              {hospital.pci === 'yes' ? ' · does emergency angioplasty' : ''}
             </p>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
-            <p style={{ color: T.red, fontWeight: 800, fontSize: '38px', fontFamily: 'inherit', lineHeight: 0.9, letterSpacing: '-0.8px' }}>
+            <p
+              style={{
+                color: T.red,
+                fontWeight: 800,
+                fontSize: '38px',
+                fontFamily: 'inherit',
+                lineHeight: 0.9,
+                letterSpacing: '-0.8px',
+              }}
+            >
               {etaText(hospital)}
             </p>
-            <p style={{ color: T.textMuted, fontSize: '12px', fontFamily: 'inherit', marginTop: '5px' }}>
+            <p
+              style={{
+                color: T.textMuted,
+                fontSize: '12px',
+                fontFamily: 'inherit',
+                marginTop: '5px',
+              }}
+            >
               {formatDistance(hospital.distance || 0)}
             </p>
             {hospital.etaTrafficSec != null && (
-              <p style={{ color: hospital.liveTraffic ? T.green : T.amber, fontSize: '13px', marginTop: '4px', letterSpacing: '0' }}>
+              <p
+                style={{
+                  color: hospital.liveTraffic ? T.green : T.amber,
+                  fontSize: '13px',
+                  marginTop: '4px',
+                  letterSpacing: '0',
+                }}
+              >
                 {hospital.liveTraffic ? 'live traffic' : trafficLabel()}
               </p>
             )}
@@ -967,29 +1335,108 @@ function RoutingPage() {
             there is often no street address to give, so the exact coordinates
             are shown in large type for the dispatcher. */}
         {(() => {
-          const eta = formatEtaMin(hospital) ?? (hospital.distance ? Math.round(hospital.distance / 1000 / 50 * 60) : null)
+          const eta =
+            formatEtaMin(hospital) ??
+            (hospital.distance ? Math.round((hospital.distance / 1000 / 50) * 60) : null)
           if (eta == null || eta < FAR_MINUTES) return null
-          const coords = patientPos ? `${patientPos[0].toFixed(5)}, ${patientPos[1].toFixed(5)}` : null
+          const coords = patientPos
+            ? `${patientPos[0].toFixed(5)}, ${patientPos[1].toFixed(5)}`
+            : null
           return (
             <div style={{ border: `2px solid ${T.red}`, padding: '14px', marginTop: '16px' }}>
-              <p style={{ color: T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '6px' }}>
+              <p
+                style={{
+                  color: T.red,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0',
+                  marginBottom: '6px',
+                }}
+              >
                 Far from help · {eta} min drive
               </p>
-              <p style={{ color: T.textPrimary, fontSize: '15px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px' }}>
+              <p
+                style={{
+                  color: T.textPrimary,
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  lineHeight: 1.4,
+                  marginBottom: '6px',
+                }}
+              >
                 Call {emg.label} before you start driving.
               </p>
-              <p style={{ color: T.textSec, fontSize: '13px', lineHeight: 1.55, marginBottom: '10px' }}>
-                Paramedics can start treatment where you are or meet you on the way, and for a heart attack they can warn the cath lab so the team is ready. Follow the dispatcher&apos;s instructions.
+              <p
+                style={{
+                  color: T.textSec,
+                  fontSize: '13px',
+                  lineHeight: 1.55,
+                  marginBottom: '10px',
+                }}
+              >
+                Paramedics can start treatment where you are or meet you on the way, and for a heart
+                attack they can warn the cath lab so the team is ready. Follow the dispatcher&apos;s
+                instructions.
               </p>
-              <a href={`tel:${emg.number}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: T.red, color: '#fff', padding: '13px', fontWeight: 800, textDecoration: 'none', fontSize: '15.5px' }}>
-                <Phone size={17}/> Call {emg.label}
+              <a
+                href={`tel:${emg.number}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  background: T.red,
+                  color: '#fff',
+                  padding: '13px',
+                  fontWeight: 800,
+                  textDecoration: 'none',
+                  fontSize: '15.5px',
+                }}
+              >
+                <Phone size={17} /> Call {emg.label}
               </a>
               {coords && (
                 <button
-                  onClick={() => { try { navigator.clipboard.writeText(coords); toast.success('Location copied') } catch {} }}
-                  style={{ display: 'block', width: '100%', textAlign: 'left', marginTop: '10px', background: 'transparent', border: `1px solid ${T.border}`, padding: '10px 12px', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  <span style={{ display: 'block', color: T.textMuted, fontSize: '13px', letterSpacing: '0' }}>Read this to the dispatcher (tap to copy)</span>
-                  <span style={{ display: 'block', color: T.textPrimary, fontFamily: 'inherit', fontSize: '19px', fontWeight: 700, marginTop: '3px' }}>{coords}</span>
+                  onClick={() => {
+                    try {
+                      navigator.clipboard.writeText(coords)
+                      toast.success('Location copied')
+                    } catch {}
+                  }}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'left',
+                    marginTop: '10px',
+                    background: 'transparent',
+                    border: `1px solid ${T.border}`,
+                    padding: '10px 12px',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'block',
+                      color: T.textMuted,
+                      fontSize: '13px',
+                      letterSpacing: '0',
+                    }}
+                  >
+                    Read this to the dispatcher (tap to copy)
+                  </span>
+                  <span
+                    style={{
+                      display: 'block',
+                      color: T.textPrimary,
+                      fontFamily: 'inherit',
+                      fontSize: '19px',
+                      fontWeight: 700,
+                      marginTop: '3px',
+                    }}
+                  >
+                    {coords}
+                  </span>
                 </button>
               )}
             </div>
@@ -1000,36 +1447,100 @@ function RoutingPage() {
           onClick={() => setNavMode(true)}
           whileTap={{ scale: 0.985 }}
           style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-            width: '100%', background: T.red, color: 'white',
-            padding: '17px', borderRadius: '12px', border: 'none',
-            fontWeight: 800, fontSize: '16.5px', letterSpacing: '-0.2px',
-            cursor: 'pointer', fontFamily: 'inherit', marginTop: '16px', minHeight: '56px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            width: '100%',
+            background: T.red,
+            color: 'white',
+            padding: '17px',
+            borderRadius: '12px',
+            border: 'none',
+            fontWeight: 800,
+            fontSize: '16.5px',
+            letterSpacing: '-0.2px',
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            marginTop: '16px',
+            minHeight: '56px',
           }}
         >
-          <Navigation2 size={19} strokeWidth={2.5}/>
+          <Navigation2 size={19} strokeWidth={2.5} />
           Start navigation
         </motion.button>
-        <a href={directionsUrl(hospital)} target="_blank" rel="noopener noreferrer"
-          style={{ display: 'block', textAlign: 'center', color: T.textMuted, fontSize: '12.5px', textDecoration: 'none', padding: '10px 0 0' }}>
-          Prefer Google Maps? <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>Open there instead</span>
+        <a
+          href={directionsUrl(hospital)}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block',
+            textAlign: 'center',
+            color: T.textMuted,
+            fontSize: '12.5px',
+            textDecoration: 'none',
+            padding: '10px 0 0',
+          }}
+        >
+          Prefer Google Maps?{' '}
+          <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+            Open there instead
+          </span>
         </a>
 
         {/* ── Getting there — solve the vehicle, not just the destination ── */}
         {patientPos && ride !== 'dismissed' && (
-          <div style={{ borderTop: `1px solid ${T.border}`, marginTop: '14px', paddingTop: '14px' }}>
-            <p style={{ color: T.textMuted, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '10px' }}>
+          <div
+            style={{ borderTop: `1px solid ${T.border}`, marginTop: '14px', paddingTop: '14px' }}
+          >
+            <p
+              style={{
+                color: T.textMuted,
+                fontSize: '13px',
+                fontWeight: 600,
+                letterSpacing: '0',
+                marginBottom: '10px',
+              }}
+            >
               Getting there
             </p>
 
             {ride === 'none' && (
               <div style={{ display: 'flex', gap: '9px' }}>
-                <button onClick={() => setRide('dismissed')}
-                  style={{ flex: 1, background: 'none', border: `1.5px solid ${T.border}`, color: T.textSec, fontWeight: 600, fontSize: '13.5px', padding: '13px 8px', borderRadius: '14px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                <button
+                  onClick={() => setRide('dismissed')}
+                  style={{
+                    flex: 1,
+                    background: 'none',
+                    border: `1.5px solid ${T.border}`,
+                    color: T.textSec,
+                    fontWeight: 600,
+                    fontSize: '13.5px',
+                    padding: '13px 8px',
+                    borderRadius: '14px',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    minHeight: '50px',
+                  }}
+                >
                   I have a driver
                 </button>
-                <button onClick={requestRide}
-                  style={{ flex: 1.4, background: T.blue, border: 'none', color: 'white', fontWeight: 700, fontSize: '13.5px', padding: '13px 8px', borderRadius: '14px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '50px' }}>
+                <button
+                  onClick={requestRide}
+                  style={{
+                    flex: 1.4,
+                    background: T.blue,
+                    border: 'none',
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: '13.5px',
+                    padding: '13px 8px',
+                    borderRadius: '14px',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    minHeight: '50px',
+                  }}
+                >
                   I need a ride. Alert drivers
                 </button>
               </div>
@@ -1037,13 +1548,34 @@ function RoutingPage() {
 
             {ride === 'searching' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
-                <Loader2 size={16} color={T.blue} className="animate-spin" style={{ flexShrink: 0 }}/>
+                <Loader2
+                  size={16}
+                  color={T.blue}
+                  className="animate-spin"
+                  style={{ flexShrink: 0 }}
+                />
                 <div style={{ flex: 1 }}>
-                  <p style={{ color: T.textPrimary, fontSize: '14px', fontWeight: 700 }}>Alerting nearby community drivers…</p>
-                  <p style={{ color: T.textMuted, fontSize: '12px', marginTop: '2px' }}>Your live location and hospital are attached.</p>
+                  <p style={{ color: T.textPrimary, fontSize: '14px', fontWeight: 700 }}>
+                    Alerting nearby community drivers…
+                  </p>
+                  <p style={{ color: T.textMuted, fontSize: '12px', marginTop: '2px' }}>
+                    Your live location and hospital are attached.
+                  </p>
                 </div>
-                <button onClick={cancelRide}
-                  style={{ background: 'none', border: 'none', color: T.textMuted, fontSize: '12.5px', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px', flexShrink: 0 }}>
+                <button
+                  onClick={cancelRide}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: T.textMuted,
+                    fontSize: '12.5px',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '3px',
+                    flexShrink: 0,
+                  }}
+                >
                   Cancel
                 </button>
               </div>
@@ -1051,10 +1583,14 @@ function RoutingPage() {
 
             {ride === 'accepted' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
-                <CheckCircle size={17} color={T.green} style={{ flexShrink: 0 }}/>
+                <CheckCircle size={17} color={T.green} style={{ flexShrink: 0 }} />
                 <div>
-                  <p style={{ color: T.green, fontSize: '14.5px', fontWeight: 800 }}>{rideDriver} is coming to you</p>
-                  <p style={{ color: T.textSec, fontSize: '12.5px', marginTop: '2px' }}>They can see your live location. Stay where you are if safe.</p>
+                  <p style={{ color: T.green, fontSize: '14.5px', fontWeight: 800 }}>
+                    {rideDriver} is coming to you
+                  </p>
+                  <p style={{ color: T.textSec, fontSize: '12.5px', marginTop: '2px' }}>
+                    They can see your live location. Stay where you are if safe.
+                  </p>
                 </div>
               </div>
             )}
@@ -1063,7 +1599,14 @@ function RoutingPage() {
       </div>
 
       {/* ── Map — full bleed ────────────────────────────────────────────────── */}
-      <div style={{ height: '32vh', flexShrink: 0, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
+      <div
+        style={{
+          height: '32vh',
+          flexShrink: 0,
+          borderTop: `1px solid ${T.border}`,
+          borderBottom: `1px solid ${T.border}`,
+        }}
+      >
         {!navMode && <Nav hospital={hospital} preview demo={isDemo} />}
       </div>
 
@@ -1074,21 +1617,34 @@ function RoutingPage() {
         transition={{ duration: 0.2 }}
         style={{ flex: 1, padding: '22px 20px 44px' }}
       >
-
         {/* Care team status.
             Three states, and each one says only what is true. The old version
             had one state, showed a green tick every time, and told the person
             their care team could see them even when nothing had been written
             anywhere. See alertCareTeam above. */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '26px' }}>
-          {!careTeamAlerted
-            ? <Loader2 size={16} color={T.textMuted} className="animate-spin" style={{ flexShrink: 0, marginTop: '2px' }} />
-            : recorded
-              ? <CheckCircle size={16} color={T.green} style={{ flexShrink: 0, marginTop: '2px' }} />
-              : <AlertTriangle size={16} color={T.red} style={{ flexShrink: 0, marginTop: '2px' }} />
-          }
+        <div
+          style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '26px' }}
+        >
+          {!careTeamAlerted ? (
+            <Loader2
+              size={16}
+              color={T.textMuted}
+              className="animate-spin"
+              style={{ flexShrink: 0, marginTop: '2px' }}
+            />
+          ) : recorded ? (
+            <CheckCircle size={16} color={T.green} style={{ flexShrink: 0, marginTop: '2px' }} />
+          ) : (
+            <AlertTriangle size={16} color={T.red} style={{ flexShrink: 0, marginTop: '2px' }} />
+          )}
           <div>
-            <p style={{ fontSize: '14px', fontWeight: 600, color: !careTeamAlerted ? T.textSec : recorded ? T.green : T.red }}>
+            <p
+              style={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: !careTeamAlerted ? T.textSec : recorded ? T.green : T.red,
+              }}
+            >
               {!careTeamAlerted
                 ? 'Recording this emergency'
                 : recorded
@@ -1096,7 +1652,9 @@ function RoutingPage() {
                   : 'This emergency could not be recorded'}
             </p>
             {careTeamAlerted && (
-              <p style={{ fontSize: '12.5px', color: T.textSec, marginTop: '3px', lineHeight: 1.45 }}>
+              <p
+                style={{ fontSize: '12.5px', color: T.textSec, marginTop: '3px', lineHeight: 1.45 }}
+              >
                 {recorded
                   ? 'Nobody has confirmed they have seen it. Call emergency services if you need help now.'
                   : 'Nothing was saved and nobody has been told. Call emergency services now.'}
@@ -1108,7 +1666,15 @@ function RoutingPage() {
         {/* ── Notify family ─────────────────────────────────────────────────── */}
         {careTeamAlerted && (
           <div style={{ marginBottom: '30px' }}>
-            <p style={{ color: T.textMuted, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>
+            <p
+              style={{
+                color: T.textMuted,
+                fontSize: '13px',
+                fontWeight: 600,
+                letterSpacing: '0',
+                marginBottom: '4px',
+              }}
+            >
               Notify family
             </p>
 
@@ -1116,13 +1682,41 @@ function RoutingPage() {
               <>
                 <div style={{ borderTop: `1px solid ${T.border}`, marginBottom: '12px' }}>
                   {notifiedContacts.map((c: any, i: number) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', padding: '13px 0', borderBottom: `1px solid ${T.border}` }}>
+                    <div
+                      key={i}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '14px',
+                        padding: '13px 0',
+                        borderBottom: `1px solid ${T.border}`,
+                      }}
+                    >
                       <div style={{ minWidth: 0 }}>
-                        <p style={{ color: T.textPrimary, fontSize: '14.5px', fontWeight: 600 }}>{c.name}</p>
-                        {c.relationship && <p style={{ color: T.textMuted, fontSize: '12px', marginTop: '1px' }}>{c.relationship}</p>}
+                        <p style={{ color: T.textPrimary, fontSize: '14.5px', fontWeight: 600 }}>
+                          {c.name}
+                        </p>
+                        {c.relationship && (
+                          <p style={{ color: T.textMuted, fontSize: '12px', marginTop: '1px' }}>
+                            {c.relationship}
+                          </p>
+                        )}
                       </div>
-                      <a href={`tel:${c.phone}`}
-                        style={{ display: 'flex', alignItems: 'center', gap: '6px', color: T.green, fontSize: '14px', fontWeight: 700, textDecoration: 'none', flexShrink: 0, padding: '8px 0 8px 16px' }}>
+                      <a
+                        href={`tel:${c.phone}`}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          color: T.green,
+                          fontSize: '14px',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          flexShrink: 0,
+                          padding: '8px 0 8px 16px',
+                        }}
+                      >
                         <Phone size={14} color={T.green} />
                         Call
                       </a>
@@ -1134,11 +1728,18 @@ function RoutingPage() {
                   href={buildSmsHref(notifiedContacts, hospital, type)}
                   whileTap={{ scale: 0.985 }}
                   style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px',
-                    background: T.blue, color: 'white',
-                    fontWeight: 700, fontSize: '15px',
-                    padding: '16px', borderRadius: '12px',
-                    textDecoration: 'none', minHeight: '54px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '9px',
+                    background: T.blue,
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: '15px',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    textDecoration: 'none',
+                    minHeight: '54px',
                   }}
                 >
                   <MessageSquare size={16} color="white" />
@@ -1147,34 +1748,91 @@ function RoutingPage() {
 
                 <button
                   onClick={shareLive}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', background: 'none', border: 'none', color: T.blue, fontWeight: 600, fontSize: '13.5px', padding: '14px 14px 6px', cursor: 'pointer', fontFamily: 'inherit' }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    background: 'none',
+                    border: 'none',
+                    color: T.blue,
+                    fontWeight: 600,
+                    fontSize: '13.5px',
+                    padding: '14px 14px 6px',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                  }}
                 >
                   <Share2 size={14} color={T.blue} />
                   Share a live status link instead
                 </button>
                 <button
-                  onClick={() => setShowQr(q => !q)}
-                  style={{ display: 'block', width: '100%', background: 'none', border: 'none', color: T.textMuted, fontWeight: 500, fontSize: '12.5px', padding: '4px 14px 10px', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'center' }}
+                  onClick={() => setShowQr((q) => !q)}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    background: 'none',
+                    border: 'none',
+                    color: T.textMuted,
+                    fontWeight: 500,
+                    fontSize: '12.5px',
+                    padding: '4px 14px 10px',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    textAlign: 'center',
+                  }}
                 >
                   {showQr ? 'Hide QR' : 'Or show a QR for anyone nearby to scan'}
                 </button>
-                {showQr && roomId && typeof window !== 'undefined' && (() => {
-                  try {
-                    const qr = qrgen(0, 'M')
-                    qr.addData(`${window.location.origin}/emergency/live/${roomId}`)
-                    qr.make()
-                    const svg = qr.createSvgTag({ cellSize: 4, margin: 2 })
-                    return (
-                      <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
-                        <div style={{ width: '164px', border: `1px solid ${T.border}`, borderRadius: '14px', padding: '10px', background: 'white' }}
-                          dangerouslySetInnerHTML={{ __html: svg.replace('<svg ', '<svg style="width:100%;height:auto;display:block" ') }}/>
-                      </div>
-                    )
-                  } catch { return null }
-                })()}
+                {showQr &&
+                  roomId &&
+                  typeof window !== 'undefined' &&
+                  (() => {
+                    try {
+                      const qr = qrgen(0, 'M')
+                      qr.addData(`${window.location.origin}/emergency/live/${roomId}`)
+                      qr.make()
+                      const svg = qr.createSvgTag({ cellSize: 4, margin: 2 })
+                      return (
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            paddingBottom: '10px',
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: '164px',
+                              border: `1px solid ${T.border}`,
+                              borderRadius: '14px',
+                              padding: '10px',
+                              background: 'white',
+                            }}
+                            dangerouslySetInnerHTML={{
+                              __html: svg.replace(
+                                '<svg ',
+                                '<svg style="width:100%;height:auto;display:block" ',
+                              ),
+                            }}
+                          />
+                        </div>
+                      )
+                    } catch {
+                      return null
+                    }
+                  })()}
               </>
             ) : (
-              <p style={{ color: T.textMuted, fontSize: '13.5px', padding: '13px 0', borderTop: `1px solid ${T.border}` }}>
+              <p
+                style={{
+                  color: T.textMuted,
+                  fontSize: '13.5px',
+                  padding: '13px 0',
+                  borderTop: `1px solid ${T.border}`,
+                }}
+              >
                 No emergency contacts saved. Add them in Settings so you can text everyone at once.
               </p>
             )}
@@ -1182,71 +1840,219 @@ function RoutingPage() {
         )}
 
         {/* ── First responder info — always visible, no box ─────────────────── */}
-        {profile && (profile.blood_type || profile.allergies || (profile.medications?.length > 0)) && (
-          <div style={{ marginBottom: '30px' }}>
-            <p style={{ color: T.red, fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>
-              First responder info. Show this screen
-            </p>
-            <div style={{ borderTop: `2px solid ${T.red}` }}>
-              {profile.blood_type && (
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
-                  <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Blood type</span>
-                  <span style={{ color: T.red, fontWeight: 900, fontSize: '34px', fontFamily: 'inherit', letterSpacing: '-0.4px', lineHeight: 0.9 }}>
-                    {profile.blood_type}
-                  </span>
-                </div>
-              )}
-              {profile.allergies && (
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
-                  <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Allergies</span>
-                  <span style={{ color: T.red, fontWeight: 700, fontSize: '15.5px', lineHeight: 1.5 }}>
-                    {profile.allergies}
-                  </span>
-                </div>
-              )}
-              {profile.medications?.length > 0 && (
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '18px', padding: '14px 0', borderBottom: `1px solid ${T.border}` }}>
-                  <span style={{ color: T.textMuted, fontSize: '12.5px', width: '92px', flexShrink: 0 }}>Medications</span>
-                  <span style={{ color: T.textSec, fontSize: '13.5px', lineHeight: 1.7 }}>
-                    {profile.medications.slice(0, 4).map((m: any) => m.name || m).join(', ')}
-                  </span>
-                </div>
-              )}
+        {profile &&
+          (profile.blood_type || profile.allergies || profile.medications?.length > 0) && (
+            <div style={{ marginBottom: '30px' }}>
+              <p
+                style={{
+                  color: T.red,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0',
+                  marginBottom: '4px',
+                }}
+              >
+                First responder info. Show this screen
+              </p>
+              <div style={{ borderTop: `2px solid ${T.red}` }}>
+                {profile.blood_type && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      gap: '18px',
+                      padding: '14px 0',
+                      borderBottom: `1px solid ${T.border}`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: T.textMuted,
+                        fontSize: '12.5px',
+                        width: '92px',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Blood type
+                    </span>
+                    <span
+                      style={{
+                        color: T.red,
+                        fontWeight: 900,
+                        fontSize: '34px',
+                        fontFamily: 'inherit',
+                        letterSpacing: '-0.4px',
+                        lineHeight: 0.9,
+                      }}
+                    >
+                      {profile.blood_type}
+                    </span>
+                  </div>
+                )}
+                {profile.allergies && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      gap: '18px',
+                      padding: '14px 0',
+                      borderBottom: `1px solid ${T.border}`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: T.textMuted,
+                        fontSize: '12.5px',
+                        width: '92px',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Allergies
+                    </span>
+                    <span
+                      style={{ color: T.red, fontWeight: 700, fontSize: '15.5px', lineHeight: 1.5 }}
+                    >
+                      {profile.allergies}
+                    </span>
+                  </div>
+                )}
+                {profile.medications?.length > 0 && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      gap: '18px',
+                      padding: '14px 0',
+                      borderBottom: `1px solid ${T.border}`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: T.textMuted,
+                        fontSize: '12.5px',
+                        width: '92px',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Medications
+                    </span>
+                    <span style={{ color: T.textSec, fontSize: '13.5px', lineHeight: 1.7 }}>
+                      {profile.medications
+                        .slice(0, 4)
+                        .map((m: any) => m.name || m)
+                        .join(', ')}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* ── Other hospitals — hairline rows ───────────────────────────────── */}
         {nearbyHospitals.length > 1 && (
           <div style={{ marginBottom: '30px' }}>
             <button
               onClick={() => setShowAll(!showAll)}
-              style={{ color: T.textMuted, fontSize: '13px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '5px', padding: 0 }}
+              style={{
+                color: T.textMuted,
+                fontSize: '13px',
+                fontWeight: 600,
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                letterSpacing: '0',
+                marginBottom: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                padding: 0,
+              }}
             >
-              {showAll ? 'Hide other hospitals' : `${nearbyHospitals.length - 1} other hospital${nearbyHospitals.length - 1 > 1 ? 's' : ''} nearby`}
-              <ChevronRight size={11} style={{ transform: showAll ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s ease' }}/>
+              {showAll
+                ? 'Hide other hospitals'
+                : `${nearbyHospitals.length - 1} other hospital${nearbyHospitals.length - 1 > 1 ? 's' : ''} nearby`}
+              <ChevronRight
+                size={11}
+                style={{
+                  transform: showAll ? 'rotate(90deg)' : 'none',
+                  transition: 'transform 0.2s ease',
+                }}
+              />
             </button>
 
             <AnimatePresence>
               {showAll && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   style={{ borderTop: `1px solid ${T.border}` }}
                 >
                   {nearbyHospitals.slice(1).map((h, i) => (
                     <button
                       key={i}
-                      onClick={() => { setHospital(h); setShowAll(false) }}
-                      style={{ width: '100%', background: 'none', border: 'none', borderBottom: `1px solid ${T.border}`, padding: '13px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
+                      onClick={() => {
+                        setHospital(h)
+                        setShowAll(false)
+                      }}
+                      style={{
+                        width: '100%',
+                        background: 'none',
+                        border: 'none',
+                        borderBottom: `1px solid ${T.border}`,
+                        padding: '13px 0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '14px',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        fontFamily: 'inherit',
+                      }}
                     >
                       <div style={{ minWidth: 0 }}>
-                        <p style={{ color: T.textPrimary, fontWeight: 600, fontSize: '14px', marginBottom: '2px' }}>{h.name}</p>
-                        <p style={{ color: T.textMuted, fontSize: '11.5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{h.address}</p>
+                        <p
+                          style={{
+                            color: T.textPrimary,
+                            fontWeight: 600,
+                            fontSize: '14px',
+                            marginBottom: '2px',
+                          }}
+                        >
+                          {h.name}
+                        </p>
+                        <p
+                          style={{
+                            color: T.textMuted,
+                            fontSize: '11.5px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {h.address}
+                        </p>
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <p style={{ color: T.textPrimary, fontWeight: 700, fontSize: '15px', fontFamily: 'inherit', letterSpacing: '-0.5px' }}>
+                        <p
+                          style={{
+                            color: T.textPrimary,
+                            fontWeight: 700,
+                            fontSize: '15px',
+                            fontFamily: 'inherit',
+                            letterSpacing: '-0.5px',
+                          }}
+                        >
                           {etaText(h)}
                         </p>
-                        <p style={{ color: T.textMuted, fontSize: '11px', fontFamily: 'inherit', marginTop: '2px' }}>
+                        <p
+                          style={{
+                            color: T.textMuted,
+                            fontSize: '11px',
+                            fontFamily: 'inherit',
+                            marginTop: '2px',
+                          }}
+                        >
                           {formatDistance(h.distance || 0)}
                         </p>
                       </div>
@@ -1264,11 +2070,19 @@ function RoutingPage() {
             href={`tel:${emg.number}`}
             whileTap={{ scale: 0.985 }}
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-              background: T.red, color: 'white',
-              padding: '17px', borderRadius: '12px',
-              fontWeight: 800, fontSize: '17px',
-              textDecoration: 'none', minHeight: '56px', letterSpacing: '-0.1px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              background: T.red,
+              color: 'white',
+              padding: '17px',
+              borderRadius: '12px',
+              fontWeight: 800,
+              fontSize: '17px',
+              textDecoration: 'none',
+              minHeight: '56px',
+              letterSpacing: '-0.1px',
             }}
           >
             <Phone size={19} strokeWidth={2.5} />
@@ -1280,11 +2094,20 @@ function RoutingPage() {
               whileTap={{ scale: 0.985 }}
               onClick={() => router.push('/emergency/cpr')}
               style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                background: 'none', color: T.red,
-                padding: '15px', borderRadius: '12px',
-                fontWeight: 700, fontSize: '14.5px',
-                border: `1.5px solid ${T.red}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                background: 'none',
+                color: T.red,
+                padding: '15px',
+                borderRadius: '12px',
+                fontWeight: 700,
+                fontSize: '14.5px',
+                border: `1.5px solid ${T.red}`,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                minHeight: '52px',
               }}
             >
               Not breathing? Start CPR guide
@@ -1293,13 +2116,24 @@ function RoutingPage() {
 
           <motion.button
             whileTap={{ scale: 0.985 }}
-            onClick={() => router.push(`/emergency/brief?type=${type}&name=${encodeURIComponent(hospital.name)}`)}
+            onClick={() =>
+              router.push(`/emergency/brief?type=${type}&name=${encodeURIComponent(hospital.name)}`)
+            }
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              background: 'none', color: T.textPrimary,
-              padding: '15px', borderRadius: '12px',
-              fontWeight: 700, fontSize: '14.5px',
-              border: `1.5px solid ${T.textPrimary}`, cursor: 'pointer', fontFamily: 'inherit', minHeight: '52px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              background: 'none',
+              color: T.textPrimary,
+              padding: '15px',
+              borderRadius: '12px',
+              fontWeight: 700,
+              fontSize: '14.5px',
+              border: `1.5px solid ${T.textPrimary}`,
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              minHeight: '52px',
             }}
           >
             <FileText size={15} />
@@ -1308,9 +2142,21 @@ function RoutingPage() {
 
           <button
             onClick={() => setShowCancelConfirm(true)}
-            style={{ background: 'none', color: T.textMuted, fontWeight: 500, fontSize: '13.5px', padding: '14px', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
+            style={{
+              background: 'none',
+              color: T.textMuted,
+              fontWeight: 500,
+              fontSize: '13.5px',
+              padding: '14px',
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+            }}
           >
-            I&apos;m safe. <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>Cancel this emergency</span>
+            I&apos;m safe.{' '}
+            <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+              Cancel this emergency
+            </span>
           </button>
         </div>
       </motion.div>
@@ -1328,38 +2174,113 @@ function RoutingPage() {
       <AnimatePresence>
         {navMode && (
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}
-            style={{ position: 'fixed', inset: 0, zIndex: 150, background: '#FFFFFF', display: 'flex', flexDirection: 'column' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 150,
+              background: '#FFFFFF',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
           >
-            <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(163,52,23,0.18)', flexShrink: 0 }}>
+            <div
+              style={{
+                padding: '12px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderBottom: '1px solid rgba(163,52,23,0.18)',
+                flexShrink: 0,
+              }}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-                <motion.div animate={{ opacity: [1, 0.25, 1] }} transition={{ duration: 1.1, repeat: Infinity }}
-                  style={{ width: '8px', height: '8px', background: T.red }}/>
-                <span style={{ color: T.red, fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
+                <motion.div
+                  animate={{ opacity: [1, 0.25, 1] }}
+                  transition={{ duration: 1.1, repeat: Infinity }}
+                  style={{ width: '8px', height: '8px', background: T.red }}
+                />
+                <span
+                  style={{ color: T.red, fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}
+                >
                   Relay navigation
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <span style={{ color: T.red, fontFamily: 'inherit', fontSize: '14px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
+                <span
+                  style={{
+                    color: T.red,
+                    fontFamily: 'inherit',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
                   {fmtElapsed(elapsed)}
                 </span>
-                <button onClick={() => setNavMode(false)} aria-label="Exit navigation"
-                  style={{ background: '#B3DDAC', border: `1px solid ${T.border}`, borderRadius: '14px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                  <X size={16} color={T.textSec}/>
+                <button
+                  onClick={() => setNavMode(false)}
+                  aria-label="Exit navigation"
+                  style={{
+                    background: '#B3DDAC',
+                    border: `1px solid ${T.border}`,
+                    borderRadius: '14px',
+                    width: '36px',
+                    height: '36px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <X size={16} color={T.textSec} />
                 </button>
               </div>
             </div>
 
             <div style={{ flex: 1, minHeight: 0 }}>
-              <Nav hospital={hospital} demo={isDemo}/>
+              <Nav hospital={hospital} demo={isDemo} />
             </div>
 
-            <div style={{ padding: '11px 16px', borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, background: '#FFFFFF' }}>
-              <a href={`tel:${emg.number}`} style={{ color: T.red, fontWeight: 800, fontSize: '14.5px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '7px' }}>
-                <Phone size={14} strokeWidth={2.5}/> Call {emg.label}
+            <div
+              style={{
+                padding: '11px 16px',
+                borderTop: `1px solid ${T.border}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexShrink: 0,
+                background: '#FFFFFF',
+              }}
+            >
+              <a
+                href={`tel:${emg.number}`}
+                style={{
+                  color: T.red,
+                  fontWeight: 800,
+                  fontSize: '14.5px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '7px',
+                }}
+              >
+                <Phone size={14} strokeWidth={2.5} /> Call {emg.label}
               </a>
-              <a href={directionsUrl(hospital)} target="_blank" rel="noopener noreferrer"
-                style={{ color: T.textMuted, fontSize: '12.5px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+              <a
+                href={directionsUrl(hospital)}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: T.textMuted,
+                  fontSize: '12.5px',
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '3px',
+                }}
+              >
                 Open in Google Maps
               </a>
             </div>
@@ -1378,16 +2299,22 @@ function RoutingPage() {
   )
 }
 
-
 // Blood type, allergies and medications from the signed-in profile, or from the
 // no-account emergency card saved on this phone. Both live in localStorage, so
 // this works with no signal.
 function responderInfo(profile: any): [string, string][] {
   let card: any = null
-  try { card = JSON.parse(localStorage.getItem('relay-arc:card:v1') || 'null') } catch {}
+  try {
+    card = JSON.parse(localStorage.getItem('relay-arc:card:v1') || 'null')
+  } catch {}
   const blood = profile?.blood_type || card?.blood || ''
   const allergies = profile?.allergies || card?.allergies || ''
-  const meds = profile?.medications?.length ? profile.medications.slice(0, 4).map((m: any) => m.name || m).join(', ') : (card?.medications || '')
+  const meds = profile?.medications?.length
+    ? profile.medications
+        .slice(0, 4)
+        .map((m: any) => m.name || m)
+        .join(', ')
+    : card?.medications || ''
   const out: [string, string][] = []
   if (blood) out.push(['Blood type', blood])
   if (allergies) out.push(['Allergies', allergies])

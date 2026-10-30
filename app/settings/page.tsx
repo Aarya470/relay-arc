@@ -4,7 +4,18 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, LogOut, User, Phone, Calendar, Stethoscope, ChevronRight, History, Shield, Activity } from 'lucide-react'
+import {
+  ArrowLeft,
+  LogOut,
+  User,
+  Phone,
+  Calendar,
+  Stethoscope,
+  ChevronRight,
+  History,
+  Shield,
+  Activity,
+} from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 import DateField from '@/components/DateField'
@@ -24,14 +35,7 @@ const inputStyle: React.CSSProperties = {
   borderRadius: '12px',
   padding: '14px 16px',
   color: '#141413',
-    // 16px, not 15 or 14, and it is not a taste decision.
-    //
-    // Mobile Safari zooms the whole page in when a focused form control has a
-    // font size below 16px. Every text field in this app sat at 14 or 15, so on
-    // an iPhone tapping any of them jumped the layout and left the person
-    // pinching back out afterwards. Signup, onboarding, emergency contacts, the
-    // check-in box, the symptom note and every field on the no-account
-    // emergency card all did it. Measured across the running app.
+  // 16px, not 15 or 14, and it is not a taste decision.
   fontSize: '16px',
   outline: 'none',
   fontFamily: 'inherit',
@@ -48,8 +52,13 @@ export default function Settings() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(data)
       setLoading(false)
@@ -65,14 +74,17 @@ export default function Settings() {
   const saveEdit = async () => {
     if (!editing || !profile) return
     setSaving(true)
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) return
-    // Same trap as onboarding: date_of_birth is editable here, and clearing the
-    // field sends '' which Postgres rejects for a date column. Blanking to null
-    // for every field, because '' and null both mean "not answered" and keeping
-    // two empties forces every reader to check for both.
+    // Same trap as onboarding: date_of_birth is editable here, and clearing the field sends
+    // '' which Postgres rejects for a date column.
     const next = editValue.trim() === '' ? null : editValue
-    const { error } = await supabase.from('profiles').update({ [editing]: next }).eq('id', user.id)
+    const { error } = await supabase
+      .from('profiles')
+      .update({ [editing]: next })
+      .eq('id', user.id)
     if (error) {
       // Show what actually went wrong. "Could not save — try again" sent me
       // hunting for a network fault when the real message named the column and
@@ -91,45 +103,140 @@ export default function Settings() {
     router.push('/')
   }
 
-  if (loading) return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '56px', borderRadius: '12px', background: '#F2F0E8' }}/>)}
-    </div>
-  )
+  if (loading)
+    return (
+      <div
+        style={{
+          minHeight: '100dvh',
+          background: '#B3DDAC',
+          padding: '80px 20px 100px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+        }}
+      >
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton
+            key={i}
+            style={{ height: '56px', borderRadius: '12px', background: '#F2F0E8' }}
+          />
+        ))}
+      </div>
+    )
 
   const fields = [
-    { key: 'full_name', label: 'Full name', icon: User, value: profile?.full_name, inputType: 'text' },
+    {
+      key: 'full_name',
+      label: 'Full name',
+      icon: User,
+      value: profile?.full_name,
+      inputType: 'text',
+    },
     { key: 'phone', label: 'Phone', icon: Phone, value: profile?.phone, inputType: 'tel' },
-    { key: 'date_of_birth', label: 'Date of birth', icon: Calendar, value: profile?.date_of_birth, inputType: 'date' },
-    { key: 'cardiologist', label: 'Cardiologist', icon: Stethoscope, value: profile?.cardiologist, inputType: 'text' },
+    {
+      key: 'date_of_birth',
+      label: 'Date of birth',
+      icon: Calendar,
+      value: profile?.date_of_birth,
+      inputType: 'date',
+    },
+    {
+      key: 'cardiologist',
+      label: 'Cardiologist',
+      icon: Stethoscope,
+      value: profile?.cardiologist,
+      inputType: 'text',
+    },
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '90px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
-
+    <div
+      style={{
+        minHeight: '100dvh',
+        background: '#B3DDAC',
+        paddingBottom: '90px',
+        maxWidth: '640px',
+        margin: '0 auto',
+        width: '100%',
+      }}
+    >
       {/* Header */}
       <div style={{ padding: '56px 20px 22px' }}>
-        <button onClick={() => router.push('/dashboard')}
-          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#5C5A52', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
-          <ArrowLeft size={14}/> Dashboard
+        <button
+          onClick={() => router.push('/dashboard')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '7px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+            marginBottom: '22px',
+            color: '#5C5A52',
+            fontSize: '13px',
+            fontWeight: 500,
+            fontFamily: 'inherit',
+          }}
+        >
+          <ArrowLeft size={14} /> Dashboard
         </button>
-        <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>Settings</p>
-        <h1 style={{ color: '#141413', fontSize: '32px', fontWeight: 800, letterSpacing: '-0.4px', lineHeight: 1 }}>
+        <p
+          style={{
+            color: '#5C5A52',
+            fontSize: '13px',
+            fontWeight: 600,
+            letterSpacing: '0',
+            marginBottom: '8px',
+          }}
+        >
+          Settings
+        </p>
+        <h1
+          style={{
+            color: '#141413',
+            fontSize: '32px',
+            fontWeight: 800,
+            letterSpacing: '-0.4px',
+            lineHeight: 1,
+          }}
+        >
           {profile?.full_name?.split(' ')[0] || 'Profile'}
         </h1>
-        <p style={{ color: '#5C5A52', fontSize: '13px', marginTop: '8px' }}>{profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}</p>
+        <p style={{ color: '#5C5A52', fontSize: '13px', marginTop: '8px' }}>
+          {profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}
+        </p>
       </div>
 
       <div style={{ padding: '0 20px' }}>
-
         {/* Profile fields — flat rows */}
-        <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>Profile</p>
+        <p
+          style={{
+            color: '#5C5A52',
+            fontSize: '13px',
+            fontWeight: 600,
+            letterSpacing: '0',
+            marginBottom: '4px',
+          }}
+        >
+          Profile
+        </p>
         <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
-          {fields.map(f => (
+          {fields.map((f) => (
             <div key={f.key} style={{ borderBottom: '1px solid #98C890' }}>
               {editing === f.key ? (
                 <div style={{ padding: '16px 0' }}>
-                  <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, marginBottom: '10px', letterSpacing: '0' }}>{f.label}</p>
+                  <p
+                    style={{
+                      color: '#5C5A52',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      marginBottom: '10px',
+                      letterSpacing: '0',
+                    }}
+                  >
+                    {f.label}
+                  </p>
                   {/* Date of birth was still a native <input type="date"> here,
                       so editing your birthday from settings gave you the OS
                       spinner that onboarding was moved off. Same control in
@@ -148,18 +255,49 @@ export default function Settings() {
                       type={f.inputType}
                       autoFocus
                       value={editValue}
-                      onChange={e => setEditValue(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && saveEdit()}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && saveEdit()}
                       style={{ ...inputStyle, marginBottom: '10px' }}
                     />
                   )}
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <motion.button whileTap={{ scale: 0.97 }} onClick={saveEdit} disabled={saving}
-                      style={{ flex: 1, background: '#141413', color: 'white', fontWeight: 600, fontSize: '13px', padding: '12px', borderRadius: '14px', border: 'none', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={saveEdit}
+                      disabled={saving}
+                      style={{
+                        flex: 1,
+                        background: '#141413',
+                        color: 'white',
+                        fontWeight: 600,
+                        fontSize: '13px',
+                        padding: '12px',
+                        borderRadius: '14px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        height: '44px',
+                        fontFamily: 'inherit',
+                      }}
+                    >
                       {saving ? 'Saving…' : 'Save'}
                     </motion.button>
-                    <motion.button whileTap={{ scale: 0.97 }} onClick={() => setEditing(null)}
-                      style={{ flex: 1, background: 'none', border: '1px solid #D8D4C8', color: '#5C5A52', fontWeight: 500, fontSize: '13px', padding: '12px', borderRadius: '14px', cursor: 'pointer', height: '44px', fontFamily: 'inherit' }}>
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setEditing(null)}
+                      style={{
+                        flex: 1,
+                        background: 'none',
+                        border: '1px solid #D8D4C8',
+                        color: '#5C5A52',
+                        fontWeight: 500,
+                        fontSize: '13px',
+                        padding: '12px',
+                        borderRadius: '14px',
+                        cursor: 'pointer',
+                        height: '44px',
+                        fontFamily: 'inherit',
+                      }}
+                    >
                       Cancel
                     </motion.button>
                   </div>
@@ -168,11 +306,32 @@ export default function Settings() {
                 <motion.button
                   whileTap={{ scale: 0.995 }}
                   onClick={() => startEdit(f.key, f.value)}
-                  style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'baseline', gap: '16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+                  style={{
+                    width: '100%',
+                    padding: '15px 0',
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    gap: '16px',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
                 >
-                  <p style={{ color: '#5C5A52', fontSize: '13px', width: '110px', flexShrink: 0 }}>{f.label}</p>
-                  <p style={{ flex: 1, color: f.value ? '#141413' : '#C4BFB0', fontSize: '14.5px', fontWeight: f.value ? 600 : 400 }}>{f.value || 'Tap to add'}</p>
-                  <ChevronRight size={13} color="#C4BFB0" style={{ alignSelf: 'center' }}/>
+                  <p style={{ color: '#5C5A52', fontSize: '13px', width: '110px', flexShrink: 0 }}>
+                    {f.label}
+                  </p>
+                  <p
+                    style={{
+                      flex: 1,
+                      color: f.value ? '#141413' : '#C4BFB0',
+                      fontSize: '14.5px',
+                      fontWeight: f.value ? 600 : 400,
+                    }}
+                  >
+                    {f.value || 'Tap to add'}
+                  </p>
+                  <ChevronRight size={13} color="#C4BFB0" style={{ alignSelf: 'center' }} />
                 </motion.button>
               )}
             </div>
@@ -180,44 +339,98 @@ export default function Settings() {
         </div>
 
         {/* Data — flat rows */}
-        <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>Data</p>
+        <p
+          style={{
+            color: '#5C5A52',
+            fontSize: '13px',
+            fontWeight: 600,
+            letterSpacing: '0',
+            marginBottom: '4px',
+          }}
+        >
+          Data
+        </p>
         <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
           {[
             { label: 'Health history', sub: 'Past check-ins and emergencies', path: '/history' },
             { label: 'Vitals check', sub: 'Pulse, breathing and your NEWS2 sheet', path: '/check' },
-            { label: 'Emergency contacts', sub: 'Who to alert in an emergency', path: '/emergency-contacts', red: true },
-          ].map(item => (
+            {
+              label: 'Emergency contacts',
+              sub: 'Who to alert in an emergency',
+              path: '/emergency-contacts',
+              red: true,
+            },
+          ].map((item) => (
             <motion.button
               key={item.path}
               whileTap={{ scale: 0.995 }}
               onClick={() => router.push(item.path)}
-              style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'center', gap: '14px', background: 'none', border: 'none', borderBottom: '1px solid #98C890', cursor: 'pointer', textAlign: 'left' }}
+              style={{
+                width: '100%',
+                padding: '15px 0',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '14px',
+                background: 'none',
+                border: 'none',
+                borderBottom: '1px solid #98C890',
+                cursor: 'pointer',
+                textAlign: 'left',
+              }}
             >
               <div style={{ flex: 1 }}>
-                <p style={{ color: (item as any).red ? '#A33417' : '#141413', fontWeight: 600, fontSize: '14.5px' }}>{item.label}</p>
+                <p
+                  style={{
+                    color: (item as any).red ? '#A33417' : '#141413',
+                    fontWeight: 600,
+                    fontSize: '14.5px',
+                  }}
+                >
+                  {item.label}
+                </p>
                 <p style={{ color: '#5C5A52', fontSize: '12.5px', marginTop: '2px' }}>{item.sub}</p>
               </div>
-              <ChevronRight size={13} color="#C4BFB0"/>
+              <ChevronRight size={13} color="#C4BFB0" />
             </motion.button>
           ))}
         </div>
 
         {/* Account */}
-        <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '4px' }}>Account</p>
+        <p
+          style={{
+            color: '#5C5A52',
+            fontSize: '13px',
+            fontWeight: 600,
+            letterSpacing: '0',
+            marginBottom: '4px',
+          }}
+        >
+          Account
+        </p>
         <div style={{ borderTop: '1px solid #98C890' }}>
           <motion.button
             whileTap={{ scale: 0.995 }}
             onClick={signOut}
-            style={{ width: '100%', padding: '15px 0', display: 'flex', alignItems: 'center', gap: '10px', background: 'none', border: 'none', borderBottom: '1px solid #98C890', cursor: 'pointer', textAlign: 'left' }}
+            style={{
+              width: '100%',
+              padding: '15px 0',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'none',
+              border: 'none',
+              borderBottom: '1px solid #98C890',
+              cursor: 'pointer',
+              textAlign: 'left',
+            }}
           >
-            <LogOut size={14} color="#A33417"/>
+            <LogOut size={14} color="#A33417" />
             <p style={{ color: '#A33417', fontWeight: 600, fontSize: '14.5px' }}>Sign out</p>
           </motion.button>
         </div>
-
       </div>
 
-      <BottomNav/>
+      <BottomNav />
     </div>
   )
 }

@@ -9,12 +9,14 @@ const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   // Minimal referrer info sent to third parties
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  // Lock down browser features
-  // camera and microphone used to be () — blocked for the whole site, which
-  // silently broke voice SOS (the speech recogniser needs the microphone), the
-  // camera pulse reader on /check, and the care-team video calls. They are now
-  // allowed for this origin and the Jitsi meeting frame only.
-  { key: 'Permissions-Policy', value: 'camera=(self "https://meet.jit.si"), microphone=(self "https://meet.jit.si"), geolocation=(self), payment=()' },
+  // Lock down browser features camera and microphone used to be () — blocked for the whole
+  // site, which silently broke voice SOS (the speech recogniser needs the microphone), the
+  // camera pulse reader on /check, and the care-team video calls.
+  {
+    key: 'Permissions-Policy',
+    value:
+      'camera=(self "https://meet.jit.si"), microphone=(self "https://meet.jit.si"), geolocation=(self), payment=()',
+  },
   // Legacy XSS protection for older browsers
   { key: 'X-XSS-Protection', value: '1; mode=block' },
   // Content Security Policy

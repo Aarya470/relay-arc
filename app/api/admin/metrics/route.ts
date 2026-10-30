@@ -1,17 +1,4 @@
-// Private metrics. The only numbers worth quoting.
-//
-// WHY THIS EXISTS
-// Before this, the honest answer to "how many people use Relay Arc?" required
-// opening the database by hand — which meant the answer in a pitch would have been
-// a guess. Every conversation with a school, a hospital or a journalist opens with
-// that question.
-//
-// Deliberately excluded: signups, page views, GitHub stars. They measure nothing.
-// Two numbers matter and they are both here:
-//   1. How many people have a COMPLETE medical ID — the real unit of value, because
-//      it means "if something happened, this would have helped".
-//   2. Day-30 check-in retention — whether the product has a reason to exist on an
-//      ordinary day.
+// Private metrics.
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
@@ -22,7 +9,7 @@ export const dynamic = 'force-dynamic'
 const admin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  { auth: { persistSession: false } }
+  { auth: { persistSession: false } },
 )
 
 const DAY = 86_400_000
@@ -35,14 +22,21 @@ function isComplete(p: Record<string, unknown>): boolean {
     if (Array.isArray(v)) return v.length > 0
     return typeof v === 'string' ? v.trim().length > 0 : v != null
   }
-  return has('full_name') && has('blood_type') && has('diagnosis') &&
+  return (
+    has('full_name') &&
+    has('blood_type') &&
+    has('diagnosis') &&
     (has('medications') || has('allergies'))
+  )
 }
 
 export async function GET(req: NextRequest) {
   const key = req.headers.get('x-admin-key') || new URL(req.url).searchParams.get('key')
   if (!process.env.ADMIN_PORTAL_KEY) {
-    return NextResponse.json({ error: 'ADMIN_PORTAL_KEY is not set in the environment' }, { status: 503 })
+    return NextResponse.json(
+      { error: 'ADMIN_PORTAL_KEY is not set in the environment' },
+      { status: 503 },
+    )
   }
   if (key !== process.env.ADMIN_PORTAL_KEY) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -68,15 +62,16 @@ export async function GET(req: NextRequest) {
     type Stamped = { created_at?: string; logged_at?: string; taken_at?: string }
     const since = <T extends Stamped>(rows: T[], d: number): T[] => {
       const cut = iso(d)
-      return rows.filter(r => (r.created_at || r.logged_at || r.taken_at || '') >= cut)
+      return rows.filter((r) => (r.created_at || r.logged_at || r.taken_at || '') >= cut)
     }
-    const uniq = (rows: { user_id?: string }[]) => new Set(rows.map(r => r.user_id).filter(Boolean)).size
+    const uniq = (rows: { user_id?: string }[]) =>
+      new Set(rows.map((r) => r.user_id).filter(Boolean)).size
 
     // Retention: of the people who signed up at least 30 days ago, how many are
     // still checking in? Counting recent signups would flatter the number.
-    const cohort30 = P.filter(p => (p.created_at || '') <= iso(30))
-    const active7 = new Set(since(C, 7).map(c => c.user_id))
-    const retained30 = cohort30.filter(p => active7.has(p.id)).length
+    const cohort30 = P.filter((p) => (p.created_at || '') <= iso(30))
+    const active7 = new Set(since(C, 7).map((c) => c.user_id))
+    const retained30 = cohort30.filter((p) => active7.has(p.id)).length
 
     const complete = P.filter(isComplete)
 
@@ -96,11 +91,14 @@ export async function GET(req: NextRequest) {
       // ── the funnel, so the biggest leak is visible ─────────────────────────
       funnel: {
         profiles_created: P.length,
-        with_a_name: P.filter(p => (p.full_name || '').trim()).length,
-        with_blood_type: P.filter(p => (p.blood_type || '').trim()).length,
-        with_a_diagnosis: P.filter(p => (p.diagnosis || '').trim()).length,
-        with_medications: P.filter(p => Array.isArray(p.medications) && p.medications.length).length,
-        with_emergency_contacts: P.filter(p => Array.isArray(p.emergency_contacts) && p.emergency_contacts.length).length,
+        with_a_name: P.filter((p) => (p.full_name || '').trim()).length,
+        with_blood_type: P.filter((p) => (p.blood_type || '').trim()).length,
+        with_a_diagnosis: P.filter((p) => (p.diagnosis || '').trim()).length,
+        with_medications: P.filter((p) => Array.isArray(p.medications) && p.medications.length)
+          .length,
+        with_emergency_contacts: P.filter(
+          (p) => Array.isArray(p.emergency_contacts) && p.emergency_contacts.length,
+        ).length,
         fully_complete: complete.length,
       },
 
@@ -112,13 +110,14 @@ export async function GET(req: NextRequest) {
         vitals_logged_7d: since(V, 7).length,
         vitals_logged_30d: since(V, 30).length,
         distinct_users_logging_vitals_30d: uniq(since(V, 30)),
-        medications_marked_taken_7d: since(M, 7).filter(m => (m as { taken?: boolean }).taken).length,
+        medications_marked_taken_7d: since(M, 7).filter((m) => (m as { taken?: boolean }).taken)
+          .length,
       },
 
       emergencies: {
         total: E.length,
         last_30d: since(E, 30).length,
-        currently_active: E.filter(e => (e as { status?: string }).status === 'active').length,
+        currently_active: E.filter((e) => (e as { status?: string }).status === 'active').length,
       },
 
       // Honest framing so a number is never quoted without its caveat.

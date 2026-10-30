@@ -4,7 +4,9 @@ import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 
 declare global {
-  interface Window { JitsiMeetExternalAPI: any }
+  interface Window {
+    JitsiMeetExternalAPI: any
+  }
 }
 
 interface Props {
@@ -21,7 +23,9 @@ export default function JitsiMeeting({ roomId, displayName, onEnd }: Props) {
   const handleEnd = () => {
     if (firedRef.current) return
     firedRef.current = true
-    try { apiRef.current?.dispose() } catch {}
+    try {
+      apiRef.current?.dispose()
+    } catch {}
     onEnd()
   }
 
@@ -59,7 +63,9 @@ export default function JitsiMeeting({ roomId, displayName, onEnd }: Props) {
     }
 
     return () => {
-      try { apiRef.current?.dispose() } catch {}
+      try {
+        apiRef.current?.dispose()
+      } catch {}
     }
   }, [roomId])
 
@@ -68,7 +74,14 @@ export default function JitsiMeeting({ roomId, displayName, onEnd }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ position: 'fixed', inset: 0, zIndex: 200, background: '#000', display: 'flex', flexDirection: 'column' }}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 200,
+        background: '#000',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
       <div ref={containerRef} style={{ flex: 1 }} />
       <button
@@ -77,10 +90,18 @@ export default function JitsiMeeting({ roomId, displayName, onEnd }: Props) {
         // "button" with no name.
         aria-label="Leave this call"
         style={{
-          position: 'absolute', top: 16, left: 16, zIndex: 201,
-          background: 'rgba(0,0,0,0.55)', border: '1px solid rgba(255,255,255,0.15)',
-          borderRadius: '50%', width: 44, height: 44,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          position: 'absolute',
+          top: 16,
+          left: 16,
+          zIndex: 201,
+          background: 'rgba(0,0,0,0.55)',
+          border: '1px solid rgba(255,255,255,0.15)',
+          borderRadius: '50%',
+          width: 44,
+          height: 44,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           cursor: 'pointer',
         }}
       >

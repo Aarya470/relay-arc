@@ -7,7 +7,7 @@ import { authedClient } from '@/lib/supabase-route'
 // RLS sees no user. See lib/supabase-route.ts.
 const anonSupabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 const CRITICAL_THRESHOLDS = {
@@ -40,11 +40,19 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { heart_rate, systolic, diastolic, oxygen_sat, resp_rate } = body
     // Where the reading came from, so the NEWS2 sheet can say so. Allow-listed.
-    const source = ['camera', 'motion', 'taps', 'manual'].includes(body.source) ? body.source : 'manual'
+    const source = ['camera', 'motion', 'taps', 'manual'].includes(body.source)
+      ? body.source
+      : 'manual'
 
     // Validate numeric values
     const vitals: Record<string, number | null> = {}
-    for (const [key, val] of Object.entries({ heart_rate, systolic, diastolic, oxygen_sat, resp_rate })) {
+    for (const [key, val] of Object.entries({
+      heart_rate,
+      systolic,
+      diastolic,
+      oxygen_sat,
+      resp_rate,
+    })) {
       if (val !== undefined && val !== null && val !== '') {
         const num = parseFloat(String(val))
         if (!isNaN(num) && num > 0) vitals[key] = num
@@ -71,18 +79,8 @@ export async function POST(req: NextRequest) {
     // Check for critical values and record the alert.
     const criticalAlerts = isCritical(vitals)
     if (criticalAlerts.length > 0) {
-      // The result of this insert is now checked, because the message below
-      // used to promise something this code cannot guarantee.
-      //
-      // It previously said "Your care team has been notified" unconditionally,
-      // with the insert fired as .then(() => {}) so any failure was discarded.
-      // Telling someone with a heart rate of 142 that their care team knows,
-      // when the row was never written, is the most harmful sentence in this
-      // file: it is a reason to sit down and wait instead of calling anyone.
-      //
-      // Recording the alert is also not the same as delivering it. Nothing here
-      // sends a push or an email, so the honest claim is that it has been
-      // flagged for the care team, not that anyone has seen it.
+      // The result of this insert is now checked, because the message below used to promise
+      // something this code cannot guarantee.
       const { error: alertError } = await supabase.from('vitals_alerts').insert({
         user_id: user.id,
         alerts: criticalAlerts,

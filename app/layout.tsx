@@ -16,20 +16,9 @@ const jakarta = Plus_Jakarta_Sans({
   weight: ['400', '500', '600', '700', '800'],
 })
 
-// --font-mono is a misnomer now and the name is kept on purpose: it is read by
-// well over a hundred inline `fontFamily: var(--font-mono, monospace)` styles
-// across the app, and renaming it would mean touching every one of them to
-// change a typeface. So the variable keeps its name and gets a new face.
-//
-// This slot was JetBrains Mono, which is what made the uppercase label chips
-// (RELAY ARC, KNOW YOUR RIGHTS, FLARE CHECK, the 01/02/03 numbers) read as hard
-// and technical. Nunito has rounded terminals and carries the same tracking
-// without the boxiness.
-//
-// It is not monospaced, so the alignment the old face gave for free is now
-// bought explicitly with tabular-nums on the body in globals.css. That matters
-// for the dispatch timer and the vitals columns, where digits changing width
-// makes numbers jitter as they update.
+// --font-mono is a misnomer now and the name is kept on purpose: it is read by well over a
+// hundred inline `fontFamily: var(--font-mono, monospace)` styles across the app, and
+// renaming it would mean touching every one of them to change a typeface.
 const mono = Nunito({
   subsets: ['latin'],
   variable: '--font-mono',
@@ -47,10 +36,8 @@ const code = JetBrains_Mono({
   weight: ['400', '500', '600', '700'],
 })
 
-// Without this a phone lays the page out at 980px and shrinks it, which is why
-// a site can look "not mobile friendly" even when every breakpoint is correct.
-// maximumScale is deliberately left alone: capping zoom locks out anyone who
-// needs to enlarge text, and this is a medical app.
+// Without this a phone lays the page out at 980px and shrinks it, which is why a site can
+// look "not mobile friendly" even when every breakpoint is correct.
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -64,10 +51,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: '/' },
   title: 'Relay Arc: emergency help for heart and dysautonomia conditions',
-  description: 'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. It works with no signal, and the emergency card needs no account.',
+  description:
+    'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. It works with no signal, and the emergency card needs no account.',
   openGraph: {
     title: 'Relay Arc: the closest hospital is not always the right one',
-    description: 'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. No account needed for the emergency card.',
+    description:
+      'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. No account needed for the emergency card.',
     url: SITE_URL,
     siteName: 'Relay Arc',
     type: 'website',
@@ -75,7 +64,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Relay Arc: the closest hospital is not always the right one',
-    description: 'A free app that finds a hospital which can treat your condition and sends your medical details ahead.',
+    description:
+      'A free app that finds a hospital which can treat your condition and sends your medical details ahead.',
   },
   manifest: '/manifest.json',
   appleWebApp: {
@@ -88,17 +78,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}` }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}`,
+          }}
+        />
       </head>
-      <body className={`${jakarta.variable} ${mono.variable} ${code.variable} ${jakarta.className}`}>
+      <body
+        className={`${jakarta.variable} ${mono.variable} ${code.variable} ${jakarta.className}`}
+      >
         <Motion>
           <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
             {children}

@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -16,7 +16,10 @@ export function cn(...inputs: ClassValue[]) {
  * Deliberately returns the fallback rather than `Invalid Date` for anything
  * unparseable — a chart must never display a value a reader could mistake for data.
  */
-export function formatDate(value: string | number | Date | null | undefined, fallback = 'N/A'): string {
+export function formatDate(
+  value: string | number | Date | null | undefined,
+  fallback = 'N/A',
+): string {
   if (value === null || value === undefined || value === '') return fallback
   const d = new Date(value)
   if (Number.isNaN(d.getTime())) return fallback

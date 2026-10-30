@@ -1,0 +1,7 @@
+node_modules
+.next
+lib/triage/model*.ts
+lib/triage/*.generated.ts
+public
+supabase
+ml

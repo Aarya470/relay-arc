@@ -1,19 +1,12 @@
-// Server-side risk handler, shared by /api/risk and the deprecated
-// /api/groq/crash-risk path.
-//
-// This lives in lib/ rather than in one route importing the other, because
-// Next.js treats every route.ts as its own compiled entry point and importing
-// across them is asking for trouble.
-//
-// The scoring itself is in lib/risk/index.ts — pure and client-safe, so the
-// dashboard runs the identical function locally with no network.
+// Server-side risk handler, shared by /api/risk and the deprecated /api/groq/crash-risk
+// path.
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { assessRisk, type VitalsSample } from './index'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 export async function handleRiskRequest(req: NextRequest) {
@@ -21,7 +14,10 @@ export async function handleRiskRequest(req: NextRequest) {
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     // 21 days is what the personal-baseline layer needs to establish a median.

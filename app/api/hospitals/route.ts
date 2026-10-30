@@ -5,22 +5,24 @@ export async function POST(req: NextRequest) {
 
   // SEC-6: Validate lat/lng ranges before making outbound requests
   if (
-    typeof lat !== 'number' || typeof lng !== 'number' ||
-    lat < -90 || lat > 90 || lng < -180 || lng > 180
+    typeof lat !== 'number' ||
+    typeof lng !== 'number' ||
+    lat < -90 ||
+    lat > 90 ||
+    lng < -180 ||
+    lng > 180
   ) {
     return NextResponse.json({ error: 'Invalid coordinates' }, { status: 400 })
   }
 
   // The Nominatim query uses bounding boxes rather than a radius parameter.
-  // `radius` is accepted in the request body for API contract clarity but the
-  // bounding-box expansion strategy below provides equivalent progressive coverage.
-  // Derive an initial box half-width from the radius if provided (clamped to 2°).
   const initialBox = radius ? Math.min(radius / 111_000, 2.0) : 0.2
   const boxes = Array.from(new Set([initialBox, 0.5, 1.0, 2.0])).sort((a, b) => a - b)
 
   for (const box of boxes) {
     try {
-      const url = `https://nominatim.openstreetmap.org/search?` +
+      const url =
+        `https://nominatim.openstreetmap.org/search?` +
         `q=hospital&` +
         `format=json&` +
         `limit=15&` +
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest) {
         `bounded=1`
 
       const res = await fetch(url, {
-        headers: { 'User-Agent': 'RelayArc/1.0 (cardiac-emergency-app)' }
+        headers: { 'User-Agent': 'RelayArc/1.0 (cardiac-emergency-app)' },
       })
 
       const data = await res.json()

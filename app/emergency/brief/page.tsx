@@ -43,11 +43,7 @@ function BriefContent() {
 
   const emergencyLabel = EMERGENCY_LABELS[type] || 'Emergency'
 
-  // Autonomic context for staff, derived from the diagnosis text and the
-  // emergency type. Declared above buildPlainText because both the printed card
-  // and the copyable text have to carry the same content — a paper card that
-  // says more than the text a nurse pastes into a chart is a way for the caution
-  // line to go missing from the version that gets kept.
+  // Autonomic context for staff, derived from the diagnosis text and the emergency type.
   const handoff = autonomicHandoff({
     diagnosis: profile?.diagnosis,
     emergencyType: type,
@@ -56,7 +52,9 @@ function BriefContent() {
 
   useEffect(() => {
     const init = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         router.replace('/login')
         return
@@ -65,7 +63,9 @@ function BriefContent() {
 
       const { data } = await supabase
         .from('profiles')
-        .select('full_name, blood_type, allergies, medications, diagnosis, emergency_contacts, surgery_date, date_of_birth')
+        .select(
+          'full_name, blood_type, allergies, medications, diagnosis, emergency_contacts, surgery_date, date_of_birth',
+        )
         .eq('id', user.id)
         .single()
 
@@ -80,20 +80,28 @@ function BriefContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Generated server-side. This used to construct a Groq client in the browser
-  // with NEXT_PUBLIC_GROQ_API_KEY, which put the API key in the client bundle.
-  // The server refetches the profile under this user's own JWT, so nothing about
-  // who can read what has changed.
+  // Generated server-side.
   const generateClinicalNote = async (_p: Profile) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session?.access_token) { setClinicalNote(''); return }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (!session?.access_token) {
+        setClinicalNote('')
+        return
+      }
       const res = await fetch('/api/ai/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({ task: 'clinical_handoff', emergencyType: type }),
       })
-      if (!res.ok) { setClinicalNote(''); return }
+      if (!res.ok) {
+        setClinicalNote('')
+        return
+      }
       const { text } = await res.json()
       setClinicalNote(text || '')
     } catch {
@@ -104,9 +112,10 @@ function BriefContent() {
   }
 
   const buildPlainText = () => {
-    const meds = (profile?.medications || [])
-      .map(m => `  • ${m.name} ${m.dose}. ${m.frequency}`)
-      .join('\n') || '  • None on file'
+    const meds =
+      (profile?.medications || [])
+        .map((m) => `  • ${m.name} ${m.dose}. ${m.frequency}`)
+        .join('\n') || '  • None on file'
     const contact = profile?.emergency_contacts?.[0]
     const contactLine = contact
       ? `${contact.name}${contact.relationship ? ` (${contact.relationship})` : ''}: ${contact.phone}`
@@ -134,7 +143,7 @@ function BriefContent() {
       handoff.applies
         ? [
             'AUTONOMIC CONTEXT FOR STAFF:',
-            ...handoff.lines.map(l => `  • ${l}`),
+            ...handoff.lines.map((l) => `  • ${l}`),
             '',
             `  CAUTION: ${handoff.caution}`,
           ].join('\n')
@@ -146,7 +155,7 @@ function BriefContent() {
       '',
       '═══════════════════════════════',
     ]
-      .filter(l => l !== null && l !== undefined)
+      .filter((l) => l !== null && l !== undefined)
       .join('\n')
       .replace(/\n{3,}/g, '\n\n')
       .trim()
@@ -165,7 +174,10 @@ function BriefContent() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#B3DDAC' }}>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: '#B3DDAC' }}
+      >
         <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#42623C' }} />
       </div>
     )
@@ -200,14 +212,22 @@ function BriefContent() {
           ER Medical Brief
         </span>
         {hospitalName && (
-          <span className="ml-auto text-sm truncate max-w-[120px]" style={{ color: 'rgba(255,255,255,0.70)' }}>{hospitalName}</span>
+          <span
+            className="ml-auto text-sm truncate max-w-[120px]"
+            style={{ color: 'rgba(255,255,255,0.70)' }}
+          >
+            {hospitalName}
+          </span>
         )}
       </div>
 
       {/* SHOW TO HOSPITAL STAFF banner */}
       <div
         className="w-full text-center py-3 px-4"
-        style={{ background: 'rgba(163,52,23,0.10)', borderBottom: '1px solid rgba(163,52,23,0.18)' }}
+        style={{
+          background: 'rgba(163,52,23,0.10)',
+          borderBottom: '1px solid rgba(163,52,23,0.18)',
+        }}
       >
         <p
           className="font-black tracking-widest uppercase"
@@ -275,9 +295,7 @@ function BriefContent() {
                   <span className="text-sm" style={{ color: '#141413' }}>
                     <span className="font-semibold">{m.name}</span>
                     {m.dose && `. ${m.dose}`}
-                    {m.frequency && (
-                      <span style={{ color: '#5C5A52' }}> · {m.frequency}</span>
-                    )}
+                    {m.frequency && <span style={{ color: '#5C5A52' }}> · {m.frequency}</span>}
                   </span>
                 </li>
               ))}
@@ -321,7 +339,10 @@ function BriefContent() {
                 tachycardia is expected is how a real event gets waved through. */}
             <div
               className="mt-3 rounded-xl p-3"
-              style={{ background: 'rgba(163,52,23,0.07)', border: '1px solid rgba(163,52,23,0.2)' }}
+              style={{
+                background: 'rgba(163,52,23,0.07)',
+                border: '1px solid rgba(163,52,23,0.2)',
+              }}
             >
               <p
                 className="text-xs font-bold uppercase tracking-widest mb-1"
@@ -345,7 +366,8 @@ function BriefContent() {
                 {primaryContact.name}
                 {primaryContact.relationship && (
                   <span className="font-normal text-sm" style={{ color: '#5C5A52' }}>
-                    {' '}({primaryContact.relationship})
+                    {' '}
+                    ({primaryContact.relationship})
                   </span>
                 )}
               </p>
@@ -366,7 +388,9 @@ function BriefContent() {
           {noteLoading ? (
             <div className="flex items-center gap-2 mt-1" style={{ color: '#42623C' }}>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span className="text-sm" style={{ color: '#5C5A52' }}>Generating note…</span>
+              <span className="text-sm" style={{ color: '#5C5A52' }}>
+                Generating note…
+              </span>
             </div>
           ) : clinicalNote ? (
             <p className="text-sm leading-relaxed" style={{ color: '#141413' }}>
@@ -404,7 +428,9 @@ function BriefContent() {
               color: copied ? '#B3DDAC' : '#fff',
               borderRadius: '12px',
               border: 'none',
-              boxShadow: copied ? '0 4px 20px rgba(86,128,78,0.28)' : '0 4px 20px rgba(86,128,78,0.28)',
+              boxShadow: copied
+                ? '0 4px 20px rgba(86,128,78,0.28)'
+                : '0 4px 20px rgba(86,128,78,0.28)',
             }}
           >
             {copied ? (
@@ -440,9 +466,7 @@ function Section({
       className="rounded-2xl p-4"
       style={{
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
-        border: highlight
-          ? '1px solid rgba(163,52,23,0.22)'
-          : '1px solid #98C890',
+        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
         borderRadius: '12px',
       }}
     >
@@ -466,7 +490,10 @@ export default function BriefPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center" style={{ background: '#B3DDAC' }}>
+        <div
+          className="min-h-screen flex items-center justify-center"
+          style={{ background: '#B3DDAC' }}
+        >
           <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#42623C' }} />
         </div>
       }

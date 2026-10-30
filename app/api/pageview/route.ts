@@ -1,15 +1,4 @@
 // POST /api/pageview
-//
-// Records that a path was viewed. Nothing about who viewed it.
-//
-// The request body carries a path and nothing else. This route deliberately
-// does not read the IP, the user agent, the referrer or the session, because
-// the moment any of those are stored the table stops being aggregate and
-// starts being personal data, and then it needs a legal basis, a retention
-// policy and a line in the privacy policy.
-//
-// The IP is used for one thing only, rate limiting, and it never reaches the
-// database.
 import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
@@ -20,7 +9,7 @@ export const dynamic = 'force-dynamic'
 // An allow-list rather than free text. Without it, anyone can write arbitrary
 // rows by posting invented paths, and the table fills with junk that makes the
 // real numbers useless.
-const ALLOWED = new Set<string>(PUBLIC_ROUTES.map(r => r.path))
+const ALLOWED = new Set<string>(PUBLIC_ROUTES.map((r) => r.path))
 
 export async function POST(req: NextRequest) {
   // Generous. A person navigating quickly should never see this, and a script

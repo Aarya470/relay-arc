@@ -5,17 +5,17 @@ import { createClient } from '@supabase/supabase-js'
 webpush.setVapidDetails(
   process.env.VAPID_EMAIL!,
   process.env.NEXT_PUBLIC_VAPID_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
+  process.env.VAPID_PRIVATE_KEY!,
 )
 
 // Auth checks use the anon client with user JWT; data reads use service role to bypass RLS
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
 export async function POST(req: NextRequest) {
@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token)
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

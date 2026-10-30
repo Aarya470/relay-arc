@@ -8,10 +8,18 @@ export const dynamic = 'force-dynamic'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
-const VALID_TYPES = ['chest_pain', 'unconscious', 'breathing', 'pots', 'stroke', 'mecfs', 'other'] as const
+const VALID_TYPES = [
+  'chest_pain',
+  'unconscious',
+  'breathing',
+  'pots',
+  'stroke',
+  'mecfs',
+  'other',
+] as const
 
 export async function POST(req: NextRequest) {
   const limited = rateLimit(clientKey(req, 'classify'), 30, 60000)
@@ -25,7 +33,10 @@ export async function POST(req: NextRequest) {
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { transcript, lang } = await req.json()
@@ -36,11 +47,17 @@ export async function POST(req: NextRequest) {
     // This endpoint only runs when the on-device engine abstained, so the input
     // is already unusual phrasing. Telling the model which language was spoken
     // stops it treating romanised Hindi/Marathi as garbled English.
-    const LANG_NAME: Record<string, string> = { hi: 'Hindi', mr: 'Marathi', es: 'Spanish', en: 'English' }
+    const LANG_NAME: Record<string, string> = {
+      hi: 'Hindi',
+      mr: 'Marathi',
+      es: 'Spanish',
+      en: 'English',
+    }
     const spoken = LANG_NAME[lang] || 'English'
-    const langHint = spoken === 'English'
-      ? ''
-      : `\n\nThe description was spoken in ${spoken}. It may be in Devanagari script or romanised (Latin letters spelling ${spoken} words). Translate it yourself before classifying. Classify on meaning, never on spelling.`
+    const langHint =
+      spoken === 'English'
+        ? ''
+        : `\n\nThe description was spoken in ${spoken}. It may be in Devanagari script or romanised (Latin letters spelling ${spoken} words). Translate it yourself before classifying. Classify on meaning, never on spelling.`
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
     const response = await createChat(groq, {

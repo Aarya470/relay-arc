@@ -1,13 +1,19 @@
 // Browser side of the breathing reader: the accelerometer, sampled while the
 // phone rests on the chest of someone lying back.
-export interface MotionReader { stop: () => void }
+export interface MotionReader {
+  stop: () => void
+}
 
 /** iOS asks permission for motion sensors, and only from inside a tap handler. */
 export async function requestMotionPermission(): Promise<boolean> {
-  const D = (typeof window !== 'undefined' ? (window as any).DeviceMotionEvent : undefined)
+  const D = typeof window !== 'undefined' ? (window as any).DeviceMotionEvent : undefined
   if (!D) return false
   if (typeof D.requestPermission === 'function') {
-    try { return (await D.requestPermission()) === 'granted' } catch { return false }
+    try {
+      return (await D.requestPermission()) === 'granted'
+    } catch {
+      return false
+    }
   }
   return true
 }

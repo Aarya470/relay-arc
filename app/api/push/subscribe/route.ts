@@ -7,7 +7,7 @@ import { authedClient } from '@/lib/supabase-route'
 // RLS sees no user. See lib/supabase-route.ts.
 const anonSupabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 export async function POST(req: NextRequest) {
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       .from('push_subscriptions')
       .upsert(
         { user_id: userId, subscription: JSON.stringify(subscription) },
-        { onConflict: 'user_id' }
+        { onConflict: 'user_id' },
       )
 
     if (error) {

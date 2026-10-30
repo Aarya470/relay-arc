@@ -1,31 +1,9 @@
 // Single source of truth for legal copy, used by the consent modal
 // (components/LegalModal.tsx) and the public /privacy and /terms pages.
-//
-// WHAT WAS WRONG WITH THE PREVIOUS VERSION
-// It was structurally fine and factually incomplete, which is the dangerous
-// combination for a privacy policy. Specifically:
-//
-//  - It listed four third parties. The app actually sends data to seven. The
-//    two missing ones matter most: Resend receives an email address, and the
-//    geocoding and routing services receive LOCATION during an emergency,
-//    which is the most sensitive thing the app handles.
-//  - It gave no legal basis for processing. Health data is a special category
-//    under GDPR and needs explicit consent, and "by using Relay Arc you agree
-//    to this policy in full" is not explicit consent.
-//  - It said nothing about local storage, and the app stores drafts and the
-//    whole emergency card on the device.
-//  - It banned under-18s while lib/autonomic ships a 40 bpm orthostatic
-//    threshold specifically for ages 12 to 19. The product was built to serve
-//    teenagers and the terms forbade them from using it.
-//
-// NOT LEGAL ADVICE. This is a careful, plain-language document that follows the
-// usual structure and describes what the code actually does. Three decisions in
-// here are the operator's to make and are flagged in the text: the governing
-// jurisdiction, the minimum age, and whether to keep an arbitration clause.
 
-export const LEGAL_LAST_UPDATED = "September 2026"
+export const LEGAL_LAST_UPDATED = 'September 2026'
 
-const CONTACT = "relay.arc.org@gmail.com"
+const CONTACT = 'relay.arc.org@gmail.com'
 
 export const PRIVACY_POLICY = `PRIVACY POLICY
 Last updated: September 2026

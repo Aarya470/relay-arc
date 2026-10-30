@@ -1,9 +1,4 @@
-// Per-route metadata. See app/card/layout.tsx for why this file exists.
-//
-// The description is written for the query someone actually types mid-episode —
-// "is my POTS flare an emergency" — rather than for the product. That question
-// has a lot of search volume and very little written for it that is not either a
-// forum thread or a hospital marketing page.
+// Per-route metadata.
 import type { Metadata } from 'next'
 
 const TITLE = 'Is this POTS flare an emergency?. Relay Arc'

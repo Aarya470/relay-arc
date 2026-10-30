@@ -8,7 +8,12 @@ export async function registerServiceWorker() {
 }
 
 export async function registerPushNotifications(userId: string) {
-  if (typeof window === 'undefined' || !('serviceWorker' in navigator) || !('PushManager' in window)) return
+  if (
+    typeof window === 'undefined' ||
+    !('serviceWorker' in navigator) ||
+    !('PushManager' in window)
+  )
+    return
 
   try {
     // Explicitly request notification permission before trying to subscribe
@@ -30,13 +35,15 @@ export async function registerPushNotifications(userId: string) {
       })
     }
 
-    const { data: { session } } = await supabase.auth.getSession()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
     const token = session?.access_token
     if (!token) return
 
     await fetch('/api/push/subscribe', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ subscription: sub, userId }),
     })
   } catch (e) {
@@ -65,15 +72,21 @@ export async function registerPushNotifications(userId: string) {
  */
 export type PushResult = 'sent' | 'no-subscription' | 'failed'
 
-export async function sendPushNotification(userId: string, title: string, body: string): Promise<PushResult> {
+export async function sendPushNotification(
+  userId: string,
+  title: string,
+  body: string,
+): Promise<PushResult> {
   try {
-    const { data: { session } } = await supabase.auth.getSession()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
     const token = session?.access_token
     if (!token) return 'failed'
 
     const res = await fetch('/api/push/send', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ userId, title, body }),
     })
     if (res.ok) return 'sent'
@@ -91,5 +104,5 @@ function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
   const raw = window.atob(base64)
-  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)))
+  return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)))
 }

@@ -23,15 +23,15 @@ interface Metric {
   key: keyof Omit<SymptomLog, 'id' | 'created_at' | 'note'>
   label: string
   Icon: React.ElementType
-  inverted: boolean   // true = higher is better
+  inverted: boolean // true = higher is better
 }
 
 const METRICS: Metric[] = [
-  { key: 'chest_pain',          label: 'Chest pain / pressure',       Icon: AlertCircle, inverted: false },
-  { key: 'fatigue',             label: 'Fatigue / tiredness',         Icon: Battery,     inverted: false },
-  { key: 'dizziness',           label: 'Dizziness / lightheadedness', Icon: Zap,         inverted: false },
-  { key: 'shortness_of_breath', label: 'Shortness of breath',         Icon: Wind,        inverted: false },
-  { key: 'energy',              label: 'Energy / wellbeing',          Icon: Activity,    inverted: true  },
+  { key: 'chest_pain', label: 'Chest pain / pressure', Icon: AlertCircle, inverted: false },
+  { key: 'fatigue', label: 'Fatigue / tiredness', Icon: Battery, inverted: false },
+  { key: 'dizziness', label: 'Dizziness / lightheadedness', Icon: Zap, inverted: false },
+  { key: 'shortness_of_breath', label: 'Shortness of breath', Icon: Wind, inverted: false },
+  { key: 'energy', label: 'Energy / wellbeing', Icon: Activity, inverted: true },
 ]
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -73,34 +73,21 @@ interface SliderProps {
   label: string
 }
 
-// WHAT WAS WRONG WITH THIS CONTROL
-//
-// It was a plain <div> with pointer handlers. That meant three things, and this
-// is the only way to answer the one question the page asks:
-//
-//   1. It could not be focused, so a keyboard never reached it. Tab went from
-//      the back link straight past all five ratings to the note box. There was
-//      no way to record a symptom without a mouse or a touchscreen.
-//   2. It had no role and no value, so assistive tech announced nothing at all.
-//      Not a wrong number, nothing.
-//   3. The only thing that took a pointer event was the 8px track. The thumb is
-//      22px but carries pointerEvents: 'none', so the real target was an eight
-//      pixel high line. This app is for people who are dizzy, shaky or about to
-//      faint. Eight pixels is not a target they can hit.
-//
-// It is now a real slider: focusable, announced, arrow keys, Home and End, and
-// a 24px transparent hit area over an unchanged 8px line.
+// What was wrong with this control.
 function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const dragging = useRef(false)
 
-  const computeValue = useCallback((clientX: number) => {
-    const el = trackRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
-    onChange(Math.round(ratio * 10))
-  }, [onChange])
+  const computeValue = useCallback(
+    (clientX: number) => {
+      const el = trackRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+      onChange(Math.round(ratio * 10))
+    },
+    [onChange],
+  )
 
   const onPointerDown = (e: React.PointerEvent) => {
     dragging.current = true
@@ -111,22 +98,17 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
     if (!dragging.current) return
     computeValue(e.clientX)
   }
-  const onPointerUp = () => { dragging.current = false }
+  const onPointerUp = () => {
+    dragging.current = false
+  }
 
   const clamp = (n: number) => Math.max(0, Math.min(10, n))
 
-  // HOLDING AN ARROW KEY USED TO MOVE THIS BY EXACTLY ONE AND THEN STOP.
-  //
-  // The handler computed `value + 1` from the prop. Key repeat fires around
-  // thirty times a second, and React batches, so every keydown in a batch read
-  // the same stale `value` and every one of them computed the same answer.
-  // Press and hold to go from 0 to 8 and you land on 1.
-  //
-  // This ref carries the latest intended value across a batch, so repeats
-  // compound. It resyncs whenever the prop actually changes, which covers the
-  // pointer path and a parent reset.
+  // Holding an arrow key used to move this by exactly one and then stop.
   const pending = useRef(value)
-  useEffect(() => { pending.current = value }, [value])
+  useEffect(() => {
+    pending.current = value
+  }, [value])
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     const key = e.key
@@ -187,7 +169,8 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            left: 0, right: 0,
+            left: 0,
+            right: 0,
             top: '50%',
             transform: 'translateY(-50%)',
             height: '24px',
@@ -227,8 +210,10 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
       </div>
       {/* tick labels */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
-        {[0, 2, 4, 6, 8, 10].map(n => (
-          <span key={n} style={{ fontSize: '10px', color: '#5C5A52', fontWeight: 500 }}>{n}</span>
+        {[0, 2, 4, 6, 8, 10].map((n) => (
+          <span key={n} style={{ fontSize: '10px', color: '#5C5A52', fontWeight: 500 }}>
+            {n}
+          </span>
         ))}
       </div>
     </div>
@@ -238,8 +223,11 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
 // ── mini sparkline ────────────────────────────────────────────────────────────
 function Sparkline({ values, inverted }: { values: number[]; inverted: boolean }) {
   if (values.length < 2) return null
-  const W = 72, H = 28, PAD = 2
-  const min = 0, max = 10
+  const W = 72,
+    H = 28,
+    PAD = 2
+  const min = 0,
+    max = 10
   const pts = values.map((v, i) => {
     const x = PAD + (i / (values.length - 1)) * (W - PAD * 2)
     const y = H - PAD - ((v - min) / (max - min)) * (H - PAD * 2)
@@ -252,7 +240,14 @@ function Sparkline({ values, inverted }: { values: number[]; inverted: boolean }
   const lineColor = same ? '#5C5A52' : improving ? '#42623C' : '#A33417'
 
   return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} fill="none" role="img" aria-label="Symptom severity over time">
+    <svg
+      width={W}
+      height={H}
+      viewBox={`0 0 ${W} ${H}`}
+      fill="none"
+      role="img"
+      aria-label="Symptom severity over time"
+    >
       <polyline
         points={pts.join(' ')}
         stroke={lineColor}
@@ -272,34 +267,48 @@ function Sparkline({ values, inverted }: { values: number[]; inverted: boolean }
 // ── day card for history ──────────────────────────────────────────────────────
 function DayCard({ log }: { log: SymptomLog }) {
   return (
-    <div style={{
-      flexShrink: 0,
-      width: '80px',
-      background: '#FFFFFF',
-      border: '1px solid #98C890',
-      borderRadius: '12px',
-      padding: '12px 10px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '8px',
-    }}>
+    <div
+      style={{
+        flexShrink: 0,
+        width: '80px',
+        background: '#FFFFFF',
+        border: '1px solid #98C890',
+        borderRadius: '12px',
+        padding: '12px 10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+      }}
+    >
       <span style={{ fontSize: '10px', fontWeight: 700, color: '#5C5A52', letterSpacing: '0.2px' }}>
         {formatDay(log.created_at)}
       </span>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%', alignItems: 'center' }}>
-        {METRICS.map(m => {
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '5px',
+          width: '100%',
+          alignItems: 'center',
+        }}
+      >
+        {METRICS.map((m) => {
           const v = log[m.key] as number
           const color = valueColor(v, m.inverted)
           return (
-            <div key={m.key} title={m.label} style={{
-              width: '10px',
-              height: '10px',
-              borderRadius: '50%',
-              background: color,
-              flexShrink: 0,
-              opacity: 0.9,
-            }} />
+            <div
+              key={m.key}
+              title={m.label}
+              style={{
+                width: '10px',
+                height: '10px',
+                borderRadius: '50%',
+                background: color,
+                flexShrink: 0,
+                opacity: 0.9,
+              }}
+            />
           )
         })}
       </div>
@@ -327,7 +336,9 @@ export default function SymptomsPage() {
   const loadHistory = useCallback(async () => {
     setHistoryLoading(true)
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) return
       const { data, error } = await supabase
         .from('symptom_logs')
@@ -347,18 +358,25 @@ export default function SymptomsPage() {
     }
   }, [])
 
-  useEffect(() => { loadHistory() }, [loadHistory])
+  useEffect(() => {
+    loadHistory()
+  }, [loadHistory])
 
   const handleChange = (key: string, v: number) => {
-    setValues(prev => ({ ...prev, [key]: v }))
+    setValues((prev) => ({ ...prev, [key]: v }))
   }
 
   const handleSubmit = async () => {
     if (submitting) return
     setSubmitting(true)
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { toast.error('Please sign in first'); return }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('Please sign in first')
+        return
+      }
 
       const { error } = await supabase.from('symptom_logs').insert({
         user_id: user.id,
@@ -394,56 +412,79 @@ export default function SymptomsPage() {
 
   // build 7-day trend data per metric
   const last7 = history.slice(0, 7).reverse()
-  const trendData = METRICS.map(m => ({
+  const trendData = METRICS.map((m) => ({
     ...m,
-    values: last7.map(l => l[m.key] as number),
+    values: last7.map((l) => l[m.key] as number),
   }))
 
   return (
-    <div style={{
-      minHeight: '100dvh',
-      background: '#B3DDAC',
-      paddingBottom: '80px',
-    }}>
-
+    <div
+      style={{
+        minHeight: '100dvh',
+        background: '#B3DDAC',
+        paddingBottom: '80px',
+      }}
+    >
       {/* ── header ── */}
-      <div style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 20,
-        background: 'rgba(244,245,247,0.92)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid #98C890',
-        padding: '0 20px',
-      }}>
-        <div style={{ maxWidth: '560px', margin: '0 auto', display: 'flex', alignItems: 'center', height: '62px', gap: '12px' }}>
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 20,
+          background: 'rgba(244,245,247,0.92)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid #98C890',
+          padding: '0 20px',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '560px',
+            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
+            height: '62px',
+            gap: '12px',
+          }}
+        >
           <motion.button
             whileTap={{ scale: 0.88 }}
             onClick={() => router.push('/dashboard')}
             style={{
-              width: '38px', height: '38px', borderRadius: '14px',
+              width: '38px',
+              height: '38px',
+              borderRadius: '14px',
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              flexShrink: 0,
             }}
           >
             <ArrowLeft size={18} color="#5C5A52" strokeWidth={2} />
           </motion.button>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#141413', margin: 0, letterSpacing: '-0.4px', lineHeight: 1.1 }}>
+            <h1
+              style={{
+                fontSize: '28px',
+                fontWeight: 900,
+                color: '#141413',
+                margin: 0,
+                letterSpacing: '-0.4px',
+                lineHeight: 1.1,
+              }}
+            >
               How are you feeling?
             </h1>
-            <p style={{ fontSize: '12px', color: '#5C5A52', margin: '2px 0 0' }}>
-              {todayLabel()}
-            </p>
+            <p style={{ fontSize: '12px', color: '#5C5A52', margin: '2px 0 0' }}>{todayLabel()}</p>
           </div>
         </div>
       </div>
 
       <div style={{ maxWidth: '560px', margin: '0 auto', padding: '24px 16px 0' }}>
-
         {/* ── sliders card ── */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
@@ -457,13 +498,15 @@ export default function SymptomsPage() {
             marginBottom: '16px',
           }}
         >
-          <p style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: '#5C5A52',
-            letterSpacing: '0',
-            margin: '0 0 20px',
-          }}>
+          <p
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: '#5C5A52',
+              letterSpacing: '0',
+              margin: '0 0 20px',
+            }}
+          >
             Rate each symptom (0 – 10)
           </p>
 
@@ -479,18 +522,43 @@ export default function SymptomsPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.06, type: 'spring', stiffness: 320, damping: 28 }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '12px',
+                    }}
+                  >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{
-                        width: '36px', height: '36px', borderRadius: '14px',
-                        background: bg,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0,
-                        transition: 'background 0.3s',
-                      }}>
-                        <m.Icon size={17} color={color} strokeWidth={2} style={{ transition: 'color 0.3s' }} />
+                      <div
+                        style={{
+                          width: '36px',
+                          height: '36px',
+                          borderRadius: '14px',
+                          background: bg,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          transition: 'background 0.3s',
+                        }}
+                      >
+                        <m.Icon
+                          size={17}
+                          color={color}
+                          strokeWidth={2}
+                          style={{ transition: 'color 0.3s' }}
+                        />
                       </div>
-                      <span style={{ fontSize: '14px', fontWeight: 600, color: '#141413', lineHeight: 1.3 }}>
+                      <span
+                        style={{
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          color: '#141413',
+                          lineHeight: 1.3,
+                        }}
+                      >
                         {m.label}
                       </span>
                     </div>
@@ -509,22 +577,24 @@ export default function SymptomsPage() {
                         transition: 'background 0.3s, border-color 0.3s',
                       }}
                     >
-                      <span style={{
-                        fontSize: '22px',
-                        fontWeight: 800,
-                        color: color,
-                        lineHeight: 1,
-                        fontVariantNumeric: 'tabular-nums',
-                        transition: 'color 0.3s',
-                        display: 'block',
-                      }}>
+                      <span
+                        style={{
+                          fontSize: '22px',
+                          fontWeight: 800,
+                          color: color,
+                          lineHeight: 1,
+                          fontVariantNumeric: 'tabular-nums',
+                          transition: 'color 0.3s',
+                          display: 'block',
+                        }}
+                      >
                         {v}
                       </span>
                     </motion.div>
                   </div>
                   <SymptomSlider
                     value={v}
-                    onChange={val => handleChange(m.key, val)}
+                    onChange={(val) => handleChange(m.key, val)}
                     inverted={m.inverted}
                     label={m.label}
                   />
@@ -547,14 +617,16 @@ export default function SymptomsPage() {
             marginBottom: '16px',
           }}
         >
-          <label style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: '#5C5A52',
-            letterSpacing: '0',
-            display: 'block',
-            marginBottom: '12px',
-          }}>
+          <label
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: '#5C5A52',
+              letterSpacing: '0',
+              display: 'block',
+              marginBottom: '12px',
+            }}
+          >
             Note (optional)
           </label>
           <textarea
@@ -564,7 +636,7 @@ export default function SymptomsPage() {
             aria-label="Note, optional. Up to 200 characters."
             maxLength={200}
             value={note}
-            onChange={e => setNote(e.target.value.slice(0, 200))}
+            onChange={(e) => setNote(e.target.value.slice(0, 200))}
             placeholder="Any extra detail to share with your doctor…"
             rows={3}
             style={{
@@ -655,7 +727,12 @@ export default function SymptomsPage() {
                 <Check size={18} strokeWidth={2.5} /> Logged!
               </motion.span>
             ) : submitting ? (
-              <motion.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontSize: '14px' }}>
+              <motion.span
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                style={{ fontSize: '14px' }}
+              >
                 Saving…
               </motion.span>
             ) : (
@@ -680,17 +757,19 @@ export default function SymptomsPage() {
               marginBottom: '20px',
             }}
           >
-            <p style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: '#5C5A52',
-              letterSpacing: '0',
-              margin: '0 0 18px',
-            }}>
+            <p
+              style={{
+                fontSize: '13px',
+                fontWeight: 600,
+                color: '#5C5A52',
+                letterSpacing: '0',
+                margin: '0 0 18px',
+              }}
+            >
               7-day trends
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              {trendData.map(m => {
+              {trendData.map((m) => {
                 if (m.values.length < 2) return null
                 const latest = m.values[m.values.length - 1]
                 const prev = m.values[m.values.length - 2]
@@ -699,30 +778,43 @@ export default function SymptomsPage() {
                 const arrow = same ? '→' : improving ? '↓' : '↑'
                 const arrowColor = same ? '#5C5A52' : improving ? '#42623C' : '#A33417'
                 return (
-                  <div key={m.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div
+                    key={m.key}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
                       <m.Icon size={15} color="#5C5A52" strokeWidth={1.8} />
-                      <span style={{
-                        fontSize: '13px',
-                        fontWeight: 500,
-                        color: '#5C5A52',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}>
+                      <span
+                        style={{
+                          fontSize: '13px',
+                          fontWeight: 500,
+                          color: '#5C5A52',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
                         {m.label}
                       </span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                    <div
+                      style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}
+                    >
                       <Sparkline values={m.values} inverted={m.inverted} />
-                      <span style={{
-                        fontSize: '18px',
-                        fontWeight: 700,
-                        color: arrowColor,
-                        lineHeight: 1,
-                        minWidth: '18px',
-                        textAlign: 'center',
-                      }}>
+                      <span
+                        style={{
+                          fontSize: '18px',
+                          fontWeight: 700,
+                          color: arrowColor,
+                          lineHeight: 1,
+                          minWidth: '18px',
+                          textAlign: 'center',
+                        }}
+                      >
                         {arrow}
                       </span>
                     </div>
@@ -735,41 +827,58 @@ export default function SymptomsPage() {
 
         {/* ── history timeline ── */}
         <div style={{ marginBottom: '20px' }}>
-          <p style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: '#5C5A52',
-            letterSpacing: '0',
-            margin: '0 0 14px 2px',
-          }}>
+          <p
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: '#5C5A52',
+              letterSpacing: '0',
+              margin: '0 0 14px 2px',
+            }}
+          >
             Recent history
           </p>
           {historyLoading ? (
             <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '8px' }}>
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} style={{
-                  flexShrink: 0, width: '80px', height: '108px',
-                  background: '#FFFFFF',
-                  border: '1px solid #EDEAE0',
-                  borderRadius: '12px',
-                  animation: 'pulse 1.5s infinite',
-                }} />
+                <div
+                  key={i}
+                  style={{
+                    flexShrink: 0,
+                    width: '80px',
+                    height: '108px',
+                    background: '#FFFFFF',
+                    border: '1px solid #EDEAE0',
+                    borderRadius: '12px',
+                    animation: 'pulse 1.5s infinite',
+                  }}
+                />
               ))}
             </div>
           ) : history.length === 0 ? (
-            <div style={{
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
-              borderRadius: '12px',
-              padding: '28px 20px',
-              textAlign: 'center',
-            }}>
+            <div
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #98C890',
+                borderRadius: '12px',
+                padding: '28px 20px',
+                textAlign: 'center',
+              }}
+            >
               <p style={{ fontSize: '14px', color: '#5C5A52', margin: 0 }}>
                 No logs yet. Tap "Log symptoms" to start tracking.
               </p>
             </div>
           ) : (
-            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '10px',
+                overflowX: 'auto',
+                paddingBottom: '8px',
+                scrollbarWidth: 'none',
+              }}
+            >
               {history.map((log, i) => (
                 <motion.div
                   key={log.id}
@@ -785,7 +894,7 @@ export default function SymptomsPage() {
           {/* legend */}
           {history.length > 0 && (
             <div style={{ display: 'flex', gap: '16px', marginTop: '12px', flexWrap: 'wrap' }}>
-              {METRICS.map(m => (
+              {METRICS.map((m) => (
                 <div key={m.key} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                   <m.Icon size={12} color="#5C5A52" strokeWidth={1.8} />
                   <span style={{ fontSize: '11px', color: '#5C5A52', fontWeight: 500 }}>
@@ -796,7 +905,6 @@ export default function SymptomsPage() {
             </div>
           )}
         </div>
-
       </div>
 
       <BottomNav />

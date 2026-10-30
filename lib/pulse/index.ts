@@ -1,31 +1,10 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Phone-as-sensor signal processing. No hardware to buy.
-//
-// HEART RATE FROM THE CAMERA (photoplethysmography, PPG)
-// A fingertip pressed over the rear camera, lit by the flash, goes very slightly
-// darker each time a pulse of blood arrives. Averaging the red channel of every
-// frame gives a waveform with one bump per heartbeat. This is the same physics a
-// pulse oximeter or a smartwatch uses; the phone camera is just a cheaper sensor.
-//
-// BREATHING RATE FROM THE ACCELEROMETER
-// A phone resting on the chest of someone lying back rises and falls with each
-// breath. The accelerometer sees that as a slow oscillation, about one cycle
-// every 3 to 5 seconds at rest.
-//
-// Both are estimated the same way: resample to an even rate, remove the slow
-// drift, then find the strongest frequency inside the physiological band with a
-// direct Fourier scan. The answer comes with a QUALITY score (how much of the
-// band's energy sits at that one frequency) so the app can refuse to report a
-// number from a noisy recording instead of showing a confident wrong one.
-//
-// Everything here is a pure function, so it is unit-tested against synthetic
-// signals with a known answer in tests/pulse.test.ts.
-//
-// This is a wellness-grade estimate, not a medical device. The /check page says
-// so, and a reading only feeds NEWS2 when its quality passes the gate below.
-// ─────────────────────────────────────────────────────────────────────────────
+// Phone-as-sensor signal processing.
 
-export interface Sample { t: number; v: number }   // t in seconds
+export interface Sample {
+  t: number
+  v: number
+} // t in seconds
 
 export interface RateEstimate {
   /** Beats or breaths per minute, rounded. Null when quality is too low. */
@@ -43,14 +22,16 @@ export interface RateEstimate {
 /** Linear-interpolate irregular samples onto an even grid. */
 export function resample(samples: Sample[], hz: number): number[] {
   if (samples.length < 2) return []
-  const t0 = samples[0].t, t1 = samples[samples.length - 1].t
+  const t0 = samples[0].t,
+    t1 = samples[samples.length - 1].t
   const n = Math.floor((t1 - t0) * hz)
   const out: number[] = new Array(Math.max(0, n))
   let j = 0
   for (let i = 0; i < n; i++) {
     const t = t0 + i / hz
     while (j < samples.length - 2 && samples[j + 1].t < t) j++
-    const a = samples[j], b = samples[j + 1]
+    const a = samples[j],
+      b = samples[j + 1]
     const f = b.t === a.t ? 0 : (t - a.t) / (b.t - a.t)
     out[i] = a.v + (b.v - a.v) * Math.min(1, Math.max(0, f))
   }
@@ -64,7 +45,8 @@ export function detrend(x: number[], hz: number, windowSec: number): number[] {
   const pre = new Float64Array(x.length + 1)
   for (let i = 0; i < x.length; i++) pre[i + 1] = pre[i] + x[i]
   return x.map((v, i) => {
-    const a = Math.max(0, i - half), b = Math.min(x.length, i + half + 1)
+    const a = Math.max(0, i - half),
+      b = Math.min(x.length, i + half + 1)
     return v - (pre[b] - pre[a]) / (b - a)
   })
 }
@@ -77,25 +59,43 @@ export function detrend(x: number[], hz: number, windowSec: number): number[] {
 export function spectrum(x: number[], hz: number, loHz: number, hiHz: number, stepHz = 0.005) {
   const n = x.length
   const win = x.map((v, i) => v * (0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1))))
-  const freqs: number[] = [], power: number[] = []
+  const freqs: number[] = [],
+    power: number[] = []
   for (let f = loHz; f <= hiHz + 1e-9; f += stepHz) {
-    let re = 0, im = 0
+    let re = 0,
+      im = 0
     const w = (2 * Math.PI * f) / hz
-    for (let i = 0; i < n; i++) { re += win[i] * Math.cos(w * i); im -= win[i] * Math.sin(w * i) }
-    freqs.push(f); power.push(re * re + im * im)
+    for (let i = 0; i < n; i++) {
+      re += win[i] * Math.cos(w * i)
+      im -= win[i] * Math.sin(w * i)
+    }
+    freqs.push(f)
+    power.push(re * re + im * im)
   }
   return { freqs, power }
 }
 
-export function dominantFrequency(x: number[], hz: number, loHz: number, hiHz: number, stepHz = 0.005) {
+export function dominantFrequency(
+  x: number[],
+  hz: number,
+  loHz: number,
+  hiHz: number,
+  stepHz = 0.005,
+) {
   const n = x.length
   const win = x.map((v, i) => v * (0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1))))
-  const freqs: number[] = [], power: number[] = []
+  const freqs: number[] = [],
+    power: number[] = []
   for (let f = loHz; f <= hiHz + 1e-9; f += stepHz) {
-    let re = 0, im = 0
+    let re = 0,
+      im = 0
     const w = (2 * Math.PI * f) / hz
-    for (let i = 0; i < n; i++) { re += win[i] * Math.cos(w * i); im -= win[i] * Math.sin(w * i) }
-    freqs.push(f); power.push(re * re + im * im)
+    for (let i = 0; i < n; i++) {
+      re += win[i] * Math.cos(w * i)
+      im -= win[i] * Math.sin(w * i)
+    }
+    freqs.push(f)
+    power.push(re * re + im * im)
   }
   let best = 0
   for (let i = 1; i < power.length; i++) if (power[i] > power[best]) best = i
@@ -103,40 +103,61 @@ export function dominantFrequency(x: number[], hz: number, loHz: number, hiHz: n
   // Energy within one frequency-resolution bin of the peak (1 / duration).
   const res = hz / n
   let near = 0
-  for (let i = 0; i < power.length; i++) if (Math.abs(freqs[i] - freqs[best]) <= res) near += power[i]
+  for (let i = 0; i < power.length; i++)
+    if (Math.abs(freqs[i] - freqs[best]) <= res) near += power[i]
   return { freq: freqs[best], quality: near / total }
 }
 
-function estimate(samples: Sample[], opt: {
-  hz: number; loHz: number; hiHz: number; detrendSec: number; minSec: number; minQuality: number;
-  perMinuteLabel: string
-}): RateEstimate {
+function estimate(
+  samples: Sample[],
+  opt: {
+    hz: number
+    loHz: number
+    hiHz: number
+    detrendSec: number
+    minSec: number
+    minQuality: number
+    perMinuteLabel: string
+  },
+): RateEstimate {
   const seconds = samples.length > 1 ? samples[samples.length - 1].t - samples[0].t : 0
   if (seconds < opt.minSec) {
-    return { rate: null, quality: 0, ok: false, seconds, problem: `Keep going: need ${opt.minSec} seconds` }
+    return {
+      rate: null,
+      quality: 0,
+      ok: false,
+      seconds,
+      problem: `Keep going: need ${opt.minSec} seconds`,
+    }
   }
   const x = detrend(resample(samples, opt.hz), opt.hz, opt.detrendSec)
   const { freq, quality } = dominantFrequency(x, opt.hz, opt.loHz, opt.hiHz)
   const rate = Math.round(freq * 60)
   const ok = quality >= opt.minQuality
   return {
-    rate: ok ? rate : null, quality: Math.round(quality * 100) / 100, ok, seconds,
-    problem: ok ? undefined : `Signal too noisy to trust a ${opt.perMinuteLabel} reading. Hold still and try again`,
+    rate: ok ? rate : null,
+    quality: Math.round(quality * 100) / 100,
+    ok,
+    seconds,
+    problem: ok
+      ? undefined
+      : `Signal too noisy to trust a ${opt.perMinuteLabel} reading. Hold still and try again`,
   }
 }
 
 /** Heart rate from per-frame red-channel means. 40–200 bpm. */
-// Gate tuned on 300 synthetic 15-second traces: on pure noise the quality
-// score's 95th percentile is about 0.29, a weak but real fingertip trace sits
-// well above. A reading is only CONFIRMED when, on top of this gate, the last
-// 10 seconds agree with the whole window to within 5 bpm (confirmHeartRate):
-// that cut false readings from noise to about 1 in 100 while still accepting
-// about 93 in 100 weak real traces.
-export const PULSE_MIN_QUALITY = 0.30
+// Gate tuned on 300 synthetic 15-second traces: on pure noise the quality score's 95th
+// percentile is about 0.29, a weak but real fingertip trace sits well above.
+export const PULSE_MIN_QUALITY = 0.3
 export function estimateHeartRate(samples: Sample[]): RateEstimate {
   return estimate(samples, {
-    hz: 30, loHz: 40 / 60, hiHz: 200 / 60, detrendSec: 1.2, minSec: 8,
-    minQuality: PULSE_MIN_QUALITY, perMinuteLabel: 'pulse',
+    hz: 30,
+    loHz: 40 / 60,
+    hiHz: 200 / 60,
+    detrendSec: 1.2,
+    minSec: 8,
+    minQuality: PULSE_MIN_QUALITY,
+    perMinuteLabel: 'pulse',
   })
 }
 
@@ -149,10 +170,16 @@ export function confirmHeartRate(samples: Sample[]): RateEstimate & { confirmed:
   const all = estimateHeartRate(samples)
   if (!all.ok || samples.length < 2) return { ...all, confirmed: false }
   const tEnd = samples[samples.length - 1].t
-  const tail = estimateHeartRate(samples.filter(s => s.t > tEnd - 10))
-  const confirmed = tail.ok && tail.rate != null && all.rate != null && Math.abs(tail.rate - all.rate) <= 5
-  return { ...all, confirmed, ok: confirmed, rate: confirmed ? all.rate : null,
-    problem: confirmed ? undefined : 'Almost there. Keep holding still' }
+  const tail = estimateHeartRate(samples.filter((s) => s.t > tEnd - 10))
+  const confirmed =
+    tail.ok && tail.rate != null && all.rate != null && Math.abs(tail.rate - all.rate) <= 5
+  return {
+    ...all,
+    confirmed,
+    ok: confirmed,
+    rate: confirmed ? all.rate : null,
+    problem: confirmed ? undefined : 'Almost there. Keep holding still',
+  }
 }
 
 // 15 seconds is short for breathing (three or four breaths), so the gate is
@@ -161,8 +188,13 @@ export function confirmHeartRate(samples: Sample[]): RateEstimate & { confirmed:
 export const BREATH_MIN_QUALITY = 0.75
 export function estimateBreathRate(samples: Sample[]): RateEstimate {
   return estimate(samples, {
-    hz: 20, loHz: 6 / 60, hiHz: 40 / 60, detrendSec: 8, minSec: 12,
-    minQuality: BREATH_MIN_QUALITY, perMinuteLabel: 'breathing',
+    hz: 20,
+    loHz: 6 / 60,
+    hiHz: 40 / 60,
+    detrendSec: 8,
+    minSec: 12,
+    minQuality: BREATH_MIN_QUALITY,
+    perMinuteLabel: 'breathing',
   })
 }
 
@@ -187,15 +219,20 @@ export function breathRateFromTaps(tapTimesSec: number[]): number | null {
  * green and enough light to see anything at all.
  */
 export function fingerPresent(meanR: number, meanG: number, meanB: number, spread = 0): boolean {
-  if (meanR < 18) return false                       // too dark to read
-  if (meanR < meanG * 0.95 || meanR < meanB) return false   // skin is red-dominant
+  if (meanR < 18) return false // too dark to read
+  if (meanR < meanG * 0.95 || meanR < meanB) return false // skin is red-dominant
   return spread < 28 || (meanR > 90 && meanR > meanG * 1.6)
 }
 
 /** Pick the camera channel with the most pulse in it. */
-export function bestChannelEstimate(red: Sample[], green: Sample[]): RateEstimate & { confirmed: boolean; channel: 'red' | 'green' } {
-  const r = confirmHeartRate(red), g = confirmHeartRate(green)
-  const pick = (g.confirmed && !r.confirmed) || (g.confirmed === r.confirmed && g.quality > r.quality)
+export function bestChannelEstimate(
+  red: Sample[],
+  green: Sample[],
+): RateEstimate & { confirmed: boolean; channel: 'red' | 'green' } {
+  const r = confirmHeartRate(red),
+    g = confirmHeartRate(green)
+  const pick =
+    (g.confirmed && !r.confirmed) || (g.confirmed === r.confirmed && g.quality > r.quality)
   return pick ? { ...g, channel: 'green' } : { ...r, channel: 'red' }
 }
 
@@ -206,7 +243,10 @@ export function bestChannelEstimate(red: Sample[], green: Sample[]): RateEstimat
  * never as a measured value. Needs at least 5 s of fingertip signal.
  */
 export type PulseConfidence = 'good' | 'fair' | 'rough'
-export function approxHeartRate(red: Sample[], green: Sample[]): { rate: number; quality: number; confidence: PulseConfidence; channel: 'red' | 'green' } | null {
+export function approxHeartRate(
+  red: Sample[],
+  green: Sample[],
+): { rate: number; quality: number; confidence: PulseConfidence; channel: 'red' | 'green' } | null {
   const one = (s: Sample[]) => {
     if (s.length < 2 || s[s.length - 1].t - s[0].t < 5) return null
     const x = detrend(resample(s, 30), 30, 1.2)
@@ -214,11 +254,18 @@ export function approxHeartRate(red: Sample[], green: Sample[]): { rate: number;
     const { freq, quality } = dominantFrequency(x, 30, 40 / 60, 200 / 60)
     return { rate: Math.round(freq * 60), quality: Math.round(quality * 100) / 100 }
   }
-  const r = one(red), g = one(green)
-  const best = !r ? (g ? { ...g, channel: 'green' as const } : null)
-    : !g || r.quality >= g.quality ? { ...r, channel: 'red' as const } : { ...g, channel: 'green' as const }
+  const r = one(red),
+    g = one(green)
+  const best = !r
+    ? g
+      ? { ...g, channel: 'green' as const }
+      : null
+    : !g || r.quality >= g.quality
+      ? { ...r, channel: 'red' as const }
+      : { ...g, channel: 'green' as const }
   if (!best) return null
-  const confidence: PulseConfidence = best.quality >= PULSE_MIN_QUALITY ? 'good' : best.quality >= 0.18 ? 'fair' : 'rough'
+  const confidence: PulseConfidence =
+    best.quality >= PULSE_MIN_QUALITY ? 'good' : best.quality >= 0.18 ? 'fair' : 'rough'
   return { ...best, confidence }
 }
 

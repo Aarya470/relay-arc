@@ -82,7 +82,8 @@ const PROTOCOLS: Record<string, Protocol> = {
       'Difficulty breathing at rest',
       'Confusion or persistent disorientation',
     ],
-    followUpNote: 'Track the episode in your health log and contact your cardiologist or specialist within 48 hours.',
+    followUpNote:
+      'Track the episode in your health log and contact your cardiologist or specialist within 48 hours.',
   },
   mecfs: {
     description:
@@ -124,7 +125,8 @@ const PROTOCOLS: Record<string, Protocol> = {
       'Inability to speak full sentences',
       'Chest tightness or pain alongside breathlessness',
     ],
-    followUpNote: 'If you used a rescue inhaler more than twice today, contact your doctor or pulmonologist.',
+    followUpNote:
+      'If you used a rescue inhaler more than twice today, contact your doctor or pulmonologist.',
   },
   unconscious: {
     description:
@@ -144,7 +146,8 @@ const PROTOCOLS: Record<string, Protocol> = {
       'Inability to move a limb or speak clearly',
       'Sudden severe headache',
     ],
-    followUpNote: 'Return to the ER within hours for an ECG and evaluation. This cannot wait for a routine appointment.',
+    followUpNote:
+      'Return to the ER within hours for an ECG and evaluation. This cannot wait for a routine appointment.',
   },
   other: {
     description:
@@ -183,8 +186,12 @@ function RecoveryContent() {
       {/* Green "You're safe" header */}
       <div
         style={{
-          position: 'sticky', top: 0, zIndex: 20,
-          display: 'flex', alignItems: 'center', gap: '12px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 20,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
           padding: '16px',
           background: '#42623C',
           boxShadow: '0 2px 20px rgba(86,128,78,0.30)',
@@ -193,9 +200,15 @@ function RecoveryContent() {
         <button
           onClick={() => router.push('/dashboard')}
           style={{
-            padding: '4px', borderRadius: '50%', background: 'none',
-            border: 'none', cursor: 'pointer', color: '#B3DDAC',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '4px',
+            borderRadius: '50%',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: '#B3DDAC',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
           aria-label="Back to dashboard"
         >
@@ -203,26 +216,44 @@ function RecoveryContent() {
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <CheckCircle style={{ width: '20px', height: '20px', color: '#B3DDAC' }} />
-          <span style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#B3DDAC' }}>
+          <span
+            style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '-0.4px', color: '#B3DDAC' }}
+          >
             You&apos;re safe
           </span>
         </div>
       </div>
 
-      <div style={{ maxWidth: '512px', margin: '0 auto', padding: '24px 16px 48px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div
+        style={{
+          maxWidth: '512px',
+          margin: '0 auto',
+          padding: '24px 16px 48px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}
+      >
         {/* Subtitle */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={spring}
         >
-          <p style={{
-            fontSize: '13px', fontWeight: 600,
-            letterSpacing: '0', color: '#42623C', marginBottom: '4px',
-          }}>
+          <p
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              letterSpacing: '0',
+              color: '#42623C',
+              marginBottom: '4px',
+            }}
+          >
             Recovery protocol
           </p>
-          <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#141413', letterSpacing: '-0.5px' }}>
+          <h1
+            style={{ fontSize: '24px', fontWeight: 900, color: '#141413', letterSpacing: '-0.5px' }}
+          >
             {label}
           </h1>
         </motion.div>
@@ -246,17 +277,23 @@ function RecoveryContent() {
               <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <span
                   style={{
-                    flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '11px', fontWeight: 700, marginTop: '2px',
-                    background: 'rgba(86,128,78,0.15)', color: '#42623C',
+                    flexShrink: 0,
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    marginTop: '2px',
+                    background: 'rgba(86,128,78,0.15)',
+                    color: '#42623C',
                   }}
                 >
                   {i + 1}
                 </span>
-                <span style={{ fontSize: '14px', lineHeight: 1.5, color: '#141413' }}>
-                  {step}
-                </span>
+                <span style={{ fontSize: '14px', lineHeight: 1.5, color: '#141413' }}>{step}</span>
               </li>
             ))}
           </ul>
@@ -265,20 +302,29 @@ function RecoveryContent() {
         {/* Watch out for — amber-tinted warning card */}
         <Card delay={0.15} highlight>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <AlertTriangle style={{ width: '16px', height: '16px', flexShrink: 0, color: '#A33417' }} />
-            <CardLabel noMargin danger>Watch out for</CardLabel>
+            <AlertTriangle
+              style={{ width: '16px', height: '16px', flexShrink: 0, color: '#A33417' }}
+            />
+            <CardLabel noMargin danger>
+              Watch out for
+            </CardLabel>
           </div>
           <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {protocol.warnings.map((w, i) => (
               <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                 <span
                   style={{
-                    flexShrink: 0, marginTop: '6px',
-                    width: '6px', height: '6px', borderRadius: '50%',
+                    flexShrink: 0,
+                    marginTop: '6px',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
                     background: '#A33417',
                   }}
                 />
-                <span style={{ fontSize: '14px', lineHeight: 1.5, color: '#A33417', opacity: 0.88 }}>
+                <span
+                  style={{ fontSize: '14px', lineHeight: 1.5, color: '#A33417', opacity: 0.88 }}
+                >
                   {w}
                 </span>
               </li>
@@ -286,9 +332,12 @@ function RecoveryContent() {
           </ul>
           <div
             style={{
-              marginTop: '16px', paddingTop: '12px',
+              marginTop: '16px',
+              paddingTop: '12px',
               borderTop: '1px solid rgba(163,52,23,0.20)',
-              fontSize: '14px', fontWeight: 600, color: '#A33417',
+              fontSize: '14px',
+              fontWeight: 600,
+              color: '#A33417',
             }}
           >
             Call emergency services immediately if any of these occur.
@@ -304,10 +353,18 @@ function RecoveryContent() {
           <a
             href="tel:"
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              width: '100%', padding: '12px', borderRadius: '12px',
-              fontSize: '14px', fontWeight: 600, textDecoration: 'none',
-              background: '#42623C', color: '#B3DDAC',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              width: '100%',
+              padding: '12px',
+              borderRadius: '12px',
+              fontSize: '14px',
+              fontWeight: 600,
+              textDecoration: 'none',
+              background: '#42623C',
+              color: '#B3DDAC',
             }}
           >
             <Phone style={{ width: '16px', height: '16px' }} />
@@ -320,10 +377,19 @@ function RecoveryContent() {
           <button
             onClick={() => router.push('/emergency/history')}
             style={{
-              flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              padding: '12px', borderRadius: '12px',
-              background: '#F2F0E8', border: '1px solid #D8D4C8',
-              color: '#5C5A52', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              padding: '12px',
+              borderRadius: '12px',
+              background: '#F2F0E8',
+              border: '1px solid #D8D4C8',
+              color: '#5C5A52',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer',
             }}
           >
             <History style={{ width: '16px', height: '16px' }} />
@@ -332,10 +398,15 @@ function RecoveryContent() {
           <button
             onClick={() => router.push('/dashboard')}
             style={{
-              flex: 1, padding: '12px', borderRadius: '12px',
-              background: '#42623C', border: 'none',
-              color: '#fff', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
-              
+              flex: 1,
+              padding: '12px',
+              borderRadius: '12px',
+              background: '#42623C',
+              border: 'none',
+              color: '#fff',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer',
             }}
           >
             Back to dashboard
@@ -362,9 +433,7 @@ function Card({
       transition={{ type: 'spring', stiffness: 340, damping: 26, delay }}
       style={{
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
-        border: highlight
-          ? '1px solid rgba(163,52,23,0.22)'
-          : '1px solid #98C890',
+        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
         borderRadius: '12px',
         padding: '16px',
       }}
@@ -386,8 +455,10 @@ function CardLabel({
   return (
     <p
       style={{
-        fontSize: '13px', fontWeight: 600,
-        letterSpacing: '0', marginBottom: noMargin ? '0' : '8px',
+        fontSize: '13px',
+        fontWeight: 600,
+        letterSpacing: '0',
+        marginBottom: noMargin ? '0' : '8px',
         color: danger ? '#A33417' : '#5C5A52',
       }}
     >
@@ -401,12 +472,21 @@ export default function RecoveryPage() {
     <Suspense
       fallback={
         <div
-          style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#B3DDAC' }}
+          style={{
+            minHeight: '100dvh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#B3DDAC',
+          }}
         >
           <div
             style={{
-              width: '32px', height: '32px', borderRadius: '50%',
-              border: '2px solid #42623C', borderTopColor: 'transparent',
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              border: '2px solid #42623C',
+              borderTopColor: 'transparent',
               animation: 'spin 0.8s linear infinite',
             }}
           />

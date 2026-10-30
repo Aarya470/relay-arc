@@ -12,7 +12,10 @@ export interface PartnerStatus {
 }
 
 // Which facility capability matters for which emergency
-export const CAPABILITY_FOR_TYPE: Record<string, keyof Pick<PartnerStatus, 'cathLab' | 'strokeUnit' | 'traumaUnit'>> = {
+export const CAPABILITY_FOR_TYPE: Record<
+  string,
+  keyof Pick<PartnerStatus, 'cathLab' | 'strokeUnit' | 'traumaUnit'>
+> = {
   chest_pain: 'cathLab',
   stroke: 'strokeUnit',
   unconscious: 'traumaUnit',
@@ -47,13 +50,14 @@ const EMERGENCY_CAPABILITIES: Record<string, { tags: string[]; label: string }> 
   other: { tags: ['hospital'], label: 'Emergency care' },
 }
 
-
 function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371000
-  const dLat = (lat2 - lat1) * Math.PI / 180
-  const dLon = (lon2 - lon1) * Math.PI / 180
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+  const dLat = ((lat2 - lat1) * Math.PI) / 180
+  const dLon = ((lon2 - lon1) * Math.PI) / 180
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
 // ── Traffic model — time-of-day congestion heuristic, clearly labeled as
@@ -76,12 +80,9 @@ export function trafficLabel(d: Date = new Date()): string {
 }
 
 // ── Real drive times: one OSRM matrix call for all candidates ──────────────
-const ROUTERS = [
-  'https://routing.openstreetmap.de/routed-car',
-  'https://router.project-osrm.org',
-]
+const ROUTERS = ['https://routing.openstreetmap.de/routed-car', 'https://router.project-osrm.org']
 async function fetchDriveTimes(from: [number, number], hs: Hospital[]): Promise<(number | null)[]> {
-  const coords = [`${from[1]},${from[0]}`, ...hs.map(h => `${h.lng},${h.lat}`)].join(';')
+  const coords = [`${from[1]},${from[0]}`, ...hs.map((h) => `${h.lng},${h.lat}`)].join(';')
   for (const base of ROUTERS) {
     try {
       const res = await fetch(`${base}/table/v1/driving/${coords}?sources=0&annotations=duration`)
@@ -89,7 +90,9 @@ async function fetchDriveTimes(from: [number, number], hs: Hospital[]): Promise<
       const json = await res.json()
       if (json.code !== 'Ok' || !json.durations?.[0]) continue
       return json.durations[0].slice(1)
-    } catch { /* try next */ }
+    } catch {
+      /* try next */
+    }
   }
   return hs.map(() => null)
 }
@@ -100,11 +103,13 @@ async function fetchPartnerStatuses(hs: Hospital[]): Promise<(PartnerStatus | nu
     const res = await fetch('/api/hospitals/match', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ candidates: hs.map(h => ({ id: h.id, name: h.name, lat: h.lat, lng: h.lng })) }),
+      body: JSON.stringify({
+        candidates: hs.map((h) => ({ id: h.id, name: h.name, lat: h.lat, lng: h.lng })),
+      }),
     })
     if (!res.ok) return hs.map(() => null)
     const { statuses } = await res.json()
-    return hs.map(h => statuses?.[h.id] || null)
+    return hs.map((h) => statuses?.[h.id] || null)
   } catch {
     return hs.map(() => null)
   }
@@ -123,14 +128,16 @@ async function liveTrafficEta(from: [number, number], h: Hospital): Promise<numb
     const json = await res.json()
     const sec = json.routes?.[0]?.summary?.travelTimeInSeconds
     return typeof sec === 'number' ? sec : null
-  } catch { return null }
+  } catch {
+    return null
+  }
 }
 
 export async function findNearbyHospitals(
   lat: number,
   lng: number,
   emergencyType: string,
-  radiusKm: number = 50
+  radiusKm: number = 50,
 ): Promise<Hospital[]> {
   const radius = radiusKm * 1000
   const capability = EMERGENCY_CAPABILITIES[emergencyType] || EMERGENCY_CAPABILITIES.other
@@ -139,7 +146,7 @@ export async function findNearbyHospitals(
     const res = await fetch('/api/hospitals', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ lat, lng, radius })
+      body: JSON.stringify({ lat, lng, radius }),
     })
 
     const data = await res.json()
@@ -155,14 +162,17 @@ export async function findNearbyHospitals(
           name: el.tags.name,
           lat: elLat,
           lng: elLng,
-          address: [
-            el.tags['addr:housenumber'],
-            el.tags['addr:street'],
-            el.tags['addr:city'],
-            el.tags['addr:state']
-          ].filter(Boolean).join(', ') || 'Address unavailable',
+          address:
+            [
+              el.tags['addr:housenumber'],
+              el.tags['addr:street'],
+              el.tags['addr:city'],
+              el.tags['addr:state'],
+            ]
+              .filter(Boolean)
+              .join(', ') || 'Address unavailable',
           distance: haversine(lat, lng, elLat, elLng),
-          phone: el.tags.phone || ''
+          phone: el.tags.phone || '',
         }
       })
       .filter((h: Hospital) => h.lat && h.lng && h.name && !NOT_AN_ER.test(h.name))
@@ -173,9 +183,14 @@ export async function findNearbyHospitals(
         if (emergencyType !== 'chest_pain') return h
         const pci = pciStatus(h.name, h.lat, h.lng)
         return {
-          ...h, pci,
-          capability: pci === 'yes' ? 'Emergency angioplasty (primary PCI)'
-            : pci === 'no' ? 'No emergency angioplasty in state data' : undefined,
+          ...h,
+          pci,
+          capability:
+            pci === 'yes'
+              ? 'Emergency angioplasty (primary PCI)'
+              : pci === 'no'
+                ? 'No emergency angioplasty in state data'
+                : undefined,
         }
       })
       .sort((a: Hospital, b: Hospital) => (a.distance || 0) - (b.distance || 0))
@@ -200,7 +215,7 @@ export async function findNearbyHospitals(
     // slightly favor facilities actively reporting they are accepting.
     const capKey = CAPABILITY_FOR_TYPE[emergencyType]
     const score = (h: Hospital) => {
-      let base = h.etaTrafficSec ?? ((h.distance || 0) / 1000 / 40 * 3600 * mult)
+      let base = h.etaTrafficSec ?? ((h.distance || 0) / 1000 / 40) * 3600 * mult
       if (h.partner && fresh(h.partner)) {
         if (!h.partner.accepting) return base * 2.2
         base *= 0.85
@@ -226,7 +241,7 @@ export async function findNearbyHospitals(
     // Upgrade the top 3 with live-traffic ETAs when a provider key is set
     if (process.env.NEXT_PUBLIC_TOMTOM_KEY) {
       const top = hospitals.slice(0, 3)
-      const live = await Promise.all(top.map(h => liveTrafficEta([lat, lng], h)))
+      const live = await Promise.all(top.map((h) => liveTrafficEta([lat, lng], h)))
       live.forEach((sec, i) => {
         if (sec != null) {
           hospitals[i] = { ...hospitals[i], etaTrafficSec: sec, liveTraffic: true }
@@ -246,9 +261,7 @@ export function fresh(p: PartnerStatus, maxMin = 240): boolean {
 }
 
 export function formatDistance(meters: number): string {
-  return meters >= 1000
-    ? `${(meters / 1000).toFixed(1)} km`
-    : `${Math.round(meters)} m`
+  return meters >= 1000 ? `${(meters / 1000).toFixed(1)} km` : `${Math.round(meters)} m`
 }
 
 export function formatEtaMin(h: Hospital): number | null {
@@ -257,12 +270,12 @@ export function formatEtaMin(h: Hospital): number | null {
 }
 
 export function estimateTime(meters: number): string {
-  const minutes = Math.round(meters / 1000 / 50 * 60)
-  return minutes < 60 ? `${minutes} min` : `${Math.floor(minutes/60)}h ${minutes%60}m`
+  const minutes = Math.round((meters / 1000 / 50) * 60)
+  return minutes < 60 ? `${minutes} min` : `${Math.floor(minutes / 60)}h ${minutes % 60}m`
 }
 
 export function etaText(h: Hospital): string {
   const m = formatEtaMin(h)
-  if (m != null) return m < 60 ? `${m} min` : `${Math.floor(m/60)}h ${m%60}m`
+  if (m != null) return m < 60 ? `${m} min` : `${Math.floor(m / 60)}h ${m % 60}m`
   return estimateTime(h.distance || 0)
 }

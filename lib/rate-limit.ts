@@ -1,22 +1,4 @@
 // Request limiting for the public API routes.
-//
-// WHY THIS EXISTS
-// Nothing in app/api limited anything. Six of those routes forward text to a
-// paid language model, and /api/health/ingest writes to a profile using a token
-// in the request. An unlimited public endpoint that spends money per call is a
-// bill waiting to happen, and an unlimited endpoint that writes to a row is a
-// way to hammer someone else's record.
-//
-// WHAT THIS IS NOT
-// It is in-memory, so each serverless instance counts on its own and a burst
-// spread across instances gets through proportionally. That is a real weakness
-// and it is the correct trade here: the alternative is a round trip to Redis on
-// the hot path of an emergency route. This stops scripted abuse and accidental
-// loops, which is what actually happens. If the project ever needs a hard
-// guarantee, this is the seam to replace with a durable counter.
-//
-// It also resets when an instance recycles. Again, deliberate: failing open is
-// the right direction for a route that might be carrying an SOS.
 
 type Bucket = { count: number; resetAt: number }
 
@@ -85,6 +67,6 @@ export function tooManyRequests(r: RateLimitResult): Response {
         'Content-Type': 'application/json',
         'Retry-After': String(r.retryAfterSeconds),
       },
-    }
+    },
   )
 }

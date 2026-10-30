@@ -23,7 +23,10 @@ export default function NurseDashboard() {
     const load = async () => {
       // ?demo=1 renders this real dashboard against synthetic fixtures, so it can
       // be shown or recorded without a login and without a real patient's chart.
-      if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === '1') {
+      if (
+        typeof window !== 'undefined' &&
+        new URLSearchParams(window.location.search).get('demo') === '1'
+      ) {
         setIsDemo(true)
         setPatients(DEMO_PATIENTS as any)
         setCheckins(DEMO_CHECKINS as any)
@@ -34,7 +37,11 @@ export default function NurseDashboard() {
       const [{ data: p }, { data: c }, { data: e }] = await Promise.all([
         supabase.from('profiles').select('*').order('created_at', { ascending: false }),
         supabase.from('checkins').select('*').order('created_at', { ascending: false }),
-        supabase.from('emergencies').select('*').eq('status', 'active').order('created_at', { ascending: false })
+        supabase
+          .from('emergencies')
+          .select('*')
+          .eq('status', 'active')
+          .order('created_at', { ascending: false }),
       ])
       setPatients(p || [])
       setCheckins(c || [])
@@ -44,20 +51,38 @@ export default function NurseDashboard() {
     load()
   }, [])
 
-  const getCheckins = (id: string) => checkins.filter(c => c.user_id === id)
-  const getEmergency = (id: string) => emergencies.find(e => e.user_id === id)
+  const getCheckins = (id: string) => checkins.filter((c) => c.user_id === id)
+  const getEmergency = (id: string) => emergencies.find((e) => e.user_id === id)
 
-  if (loading) return (
-    <div className="min-h-screen bg-[#B3DDAC] px-4 py-14 space-y-3">
-      {[1,2,3].map(i => <Skeleton key={i} className="h-20 w-full rounded-3xl bg-[#F2F0E8]"/>)}
-    </div>
-  )
+  if (loading)
+    return (
+      <div className="min-h-screen bg-[#B3DDAC] px-4 py-14 space-y-3">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-20 w-full rounded-3xl bg-[#F2F0E8]" />
+        ))}
+      </div>
+    )
 
   return (
     <div className="min-h-screen bg-[#B3DDAC] pb-8">
       {isDemo && (
-        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '11px', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+        <div
+          style={{
+            background: '#D97757',
+            color: '#141413',
+            padding: '9px 14px',
+            textAlign: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '1.2px',
+              textTransform: 'uppercase',
+            }}
+          >
             {DEMO_BANNER}
           </span>
         </div>
@@ -69,10 +94,10 @@ export default function NurseDashboard() {
           <div className="flex items-center gap-3">
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onClick={() => selected ? setSelected(null) : router.push('/dashboard')}
+              onClick={() => (selected ? setSelected(null) : router.push('/dashboard'))}
               className="w-9 h-9 rounded-xl bg-[#F2F0E8] flex items-center justify-center"
             >
-              <ArrowLeft size={16} className="text-[#5C5A52]"/>
+              <ArrowLeft size={16} className="text-[#5C5A52]" />
             </motion.button>
             <div>
               <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider">
@@ -107,10 +132,9 @@ export default function NurseDashboard() {
             exit={{ opacity: 0, x: -10 }}
             className="px-4 py-4 space-y-3"
           >
-
             {/* Active emergencies */}
             {emergencies.map((e, i) => {
-              const patient = patients.find(p => p.id === e.user_id)
+              const patient = patients.find((p) => p.id === e.user_id)
               return (
                 <motion.div
                   key={i}
@@ -125,7 +149,10 @@ export default function NurseDashboard() {
                   />
                   <div className="flex-1">
                     <p className="text-[#141413] font-semibold text-sm">{patient?.full_name}</p>
-                    <p className="text-[#A33417]/70 text-xs">{e.emergency_type?.replace('_', ' ')} · {new Date(e.created_at).toLocaleTimeString()}</p>
+                    <p className="text-[#A33417]/70 text-xs">
+                      {e.emergency_type?.replace('_', ' ')} ·{' '}
+                      {new Date(e.created_at).toLocaleTimeString()}
+                    </p>
                   </div>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
@@ -139,10 +166,12 @@ export default function NurseDashboard() {
             })}
 
             {/* Criterion 4 labelling — must stay visible. See components/IntendedUse.tsx */}
-            <IntendedUse/>
+            <IntendedUse />
 
             {/* Patient list */}
-            <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider px-1">All patients</p>
+            <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider px-1">
+              All patients
+            </p>
             {patients.map((patient, i) => {
               const patientCheckins = getCheckins(patient.id)
               const hasEmergency = getEmergency(patient.id)
@@ -160,15 +189,22 @@ export default function NurseDashboard() {
                     {patient.full_name?.[0]}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[#141413] font-semibold text-sm truncate">{patient.full_name}</p>
+                    <p className="text-[#141413] font-semibold text-sm truncate">
+                      {patient.full_name}
+                    </p>
                     <p className="text-[#5C5A52] text-xs truncate">{patient.diagnosis}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${
-                      hasEmergency ? 'bg-[#A33417]' :
-                      patientCheckins.length > 0 ? 'bg-[#42623C]' : 'bg-[#D8D4C8]'
-                    }`}/>
-                    <ChevronRight size={14} className="text-[#C4BFB0]"/>
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        hasEmergency
+                          ? 'bg-[#A33417]'
+                          : patientCheckins.length > 0
+                            ? 'bg-[#42623C]'
+                            : 'bg-[#D8D4C8]'
+                      }`}
+                    />
+                    <ChevronRight size={14} className="text-[#C4BFB0]" />
                   </div>
                 </motion.button>
               )
@@ -176,11 +212,10 @@ export default function NurseDashboard() {
 
             {patients.length === 0 && (
               <div className="text-center py-12">
-                <User size={32} className="text-[#C6CBD3] mx-auto mb-3"/>
+                <User size={32} className="text-[#C6CBD3] mx-auto mb-3" />
                 <p className="text-[#5C5A52] text-sm">No patients yet</p>
               </div>
             )}
-
           </motion.div>
         ) : (
           <motion.div
@@ -190,7 +225,6 @@ export default function NurseDashboard() {
             exit={{ opacity: 0, x: 10 }}
             className="px-4 py-4 space-y-3"
           >
-
             {/* Patient header card */}
             <div className="bg-white border border-[#98C890] rounded-3xl p-4">
               <div className="flex items-center gap-3 mb-4">
@@ -211,8 +245,12 @@ export default function NurseDashboard() {
                   { label: 'Surgery', value: formatDate(selected.surgery_date) },
                 ].map((item, i) => (
                   <div key={i} className="bg-[#B3DDAC] rounded-xl p-2.5">
-                    <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-1">{item.label}</p>
-                    <p className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-[#A33417]' : 'text-[#5C5A52]'}`}>
+                    <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-1">
+                      {item.label}
+                    </p>
+                    <p
+                      className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-[#A33417]' : 'text-[#5C5A52]'}`}
+                    >
                       {item.value}
                     </p>
                   </div>
@@ -222,12 +260,14 @@ export default function NurseDashboard() {
 
             {/* Tabs */}
             <div className="flex gap-1 bg-white border border-[#98C890] rounded-2xl p-1">
-              {['overview', 'checkins', 'medications'].map(t => (
+              {['overview', 'checkins', 'medications'].map((t) => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
                   className={`flex-1 py-2 rounded-xl text-xs font-medium transition capitalize ${
-                    tab === t ? 'bg-white text-[#141413] shadow-sm' : 'text-[#5C5A52] hover:text-[#5C5A52]'
+                    tab === t
+                      ? 'bg-white text-[#141413] shadow-sm'
+                      : 'text-[#5C5A52] hover:text-[#5C5A52]'
                   }`}
                 >
                   {t}
@@ -239,15 +279,22 @@ export default function NurseDashboard() {
             {tab === 'overview' && (
               <div className="space-y-3">
                 <div className="bg-white border border-[#98C890] rounded-2xl p-4">
-                  <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">Emergency contacts</p>
+                  <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">
+                    Emergency contacts
+                  </p>
                   {selected.emergency_contacts?.map((c: any, i: number) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-[#EDEAE0] last:border-0">
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 py-2 border-b border-[#EDEAE0] last:border-0"
+                    >
                       <div className="w-8 h-8 rounded-xl bg-[#56804E]/10 flex items-center justify-center text-[#42623C] text-xs font-bold">
                         {c.name?.[0]}
                       </div>
                       <div>
                         <p className="text-[#141413] text-sm">{c.name}</p>
-                        <p className="text-[#5C5A52] text-xs">{c.relationship} · {c.phone}</p>
+                        <p className="text-[#5C5A52] text-xs">
+                          {c.relationship} · {c.phone}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -257,23 +304,38 @@ export default function NurseDashboard() {
 
             {tab === 'checkins' && (
               <div className="bg-white border border-[#98C890] rounded-2xl p-4">
-                <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">Check-in history</p>
-                {getCheckins(selected.id).length === 0 && <p className="text-[#5C5A52] text-sm">No check-ins yet</p>}
-                {getCheckins(selected.id).slice(0, 10).map((c, i) => (
-                  <div key={i} className="py-2.5 border-b border-[#EDEAE0] last:border-0">
-                    <p className="text-[#5C5A52] font-mono text-xs mb-1">{new Date(c.created_at).toLocaleString()}</p>
-                    <p className="text-[#5C5A52] text-xs leading-relaxed">{c.summary}</p>
-                  </div>
-                ))}
+                <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">
+                  Check-in history
+                </p>
+                {getCheckins(selected.id).length === 0 && (
+                  <p className="text-[#5C5A52] text-sm">No check-ins yet</p>
+                )}
+                {getCheckins(selected.id)
+                  .slice(0, 10)
+                  .map((c, i) => (
+                    <div key={i} className="py-2.5 border-b border-[#EDEAE0] last:border-0">
+                      <p className="text-[#5C5A52] font-mono text-xs mb-1">
+                        {new Date(c.created_at).toLocaleString()}
+                      </p>
+                      <p className="text-[#5C5A52] text-xs leading-relaxed">{c.summary}</p>
+                    </div>
+                  ))}
               </div>
             )}
 
             {tab === 'medications' && (
               <div className="bg-white border border-[#98C890] rounded-2xl p-4">
-                <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">Medications</p>
-                {selected.medications?.length === 0 && <p className="text-[#5C5A52] text-sm">No medications</p>}
+                <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">
+                  Medications
+                </p>
+                {selected.medications?.length === 0 && (
+                  <p className="text-[#5C5A52] text-sm">No medications</p>
+                )}
                 {selected.medications?.map((m: any, i: number) => (
-                  <div key={i} className="flex justify-between items-center py-2.5 border-b border-[#EDEAE0] last:border-0">
+                  <div
+                    key={i}
+                    className="flex justify-between items-center py-2.5 border-b border-[#EDEAE0] last:border-0"
+                  >
                     <div>
                       <p className="text-[#141413] text-sm font-medium">{m.name}</p>
                       <p className="text-[#5C5A52] text-xs">{m.frequency}</p>
@@ -283,7 +345,6 @@ export default function NurseDashboard() {
                 ))}
               </div>
             )}
-
           </motion.div>
         )}
       </AnimatePresence>

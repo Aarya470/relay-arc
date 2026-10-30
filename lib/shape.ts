@@ -1,40 +1,4 @@
 // The shape language, in one place.
-//
-// WHY THIS FILE EXISTS
-// A sweep of the codebase found 478 borderRadius declarations using 22
-// different values: 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 24,
-// 28, 50%, 99px and three multi-corner strings. Nobody decided that. It is what
-// happens when every one of 45 files picks a number that looked right on the
-// day, and the result is that nothing on screen is shaped like anything else
-// for any reason.
-//
-// The visible effect was the opposite of variety. Almost every value sat in the
-// 8 to 16 band, so everything read as the same softly rounded rectangle, which
-// is the house style of every template on the internet and a large part of why
-// people say a site looks generated.
-//
-// So: four radii, and two shapes that are not rectangles at all. Each one means
-// something, and the meaning is the rule for when to use it.
-//
-//   SQUARE   buttons and panels. The default. 20px — a real, visible curve
-//            rather than a hint of one. Went from 0px to a subtle 8px first;
-//            that read as barely-there on a phone screen, so it went further.
-//   EDGE     inputs and inner surfaces. 14px, a step lighter than SQUARE so
-//            the nesting still reads: an input inside a card is visibly a
-//            different surface, not just a smaller version of the same one.
-//   DOT      50%, and only for things that are actually round: status dots,
-//            avatars, the record light. Never a button.
-//   BAR      99px, and only for the end caps of a progress bar, where the
-//            round cap is showing you where the fill stopped.
-//
-//   notch()  a chamfered corner, cut at 45 degrees. This is the emergency
-//            surface. It reads as an ID badge, a warning plate, a machined
-//            part, and it is instantly distinguishable from a rounded card
-//            without anyone having to read it. Rounding SQUARE and EDGE does
-//            not touch this — notch() is a clip-path, not a radius, so the
-//            emergency screens keep their sharp identity while everything
-//            else softened.
-//   octagon() the SOS control, and nothing else. See the note on it below.
 export const SHAPE = {
   square: '20px',
   edge: '14px',

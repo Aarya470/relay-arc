@@ -30,7 +30,7 @@ const STORAGE_KEY = 'relay_arc_legal_v1'
 const GATED_ROUTES = ['/login', '/onboarding']
 
 const needsGate = (pathname: string | null) =>
-  !!pathname && GATED_ROUTES.some(r => pathname === r || pathname.startsWith(`${r}/`))
+  !!pathname && GATED_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`))
 
 export default function LegalModal() {
   // step 1 = privacy policy, step 2 = terms of service, done = hidden
@@ -43,16 +43,23 @@ export default function LegalModal() {
   const pathname = usePathname()
 
   useEffect(() => {
-    if (!needsGate(pathname)) { setStep('done'); return }
+    if (!needsGate(pathname)) {
+      setStep('done')
+      return
+    }
     try {
       if (!localStorage.getItem(STORAGE_KEY)) setStep(1)
-    } catch { setStep(1) }
+    } catch {
+      setStep(1)
+    }
   }, [pathname])
 
   // Reset "read" flag and scroll to top whenever the step changes
   useEffect(() => {
     setCanAccept(false)
-    setTimeout(() => { scrollRef.current?.scrollTo({ top: 0 }) }, 50)
+    setTimeout(() => {
+      scrollRef.current?.scrollTo({ top: 0 })
+    }, 50)
   }, [step])
 
   const handleScroll = () => {
@@ -65,7 +72,9 @@ export default function LegalModal() {
     if (step === 1) {
       setStep(2)
     } else {
-      try { localStorage.setItem(STORAGE_KEY, new Date().toISOString()) } catch {}
+      try {
+        localStorage.setItem(STORAGE_KEY, new Date().toISOString())
+      } catch {}
       setStep('done')
     }
   }
@@ -78,7 +87,9 @@ export default function LegalModal() {
   const subtitle = isPrivacy
     ? 'Step 1 of 2. Read our Privacy Policy then tap Accept.'
     : 'Step 2 of 2. Read our Terms of Service then tap Accept.'
-  const buttonLabel = isPrivacy ? 'I accept the Privacy Policy' : 'I accept the Terms of Service and want to continue'
+  const buttonLabel = isPrivacy
+    ? 'I accept the Privacy Policy'
+    : 'I accept the Terms of Service and want to continue'
 
   return (
     <AnimatePresence mode="wait">
@@ -87,11 +98,15 @@ export default function LegalModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         style={{
-          position: 'fixed', inset: 0, zIndex: 9999,
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9999,
           background: 'rgba(10,16,12,0.82)',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
         }}
       >
         <motion.div
@@ -101,30 +116,55 @@ export default function LegalModal() {
           exit={{ y: '100%' }}
           transition={{ type: 'spring', stiffness: 320, damping: 30 }}
           style={{
-            width: '100%', maxWidth: '430px',
+            width: '100%',
+            maxWidth: '430px',
             background: '#FAFAF8',
             borderRadius: '20px',
-            display: 'flex', flexDirection: 'column',
+            display: 'flex',
+            flexDirection: 'column',
             maxHeight: '92dvh',
             overflow: 'hidden',
           }}
         >
           {/* Header */}
           <div style={{ padding: '20px 20px 12px', flexShrink: 0 }}>
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(26,40,32,0.1)', margin: '0 auto 18px' }} />
+            <div
+              style={{
+                width: 36,
+                height: 4,
+                borderRadius: 2,
+                background: 'rgba(26,40,32,0.1)',
+                margin: '0 auto 18px',
+              }}
+            />
 
             {/* Step indicator */}
             <div style={{ display: 'flex', gap: '6px', marginBottom: '14px' }}>
-              {[1, 2].map(n => (
-                <div key={n} style={{
-                  flex: 1, height: '3px', borderRadius: '99px',
-                  background: n <= step ? '#5C8B74' : 'rgba(26,40,32,0.1)',
-                  transition: 'background 0.3s ease',
-                }} />
+              {[1, 2].map((n) => (
+                <div
+                  key={n}
+                  style={{
+                    flex: 1,
+                    height: '3px',
+                    borderRadius: '99px',
+                    background: n <= step ? '#5C8B74' : 'rgba(26,40,32,0.1)',
+                    transition: 'background 0.3s ease',
+                  }}
+                />
               ))}
             </div>
 
-            <h2 style={{ color: '#1A2820', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.5px', marginBottom: '4px' }}>{title}</h2>
+            <h2
+              style={{
+                color: '#1A2820',
+                fontWeight: 900,
+                fontSize: '20px',
+                letterSpacing: '-0.5px',
+                marginBottom: '4px',
+              }}
+            >
+              {title}
+            </h2>
             <p style={{ color: 'rgba(26,40,32,0.45)', fontSize: '13px' }}>{subtitle}</p>
           </div>
 
@@ -134,19 +174,40 @@ export default function LegalModal() {
             onScroll={handleScroll}
             style={{ flex: 1, overflowY: 'auto', padding: '0 20px', scrollbarWidth: 'none' }}
           >
-            <pre style={{
-              whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-              color: 'rgba(26,40,32,0.7)', fontSize: '11px', lineHeight: 1.7,
-              fontFamily: 'inherit', margin: 0, paddingBottom: '24px',
-            }}>
+            <pre
+              style={{
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                color: 'rgba(26,40,32,0.7)',
+                fontSize: '11px',
+                lineHeight: 1.7,
+                fontFamily: 'inherit',
+                margin: 0,
+                paddingBottom: '24px',
+              }}
+            >
               {content}
             </pre>
           </div>
 
           {/* Footer */}
-          <div style={{ padding: '12px 20px 40px', flexShrink: 0, borderTop: '1px solid rgba(26,40,32,0.07)', background: '#FAFAF8' }}>
+          <div
+            style={{
+              padding: '12px 20px 40px',
+              flexShrink: 0,
+              borderTop: '1px solid rgba(26,40,32,0.07)',
+              background: '#FAFAF8',
+            }}
+          >
             {!canAccept && (
-              <p style={{ color: 'rgba(26,40,32,0.38)', fontSize: '11px', textAlign: 'center', marginBottom: '10px' }}>
+              <p
+                style={{
+                  color: 'rgba(26,40,32,0.38)',
+                  fontSize: '11px',
+                  textAlign: 'center',
+                  marginBottom: '10px',
+                }}
+              >
                 Scroll to the bottom to continue
               </p>
             )}
@@ -157,8 +218,11 @@ export default function LegalModal() {
                 width: '100%',
                 background: canAccept ? '#D97757' : 'rgba(20,20,19,0.08)',
                 color: canAccept ? '#141413' : 'rgba(20,20,19,0.30)',
-                fontWeight: 800, fontSize: '15px',
-                padding: '16px', borderRadius: '20px', border: 'none',
+                fontWeight: 800,
+                fontSize: '15px',
+                padding: '16px',
+                borderRadius: '20px',
+                border: 'none',
                 cursor: canAccept ? 'pointer' : 'default',
                 boxShadow: 'none',
                 transition: 'all 0.2s ease',
@@ -166,7 +230,15 @@ export default function LegalModal() {
             >
               {canAccept ? buttonLabel : `Read the ${title} to continue`}
             </motion.button>
-            <p style={{ color: 'rgba(26,40,32,0.28)', fontSize: '10px', textAlign: 'center', marginTop: '10px', lineHeight: 1.5 }}>
+            <p
+              style={{
+                color: 'rgba(26,40,32,0.28)',
+                fontSize: '10px',
+                textAlign: 'center',
+                marginTop: '10px',
+                lineHeight: 1.5,
+              }}
+            >
               {isPrivacy
                 ? 'You will also need to accept the Terms of Service on the next screen.'
                 : 'By tapping above you confirm you are 18+ and agree to all terms.'}

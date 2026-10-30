@@ -1,9 +1,4 @@
 // Investor / conference-room demo mode.
-//
-// A live pitch cannot depend on GPS indoors, a hospital being nearby, or a
-// routing server being fast. When demo mode is on, Relay uses a fixed scenario
-// and simulates the drive, while every other system (Guardian, Relay Room, ER
-// brief, CPR coach) runs for real. Always visibly badged DEMO.
 
 export const DEMO_KEY = 'relay_demo_mode'
 
@@ -12,8 +7,13 @@ export interface DemoScenario {
   patientName: string
   origin: [number, number]
   hospitals: {
-    id: string; name: string; lat: number; lng: number; address: string
-    capability?: string; phone?: string
+    id: string
+    name: string
+    lat: number
+    lng: number
+    address: string
+    capability?: string
+    phone?: string
   }[]
 }
 
@@ -24,18 +24,43 @@ export const DEMO: DemoScenario = {
   patientName: 'Asha Kulkarni',
   origin: [19.1136, 72.8697],
   hospitals: [
-    { id: 'demo-kokilaben', name: 'Kokilaben Dhirubhai Ambani Hospital', lat: 19.1300, lng: 72.8258,
-      address: 'Rao Saheb Achutrao Patwardhan Marg, Andheri West', capability: 'Cardiac catheterization lab', phone: '' },
-    { id: 'demo-lilavati', name: 'Lilavati Hospital', lat: 19.0509, lng: 72.8296,
-      address: 'A-791, Bandra Reclamation, Bandra West', capability: 'Cardiac catheterization lab', phone: '' },
-    { id: 'demo-hinduja', name: 'P. D. Hinduja Hospital', lat: 19.0270, lng: 72.8399,
-      address: 'Veer Savarkar Marg, Mahim West', capability: 'Cardiac catheterization lab', phone: '' },
+    {
+      id: 'demo-kokilaben',
+      name: 'Kokilaben Dhirubhai Ambani Hospital',
+      lat: 19.13,
+      lng: 72.8258,
+      address: 'Rao Saheb Achutrao Patwardhan Marg, Andheri West',
+      capability: 'Cardiac catheterization lab',
+      phone: '',
+    },
+    {
+      id: 'demo-lilavati',
+      name: 'Lilavati Hospital',
+      lat: 19.0509,
+      lng: 72.8296,
+      address: 'A-791, Bandra Reclamation, Bandra West',
+      capability: 'Cardiac catheterization lab',
+      phone: '',
+    },
+    {
+      id: 'demo-hinduja',
+      name: 'P. D. Hinduja Hospital',
+      lat: 19.027,
+      lng: 72.8399,
+      address: 'Veer Savarkar Marg, Mahim West',
+      capability: 'Cardiac catheterization lab',
+      phone: '',
+    },
   ],
 }
 
 export function demoOn(): boolean {
   if (typeof window === 'undefined') return false
-  try { return sessionStorage.getItem(DEMO_KEY) === '1' } catch { return false }
+  try {
+    return sessionStorage.getItem(DEMO_KEY) === '1'
+  } catch {
+    return false
+  }
 }
 export function setDemo(on: boolean) {
   try {

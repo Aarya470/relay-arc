@@ -31,14 +31,16 @@ export const dynamic = 'force-dynamic'
 // Use service role key so we can look up users by their ingest token
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 // The key can arrive three ways, so whichever app sends the data needs the
 // least setup: in the URL (?key=..., one paste in Health Auto Export or a
 // Shortcut), as an X-API-Key header, or as api_key in the JSON body.
 function keyFrom(req: NextRequest, body: any): string | null {
-  return req.nextUrl.searchParams.get('key') || req.headers.get('x-api-key') || body?.api_key || null
+  return (
+    req.nextUrl.searchParams.get('key') || req.headers.get('x-api-key') || body?.api_key || null
+  )
 }
 
 export async function POST(req: NextRequest) {
@@ -47,7 +49,9 @@ export async function POST(req: NextRequest) {
 
   try {
     let body: any
-    try { body = await req.json() } catch {
+    try {
+      body = await req.json()
+    } catch {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
@@ -68,9 +72,13 @@ export async function POST(req: NextRequest) {
     const userId = profile.id
     const parsed = parseIngestBody(body)
     if (parsed.length === 0) {
-      return NextResponse.json({ ok: true, stored: 0, message: 'Nothing usable in that payload (heart rate, breathing, oxygen or blood pressure)' })
+      return NextResponse.json({
+        ok: true,
+        stored: 0,
+        message: 'Nothing usable in that payload (heart rate, breathing, oxygen or blood pressure)',
+      })
     }
-    const rows = parsed.map(r => ({ ...r, user_id: userId, source: 'apple_health' }))
+    const rows = parsed.map((r) => ({ ...r, user_id: userId, source: 'apple_health' }))
 
     // Upsert on (user_id, logged_at) so a watch re-sending the same hour does not duplicate it
     const { error: insertErr } = await supabase
@@ -81,7 +89,10 @@ export async function POST(req: NextRequest) {
       const { error: fallbackErr } = await supabase.from('vitals_logs').insert(rows)
       if (fallbackErr) {
         console.error('Vitals ingest error:', fallbackErr)
-        return NextResponse.json({ error: 'Failed to store readings', detail: fallbackErr.message }, { status: 500 })
+        return NextResponse.json(
+          { error: 'Failed to store readings', detail: fallbackErr.message },
+          { status: 500 },
+        )
       }
     }
 
@@ -89,9 +100,15 @@ export async function POST(req: NextRequest) {
     fetch(`${process.env.NEXT_PUBLIC_APP_URL || SITE_URL}/api/groq/health-intelligence`, {
       method: 'POST',
       headers: { 'x-internal-user-id': userId },
-    }).catch(() => { /* silent */ })
+    }).catch(() => {
+      /* silent */
+    })
 
-    return NextResponse.json({ ok: true, stored: rows.length, message: `${rows.length} reading(s) synced` })
+    return NextResponse.json({
+      ok: true,
+      stored: rows.length,
+      message: `${rows.length} reading(s) synced`,
+    })
   } catch (e: any) {
     console.error('Ingest error:', e)
     return NextResponse.json({ error: e?.message || 'Ingest failed' }, { status: 500 })

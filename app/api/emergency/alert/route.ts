@@ -8,13 +8,13 @@ import { authedClient } from '@/lib/supabase-route'
 // RLS sees no user. See lib/supabase-route.ts.
 const anonSupabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 webpush.setVapidDetails(
   `mailto:${process.env.VAPID_CONTACT_EMAIL || 'admin@relayarc.com'}`,
   process.env.NEXT_PUBLIC_VAPID_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
+  process.env.VAPID_PRIVATE_KEY!,
 )
 
 export async function POST(req: NextRequest) {
@@ -26,9 +26,7 @@ export async function POST(req: NextRequest) {
   const { emergencyId, emergencyType, patientName, hospitalName } = await req.json()
 
   // Fetch all care team members
-  const { data: careTeamMembers } = await supabase
-    .from('care_team_members')
-    .select('id')
+  const { data: careTeamMembers } = await supabase.from('care_team_members').select('id')
 
   if (!careTeamMembers || careTeamMembers.length === 0) {
     return NextResponse.json({ sent: 0 })
@@ -65,15 +63,17 @@ export async function POST(req: NextRequest) {
   await Promise.allSettled(
     subscriptions.map(async (sub: any) => {
       try {
-        const pushSub = typeof sub.subscription === 'string'
-          ? JSON.parse(sub.subscription)
-          : sub.subscription
-        await webpush.sendNotification(pushSub, JSON.stringify({
-          title,
-          body,
-          requireInteraction: true,
-          data: { url: '/care-team/dashboard' }
-        }))
+        const pushSub =
+          typeof sub.subscription === 'string' ? JSON.parse(sub.subscription) : sub.subscription
+        await webpush.sendNotification(
+          pushSub,
+          JSON.stringify({
+            title,
+            body,
+            requireInteraction: true,
+            data: { url: '/care-team/dashboard' },
+          }),
+        )
         sent++
       } catch (e: any) {
         failed.push(sub.user_id)
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
           await supabase.from('push_subscriptions').delete().eq('id', sub.id)
         }
       }
-    })
+    }),
   )
 
   return NextResponse.json({ sent, failed: failed.length })

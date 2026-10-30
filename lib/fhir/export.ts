@@ -1,34 +1,4 @@
 // FHIR R4 export — turns a Relay Arc profile into a standards-conformant Bundle.
-//
-// WHY THIS EXISTS
-// "We could integrate with your EHR" is a sentence anyone can say. A Bundle that
-// validates against the HL7 reference validator is a thing you can hand to a
-// hospital's integration engineer, and it is the difference between a conversation
-// and a demo. US hospitals running certified EHRs are required to expose
-// standardized FHIR APIs, so this is the interface that already exists rather than
-// a bespoke one somebody would have to agree to build.
-//
-// DESIGN CONSTRAINTS
-//  1. Pure and dependency-free, like lib/risk. No network, no SDK. It maps data
-//     structures to data structures, so it unit-tests cleanly and runs on the
-//     client without shipping a FHIR library.
-//  2. Export only. This deliberately does NOT read from an EHR. Receiving PHI from
-//     a covered entity would make Relay Arc a HIPAA business associate and trigger
-//     the full Security Rule — see docs/INTENDED_USE.md §5. One-directional
-//     patient-to-facility transmission of the patient's own record is a materially
-//     lighter posture, and that is a choice, not a missing feature.
-//  3. Real codes. Vitals carry their actual LOINC codes rather than free text,
-//     because a receiving system that cannot bind a code has received a document,
-//     not data.
-//  4. Nothing is invented. A field the user did not fill in is omitted entirely
-//     rather than defaulted — a fabricated negative in a medical record is worse
-//     than a gap. Patient-reported findings are marked `unconfirmed`, because
-//     Relay Arc is not the author of record for any of this.
-//
-// VALIDATION
-// tests/fhir.test.ts covers the structure offline. scripts/validate-fhir.mjs posts
-// a generated Bundle to a public HL7-conformant server's $validate operation, which
-// is what caught the reference-resolution bug described on `uuid()` below.
 
 /** LOINC codes for the observations Relay Arc records. */
 export const LOINC = {
@@ -86,8 +56,7 @@ export type Bundle = {
   entry: { fullUrl: string; resource: Res }[]
 }
 
-const nonEmpty = (v: unknown): v is string =>
-  typeof v === 'string' && v.trim().length > 0
+const nonEmpty = (v: unknown): v is string => typeof v === 'string' && v.trim().length > 0
 
 /** Treat 0 and null alike as "not measured" — an SpO2 of 0 is a blank field. */
 const measured = (v: number | null | undefined): v is number =>
@@ -108,7 +77,7 @@ const measured = (v: number | null | undefined): v is number =>
 function uuid(): string {
   const c: Crypto | undefined = globalThis.crypto
   if (c && typeof c.randomUUID === 'function') return c.randomUUID()
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, ch => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (ch) => {
     const r = (Math.random() * 16) | 0
     return (ch === 'x' ? r : (r & 0x3) | 0x8).toString(16)
   })
@@ -116,8 +85,7 @@ function uuid(): string {
 
 const urn = () => `urn:uuid:${uuid()}`
 
-const esc = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 /**
  * Minimal generated narrative. FHIR flags a missing one as a best-practice
@@ -160,14 +128,18 @@ function humanName(full: string): Record<string, unknown> {
   }
 }
 
-const vitalCategory = [{
-  coding: [{ system: SYS.obsCategory, code: 'vital-signs', display: 'Vital Signs' }],
-}]
+const vitalCategory = [
+  {
+    coding: [{ system: SYS.obsCategory, code: 'vital-signs', display: 'Vital Signs' }],
+  },
+]
 
 function patientResource(p: ProfileInput): Res {
   const res: Res = {
     resourceType: 'Patient',
-    text: narrative(`${p.full_name?.trim() || 'Unnamed patient'}. Record supplied by the patient via Relay Arc.`),
+    text: narrative(
+      `${p.full_name?.trim() || 'Unnamed patient'}. Record supplied by the patient via Relay Arc.`,
+    ),
     active: true,
   }
   if (nonEmpty(p.full_name)) res.name = [humanName(p.full_name)]
@@ -175,17 +147,21 @@ function patientResource(p: ProfileInput): Res {
   if (bd) res.birthDate = bd
   if (nonEmpty(p.phone)) res.telecom = [{ system: 'phone', value: p.phone.trim(), use: 'mobile' }]
 
-  const contacts = (p.emergency_contacts || []).filter(ct => nonEmpty(ct?.name) || nonEmpty(ct?.phone))
+  const contacts = (p.emergency_contacts || []).filter(
+    (ct) => nonEmpty(ct?.name) || nonEmpty(ct?.phone),
+  )
   if (contacts.length) {
-    res.contact = contacts.map(ct => {
+    res.contact = contacts.map((ct) => {
       const c: Record<string, unknown> = {
         // These are emergency contacts by definition, so code them as such (v2-0131
         // "C") rather than leaving an uncoded text relationship the receiver has to
         // guess at. The free text is preserved alongside.
-        relationship: [{
-          coding: [{ system: SYS.contactRelationship, code: 'C', display: 'Emergency Contact' }],
-          ...(nonEmpty(ct.relation) ? { text: ct.relation.trim() } : {}),
-        }],
+        relationship: [
+          {
+            coding: [{ system: SYS.contactRelationship, code: 'C', display: 'Emergency Contact' }],
+            ...(nonEmpty(ct.relation) ? { text: ct.relation.trim() } : {}),
+          },
+        ],
       }
       if (nonEmpty(ct.name)) c.name = humanName(ct.name)
       if (nonEmpty(ct.phone)) c.telecom = [{ system: 'phone', value: ct.phone.trim() }]
@@ -201,53 +177,73 @@ function patientResource(p: ProfileInput): Res {
  * because an unsupported "high" in a record is a safety problem.
  */
 function allergyResources(patientRef: string, allergies: string): Res[] {
-  return allergies.split(/[,;\n]/).map(s => s.trim()).filter(Boolean).map(substance => ({
-    resourceType: 'AllergyIntolerance',
-    text: narrative(`Allergy: ${substance} (patient-reported, unconfirmed).`),
-    clinicalStatus: { coding: [{ system: SYS.allergyClinical, code: 'active', display: 'Active' }] },
-    verificationStatus: {
-      coding: [{ system: SYS.allergyVerification, code: 'unconfirmed', display: 'Unconfirmed' }],
-    },
-    code: { text: substance },
-    patient: { reference: patientRef },
-  }))
+  return allergies
+    .split(/[,;\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((substance) => ({
+      resourceType: 'AllergyIntolerance',
+      text: narrative(`Allergy: ${substance} (patient-reported, unconfirmed).`),
+      clinicalStatus: {
+        coding: [{ system: SYS.allergyClinical, code: 'active', display: 'Active' }],
+      },
+      verificationStatus: {
+        coding: [{ system: SYS.allergyVerification, code: 'unconfirmed', display: 'Unconfirmed' }],
+      },
+      code: { text: substance },
+      patient: { reference: patientRef },
+    }))
 }
 
 function medicationResources(
   patientRef: string,
-  meds: NonNullable<ProfileInput['medications']>
+  meds: NonNullable<ProfileInput['medications']>,
 ): Res[] {
-  return meds.filter(m => nonEmpty(m?.name)).map(m => {
-    const name = (m.name as string).trim()
-    const dosageText = [m.dose, m.frequency].filter(nonEmpty).join(', ')
-    const res: Res = {
-      resourceType: 'MedicationStatement',
-      text: narrative(`Medication: ${name}${dosageText ? `. ${dosageText}` : ''} (patient-reported).`),
-      status: 'active',
-      medicationCodeableConcept: { text: name },
-      subject: { reference: patientRef },
-    }
-    if (dosageText) res.dosage = [{ text: dosageText }]
-    return res
-  })
+  return meds
+    .filter((m) => nonEmpty(m?.name))
+    .map((m) => {
+      const name = (m.name as string).trim()
+      const dosageText = [m.dose, m.frequency].filter(nonEmpty).join(', ')
+      const res: Res = {
+        resourceType: 'MedicationStatement',
+        text: narrative(
+          `Medication: ${name}${dosageText ? `. ${dosageText}` : ''} (patient-reported).`,
+        ),
+        status: 'active',
+        medicationCodeableConcept: { text: name },
+        subject: { reference: patientRef },
+      }
+      if (dosageText) res.dosage = [{ text: dosageText }]
+      return res
+    })
 }
 
 function conditionResources(patientRef: string, diagnosis: string): Res[] {
-  return diagnosis.split(/[,;\n]/).map(s => s.trim()).filter(Boolean).map(text => ({
-    resourceType: 'Condition',
-    text: narrative(`Condition: ${text} (patient-reported, unconfirmed).`),
-    clinicalStatus: { coding: [{ system: SYS.conditionClinical, code: 'active', display: 'Active' }] },
-    verificationStatus: {
-      coding: [{ system: SYS.conditionVerification, code: 'unconfirmed', display: 'Unconfirmed' }],
-    },
-    code: { text },
-    subject: { reference: patientRef },
-  }))
+  return diagnosis
+    .split(/[,;\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((text) => ({
+      resourceType: 'Condition',
+      text: narrative(`Condition: ${text} (patient-reported, unconfirmed).`),
+      clinicalStatus: {
+        coding: [{ system: SYS.conditionClinical, code: 'active', display: 'Active' }],
+      },
+      verificationStatus: {
+        coding: [
+          { system: SYS.conditionVerification, code: 'unconfirmed', display: 'Unconfirmed' },
+        ],
+      },
+      code: { text },
+      subject: { reference: patientRef },
+    }))
 }
 
 function simpleObservation(
-  patientRef: string, when: string,
-  def: { code: string; display: string; ucum: string }, value: number
+  patientRef: string,
+  when: string,
+  def: { code: string; display: string; ucum: string },
+  value: number,
 ): Res {
   return {
     resourceType: 'Observation',
@@ -296,10 +292,14 @@ function observationResources(patientRef: string, vitals: VitalsInput[]): Res[] 
   const out: Res[] = []
   for (const v of vitals) {
     const when = fhirInstant(v.logged_at)
-    if (measured(v.heart_rate)) out.push(simpleObservation(patientRef, when, LOINC.heartRate, v.heart_rate))
-    if (measured(v.resp_rate)) out.push(simpleObservation(patientRef, when, LOINC.respRate, v.resp_rate))
-    if (measured(v.oxygen_sat)) out.push(simpleObservation(patientRef, when, LOINC.oxygenSat, v.oxygen_sat))
-    if (measured(v.temperature_c)) out.push(simpleObservation(patientRef, when, LOINC.temperature, v.temperature_c))
+    if (measured(v.heart_rate))
+      out.push(simpleObservation(patientRef, when, LOINC.heartRate, v.heart_rate))
+    if (measured(v.resp_rate))
+      out.push(simpleObservation(patientRef, when, LOINC.respRate, v.resp_rate))
+    if (measured(v.oxygen_sat))
+      out.push(simpleObservation(patientRef, when, LOINC.oxygenSat, v.oxygen_sat))
+    if (measured(v.temperature_c))
+      out.push(simpleObservation(patientRef, when, LOINC.temperature, v.temperature_c))
     if (measured(v.systolic) && measured(v.diastolic)) {
       out.push(bloodPressure(patientRef, when, v.systolic, v.diastolic))
     }
@@ -311,11 +311,17 @@ function observationResources(patientRef: string, vitals: VitalsInput[]): Res[] 
 function bloodGroupObservation(patientRef: string, bloodType: string, when: string): Res {
   return {
     resourceType: 'Observation',
-    text: narrative(`Blood group: ${bloodType.trim()} (patient-reported, not resulted from a specimen).`),
+    text: narrative(
+      `Blood group: ${bloodType.trim()} (patient-reported, not resulted from a specimen).`,
+    ),
     status: 'final',
-    category: [{ coding: [{ system: SYS.obsCategory, code: 'laboratory', display: 'Laboratory' }] }],
+    category: [
+      { coding: [{ system: SYS.obsCategory, code: 'laboratory', display: 'Laboratory' }] },
+    ],
     code: {
-      coding: [{ system: SYS.loinc, code: LOINC.bloodGroup.code, display: LOINC.bloodGroup.display }],
+      coding: [
+        { system: SYS.loinc, code: LOINC.bloodGroup.code, display: LOINC.bloodGroup.display },
+      ],
       text: 'Blood group',
     },
     subject: { reference: patientRef },

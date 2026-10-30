@@ -1,39 +1,12 @@
 // ─── Relay Autonomic Engine ──────────────────────────────────────────────────
-//
-// WHY THIS EXISTS
-// Relay was built around getting someone to the right hospital fast. For the
-// people it is actually aimed at, that is the wrong default most of the time.
-// A POTS flare is frightening, it looks alarming on a heart-rate monitor, and it
-// is usually not an emergency — it resolves lying down with salt and fluids. The
-// app had no way to say that. Every path led toward a hospital.
-//
-// That is a clinical problem and a financial one at the same time. An avoidable
-// emergency department visit in the United States is one of the most expensive
-// things a person without money can accidentally buy, and the fear of that bill
-// is itself a reason people delay care when they genuinely need it. Helping
-// someone tell an ordinary flare from a real change is therefore the single most
-// useful thing this app can do for a dysautonomia patient, and it happens to be
-// the same feature that stops the app generating unnecessary bills.
-//
-// WHAT THIS IS NOT
-// This does not diagnose POTS, and nothing here should be read as saying a
-// person does or does not have it. The orthostatic thresholds below are the
-// published diagnostic criteria and are used here for one purpose only: to say
-// whether a measurement taken right now looks like that person's established
-// pattern or looks different from it. Diagnosis needs a clinician and a proper
-// tilt or stand test under supervision.
-//
-// Nothing here can override escalation. `assessFlare` can only ever move a
-// judgement *toward* care, never away from it: any red-flag symptom forces
-// `escalate` regardless of how ordinary the numbers look, and the "this looks
-// like your usual pattern" outcome is only reachable when no red flag is
-// present. A missing measurement is never read as reassurance.
+// Why this exists. Relay was built around getting someone to the right hospital fast.
 
 /** Sources for every threshold in this file, shown in the UI next to the number. */
 export const BASIS = {
   pots: 'Heart Rhythm Society 2015 expert consensus on POTS. Sustained rise of ≥30 bpm within 10 minutes of standing (≥40 bpm ages 12–19), without orthostatic hypotension',
   oh: 'Consensus definition of orthostatic hypotension. Fall of ≥20 mmHg systolic or ≥10 mmHg diastolic within 3 minutes of standing',
-  counter: 'Physical counter-pressure manoeuvres, standard first-line management for orthostatic intolerance and impending syncope',
+  counter:
+    'Physical counter-pressure manoeuvres, standard first-line management for orthostatic intolerance and impending syncope',
 } as const
 
 // ─── orthostatic vitals ──────────────────────────────────────────────────────
@@ -93,7 +66,10 @@ export interface OrthostaticResult {
   notes: string[]
 }
 
-export function assessOrthostatic(r: OrthostaticReading, ageYears?: number | null): OrthostaticResult {
+export function assessOrthostatic(
+  r: OrthostaticReading,
+  ageYears?: number | null,
+): OrthostaticResult {
   const { bpm: threshold, band } = orthostaticHrThreshold(ageYears)
   const hrDelta = Math.round(r.standingHr - r.supineHr)
   const outsideWindow = r.minutesStanding > 10
@@ -117,39 +93,44 @@ export function assessOrthostatic(r: OrthostaticReading, ageYears?: number | nul
   const notes: string[] = []
   if (outsideWindow) {
     notes.push(
-      `Recorded after ${r.minutesStanding} minutes of standing. The published criteria describe the first 10 minutes, so this reading cannot be compared against them.`
+      `Recorded after ${r.minutesStanding} minutes of standing. The published criteria describe the first 10 minutes, so this reading cannot be compared against them.`,
     )
   }
   if (meetsHrCriterion) {
-    notes.push(`Pulse rose ${hrDelta} bpm on standing, at or above the ${threshold} bpm mark used for ${band}.`)
+    notes.push(
+      `Pulse rose ${hrDelta} bpm on standing, at or above the ${threshold} bpm mark used for ${band}.`,
+    )
   } else if (!outsideWindow) {
-    notes.push(`Pulse rose ${hrDelta} bpm on standing, below the ${threshold} bpm mark used for ${band}.`)
+    notes.push(
+      `Pulse rose ${hrDelta} bpm on standing, below the ${threshold} bpm mark used for ${band}.`,
+    )
   }
   if (exceedsAbsolute) {
     notes.push(`Standing pulse of ${r.standingHr} bpm is above 120.`)
   }
   if (orthostaticHypotension) {
     notes.push(
-      `Blood pressure fell ${systolicDrop ?? 0}/${diastolicDrop ?? 0} mmHg on standing, which meets the definition of orthostatic hypotension. That is a different problem from POTS and worth raising with a clinician, because the two are managed differently.`
+      `Blood pressure fell ${systolicDrop ?? 0}/${diastolicDrop ?? 0} mmHg on standing, which meets the definition of orthostatic hypotension. That is a different problem from POTS and worth raising with a clinician, because the two are managed differently.`,
     )
   }
 
   return {
-    hrDelta, threshold, thresholdBand: band,
-    meetsHrCriterion, exceedsAbsolute,
-    orthostaticHypotension, systolicDrop, diastolicDrop,
-    outsideWindow, notes,
+    hrDelta,
+    threshold,
+    thresholdBand: band,
+    meetsHrCriterion,
+    exceedsAbsolute,
+    orthostaticHypotension,
+    systolicDrop,
+    diastolicDrop,
+    outsideWindow,
+    notes,
   }
 }
 
 // ─── red flags ───────────────────────────────────────────────────────────────
-//
-// The whole point of a "this is probably your usual flare" answer is that it is
-// safe, and it is only safe if there is a hard list of things that veto it.
-// These are the presentations that a person with POTS learns to explain away
-// because they have felt something similar a hundred times, and which are also
-// how a cardiac event, a bleed or a serious infection presents. Any one of them
-// forces escalation and none of them can be scored, weighted, or outvoted.
+// The whole point of a "this is probably your usual flare" answer is that it is safe, and it
+// is only safe if there is a hard list of things that veto it.
 
 export interface RedFlag {
   id: string
@@ -163,7 +144,8 @@ export const RED_FLAGS: RedFlag[] = [
   {
     id: 'chest_pain',
     prompt: 'Chest pain, pressure, or pain spreading to the arm, jaw or back',
-    because: 'This is how a heart attack presents, and having a heart condition already makes it more likely rather than less. It is not something to sit out at home.',
+    because:
+      'This is how a heart attack presents, and having a heart condition already makes it more likely rather than less. It is not something to sit out at home.',
   },
   {
     id: 'breathing',
@@ -173,7 +155,8 @@ export const RED_FLAGS: RedFlag[] = [
   {
     id: 'fainted',
     prompt: 'Actually passed out, rather than feeling close to it',
-    because: 'Feeling faint is common with dysautonomia. Genuinely passing out needs assessment, especially if you hit anything on the way down.',
+    because:
+      'Feeling faint is common with dysautonomia. Genuinely passing out needs assessment, especially if you hit anything on the way down.',
   },
   {
     id: 'neuro',
@@ -183,22 +166,26 @@ export const RED_FLAGS: RedFlag[] = [
   {
     id: 'confusion',
     prompt: 'Confused, or someone with you says you are not making sense',
-    because: 'New confusion is one of the strongest single warning signs in every early-warning score used in hospitals.',
+    because:
+      'New confusion is one of the strongest single warning signs in every early-warning score used in hospitals.',
   },
   {
     id: 'fever',
     prompt: 'Fever alongside this, or feeling shivery and very unwell',
-    because: 'Infection can look like a bad flare and is the common trigger for one. It also gets worse without treatment.',
+    because:
+      'Infection can look like a bad flare and is the common trigger for one. It also gets worse without treatment.',
   },
   {
     id: 'no_fluids',
     prompt: 'Cannot keep any fluid down, or have not passed urine today',
-    because: 'The usual treatment for a flare is fluid. If fluid will not stay down, the thing that normally fixes this is unavailable and you may need it through a drip.',
+    because:
+      'The usual treatment for a flare is fluid. If fluid will not stay down, the thing that normally fixes this is unavailable and you may need it through a drip.',
   },
   {
     id: 'worst_ever',
     prompt: 'This is clearly worse than any episode you have had before',
-    because: 'You know your own pattern better than any score does. A first-of-its-kind episode is not the one to wait out.',
+    because:
+      'You know your own pattern better than any score does. A first-of-its-kind episode is not the one to wait out.',
   },
 ]
 
@@ -250,19 +237,21 @@ const DISCLAIMER =
   'This compares what you have entered against your own recorded pattern. It is decision support, it does not diagnose anything, and it cannot examine you. If you feel unsafe, call emergency services whatever this says.'
 
 export function assessFlare(input: FlareInput): FlareAssessment {
-  const fired = RED_FLAGS.filter(f => input.redFlagIds.includes(f.id))
+  const fired = RED_FLAGS.filter((f) => input.redFlagIds.includes(f.id))
 
   // ── escalate ───────────────────────────────────────────────────────────────
   // Deliberately first and deliberately unconditional. No arithmetic runs before
   // this, so there is no path by which a reassuring number reduces a red flag.
   if (fired.length > 0) {
-    const timeCritical = fired.some(f => f.id === 'neuro' || f.id === 'chest_pain' || f.id === 'breathing')
+    const timeCritical = fired.some(
+      (f) => f.id === 'neuro' || f.id === 'chest_pain' || f.id === 'breathing',
+    )
     return {
       outcome: 'escalate',
       headline: timeCritical
         ? 'Call emergency services now. Do not wait to see if this settles.'
         : 'This needs to be seen today, not waited out.',
-      detail: fired.map(f => f.because),
+      detail: fired.map((f) => f.because),
       firedFlags: fired,
       next: timeCritical
         ? ['call_emergency', 'find_hospital']
@@ -284,7 +273,7 @@ export function assessFlare(input: FlareInput): FlareAssessment {
     detail.push(
       restingUnusual
         ? `Resting pulse is ${delta} bpm above the ${base} bpm you recorded as normal for you.`
-        : `Resting pulse of ${cur} is close to the ${base} bpm you recorded as normal for you.`
+        : `Resting pulse of ${cur} is close to the ${base} bpm you recorded as normal for you.`,
     )
   }
 
@@ -339,10 +328,8 @@ export function assessFlare(input: FlareInput): FlareAssessment {
 }
 
 // ─── counter-manoeuvres ──────────────────────────────────────────────────────
-//
-// Ordered by what to do first when someone is upright and going grey, not by
-// how interesting each one is. Step 1 is on the floor because gravity is doing
-// the damage and everything else is secondary to removing it.
+// Ordered by what to do first when someone is upright and going grey, not by how interesting
+// each one is.
 
 export interface CounterStep {
   id: string
@@ -396,19 +383,10 @@ export const COUNTER_STEPS: CounterStep[] = [
 export const COUNTER_TOTAL_SECONDS = COUNTER_STEPS.reduce((a, s) => a + (s.holdSeconds ?? 0), 0)
 
 // ─── handoff notes for emergency staff ───────────────────────────────────────
-//
-// The complaint that comes up over and over in dysautonomia communities is not
-// that staff are unkind, it is that a heart rate of 140 on standing gets read as
-// an acute event by someone who has never treated an autonomic disorder, and the
-// patient is too unwell mid-episode to explain the context. These are the lines
-// that close that gap, written for a clinician rather than for the patient.
-//
-// THE LINE THAT MUST NEVER BE REMOVED
-// A card that only says "the tachycardia is expected" is dangerous. People with
-// POTS have heart attacks too, and long habituation to a racing pulse is exactly
-// what makes a real event easy to dismiss — by the patient and then by the person
-// reading this card. So `caution` is returned alongside the reassurance every
-// time, and any UI showing these notes has to show it.
+// The complaint that comes up over and over in dysautonomia communities is not that staff
+// are unkind, it is that a heart rate of 140 on standing gets read as an acute event by
+// someone who has never treated an autonomic disorder, and the patient is too unwell mid-
+// episode to explain the context.
 
 export interface AutonomicHandoff {
   /** False when nothing in the profile suggests an autonomic condition. */
@@ -422,9 +400,20 @@ export interface AutonomicHandoff {
 }
 
 const AUTONOMIC_TERMS = [
-  'pots', 'dysautonom', 'orthostatic', 'postural tachycardia', 'postural orthostatic',
-  'ehlers', 'eds', 'hypermobil', 'mcas', 'mast cell', 'syncope', 'vasovagal',
-  'neurocardiogenic', 'autonomic',
+  'pots',
+  'dysautonom',
+  'orthostatic',
+  'postural tachycardia',
+  'postural orthostatic',
+  'ehlers',
+  'eds',
+  'hypermobil',
+  'mcas',
+  'mast cell',
+  'syncope',
+  'vasovagal',
+  'neurocardiogenic',
+  'autonomic',
 ]
 
 export function autonomicHandoff(input: {
@@ -433,26 +422,22 @@ export function autonomicHandoff(input: {
   baselineRestingHr?: number | null
 }): AutonomicHandoff {
   const hay = `${input.diagnosis || ''} ${input.emergencyType || ''}`.toLowerCase()
-  // Word-boundary match. Without it "eds" hits "medsurg" and "pots" hits
-  // "hypotension" — a handoff card that appears for the wrong patient is worse
-  // than one that never appears, because it tells staff to expect a tachycardia
-  // that is not expected at all.
-  const matched = AUTONOMIC_TERMS.filter(t =>
-    new RegExp(`(^|[^a-z])${t}`, 'i').test(hay)
-  )
+  // Word-boundary match.
+  const matched = AUTONOMIC_TERMS.filter((t) => new RegExp(`(^|[^a-z])${t}`, 'i').test(hay))
   if (matched.length === 0) {
     return { applies: false, matched: [], lines: [], caution: '' }
   }
 
-  const base = typeof input.baselineRestingHr === 'number' && input.baselineRestingHr > 0
-    ? Math.round(input.baselineRestingHr)
-    : null
+  const base =
+    typeof input.baselineRestingHr === 'number' && input.baselineRestingHr > 0
+      ? Math.round(input.baselineRestingHr)
+      : null
 
   const lines: string[] = [
     'Known autonomic condition. A raised resting pulse, and a large rise in pulse on standing, are expected findings in this patient and are not on their own evidence of an acute event.',
     base
       ? `Recorded baseline resting pulse is ${base} bpm. Today's readings are more informative read against that number than against a population normal.`
-      : 'No baseline resting pulse on file. Ask the patient or their care team what their usual resting rate is before reading today\'s number as a change.',
+      : "No baseline resting pulse on file. Ask the patient or their care team what their usual resting rate is before reading today's number as a change.",
     'Take observations supine where possible. Standing observations in this patient are not comparable to a standing set from someone without an autonomic condition.',
     'Usual first-line management of an orthostatic flare is lying flat plus fluid with sodium, oral or intravenous.',
     'Check with the prescriber before stopping any rate-controlling or volume-expanding medication. Abrupt withdrawal can make the presentation considerably worse.',

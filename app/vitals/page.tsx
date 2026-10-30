@@ -12,10 +12,19 @@ import BottomNav from '@/components/BottomNav'
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 const inputStyle: React.CSSProperties = {
-  width: '72px', background: '#FFFFFF', border: '1.5px solid #D8D4C8',
-  borderRadius: '14px', padding: '12px', color: '#141413', fontSize: '22px',
-  fontWeight: 800, outline: 'none', fontFamily: 'inherit', textAlign: 'center',
-  letterSpacing: '-0.5px', boxSizing: 'border-box',
+  width: '72px',
+  background: '#FFFFFF',
+  border: '1.5px solid #D8D4C8',
+  borderRadius: '14px',
+  padding: '12px',
+  color: '#141413',
+  fontSize: '22px',
+  fontWeight: 800,
+  outline: 'none',
+  fontFamily: 'inherit',
+  textAlign: 'center',
+  letterSpacing: '-0.5px',
+  boxSizing: 'border-box',
 }
 
 function parseTS(ts: string) {
@@ -24,11 +33,51 @@ function parseTS(ts: string) {
 }
 
 const VITAL_RANGES = {
-  heart_rate: { low: 40, high: 120, normal: [60, 100] as [number,number], unit: 'bpm',  label: 'Heart Rate',   icon: Heart,    color: '#A33417' },
-  systolic:   { low: 70, high: 200, normal: [90, 140] as [number,number], unit: 'mmHg', label: 'Systolic BP',  icon: Activity, color: '#42623C' },
-  diastolic:  { low: 40, high: 130, normal: [60, 90]  as [number,number], unit: 'mmHg', label: 'Diastolic BP', icon: Activity, color: '#42623C' },
-  oxygen_sat: { low: 85, high: 100, normal: [95, 100] as [number,number], unit: '%',    label: 'O₂ Sat',       icon: Droplets, color: '#42623C' },
-  resp_rate:  { low: 8,  high: 40,  normal: [12, 20]  as [number,number], unit: '/min', label: 'Resp. Rate',   icon: Wind,     color: '#7C5200' },
+  heart_rate: {
+    low: 40,
+    high: 120,
+    normal: [60, 100] as [number, number],
+    unit: 'bpm',
+    label: 'Heart Rate',
+    icon: Heart,
+    color: '#A33417',
+  },
+  systolic: {
+    low: 70,
+    high: 200,
+    normal: [90, 140] as [number, number],
+    unit: 'mmHg',
+    label: 'Systolic BP',
+    icon: Activity,
+    color: '#42623C',
+  },
+  diastolic: {
+    low: 40,
+    high: 130,
+    normal: [60, 90] as [number, number],
+    unit: 'mmHg',
+    label: 'Diastolic BP',
+    icon: Activity,
+    color: '#42623C',
+  },
+  oxygen_sat: {
+    low: 85,
+    high: 100,
+    normal: [95, 100] as [number, number],
+    unit: '%',
+    label: 'O₂ Sat',
+    icon: Droplets,
+    color: '#42623C',
+  },
+  resp_rate: {
+    low: 8,
+    high: 40,
+    normal: [12, 20] as [number, number],
+    unit: '/min',
+    label: 'Resp. Rate',
+    icon: Wind,
+    color: '#7C5200',
+  },
 }
 
 type VitalKey = keyof typeof VITAL_RANGES
@@ -44,9 +93,9 @@ function statusForValue(key: string, val: number | null) {
 }
 
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
-  ok:    { bg: 'rgba(86,128,78,0.12)',   border: 'rgba(86,128,78,0.25)',   text: '#42623C' },
-  high:  { bg: 'rgba(163,52,23,0.12)',   border: 'rgba(163,52,23,0.28)',   text: '#A33417' },
-  low:   { bg: 'rgba(168,114,0,0.12)',  border: 'rgba(168,114,0,0.28)', text: '#7C5200' },
+  ok: { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
+  high: { bg: 'rgba(163,52,23,0.12)', border: 'rgba(163,52,23,0.28)', text: '#A33417' },
+  low: { bg: 'rgba(168,114,0,0.12)', border: 'rgba(168,114,0,0.28)', text: '#7C5200' },
   empty: { bg: '#F2F0E8', border: '#F2F0E8', text: '#5C5A52' },
 }
 
@@ -88,10 +137,15 @@ function SparklineInner({ data, color, width, height, normalRange }: SparklineIn
 
   const areaPath =
     `M ${pts[0][0]},${pts[0][1]} ` +
-    pts.slice(1).map(([x, y]) => `L ${x},${y}`).join(' ') +
+    pts
+      .slice(1)
+      .map(([x, y]) => `L ${x},${y}`)
+      .join(' ') +
     ` L ${pts[pts.length - 1][0]},${height} L ${pts[0][0]},${height} Z`
 
-  let bandTop = 0, bandBot = 0, showBand = false
+  let bandTop = 0,
+    bandBot = 0,
+    showBand = false
   if (normalRange) {
     bandTop = Math.max(padY, Math.min(padY + innerH, toY(normalRange[1])))
     bandBot = Math.max(padY, Math.min(padY + innerH, toY(normalRange[0])))
@@ -104,32 +158,38 @@ function SparklineInner({ data, color, width, height, normalRange }: SparklineIn
     <>
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.28"/>
-          <stop offset="100%" stopColor={color} stopOpacity="0.02"/>
+          <stop offset="0%" stopColor={color} stopOpacity="0.28" />
+          <stop offset="100%" stopColor={color} stopOpacity="0.02" />
         </linearGradient>
         <clipPath id={clipId}>
-          <rect x={0} y={0} width={width} height={height}/>
+          <rect x={0} y={0} width={width} height={height} />
         </clipPath>
       </defs>
 
       {showBand && (
         <rect
-          x={padX} y={bandTop}
-          width={innerW} height={Math.max(0, bandBot - bandTop)}
-          fill="rgba(86,128,78,0.08)" rx="2"
+          x={padX}
+          y={bandTop}
+          width={innerW}
+          height={Math.max(0, bandBot - bandTop)}
+          fill="rgba(86,128,78,0.08)"
+          rx="2"
         />
       )}
 
-      <path d={areaPath} fill={`url(#${gradId})`} clipPath={`url(#${clipId})`}/>
+      <path d={areaPath} fill={`url(#${gradId})`} clipPath={`url(#${clipId})`} />
 
       <polyline
         points={polyline}
-        fill="none" stroke={color}
-        strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
       />
 
-      <circle cx={last[0]} cy={last[1]} r="5" fill={color} opacity="0.18"/>
-      <circle cx={last[0]} cy={last[1]} r="3" fill={color}/>
+      <circle cx={last[0]} cy={last[1]} r="5" fill={color} opacity="0.18" />
+      <circle cx={last[0]} cy={last[1]} r="3" fill={color} />
     </>
   )
 }
@@ -139,11 +199,11 @@ function SparklineInner({ data, color, width, height, normalRange }: SparklineIn
 function trendArrow(vals: number[]): { symbol: string; color: string } {
   if (vals.length < 4) return { symbol: '→', color: '#5C5A52' }
   const recent = vals.slice(-3)
-  const prior  = vals.slice(-6, -3)
+  const prior = vals.slice(-6, -3)
   if (prior.length === 0) return { symbol: '→', color: '#5C5A52' }
   const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length
   const delta = ((avg(recent) - avg(prior)) / avg(prior)) * 100
-  if (delta > 2)  return { symbol: '↑', color: '#A33417' }
+  if (delta > 2) return { symbol: '↑', color: '#A33417' }
   if (delta < -2) return { symbol: '↓', color: '#42623C' }
   return { symbol: '→', color: '#5C5A52' }
 }
@@ -157,15 +217,15 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
   // DB returns DESC; reverse for chronological chart order
   const chronoVals: number[] = [...logs]
     .reverse()
-    .map(l => l[vitalKey])
+    .map((l) => l[vitalKey])
     .filter((v): v is number => v !== null && v !== undefined)
 
   if (chronoVals.length < 2) return null
 
   const latest = chronoVals[chronoVals.length - 1]
-  const avg    = chronoVals.reduce((a, b) => a + b, 0) / chronoVals.length
+  const avg = chronoVals.reduce((a, b) => a + b, 0) / chronoVals.length
   const status = statusForValue(vitalKey, latest)
-  const ss     = STATUS_STYLES[status]
+  const ss = STATUS_STYLES[status]
   const { symbol: arrow, color: arrowColor } = trendArrow(chronoVals)
   const statusLabel = status === 'ok' ? 'Normal' : status === 'high' ? 'High' : 'Low'
 
@@ -187,19 +247,38 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '30px', height: '30px', borderRadius: '14px',
-            background: `${meta.color}18`, border: `1px solid ${meta.color}30`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Icon size={13} color={meta.color}/>
+          <div
+            style={{
+              width: '30px',
+              height: '30px',
+              borderRadius: '14px',
+              background: `${meta.color}18`,
+              border: `1px solid ${meta.color}30`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon size={13} color={meta.color} />
           </div>
-          <span style={{ color: '#141413', fontWeight: 700, fontSize: '16px', letterSpacing: '-0.3px' }}>{meta.label}</span>
+          <span
+            style={{ color: '#141413', fontWeight: 700, fontSize: '16px', letterSpacing: '-0.3px' }}
+          >
+            {meta.label}
+          </span>
         </div>
-        <span style={{
-          background: ss.bg, border: `1px solid ${ss.border}`, color: ss.text,
-          fontSize: '13px', fontWeight: 600, padding: '3px 9px', borderRadius: '14px', letterSpacing: '0',
-        }}>
+        <span
+          style={{
+            background: ss.bg,
+            border: `1px solid ${ss.border}`,
+            color: ss.text,
+            fontSize: '13px',
+            fontWeight: 600,
+            padding: '3px 9px',
+            borderRadius: '14px',
+            letterSpacing: '0',
+          }}
+        >
           {statusLabel}
         </span>
       </div>
@@ -207,14 +286,18 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       {/* Sparkline — stretches to container width */}
       <div style={{ width: '100%', lineHeight: 0 }}>
         <svg
-          width="100%" height="56"
+          width="100%"
+          height="56"
           viewBox="0 0 280 56"
           preserveAspectRatio="none"
           style={{ display: 'block', overflow: 'visible' }}
         >
           <SparklineInner
-            data={chronoVals} color={meta.color}
-            width={280} height={56} normalRange={meta.normal}
+            data={chronoVals}
+            color={meta.color}
+            width={280}
+            height={56}
+            normalRange={meta.normal}
           />
         </svg>
       </div>
@@ -222,24 +305,40 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       {/* Footer: value + trend */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <div style={{ lineHeight: 1 }}>
-          <span style={{
-            color: '#141413', fontWeight: 800, fontSize: '32px', letterSpacing: '-0.5px',
-            fontFamily: 'inherit',
-          }}>
+          <span
+            style={{
+              color: '#141413',
+              fontWeight: 800,
+              fontSize: '32px',
+              letterSpacing: '-0.5px',
+              fontFamily: 'inherit',
+            }}
+          >
             {Number.isInteger(latest) ? latest : latest.toFixed(1)}
           </span>
-          <span style={{
-            color: '#5C5A52', fontSize: '11px', marginLeft: '4px',
-            fontFamily: 'inherit',
-          }}>
+          <span
+            style={{
+              color: '#5C5A52',
+              fontSize: '11px',
+              marginLeft: '4px',
+              fontFamily: 'inherit',
+            }}
+          >
             {meta.unit}
           </span>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ color: arrowColor, fontSize: '20px', fontWeight: 700, lineHeight: 1 }}>{arrow}</div>
-          <div style={{
-            color: '#5C5A52', fontSize: '13px', marginTop: '3px', letterSpacing: '0',
-          }}>
+          <div style={{ color: arrowColor, fontSize: '20px', fontWeight: 700, lineHeight: 1 }}>
+            {arrow}
+          </div>
+          <div
+            style={{
+              color: '#5C5A52',
+              fontSize: '13px',
+              marginTop: '3px',
+              letterSpacing: '0',
+            }}
+          >
             avg {avg.toFixed(1)} {meta.unit}
           </div>
         </div>
@@ -252,21 +351,38 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
 
 type TimeRange = '7d' | '14d' | '30d'
 
-function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v: TimeRange) => void }) {
+function TimeRangeSelector({
+  value,
+  onChange,
+}: {
+  value: TimeRange
+  onChange: (v: TimeRange) => void
+}) {
   const opts: TimeRange[] = ['7d', '14d', '30d']
   return (
-    <div style={{
-      display: 'flex', gap: '3px',
-      background: '#F2F0E8', borderRadius: '14px', padding: '3px',
-      border: '1px solid #98C890',
-    }}>
-      {opts.map(opt => (
+    <div
+      style={{
+        display: 'flex',
+        gap: '3px',
+        background: '#F2F0E8',
+        borderRadius: '14px',
+        padding: '3px',
+        border: '1px solid #98C890',
+      }}
+    >
+      {opts.map((opt) => (
         <button
           key={opt}
           onClick={() => onChange(opt)}
           style={{
-            flex: 1, padding: '6px 0', borderRadius: '14px', border: 'none', cursor: 'pointer',
-            fontFamily: 'inherit', fontSize: '11px', fontWeight: 700,
+            flex: 1,
+            padding: '6px 0',
+            borderRadius: '14px',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            fontSize: '11px',
+            fontWeight: 700,
             background: value === opt ? '#42623C' : 'transparent',
             color: value === opt ? '#FFFFFF' : '#5C5A52',
             transition: 'background 0.15s, color 0.15s',
@@ -284,7 +400,11 @@ function TimeRangeSelector({ value, onChange }: { value: TimeRange; onChange: (v
 
 export default function VitalsPage() {
   const [vitals, setVitals] = useState<Record<string, string>>({
-    heart_rate: '', systolic: '', diastolic: '', oxygen_sat: '', resp_rate: '',
+    heart_rate: '',
+    systolic: '',
+    diastolic: '',
+    oxygen_sat: '',
+    resp_rate: '',
   })
   const [saving, setSaving] = useState(false)
   const [recentLogs, setRecentLogs] = useState<any[]>([])
@@ -295,14 +415,22 @@ export default function VitalsPage() {
 
   useEffect(() => {
     const load = async () => {
-      if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === '1') {
+      if (
+        typeof window !== 'undefined' &&
+        new URLSearchParams(window.location.search).get('demo') === '1'
+      ) {
         setIsDemo(true)
         setRecentLogs(DEMO_VITALS as any)
         setLoadingHistory(false)
         return
       }
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
       const { data } = await supabase
         .from('vitals_logs')
         .select('*')
@@ -316,7 +444,9 @@ export default function VitalsPage() {
   }, [router])
 
   const refreshHistory = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) return
     const { data } = await supabase
       .from('vitals_logs')
@@ -329,11 +459,20 @@ export default function VitalsPage() {
 
   const handleSave = async () => {
     const filled = Object.entries(vitals).filter(([, v]) => v.trim())
-    if (filled.length === 0) { toast.error('Enter at least one vital sign'); return }
+    if (filled.length === 0) {
+      toast.error('Enter at least one vital sign')
+      return
+    }
 
     setSaving(true)
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) { toast.error('Please sign in again'); setSaving(false); return }
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    if (!session) {
+      toast.error('Please sign in again')
+      setSaving(false)
+      return
+    }
 
     const payload: Record<string, number> = {}
     for (const [k, v] of filled) {
@@ -344,34 +483,18 @@ export default function VitalsPage() {
     try {
       const res = await fetch('/api/vitals/log', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify(payload),
       })
       const data = await res.json()
       if (!res.ok) {
         toast.error(data.error || 'Could not save vitals')
       } else if (data.critical) {
-        // THREE THINGS WERE WRONG HERE, and all three showed up only by saving a
-        // genuinely bad set of readings through the real form.
-        //
-        // 1. It read data.alerts[0] and dropped the rest. Entering 142 bpm,
-        //    188/112, 90% and 32 breaths a minute produced five alerts and the
-        //    screen named one of them. Someone reading that toast would think
-        //    their heart rate was the only thing out of range.
-        //
-        // 2. It printed "Flagged for your care team" no matter what. The route
-        //    already returns `flagged`, false when writing the alert row failed,
-        //    precisely so this claim is not made when it is not true. The client
-        //    ignored the field and claimed it anyway, which is the same bug that
-        //    was fixed on the server, still live one layer up.
-        //
-        // 3. It threw away data.message, which is the sentence that says to call
-        //    emergency services rather than wait for a reply. That sentence is
-        //    the entire reason the message exists.
-        //
-        // The server owns the wording now. Every alert is listed, and the toast
-        // does not time out, because a four second toast is the wrong container
-        // for readings this far out of range.
+        // THREE THINGS WERE WRONG HERE, and all three showed up only by saving a genuinely
+        // bad set of readings through the real form.
         toast.error(data.alerts.join('. '), {
           description: data.message,
           duration: Infinity,
@@ -386,8 +509,10 @@ export default function VitalsPage() {
         // Trigger health intelligence in background after vitals update
         fetch('/api/groq/health-intelligence', {
           method: 'POST',
-          headers: { 'Authorization': `Bearer ${session.access_token}` },
-        }).catch(() => { /* silent */ })
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        }).catch(() => {
+          /* silent */
+        })
       }
     } catch {
       toast.error('Network error. Try again')
@@ -398,16 +523,23 @@ export default function VitalsPage() {
   // Filter to selected time window
   const windowMs = { '7d': 7, '14d': 14, '30d': 30 }[timeRange] * 24 * 60 * 60 * 1000
   const now = Date.now()
-  const filteredLogs = recentLogs.filter(l => now - parseTS(l.logged_at).getTime() <= windowMs)
+  const filteredLogs = recentLogs.filter((l) => now - parseTS(l.logged_at).getTime() <= windowMs)
 
-  const hasAnyChart = VITAL_KEYS.some(k =>
-    filteredLogs.filter(l => l[k] !== null && l[k] !== undefined).length >= 2
+  const hasAnyChart = VITAL_KEYS.some(
+    (k) => filteredLogs.filter((l) => l[k] !== null && l[k] !== undefined).length >= 2,
   )
 
   return (
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '80px' }}>
       {isDemo && (
-        <div style={{ background: '#D97757', color: '#141413', padding: '9px 14px', textAlign: 'center' }}>
+        <div
+          style={{
+            background: '#D97757',
+            color: '#141413',
+            padding: '9px 14px',
+            textAlign: 'center',
+          }}
+        >
           <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
             {DEMO_BANNER}
           </span>
@@ -416,124 +548,338 @@ export default function VitalsPage() {
 
       {/* Header */}
       <div style={{ padding: '56px 20px 22px' }}>
-        <button onClick={() => router.push('/dashboard')}
-          style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '22px', color: '#5C5A52', fontSize: '13px', fontWeight: 500, fontFamily: 'inherit' }}>
-          <ArrowLeft size={14}/> Dashboard
+        <button
+          onClick={() => router.push('/dashboard')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '7px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+            marginBottom: '22px',
+            color: '#5C5A52',
+            fontSize: '13px',
+            fontWeight: 500,
+            fontFamily: 'inherit',
+          }}
+        >
+          <ArrowLeft size={14} /> Dashboard
         </button>
-        <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 600, letterSpacing: '0', marginBottom: '8px' }}>
-          {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })} · log your readings
+        <p
+          style={{
+            color: '#5C5A52',
+            fontSize: '13px',
+            fontWeight: 600,
+            letterSpacing: '0',
+            marginBottom: '8px',
+          }}
+        >
+          {new Date().toLocaleDateString('en-US', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+          })}{' '}
+          · log your readings
         </p>
-        <h1 style={{ color: '#141413', fontWeight: 800, fontSize: '32px', letterSpacing: '-0.4px', lineHeight: 1 }}>Vitals</h1>
+        <h1
+          style={{
+            color: '#141413',
+            fontWeight: 800,
+            fontSize: '32px',
+            letterSpacing: '-0.4px',
+            lineHeight: 1,
+          }}
+        >
+          Vitals
+        </h1>
       </div>
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-
         {/* No device? The phone is the device. */}
-        <button onClick={() => router.push('/check')}
-          style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left', background: '#141413', color: '#FFFFFF', border: 'none', borderRadius: '12px', padding: '16px', cursor: 'pointer', fontFamily: 'inherit' }}>
-          <Heart size={20} color="#FF8A70"/>
+        <button
+          onClick={() => router.push('/check')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            width: '100%',
+            textAlign: 'left',
+            background: '#141413',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: '12px',
+            padding: '16px',
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+          }}
+        >
+          <Heart size={20} color="#FF8A70" />
           <span style={{ flex: 1 }}>
-            <span style={{ display: 'block', fontWeight: 800, fontSize: '15px' }}>Measure with your phone</span>
-            <span style={{ display: 'block', fontSize: '12.5px', opacity: 0.8, marginTop: '2px' }}>Pulse from the camera, breathing from the motion sensor, or import Apple Health</span>
+            <span style={{ display: 'block', fontWeight: 800, fontSize: '15px' }}>
+              Measure with your phone
+            </span>
+            <span style={{ display: 'block', fontSize: '12.5px', opacity: 0.8, marginTop: '2px' }}>
+              Pulse from the camera, breathing from the motion sensor, or import Apple Health
+            </span>
           </span>
           <span style={{ fontWeight: 800 }}>→</span>
         </button>
 
         {/* Entry grid */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '12px', padding: '16px' }}>
-          <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0', marginBottom: '16px' }}>Today's readings</p>
+        <div
+          style={{
+            background: '#FFFFFF',
+            border: '1px solid #98C890',
+            borderRadius: '12px',
+            padding: '16px',
+          }}
+        >
+          <p
+            style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0', marginBottom: '16px' }}
+          >
+            Today's readings
+          </p>
 
           {/* Heart rate */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #EDEAE0', marginBottom: '14px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: '14px',
+              borderBottom: '1px solid #EDEAE0',
+              marginBottom: '14px',
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(163,52,23,0.12)', border: '1px solid rgba(163,52,23,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Heart size={14} color="#A33417"/>
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '14px',
+                  background: 'rgba(163,52,23,0.12)',
+                  border: '1px solid rgba(163,52,23,0.20)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Heart size={14} color="#A33417" />
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Heart rate</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 60–100 bpm</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                  Normal: 60–100 bpm
+                </p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number" min="20" max="250" aria-label="Heart rate in beats per minute"
-                style={{ ...inputStyle, borderColor: vitals.heart_rate ? 'rgba(163,52,23,0.35)' : '#98C890' }}
-                placeholder=". " value={vitals.heart_rate}
-                onChange={e => setVitals(p => ({ ...p, heart_rate: e.target.value }))}
+                type="number"
+                min="20"
+                max="250"
+                aria-label="Heart rate in beats per minute"
+                style={{
+                  ...inputStyle,
+                  borderColor: vitals.heart_rate ? 'rgba(163,52,23,0.35)' : '#98C890',
+                }}
+                placeholder=". "
+                value={vitals.heart_rate}
+                onChange={(e) => setVitals((p) => ({ ...p, heart_rate: e.target.value }))}
               />
-              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit', minWidth: '28px' }}>bpm</span>
+              <span
+                style={{
+                  color: '#5C5A52',
+                  fontSize: '11px',
+                  fontFamily: 'inherit',
+                  minWidth: '28px',
+                }}
+              >
+                bpm
+              </span>
             </div>
           </div>
 
           {/* Blood pressure */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #EDEAE0', marginBottom: '14px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: '14px',
+              borderBottom: '1px solid #EDEAE0',
+              marginBottom: '14px',
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Activity size={14} color="#42623C"/>
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '14px',
+                  background: 'rgba(86,128,78,0.12)',
+                  border: '1px solid rgba(86,128,78,0.20)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Activity size={14} color="#42623C" />
               </div>
               <div>
-                <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Blood pressure</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 90–140 / 60–90</p>
+                <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>
+                  Blood pressure
+                </p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                  Normal: 90–140 / 60–90
+                </p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <input
-                type="number" min="50" max="260" aria-label="Systolic blood pressure"
-                style={{ ...inputStyle, borderColor: vitals.systolic ? 'rgba(86,128,78,0.35)' : '#98C890', width: '62px', fontSize: '18px' }}
-                placeholder=". " value={vitals.systolic}
-                onChange={e => setVitals(p => ({ ...p, systolic: e.target.value }))}
+                type="number"
+                min="50"
+                max="260"
+                aria-label="Systolic blood pressure"
+                style={{
+                  ...inputStyle,
+                  borderColor: vitals.systolic ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  width: '62px',
+                  fontSize: '18px',
+                }}
+                placeholder=". "
+                value={vitals.systolic}
+                onChange={(e) => setVitals((p) => ({ ...p, systolic: e.target.value }))}
               />
               <span style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 300 }}>/</span>
               <input
-                type="number" min="30" max="160" aria-label="Diastolic blood pressure"
-                style={{ ...inputStyle, borderColor: vitals.diastolic ? 'rgba(86,128,78,0.35)' : '#98C890', width: '62px', fontSize: '18px' }}
-                placeholder=". " value={vitals.diastolic}
-                onChange={e => setVitals(p => ({ ...p, diastolic: e.target.value }))}
+                type="number"
+                min="30"
+                max="160"
+                aria-label="Diastolic blood pressure"
+                style={{
+                  ...inputStyle,
+                  borderColor: vitals.diastolic ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  width: '62px',
+                  fontSize: '18px',
+                }}
+                placeholder=". "
+                value={vitals.diastolic}
+                onChange={(e) => setVitals((p) => ({ ...p, diastolic: e.target.value }))}
               />
             </div>
           </div>
 
           {/* O2 sat */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #EDEAE0', marginBottom: '14px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: '14px',
+              borderBottom: '1px solid #EDEAE0',
+              marginBottom: '14px',
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(86,128,78,0.12)', border: '1px solid rgba(86,128,78,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Droplets size={14} color="#42623C"/>
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '14px',
+                  background: 'rgba(86,128,78,0.12)',
+                  border: '1px solid rgba(86,128,78,0.20)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Droplets size={14} color="#42623C" />
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Oxygen sat.</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 95–100%</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                  Normal: 95–100%
+                </p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number" min="50" max="100" aria-label="Oxygen saturation as a percentage"
-                style={{ ...inputStyle, borderColor: vitals.oxygen_sat ? 'rgba(86,128,78,0.35)' : '#98C890' }}
-                placeholder=". " value={vitals.oxygen_sat}
-                onChange={e => setVitals(p => ({ ...p, oxygen_sat: e.target.value }))}
+                type="number"
+                min="50"
+                max="100"
+                aria-label="Oxygen saturation as a percentage"
+                style={{
+                  ...inputStyle,
+                  borderColor: vitals.oxygen_sat ? 'rgba(86,128,78,0.35)' : '#98C890',
+                }}
+                placeholder=". "
+                value={vitals.oxygen_sat}
+                onChange={(e) => setVitals((p) => ({ ...p, oxygen_sat: e.target.value }))}
               />
-              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit', minWidth: '28px' }}>%</span>
+              <span
+                style={{
+                  color: '#5C5A52',
+                  fontSize: '11px',
+                  fontFamily: 'inherit',
+                  minWidth: '28px',
+                }}
+              >
+                %
+              </span>
             </div>
           </div>
 
           {/* Resp rate */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '14px', background: 'rgba(168,114,0,0.12)', border: '1px solid rgba(168,114,0,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Wind size={14} color="#7C5200"/>
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '14px',
+                  background: 'rgba(168,114,0,0.12)',
+                  border: '1px solid rgba(168,114,0,0.20)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Wind size={14} color="#7C5200" />
               </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>Normal: 12–20 /min</p>
+                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                  Normal: 12–20 /min
+                </p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <input
-                type="number" min="4" max="60" aria-label="Respiratory rate in breaths per minute"
-                style={{ ...inputStyle, borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : '#98C890' }}
-                placeholder=". " value={vitals.resp_rate}
-                onChange={e => setVitals(p => ({ ...p, resp_rate: e.target.value }))}
+                type="number"
+                min="4"
+                max="60"
+                aria-label="Respiratory rate in breaths per minute"
+                style={{
+                  ...inputStyle,
+                  borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : '#98C890',
+                }}
+                placeholder=". "
+                value={vitals.resp_rate}
+                onChange={(e) => setVitals((p) => ({ ...p, resp_rate: e.target.value }))}
               />
-              <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit', minWidth: '28px' }}>/min</span>
+              <span
+                style={{
+                  color: '#5C5A52',
+                  fontSize: '11px',
+                  fontFamily: 'inherit',
+                  minWidth: '28px',
+                }}
+              >
+                /min
+              </span>
             </div>
           </div>
         </div>
@@ -553,12 +899,21 @@ export default function VitalsPage() {
                   const s = STATUS_STYLES[status]
                   const r = VITAL_RANGES[key as VitalKey]
                   return (
-                    <span key={key} style={{
-                      background: s.bg, border: `1px solid ${s.border}`, color: s.text,
-                      fontSize: '11px', fontWeight: 700, padding: '5px 11px', borderRadius: '14px',
-                      fontFamily: 'inherit',
-                    }}>
-                      {r?.label}: {val} {r?.unit} {status === 'high' ? 'H' : status === 'low' ? 'L' : ''}
+                    <span
+                      key={key}
+                      style={{
+                        background: s.bg,
+                        border: `1px solid ${s.border}`,
+                        color: s.text,
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        padding: '5px 11px',
+                        borderRadius: '14px',
+                        fontFamily: 'inherit',
+                      }}
+                    >
+                      {r?.label}: {val} {r?.unit}{' '}
+                      {status === 'high' ? 'H' : status === 'low' ? 'L' : ''}
                     </span>
                   )
                 })}
@@ -574,46 +929,75 @@ export default function VitalsPage() {
           style={{
             background: '#42623C',
             color: '#FFFFFF',
-            fontWeight: 800, fontSize: '15px', padding: '17px', borderRadius: '12px',
-            border: 'none', cursor: saving ? 'not-allowed' : 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            fontWeight: 800,
+            fontSize: '15px',
+            padding: '17px',
+            borderRadius: '12px',
+            border: 'none',
+            cursor: saving ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
             opacity: saving ? 0.65 : 1,
             letterSpacing: '-0.2px',
           }}
         >
-          <Save size={16}/>
+          <Save size={16} />
           {saving ? 'Saving…' : 'Save vitals'}
         </motion.button>
 
         {/* ── Trends ─────────────────────────────────────────────────────── */}
         {loadingHistory ? (
           <div>
-            <p style={{
-              color: '#5C5A52', fontSize: '13px',
-              letterSpacing: '0', marginBottom: '12px',
-            }}>Trends</p>
-            {[1, 2, 3].map(i => (
-              <Skeleton key={i} style={{
-                height: '140px', borderRadius: '12px',
-                background: '#FFFFFF', marginBottom: '10px',
-              }}/>
+            <p
+              style={{
+                color: '#5C5A52',
+                fontSize: '13px',
+                letterSpacing: '0',
+                marginBottom: '12px',
+              }}
+            >
+              Trends
+            </p>
+            {[1, 2, 3].map((i) => (
+              <Skeleton
+                key={i}
+                style={{
+                  height: '140px',
+                  borderRadius: '12px',
+                  background: '#FFFFFF',
+                  marginBottom: '10px',
+                }}
+              />
             ))}
           </div>
         ) : (
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <p style={{
-                color: '#5C5A52', fontSize: '13px', letterSpacing: '0',
-              }}>Trends</p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '12px',
+              }}
+            >
+              <p
+                style={{
+                  color: '#5C5A52',
+                  fontSize: '13px',
+                  letterSpacing: '0',
+                }}
+              >
+                Trends
+              </p>
               <div style={{ width: '152px' }}>
-                <TimeRangeSelector value={timeRange} onChange={setTimeRange}/>
+                <TimeRangeSelector value={timeRange} onChange={setTimeRange} />
               </div>
             </div>
 
             {hasAnyChart ? (
-              <motion.div
-                style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
-              >
+              <motion.div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {VITAL_KEYS.map((key, i) => (
                   <motion.div
                     key={key}
@@ -621,15 +1005,20 @@ export default function VitalsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05, ...spring }}
                   >
-                    <TrendCard vitalKey={key} logs={filteredLogs}/>
+                    <TrendCard vitalKey={key} logs={filteredLogs} />
                   </motion.div>
                 ))}
               </motion.div>
             ) : (
-              <div style={{
-                background: '#FFFFFF', border: '1px solid #98C890',
-                borderRadius: '12px', padding: '36px 16px', textAlign: 'center',
-              }}>
+              <div
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #98C890',
+                  borderRadius: '12px',
+                  padding: '36px 16px',
+                  textAlign: 'center',
+                }}
+              >
                 <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 700 }}>
                   No data for {timeRange} view
                 </p>
@@ -640,10 +1029,9 @@ export default function VitalsPage() {
             )}
           </div>
         )}
-
       </div>
 
-      <BottomNav/>
+      <BottomNav />
     </div>
   )
 }

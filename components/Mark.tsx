@@ -12,7 +12,13 @@ type Props = {
 export default function Mark({ size = 26, className }: Props) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src="/logo-mark.png" width={size} height={size} alt="Relay Arc" className={className}
-      style={{ display: 'block', width: size, height: size }}/>
+    <img
+      src="/logo-mark.png"
+      width={size}
+      height={size}
+      alt="Relay Arc"
+      className={className}
+      style={{ display: 'block', width: size, height: size }}
+    />
   )
 }

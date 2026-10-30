@@ -16,8 +16,13 @@ export default function DriverDashboard() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
 
       const { data: p } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(p)
@@ -41,7 +46,9 @@ export default function DriverDashboard() {
       })
       .subscribe()
 
-    return () => { supabase.removeChannel(sub) }
+    return () => {
+      supabase.removeChannel(sub)
+    }
   }, [])
 
   const acceptRequest = async (request: any) => {
@@ -54,7 +61,7 @@ export default function DriverDashboard() {
         status: 'accepted',
         driver_id: profile.id,
         driver_name: profile.full_name,
-        driver_phone: profile.phone
+        driver_phone: profile.phone,
       })
       .eq('id', request.id)
 
@@ -67,73 +74,213 @@ export default function DriverDashboard() {
     setAccepting(null)
   }
 
-  if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#B3DDAC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Loader2 size={32} color="#7C5200" className="animate-spin"/>
-    </div>
-  )
-
-  if (accepted) return (
-    <div style={{ minHeight: '100vh', background: '#B3DDAC', padding: '56px 20px 20px' }}>
-      <div style={{ background: 'rgba(86,128,78,0.08)', border: '1px solid rgba(86,128,78,0.2)', borderRadius: '20px', padding: '24px', textAlign: 'center', marginBottom: '16px' }}>
-        <Car size={40} style={{ display: 'block', margin: '0 auto 12px' }} />
-        <p style={{ color: '#42623C', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>Ride accepted</p>
-        <p style={{ color: '#5C5A52', fontSize: '14px' }}>You are helping save a life</p>
+  if (loading)
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          background: '#B3DDAC',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Loader2 size={32} color="#7C5200" className="animate-spin" />
       </div>
+    )
 
-      <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '16px', marginBottom: '12px' }}>
-        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Pick up</p>
-        <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.patient_name}</p>
-        <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>{accepted.pickup_address}</p>
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={() => {
-            const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.pickup_lat}&destlng=${accepted.pickup_lng}&destname=${encodeURIComponent(accepted.patient_name)}`
-            router.push(url)
+  if (accepted)
+    return (
+      <div style={{ minHeight: '100vh', background: '#B3DDAC', padding: '56px 20px 20px' }}>
+        <div
+          style={{
+            background: 'rgba(86,128,78,0.08)',
+            border: '1px solid rgba(86,128,78,0.2)',
+            borderRadius: '20px',
+            padding: '24px',
+            textAlign: 'center',
+            marginBottom: '16px',
           }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#7C5200', color: '#FFFFFF', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '20px', border: 'none', cursor: 'pointer', width: '100%' }}
         >
-          <Navigation size={16}/> Navigate to patient
-        </motion.button>
-      </div>
+          <Car size={40} style={{ display: 'block', margin: '0 auto 12px' }} />
+          <p style={{ color: '#42623C', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>
+            Ride accepted
+          </p>
+          <p style={{ color: '#5C5A52', fontSize: '14px' }}>You are helping save a life</p>
+        </div>
 
-      <div style={{ background: '#FFFFFF', border: '1px solid #98C890', borderRadius: '20px', padding: '16px' }}>
-        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>Then take to</p>
-        <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>{accepted.hospital_name}</p>
-        <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>
-          Emergency: {accepted.emergency_type?.replace('_', ' ')}
-        </p>
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={() => {
-            const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.hospital_lat}&destlng=${accepted.hospital_lng}&destname=${encodeURIComponent(accepted.hospital_name)}`
-            router.push(url)
+        <div
+          style={{
+            background: '#FFFFFF',
+            border: '1px solid #98C890',
+            borderRadius: '20px',
+            padding: '16px',
+            marginBottom: '12px',
           }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#DC2626', color: '#141413', fontWeight: 700, fontSize: '14px', padding: '14px', borderRadius: '20px', border: 'none', cursor: 'pointer', width: '100%' }}
         >
-          <Navigation size={16}/> Navigate to hospital
-        </motion.button>
+          <p
+            style={{
+              color: '#5C5A52',
+              fontSize: '10px',
+              fontFamily: 'monospace',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              marginBottom: '12px',
+            }}
+          >
+            Pick up
+          </p>
+          <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>
+            {accepted.patient_name}
+          </p>
+          <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>
+            {accepted.pickup_address}
+          </p>
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => {
+              const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.pickup_lat}&destlng=${accepted.pickup_lng}&destname=${encodeURIComponent(accepted.patient_name)}`
+              router.push(url)
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              background: '#7C5200',
+              color: '#FFFFFF',
+              fontWeight: 700,
+              fontSize: '14px',
+              padding: '14px',
+              borderRadius: '20px',
+              border: 'none',
+              cursor: 'pointer',
+              width: '100%',
+            }}
+          >
+            <Navigation size={16} /> Navigate to patient
+          </motion.button>
+        </div>
+
+        <div
+          style={{
+            background: '#FFFFFF',
+            border: '1px solid #98C890',
+            borderRadius: '20px',
+            padding: '16px',
+          }}
+        >
+          <p
+            style={{
+              color: '#5C5A52',
+              fontSize: '10px',
+              fontFamily: 'monospace',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              marginBottom: '12px',
+            }}
+          >
+            Then take to
+          </p>
+          <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>
+            {accepted.hospital_name}
+          </p>
+          <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>
+            Emergency: {accepted.emergency_type?.replace('_', ' ')}
+          </p>
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => {
+              const url = `/emergency/routing?type=${accepted.emergency_type}&destlat=${accepted.hospital_lat}&destlng=${accepted.hospital_lng}&destname=${encodeURIComponent(accepted.hospital_name)}`
+              router.push(url)
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              background: '#DC2626',
+              color: '#141413',
+              fontWeight: 700,
+              fontSize: '14px',
+              padding: '14px',
+              borderRadius: '20px',
+              border: 'none',
+              cursor: 'pointer',
+              width: '100%',
+            }}
+          >
+            <Navigation size={16} /> Navigate to hospital
+          </motion.button>
+        </div>
       </div>
-    </div>
-  )
+    )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#B3DDAC', display: 'flex', flexDirection: 'column' }}>
-
-      <div style={{ padding: '56px 20px 16px', borderBottom: '1px solid #98C890', display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        background: '#B3DDAC',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div
+        style={{
+          padding: '56px 20px 16px',
+          borderBottom: '1px solid #98C890',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+        }}
+      >
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => router.push('/dashboard')}
-          style={{ width: '36px', height: '36px', borderRadius: '14px', background: '#F2F0E8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '14px',
+            background: '#F2F0E8',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
-          <ArrowLeft size={16} color="#5C5A52"/>
+          <ArrowLeft size={16} color="#5C5A52" />
         </motion.button>
         <div>
-          <p style={{ color: '#5C5A52', fontFamily: 'monospace', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px' }}>Community</p>
+          <p
+            style={{
+              color: '#5C5A52',
+              fontFamily: 'monospace',
+              fontSize: '10px',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+            }}
+          >
+            Community
+          </p>
           <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '20px' }}>Help someone now</h1>
         </div>
-        <div style={{ marginLeft: 'auto', background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8', border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#98C890'}`, borderRadius: '20px', padding: '4px 10px' }}>
-          <p style={{ color: requests.length > 0 ? '#A33417' : '#5C5A52', fontFamily: 'monospace', fontSize: '11px' }}>
+        <div
+          style={{
+            marginLeft: 'auto',
+            background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8',
+            border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#98C890'}`,
+            borderRadius: '20px',
+            padding: '4px 10px',
+          }}
+        >
+          <p
+            style={{
+              color: requests.length > 0 ? '#A33417' : '#5C5A52',
+              fontFamily: 'monospace',
+              fontSize: '11px',
+            }}
+          >
             {requests.length} pending
           </p>
         </div>
@@ -143,12 +290,25 @@ export default function DriverDashboard() {
         {requests.length === 0 ? (
           <div style={{ textAlign: 'center', paddingTop: '60px' }}>
             <Car size={40} style={{ display: 'block', margin: '0 auto 16px' }} />
-            <p style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>No requests nearby</p>
-            <p style={{ color: '#5C5A52', fontSize: '13px' }}>Check back soon. Requests update in real time</p>
+            <p style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>
+              No requests nearby
+            </p>
+            <p style={{ color: '#5C5A52', fontSize: '13px' }}>
+              Check back soon. Requests update in real time
+            </p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <p style={{ color: '#5C5A52', fontSize: '12px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+            <p
+              style={{
+                color: '#5C5A52',
+                fontSize: '12px',
+                fontFamily: 'monospace',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                marginBottom: '4px',
+              }}
+            >
               Active requests
             </p>
             <AnimatePresence>
@@ -159,33 +319,98 @@ export default function DriverDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ delay: i * 0.05 }}
-                  style={{ background: '#FFFFFF', border: '1px solid rgba(163,52,23,0.2)', borderRadius: '20px', overflow: 'hidden' }}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1px solid rgba(163,52,23,0.2)',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
+                  }}
                 >
                   <div style={{ padding: '14px', borderBottom: '1px solid #98C890' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginBottom: '10px',
+                      }}
+                    >
                       <motion.div
-                        style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#A33417', flexShrink: 0 }}
+                        style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          background: '#A33417',
+                          flexShrink: 0,
+                        }}
                         animate={{ opacity: [1, 0.3, 1] }}
                         transition={{ duration: 1, repeat: Infinity }}
                       />
                       <p style={{ color: '#A33417', fontWeight: 600, fontSize: '13px' }}>
                         {req.emergency_type?.replace('_', ' ')} emergency
                       </p>
-                      <p style={{ color: '#5C5A52', fontSize: '11px', marginLeft: 'auto', fontFamily: 'monospace' }}>
-                        {new Date(req.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      <p
+                        style={{
+                          color: '#5C5A52',
+                          fontSize: '11px',
+                          marginLeft: 'auto',
+                          fontFamily: 'monospace',
+                        }}
+                      >
+                        {new Date(req.created_at).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </p>
                     </div>
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'flex-start' }}>
-                      <MapPin size={13} color="#7C5200" style={{ flexShrink: 0, marginTop: '2px' }}/>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '8px',
+                        marginBottom: '8px',
+                        alignItems: 'flex-start',
+                      }}
+                    >
+                      <MapPin
+                        size={13}
+                        color="#7C5200"
+                        style={{ flexShrink: 0, marginTop: '2px' }}
+                      />
                       <div>
-                        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Pick up</p>
+                        <p
+                          style={{
+                            color: '#5C5A52',
+                            fontSize: '10px',
+                            fontFamily: 'monospace',
+                            textTransform: 'uppercase',
+                            letterSpacing: '1px',
+                            marginBottom: '2px',
+                          }}
+                        >
+                          Pick up
+                        </p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.pickup_address}</p>
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                      <AlertCircle size={13} color="#42623C" style={{ flexShrink: 0, marginTop: '2px' }}/>
+                      <AlertCircle
+                        size={13}
+                        color="#42623C"
+                        style={{ flexShrink: 0, marginTop: '2px' }}
+                      />
                       <div>
-                        <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>Hospital</p>
+                        <p
+                          style={{
+                            color: '#5C5A52',
+                            fontSize: '10px',
+                            fontFamily: 'monospace',
+                            textTransform: 'uppercase',
+                            letterSpacing: '1px',
+                            marginBottom: '2px',
+                          }}
+                        >
+                          Hospital
+                        </p>
                         <p style={{ color: '#141413', fontSize: '13px' }}>{req.hospital_name}</p>
                       </div>
                     </div>
@@ -194,9 +419,26 @@ export default function DriverDashboard() {
                     whileTap={{ scale: 0.98 }}
                     onClick={() => acceptRequest(req)}
                     disabled={accepting === req.id}
-                    style={{ width: '100%', background: '#DC2626', border: 'none', padding: '14px', color: '#141413', fontWeight: 700, fontSize: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    style={{
+                      width: '100%',
+                      background: '#DC2626',
+                      border: 'none',
+                      padding: '14px',
+                      color: '#141413',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                    }}
                   >
-                    {accepting === req.id ? <Loader2 size={16} className="animate-spin"/> : 'Accept, I can drive them'}
+                    {accepting === req.id ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      'Accept, I can drive them'
+                    )}
                   </motion.button>
                 </motion.div>
               ))}

@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
 
 export async function POST(req: NextRequest) {
@@ -23,14 +23,19 @@ export async function POST(req: NextRequest) {
 
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { profile } = await req.json()
     if (!profile) return NextResponse.json({ error: 'Missing profile' }, { status: 400 })
 
     const weeks = profile.surgery_date
-      ? Math.floor((Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7))
+      ? Math.floor(
+          (Date.now() - new Date(profile.surgery_date).getTime()) / (1000 * 60 * 60 * 24 * 7),
+        )
       : null
 
     const prompt = `You are a cardiac recovery assistant. Return ONLY a JSON object with a "timeline" key containing an array of 4-6 recovery phases. No other text.
@@ -54,7 +59,10 @@ Never use em dashes or semicolons. Use short plain sentences.`
     // Extract JSON object
     let parsed: any[]
     try {
-      const stripped = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+      const stripped = text
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim()
       const obj = JSON.parse(stripped)
       if (Array.isArray(obj)) {
         parsed = obj
@@ -68,7 +76,10 @@ Never use em dashes or semicolons. Use short plain sentences.`
       const start = text.indexOf('{')
       const end = text.lastIndexOf('}')
       if (start === -1 || end < start) {
-        return NextResponse.json({ error: `No JSON found in response: ${text.slice(0, 100)}` }, { status: 502 })
+        return NextResponse.json(
+          { error: `No JSON found in response: ${text.slice(0, 100)}` },
+          { status: 502 },
+        )
       }
       try {
         const obj = JSON.parse(text.slice(start, end + 1))

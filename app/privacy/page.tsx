@@ -8,5 +8,5 @@ export const metadata = {
 
 export default function PrivacyPage() {
   const body = PRIVACY_POLICY.replace(/^PRIVACY POLICY\n/, '').replace(/^Last updated:.*\n/m, '')
-  return <LegalDocument kicker="Legal · privacy" title="Privacy policy" body={body}/>
+  return <LegalDocument kicker="Legal · privacy" title="Privacy policy" body={body} />
 }
