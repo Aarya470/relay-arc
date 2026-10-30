@@ -783,7 +783,7 @@ export default function RelayRoomPage() {
                   fontWeight: 800,
                   fontSize: '16px',
                   padding: '16px',
-                  borderRadius: '12px',
+                  borderRadius: '16px',
                   textDecoration: 'none',
                   minHeight: '54px',
                 }}

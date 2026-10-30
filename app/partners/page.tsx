@@ -75,7 +75,7 @@ export default function Partners() {
                 width: '150px',
                 height: '84px',
                 background: '#FFFFFF',
-                borderRadius: '10px',
+                borderRadius: '16px',
                 border: `1px solid ${RULE}`,
                 display: 'flex',
                 alignItems: 'center',

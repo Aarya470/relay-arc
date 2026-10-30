@@ -153,7 +153,7 @@ export default function DateField({
           alignItems: 'center',
           background: WHITE,
           border: `1.5px solid ${error ? CRIT : BORDER}`,
-          borderRadius: 10,
+          borderRadius: '16px',
           overflow: 'hidden',
         }}
       >

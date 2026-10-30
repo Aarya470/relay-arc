@@ -709,7 +709,7 @@ export default function Features() {
                   border: 'none',
                   cursor: 'pointer',
                   fontFamily: 'inherit',
-                  borderRadius: 10,
+                  borderRadius: '16px',
                 }}
               >
                 Make your free profile

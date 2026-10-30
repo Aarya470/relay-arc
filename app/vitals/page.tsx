@@ -237,7 +237,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       style={{
         background: '#FFFFFF',
         border: '1px solid #98C890',
-        borderRadius: '12px',
+        borderRadius: '16px',
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
@@ -609,7 +609,7 @@ export default function VitalsPage() {
             background: '#141413',
             color: '#FFFFFF',
             border: 'none',
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '16px',
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -632,7 +632,7 @@ export default function VitalsPage() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '16px',
           }}
         >
@@ -932,7 +932,7 @@ export default function VitalsPage() {
             fontWeight: 800,
             fontSize: '15px',
             padding: '17px',
-            borderRadius: '12px',
+            borderRadius: '16px',
             border: 'none',
             cursor: saving ? 'not-allowed' : 'pointer',
             display: 'flex',
@@ -965,7 +965,7 @@ export default function VitalsPage() {
                 key={i}
                 style={{
                   height: '140px',
-                  borderRadius: '12px',
+                  borderRadius: '16px',
                   background: '#FFFFFF',
                   marginBottom: '10px',
                 }}
@@ -1014,7 +1014,7 @@ export default function VitalsPage() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '12px',
+                  borderRadius: '16px',
                   padding: '36px 16px',
                   textAlign: 'center',
                 }}

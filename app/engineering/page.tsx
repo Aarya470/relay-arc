@@ -237,7 +237,7 @@ export default function Engineering() {
             style={{
               border: `2px solid ${T1}`,
               marginBottom: '20px',
-              borderRadius: 10,
+              borderRadius: '16px',
               overflow: 'hidden',
             }}
           >
@@ -349,7 +349,7 @@ export default function Engineering() {
             </p>
           </div>
 
-          <div style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: 10 }}>
+          <div style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: '16px' }}>
             <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '10px' }}>
               What went wrong the first time
             </p>
@@ -418,7 +418,7 @@ export default function Engineering() {
               style={{
                 border: `1px solid ${BORDER}`,
                 padding: '20px',
-                borderRadius: 10,
+                borderRadius: '16px',
                 background: '#fff',
               }}
             >
@@ -438,7 +438,7 @@ export default function Engineering() {
               style={{
                 border: `1px solid ${BORDER}`,
                 padding: '20px',
-                borderRadius: 10,
+                borderRadius: '16px',
                 background: '#fff',
               }}
             >
@@ -491,7 +491,7 @@ export default function Engineering() {
             style={{
               border: `2px solid ${T1}`,
               marginBottom: '26px',
-              borderRadius: 10,
+              borderRadius: '16px',
               overflow: 'hidden',
             }}
           >
@@ -668,7 +668,7 @@ export default function Engineering() {
                   border: 'none',
                   cursor: 'pointer',
                   fontFamily: 'inherit',
-                  borderRadius: 10,
+                  borderRadius: '16px',
                 }}
               >
                 Make your free profile

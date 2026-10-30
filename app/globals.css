@@ -318,6 +318,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 .page-enter { animation: fadeIn 0.3s ease both; }
 
-/* ── Plain look ────────────────────────────────────────────────────────────
-   No drop shadows or glows anywhere. Edges come from borders and spacing. */
-*, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }
+
+
+/* ── Rounded & friendly ────────────────────────────────────────────────────── */
+input, select, textarea { border-radius: 12px !important; }

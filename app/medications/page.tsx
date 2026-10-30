@@ -325,7 +325,7 @@ export default function Medications() {
             key={i}
             style={{
               height: '112px',
-              borderRadius: '12px',
+              borderRadius: '16px',
               background: '#98C890',
               marginBottom: '12px',
               animation: 'pulse 1.5s ease-in-out infinite',
@@ -488,7 +488,7 @@ export default function Medications() {
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
                 background: SURFACE,
-                borderRadius: '12px',
+                borderRadius: '16px',
                 padding: '24px 20px 40px',
                 width: '100%',
                 maxHeight: '85dvh',
@@ -732,7 +732,7 @@ export default function Medications() {
           style={{
             background: SURFACE,
             border: `1px solid ${BORDER}`,
-            borderRadius: '12px',
+            borderRadius: '16px',
             marginBottom: '14px',
             overflow: 'hidden',
             boxShadow: SHADOW,
@@ -933,7 +933,7 @@ export default function Medications() {
               style={{
                 width: '56px',
                 height: '56px',
-                borderRadius: '12px',
+                borderRadius: '16px',
                 background: ACCENT_DIM,
                 border: `1px solid rgba(86,128,78,0.14)`,
                 display: 'flex',
@@ -974,7 +974,7 @@ export default function Medications() {
             style={{
               background: SURFACE,
               border: `1px solid ${BORDER}`,
-              borderRadius: '12px',
+              borderRadius: '16px',
               marginBottom: '12px',
               overflow: 'hidden',
               boxShadow: SHADOW,
@@ -988,7 +988,7 @@ export default function Medications() {
                 style={{
                   width: '40px',
                   height: '40px',
-                  borderRadius: '12px',
+                  borderRadius: '16px',
                   background: ACCENT_DIM,
                   border: `1px solid rgba(86,128,78,0.14)`,
                   display: 'flex',

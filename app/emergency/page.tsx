@@ -380,7 +380,7 @@ export default function Emergency() {
             // Chamfered: the call control wears the same shape everywhere it
             // appears, so it is recognisable before it is readable.
             padding: '22px',
-            borderRadius: '12px',
+            borderRadius: '16px',
             fontWeight: 900,
             fontSize: '22px',
             letterSpacing: '-0.3px',
@@ -440,7 +440,7 @@ export default function Emergency() {
               border: `1.5px solid ${listening ? RED : T1}`,
               color: listening ? RED : T1,
               padding: '17px',
-              borderRadius: '12px',
+              borderRadius: '16px',
               fontWeight: 700,
               fontSize: '16px',
               cursor: 'pointer',
@@ -480,7 +480,7 @@ export default function Emergency() {
               flex: 1,
               minWidth: 0,
               border: `1.5px solid ${T1}`,
-              borderRadius: '12px',
+              borderRadius: '16px',
               padding: '0 14px',
               minHeight: '54px',
               fontSize: '16px',
@@ -497,7 +497,7 @@ export default function Emergency() {
             style={{
               width: '54px',
               minHeight: '54px',
-              borderRadius: '12px',
+              borderRadius: '16px',
               border: 'none',
               background: typed.trim().length >= 3 ? T1 : '#B9B6AA',
               color: '#FFFFFF',

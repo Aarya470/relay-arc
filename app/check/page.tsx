@@ -82,7 +82,7 @@ const srcLabel: Record<Source, string> = {
 const panel: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1px solid rgba(20,20,19,0.14)',
-  borderRadius: '10px',
+  borderRadius: '16px',
   padding: '18px',
   marginBottom: '14px',
 }
@@ -102,7 +102,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
   background: primary ? tone : '#FFFFFF',
   color: primary ? '#FFFFFF' : tone,
   border: `1.5px solid ${tone}`,
-  borderRadius: '8px',
+  borderRadius: '16px',
   padding: '12px 18px',
   minHeight: '48px',
   fontWeight: 700,
@@ -114,7 +114,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
 const input: React.CSSProperties = {
   width: '100%',
   border: `1px solid ${LINE2}`,
-  borderRadius: '8px',
+  borderRadius: '16px',
   padding: '11px 12px',
   minHeight: '48px',
   fontSize: '16px',
@@ -776,7 +776,7 @@ export default function VitalsCheck() {
               display: 'block',
               background: PAPER,
               border: `1px solid ${LINE}`,
-              borderRadius: '6px',
+              borderRadius: '16px',
             }}
           />
 
@@ -804,7 +804,7 @@ export default function VitalsCheck() {
               style={{
                 margin: '12px 0 0',
                 padding: '10px 12px',
-                borderRadius: '6px',
+                borderRadius: '16px',
                 background: '#FBEDE8',
                 color: '#6B2410',
                 fontSize: '14px',
@@ -927,7 +927,7 @@ export default function VitalsCheck() {
               style={{
                 width: '100%',
                 minHeight: '128px',
-                borderRadius: '8px',
+                borderRadius: '16px',
                 border: `2px solid ${T1}`,
                 cursor: 'pointer',
                 fontFamily: 'inherit',

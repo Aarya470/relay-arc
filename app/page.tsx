@@ -65,7 +65,7 @@ function PhoneMockup() {
             transform: 'translateX(-50%)',
             width: '78px',
             height: '22px',
-            borderRadius: '12px',
+            borderRadius: '16px',
             background: '#141413',
           }}
         />
@@ -106,7 +106,7 @@ function PhoneMockup() {
         <div
           style={{
             background: RED,
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '18px 16px',
             display: 'flex',
             alignItems: 'center',
@@ -210,8 +210,8 @@ export default function Home() {
     background: primary ? T1 : 'transparent',
     color: primary ? '#FFFFFF' : T1,
     border: `1.5px solid ${T1}`,
-    borderRadius: '8px',
-    padding: '13px 20px',
+    borderRadius: '999px',
+    padding: '14px 24px',
     fontSize: '16px',
     fontWeight: 700,
     cursor: 'pointer',
@@ -224,7 +224,13 @@ export default function Home() {
     margin: '0 0 18px',
     letterSpacing: '-0.3px',
   }
-  const section: React.CSSProperties = { borderTop: `1px solid ${RULE}`, padding: '44px 0' }
+  const section: React.CSSProperties = {
+    background: '#FFFFFF',
+    borderRadius: '24px',
+    padding: '32px 28px',
+    margin: '0 0 20px',
+    boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
+  }
 
   return (
     <div style={{ background: PAGE, minHeight: '100dvh', color: T1 }}>
@@ -232,6 +238,7 @@ export default function Home() {
         .hp-wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
         .hp-hero { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: center; padding: 56px 0 64px; }
         .hp-nav-links { display: flex; gap: 22px; align-items: center; }
+        .hp-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
         @media (min-width: 481px) { .hp-mark-sm { display: none; } }
         @media (max-width: 480px) { .hp-name { display: none !important; } .hp-nav-links { gap: 14px; } .hp-nav-links button { font-size: 14px !important; } }
         @media (max-width: 760px) {
@@ -247,7 +254,11 @@ export default function Home() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '20px 0',
+            padding: '12px 20px',
+            margin: '16px 0 0',
+            background: '#FFFFFF',
+            borderRadius: '999px',
+            boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
           }}
         >
           <button
@@ -349,14 +360,14 @@ export default function Home() {
         {/* what it does */}
         <section style={section}>
           <h2 style={h2}>What it does</h2>
-          {FEATURES.map(([t, d]) => (
-            <div key={t} style={{ padding: '14px 0', borderTop: `1px solid ${RULE}` }}>
-              <p style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px' }}>{t}</p>
-              <p style={{ fontSize: '16px', lineHeight: 1.55, color: T2, maxWidth: '680px' }}>
-                {d}
-              </p>
-            </div>
-          ))}
+          <div className="hp-tiles">
+            {FEATURES.map(([t, d]) => (
+              <div key={t} style={{ background: '#EEF7EC', borderRadius: '18px', padding: '18px 18px' }}>
+                <p style={{ fontSize: '17px', fontWeight: 700, marginBottom: '6px' }}>{t}</p>
+                <p style={{ fontSize: '15px', lineHeight: 1.55, color: T2 }}>{d}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* how it works */}
@@ -417,8 +428,7 @@ export default function Home() {
         {/* footer */}
         <footer
           style={{
-            borderTop: `1px solid ${RULE}`,
-            padding: '32px 0 48px',
+            padding: '20px 4px 48px',
             fontSize: '14px',
             color: T3,
           }}
