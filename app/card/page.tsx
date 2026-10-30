@@ -421,7 +421,7 @@ export default function EmergencyCard() {
           }}
         >
           An emergency card a paramedic can read off your locked phone
-          <span style={{ color: CRIT }}>.</span>
+          .
         </h1>
         <p
           style={{

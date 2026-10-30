@@ -232,7 +232,7 @@ export default function Changelog() {
           >
             What changed, including
             <br />
-            what went wrong<span style={{ color: CRIT }}>.</span>
+            what went wrong.
           </h1>
           <p
             style={{

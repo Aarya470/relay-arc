@@ -206,7 +206,7 @@ export default function Login() {
                 marginBottom: 14,
               }}
             >
-              One more step. Check your email<span style={{ color: RED }}>.</span>
+              One more step. Check your email.
             </h1>
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.6, marginBottom: 10 }}>
               A confirmation link is on its way to <strong style={{ color: T1 }}>{sentTo}</strong>.
@@ -322,7 +322,7 @@ export default function Login() {
                 }}
               >
                 {isSignUp ? 'Create your profile' : 'Welcome back'}
-                <span style={{ color: RED }}>.</span>
+                .
               </motion.h1>
             </AnimatePresence>
             <p style={{ color: T2, fontSize: '14px', lineHeight: 1.55, marginBottom: '36px' }}>

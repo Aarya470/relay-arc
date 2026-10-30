@@ -144,7 +144,7 @@ export default function AuthCallback() {
                 marginBottom: 14,
               }}
             >
-              Your email is confirmed<span style={{ color: RED }}>.</span>
+              Your email is confirmed.
             </h1>
             <p style={{ color: T2, fontSize: 15, lineHeight: 1.6, marginBottom: 8 }}>
               {email ? (

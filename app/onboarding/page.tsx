@@ -240,7 +240,7 @@ export default function Onboarding() {
           }}
         >
           {meta.title}
-          <span style={{ color: RED }}>.</span>
+          .
         </h1>
         <p style={{ color: T2, fontSize: '14px', lineHeight: 1.55, marginBottom: '30px' }}>
           {meta.sub}

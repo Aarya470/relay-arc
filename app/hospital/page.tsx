@@ -217,7 +217,7 @@ export default function HospitalPortal() {
               marginBottom: '8px',
             }}
           >
-            ER dispatch board<span style={{ color: RED }}>.</span>
+            ER dispatch board.
           </h1>
           <p style={{ color: T2, fontSize: '14px', lineHeight: 1.6, marginBottom: '32px' }}>
             See incoming Relay patients before they arrive, and tell Relay your live capacity so

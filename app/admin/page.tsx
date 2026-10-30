@@ -177,7 +177,7 @@ export default function AdminPartners() {
               marginBottom: '8px',
             }}
           >
-            Partner network<span style={{ color: RED }}>.</span>
+            Partner network.
           </h1>
           <p style={{ color: T2, fontSize: '14px', lineHeight: 1.6, marginBottom: '30px' }}>
             Onboard hospitals, rotate access codes, and review the audit trail.

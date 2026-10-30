@@ -124,7 +124,7 @@ export default function DemoLauncher() {
             marginBottom: '12px',
           }}
         >
-          Run a full emergency, indoors<span style={{ color: RED }}>.</span>
+          Run a full emergency, indoors.
         </h1>
         <p style={{ color: T2, fontSize: '15px', lineHeight: 1.65, marginBottom: '30px' }}>
           A live demo can&apos;t rely on GPS in a conference room or a hospital being nearby. Demo
