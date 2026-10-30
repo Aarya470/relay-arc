@@ -1,3 +1,4 @@
+<!-- simple-ui -->
 # Relay Arc
 
 A free emergency web app for families who live far from a hospital.
