@@ -29,5 +29,5 @@ import { MotionConfig } from 'framer-motion'
  * a screenshot means what it looks like it means.
  */
 export default function Motion({ children }: { children: React.ReactNode }) {
-  return <MotionConfig reducedMotion="user">{children}</MotionConfig>
+  return <MotionConfig reducedMotion="always">{children}</MotionConfig>
 }

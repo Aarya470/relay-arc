@@ -49,16 +49,16 @@
 
      --text is 12.16:1. White surfaces sit 1.52:1 off the page, which is the
      intended effect: cards lift off it without needing a heavier border. */
-  --bg:        #B3DDAC;
-  --bg-2:      #95D08B;
-  --surface:   #FFFFFF;
-  --surface-2: #CEE9C9;
-  --surface-3: #8FCD84;
+  --bg: #b3ddac;
+  --bg-2: #95d08b;
+  --surface: #ffffff;
+  --surface-2: #cee9c9;
+  --surface-3: #8fcd84;
 
   /* Borders */
-  --border:        #98C890;
-  --border-mid:    #84BD7A;
-  --border-strong: #66AD59;
+  --border: #98c890;
+  --border-mid: #84bd7a;
+  --border-strong: #66ad59;
 
   /* Text — 12.16:1 and 4.56:1 on the green background. These stay neutral on
      purpose: tinting them green as well would leave nothing on the page that is
@@ -91,11 +91,11 @@
 
      --text-2 at 4.56:1 is the tightest pairing in the system. Anything that
      darkens the page further has to darken this with it. */
-  --text:   #141413;
-  --text-2: #5C5A52;
+  --text: #141413;
+  --text-2: #5c5a52;
   /* Kept as an alias so any stylesheet still naming it lands on a value that
      passes, rather than silently falling back to inherited colour. */
-  --text-3: #5C5A52;
+  --text-3: #5c5a52;
 
   /* Koala green — brand. --green for fills and large text (3.02:1),
      --green-deep for body text and white-on-green buttons (4.55:1 / 6.90:1).
@@ -107,20 +107,20 @@
      tints of each other, so a deeper page eats the contrast between them. These
      are the values that hold --green over the 3:1 large-text bar and
      --green-deep over 4.5:1 for body copy. */
-  --green:      #56804E;
-  --green-deep: #42623C;
-  --green-dim:  #344D2F;
-  --green-soft: rgba(86,128,78,0.09);
+  --green: #56804e;
+  --green-deep: #42623c;
+  --green-dim: #344d2f;
+  --green-soft: rgba(86, 128, 78, 0.09);
 
   /* Claude orange — FILL ONLY, dark ink on top. See note above. */
-  --orange:      #D97757;
-  --orange-soft: rgba(217,119,87,0.12);
+  --orange: #d97757;
+  --orange-soft: rgba(217, 119, 87, 0.12);
 
   /* Emergency / critical — 6.51:1 on cream, 6.86:1 with white on it.
      Still in the orange family, dark enough to read as danger. */
-  --crit:      #A33417;
-  --crit-dim:  #8F2E14;
-  --crit-soft: rgba(163,52,23,0.08);
+  --crit: #a33417;
+  --crit-dim: #8f2e14;
+  --crit-soft: rgba(163, 52, 23, 0.08);
 
   /* Warning / watch.
      --warn is #7C5200, moved down from #A87200 for a reason worth writing out.
@@ -152,21 +152,21 @@
 
      #A87200 remains only in the rgba soft fills below, which sit behind text
      rather than being text. */
-  --warn:      #7C5200;
-  --warn-text: #7C5200;
-  --warn-soft: rgba(168,114,0,0.10);
+  --warn: #7c5200;
+  --warn-text: #7c5200;
+  --warn-soft: rgba(168, 114, 0, 0.1);
 
   /* Legacy aliases — older rules still reference these names. Kept pointing at
      the new palette so nothing renders in the old blue-grey/red scheme. */
-  --red:      #A33417;
-  --red-dim:  #8F2E14;
-  --red-soft: rgba(163,52,23,0.08);
+  --red: #a33417;
+  --red-dim: #8f2e14;
+  --red-soft: rgba(163, 52, 23, 0.08);
   --red-glow: none;
-  --blue:      #42623C;
-  --blue-dim:  #344D2F;
-  --blue-soft: rgba(86,128,78,0.09);
-  --amber:      #7C5200;
-  --amber-soft: rgba(168,114,0,0.10);
+  --blue: #42623c;
+  --blue-dim: #344d2f;
+  --blue-soft: rgba(86, 128, 78, 0.09);
+  --amber: #7c5200;
+  --amber-soft: rgba(168, 114, 0, 0.1);
 
   /* ── The green page ───────────────────────────────────────────────────────
      #57945C. Lighter than the previous #4B8150, and getting there required a
@@ -187,14 +187,14 @@
      workaround. The emergency red and the warning amber only hold their 1.66:1
      luminance separation on a light surface. Putting every alert on a panel is
      what the palette needed anyway; the page colour just forced the issue. */
-  --page:      #57945C;
-  --page-2:    #3F7345;   /* deeper band, 1.55:1 off the page */
-  --page-rule: #9DC6A1;   /* hairline on the page */
-  --panel:     #FFFFFF;   /* small copy lives here */
-  --panel-2:   #EDF4EC;   /* softer panel, still 16.46:1 with ink */
-  --on:        #FFFFFF;   /* LARGE type only -- 3.62:1 */
-  --on-3:      #E6EBE6;   /* 3:1, large decorative type only */
-  --coral:     #F9E6E0;
+  --page: #57945c;
+  --page-2: #3f7345; /* deeper band, 1.55:1 off the page */
+  --page-rule: #9dc6a1; /* hairline on the page */
+  --panel: #ffffff; /* small copy lives here */
+  --panel-2: #edf4ec; /* softer panel, still 16.46:1 with ink */
+  --on: #ffffff; /* LARGE type only -- 3.62:1 */
+  --on-3: #e6ebe6; /* 3:1, large decorative type only */
+  --coral: #f9e6e0;
 
   /* Radius. Two values, and the reasoning is in lib/shape.ts.
      There used to be five here and twenty-two more scattered across 45 files as
@@ -213,12 +213,18 @@
      genuinely circles. Those are clip-paths, not radii, so this change does
      not soften them. */
   --r-sm: 14px;
-  --r:    20px;
+  --r: 20px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   background: var(--bg);
@@ -242,26 +248,40 @@ body {
 }
 
 /* Actual monospace, for content where character shapes carry meaning. */
-code, kbd, pre, .font-code {
+code,
+kbd,
+pre,
+.font-code {
   font-family: var(--font-code), 'JetBrains Mono', ui-monospace, monospace;
 }
 
-::-webkit-scrollbar { width: 0; display: none; }
+::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
 
 ::selection {
-  background: rgba(86,128,78,0.14);
+  background: rgba(86, 128, 78, 0.14);
   color: var(--text);
 }
 
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
 }
 
-input::placeholder, textarea::placeholder { color: var(--text-3); }
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-3);
+}
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
 
 /* ── Design tokens ── */
 .card {
@@ -287,17 +307,16 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 /* ── Skeleton shimmer ── */
 @keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--surface) 25%,
-    var(--surface-2) 50%,
-    var(--surface) 75%
-  );
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite;
   border-radius: var(--r-sm);
@@ -305,19 +324,74 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 /* ── Pulse ring for live indicators ── */
 @keyframes pulse-ring {
-  0%   { transform: scale(0.85); opacity: 1; }
-  70%  { transform: scale(1.5); opacity: 0; }
-  100% { transform: scale(1.5); opacity: 0; }
+  0% {
+    transform: scale(0.85);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }
 
 /* ── Page fade-in ── */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.page-enter { animation: fadeIn 0.3s ease both; }
+.page-enter {
+  animation: fadeIn 0.3s ease both;
+}
 
 /* ── Plain look ────────────────────────────────────────────────────────────
    No drop shadows or glows anywhere. Edges come from borders and spacing. */
-*, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }
+*,
+*::before,
+*::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* ── Simple look (simple-ui branch) ─────────────────────────────────────────
+   One plain style everywhere: no capitals-with-spacing labels, no code-style
+   fonts outside real code, no gradients, the same rounded corners on every
+   control, and no fades or slides. */
+*:not(pre):not(code):not(pre *):not(code *) {
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+[style*='monospace']:not(pre):not(code) {
+  font-family: inherit !important;
+}
+[style*='gradient'] {
+  background-image: none !important;
+}
+button,
+input,
+select,
+textarea,
+a[role='button'] {
+  border-radius: 8px !important;
+}
+*,
+*::before,
+*::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+.animate-spin {
+  animation-duration: 1s !important;
+  animation-iteration-count: infinite !important;
+}
