@@ -13,10 +13,10 @@ const sans = 'inherit'
 
 function Frame({ children, vb, title }: { children: React.ReactNode; vb: string; title: string }) {
   return (
-    <figure style={{ margin: 0, border: `1px solid ${INK}`, background: PAPER }}>
+    <figure style={{ margin: 0, border: `1px solid rgba(20,20,19,0.15)`, background: PAPER }}>
       <figcaption
         style={{
-          borderBottom: `1px solid ${INK}`,
+          borderBottom: `1px solid rgba(20,20,19,0.15)`,
           padding: '9px 14px',
           color: INK,
           fontSize: '13px',

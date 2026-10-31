@@ -92,10 +92,16 @@ export default function RiskDemo() {
   const levelColor = result?.level === 'high' ? RED : result?.level === 'medium' ? AMBER : GREEN
 
   return (
-    <div style={{ border: `2px solid ${T1}`, background: '#FFFFFF' }}>
+    <div
+      style={{
+        border: `1px solid rgba(20,20,19,0.15)`,
+        background: '#FFFFFF',
+        borderRadius: '4px',
+      }}
+    >
       <div
         style={{
-          borderBottom: `1px solid ${T1}`,
+          borderBottom: `1px solid rgba(20,20,19,0.15)`,
           padding: '11px 16px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -197,7 +203,13 @@ export default function RiskDemo() {
 
         {/* verdict */}
         {result && (
-          <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '16px', marginTop: '22px' }}>
+          <div
+            style={{
+              borderTop: `1px solid rgba(20,20,19,0.15)`,
+              paddingTop: '16px',
+              marginTop: '22px',
+            }}
+          >
             <div
               style={{
                 display: 'flex',

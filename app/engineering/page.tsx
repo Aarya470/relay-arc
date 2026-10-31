@@ -27,13 +27,20 @@ const BORDER = '#7EB382',
   BG2 = '#CEE9C9'
 const RED = '#A33417',
   ACCENT = '#42623C'
-const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
+const WRAP = {
+  maxWidth: '1120px',
+  margin: '0 auto',
+  background: '#FFFFFF',
+  borderRadius: '4px',
+  padding: 'clamp(22px, 4vw, 40px)',
+  boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
+} as const
 
 function DemoSkeleton({ label }: { label: string }) {
   return (
     <div
       style={{
-        border: `2px solid ${T1}`,
+        border: `1px solid rgba(20,20,19,0.15)`,
         background: BG2,
         height: '340px',
         display: 'flex',
@@ -48,7 +55,7 @@ function DemoSkeleton({ label }: { label: string }) {
 
 function SectionHead({ title }: { title: string }) {
   return (
-    <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '14px', marginBottom: '24px' }}>
+    <div style={{ paddingTop: '0', marginBottom: '14px' }}>
       <span style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{title}</span>
     </div>
   )
@@ -59,9 +66,9 @@ function H2({ children }: { children: React.ReactNode }) {
     <h2
       style={{
         color: T1,
-        fontSize: 'clamp(28px, 4.6vw, 50px)',
+        fontSize: 'clamp(24px, 3.4vw, 32px)',
         fontWeight: 800,
-        letterSpacing: '-0.04em',
+        letterSpacing: '-0.02em',
         lineHeight: 1.02,
         marginBottom: '20px',
         maxWidth: '860px',
@@ -104,11 +111,11 @@ function Step({ n, title, body }: { n: string; title: string; body: string }) {
 
 function Stat({ k, v, sub }: { k: string; v: string; sub?: string }) {
   return (
-    <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '10px' }}>
+    <div style={{ borderTop: `1px solid rgba(20,20,19,0.15)`, paddingTop: '10px' }}>
       <p
         style={{
           color: T1,
-          fontSize: 'clamp(24px, 3.4vw, 38px)',
+          fontSize: 'clamp(22px, 3vw, 30px)',
           fontWeight: 800,
           letterSpacing: '-0.03em',
           lineHeight: 1,
@@ -133,7 +140,7 @@ export default function Engineering() {
       <SiteHeader />
 
       {/* top */}
-      <section style={{ padding: '72px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <p style={{ color: T2, fontSize: '15px', fontWeight: 600, marginBottom: '18px' }}>
             How we built it
@@ -141,7 +148,7 @@ export default function Engineering() {
           <h1
             style={{
               color: T1,
-              fontSize: 'clamp(36px, 6.4vw, 72px)',
+              fontSize: 'clamp(32px, 5vw, 50px)',
               fontWeight: 800,
               lineHeight: 1.02,
               letterSpacing: '-0.03em',
@@ -181,7 +188,7 @@ export default function Engineering() {
       </section>
 
       {/* triage */}
-      <section style={{ padding: '84px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <SectionHead title="Figuring out what's wrong" />
           <H2>It has to work even when there&apos;s no signal.</H2>
@@ -235,13 +242,19 @@ export default function Engineering() {
 
           <div
             style={{
-              border: `2px solid ${T1}`,
+              border: `1px solid rgba(20,20,19,0.15)`,
               marginBottom: '20px',
               borderRadius: '4px',
               overflow: 'hidden',
             }}
           >
-            <div style={{ borderBottom: `1px solid ${T1}`, padding: '11px 16px', background: BG2 }}>
+            <div
+              style={{
+                borderBottom: `1px solid rgba(20,20,19,0.15)`,
+                padding: '11px 16px',
+                background: BG2,
+              }}
+            >
               <span style={{ color: T1, fontSize: '14px', fontWeight: 700 }}>
                 Our model vs. a big online AI, on 49 sentences neither had seen
               </span>
@@ -349,7 +362,9 @@ export default function Engineering() {
             </p>
           </div>
 
-          <div style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: '4px' }}>
+          <div
+            style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: '4px' }}
+          >
             <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '10px' }}>
               What went wrong the first time
             </p>
@@ -377,7 +392,7 @@ export default function Engineering() {
       </section>
 
       {/* risk */}
-      <section style={{ padding: '84px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <SectionHead title="How serious is it" />
           <H2>A warning is only useful if a doctor can check it.</H2>
@@ -477,7 +492,7 @@ export default function Engineering() {
       </section>
 
       {/* hospital */}
-      <section style={{ padding: '84px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <SectionHead title="Picking a hospital" />
           <H2>The closest hospital isn&apos;t always the right one.</H2>
@@ -489,13 +504,19 @@ export default function Engineering() {
 
           <div
             style={{
-              border: `2px solid ${T1}`,
+              border: `1px solid rgba(20,20,19,0.15)`,
               marginBottom: '26px',
               borderRadius: '4px',
               overflow: 'hidden',
             }}
           >
-            <div style={{ borderBottom: `1px solid ${T1}`, padding: '11px 16px', background: BG2 }}>
+            <div
+              style={{
+                borderBottom: `1px solid rgba(20,20,19,0.15)`,
+                padding: '11px 16px',
+                background: BG2,
+              }}
+            >
               <span style={{ color: T1, fontSize: '14px', fontWeight: 700 }}>What it looks at</span>
             </div>
             <div style={{ padding: '4px 16px 14px', background: '#fff' }}>
@@ -560,7 +581,7 @@ export default function Engineering() {
       </section>
 
       {/* navigation */}
-      <section style={{ padding: '84px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <SectionHead title="Directions" />
           <H2>Sending you to another map app loses everything.</H2>
@@ -578,7 +599,7 @@ export default function Engineering() {
       </section>
 
       {/* limits */}
-      <section style={{ padding: '84px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <SectionHead title="What it can't do yet" />
           <H2>Here&apos;s what still needs work.</H2>
@@ -628,13 +649,13 @@ export default function Engineering() {
       </section>
 
       {/* end */}
-      <section style={{ padding: '80px 24px 100px' }}>
+      <section style={{ padding: '20px 24px 60px' }}>
         <div style={WRAP}>
-          <div style={{ borderTop: `2px solid ${T1}`, paddingTop: '30px' }}>
+          <div>
             <h2
               style={{
                 color: T1,
-                fontSize: 'clamp(28px, 4.6vw, 48px)',
+                fontSize: 'clamp(24px, 3.4vw, 32px)',
                 fontWeight: 800,
                 letterSpacing: '-0.03em',
                 lineHeight: 1.05,

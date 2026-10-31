@@ -17,11 +17,18 @@ const ORANGE = '#D97757',
   CRIT = '#A33417',
   WARN = '#7C5200'
 const mono = 'var(--font-mono, monospace)'
-const WRAP = { maxWidth: '1120px', margin: '0 auto' } as const
+const WRAP = {
+  maxWidth: '1120px',
+  margin: '0 auto',
+  background: '#FFFFFF',
+  borderRadius: '4px',
+  padding: 'clamp(22px, 4vw, 40px)',
+  boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
+} as const
 
 function Head({ title }: { n?: string; title: string; right?: string }) {
   return (
-    <div style={{ borderTop: `2px solid ${INK}`, paddingTop: '12px', marginBottom: '26px' }}>
+    <div style={{ paddingTop: '0', marginBottom: '14px' }}>
       <span style={{ color: INK, fontSize: '14px', fontWeight: 700 }}>{title}</span>
     </div>
   )
@@ -32,9 +39,9 @@ function H2({ children }: { children: React.ReactNode }) {
     <h2
       style={{
         color: INK,
-        fontSize: 'clamp(27px, 4.4vw, 48px)',
+        fontSize: 'clamp(24px, 3.4vw, 32px)',
         fontWeight: 800,
-        letterSpacing: '-0.04em',
+        letterSpacing: '-0.02em',
         lineHeight: 1.03,
         marginBottom: '18px',
         maxWidth: '860px',
@@ -90,8 +97,8 @@ function Grid({ children }: { children: React.ReactNode }) {
 }
 function Panel({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ border: `1px solid ${INK}`, background: '#FFFFFF' }}>
-      <div style={{ borderBottom: `1px solid ${INK}`, padding: '9px 14px' }}>
+    <div style={{ border: `1px solid rgba(20,20,19,0.15)`, background: '#FFFFFF' }}>
+      <div style={{ borderBottom: `1px solid rgba(20,20,19,0.15)`, padding: '9px 14px' }}>
         <span style={{ color: INK, fontSize: '13px', fontWeight: 700 }}>{label}</span>
       </div>
       <div style={{ padding: '18px 16px' }}>{children}</div>
@@ -107,15 +114,15 @@ export default function Features() {
       <SiteHeader />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section style={{ padding: '78px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <h1
             style={{
               color: INK,
-              fontSize: 'clamp(38px, 7.4vw, 88px)',
+              fontSize: 'clamp(32px, 5vw, 50px)',
               fontWeight: 800,
               lineHeight: 0.96,
-              letterSpacing: '-0.045em',
+              letterSpacing: '-0.02em',
               marginBottom: '28px',
               maxWidth: '940px',
             }}
@@ -141,7 +148,7 @@ export default function Features() {
       </section>
 
       {/* ── 01 TRIAGE ─────────────────────────────────────────────────────── */}
-      <section style={{ padding: '88px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <Head title="Working out what is wrong" />
           <H2>The phone makes the first call, even with no signal.</H2>
@@ -321,7 +328,7 @@ export default function Features() {
       </section>
 
       {/* ── 02 DISPATCH ───────────────────────────────────────────────────── */}
-      <section style={{ padding: '88px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <Head title="Choosing a hospital" />
           <H2>The nearest hospital can be the slowest way to get treated.</H2>
@@ -426,7 +433,7 @@ export default function Features() {
       </section>
 
       {/* ── 03 RISK ───────────────────────────────────────────────────────── */}
-      <section style={{ padding: '88px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <Head title="How urgent it is" />
           <H2>A single reading tells you less than the trend.</H2>
@@ -542,7 +549,7 @@ export default function Features() {
       </section>
 
       {/* ── 04 THE RELAY ──────────────────────────────────────────────────── */}
-      <section style={{ padding: '88px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <Head title="Telling everyone else" />
           <H2>Your family, the hospital and a driver find out together.</H2>
@@ -612,7 +619,7 @@ export default function Features() {
       </section>
 
       {/* ── 05 NAVIGATION ─────────────────────────────────────────────────── */}
-      <section style={{ padding: '88px 24px 0' }}>
+      <section style={{ padding: '20px 24px 0' }}>
         <div style={WRAP}>
           <Head title="Getting there" />
           <H2>Directions are built in, so nobody has to switch apps.</H2>
@@ -671,13 +678,13 @@ export default function Features() {
       </section>
 
       {/* end */}
-      <section style={{ padding: '80px 24px 100px' }}>
+      <section style={{ padding: '20px 24px 60px' }}>
         <div style={WRAP}>
-          <div style={{ borderTop: `2px solid ${INK}`, paddingTop: '30px' }}>
+          <div>
             <h2
               style={{
                 color: INK,
-                fontSize: 'clamp(28px, 4.6vw, 48px)',
+                fontSize: 'clamp(24px, 3.4vw, 32px)',
                 fontWeight: 800,
                 letterSpacing: '-0.03em',
                 lineHeight: 1.05,
