@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 
 const admin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -7,6 +8,8 @@ const admin = createClient(
 )
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(clientKey(req, 'hospital-code'), 20, 15 * 60_000)
+  if (!limited.ok) return tooManyRequests(limited)
   try {
     const { code } = await req.json()
     if (!code || typeof code !== 'string' || code.length > 64) {

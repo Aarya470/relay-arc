@@ -289,6 +289,25 @@ export default function Checkin() {
         </div>
       </div>
 
+      <p
+        role="note"
+        style={{
+          margin: 0,
+          padding: '8px 16px',
+          fontSize: '12.5px',
+          lineHeight: 1.5,
+          color: T1,
+          background: '#FFF8E6',
+          borderBottom: `1px solid ${BORDER}`,
+        }}
+      >
+        You are chatting with an AI, not a person. Your messages are sent to Groq to write the
+        replies. Not for emergencies: call 911.{' '}
+        <a href="/privacy" style={{ color: T1 }}>
+          Privacy
+        </a>
+      </p>
+
       {/* Messages */}
       <div
         style={{

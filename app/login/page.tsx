@@ -100,7 +100,9 @@ export default function Login() {
               : error.message,
           )
         } else {
-          router.push('/dashboard')
+          // Only same-site paths, so ?next= can't be used to send people elsewhere.
+          const next = new URLSearchParams(window.location.search).get('next') || ''
+          router.push(/^\/(?!\/)[\w\-/]*$/.test(next) ? next : '/dashboard')
         }
       }
     } catch (e) {

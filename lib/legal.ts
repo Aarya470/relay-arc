@@ -51,7 +51,9 @@ We use other companies to run the service. Each of them has its own privacy poli
 • Resend. Sends account email such as the signup confirmation. Receives your email address.
 • Jitsi and 8x8. Video consultations, if you use one. Receives the call itself.
 • OpenStreetMap Nominatim and OSRM. Address lookup and driving directions. Receives location during an emergency.
-• MapLibre and map tile providers. Draws the map. Receives the area you are looking at.
+• MapLibre and map tile providers (OpenFreeMap, CARTO, OpenStreetMap). Draws the map. Receives the area you are looking at and your IP address.
+• TomTom. Live traffic for ranking hospitals, when enabled. Receives the hospital locations being compared, not your identity.
+• YouTube (privacy-enhanced mode). Only if you press play on the demonstration video. Receives your IP address and viewing activity from that point.
 
 We do not sell personal information, and we do not share it for cross-context behavioural advertising. If you are a California resident, that means there is nothing for you to opt out of on that front.
 

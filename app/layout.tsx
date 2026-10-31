@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
 import MeetingAlert from '@/components/MeetingAlert'
 import LegalModal from '@/components/LegalModal'
+import AuthGate from '@/components/AuthGate'
 import Analytics from '@/components/Analytics'
 import { SITE_URL } from '@/lib/site'
 import Motion from '@/components/Motion'
@@ -93,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <Motion>
           <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
-            {children}
+            <AuthGate>{children}</AuthGate>
             <LegalModal />
             <Analytics />
             <MeetingAlert />
