@@ -262,20 +262,6 @@ export default function AppointmentSummary() {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div
-                  style={{
-                    width: '22px',
-                    height: '22px',
-                    borderRadius: '14px',
-                    background: 'rgba(168,114,0,0.12)',
-                    border: '1px solid rgba(168,114,0,0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Sparkles size={11} color="#7C5200" />
-                </div>
                 <p
                   style={{
                     color: 'rgba(237,234,224,0.4)',

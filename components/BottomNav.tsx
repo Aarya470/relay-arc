@@ -1,79 +1,47 @@
 'use client'
+// Bottom bar for the signed-in app: four text tabs and a red SOS button.
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, MessageCircle, LayoutList, Activity, Phone } from '@/lib/plain-icons'
-import { motion } from 'framer-motion'
-import { octagon } from '@/lib/shape'
 
-// ─── Design tokens ────────────────────────────────────────────────────────────
-const ACCENT = '#42623C'
+const INK = '#141413'
+const MUTED = '#5C5A52'
 const RED = '#A33417'
-const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const ACCENT = '#42623C'
+const LINE = 'rgba(20,20,19,0.15)'
 
 const tabs = [
-  { href: '/dashboard', icon: Home, label: 'Home' },
-  { href: '/checkin', icon: MessageCircle, label: 'Check-in' },
-  { href: '/medications', icon: LayoutList, label: 'Meds' },
-  { href: '/symptoms', icon: Activity, label: 'Symptoms' },
+  { href: '/dashboard', label: 'Home' },
+  { href: '/checkin', label: 'Check-in' },
+  { href: '/medications', label: 'Meds' },
+  { href: '/symptoms', label: 'Symptoms' },
 ]
 
 const HIDE_ON = ['/login', '/onboarding', '/care-team', '/nurse', '/driver', '/transport']
 
-// Hoisted to module scope, deliberately.
-function TabButton({
-  tab,
-  active,
-  onClick,
-}: {
-  tab: (typeof tabs)[0]
-  active: boolean
-  onClick: () => void
-}) {
+function Tab({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
-    <motion.button
-      whileTap={{ scale: 0.88 }}
+    <button
       onClick={onClick}
-      aria-label={tab.label}
       aria-current={active ? 'page' : undefined}
       style={{
         flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '3px',
+        minWidth: 0,
+        height: '100%',
         background: 'none',
         border: 'none',
+        borderTop: `3px solid ${active ? ACCENT : 'transparent'}`,
+        color: active ? INK : MUTED,
+        fontSize: '13px',
+        fontWeight: active ? 700 : 500,
+        fontFamily: 'inherit',
         cursor: 'pointer',
-        padding: '8px 4px',
-        position: 'relative',
+        padding: '0 2px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
       }}
     >
-      {active && (
-        <motion.div
-          layoutId="nav-indicator"
-          style={{
-            position: 'absolute',
-            inset: '4px 10%',
-            background: 'rgba(86,128,78,0.07)',
-            borderRadius: '14px',
-          }}
-          transition={{ type: 'spring', stiffness: 500, damping: 36 }}
-        />
-      )}
-      <tab.icon size={20} color={active ? ACCENT : T3} strokeWidth={active ? 2.2 : 1.7} />
-      <span
-        style={{
-          fontSize: '10px',
-          fontWeight: active ? 700 : 500,
-          color: active ? ACCENT : T3,
-          letterSpacing: '0.1px',
-          position: 'relative',
-        }}
-      >
-        {tab.label}
-      </span>
-    </motion.button>
+      {label}
+    </button>
   )
 }
 
@@ -101,10 +69,8 @@ export default function BottomNav() {
         bottom: 0,
         left: 0,
         right: 0,
-        background: 'rgba(255,255,255,0.94)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderTop: `1px solid ${BORDER}`,
+        background: '#FFFFFF',
+        borderTop: `1px solid ${LINE}`,
         zIndex: 50,
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
@@ -115,24 +81,22 @@ export default function BottomNav() {
           alignItems: 'stretch',
           maxWidth: '600px',
           margin: '0 auto',
-          height: '62px',
+          height: '56px',
         }}
       >
-        <TabButton
-          tab={tabs[0]}
+        <Tab
+          label={tabs[0].label}
           active={isActive(tabs[0].href)}
           onClick={() => router.push(tabs[0].href)}
         />
-        <TabButton
-          tab={tabs[1]}
+        <Tab
+          label={tabs[1].label}
           active={isActive(tabs[1].href)}
           onClick={() => router.push(tabs[1].href)}
         />
 
-        {/* SOS — center */}
-        <motion.a
+        <a
           href="/emergency"
-          whileTap={{ scale: 0.9 }}
           aria-label="Emergency SOS"
           onClick={() => {
             if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
@@ -140,55 +104,28 @@ export default function BottomNav() {
             }
           }}
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '3px',
-            padding: '0 22px',
-            cursor: 'pointer',
-            textDecoration: 'none',
+            alignSelf: 'center',
             flexShrink: 0,
+            margin: '0 6px',
+            padding: '9px 16px',
+            background: RED,
+            color: '#FFFFFF',
+            borderRadius: '4px',
+            fontSize: '15px',
+            fontWeight: 800,
+            textDecoration: 'none',
           }}
         >
-          <div
-            style={{
-              width: '48px',
-              height: '48px',
-              // Stop-sign octagon. The one control on this bar that is not a plain
-              // icon, findable by outline when somebody cannot focus on a label.
-              borderRadius: '50%',
-              background: RED,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '-10px',
-            }}
-          >
-            <Phone size={19} color="white" strokeWidth={2.2} />
-          </div>
-          <span
-            style={{
-              fontSize: '9px',
-              fontWeight: 900,
-              color: RED,
-              letterSpacing: '1.5px',
-              fontFamily: 'inherit',
-              marginTop: '-1px',
-              position: 'relative',
-            }}
-          >
-            SOS
-          </span>
-        </motion.a>
+          SOS
+        </a>
 
-        <TabButton
-          tab={tabs[2]}
+        <Tab
+          label={tabs[2].label}
           active={isActive(tabs[2].href)}
           onClick={() => router.push(tabs[2].href)}
         />
-        <TabButton
-          tab={tabs[3]}
+        <Tab
+          label={tabs[3].label}
           active={isActive(tabs[3].href)}
           onClick={() => router.push(tabs[3].href)}
         />

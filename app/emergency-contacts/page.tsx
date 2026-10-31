@@ -310,21 +310,6 @@ export default function EmergencyContacts() {
 
         {contacts.length === 0 && !showAdd && (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <div
-              style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '50%',
-                background: 'rgba(163,52,23,0.08)',
-                border: '1px solid rgba(163,52,23,0.18)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 12px',
-              }}
-            >
-              <User size={22} color="rgba(163,52,23,0.5)" />
-            </div>
             <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '16px' }}>
               No emergency contacts yet
             </p>

@@ -272,21 +272,6 @@ export default function TransportRequest() {
                   textAlign: 'center',
                 }}
               >
-                <div
-                  style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '4px',
-                    background: 'rgba(86,128,78,0.10)',
-                    border: '1px solid rgba(86,128,78,0.18)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px',
-                  }}
-                >
-                  <MapPin size={24} color="#42623C" />
-                </div>
                 <p
                   style={{
                     color: '#141413',
@@ -475,23 +460,6 @@ export default function TransportRequest() {
               animate={{ opacity: 1 }}
               style={{ textAlign: 'center', paddingTop: '40px' }}
             >
-              <motion.div
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  background: 'rgba(86,128,78,0.10)',
-                  border: '2px solid rgba(86,128,78,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 24px',
-                }}
-              >
-                <Car size={32} color="#42623C" />
-              </motion.div>
               <h2
                 style={{
                   color: '#141413',
@@ -623,21 +591,6 @@ export default function TransportRequest() {
                   marginBottom: '14px',
                 }}
               >
-                <div
-                  style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '4px',
-                    background: 'rgba(86,128,78,0.12)',
-                    border: '1px solid rgba(86,128,78,0.22)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 14px',
-                  }}
-                >
-                  <CheckCircle size={26} color="#42623C" />
-                </div>
                 <p
                   style={{
                     color: '#42623C',

@@ -727,20 +727,6 @@ export default function Appointments() {
             gap: '14px',
           }}
         >
-          <div
-            style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '4px',
-              background: 'rgba(255,255,255,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <Calendar size={20} color="white" />
-          </div>
           <div>
             <p
               style={{
@@ -765,21 +751,6 @@ export default function Appointments() {
 
         {appointments.length === 0 && !loading && (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
-            <div
-              style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '4px',
-                background: '#F2F0E8',
-                border: '1px solid #98C890',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 12px',
-              }}
-            >
-              <Calendar size={20} color="#5C5A52" />
-            </div>
             <p style={{ color: '#5C5A52', fontSize: '13px' }}>No appointments yet</p>
           </div>
         )}

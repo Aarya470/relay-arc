@@ -654,20 +654,6 @@ export default function VitalsPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(163,52,23,0.12)',
-                  border: '1px solid rgba(163,52,23,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Heart size={14} color="#A33417" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Heart rate</p>
                 <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
@@ -714,20 +700,6 @@ export default function VitalsPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(86,128,78,0.12)',
-                  border: '1px solid rgba(86,128,78,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Activity size={14} color="#42623C" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>
                   Blood pressure
@@ -784,20 +756,6 @@ export default function VitalsPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(86,128,78,0.12)',
-                  border: '1px solid rgba(86,128,78,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Droplets size={14} color="#42623C" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Oxygen sat.</p>
                 <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
@@ -835,20 +793,6 @@ export default function VitalsPage() {
           {/* Resp rate */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(168,114,0,0.12)',
-                  border: '1px solid rgba(168,114,0,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Wind size={14} color="#7C5200" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>
                 <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>

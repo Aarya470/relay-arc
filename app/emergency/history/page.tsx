@@ -190,21 +190,6 @@ export default function EmergencyHistoryPage() {
               textAlign: 'center',
             }}
           >
-            <div
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '4px',
-                background: 'rgba(163,52,23,0.10)',
-                border: '1px solid rgba(163,52,23,0.18)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-              }}
-            >
-              <AlertCircle size={28} color="#A33417" />
-            </div>
             <p style={{ color: '#141413', fontWeight: 700, fontSize: '18px', marginBottom: '8px' }}>
               No emergency history
             </p>

@@ -929,21 +929,6 @@ export default function Medications() {
 
         {medications.length === 0 && (
           <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <div
-              style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '4px',
-                background: ACCENT_DIM,
-                border: `1px solid rgba(86,128,78,0.14)`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-              }}
-            >
-              <Pill size={22} color={ACCENT} />
-            </div>
             <p style={{ color: T2, fontSize: '14px', marginBottom: '16px' }}>
               No medications added yet
             </p>
@@ -984,21 +969,6 @@ export default function Medications() {
             <div
               style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
             >
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '4px',
-                  background: ACCENT_DIM,
-                  border: `1px solid rgba(86,128,78,0.14)`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                <Pill size={16} color={ACCENT} />
-              </div>
               <div style={{ flex: 1 }}>
                 <p
                   style={{ color: T1, fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}

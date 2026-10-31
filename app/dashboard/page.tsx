@@ -1109,18 +1109,20 @@ export default function Dashboard() {
               whileTap={{ scale: 0.9 }}
               onClick={() => router.push('/settings')}
               style={{
-                width: '36px',
                 height: '36px',
-                borderRadius: '14px',
+                padding: '0 12px',
+                borderRadius: '4px',
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                color: T1,
+                fontSize: '14px',
+                fontWeight: 600,
+                fontFamily: 'inherit',
                 cursor: 'pointer',
+                whiteSpace: 'nowrap',
               }}
             >
-              <Settings size={15} color={T2} />
+              Settings
             </motion.button>
           </div>
         </div>
@@ -1270,19 +1272,6 @@ export default function Dashboard() {
             >
               {/* An octagon, because that is the stop sign, and it is the only
                   shape in this app that means emergency. Nothing else wears it. */}
-              <div
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.22)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Phone size={24} color="white" strokeWidth={2} />
-              </div>
             </div>
           </motion.button>
         </motion.div>

@@ -901,21 +901,6 @@ function RoutingPage() {
         }}
       >
         {/* Red phone icon in glowing circle */}
-        <div
-          style={{
-            width: '72px',
-            height: '72px',
-            borderRadius: '50%',
-            background: T.redSoft,
-            border: `1px solid rgba(163,52,23,0.25)`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: T.redGlow,
-          }}
-        >
-          <Phone size={30} color={T.red} />
-        </div>
 
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <p

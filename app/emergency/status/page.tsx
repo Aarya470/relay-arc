@@ -186,22 +186,6 @@ export default function EmergencyStatus() {
               gap: '12px',
             }}
           >
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '14px',
-                flexShrink: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background:
-                  action.color === 'green' ? 'rgba(86,128,78,0.12)' : 'rgba(86,128,78,0.12)',
-                border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.25)' : 'rgba(86,128,78,0.22)'}`,
-              }}
-            >
-              <CheckCircle size={15} color={action.color === 'green' ? '#42623C' : '#42623C'} />
-            </div>
             <div style={{ flex: 1 }}>
               <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
               <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>
@@ -233,21 +217,6 @@ export default function EmergencyStatus() {
             gap: '12px',
           }}
         >
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '14px',
-              background: 'rgba(86,128,78,0.12)',
-              border: '1px solid rgba(86,128,78,0.22)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <Navigation size={16} color="#42623C" />
-          </div>
           <div style={{ flex: 1 }}>
             <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>
               Turn right onto County Rd
