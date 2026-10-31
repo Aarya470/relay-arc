@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Plus_Jakarta_Sans, Nunito, JetBrains_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
 import { Toaster } from '@/components/ui/sonner'
@@ -10,31 +10,29 @@ import Analytics from '@/components/Analytics'
 import { SITE_URL } from '@/lib/site'
 import Motion from '@/components/Motion'
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
-})
+// Fonts are bundled with the app (app/fonts) instead of fetched from Google at
+// build time, so a Google Fonts hiccup can no longer fail a deploy.
+const jakartaFiles = [
+  { path: './fonts/PlusJakartaSans-400.ttf', weight: '400', style: 'normal' },
+  { path: './fonts/PlusJakartaSans-500.ttf', weight: '500', style: 'normal' },
+  { path: './fonts/PlusJakartaSans-600.ttf', weight: '600', style: 'normal' },
+  { path: './fonts/PlusJakartaSans-700.ttf', weight: '700', style: 'normal' },
+  { path: './fonts/PlusJakartaSans-800.ttf', weight: '800', style: 'normal' },
+]
 
-// --font-mono is a misnomer now and the name is kept on purpose: it is read by well over a
-// hundred inline `fontFamily: var(--font-mono, monospace)` styles across the app, and
-// renaming it would mean touching every one of them to change a typeface.
-const mono = Nunito({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
-})
+const jakarta = localFont({ src: jakartaFiles, variable: '--font-sans', display: 'swap' })
 
-// Kept for the few places that need real monospace rather than the label look:
-// an opaque ingest token, where being able to tell 0 from O and 1 from l is the
-// entire point of the typeface.
-const code = JetBrains_Mono({
-  subsets: ['latin'],
+// --font-mono is read by many inline styles; it now points at the same plain font.
+const mono = localFont({ src: jakartaFiles, variable: '--font-mono', display: 'swap' })
+
+// Real monospace for the few places that need it (an ingest token).
+const code = localFont({
+  src: [
+    { path: './fonts/JetBrainsMono-400.ttf', weight: '400', style: 'normal' },
+    { path: './fonts/JetBrainsMono-700.ttf', weight: '700', style: 'normal' },
+  ],
   variable: '--font-code',
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
 })
 
 // Without this a phone lays the page out at 980px and shrinks it, which is why a site can
