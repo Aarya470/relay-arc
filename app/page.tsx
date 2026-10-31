@@ -65,7 +65,7 @@ function PhoneMockup() {
             transform: 'translateX(-50%)',
             width: '78px',
             height: '22px',
-            borderRadius: '16px',
+            borderRadius: '4px',
             background: '#141413',
           }}
         />
@@ -106,7 +106,7 @@ function PhoneMockup() {
         <div
           style={{
             background: RED,
-            borderRadius: '16px',
+            borderRadius: '4px',
             padding: '18px 16px',
             display: 'flex',
             alignItems: 'center',
@@ -210,7 +210,7 @@ export default function Home() {
     background: primary ? T1 : 'transparent',
     color: primary ? '#FFFFFF' : T1,
     border: `1.5px solid ${T1}`,
-    borderRadius: '999px',
+    borderRadius: '4px',
     padding: '14px 24px',
     fontSize: '16px',
     fontWeight: 700,
@@ -226,7 +226,7 @@ export default function Home() {
   }
   const section: React.CSSProperties = {
     background: '#FFFFFF',
-    borderRadius: '24px',
+    borderRadius: '4px',
     padding: '32px 28px',
     margin: '0 0 20px',
     boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
@@ -257,7 +257,7 @@ export default function Home() {
             padding: '12px 20px',
             margin: '16px 0 0',
             background: '#FFFFFF',
-            borderRadius: '999px',
+            borderRadius: '4px',
             boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
           }}
         >
@@ -362,7 +362,7 @@ export default function Home() {
           <h2 style={h2}>What it does</h2>
           <div className="hp-tiles">
             {FEATURES.map(([t, d]) => (
-              <div key={t} style={{ background: '#EEF7EC', borderRadius: '18px', padding: '18px 18px' }}>
+              <div key={t} style={{ background: '#EEF7EC', borderRadius: '4px', padding: '18px 18px' }}>
                 <p style={{ fontSize: '17px', fontWeight: 700, marginBottom: '6px' }}>{t}</p>
                 <p style={{ fontSize: '15px', lineHeight: 1.55, color: T2 }}>{d}</p>
               </div>

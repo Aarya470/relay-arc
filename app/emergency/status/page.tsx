@@ -150,7 +150,7 @@ export default function EmergencyStatus() {
             gap: '6px',
             background: 'rgba(163,52,23,0.10)',
             border: '1px solid rgba(163,52,23,0.25)',
-            borderRadius: '16px',
+            borderRadius: '4px',
             padding: '6px 12px',
           }}
         >
@@ -179,7 +179,7 @@ export default function EmergencyStatus() {
               background:
                 action.color === 'green' ? 'rgba(86,128,78,0.05)' : 'rgba(86,128,78,0.05)',
               border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.18)' : 'rgba(86,128,78,0.18)'}`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '14px',
               display: 'flex',
               alignItems: 'flex-start',
@@ -226,7 +226,7 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(86,128,78,0.05)',
             border: '1px solid rgba(86,128,78,0.18)',
-            borderRadius: '16px',
+            borderRadius: '4px',
             padding: '14px 16px',
             display: 'flex',
             alignItems: 'center',
@@ -270,7 +270,7 @@ export default function EmergencyStatus() {
               color: '#42623C',
               fontSize: '11px',
               padding: '5px 10px',
-              borderRadius: '16px',
+              borderRadius: '4px',
               fontFamily: 'inherit',
               fontWeight: 700,
               flexShrink: 0,
@@ -286,7 +286,7 @@ export default function EmergencyStatus() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '16px',
             }}
           >
@@ -346,7 +346,7 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(163,52,23,0.06)',
             border: '1px solid rgba(163,52,23,0.18)',
-            borderRadius: '16px',
+            borderRadius: '4px',
             padding: '16px',
           }}
         >
@@ -373,7 +373,7 @@ export default function EmergencyStatus() {
               fontWeight: 700,
               fontSize: '14px',
               padding: '14px',
-              borderRadius: '16px',
+              borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
               display: 'flex',

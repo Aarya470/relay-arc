@@ -55,7 +55,7 @@ export default function LegalModal() {
       <div
         style={{
           background: '#FFFFFF',
-          borderRadius: '16px',
+          borderRadius: '4px',
           padding: '22px 20px',
           width: '100%',
           maxWidth: '440px',
@@ -83,7 +83,7 @@ export default function LegalModal() {
             background: '#141413',
             color: '#FFFFFF',
             border: 'none',
-            borderRadius: '16px',
+            borderRadius: '4px',
             padding: '14px',
             fontSize: '15px',
             fontWeight: 700,

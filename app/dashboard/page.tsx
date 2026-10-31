@@ -894,7 +894,7 @@ export default function Dashboard() {
             key={i}
             style={{
               height: `${h}px`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               background: '#98C890',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -937,7 +937,7 @@ export default function Dashboard() {
       style={{
         background: SURFACE,
         border: `1px solid ${BORDER}`,
-        borderRadius: '16px',
+        borderRadius: '4px',
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
         ...style,
@@ -1146,7 +1146,7 @@ export default function Dashboard() {
             style={{
               background: SURFACE,
               border: `1px solid ${BORDER}`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
@@ -1213,7 +1213,7 @@ export default function Dashboard() {
               width: '100%',
               background: RED,
               // Chamfered rather than rounded.
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '28px 24px',
               border: 'none',
               cursor: 'pointer',
@@ -1308,7 +1308,7 @@ export default function Dashboard() {
               style={{
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                borderRadius: '16px',
+                borderRadius: '4px',
                 padding: '14px 16px',
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -1392,7 +1392,7 @@ export default function Dashboard() {
               background: checkinToday ? SURFACE : T1,
               color: checkinToday ? T1 : '#FFFFFF',
               border: `1.5px solid ${T1}`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '16px 14px',
               textAlign: 'left',
               cursor: 'pointer',
@@ -1411,7 +1411,7 @@ export default function Dashboard() {
               background: T1,
               color: '#FFFFFF',
               border: `1.5px solid ${T1}`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '16px 14px',
               textAlign: 'left',
               cursor: 'pointer',

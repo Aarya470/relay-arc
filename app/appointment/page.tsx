@@ -92,7 +92,7 @@ export default function AppointmentSummary() {
             key={i}
             style={{
               height: '80px',
-              borderRadius: '16px',
+              borderRadius: '4px',
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -179,7 +179,7 @@ export default function AppointmentSummary() {
               style={{
                 background: s.bg,
                 border: `1px solid ${s.border}`,
-                borderRadius: '16px',
+                borderRadius: '4px',
                 padding: '16px 12px',
                 textAlign: 'center',
                 boxShadow: '0 4px 16px rgba(20,20,19,0.06)',
@@ -225,7 +225,7 @@ export default function AppointmentSummary() {
               fontWeight: 700,
               fontSize: '15px',
               padding: '20px',
-              borderRadius: '16px',
+              borderRadius: '4px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -248,7 +248,7 @@ export default function AppointmentSummary() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '18px',
               boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
             }}
@@ -323,7 +323,7 @@ export default function AppointmentSummary() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '16px',
+            borderRadius: '4px',
             padding: '18px',
             boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
           }}

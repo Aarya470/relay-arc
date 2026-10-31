@@ -237,7 +237,7 @@ export default function CprCoach() {
               fontWeight: 700,
               fontSize: '16.5px',
               padding: '17px',
-              borderRadius: '16px',
+              borderRadius: '4px',
               cursor: 'pointer',
               fontFamily: 'inherit',
               minHeight: '58px',

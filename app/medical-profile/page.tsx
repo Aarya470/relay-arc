@@ -103,7 +103,7 @@ export default function MedicalProfile() {
             key={i}
             style={{
               height: '60px',
-              borderRadius: '16px',
+              borderRadius: '4px',
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -521,7 +521,7 @@ export default function MedicalProfile() {
             fontWeight: 600,
             fontSize: '14.5px',
             padding: '0 20px',
-            borderRadius: '16px',
+            borderRadius: '4px',
             border: 'none',
             cursor: 'pointer',
             display: 'flex',

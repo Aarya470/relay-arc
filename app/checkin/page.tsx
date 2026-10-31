@@ -349,7 +349,7 @@ export default function Checkin() {
                 border: `1px solid ${BORDER}`,
                 boxShadow: SHADOW,
                 padding: '13px 16px',
-                borderRadius: '16px',
+                borderRadius: '4px',
                 display: 'flex',
                 gap: '5px',
                 alignItems: 'center',
@@ -380,7 +380,7 @@ export default function Checkin() {
             style={{
               background: GREEN_DIM,
               border: `1px solid rgba(86,128,78,0.18)`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '28px 20px',
               textAlign: 'center',
               margin: '8px 0',
@@ -427,7 +427,7 @@ export default function Checkin() {
                   fontWeight: 700,
                   fontSize: '13px',
                   padding: '13px 16px',
-                  borderRadius: '16px',
+                  borderRadius: '4px',
                   border: `1px solid ${BORDER}`,
                   cursor: 'pointer',
                 }}
@@ -445,7 +445,7 @@ export default function Checkin() {
                   fontWeight: 700,
                   fontSize: '13px',
                   padding: '13px 16px',
-                  borderRadius: '16px',
+                  borderRadius: '4px',
                   border: 'none',
                   cursor: 'pointer',
                 }}
@@ -513,7 +513,7 @@ export default function Checkin() {
               flex: 1,
               background: BG,
               border: `1.5px solid ${focused ? ACCENT : BORDER}`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '12px 16px',
               color: T1,
               // 16px so mobile Safari does not zoom the page on focus. See the
@@ -538,7 +538,7 @@ export default function Checkin() {
               width: '44px',
               height: '44px',
               background: input.trim() ? ACCENT : BG,
-              borderRadius: '16px',
+              borderRadius: '4px',
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
               cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex',

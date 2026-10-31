@@ -16,7 +16,7 @@ const PAGE = '#B3DDAC',
 const panel: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1px solid rgba(20,20,19,0.14)',
-  borderRadius: '16px',
+  borderRadius: '4px',
   padding: '18px',
   marginBottom: '14px',
 }
@@ -29,7 +29,7 @@ const btn = (primary: boolean): React.CSSProperties => ({
   background: primary ? T1 : '#FFFFFF',
   color: primary ? '#FFFFFF' : T1,
   border: `1.5px solid ${T1}`,
-  borderRadius: '16px',
+  borderRadius: '4px',
   padding: '11px 16px',
   minHeight: '46px',
   fontWeight: 700,
@@ -211,7 +211,7 @@ export default function ConnectHealth() {
               color: T1,
               background: '#FBFAF6',
               border: `1px solid ${LINE}`,
-              borderRadius: '16px',
+              borderRadius: '4px',
               padding: '10px 12px',
               wordBreak: 'break-all',
             }}

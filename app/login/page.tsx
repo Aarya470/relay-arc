@@ -220,7 +220,7 @@ export default function Login() {
             <div
               style={{
                 border: `1px solid ${BORDER}`,
-                borderRadius: '16px',
+                borderRadius: '4px',
                 padding: '14px 16px',
                 marginBottom: 22,
               }}

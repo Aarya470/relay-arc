@@ -28,7 +28,7 @@ export default function SiteHeader() {
           gap: '16px',
           flexWrap: 'wrap',
           background: '#FFFFFF',
-          borderRadius: '999px',
+          borderRadius: '4px',
           padding: '12px 22px',
           boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
         }}
