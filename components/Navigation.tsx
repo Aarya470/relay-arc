@@ -804,7 +804,7 @@ export default function Navigation({
           </svg>
         </div>
         <p style={{ color: T1, fontSize: '24px', fontWeight: 800, letterSpacing: '-0.6px' }}>
-          You have arrived<span style={{ color: GREEN }}>.</span>
+          You have arrived.
         </p>
         <p
           style={{

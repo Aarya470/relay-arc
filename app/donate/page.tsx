@@ -134,7 +134,7 @@ export default function Donate() {
         >
           Keep the margin
           <br />
-          free<span style={{ color: RED }}>.</span>
+          free.
         </h1>
         <p
           style={{

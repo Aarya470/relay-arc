@@ -420,8 +420,7 @@ export default function EmergencyCard() {
             maxWidth: '780px',
           }}
         >
-          An emergency card a paramedic can read off your locked phone
-          <span style={{ color: CRIT }}>.</span>
+          An emergency card a paramedic can read off your locked phone.
         </h1>
         <p
           style={{

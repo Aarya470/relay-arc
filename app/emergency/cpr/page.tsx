@@ -170,7 +170,7 @@ export default function CprCoach() {
             marginBottom: '20px',
           }}
         >
-          Push to the beat<span style={{ color: RED }}>.</span>
+          Push to the beat.
         </h1>
 
         {/* Metronome */}

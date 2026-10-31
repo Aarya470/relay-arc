@@ -411,7 +411,7 @@ export default function RelayRoomPage() {
               marginBottom: '8px',
             }}
           >
-            {data?.patientFirstName} needs you here<span style={{ color: RED }}>.</span>
+            {data?.patientFirstName} needs you here.
           </h1>
           <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.6, marginBottom: '28px' }}>
             Join to see their live location, what&apos;s happening, and how you can help, together

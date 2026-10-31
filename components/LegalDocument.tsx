@@ -148,7 +148,7 @@ export default function LegalDocument({
           }}
         >
           {title}
-          <span style={{ color: ON_3 }}>.</span>
+          .
         </h1>
 
         {/* Everything from here down is prose at 14.5px, so it lives on a
