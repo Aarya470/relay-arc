@@ -12,18 +12,31 @@ import Motion from '@/components/Motion'
 
 // Fonts are bundled with the app (app/fonts) instead of fetched from Google at
 // build time, so a Google Fonts hiccup can no longer fail a deploy.
-const jakartaFiles = [
-  { path: './fonts/PlusJakartaSans-400.ttf', weight: '400', style: 'normal' },
-  { path: './fonts/PlusJakartaSans-500.ttf', weight: '500', style: 'normal' },
-  { path: './fonts/PlusJakartaSans-600.ttf', weight: '600', style: 'normal' },
-  { path: './fonts/PlusJakartaSans-700.ttf', weight: '700', style: 'normal' },
-  { path: './fonts/PlusJakartaSans-800.ttf', weight: '800', style: 'normal' },
-]
-
-const jakarta = localFont({ src: jakartaFiles, variable: '--font-sans', display: 'swap' })
+// next/font/local needs each call written out in full (it is read at build time).
+const jakarta = localFont({
+  src: [
+    { path: './fonts/PlusJakartaSans-400.ttf', weight: '400', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-500.ttf', weight: '500', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-600.ttf', weight: '600', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-700.ttf', weight: '700', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-800.ttf', weight: '800', style: 'normal' },
+  ],
+  variable: '--font-sans',
+  display: 'swap',
+})
 
 // --font-mono is read by many inline styles; it now points at the same plain font.
-const mono = localFont({ src: jakartaFiles, variable: '--font-mono', display: 'swap' })
+const mono = localFont({
+  src: [
+    { path: './fonts/PlusJakartaSans-400.ttf', weight: '400', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-500.ttf', weight: '500', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-600.ttf', weight: '600', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-700.ttf', weight: '700', style: 'normal' },
+    { path: './fonts/PlusJakartaSans-800.ttf', weight: '800', style: 'normal' },
+  ],
+  variable: '--font-mono',
+  display: 'swap',
+})
 
 // Real monospace for the few places that need it (an ingest token).
 const code = localFont({
