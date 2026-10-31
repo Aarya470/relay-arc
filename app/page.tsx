@@ -289,6 +289,9 @@ export default function Home() {
             <button onClick={() => router.push('/engineering')} style={link}>
               Engineering
             </button>
+            <button onClick={() => router.push('/partners')} style={link}>
+              Partners
+            </button>
             <button
               onClick={() =>
                 document.getElementById('video')?.scrollIntoView({ behavior: 'smooth' })
@@ -332,8 +335,9 @@ export default function Home() {
                 maxWidth: '560px',
               }}
             >
-              Press SOS and Relay Arc finds a hospital that can actually treat what is happening,
-              sends your medical details ahead, and tells your family. It runs in any phone&apos;s
+              Press SOS and Relay Arc spots the emergency, picks the nearest hospital that can treat
+              it, guides you there, and texts your family your live location. It also keeps an
+              offline emergency card, checks pulse and breathing, and runs in any phone&apos;s
               browser.
             </p>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
