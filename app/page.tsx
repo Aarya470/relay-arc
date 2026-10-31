@@ -335,10 +335,10 @@ export default function Home() {
                 maxWidth: '560px',
               }}
             >
-              Press SOS and Relay Arc spots the emergency, picks the nearest hospital that can treat
-              it, guides you there, and texts your family your live location. It also keeps an
-              offline emergency card, checks pulse and breathing, and runs in any phone&apos;s
-              browser.
+              Press SOS and Relay Arc spots the emergency, picks the closest hospital that can treat
+              it, guides you there, and sends your details to the hospital and your family. It also
+              keeps an offline emergency card, checks pulse and breathing, and runs in any
+              phone&apos;s browser.
             </p>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <button onClick={() => router.push('/card')} style={btn(true)}>
