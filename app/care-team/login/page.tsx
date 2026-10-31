@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, KeyRound, Loader2, Lock, Mail, User } from 'lucide-react'
+import { ArrowLeft, KeyRound, Loader2, Lock, Mail, User } from '@/lib/plain-icons'
 
 export default function CareTeamLogin() {
   const [mode, setMode] = useState<'login' | 'signup'>('login')

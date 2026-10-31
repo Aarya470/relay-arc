@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Download, Printer, Trash2, Check } from 'lucide-react'
+import { ArrowLeft, Download, Printer, Trash2, Check } from '@/lib/plain-icons'
 // The wallet card and the lock-screen image both printed relay-arc.vercel.app, which is the
 // address this site used before the domain existed.
 import { SITE_URL } from '@/lib/site'

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 
 const T1 = '#141413',

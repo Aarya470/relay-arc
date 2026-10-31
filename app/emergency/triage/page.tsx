@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Phone } from 'lucide-react'
+import { ArrowLeft, Phone } from '@/lib/plain-icons'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 

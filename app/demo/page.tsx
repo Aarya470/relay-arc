@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Play, ArrowLeft, Check } from 'lucide-react'
+import { Play, ArrowLeft, Check } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { DEMO, setDemo, demoOn } from '@/lib/demo'
 import { supabase } from '@/lib/supabase'

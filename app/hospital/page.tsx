@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Loader2, Minus, Plus, ExternalLink, Check } from 'lucide-react'
+import { Loader2, Minus, Plus, ExternalLink, Check } from '@/lib/plain-icons'
 import { DEMO_PARTNER, DEMO_INCOMING, DEMO_BANNER } from '@/lib/demo-data'
 
 const T1 = '#141413'

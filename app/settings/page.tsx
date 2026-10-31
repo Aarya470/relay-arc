@@ -15,7 +15,7 @@ import {
   History,
   Shield,
   Activity,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 import DateField from '@/components/DateField'

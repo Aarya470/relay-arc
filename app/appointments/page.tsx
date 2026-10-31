@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Video,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import BottomNav from '@/components/BottomNav'
 import JitsiMeeting from '@/components/JitsiMeeting'
 

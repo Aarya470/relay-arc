@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Phone, ArrowLeft, Play, Square } from 'lucide-react'
+import { Phone, ArrowLeft, Play, Square } from '@/lib/plain-icons'
 import { emergencyNumber } from '@/lib/emergency-number'
 
 const T1 = '#141413'

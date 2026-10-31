@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Phone, CheckCircle, AlertCircle, Loader2, Plus, Check, QrCode } from 'lucide-react'
+import { Phone, CheckCircle, AlertCircle, Loader2, Plus, Check, QrCode } from '@/lib/plain-icons'
 import { supabase } from '@/lib/supabase'
 import { emergencyNumber } from '@/lib/emergency-number'
 import maplibregl from 'maplibre-gl'

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { Loader2, Eye, EyeOff, ArrowRight, MailCheck } from 'lucide-react'
+import { Loader2, Eye, EyeOff, ArrowRight, MailCheck } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { SITE_URL } from '@/lib/site'
 

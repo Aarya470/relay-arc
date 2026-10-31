@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, X, Phone, User, Heart, Edit2 } from 'lucide-react'
+import { ArrowLeft, Plus, X, Phone, User, Heart, Edit2 } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 

@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { RefreshCw, ArrowLeft, Check, X, AlertTriangle } from 'lucide-react'
+import { RefreshCw, ArrowLeft, Check, X, AlertTriangle } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { useRouter } from 'next/navigation'
 

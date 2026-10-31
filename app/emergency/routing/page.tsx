@@ -16,7 +16,7 @@ import {
   FileText,
   MessageSquare,
   Navigation2,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import {
   findNearbyHospitals,
   formatDistance,
@@ -1227,7 +1227,7 @@ function RoutingPage() {
                   marginTop: '8px',
                 }}
               >
-                ⚠ {hospital.capability}
+                Not confirmed: {hospital.capability}
               </p>
             )}
             {hospital.pci === 'unknown' && (
@@ -1268,7 +1268,7 @@ function RoutingPage() {
                   marginTop: '5px',
                 }}
               >
-                {hospital.partner.accepting ? '✓ Accepting now' : '⚠ Diverting'}
+                {hospital.partner.accepting ? '✓ Accepting now' : 'Diverting'}
                 {hospital.partner.cathLab === true ? ' · cath lab open' : ''}
                 {hospital.partner.bedsFree != null ? ` · ${hospital.partner.bedsFree} beds` : ''}
                 {'. Reported by facility'}

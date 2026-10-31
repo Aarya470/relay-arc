@@ -13,7 +13,7 @@ import {
   Phone,
   Droplets,
   Shield,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from 'sonner'
 import BottomNav from '@/components/BottomNav'

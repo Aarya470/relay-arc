@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { Phone } from 'lucide-react'
+import { Phone } from '@/lib/plain-icons'
 import FollowLinks from '@/components/FollowLinks'
 import VideoEmbed from '@/components/VideoEmbed'
 import Mark from '@/components/Mark'

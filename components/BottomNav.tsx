@@ -1,6 +1,6 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, MessageCircle, LayoutList, Activity, Phone } from 'lucide-react'
+import { Home, MessageCircle, LayoutList, Activity, Phone } from '@/lib/plain-icons'
 import { motion } from 'framer-motion'
 import { octagon } from '@/lib/shape'
 

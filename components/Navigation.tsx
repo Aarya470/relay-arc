@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { Volume2, VolumeX, Crosshair, List, X, MapPin } from 'lucide-react'
+import { Volume2, VolumeX, Crosshair, List, X, MapPin } from '@/lib/plain-icons'
 import { trafficMultiplier } from '@/lib/hospitals'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────

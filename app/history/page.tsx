@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ChevronDown, Heart, AlertTriangle, Calendar } from 'lucide-react'
+import { ArrowLeft, ChevronDown, Heart, AlertTriangle, Calendar } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 

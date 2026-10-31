@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { CheckCircle, AlertTriangle, Clock, Phone, ChevronLeft, History } from 'lucide-react'
+import { CheckCircle, AlertTriangle, Clock, Phone, ChevronLeft, History } from '@/lib/plain-icons'
 
 const EMERGENCY_LABELS: Record<string, string> = {
   chest_pain: 'Chest pain',

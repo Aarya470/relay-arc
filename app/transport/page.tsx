@@ -16,7 +16,7 @@ import {
   Activity,
   Car,
   CheckCircle,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { findNearbyHospitals, Hospital } from '@/lib/hospitals'
 

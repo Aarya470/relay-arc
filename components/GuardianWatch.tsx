@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { emergencyNumber } from '@/lib/emergency-number'
-import { Phone, MessageSquare, HeartPulse, Check } from 'lucide-react'
+import { Phone, MessageSquare, HeartPulse, Check } from '@/lib/plain-icons'
 
 const T1 = '#141413'
 const RED = '#A33417'
@@ -263,7 +263,7 @@ export default function GuardianWatch({
               marginBottom: '14px',
             }}
           >
-            ⚠ Guardian alert: no response
+            Guardian alert: no response
           </motion.p>
           <h1
             style={{

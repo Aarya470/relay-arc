@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useCallback } from 'react'
-import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from 'lucide-react'
+import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from '@/lib/plain-icons'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'

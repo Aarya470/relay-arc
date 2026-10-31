@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { X } from 'lucide-react'
+import { X } from '@/lib/plain-icons'
 
 declare global {
   interface Window {

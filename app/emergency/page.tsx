@@ -16,7 +16,7 @@ import {
   ChevronRight,
   Mic,
   ArrowRight,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { demoOn } from '@/lib/demo'

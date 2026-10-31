@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Activity, Wind, Zap, AlertCircle, Battery, Check } from 'lucide-react'
+import { ArrowLeft, Activity, Wind, Zap, AlertCircle, Battery, Check } from '@/lib/plain-icons'
 import BottomNav from '@/components/BottomNav'
 
 // ── types ────────────────────────────────────────────────────────────────────

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertCircle, ArrowLeft, Car, Loader2, MapPin, Navigation } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Car, Loader2, MapPin, Navigation } from '@/lib/plain-icons'
 import { toast } from 'sonner'
 
 export default function DriverDashboard() {

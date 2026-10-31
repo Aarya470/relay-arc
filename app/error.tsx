@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Phone, RefreshCw } from 'lucide-react'
+import { Phone, RefreshCw } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { emergencyNumber } from '@/lib/emergency-number'
 

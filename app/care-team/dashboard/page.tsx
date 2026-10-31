@@ -15,7 +15,7 @@ import {
   Phone,
   AlertTriangle,
   ExternalLink,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import {
   DEMO_MEMBER,

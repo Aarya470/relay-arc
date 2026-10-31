@@ -15,7 +15,7 @@ import {
   Loader2,
   Plus,
   Zap,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import DateField from '@/components/DateField'
 import Mark from '@/components/Mark'
 

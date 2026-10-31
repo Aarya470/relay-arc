@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { Video, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Video, ChevronLeft, ChevronRight } from '@/lib/plain-icons'
 import JitsiMeeting from './JitsiMeeting'
 import { registerPushNotifications } from '@/lib/notifications'
 

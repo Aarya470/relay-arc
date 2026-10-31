@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Phone } from 'lucide-react'
+import { ArrowLeft, Phone } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { useEffect, useState } from 'react'

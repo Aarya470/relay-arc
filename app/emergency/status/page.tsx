@@ -4,7 +4,7 @@ import { emergencyNumber } from '@/lib/emergency-number'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Phone, ArrowLeft, CheckCircle, Navigation } from 'lucide-react'
+import { Phone, ArrowLeft, CheckCircle, Navigation } from '@/lib/plain-icons'
 
 export default function EmergencyStatus() {
   const [emg, setEmg] = useState({ number: '911', label: '911' })

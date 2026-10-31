@@ -9,7 +9,6 @@
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { demoOn } from '@/lib/demo'
 
 const PRIVATE = [
   '/dashboard',
@@ -38,14 +37,6 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isPrivate(pathname)) {
-      setAllowed(true)
-      return
-    }
-    // The vitals check has a demo mode with sample data and no account behind it.
-    if (
-      pathname === '/check' &&
-      (demoOn() || new URLSearchParams(window.location.search).has('demo'))
-    ) {
       setAllowed(true)
       return
     }

@@ -2,7 +2,7 @@
 // /connect-health — get Apple Watch readings into Relay Arc with nothing to upload.
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Copy, Check, RefreshCw, Watch } from 'lucide-react'
+import { ArrowLeft, Copy, Check, RefreshCw, Watch } from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { SITE_URL } from '@/lib/site'

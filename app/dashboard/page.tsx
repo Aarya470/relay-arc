@@ -24,7 +24,7 @@ import {
   Star,
   Activity,
   Zap,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 // Inline type — mirrors the export in app/api/groq/health-intelligence/route.ts
 // (Defined here to avoid bundling server-only imports into the client)
 interface HealthIntelligence {

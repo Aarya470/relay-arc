@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
-import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck, Activity } from 'lucide-react'
+import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck, Activity } from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { autonomicHandoff } from '@/lib/autonomic'
 

@@ -17,7 +17,7 @@ import {
   Send,
   Video,
   X,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import JitsiMeeting from '@/components/JitsiMeeting'
 import { sendPushNotification } from '@/lib/notifications'
 import { formatDate } from '@/lib/utils'

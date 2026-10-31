@@ -5,7 +5,7 @@ import { DEMO_VITALS, DEMO_BANNER } from '@/lib/demo-data'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Activity, Save, Heart, Droplets, Wind } from 'lucide-react'
+import { ArrowLeft, Activity, Save, Heart, Droplets, Wind } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 

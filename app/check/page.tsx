@@ -2,7 +2,7 @@
 // /check — a full NEWS2 vitals check using only the phone.
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Heart, Wind, Phone, Hand, Watch, MessageCircle } from 'lucide-react'
+import { ArrowLeft, Heart, Wind, Phone, Hand, Watch, MessageCircle } from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import {
@@ -31,7 +31,6 @@ import {
 } from '@/lib/risk'
 import { emergencyNumber } from '@/lib/emergency-number'
 import SignalView from '@/components/SignalView'
-import { demoOn } from '@/lib/demo'
 
 // ── look ──────────────────────────────────────────────────────────────────────
 const PAGE = '#B3DDAC',
@@ -132,13 +131,8 @@ export default function VitalsCheck() {
     setEmg(emergencyNumber())
   }, [])
 
-  // DEMO MODE (relay-arc.org/check?demo=1, or the site-wide demo switch): for filming.
-  const [demo, setDemo] = useState(false)
-  useEffect(() => {
-    try {
-      setDemo(demoOn() || new URLSearchParams(window.location.search).has('demo'))
-    } catch {}
-  }, [])
+  // Every number on this page is measured. There is no demo mode.
+  const demo = false
 
   // ── measured values ────────────────────────────────────────────────────────
   const [hr, setHr] = useState<Val>(empty)

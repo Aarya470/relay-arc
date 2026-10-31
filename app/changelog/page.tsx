@@ -1,7 +1,7 @@
 'use client'
 // Public changelog.
 import { useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from '@/lib/plain-icons'
 
 // The page green, and why it is this one.
 const INK = '#141413',

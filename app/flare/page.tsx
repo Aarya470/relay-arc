@@ -2,7 +2,7 @@
 // Flare check — the page that is allowed to say "this is probably not an emergency".
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Phone, ChevronRight, AlertTriangle, Check, Info } from 'lucide-react'
+import { ArrowLeft, Phone, ChevronRight, AlertTriangle, Check, Info } from '@/lib/plain-icons'
 import {
   RED_FLAGS,
   COUNTER_STEPS,

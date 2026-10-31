@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, KeyRound, Loader2, Lock, Mail } from 'lucide-react'
+import { ArrowLeft, KeyRound, Loader2, Lock, Mail } from '@/lib/plain-icons'
 
 const NURSE_CODE = 'relay-nurse-2026'
 

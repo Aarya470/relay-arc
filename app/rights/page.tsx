@@ -2,7 +2,7 @@
 // What an emergency room owes you.
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Scale, AlertCircle, ArrowRight, Printer } from 'lucide-react'
+import { ArrowLeft, Scale, AlertCircle, ArrowRight, Printer } from '@/lib/plain-icons'
 import { rightsFor, guessCountry, COUNTRIES, type Country } from '@/lib/rights'
 
 // Ink tones. These are for text INSIDE the white cards, which is most of this

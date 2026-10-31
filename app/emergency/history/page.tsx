@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Heart, Brain, Zap, Activity, Wind, AlertCircle, Plus } from 'lucide-react'
+import { ArrowLeft, Heart, Brain, Zap, Activity, Wind, AlertCircle, Plus } from '@/lib/plain-icons'
 
 const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 const fadeUp = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: ease } }
