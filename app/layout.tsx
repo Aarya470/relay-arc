@@ -7,6 +7,7 @@ import MeetingAlert from '@/components/MeetingAlert'
 import LegalModal from '@/components/LegalModal'
 import AuthGate from '@/components/AuthGate'
 import Analytics from '@/components/Analytics'
+import Reveal from '@/components/Reveal'
 import { SITE_URL } from '@/lib/site'
 import Motion from '@/components/Motion'
 
@@ -154,6 +155,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AuthGate>{children}</AuthGate>
             <LegalModal />
             <Analytics />
+            <Reveal />
             <MeetingAlert />
             <Toaster position="top-center" richColors />
           </div>

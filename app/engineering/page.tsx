@@ -18,7 +18,7 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
 
 // The page green, and why it is this one.
 const T1 = '#141413',
-  T2 = '#5C5A52',
+  T2 = '#3F3D36',
   T3 = '#5C5A52'
 // BG2 was #3A6440, a dark inner panel built for the dark page. Once the page
 // went light it kept its dark fill while the text on it stayed ink and grey,
@@ -30,17 +30,12 @@ const RED = '#A33417',
 const WRAP = {
   maxWidth: '1120px',
   margin: '0 auto',
-  background: '#FFFFFF',
-  borderRadius: '4px',
-  padding: 'clamp(22px, 4vw, 40px)',
-  boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
 } as const
 
 function DemoSkeleton({ label }: { label: string }) {
   return (
     <div
       style={{
-        border: `1px solid rgba(20,20,19,0.15)`,
         background: BG2,
         height: '340px',
         display: 'flex',
@@ -54,25 +49,14 @@ function DemoSkeleton({ label }: { label: string }) {
 }
 
 function SectionHead({ title }: { title: string }) {
-  return (
-    <div style={{ paddingTop: '0', marginBottom: '14px' }}>
-      <span style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{title}</span>
-    </div>
-  )
+  return null
 }
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
     <h2
-      style={{
-        color: T1,
-        fontSize: 'clamp(24px, 3.4vw, 32px)',
-        fontWeight: 800,
-        letterSpacing: '-0.02em',
-        lineHeight: 1.02,
-        marginBottom: '20px',
-        maxWidth: '860px',
-      }}
+      className="ds-title"
+      style={{ fontSize: 'clamp(28px, 3.8vw, 48px)', marginBottom: '24px', maxWidth: '900px' }}
     >
       {children}
     </h2>
@@ -135,20 +119,21 @@ export default function Engineering() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div className="ds-chapters" style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
       <SiteHeader />
 
       {/* top */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <p style={{ color: T2, fontSize: '15px', fontWeight: 600, marginBottom: '18px' }}>
             How we built it
           </p>
           <h1
+            className="ds-display"
             style={{
               color: T1,
-              fontSize: 'clamp(32px, 5vw, 50px)',
+              fontSize: 'clamp(40px, 6vw, 80px)',
               fontWeight: 800,
               lineHeight: 1.02,
               letterSpacing: '-0.03em',
@@ -188,7 +173,7 @@ export default function Engineering() {
       </section>
 
       {/* triage */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <SectionHead title="Figuring out what's wrong" />
           <H2>It has to work even when there&apos;s no signal.</H2>
@@ -392,7 +377,7 @@ export default function Engineering() {
       </section>
 
       {/* risk */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <SectionHead title="How serious is it" />
           <H2>A warning is only useful if a doctor can check it.</H2>
@@ -492,7 +477,7 @@ export default function Engineering() {
       </section>
 
       {/* hospital */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <SectionHead title="Picking a hospital" />
           <H2>The closest hospital isn&apos;t always the right one.</H2>
@@ -581,7 +566,7 @@ export default function Engineering() {
       </section>
 
       {/* navigation */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <SectionHead title="Directions" />
           <H2>Sending you to another map app loses everything.</H2>
@@ -599,7 +584,7 @@ export default function Engineering() {
       </section>
 
       {/* limits */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <SectionHead title="What it can't do yet" />
           <H2>Here&apos;s what still needs work.</H2>
@@ -649,7 +634,7 @@ export default function Engineering() {
       </section>
 
       {/* end */}
-      <section style={{ padding: '20px 24px 60px' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <div>
             <h2
@@ -680,17 +665,7 @@ export default function Engineering() {
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button
                 onClick={() => router.push('/login?signup=1')}
-                style={{
-                  background: T1,
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: '15px',
-                  padding: '14px 26px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  borderRadius: '4px',
-                }}
+                className="ds-btn ds-btn-ink sh-slant"
               >
                 Make your free profile
               </button>

@@ -7,7 +7,7 @@ import { Flow } from '@/components/viz/Flow'
 import { BarChart, Donut } from '@/components/viz/Chart'
 
 const INK = '#141413',
-  INK2 = '#5C5A52',
+  INK2 = '#3F3D36',
   INK3 = '#5C5A52'
 const BORDER = '#98C890',
   CREAM = '#B3DDAC'
@@ -20,32 +20,17 @@ const mono = 'var(--font-mono, monospace)'
 const WRAP = {
   maxWidth: '1120px',
   margin: '0 auto',
-  background: '#FFFFFF',
-  borderRadius: '4px',
-  padding: 'clamp(22px, 4vw, 40px)',
-  boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
 } as const
 
 function Head({ title }: { n?: string; title: string; right?: string }) {
-  return (
-    <div style={{ paddingTop: '0', marginBottom: '14px' }}>
-      <span style={{ color: INK, fontSize: '14px', fontWeight: 700 }}>{title}</span>
-    </div>
-  )
+  return null
 }
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
     <h2
-      style={{
-        color: INK,
-        fontSize: 'clamp(24px, 3.4vw, 32px)',
-        fontWeight: 800,
-        letterSpacing: '-0.02em',
-        lineHeight: 1.03,
-        marginBottom: '18px',
-        maxWidth: '860px',
-      }}
+      className="ds-title"
+      style={{ fontSize: 'clamp(28px, 3.8vw, 48px)', marginBottom: '24px', maxWidth: '900px' }}
     >
       {children}
     </h2>
@@ -97,8 +82,8 @@ function Grid({ children }: { children: React.ReactNode }) {
 }
 function Panel({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ border: `1px solid rgba(20,20,19,0.15)`, background: '#FFFFFF' }}>
-      <div style={{ borderBottom: `1px solid rgba(20,20,19,0.15)`, padding: '9px 14px' }}>
+    <div className="sh-cut" style={{ background: 'rgba(20,20,19,0.05)' }}>
+      <div style={{ padding: '14px 16px 0' }}>
         <span style={{ color: INK, fontSize: '13px', fontWeight: 700 }}>{label}</span>
       </div>
       <div style={{ padding: '18px 16px' }}>{children}</div>
@@ -110,16 +95,17 @@ export default function Features() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div className="ds-chapters" style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
       <SiteHeader />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <h1
+            className="ds-display"
             style={{
               color: INK,
-              fontSize: 'clamp(32px, 5vw, 50px)',
+              fontSize: 'clamp(40px, 6vw, 80px)',
               fontWeight: 800,
               lineHeight: 0.96,
               letterSpacing: '-0.02em',
@@ -148,7 +134,7 @@ export default function Features() {
       </section>
 
       {/* ── 01 TRIAGE ─────────────────────────────────────────────────────── */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <Head title="Working out what is wrong" />
           <H2>The phone makes the first call, even with no signal.</H2>
@@ -328,7 +314,7 @@ export default function Features() {
       </section>
 
       {/* ── 02 DISPATCH ───────────────────────────────────────────────────── */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <Head title="Choosing a hospital" />
           <H2>The nearest hospital can be the slowest way to get treated.</H2>
@@ -433,7 +419,7 @@ export default function Features() {
       </section>
 
       {/* ── 03 RISK ───────────────────────────────────────────────────────── */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <Head title="How urgent it is" />
           <H2>A single reading tells you less than the trend.</H2>
@@ -549,7 +535,7 @@ export default function Features() {
       </section>
 
       {/* ── 04 THE RELAY ──────────────────────────────────────────────────── */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <Head title="Telling everyone else" />
           <H2>Your family, the hospital and a driver find out together.</H2>
@@ -619,7 +605,7 @@ export default function Features() {
       </section>
 
       {/* ── 05 NAVIGATION ─────────────────────────────────────────────────── */}
-      <section style={{ padding: '20px 24px 0' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <Head title="Getting there" />
           <H2>Directions are built in, so nobody has to switch apps.</H2>
@@ -678,7 +664,7 @@ export default function Features() {
       </section>
 
       {/* end */}
-      <section style={{ padding: '20px 24px 60px' }}>
+      <section className="ds-ch">
         <div style={WRAP}>
           <div>
             <h2
@@ -707,17 +693,7 @@ export default function Features() {
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button
                 onClick={() => router.push('/login?signup=1')}
-                style={{
-                  background: INK,
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: '15px',
-                  padding: '14px 26px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  borderRadius: '4px',
-                }}
+                className="ds-btn ds-btn-ink sh-slant"
               >
                 Make your free profile
               </button>

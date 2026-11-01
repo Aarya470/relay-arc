@@ -1,470 +1,508 @@
 'use client'
-// Homepage.
-import { useEffect } from 'react'
+// Homepage. Each section is a full width colour chapter with one heading, one
+// short paragraph and one real piece of the app. See DESIGN.md.
+import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { Phone } from '@/lib/plain-icons'
 import FollowLinks from '@/components/FollowLinks'
 import VideoEmbed from '@/components/VideoEmbed'
-import Mark from '@/components/Mark'
 
-const BG2 = '#B3DDAC'
-const PAGE = '#B3DDAC'
-const T1 = '#141413'
-const T2 = '#3F3D36'
-const T3 = '#5C5A52'
-const BORDER = '#98C890'
-const RULE = 'rgba(20,20,19,0.18)'
-const RED = '#A33417'
+const LEAF = '#B3DDAC'
+const MINT = '#DDEFD9'
+const PAPER = '#FFFFFF'
+const FOREST = '#1E3A23'
+const INK = '#141413'
+const INK2 = '#3F3D36'
+const SOS = '#A33417'
 const GREEN = '#42623C'
 
-// ─── Phone mockup ───────────────────────────────────────────────────────────
-// Deliberately plain: a phone outline and the home screen as it really looks.
-// The earlier version had a dot grid, a dashed route line, floating cards and
-// a soft drop shadow, which read as a generated hero image rather than an app.
-function PhoneMockup() {
-  const row = (label: string, value: string, done = false) => (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '11px 0',
-        borderTop: `1px solid ${BORDER}`,
-      }}
-    >
-      <span style={{ color: T1, fontSize: '12.5px', fontWeight: 600 }}>{label}</span>
-      <span style={{ color: done ? GREEN : T3, fontSize: '11.5px', fontWeight: 600 }}>{value}</span>
-    </div>
-  )
+const NAV: [string, string][] = [
+  ['Features', '/features'],
+  ['Engineering', '/engineering'],
+  ['Partners', '/partners'],
+  ['Donate', '/donate'],
+  ['Sign in', '/login'],
+]
+
+// One chapter: a full width field of flat colour.
+function Chapter({
+  id,
+  bg,
+  fg,
+  children,
+  tall = true,
+}: {
+  id?: string
+  bg: string
+  fg: string
+  children: React.ReactNode
+  tall?: boolean
+}) {
   return (
-    <div
-      style={{
-        width: '280px',
-        margin: '0 auto',
-        borderRadius: '40px',
-        background: '#141413',
-        padding: '9px',
-      }}
-      className="phone-wrap"
-    >
-      <div
-        style={{
-          position: 'relative',
-          borderRadius: '32px',
-          background: BG2,
-          padding: '14px 18px 26px',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '10px',
-            transform: 'translateX(-50%)',
-            width: '78px',
-            height: '22px',
-            borderRadius: '4px',
-            background: '#141413',
-          }}
-        />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            height: '24px',
-            marginBottom: '22px',
-          }}
-        >
-          <span style={{ color: T1, fontSize: '11.5px', fontWeight: 600 }}>9:41</span>
-          <span
-            style={{
-              width: '20px',
-              height: '9px',
-              border: `1.2px solid ${T1}`,
-              borderRadius: '3px',
-              display: 'inline-block',
-            }}
-          />
-        </div>
+    <section id={id} className={tall ? 'ch ch-tall' : 'ch'} style={{ background: bg, color: fg }}>
+      <div className="ch-in">{children}</div>
+    </section>
+  )
+}
 
-        <p style={{ color: T3, fontSize: '11px', marginBottom: '2px' }}>Good morning</p>
-        <p
-          style={{
-            color: T1,
-            fontSize: '24px',
-            fontWeight: 800,
-            lineHeight: 1.1,
-            marginBottom: '18px',
-          }}
-        >
-          Asha
+// Heading and paragraph on one side, the app on the other.
+function Split({
+  title,
+  body,
+  children,
+  flip = false,
+  action,
+}: {
+  title: string
+  body: React.ReactNode
+  children: React.ReactNode
+  flip?: boolean
+  action?: React.ReactNode
+}) {
+  return (
+    <div className={flip ? 'split split-flip' : 'split'}>
+      <div data-reveal>
+        <h2 className="ds-title">{title}</h2>
+        <p className="ds-lead" style={{ marginTop: '28px' }}>
+          {body}
         </p>
-
-        <div
-          style={{
-            background: RED,
-            borderRadius: '4px',
-            padding: '18px 16px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '18px',
-          }}
-        >
-          <div>
-            <p style={{ color: 'white', fontSize: '26px', fontWeight: 800, lineHeight: 1 }}>SOS</p>
-            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '10.5px', marginTop: '5px' }}>
-              Hold to start
-            </p>
-          </div>
-          <Phone size={20} color="white" />
-        </div>
-
-        {row('Daily check-in', 'Done', true)}
-        {row('Vitals check', 'Pulse 72')}
-        {row('Medications', '1 due')}
-        {row('Emergency card', 'Ready', true)}
-
-        <div
-          style={{
-            width: '90px',
-            height: '4px',
-            borderRadius: '2px',
-            background: '#141413',
-            margin: '22px auto 0',
-            opacity: 0.8,
-          }}
-        />
+        {action ? <div style={{ marginTop: '36px' }}>{action}</div> : null}
+      </div>
+      <div data-reveal className="split-media">
+        <div>{children}</div>
       </div>
     </div>
   )
 }
 
-const FEATURES: [string, string][] = [
-  [
-    'SOS that picks the right hospital',
-    'Say or type what is happening. Relay Arc ranks nearby hospitals by real drive time and by whether they can treat it, not just by distance.',
-  ],
-  [
-    'Everyone finds out at once',
-    'Your family gets a text and a live map. The hospital gets your blood type, allergies and medications before you arrive.',
-  ],
-  [
-    'Works with no signal',
-    'The emergency card and the part that works out what is wrong both run on the phone itself.',
-  ],
-  [
-    'Your phone as a sensor',
-    'Measure pulse with the camera and breathing with the motion sensor, then show a doctor the numbers.',
-  ],
-  ['A short daily check-in', 'A two-minute chat that notices when things are changing.'],
-]
+// The home screen as it really looks.
+function PhoneHome() {
+  const row = (label: string, value: string, good = false) => (
+    <div className="ph-row">
+      <span style={{ fontWeight: 600 }}>{label}</span>
+      <span style={{ color: good ? GREEN : INK2, fontWeight: 600 }}>{value}</span>
+    </div>
+  )
+  return (
+    <div className="phone" aria-label="The Relay Arc home screen">
+      <div className="phone-screen">
+        <div className="ph-bar">
+          <span>9:41</span>
+        </div>
+        <p style={{ fontSize: '13px', color: INK2 }}>Good morning</p>
+        <p style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.03em', margin: '2px 0 18px' }}>
+          Asha
+        </p>
+        <div className="sh-slant ph-sos">
+          <span style={{ fontSize: '30px', fontWeight: 800 }}>SOS</span>
+          <span style={{ fontSize: '12px', opacity: 0.9 }}>Hold to start</span>
+        </div>
+        {row('Daily check in', 'Done', true)}
+        {row('Pulse', '72')}
+        {row('Medicines', '1 due')}
+        {row('Emergency card', 'Ready', true)}
+      </div>
+    </div>
+  )
+}
+
+// What the SOS screen says after someone types what is happening.
+function SosScreen() {
+  return (
+    <div className="sh-cut frag" style={{ background: PAPER, color: INK }}>
+      <p className="ds-small" style={{ color: INK2 }}>What is happening?</p>
+      <p style={{ fontSize: '20px', fontWeight: 700, margin: '6px 0 22px' }}>
+        My dad has chest pain and he is sweating
+      </p>
+      <div style={{ background: MINT, padding: '18px 20px' }}>
+        <p style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.02em' }}>
+          This may be a heart attack
+        </p>
+        <p className="ds-small" style={{ marginTop: '6px' }}>
+          Worked out on the phone in under a second. No signal needed.
+        </p>
+      </div>
+      <div className="sh-slant" style={{ background: SOS, color: '#fff', padding: '16px 24px', marginTop: '16px', fontWeight: 700 }}>
+        Call 911 now
+      </div>
+    </div>
+  )
+}
+
+// Example ranking for a trip from East Windsor. Drive times are illustrative.
+function HospitalList() {
+  const rows: [string, string, boolean][] = [
+    ['RWJ University Hospital at Hamilton', '17 min', true],
+    ['Penn Medicine Princeton Medical Center', '19 min', true],
+    ['A closer emergency room', '12 min', false],
+  ]
+  return (
+    <div className="sh-cut frag" style={{ background: MINT, color: INK }}>
+      <p style={{ fontSize: '20px', fontWeight: 800, marginBottom: '14px' }}>Best match for a heart attack</p>
+      {rows.map(([name, mins, ok], i) => (
+        <div key={name} className="hosp" style={{ background: i === 0 ? PAPER : 'transparent' }}>
+          <div>
+            <p style={{ fontWeight: 700, fontSize: '16px' }}>{name}</p>
+            <p className="ds-small" style={{ color: ok ? GREEN : SOS, fontWeight: 600 }}>
+              {ok ? 'Has a heart unit' : 'No heart unit'}
+            </p>
+          </div>
+          <span style={{ fontWeight: 800, fontSize: '18px', whiteSpace: 'nowrap' }}>{mins}</span>
+        </div>
+      ))}
+      <p className="ds-small" style={{ marginTop: '12px', color: INK2 }}>Example trip from East Windsor</p>
+    </div>
+  )
+}
+
+// The text the family gets.
+function FamilyText() {
+  return (
+    <div className="sh-cut frag" style={{ background: PAPER, color: INK, maxWidth: '420px' }}>
+      <p className="ds-small" style={{ color: INK2, marginBottom: '12px' }}>Text message, now</p>
+      <div className="bubble">
+        Asha pressed SOS. She is going to RWJ University Hospital at Hamilton. Follow her on the
+        live map.
+      </div>
+      <div className="bubble" style={{ marginTop: '10px', fontWeight: 700, textDecoration: 'underline' }}>
+        relay-arc.org/live
+      </div>
+      <div className="sh-pill" style={{ display: 'inline-block', background: MINT, padding: '8px 16px', marginTop: '14px', fontSize: '14px', fontWeight: 600 }}>
+        Hospital has her details
+      </div>
+    </div>
+  )
+}
+
+// The one live thing: type and watch the card fill in.
+function CardMaker() {
+  const router = useRouter()
+  const [name, setName] = useState('')
+  const [blood, setBlood] = useState('')
+  const [allergy, setAllergy] = useState('')
+  return (
+    <div className="maker">
+      <div className="maker-form">
+        <label className="fld">
+          <span>Your name</span>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Asha Patel" maxLength={40} />
+        </label>
+        <label className="fld">
+          <span>Blood type</span>
+          <select value={blood} onChange={(e) => setBlood(e.target.value)}>
+            <option value="">Choose</option>
+            {['O+', 'O−', 'A+', 'A−', 'B+', 'B−', 'AB+', 'AB−'].map((b) => (
+              <option key={b}>{b}</option>
+            ))}
+          </select>
+        </label>
+        <label className="fld">
+          <span>Allergies</span>
+          <input value={allergy} onChange={(e) => setAllergy(e.target.value)} placeholder="Penicillin" maxLength={60} />
+        </label>
+        <button className="ds-btn ds-btn-ink sh-slant" onClick={() => router.push('/card')} style={{ marginTop: '8px' }}>
+          Make my full card
+        </button>
+      </div>
+      <div className="sh-cut idcard" aria-live="polite">
+        <p className="ds-small" style={{ color: INK2 }}>Emergency card</p>
+        <p style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.03em', margin: '6px 0 20px', minHeight: '34px' }}>
+          {name || 'Your name'}
+        </p>
+        <div style={{ display: 'flex', gap: '32px' }}>
+          <div>
+            <p className="ds-small" style={{ color: INK2 }}>Blood type</p>
+            <p style={{ fontSize: '40px', fontWeight: 800, color: SOS, lineHeight: 1.1 }}>{blood || 'Add'}</p>
+          </div>
+          <div>
+            <p className="ds-small" style={{ color: INK2 }}>Allergies</p>
+            <p style={{ fontSize: '18px', fontWeight: 700, marginTop: '8px' }}>{allergy || 'None added'}</p>
+          </div>
+        </div>
+        <p className="ds-small" style={{ marginTop: '22px', color: INK2 }}>Saved on this phone only</p>
+      </div>
+    </div>
+  )
+}
+
+// A finished pulse check.
+function PulseReadout() {
+  const rows: [string, string][] = [
+    ['Pulse', '72 a minute'],
+    ['Breathing', '16 a minute'],
+    ['NEWS2 score', '0, low risk'],
+  ]
+  return (
+    <div className="sh-cut frag" style={{ background: PAPER, color: INK }}>
+      <p style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>Your check</p>
+      {rows.map(([k, v]) => (
+        <div key={k} className="hosp">
+          <span style={{ fontWeight: 600 }}>{k}</span>
+          <span style={{ fontWeight: 800, fontSize: '18px' }}>{v}</span>
+        </div>
+      ))}
+      <p className="ds-small" style={{ marginTop: '12px', color: INK2 }}>Camera and motion sensor, 15 seconds</p>
+    </div>
+  )
+}
 
 const PARTNERS: [string, string][] = [
-  [
-    'BBSCA',
-    'Nonprofit that has raised over $1.2M for STEM and humanitarian causes. Has shared Relay Arc with 4,000+ people.',
-  ],
-  [
-    'East Windsor Board of Education',
-    'In discussion about bringing Relay Arc into the district. Not a formal partnership yet.',
-  ],
-  ['Aerox Labs', 'AI startup that reviewed our models and methodology.'],
+  ['BBSCA', 'A nonprofit that has raised over $1.2M for STEM and humanitarian causes. It has shared Relay Arc with more than 4,000 people.'],
+  ['Aerox Labs', 'An AI startup that reviewed our models and how we test them.'],
+  ['East Windsor Board of Education', 'Talking with us about bringing Relay Arc into the district. This is not a formal partnership yet.'],
 ]
 
 export default function Home() {
   const router = useRouter()
 
-  // Signed-in visitors go straight to their dashboard. The page still renders
-  // first so search engines (which do not run this effect) see real content.
+  // Signed in visitors go to their dashboard. The page still renders first so
+  // search engines see real content.
   useEffect(() => {
     const check = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession()
       if (!session) return
-      const { data } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', session.user.id)
-        .single()
+      const { data } = await supabase.from('profiles').select('id').eq('id', session.user.id).single()
       router.replace(data ? '/dashboard' : '/onboarding')
     }
     check()
   }, [router])
 
-  const link: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
-    color: T1,
-    fontSize: '15px',
-    fontWeight: 600,
-    cursor: 'pointer',
-    fontFamily: 'inherit',
-    padding: '6px 0',
-  }
-  const btn = (primary: boolean): React.CSSProperties => ({
-    background: primary ? T1 : 'transparent',
-    color: primary ? '#FFFFFF' : T1,
-    border: `1.5px solid ${T1}`,
-    borderRadius: '4px',
-    padding: '14px 24px',
-    fontSize: '16px',
-    fontWeight: 700,
-    cursor: 'pointer',
-    fontFamily: 'inherit',
-  })
-  const h2: React.CSSProperties = {
-    fontSize: '26px',
-    fontWeight: 800,
-    color: T1,
-    margin: '0 0 18px',
-    letterSpacing: '-0.3px',
-  }
-  const section: React.CSSProperties = {
-    background: '#FFFFFF',
-    borderRadius: '4px',
-    padding: '32px 28px',
-    margin: '0 0 20px',
-    boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
-  }
-
   return (
-    <div style={{ background: PAGE, minHeight: '100dvh', color: T1 }}>
+    <div style={{ background: LEAF, color: INK }}>
       <style>{`
-        .hp-wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
-        .hp-hero { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: center; padding: 56px 0 64px; }
-        .hp-nav-links { display: flex; gap: 22px; align-items: center; }
-        .hp-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-        @media (min-width: 481px) { .hp-mark-sm { display: none; } }
-        @media (max-width: 480px) { .hp-name { display: none !important; } .hp-nav-links { gap: 14px; } .hp-nav-links button { font-size: 14px !important; } }
-        @media (max-width: 760px) {
-          .hp-hero { grid-template-columns: 1fr; gap: 40px; padding: 36px 0 48px; }
-          .hp-hide-sm { display: none !important; }
+        .ch-in { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
+        .ch { padding: 120px 0; }
+        .ch-tall { min-height: 88svh; display: flex; align-items: center; }
+        .ch-tall > .ch-in { width: 100%; }
+        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+        .split-flip > :first-child { order: 2; }
+        .split-media > div { width: 100%; }
+        .frag { padding: 28px; }
+        .hosp { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; }
+        .bubble { background: ${MINT}; padding: 14px 18px; font-size: 17px; line-height: 1.5; border-radius: 18px 18px 18px 0; }
+        .phone { width: 300px; margin: 0 auto; background: ${INK}; padding: 10px; border-radius: 44px; }
+        .phone-screen { background: ${LEAF}; border-radius: 36px; padding: 18px 20px 30px; }
+        .ph-bar { font-size: 12px; font-weight: 600; height: 28px; }
+        .ph-sos { background: ${SOS}; color: #fff; padding: 18px 26px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .ph-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; }
+        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.12); }
+        .nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 0; }
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-links a { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }
+        .nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+        .hero { display: grid; grid-template-columns: 1.45fr 0.55fr; gap: 64px; align-items: center; padding: 64px 0 120px; }
+        .maker { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+        .maker-form { display: grid; gap: 16px; }
+        .fld { display: grid; gap: 6px; font-size: 15px; font-weight: 600; }
+        .fld input, .fld select { height: 52px; padding: 0 16px; border: 0; background: ${PAPER}; font-size: 17px; color: ${INK}; box-shadow: inset 0 -2px 0 ${INK}; }
+        .fld input:focus, .fld select:focus { outline: 3px solid ${INK}; outline-offset: 2px; }
+        .idcard { background: ${PAPER}; padding: 32px; }
+        .partner { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 40px; padding: 28px 0; }
+                .foot-links { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+        .foot-links a { color: ${INK}; font-weight: 600; text-decoration: none; }
+        .foot-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+        .wordmark { font-size: clamp(64px, 17vw, 260px); font-weight: 800; letter-spacing: -0.06em !important; line-height: 1; margin-top: 72px; padding-bottom: 0.08em; white-space: nowrap; }
+        .nav-scroll { display: none; }
+        @media (max-width: 900px) {
+          .ch-in { padding: 0 24px; }
+          .ch { padding: 80px 0; }
+          .ch-tall { min-height: 0; }
+          .split, .hero, .maker, .partner { grid-template-columns: 1fr; gap: 40px; }
+          .split-flip > :first-child { order: 0; }
+          .hero { padding: 24px 0 80px; }
+          .nav-links .hide-sm { display: none; }
+          .nav-scroll { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 12px; }
+          .nav-scroll a { color: ${INK}; font-weight: 600; white-space: nowrap; text-decoration: none; }
+          .frag { padding: 22px; }
+          .partner { gap: 8px; }
         }
       `}</style>
 
-      <div className="hp-wrap">
-        {/* top bar */}
-        <nav
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '12px 20px',
-            margin: '16px 0 0',
-            background: '#FFFFFF',
-            borderRadius: '4px',
-            boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
-          }}
-        >
-          <button
-            onClick={() => router.push('/')}
-            style={{
-              ...link,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              fontSize: '18px',
-              fontWeight: 800,
-            }}
-          >
-            <img
-              src="/logo-wordmark.png"
-              alt="Relay Arc"
-              className="hp-name"
-              style={{ height: '30px', width: 'auto', display: 'block' }}
-            />
-            <span className="hp-mark-sm">
-              <Mark size={30} />
-            </span>
-          </button>
-          <div className="hp-nav-links">
-            <button onClick={() => router.push('/features')} style={link}>
-              Features
-            </button>
-            <button onClick={() => router.push('/engineering')} style={link}>
-              Engineering
-            </button>
-            <button onClick={() => router.push('/partners')} style={link}>
-              Partners
-            </button>
-            <button
-              onClick={() =>
-                document.getElementById('video')?.scrollIntoView({ behavior: 'smooth' })
-              }
-              style={link}
-            >
-              Video
-            </button>
-            <button onClick={() => router.push('/demo')} style={link} className="hp-hide-sm">
-              Demo
-            </button>
-            <button onClick={() => router.push('/donate')} style={link} className="hp-hide-sm">
-              Donate
-            </button>
-            <button onClick={() => router.push('/login')} style={link}>
-              Sign in
-            </button>
-          </div>
-        </nav>
-
-        {/* hero */}
-        <div className="hp-hero">
-          <div>
-            <h1
-              style={{
-                fontSize: 'clamp(36px, 6vw, 54px)',
-                fontWeight: 800,
-                lineHeight: 1.08,
-                letterSpacing: '-0.8px',
-                margin: '0 0 18px',
-              }}
-            >
-              Free emergency help for families far from a hospital.
-            </h1>
-            <p
-              style={{
-                fontSize: '19px',
-                lineHeight: 1.55,
-                color: T2,
-                margin: '0 0 28px',
-                maxWidth: '560px',
-              }}
-            >
-              Press SOS and Relay Arc spots the emergency, picks the closest hospital that can treat
-              it, guides you there, and sends your details to the hospital and your family. It also
-              keeps an offline emergency card, checks pulse and breathing, and runs in any
-              phone&apos;s browser.
-            </p>
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <button onClick={() => router.push('/card')} style={btn(true)}>
-                Make an emergency card
-              </button>
-              <button onClick={() => router.push('/login?signup=1')} style={btn(false)}>
-                Sign up free
-              </button>
+      {/* top bar and opening chapter */}
+      <header style={{ background: LEAF }}>
+        <div className="ch-in">
+          <nav className="nav" aria-label="Main">
+            <a href="/" aria-label="Relay Arc home" style={{ display: 'flex', alignItems: 'center' }}>
+              <img src="/logo-wordmark.png" alt="Relay Arc" style={{ height: '32px', width: 'auto' }} />
+            </a>
+            <div className="nav-links">
+              {NAV.map(([l, h]) => (
+                <a key={h} href={h} className="hide-sm">
+                  {l}
+                </a>
+              ))}
+              <a href="/card" className="ds-btn ds-btn-ink sh-slant" style={{ color: '#fff', minHeight: '46px', padding: '0 26px', textDecoration: 'none' }}>
+                Make a card
+              </a>
             </div>
-            <p style={{ fontSize: '14px', color: T3, marginTop: '14px' }}>
-              The card takes two minutes. No account needed.
-            </p>
-          </div>
-          <PhoneMockup />
-        </div>
-
-        {/* demo video */}
-        <section id="video" style={section}>
-          <h2 style={h2}>A simple demonstration</h2>
-          <VideoEmbed id="ozCUg87GAto" title="Relay Arc demonstration" />
-        </section>
-
-        {/* what it does */}
-        <section style={section}>
-          <h2 style={h2}>What it does</h2>
-          <div className="hp-tiles">
-            {FEATURES.map(([t, d]) => (
-              <div key={t} style={{ background: '#EEF7EC', borderRadius: '4px', padding: '18px 18px' }}>
-                <p style={{ fontSize: '17px', fontWeight: 700, marginBottom: '6px' }}>{t}</p>
-                <p style={{ fontSize: '15px', lineHeight: 1.55, color: T2 }}>{d}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* how it works */}
-        <section style={section}>
-          <h2 style={h2}>How it works</h2>
-          <ol
-            style={{
-              paddingLeft: '22px',
-              fontSize: '17px',
-              lineHeight: 1.7,
-              color: T2,
-              maxWidth: '680px',
-            }}
-          >
-            <li>
-              Set up your profile or emergency card once: medications, allergies, blood type and who
-              to call.
-            </li>
-            <li>In an emergency, press SOS and say or type what is happening.</li>
-            <li>
-              Relay Arc picks a hospital, starts directions, and sends your details to the hospital
-              and your family. If help is far away, it tells you to call 911 first.
-            </li>
-          </ol>
-        </section>
-
-        {/* partners */}
-        <section style={section}>
-          <h2 style={h2}>Who we work with</h2>
-          {PARTNERS.map(([t, d]) => (
-            <p
-              key={t}
-              style={{
-                fontSize: '16px',
-                lineHeight: 1.6,
-                color: T2,
-                marginBottom: '10px',
-                maxWidth: '680px',
-              }}
-            >
-              <strong style={{ color: T1 }}>{t}.</strong> {d}
-            </p>
-          ))}
-          <a
-            href="/partners"
-            style={{
-              color: T1,
-              fontSize: '15px',
-              fontWeight: 600,
-              textDecoration: 'underline',
-              textUnderlineOffset: '3px',
-            }}
-          >
-            All partnerships
-          </a>
-        </section>
-
-        {/* footer */}
-        <footer
-          style={{
-            padding: '20px 4px 48px',
-            fontSize: '14px',
-            color: T3,
-          }}
-        >
-          <p style={{ marginBottom: '14px', color: T2, maxWidth: '680px' }}>
-            Relay Arc helps with decisions; it is not a diagnosis. In an emergency, call 911 first.
-          </p>
-          <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {[
-              ['Video', '#video'],
-              ['Features', '/features'],
-              ['Engineering', '/engineering'],
-              ['Partnerships', '/partners'],
-              ['Demo', '/demo'],
-              ['Donate', '/donate'],
-              ['Privacy', '/privacy'],
-              ['Terms', '/terms'],
-              ['Status', '/status'],
-            ].map(([l, h]) => (
-              <a
-                key={h}
-                href={h}
-                style={{ color: T1, textDecoration: 'underline', textUnderlineOffset: '3px' }}
-              >
+          </nav>
+          <div className="nav-scroll" aria-label="More pages">
+            {NAV.map(([l, h]) => (
+              <a key={h} href={h}>
                 {l}
               </a>
             ))}
           </div>
-          <FollowLinks tone="light" variant="inline" />
-          <p style={{ marginTop: '16px' }}>© {new Date().getFullYear()} Relay Arc</p>
-        </footer>
-      </div>
+
+          <div className="hero">
+            <div data-reveal>
+              <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 5.6vw, 80px)' }}>
+                Free help when the hospital is far
+              </h1>
+              <p className="ds-lead" style={{ marginTop: '32px' }}>
+                Press SOS and Relay Arc spots the emergency, picks the closest hospital that can
+                treat it, guides you there, and sends your details to the hospital and your family.
+                It also keeps an offline emergency card, checks pulse and breathing, and runs in any
+                phone&apos;s browser.
+              </p>
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '40px' }}>
+                <a href="/card" className="ds-btn ds-btn-sos sh-slant">
+                  Make an emergency card
+                </a>
+                <a href="/login?signup=1" className="ds-btn ds-btn-line sh-pill">
+                  Sign up free
+                </a>
+              </div>
+              <p className="ds-small" style={{ marginTop: '18px', color: INK2 }}>
+                The card takes two minutes and needs no account.
+              </p>
+            </div>
+            <div data-reveal>
+              <PhoneHome />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <Chapter id="video" bg={INK} fg="#fff" tall={false}>
+          <div data-reveal>
+            <h2 className="ds-title" style={{ marginBottom: '40px' }}>
+              A simple demonstration
+            </h2>
+            <VideoEmbed id="ozCUg87GAto" title="Relay Arc demonstration" />
+          </div>
+        </Chapter>
+
+        <Chapter bg={SOS} fg="#fff">
+          <Split
+            title="Press SOS and say what is happening"
+            body="Type it or say it in English, Spanish, Hindi or Marathi. Your phone works out what kind of emergency it is, even with no signal."
+          >
+            <SosScreen />
+          </Split>
+        </Chapter>
+
+        <Chapter bg={PAPER} fg={INK}>
+          <Split
+            flip
+            title="It picks a hospital that can treat you"
+            body="Relay Arc ranks nearby hospitals by real drive time and by what each one can treat, using New Jersey health department data for heart attacks. When help is 25 minutes or more away, it tells you to call 911 first."
+          >
+            <HospitalList />
+          </Split>
+        </Chapter>
+
+        <Chapter bg={FOREST} fg="#fff">
+          <Split
+            title="Your family knows right away"
+            body="One tap texts them the hospital and a live map. The hospital gets your blood type, allergies and medicines before you arrive. Directions open inside the app."
+          >
+            <FamilyText />
+          </Split>
+        </Chapter>
+
+        <Chapter id="card" bg={MINT} fg={INK}>
+          <div data-reveal style={{ marginBottom: '56px' }}>
+            <h2 className="ds-title">A card that works with no signal</h2>
+            <p className="ds-lead" style={{ marginTop: '28px' }}>
+              Try it here. The full card takes two minutes and needs no account. It stays on your
+              phone, and a paramedic can read it from your lock screen.
+            </p>
+          </div>
+          <div data-reveal>
+            <CardMaker />
+          </div>
+        </Chapter>
+
+        <Chapter bg={LEAF} fg={INK}>
+          <Split
+            flip
+            title="Check your pulse with your phone"
+            body="Hold a finger over the camera for 15 seconds. Breathing comes from the motion sensor. You get a NEWS2 score a doctor can read, and a short daily check in spots changes early."
+          >
+            <PulseReadout />
+          </Split>
+        </Chapter>
+
+        <Chapter id="partners" bg={INK} fg="#fff" tall={false}>
+          <div data-reveal>
+            <h2 className="ds-title" style={{ marginBottom: '40px' }}>
+              Who we work with
+            </h2>
+          </div>
+          {PARTNERS.map(([t, d]) => (
+            <div key={t} className="partner" data-reveal>
+              <p style={{ fontSize: 'clamp(24px, 2.6vw, 34px)', fontWeight: 800, letterSpacing: '-0.02em' }}>{t}</p>
+              <p className="ds-body" style={{ color: 'rgba(255,255,255,0.88)' }}>
+                {d}
+              </p>
+            </div>
+          ))}
+          <a href="/partners" className="ds-btn ds-btn-line sh-pill" style={{ marginTop: '32px', color: '#fff' }}>
+            All partnerships
+          </a>
+        </Chapter>
+      </main>
+
+      <footer style={{ background: LEAF, padding: '120px 0 0', overflow: 'hidden' }}>
+        <div className="ch-in">
+          <div data-reveal>
+            <h2 className="ds-title">Ready when you need it</h2>
+            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '36px' }}>
+              <a href="/card" className="ds-btn ds-btn-ink sh-slant">
+                Make an emergency card
+              </a>
+              <a href="/login?signup=1" className="ds-btn ds-btn-line sh-pill">
+                Sign up free
+              </a>
+            </div>
+          </div>
+          <div style={{ marginTop: '96px' }}>
+            <div className="foot-links">
+              {[
+                ['Features', '/features'],
+                ['Engineering', '/engineering'],
+                ['Partners', '/partners'],
+                ['Demo', '/demo'],
+                ['Donate', '/donate'],
+                ['Changelog', '/changelog'],
+                ['Status', '/status'],
+                ['Privacy', '/privacy'],
+                ['Terms', '/terms'],
+              ].map(([l, h]) => (
+                <a key={h} href={h}>
+                  {l}
+                </a>
+              ))}
+            </div>
+            <div style={{ marginTop: '20px' }}>
+              <FollowLinks tone="light" variant="inline" />
+            </div>
+            <p className="ds-small" style={{ marginTop: '20px', color: INK2, maxWidth: '640px' }}>
+              Relay Arc helps you decide what to do. It does not diagnose. In an emergency, call 911
+              first. © {new Date().getFullYear()} Relay Arc, a free nonprofit project.
+            </p>
+          </div>
+          <div className="wordmark" aria-hidden>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.12em' }}>
+              Relay Arc
+            </span>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

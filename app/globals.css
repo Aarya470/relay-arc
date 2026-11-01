@@ -320,27 +320,77 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 
 
-/* ── Rounded & friendly ────────────────────────────────────────────────────── */
-input, select, textarea { border-radius: 4px !important; }
+/* ── Relay Arc 2026 system (see DESIGN.md) ─────────────────────────── */
+:root {
+  --leaf: #B3DDAC;
+  --paper: #FFFFFF;
+  --mint: #DDEFD9;
+  --forest: #1E3A23;
+  --ink: #141413;
+  --sos: #A33417;
+  --ink-2: #3F3D36;
+  --slant: 14px;
+  --cut: 18px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-/* ── Basic look ──────────────────────────────────────────────────────────────
-   Plain type everywhere: no spaced-out capital labels, no code-style fonts
-   outside real code, no gradients, and headings at a normal size. */
+input, select, textarea { border-radius: 0 !important; }
+
+/* Plain type: no spaced capitals, no code fonts outside code, no gradients. */
 *:not(pre):not(code):not(pre *):not(code *) {
   letter-spacing: normal !important;
   text-transform: none !important;
 }
-[style*='monospace']:not(pre):not(code) {
-  font-family: inherit !important;
+[style*='monospace']:not(pre):not(code) { font-family: inherit !important; }
+[style*='gradient'] { background-image: none !important; }
+h1:not(.ds-display):not(.ds-title) { font-size: clamp(28px, 5vw, 40px) !important; line-height: 1.15 !important; }
+h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !important; line-height: 1.25 !important; }
+
+/* Type scale */
+.ds-display { font-size: clamp(44px, 7.2vw, 104px); font-weight: 800; line-height: 0.95; letter-spacing: -0.045em !important; margin: 0; text-wrap: balance; }
+.ds-title { font-size: clamp(32px, 4.6vw, 64px); font-weight: 800; line-height: 1; letter-spacing: -0.035em !important; margin: 0; text-wrap: balance; }
+.ds-lead { font-size: 20px; line-height: 1.5; max-width: 34em; }
+.ds-body { font-size: 17px; line-height: 1.55; max-width: 38em; }
+.ds-small { font-size: 14px; line-height: 1.5; }
+
+/* Shapes */
+.sh-square { border-radius: 0 !important; }
+.sh-pill { border-radius: 999px !important; }
+.sh-slant { border-radius: 0 !important; clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%); }
+.sh-cut { border-radius: 0 !important; clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%); }
+
+/* Buttons */
+.ds-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 30px; border: 0; cursor: pointer; white-space: nowrap;
+  font: inherit; font-size: 16px; font-weight: 700; text-decoration: none;
+  transition: transform 160ms var(--ease-out), opacity 160ms var(--ease-out), background-color 160ms var(--ease-out);
 }
-[style*='gradient'] {
-  background-image: none !important;
-}
-h1 {
-  font-size: clamp(28px, 5vw, 40px) !important;
-  line-height: 1.15 !important;
-}
-h2 {
-  font-size: clamp(20px, 3.4vw, 26px) !important;
-  line-height: 1.25 !important;
+.ds-btn:active { transform: scale(0.97); }
+.ds-btn:focus-visible { outline: 3px solid currentColor; outline-offset: -6px; }
+.ds-btn-sos { background: var(--sos); color: #fff; }
+.ds-btn-ink { background: var(--ink); color: #fff; }
+.ds-btn-paper { background: var(--paper); color: var(--ink); }
+.ds-btn-line { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px currentColor; }
+.ds-btn-sos:hover, .ds-btn-ink:hover { opacity: 0.9; }
+.ds-btn-line:hover { background: rgba(127,127,127,0.12); }
+
+/* Chapter pages (features, engineering): full width fields that alternate tone */
+.ds-ch { padding: clamp(64px, 9vw, 120px) 24px; }
+.ds-chapters > .ds-ch:nth-of-type(3n+1) { background: var(--paper); }
+.ds-chapters > .ds-ch:nth-of-type(3n+2) { background: var(--mint); }
+.ds-chapters > .ds-ch:nth-of-type(3n) { background: var(--leaf); }
+
+/* Reveal: only hides content once script has marked the page, so nothing stays hidden without JS */
+.js-reveal [data-reveal] > * { opacity: 0; transform: translateY(24px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+.js-reveal [data-reveal].is-in > * { opacity: 1; transform: none; }
+.js-reveal [data-reveal].is-in > *:nth-child(2) { transition-delay: 80ms; }
+.js-reveal [data-reveal].is-in > *:nth-child(3) { transition-delay: 160ms; }
+.js-reveal [data-reveal].is-in > *:nth-child(4) { transition-delay: 240ms; }
+.js-reveal [data-reveal].is-in > *:nth-child(5) { transition-delay: 320ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal] > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .ds-btn, .ds-btn:active { transition: none; transform: none; }
+  html { scroll-behavior: auto; }
 }

@@ -8,14 +8,13 @@ export default function VideoEmbed({ id, title }: { id: string; title: string })
   const [play, setPlay] = useState(false)
   return (
     <div
+      className="sh-cut"
       style={{
         position: 'relative',
         width: '100%',
         aspectRatio: '16 / 9',
         background: '#141413',
-        borderRadius: '14px',
         overflow: 'hidden',
-        border: '1px solid rgba(20,20,19,0.18)',
       }}
     >
       {play ? (
