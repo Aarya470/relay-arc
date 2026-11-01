@@ -1,7 +1,7 @@
 {
   "name": "Relay Arc",
   "short_name": "Relay Arc",
-  "description": "Cardiac emergency response \u2014 SOS, hospital routing, and your medical profile, ready when it counts.",
+  "description": "Free emergency app: press SOS to find a hospital that can treat you, get directions and alert your family.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#57945C",

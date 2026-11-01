@@ -1,7 +1,7 @@
 'use client'
 // Public changelog.
 import { useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from '@/lib/plain-icons'
 
 // The page green, and why it is this one.
 const INK = '#141413',
@@ -232,7 +232,7 @@ export default function Changelog() {
           >
             What changed, including
             <br />
-            what went wrong<span style={{ color: CRIT }}>.</span>
+            what went wrong.
           </h1>
           <p
             style={{

@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
-import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck, Activity } from 'lucide-react'
+import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck, Activity } from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { autonomicHandoff } from '@/lib/autonomic'
 
@@ -415,7 +415,7 @@ function BriefContent() {
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               color: '#5C5A52',
-              borderRadius: '12px',
+              borderRadius: '4px',
             }}
           >
             Back
@@ -426,7 +426,7 @@ function BriefContent() {
             style={{
               background: copied ? '#42623C' : '#42623C',
               color: copied ? '#B3DDAC' : '#fff',
-              borderRadius: '12px',
+              borderRadius: '4px',
               border: 'none',
               boxShadow: copied
                 ? '0 4px 20px rgba(86,128,78,0.28)'
@@ -467,7 +467,7 @@ function Section({
       style={{
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
         border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
-        borderRadius: '12px',
+        borderRadius: '4px',
       }}
     >
       {children}

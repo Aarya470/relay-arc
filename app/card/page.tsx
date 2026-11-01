@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Download, Printer, Trash2, Check } from 'lucide-react'
+import { ArrowLeft, Download, Printer, Trash2, Check } from '@/lib/plain-icons'
 // The wallet card and the lock-screen image both printed relay-arc.vercel.app, which is the
 // address this site used before the domain existed.
 import { SITE_URL } from '@/lib/site'
@@ -420,8 +420,7 @@ export default function EmergencyCard() {
             maxWidth: '780px',
           }}
         >
-          An emergency card a paramedic can read off your locked phone
-          <span style={{ color: CRIT }}>.</span>
+          An emergency card a paramedic can read off your locked phone.
         </h1>
         <p
           style={{
@@ -609,7 +608,7 @@ export default function EmergencyCard() {
                         border: `1px solid ${INK}`,
                         background: WHITE,
                         color: INK,
-                        borderRadius: '8px',
+                        borderRadius: '4px',
                         padding: '8px 12px',
                         fontSize: '14px',
                         fontWeight: 600,
@@ -627,7 +626,7 @@ export default function EmergencyCard() {
                     border: `1px dashed ${INK3}`,
                     background: WHITE,
                     color: INK2,
-                    borderRadius: '8px',
+                    borderRadius: '4px',
                     padding: '8px 12px',
                     fontSize: '14px',
                     fontWeight: 600,

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Phone, CheckCircle, AlertCircle, Loader2, Plus, Check, QrCode } from 'lucide-react'
+import { Phone, CheckCircle, AlertCircle, Loader2, Plus, Check, QrCode } from '@/lib/plain-icons'
 import { supabase } from '@/lib/supabase'
 import { emergencyNumber } from '@/lib/emergency-number'
 import maplibregl from 'maplibre-gl'
@@ -411,7 +411,7 @@ export default function RelayRoomPage() {
               marginBottom: '8px',
             }}
           >
-            {data?.patientFirstName} needs you here<span style={{ color: RED }}>.</span>
+            {data?.patientFirstName} needs you here.
           </h1>
           <p style={{ color: T2, fontSize: '14.5px', lineHeight: 1.6, marginBottom: '28px' }}>
             Join to see their live location, what&apos;s happening, and how you can help, together
@@ -783,7 +783,7 @@ export default function RelayRoomPage() {
                   fontWeight: 800,
                   fontSize: '16px',
                   padding: '16px',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   textDecoration: 'none',
                   minHeight: '54px',
                 }}

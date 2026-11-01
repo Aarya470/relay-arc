@@ -14,8 +14,7 @@ export default function SiteHeader() {
   return (
     <header
       style={{
-        borderBottom: '1px solid rgba(20,20,19,0.15)',
-        padding: '16px 24px',
+        padding: '16px 24px 0',
         background: '#B3DDAC',
       }}
     >
@@ -28,6 +27,10 @@ export default function SiteHeader() {
           alignItems: 'center',
           gap: '16px',
           flexWrap: 'wrap',
+          background: '#FFFFFF',
+          borderRadius: '4px',
+          padding: '12px 22px',
+          boxShadow: '0 2px 10px rgba(20,20,19,0.06)',
         }}
       >
         <Link href="/" aria-label="Relay Arc home" style={{ display: 'block' }}>

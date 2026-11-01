@@ -318,6 +318,29 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 .page-enter { animation: fadeIn 0.3s ease both; }
 
-/* ── Plain look ────────────────────────────────────────────────────────────
-   No drop shadows or glows anywhere. Edges come from borders and spacing. */
-*, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }
+
+
+/* ── Rounded & friendly ────────────────────────────────────────────────────── */
+input, select, textarea { border-radius: 4px !important; }
+
+/* ── Basic look ──────────────────────────────────────────────────────────────
+   Plain type everywhere: no spaced-out capital labels, no code-style fonts
+   outside real code, no gradients, and headings at a normal size. */
+*:not(pre):not(code):not(pre *):not(code *) {
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+[style*='monospace']:not(pre):not(code) {
+  font-family: inherit !important;
+}
+[style*='gradient'] {
+  background-image: none !important;
+}
+h1 {
+  font-size: clamp(28px, 5vw, 40px) !important;
+  line-height: 1.15 !important;
+}
+h2 {
+  font-size: clamp(20px, 3.4vw, 26px) !important;
+  line-height: 1.25 !important;
+}

@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useCallback } from 'react'
-import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from 'lucide-react'
+import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from '@/lib/plain-icons'
 
 const T1 = '#141413'
 const T2 = '#5C5A52'
@@ -177,7 +177,7 @@ export default function AdminPartners() {
               marginBottom: '8px',
             }}
           >
-            Partner network<span style={{ color: RED }}>.</span>
+            Partner network.
           </h1>
           <p style={{ color: T2, fontSize: '14px', lineHeight: 1.6, marginBottom: '30px' }}>
             Onboard hospitals, rotate access codes, and review the audit trail.

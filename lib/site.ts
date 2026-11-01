@@ -34,7 +34,6 @@ export const PUBLIC_ROUTES: {
   { path: '/partners', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/engineering', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/changelog', priority: 0.7, changeFrequency: 'weekly' },
-  { path: '/demo', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/donate', priority: 0.5, changeFrequency: 'yearly' },
   { path: '/status', priority: 0.4, changeFrequency: 'daily' },
   { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },

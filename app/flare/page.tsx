@@ -2,7 +2,7 @@
 // Flare check — the page that is allowed to say "this is probably not an emergency".
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Phone, ChevronRight, AlertTriangle, Check, Info } from 'lucide-react'
+import { ArrowLeft, Phone, ChevronRight, AlertTriangle, Check, Info } from '@/lib/plain-icons'
 import {
   RED_FLAGS,
   COUNTER_STEPS,
@@ -94,7 +94,7 @@ export default function FlarePage() {
             style={{
               width: 38,
               height: 38,
-              borderRadius: 12,
+              borderRadius: '4px',
               border: `1px solid ${BORDER}`,
               background: WHITE,
               display: 'grid',
@@ -187,7 +187,7 @@ export default function FlarePage() {
                       style={{
                         width: 20,
                         height: 20,
-                        borderRadius: 6,
+                        borderRadius: '4px',
                         flexShrink: 0,
                         marginTop: 2,
                         border: `1.5px solid ${on ? CRIT : BORDER}`,

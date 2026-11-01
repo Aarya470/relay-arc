@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Phone } from 'lucide-react'
+import { ArrowLeft, Phone } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { emergencyNumber } from '@/lib/emergency-number'
 import { useEffect, useState } from 'react'
@@ -148,7 +148,7 @@ export default function LegalDocument({
           }}
         >
           {title}
-          <span style={{ color: ON_3 }}>.</span>
+          .
         </h1>
 
         {/* Everything from here down is prose at 14.5px, so it lives on a

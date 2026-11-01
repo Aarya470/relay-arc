@@ -4,7 +4,7 @@ import { emergencyNumber } from '@/lib/emergency-number'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Phone, ArrowLeft, CheckCircle, Navigation } from 'lucide-react'
+import { Phone, ArrowLeft, CheckCircle, Navigation } from '@/lib/plain-icons'
 
 export default function EmergencyStatus() {
   const [emg, setEmg] = useState({ number: '911', label: '911' })
@@ -150,7 +150,7 @@ export default function EmergencyStatus() {
             gap: '6px',
             background: 'rgba(163,52,23,0.10)',
             border: '1px solid rgba(163,52,23,0.25)',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '6px 12px',
           }}
         >
@@ -179,29 +179,13 @@ export default function EmergencyStatus() {
               background:
                 action.color === 'green' ? 'rgba(86,128,78,0.05)' : 'rgba(86,128,78,0.05)',
               border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.18)' : 'rgba(86,128,78,0.18)'}`,
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '14px',
               display: 'flex',
               alignItems: 'flex-start',
               gap: '12px',
             }}
           >
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '14px',
-                flexShrink: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background:
-                  action.color === 'green' ? 'rgba(86,128,78,0.12)' : 'rgba(86,128,78,0.12)',
-                border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.25)' : 'rgba(86,128,78,0.22)'}`,
-              }}
-            >
-              <CheckCircle size={15} color={action.color === 'green' ? '#42623C' : '#42623C'} />
-            </div>
             <div style={{ flex: 1 }}>
               <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
               <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>
@@ -226,28 +210,13 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(86,128,78,0.05)',
             border: '1px solid rgba(86,128,78,0.18)',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '14px 16px',
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
           }}
         >
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '14px',
-              background: 'rgba(86,128,78,0.12)',
-              border: '1px solid rgba(86,128,78,0.22)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <Navigation size={16} color="#42623C" />
-          </div>
           <div style={{ flex: 1 }}>
             <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>
               Turn right onto County Rd
@@ -270,7 +239,7 @@ export default function EmergencyStatus() {
               color: '#42623C',
               fontSize: '11px',
               padding: '5px 10px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               fontFamily: 'inherit',
               fontWeight: 700,
               flexShrink: 0,
@@ -286,7 +255,7 @@ export default function EmergencyStatus() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '16px',
             }}
           >
@@ -346,7 +315,7 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(163,52,23,0.06)',
             border: '1px solid rgba(163,52,23,0.18)',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '16px',
           }}
         >
@@ -373,7 +342,7 @@ export default function EmergencyStatus() {
               fontWeight: 700,
               fontSize: '14px',
               padding: '14px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
               display: 'flex',

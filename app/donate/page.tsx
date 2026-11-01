@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Copy, Check, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Copy, Check, ExternalLink } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 
 // ─── Design tokens — shared with the homepage ────────────────────────────────
@@ -134,7 +134,7 @@ export default function Donate() {
         >
           Keep the margin
           <br />
-          free<span style={{ color: RED }}>.</span>
+          free.
         </h1>
         <p
           style={{

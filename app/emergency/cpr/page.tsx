@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Phone, ArrowLeft, Play, Square } from 'lucide-react'
+import { Phone, ArrowLeft, Play, Square } from '@/lib/plain-icons'
 import { emergencyNumber } from '@/lib/emergency-number'
 
 const T1 = '#141413'
@@ -170,7 +170,7 @@ export default function CprCoach() {
             marginBottom: '20px',
           }}
         >
-          Push to the beat<span style={{ color: RED }}>.</span>
+          Push to the beat.
         </h1>
 
         {/* Metronome */}
@@ -237,7 +237,7 @@ export default function CprCoach() {
               fontWeight: 700,
               fontSize: '16.5px',
               padding: '17px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               cursor: 'pointer',
               fontFamily: 'inherit',
               minHeight: '58px',

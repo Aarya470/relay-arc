@@ -2,7 +2,7 @@
 // /check — a full NEWS2 vitals check using only the phone.
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Heart, Wind, Phone, Hand, Watch, MessageCircle } from 'lucide-react'
+import { ArrowLeft, Heart, Wind, Phone, Hand, Watch, MessageCircle } from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import {
@@ -31,7 +31,6 @@ import {
 } from '@/lib/risk'
 import { emergencyNumber } from '@/lib/emergency-number'
 import SignalView from '@/components/SignalView'
-import { demoOn } from '@/lib/demo'
 
 // ── look ──────────────────────────────────────────────────────────────────────
 const PAGE = '#B3DDAC',
@@ -82,7 +81,7 @@ const srcLabel: Record<Source, string> = {
 const panel: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1px solid rgba(20,20,19,0.14)',
-  borderRadius: '10px',
+  borderRadius: '4px',
   padding: '18px',
   marginBottom: '14px',
 }
@@ -102,7 +101,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
   background: primary ? tone : '#FFFFFF',
   color: primary ? '#FFFFFF' : tone,
   border: `1.5px solid ${tone}`,
-  borderRadius: '8px',
+  borderRadius: '4px',
   padding: '12px 18px',
   minHeight: '48px',
   fontWeight: 700,
@@ -114,7 +113,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
 const input: React.CSSProperties = {
   width: '100%',
   border: `1px solid ${LINE2}`,
-  borderRadius: '8px',
+  borderRadius: '4px',
   padding: '11px 12px',
   minHeight: '48px',
   fontSize: '16px',
@@ -132,13 +131,8 @@ export default function VitalsCheck() {
     setEmg(emergencyNumber())
   }, [])
 
-  // DEMO MODE (relay-arc.org/check?demo=1, or the site-wide demo switch): for filming.
-  const [demo, setDemo] = useState(false)
-  useEffect(() => {
-    try {
-      setDemo(demoOn() || new URLSearchParams(window.location.search).has('demo'))
-    } catch {}
-  }, [])
+  // Every number on this page is measured. There is no demo mode.
+  const demo = false
 
   // ── measured values ────────────────────────────────────────────────────────
   const [hr, setHr] = useState<Val>(empty)
@@ -776,7 +770,7 @@ export default function VitalsCheck() {
               display: 'block',
               background: PAPER,
               border: `1px solid ${LINE}`,
-              borderRadius: '6px',
+              borderRadius: '4px',
             }}
           />
 
@@ -804,7 +798,7 @@ export default function VitalsCheck() {
               style={{
                 margin: '12px 0 0',
                 padding: '10px 12px',
-                borderRadius: '6px',
+                borderRadius: '4px',
                 background: '#FBEDE8',
                 color: '#6B2410',
                 fontSize: '14px',
@@ -927,7 +921,7 @@ export default function VitalsCheck() {
               style={{
                 width: '100%',
                 minHeight: '128px',
-                borderRadius: '8px',
+                borderRadius: '4px',
                 border: `2px solid ${T1}`,
                 cursor: 'pointer',
                 fontFamily: 'inherit',

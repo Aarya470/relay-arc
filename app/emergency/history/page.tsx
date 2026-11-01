@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Heart, Brain, Zap, Activity, Wind, AlertCircle, Plus } from 'lucide-react'
+import { ArrowLeft, Heart, Brain, Zap, Activity, Wind, AlertCircle, Plus } from '@/lib/plain-icons'
 
 const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 const fadeUp = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: ease } }
@@ -114,7 +114,7 @@ export default function EmergencyHistoryPage() {
             key={i}
             style={{
               height: '72px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#F2F0E8',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -190,21 +190,6 @@ export default function EmergencyHistoryPage() {
               textAlign: 'center',
             }}
           >
-            <div
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '12px',
-                background: 'rgba(163,52,23,0.10)',
-                border: '1px solid rgba(163,52,23,0.18)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-              }}
-            >
-              <AlertCircle size={28} color="#A33417" />
-            </div>
             <p style={{ color: '#141413', fontWeight: 700, fontSize: '18px', marginBottom: '8px' }}>
               No emergency history
             </p>
@@ -221,7 +206,7 @@ export default function EmergencyHistoryPage() {
                 fontWeight: 600,
                 fontSize: '14px',
                 padding: '12px 24px',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 border: 'none',
                 cursor: 'pointer',
               }}
@@ -261,7 +246,7 @@ export default function EmergencyHistoryPage() {
                         style={{
                           background: '#FFFFFF',
                           border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(163,52,23,0.20)'}`,
-                          borderRadius: '12px',
+                          borderRadius: '4px',
                           boxShadow: resolved ? 'none' : '0 2px 16px rgba(163,52,23,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
@@ -274,7 +259,7 @@ export default function EmergencyHistoryPage() {
                           style={{
                             width: '40px',
                             height: '40px',
-                            borderRadius: '12px',
+                            borderRadius: '4px',
                             background: resolved ? '#F2F0E8' : 'rgba(163,52,23,0.12)',
                             display: 'flex',
                             alignItems: 'center',

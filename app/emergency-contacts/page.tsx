@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, X, Phone, User, Heart, Edit2 } from 'lucide-react'
+import { ArrowLeft, Plus, X, Phone, User, Heart, Edit2 } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
@@ -14,7 +14,7 @@ const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
   border: '1px solid #D8D4C8',
-  borderRadius: '12px',
+  borderRadius: '4px',
   padding: '14px 16px',
   color: '#141413',
   // 16px, not 15 or 14, and it is not a taste decision.
@@ -127,7 +127,7 @@ export default function EmergencyContacts() {
             key={i}
             style={{
               height: '72px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -200,7 +200,7 @@ export default function EmergencyContacts() {
           style={{
             background: 'rgba(163,52,23,0.06)',
             border: '1px solid rgba(163,52,23,0.18)',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '12px 14px',
             display: 'flex',
             alignItems: 'flex-start',
@@ -229,7 +229,7 @@ export default function EmergencyContacts() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '14px 16px',
                   display: 'flex',
                   alignItems: 'center',
@@ -310,21 +310,6 @@ export default function EmergencyContacts() {
 
         {contacts.length === 0 && !showAdd && (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <div
-              style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '50%',
-                background: 'rgba(163,52,23,0.08)',
-                border: '1px solid rgba(163,52,23,0.18)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 12px',
-              }}
-            >
-              <User size={22} color="rgba(163,52,23,0.5)" />
-            </div>
             <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '16px' }}>
               No emergency contacts yet
             </p>
@@ -337,7 +322,7 @@ export default function EmergencyContacts() {
                 fontWeight: 700,
                 fontSize: '13px',
                 padding: '12px 22px',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 border: 'none',
                 cursor: 'pointer',
                 height: '44px',
@@ -357,7 +342,7 @@ export default function EmergencyContacts() {
               width: '100%',
               background: 'transparent',
               border: '1.5px dashed #C9CED6',
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '18px',
               display: 'flex',
               alignItems: 'center',
@@ -384,7 +369,7 @@ export default function EmergencyContacts() {
               style={{
                 background: '#FFFFFF',
                 border: '1px solid rgba(86,128,78,0.2)',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 padding: '20px',
               }}
             >
@@ -465,7 +450,7 @@ export default function EmergencyContacts() {
                     fontWeight: 700,
                     fontSize: '14px',
                     padding: '0 20px',
-                    borderRadius: '12px',
+                    borderRadius: '4px',
                     border: 'none',
                     cursor: saving ? 'not-allowed' : 'pointer',
                     marginTop: '4px',

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Send, Loader2, Check } from 'lucide-react'
+import { ArrowLeft, Send, Loader2, Check } from '@/lib/plain-icons'
 import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
@@ -153,38 +153,9 @@ export default function Checkin() {
 
   const QUICK_REPLIES = ['Feeling good!', 'A bit tired', 'Not great today', 'Some discomfort']
 
-  const AIAvatar = ({ size = 28 }: { size?: number }) => (
-    <div
-      style={{
-        width: size,
-        height: size,
-        borderRadius: '14px',
-        flexShrink: 0,
-        background: ACCENT,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {/* ECG pulse line */}
-      <svg
-        aria-hidden
-        focusable={false}
-        width={Math.round(size * 0.62)}
-        height={Math.round(size * 0.42)}
-        viewBox="0 0 18 12"
-        fill="none"
-      >
-        <path
-          d="M0 6 H3 L5 1 L8 11 L10 4 L12 8 H15 L17 3 L18 6"
-          stroke="white"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  )
+  // No avatar picture: the AI's messages are plain bubbles.
+  const AIAvatar = (_p: { size?: number }) => null
+
 
   return (
     <div
@@ -289,6 +260,25 @@ export default function Checkin() {
         </div>
       </div>
 
+      <p
+        role="note"
+        style={{
+          margin: 0,
+          padding: '8px 16px',
+          fontSize: '12.5px',
+          lineHeight: 1.5,
+          color: T1,
+          background: '#FFF8E6',
+          borderBottom: `1px solid ${BORDER}`,
+        }}
+      >
+        You are chatting with an AI, not a person. Your messages are sent to Groq to write the
+        replies. Not for emergencies: call 911.{' '}
+        <a href="/privacy" style={{ color: T1 }}>
+          Privacy
+        </a>
+      </p>
+
       {/* Messages */}
       <div
         style={{
@@ -349,7 +339,7 @@ export default function Checkin() {
                 border: `1px solid ${BORDER}`,
                 boxShadow: SHADOW,
                 padding: '13px 16px',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 display: 'flex',
                 gap: '5px',
                 alignItems: 'center',
@@ -380,7 +370,7 @@ export default function Checkin() {
             style={{
               background: GREEN_DIM,
               border: `1px solid rgba(86,128,78,0.18)`,
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '28px 20px',
               textAlign: 'center',
               margin: '8px 0',
@@ -427,7 +417,7 @@ export default function Checkin() {
                   fontWeight: 700,
                   fontSize: '13px',
                   padding: '13px 16px',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   border: `1px solid ${BORDER}`,
                   cursor: 'pointer',
                 }}
@@ -445,7 +435,7 @@ export default function Checkin() {
                   fontWeight: 700,
                   fontSize: '13px',
                   padding: '13px 16px',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   border: 'none',
                   cursor: 'pointer',
                 }}
@@ -513,7 +503,7 @@ export default function Checkin() {
               flex: 1,
               background: BG,
               border: `1.5px solid ${focused ? ACCENT : BORDER}`,
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '12px 16px',
               color: T1,
               // 16px so mobile Safari does not zoom the page on focus. See the
@@ -538,7 +528,7 @@ export default function Checkin() {
               width: '44px',
               height: '44px',
               background: input.trim() ? ACCENT : BG,
-              borderRadius: '12px',
+              borderRadius: '4px',
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
               cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex',

@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Video,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import BottomNav from '@/components/BottomNav'
 import JitsiMeeting from '@/components/JitsiMeeting'
 
@@ -99,7 +99,7 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
       style={{
         position: 'relative',
         height: ITEM_H * 3,
-        borderRadius: '12px',
+        borderRadius: '4px',
         background: '#FFFFFF',
         border: '1px solid #D8D4C8',
         overflow: 'hidden',
@@ -624,7 +624,7 @@ export default function Appointments() {
                 fontWeight: 700,
                 fontSize: '12px',
                 padding: '10px 16px',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
@@ -718,7 +718,7 @@ export default function Appointments() {
             width: '100%',
             background: '#42623C',
             border: 'none',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '18px',
             cursor: 'pointer',
             textAlign: 'left',
@@ -727,20 +727,6 @@ export default function Appointments() {
             gap: '14px',
           }}
         >
-          <div
-            style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              background: 'rgba(255,255,255,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <Calendar size={20} color="white" />
-          </div>
           <div>
             <p
               style={{
@@ -765,21 +751,6 @@ export default function Appointments() {
 
         {appointments.length === 0 && !loading && (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
-            <div
-              style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '12px',
-                background: '#F2F0E8',
-                border: '1px solid #98C890',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 12px',
-              }}
-            >
-              <Calendar size={20} color="#5C5A52" />
-            </div>
             <p style={{ color: '#5C5A52', fontSize: '13px' }}>No appointments yet</p>
           </div>
         )}
@@ -795,7 +766,7 @@ export default function Appointments() {
               style={{
                 background: '#FFFFFF',
                 border: `1px solid ${joinable ? 'rgba(86,128,78,0.30)' : cardBorderColor(a.status)}`,
-                borderRadius: '12px',
+                borderRadius: '4px',
                 padding: '16px',
                 boxShadow: joinable
                   ? '0 4px 20px rgba(86,128,78,0.14)'
@@ -874,7 +845,7 @@ export default function Appointments() {
                     justifyContent: 'center',
                     gap: '8px',
                     background: '#42623C',
-                    borderRadius: '12px',
+                    borderRadius: '4px',
                     padding: '13px',
                     color: 'white',
                     fontWeight: 700,
@@ -901,7 +872,7 @@ export default function Appointments() {
                     gap: '8px',
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
-                    borderRadius: '12px',
+                    borderRadius: '4px',
                     padding: '12px',
                     color: '#5C5A52',
                     fontWeight: 700,
@@ -944,7 +915,7 @@ export default function Appointments() {
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
                 background: '#FFFFFF',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 width: '100%',
                 maxHeight: '92dvh',
                 overflowY: 'auto',
@@ -1007,7 +978,7 @@ export default function Appointments() {
                     style={{
                       background: '#FFFFFF',
                       border: '1px solid #98C890',
-                      borderRadius: '12px',
+                      borderRadius: '4px',
                       padding: '16px',
                       marginBottom: '12px',
                     }}
@@ -1064,7 +1035,7 @@ export default function Appointments() {
                           gap: '8px',
                           background: 'rgba(86,128,78,0.10)',
                           border: '1px solid rgba(86,128,78,0.22)',
-                          borderRadius: '12px',
+                          borderRadius: '4px',
                           padding: '10px 14px',
                         }}
                       >
@@ -1087,7 +1058,7 @@ export default function Appointments() {
                     width: '100%',
                     background: '#FFFFFF',
                     border: `1.5px solid ${focused ? 'rgba(86,128,78,0.50)' : '#98C890'}`,
-                    borderRadius: '12px',
+                    borderRadius: '4px',
                     padding: '14px 16px',
                     color: '#141413',
                     fontSize: '16px',
@@ -1112,7 +1083,7 @@ export default function Appointments() {
                     fontWeight: 800,
                     fontSize: '15px',
                     padding: '16px',
-                    borderRadius: '12px',
+                    borderRadius: '4px',
                     border: 'none',
                     cursor: canSubmit ? 'pointer' : 'default',
                     boxShadow: canSubmit ? '0 8px 24px rgba(86,128,78,0.28)' : 'none',

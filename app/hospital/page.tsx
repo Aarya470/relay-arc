@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Loader2, Minus, Plus, ExternalLink, Check } from 'lucide-react'
+import { Loader2, Minus, Plus, ExternalLink, Check } from '@/lib/plain-icons'
 import { DEMO_PARTNER, DEMO_INCOMING, DEMO_BANNER } from '@/lib/demo-data'
 
 const T1 = '#141413'
@@ -217,7 +217,7 @@ export default function HospitalPortal() {
               marginBottom: '8px',
             }}
           >
-            ER dispatch board<span style={{ color: RED }}>.</span>
+            ER dispatch board.
           </h1>
           <p style={{ color: T2, fontSize: '14px', lineHeight: 1.6, marginBottom: '32px' }}>
             See incoming Relay patients before they arrive, and tell Relay your live capacity so

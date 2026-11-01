@@ -24,7 +24,7 @@ import {
   Star,
   Activity,
   Zap,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 // Inline type — mirrors the export in app/api/groq/health-intelligence/route.ts
 // (Defined here to avoid bundling server-only imports into the client)
 interface HealthIntelligence {
@@ -894,7 +894,7 @@ export default function Dashboard() {
             key={i}
             style={{
               height: `${h}px`,
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#98C890',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -937,7 +937,7 @@ export default function Dashboard() {
       style={{
         background: SURFACE,
         border: `1px solid ${BORDER}`,
-        borderRadius: '12px',
+        borderRadius: '4px',
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
         ...style,
@@ -1109,18 +1109,20 @@ export default function Dashboard() {
               whileTap={{ scale: 0.9 }}
               onClick={() => router.push('/settings')}
               style={{
-                width: '36px',
                 height: '36px',
-                borderRadius: '14px',
+                padding: '0 12px',
+                borderRadius: '4px',
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                color: T1,
+                fontSize: '14px',
+                fontWeight: 600,
+                fontFamily: 'inherit',
                 cursor: 'pointer',
+                whiteSpace: 'nowrap',
               }}
             >
-              <Settings size={15} color={T2} />
+              Settings
             </motion.button>
           </div>
         </div>
@@ -1146,7 +1148,7 @@ export default function Dashboard() {
             style={{
               background: SURFACE,
               border: `1px solid ${BORDER}`,
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
@@ -1213,7 +1215,7 @@ export default function Dashboard() {
               width: '100%',
               background: RED,
               // Chamfered rather than rounded.
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '28px 24px',
               border: 'none',
               cursor: 'pointer',
@@ -1270,19 +1272,6 @@ export default function Dashboard() {
             >
               {/* An octagon, because that is the stop sign, and it is the only
                   shape in this app that means emergency. Nothing else wears it. */}
-              <div
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.22)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Phone size={24} color="white" strokeWidth={2} />
-              </div>
             </div>
           </motion.button>
         </motion.div>
@@ -1308,7 +1297,7 @@ export default function Dashboard() {
               style={{
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                borderRadius: '12px',
+                borderRadius: '4px',
                 padding: '14px 16px',
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -1392,7 +1381,7 @@ export default function Dashboard() {
               background: checkinToday ? SURFACE : T1,
               color: checkinToday ? T1 : '#FFFFFF',
               border: `1.5px solid ${T1}`,
-              borderRadius: '10px',
+              borderRadius: '4px',
               padding: '16px 14px',
               textAlign: 'left',
               cursor: 'pointer',
@@ -1411,7 +1400,7 @@ export default function Dashboard() {
               background: T1,
               color: '#FFFFFF',
               border: `1.5px solid ${T1}`,
-              borderRadius: '10px',
+              borderRadius: '4px',
               padding: '16px 14px',
               textAlign: 'left',
               cursor: 'pointer',

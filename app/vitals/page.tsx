@@ -5,7 +5,7 @@ import { DEMO_VITALS, DEMO_BANNER } from '@/lib/demo-data'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Activity, Save, Heart, Droplets, Wind } from 'lucide-react'
+import { ArrowLeft, Activity, Save, Heart, Droplets, Wind } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
@@ -237,7 +237,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       style={{
         background: '#FFFFFF',
         border: '1px solid #98C890',
-        borderRadius: '12px',
+        borderRadius: '4px',
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
@@ -609,7 +609,7 @@ export default function VitalsPage() {
             background: '#141413',
             color: '#FFFFFF',
             border: 'none',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '16px',
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -632,7 +632,7 @@ export default function VitalsPage() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '16px',
           }}
         >
@@ -654,20 +654,6 @@ export default function VitalsPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(163,52,23,0.12)',
-                  border: '1px solid rgba(163,52,23,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Heart size={14} color="#A33417" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Heart rate</p>
                 <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
@@ -714,20 +700,6 @@ export default function VitalsPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(86,128,78,0.12)',
-                  border: '1px solid rgba(86,128,78,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Activity size={14} color="#42623C" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>
                   Blood pressure
@@ -784,20 +756,6 @@ export default function VitalsPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(86,128,78,0.12)',
-                  border: '1px solid rgba(86,128,78,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Droplets size={14} color="#42623C" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Oxygen sat.</p>
                 <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
@@ -835,20 +793,6 @@ export default function VitalsPage() {
           {/* Resp rate */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '14px',
-                  background: 'rgba(168,114,0,0.12)',
-                  border: '1px solid rgba(168,114,0,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Wind size={14} color="#7C5200" />
-              </div>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>
                 <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
@@ -932,7 +876,7 @@ export default function VitalsPage() {
             fontWeight: 800,
             fontSize: '15px',
             padding: '17px',
-            borderRadius: '12px',
+            borderRadius: '4px',
             border: 'none',
             cursor: saving ? 'not-allowed' : 'pointer',
             display: 'flex',
@@ -965,7 +909,7 @@ export default function VitalsPage() {
                 key={i}
                 style={{
                   height: '140px',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   background: '#FFFFFF',
                   marginBottom: '10px',
                 }}
@@ -1014,7 +958,7 @@ export default function VitalsPage() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '36px 16px',
                   textAlign: 'center',
                 }}

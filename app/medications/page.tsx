@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, Check, X, ChevronDown, Pill } from 'lucide-react'
+import { ArrowLeft, Plus, Check, X, ChevronDown, Pill } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
@@ -325,7 +325,7 @@ export default function Medications() {
             key={i}
             style={{
               height: '112px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#98C890',
               marginBottom: '12px',
               animation: 'pulse 1.5s ease-in-out infinite',
@@ -488,7 +488,7 @@ export default function Medications() {
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
                 background: SURFACE,
-                borderRadius: '12px',
+                borderRadius: '4px',
                 padding: '24px 20px 40px',
                 width: '100%',
                 maxHeight: '85dvh',
@@ -732,7 +732,7 @@ export default function Medications() {
           style={{
             background: SURFACE,
             border: `1px solid ${BORDER}`,
-            borderRadius: '12px',
+            borderRadius: '4px',
             marginBottom: '14px',
             overflow: 'hidden',
             boxShadow: SHADOW,
@@ -929,21 +929,6 @@ export default function Medications() {
 
         {medications.length === 0 && (
           <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <div
-              style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '12px',
-                background: ACCENT_DIM,
-                border: `1px solid rgba(86,128,78,0.14)`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-              }}
-            >
-              <Pill size={22} color={ACCENT} />
-            </div>
             <p style={{ color: T2, fontSize: '14px', marginBottom: '16px' }}>
               No medications added yet
             </p>
@@ -974,7 +959,7 @@ export default function Medications() {
             style={{
               background: SURFACE,
               border: `1px solid ${BORDER}`,
-              borderRadius: '12px',
+              borderRadius: '4px',
               marginBottom: '12px',
               overflow: 'hidden',
               boxShadow: SHADOW,
@@ -984,21 +969,6 @@ export default function Medications() {
             <div
               style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
             >
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '12px',
-                  background: ACCENT_DIM,
-                  border: `1px solid rgba(86,128,78,0.14)`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                <Pill size={16} color={ACCENT} />
-              </div>
               <div style={{ flex: 1 }}>
                 <p
                   style={{ color: T1, fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { emergencyNumber } from '@/lib/emergency-number'
-import { Phone, MessageSquare, HeartPulse, Check } from 'lucide-react'
+import { Phone, MessageSquare, HeartPulse, Check } from '@/lib/plain-icons'
 
 const T1 = '#141413'
 const RED = '#A33417'
@@ -157,7 +157,7 @@ export default function GuardianWatch({
           <div
             style={{
               background: '#FFFFFF',
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '28px 24px',
               width: '100%',
               maxWidth: '360px',
@@ -220,7 +220,7 @@ export default function GuardianWatch({
                 fontWeight: 800,
                 fontSize: '18px',
                 padding: '18px',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 border: 'none',
                 cursor: 'pointer',
                 fontFamily: 'inherit',
@@ -263,7 +263,7 @@ export default function GuardianWatch({
               marginBottom: '14px',
             }}
           >
-            ⚠ Guardian alert: no response
+            Guardian alert: no response
           </motion.p>
           <h1
             style={{
@@ -304,7 +304,7 @@ export default function GuardianWatch({
                 fontWeight: 900,
                 fontSize: '19px',
                 padding: '19px',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 textDecoration: 'none',
                 minHeight: '62px',
               }}
@@ -325,7 +325,7 @@ export default function GuardianWatch({
                   fontWeight: 700,
                   fontSize: '15.5px',
                   padding: '16px',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   textDecoration: 'none',
                   minHeight: '56px',
                 }}
@@ -346,7 +346,7 @@ export default function GuardianWatch({
                 fontWeight: 700,
                 fontSize: '15.5px',
                 padding: '16px',
-                borderRadius: '12px',
+                borderRadius: '4px',
                 cursor: 'pointer',
                 fontFamily: 'inherit',
                 minHeight: '56px',

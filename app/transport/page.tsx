@@ -16,7 +16,7 @@ import {
   Activity,
   Car,
   CheckCircle,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { findNearbyHospitals, Hospital } from '@/lib/hospitals'
 
@@ -217,7 +217,7 @@ export default function TransportRequest() {
                     style={{
                       background: '#FFFFFF',
                       border: '1px solid #98C890',
-                      borderRadius: '12px',
+                      borderRadius: '4px',
                       padding: '18px 16px',
                       textAlign: 'left',
                       cursor: 'pointer',
@@ -227,7 +227,7 @@ export default function TransportRequest() {
                       style={{
                         width: '38px',
                         height: '38px',
-                        borderRadius: '12px',
+                        borderRadius: '4px',
                         background: 'rgba(163,52,23,0.10)',
                         border: '1px solid rgba(163,52,23,0.20)',
                         display: 'flex',
@@ -266,27 +266,12 @@ export default function TransportRequest() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '24px 20px',
                   marginBottom: '16px',
                   textAlign: 'center',
                 }}
               >
-                <div
-                  style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '12px',
-                    background: 'rgba(86,128,78,0.10)',
-                    border: '1px solid rgba(86,128,78,0.18)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px',
-                  }}
-                >
-                  <MapPin size={24} color="#42623C" />
-                </div>
                 <p
                   style={{
                     color: '#141413',
@@ -321,7 +306,7 @@ export default function TransportRequest() {
                     fontWeight: 700,
                     fontSize: '15px',
                     padding: '15px',
-                    borderRadius: '12px',
+                    borderRadius: '4px',
                     border: 'none',
                     cursor: 'pointer',
                     display: 'flex',
@@ -354,7 +339,7 @@ export default function TransportRequest() {
                 style={{
                   background: 'rgba(86,128,78,0.08)',
                   border: '1px solid rgba(86,128,78,0.15)',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '11px 14px',
                   marginBottom: '16px',
                   display: 'flex',
@@ -395,7 +380,7 @@ export default function TransportRequest() {
                       background:
                         selectedHospital?.id === h.id ? 'rgba(86,128,78,0.10)' : '#FFFFFF',
                       border: `1px solid ${selectedHospital?.id === h.id ? 'rgba(86,128,78,0.35)' : '#F2F0E8'}`,
-                      borderRadius: '12px',
+                      borderRadius: '4px',
                       padding: '14px',
                       textAlign: 'left',
                       cursor: 'pointer',
@@ -448,7 +433,7 @@ export default function TransportRequest() {
                   fontWeight: 700,
                   fontSize: '15px',
                   padding: '15px',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   border: 'none',
                   cursor: selectedHospital ? 'pointer' : 'not-allowed',
                   display: 'flex',
@@ -475,23 +460,6 @@ export default function TransportRequest() {
               animate={{ opacity: 1 }}
               style={{ textAlign: 'center', paddingTop: '40px' }}
             >
-              <motion.div
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  background: 'rgba(86,128,78,0.10)',
-                  border: '2px solid rgba(86,128,78,0.20)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 24px',
-                }}
-              >
-                <Car size={32} color="#42623C" />
-              </motion.div>
               <h2
                 style={{
                   color: '#141413',
@@ -518,7 +486,7 @@ export default function TransportRequest() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '16px',
                   textAlign: 'left',
                   marginBottom: '24px',
@@ -593,7 +561,7 @@ export default function TransportRequest() {
                   marginTop: '24px',
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '12px 24px',
                   color: '#5C5A52',
                   fontSize: '13px',
@@ -617,27 +585,12 @@ export default function TransportRequest() {
                 style={{
                   background: 'rgba(86,128,78,0.06)',
                   border: '1px solid rgba(86,128,78,0.18)',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '24px 20px',
                   textAlign: 'center',
                   marginBottom: '14px',
                 }}
               >
-                <div
-                  style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '12px',
-                    background: 'rgba(86,128,78,0.12)',
-                    border: '1px solid rgba(86,128,78,0.22)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 14px',
-                  }}
-                >
-                  <CheckCircle size={26} color="#42623C" />
-                </div>
                 <p
                   style={{
                     color: '#42623C',
@@ -655,7 +608,7 @@ export default function TransportRequest() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '16px',
                   marginBottom: '10px',
                 }}
@@ -682,7 +635,7 @@ export default function TransportRequest() {
                     style={{
                       width: '44px',
                       height: '44px',
-                      borderRadius: '12px',
+                      borderRadius: '4px',
                       background: 'rgba(86,128,78,0.10)',
                       border: '1px solid rgba(86,128,78,0.18)',
                       display: 'flex',
@@ -720,7 +673,7 @@ export default function TransportRequest() {
                       gap: '8px',
                       background: 'rgba(86,128,78,0.08)',
                       border: '1px solid rgba(86,128,78,0.16)',
-                      borderRadius: '12px',
+                      borderRadius: '4px',
                       padding: '12px',
                       color: '#42623C',
                       fontWeight: 600,
@@ -736,7 +689,7 @@ export default function TransportRequest() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '12px',
+                  borderRadius: '4px',
                   padding: '16px',
                 }}
               >

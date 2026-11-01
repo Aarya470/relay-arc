@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { Loader2, Eye, EyeOff, ArrowRight, MailCheck } from 'lucide-react'
+import { Loader2, Eye, EyeOff, ArrowRight, MailCheck } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { SITE_URL } from '@/lib/site'
 
@@ -100,7 +100,9 @@ export default function Login() {
               : error.message,
           )
         } else {
-          router.push('/dashboard')
+          // Only same-site paths, so ?next= can't be used to send people elsewhere.
+          const next = new URLSearchParams(window.location.search).get('next') || ''
+          router.push(/^\/(?!\/)[\w\-/]*$/.test(next) ? next : '/dashboard')
         }
       }
     } catch (e) {
@@ -206,7 +208,7 @@ export default function Login() {
                 marginBottom: 14,
               }}
             >
-              One more step. Check your email<span style={{ color: RED }}>.</span>
+              One more step. Check your email.
             </h1>
             <p style={{ color: T2, fontSize: '15px', lineHeight: 1.6, marginBottom: 10 }}>
               A confirmation link is on its way to <strong style={{ color: T1 }}>{sentTo}</strong>.
@@ -220,7 +222,7 @@ export default function Login() {
             <div
               style={{
                 border: `1px solid ${BORDER}`,
-                borderRadius: 12,
+                borderRadius: '4px',
                 padding: '14px 16px',
                 marginBottom: 22,
               }}
@@ -322,7 +324,7 @@ export default function Login() {
                 }}
               >
                 {isSignUp ? 'Create your profile' : 'Welcome back'}
-                <span style={{ color: RED }}>.</span>
+                .
               </motion.h1>
             </AnimatePresence>
             <p style={{ color: T2, fontSize: '14px', lineHeight: 1.55, marginBottom: '36px' }}>

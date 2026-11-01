@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ChevronDown, RefreshCw, CheckCircle2, Circle } from 'lucide-react'
+import { ArrowLeft, ChevronDown, RefreshCw, CheckCircle2, Circle } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 import { toast } from 'sonner'
@@ -120,7 +120,7 @@ export default function Timeline() {
             key={i}
             style={{
               height: '64px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#F2F0E8',
               marginBottom: '8px',
             }}
@@ -212,7 +212,7 @@ export default function Timeline() {
             style={{
               background: 'rgba(86,128,78,0.06)',
               border: '1px solid rgba(86,128,78,0.16)',
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
@@ -326,7 +326,7 @@ export default function Timeline() {
                     flex: 1,
                     background: cardBg,
                     border: `1px solid ${cardBorder}`,
-                    borderRadius: '12px',
+                    borderRadius: '4px',
                     overflow: 'hidden',
                     boxShadow: isCurrent
                       ? '0 6px 24px rgba(86,128,78,0.12)'

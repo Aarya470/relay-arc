@@ -2,7 +2,7 @@
 // What an emergency room owes you.
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Scale, AlertCircle, ArrowRight, Printer } from 'lucide-react'
+import { ArrowLeft, Scale, AlertCircle, ArrowRight, Printer } from '@/lib/plain-icons'
 import { rightsFor, guessCountry, COUNTRIES, type Country } from '@/lib/rights'
 
 // Ink tones. These are for text INSIDE the white cards, which is most of this
@@ -52,7 +52,7 @@ export default function RightsPage() {
             style={{
               width: 38,
               height: 38,
-              borderRadius: 12,
+              borderRadius: '4px',
               border: `1px solid ${WHITE}`,
               background: WHITE,
               display: 'grid',
@@ -104,7 +104,7 @@ export default function RightsPage() {
                   letterSpacing: 1,
                   fontWeight: 700,
                   padding: '9px 14px',
-                  borderRadius: 8,
+                  borderRadius: '4px',
                   cursor: 'pointer',
                   border: `1px solid ${on ? WHITE : RULE}`,
                   background: on ? WHITE : 'transparent',
@@ -176,7 +176,7 @@ export default function RightsPage() {
                 style={{
                   background: TINT,
                   borderLeft: `2px solid ${INK3}`,
-                  borderRadius: 6,
+                  borderRadius: '4px',
                   padding: '12px 14px',
                   marginBottom: r.action ? 12 : 14,
                 }}
@@ -201,7 +201,7 @@ export default function RightsPage() {
                   style={{
                     background: '#F1F3EC',
                     borderLeft: `2px solid ${GREEN_DEEP}`,
-                    borderRadius: 6,
+                    borderRadius: '4px',
                     padding: '12px 14px',
                     marginBottom: 14,
                   }}

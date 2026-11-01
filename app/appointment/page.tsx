@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import { ArrowLeft, Sparkles, RefreshCw, MessageSquare, AlertTriangle, Pill } from 'lucide-react'
+import { ArrowLeft, Sparkles, RefreshCw, MessageSquare, AlertTriangle, Pill } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 
@@ -92,7 +92,7 @@ export default function AppointmentSummary() {
             key={i}
             style={{
               height: '80px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -179,7 +179,7 @@ export default function AppointmentSummary() {
               style={{
                 background: s.bg,
                 border: `1px solid ${s.border}`,
-                borderRadius: '12px',
+                borderRadius: '4px',
                 padding: '16px 12px',
                 textAlign: 'center',
                 boxShadow: '0 4px 16px rgba(20,20,19,0.06)',
@@ -225,7 +225,7 @@ export default function AppointmentSummary() {
               fontWeight: 700,
               fontSize: '15px',
               padding: '20px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -248,7 +248,7 @@ export default function AppointmentSummary() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '12px',
+              borderRadius: '4px',
               padding: '18px',
               boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
             }}
@@ -262,20 +262,6 @@ export default function AppointmentSummary() {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div
-                  style={{
-                    width: '22px',
-                    height: '22px',
-                    borderRadius: '14px',
-                    background: 'rgba(168,114,0,0.12)',
-                    border: '1px solid rgba(168,114,0,0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Sparkles size={11} color="#7C5200" />
-                </div>
                 <p
                   style={{
                     color: 'rgba(237,234,224,0.4)',
@@ -323,7 +309,7 @@ export default function AppointmentSummary() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '12px',
+            borderRadius: '4px',
             padding: '18px',
             boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
           }}

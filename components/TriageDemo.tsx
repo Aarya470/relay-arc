@@ -65,11 +65,17 @@ export default function TriageDemo() {
   const abstained = !!result?.abstain
 
   return (
-    <div style={{ border: `2px solid ${T1}`, background: '#FFFFFF' }}>
+    <div
+      style={{
+        border: `1px solid rgba(20,20,19,0.15)`,
+        background: '#FFFFFF',
+        borderRadius: '4px',
+      }}
+    >
       {/* header strip */}
       <div
         style={{
-          borderBottom: `1px solid ${T1}`,
+          borderBottom: `1px solid rgba(20,20,19,0.15)`,
           padding: '11px 16px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -278,7 +284,7 @@ export default function TriageDemo() {
       {/* footer facts */}
       <div
         style={{
-          borderTop: `1px solid ${T1}`,
+          borderTop: `1px solid rgba(20,20,19,0.15)`,
           background: BG2,
           padding: '11px 16px',
           display: 'flex',

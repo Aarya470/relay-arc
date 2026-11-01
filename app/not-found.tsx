@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Home, ArrowLeft } from 'lucide-react'
+import { Home, ArrowLeft } from '@/lib/plain-icons'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 

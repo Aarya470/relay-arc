@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { CheckCircle, AlertTriangle, Clock, Phone, ChevronLeft, History } from 'lucide-react'
+import { CheckCircle, AlertTriangle, Clock, Phone, ChevronLeft, History } from '@/lib/plain-icons'
 
 const EMERGENCY_LABELS: Record<string, string> = {
   chest_pain: 'Chest pain',
@@ -359,7 +359,7 @@ function RecoveryContent() {
               gap: '8px',
               width: '100%',
               padding: '12px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               fontSize: '14px',
               fontWeight: 600,
               textDecoration: 'none',
@@ -383,7 +383,7 @@ function RecoveryContent() {
               justifyContent: 'center',
               gap: '8px',
               padding: '12px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               color: '#5C5A52',
@@ -400,7 +400,7 @@ function RecoveryContent() {
             style={{
               flex: 1,
               padding: '12px',
-              borderRadius: '12px',
+              borderRadius: '4px',
               background: '#42623C',
               border: 'none',
               color: '#fff',
@@ -434,7 +434,7 @@ function Card({
       style={{
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
         border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
-        borderRadius: '12px',
+        borderRadius: '4px',
         padding: '16px',
       }}
     >

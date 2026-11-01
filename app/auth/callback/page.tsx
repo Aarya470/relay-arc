@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 
 const T1 = '#141413',
@@ -144,7 +144,7 @@ export default function AuthCallback() {
                 marginBottom: 14,
               }}
             >
-              Your email is confirmed<span style={{ color: RED }}>.</span>
+              Your email is confirmed.
             </h1>
             <p style={{ color: T2, fontSize: 15, lineHeight: 1.6, marginBottom: 8 }}>
               {email ? (
@@ -163,7 +163,7 @@ export default function AuthCallback() {
               style={{
                 width: '100%',
                 padding: 15,
-                borderRadius: 10,
+                borderRadius: '4px',
                 border: 'none',
                 background: T1,
                 color: '#FFF',
@@ -215,7 +215,7 @@ export default function AuthCallback() {
               style={{
                 width: '100%',
                 padding: 15,
-                borderRadius: 10,
+                borderRadius: '4px',
                 border: 'none',
                 background: T1,
                 color: '#FFF',

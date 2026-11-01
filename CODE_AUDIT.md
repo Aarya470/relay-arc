@@ -35,7 +35,7 @@
 **File:** `.env.local`  
 **Description:** The `.env.local` file contains live production credentials:
 - Supabase project URL and anon key (identifies the real database)
-- Groq API key (`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`)
+- Groq API key (`gsk_[REDACTED: rotated]`)
 - VAPID public and **private** keys
 - Contact email
 

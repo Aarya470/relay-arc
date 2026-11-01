@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { RefreshCw, ArrowLeft, Check, X, AlertTriangle } from 'lucide-react'
+import { RefreshCw, ArrowLeft, Check, X, AlertTriangle } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
 import { useRouter } from 'next/navigation'
 
@@ -178,7 +178,7 @@ export default function StatusPage() {
             : operational
               ? 'All critical systems operational'
               : 'Degraded. A critical dependency is down'}
-          <span style={{ color: operational ? GREEN : RED }}>.</span>
+          .
         </h1>
         <p style={{ color: T2, fontSize: '15px', lineHeight: 1.65, marginBottom: '38px' }}>
           Every external service an emergency depends on, checked live from the server. Refreshes

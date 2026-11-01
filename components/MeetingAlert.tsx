@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import { Video, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Video, ChevronLeft, ChevronRight } from '@/lib/plain-icons'
 import JitsiMeeting from './JitsiMeeting'
 import { registerPushNotifications } from '@/lib/notifications'
 
@@ -94,7 +94,7 @@ function MiniCalendar({
           style={{
             width: 28,
             height: 28,
-            borderRadius: 8,
+            borderRadius: '4px',
             background: 'rgba(26,40,32,0.06)',
             border: 'none',
             cursor: 'pointer',
@@ -115,7 +115,7 @@ function MiniCalendar({
           style={{
             width: 28,
             height: 28,
-            borderRadius: 8,
+            borderRadius: '4px',
             background: 'rgba(26,40,32,0.06)',
             border: 'none',
             cursor: 'pointer',
@@ -156,7 +156,7 @@ function MiniCalendar({
               disabled={past}
               style={{
                 height: 32,
-                borderRadius: 8,
+                borderRadius: '4px',
                 border: 'none',
                 background: sel ? '#5C8B74' : 'transparent',
                 color: past ? 'rgba(26,40,32,0.15)' : sel ? 'white' : 'rgba(26,40,32,0.7)',
@@ -195,7 +195,7 @@ function TimeWheel({ value, onChange }: { value: string; onChange: (t: string) =
       style={{
         position: 'relative',
         height: ITEM_H * 3,
-        borderRadius: 12,
+        borderRadius: '4px',
         background: 'rgba(26,40,32,0.03)',
         border: '1px solid rgba(26,40,32,0.08)',
         overflow: 'hidden',
@@ -210,7 +210,7 @@ function TimeWheel({ value, onChange }: { value: string; onChange: (t: string) =
           height: ITEM_H,
           background: 'rgba(92,139,116,0.1)',
           border: '1px solid rgba(92,139,116,0.22)',
-          borderRadius: 8,
+          borderRadius: '4px',
           pointerEvents: 'none',
           zIndex: 1,
         }}

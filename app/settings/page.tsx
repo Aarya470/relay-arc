@@ -15,7 +15,7 @@ import {
   History,
   Shield,
   Activity,
-} from 'lucide-react'
+} from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
 import DateField from '@/components/DateField'
@@ -25,14 +25,14 @@ const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 const card: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1px solid #98C890',
-  borderRadius: '12px',
+  borderRadius: '4px',
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
   border: '1px solid #D8D4C8',
-  borderRadius: '12px',
+  borderRadius: '4px',
   padding: '14px 16px',
   color: '#141413',
   // 16px, not 15 or 14, and it is not a taste decision.
@@ -118,7 +118,7 @@ export default function Settings() {
         {[1, 2, 3, 4].map((i) => (
           <Skeleton
             key={i}
-            style={{ height: '56px', borderRadius: '12px', background: '#F2F0E8' }}
+            style={{ height: '56px', borderRadius: '4px', background: '#F2F0E8' }}
           />
         ))}
       </div>
