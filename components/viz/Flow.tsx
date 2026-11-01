@@ -73,7 +73,7 @@ export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; h
             markerHeight="8"
             orient="auto-start-reverse"
           >
-            <path d="M1,1 L9,5 L1,9" fill="none" stroke={INK} strokeWidth="1.4" />
+            <path d="M1,1 L9,5 L1,9" fill="none" stroke={INK} strokeWidth="2" />
           </marker>
         </defs>
 
@@ -119,8 +119,9 @@ export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; h
                 d={d}
                 fill="none"
                 stroke={INK}
-                strokeWidth={1.3}
-                strokeDasharray={e.dashed ? '5 4' : undefined}
+                strokeWidth={2}
+                strokeLinejoin="round"
+                strokeDasharray={e.dashed ? '6 5' : undefined}
                 markerEnd="url(#fl-arrow)"
               />
               {e.label && (
@@ -154,26 +155,28 @@ export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; h
                   points={`${p.cx},${p.y} ${p.x + CW},${p.cy} ${p.cx},${p.y + CH} ${p.x},${p.cy}`}
                   fill="#FFFFFF"
                   stroke={INK}
-                  strokeWidth={1.3}
+                  strokeWidth={2}
+                  strokeLinejoin="round"
+                />
+              ) : isEnd ? (
+                // End points are slanted, like the main buttons in the app.
+                <polygon
+                  points={`${p.x + 10},${p.y} ${p.x + CW},${p.y} ${p.x + CW - 10},${p.y + CH} ${p.x},${p.y + CH}`}
+                  fill={n.fill || INK}
                 />
               ) : (
-                <rect
-                  x={p.x}
-                  y={p.y}
-                  width={CW}
-                  height={CH}
-                  rx={isEnd ? CH / 2 : 3}
-                  fill="#FFFFFF"
-                  stroke={INK}
-                  strokeWidth={isEnd ? 1.8 : 1.3}
+                // Steps have one cut corner, like cards in the app.
+                <polygon
+                  points={`${p.x},${p.y} ${p.x + CW - 12},${p.y} ${p.x + CW},${p.y + 12} ${p.x + CW},${p.y + CH} ${p.x},${p.y + CH}`}
+                  fill={n.fill || '#FFFFFF'}
                 />
               )}
               <text
                 x={p.cx}
                 y={top}
                 textAnchor="middle"
-                style={{ fontSize: '13.5px', fontWeight: 700 }}
-                fill={INK}
+                style={{ fontSize: '14px', fontWeight: 800 }}
+                fill={isEnd && !n.fill ? '#FFFFFF' : INK}
               >
                 {n.label}
               </text>
@@ -183,8 +186,8 @@ export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; h
                   x={p.cx}
                   y={top + 17 + k * 13}
                   textAnchor="middle"
-                  style={{ fontSize: '10.5px' }}
-                  fill={INK2}
+                  style={{ fontSize: '11px' }}
+                  fill={isEnd && !n.fill ? 'rgba(255,255,255,0.85)' : INK2}
                 >
                   {t}
                 </text>

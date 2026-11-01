@@ -12,20 +12,10 @@ const PAPER = '#FFFFFF'
 const sans = 'inherit'
 
 function Frame({ children, vb, title }: { children: React.ReactNode; vb: string; title: string }) {
+  // No caption bar: the section heading above already says what this shows.
   return (
-    <figure style={{ margin: 0, border: `1px solid rgba(20,20,19,0.15)`, background: PAPER }}>
-      <figcaption
-        style={{
-          borderBottom: `1px solid rgba(20,20,19,0.15)`,
-          padding: '9px 14px',
-          color: INK,
-          fontSize: '13px',
-          fontWeight: 700,
-        }}
-      >
-        {title}
-      </figcaption>
-      <div style={{ padding: '18px 16px 14px' }}>
+    <figure className="sh-cut" style={{ margin: 0, background: PAPER }}>
+      <div style={{ padding: 'clamp(16px, 3vw, 32px)' }}>
         <svg
           viewBox={vb}
           style={{ width: '100%', display: 'block', fontFamily: sans }}
@@ -67,10 +57,10 @@ function Box({
         y={y}
         width={w}
         height={h}
-        fill={fill}
-        stroke={color}
-        strokeWidth={1.2}
-        strokeDasharray={dash ? '4 3' : undefined}
+        fill={dash ? 'none' : fill === 'none' ? '#DDEFD9' : fill}
+        stroke={dash ? color : 'none'}
+        strokeWidth={dash ? 1.6 : 0}
+        strokeDasharray={dash ? '5 4' : undefined}
       />
       <text
         x={x + w / 2}
@@ -91,7 +81,7 @@ function Arrow({
   d,
   color = INK,
   dash,
-  width = 1.4,
+  width = 2,
 }: {
   id: string
   d: string
@@ -243,22 +233,17 @@ export function RelayScene() {
   ]
   return (
     <Frame vb="0 0 620 160" title="What goes out after one press">
-      <Box x={0} y={60} w={74} h={34} text="SOS" color={CRIT} fill="rgba(163,52,23,0.08)" />
-      <line x1={74} y1={77} x2={616} y2={77} stroke={INK} strokeWidth={1} />
+      <polygon points="8,60 74,60 66,94 0,94" fill={CRIT} />
+      <text x={37} y={82} textAnchor="middle" fontSize="13" fontWeight={800} fill={PAPER}>
+        SOS
+      </text>
+      <line x1={74} y1={77} x2={616} y2={77} stroke={INK} strokeWidth={2} />
       {steps.map((s, i) => {
         const x = 100 + i * 128
         return (
           <g key={s.n}>
-            <rect
-              x={x - 11}
-              y={66}
-              width={22}
-              height={22}
-              fill={PAPER}
-              stroke={s.color}
-              strokeWidth={1.5}
-            />
-            <text x={x} y={81} textAnchor="middle" fontSize="11.5" fontWeight={700} fill={s.color}>
+            <rect x={x - 12} y={65} width={24} height={24} fill={s.color} />
+            <text x={x} y={81} textAnchor="middle" fontSize="12" fontWeight={800} fill={PAPER}>
               {s.n}
             </text>
             <text x={x - 11} y={116} fontSize="12" fontWeight={700} fill={INK}>
@@ -273,7 +258,7 @@ export function RelayScene() {
       <text x={217} y={46} fontSize="10.5" fill={INK3}>
         2, 3 and 4 start at the same time
       </text>
-      <line x1={228} y1={52} x2={484} y2={52} stroke={INK3} strokeWidth={1} />
+      <line x1={228} y1={52} x2={484} y2={52} stroke={INK3} strokeWidth={1.5} />
     </Frame>
   )
 }

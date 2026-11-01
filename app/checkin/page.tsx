@@ -173,14 +173,11 @@ export default function Checkin() {
       {/* Header */}
       <div
         style={{
-          padding: '52px 20px 14px',
-          borderBottom: `1px solid ${BORDER}`,
+          padding: '48px 20px 18px',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
-          background: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
+          background: BG,
         }}
       >
         <button
@@ -207,7 +204,7 @@ export default function Checkin() {
             style={{
               color: T1,
               fontWeight: 800,
-              fontSize: '17px',
+              fontSize: '24px',
               letterSpacing: '-0.4px',
               margin: 0,
             }}
@@ -217,7 +214,7 @@ export default function Checkin() {
           <p
             style={{
               color: T3,
-              fontSize: '11px',
+              fontSize: '13px',
               marginTop: '2px',
               fontFamily: 'inherit',
               margin: '2px 0 0',
@@ -225,59 +222,12 @@ export default function Checkin() {
             }}
           >
             {new Date()
-              .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-              .toUpperCase()}
+              .toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
           </p>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-            background: GREEN_DIM,
-            border: `1px solid rgba(86,128,78,0.18)`,
-            borderRadius: 0,
-            padding: '4px 10px',
-          }}
-        >
-          <motion.div
-            animate={{ opacity: [1, 0.2, 1] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ width: '5px', height: '5px', borderRadius: '50%', background: GREEN }}
-          />
-          <span
-            style={{
-              color: GREEN,
-              fontSize: '10px',
-              fontFamily: 'inherit',
-              fontWeight: 700,
-              letterSpacing: '0.5px',
-            }}
-          >
-            LIVE
-          </span>
-        </div>
       </div>
 
-      <p
-        role="note"
-        style={{
-          margin: 0,
-          padding: '8px 16px',
-          fontSize: '12.5px',
-          lineHeight: 1.5,
-          color: T1,
-          background: '#FFF8E6',
-          borderBottom: `1px solid ${BORDER}`,
-        }}
-      >
-        You are chatting with an AI, not a person. Your messages are sent to Groq to write the
-        replies. Not for emergencies. Call 911.{' '}
-        <a href="/privacy" style={{ color: T1 }}>
-          Privacy
-        </a>
-      </p>
 
       {/* Messages */}
       <div
@@ -485,9 +435,7 @@ export default function Checkin() {
             display: 'flex',
             gap: '8px',
             alignItems: 'center',
-            background: 'rgba(255,255,255,0.94)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
+            background: '#FFFFFF',
             transition: 'border-color 0.18s ease',
           }}
         >

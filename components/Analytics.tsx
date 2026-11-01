@@ -117,29 +117,12 @@ export default function Analytics() {
             maxWidth: '640px',
           }}
         >
-          We count page views. No ads, no trackers.{' '}
+          No ads and no trackers. Your health details stay private.{' '}
           <a href="/privacy" style={{ color: '#FFFFFF', fontWeight: 700 }}>
-            Privacy policy
+            Read our privacy policy
           </a>
         </p>
         <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            onClick={() => dismiss(false)}
-            className="sh-pill"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              boxShadow: 'inset 0 0 0 2px #FFFFFF',
-              color: '#FFFFFF',
-              fontWeight: 600,
-              fontSize: '14px',
-              padding: '10px 18px',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
-          >
-            Don&apos;t count me
-          </button>
           <button
             onClick={() => dismiss(true)}
             className="sh-slant"
@@ -154,7 +137,7 @@ export default function Analytics() {
               fontFamily: 'inherit',
             }}
           >
-            OK
+            Got it
           </button>
         </div>
       </div>

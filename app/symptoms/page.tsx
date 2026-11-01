@@ -432,8 +432,6 @@ export default function SymptomsPage() {
           top: 0,
           zIndex: 20,
           background: 'rgba(244,245,247,0.92)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
           borderBottom: '1px solid #98C890',
           padding: '0 20px',
         }}
@@ -455,8 +453,8 @@ export default function SymptomsPage() {
               width: '38px',
               height: '38px',
               borderRadius: 0,
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
+              background: 'transparent',
+              border: 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -532,25 +530,15 @@ export default function SymptomsPage() {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div
+                        aria-hidden
                         style={{
-                          width: '36px',
-                          height: '36px',
-                          borderRadius: 0,
-                          background: bg,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          width: '5px',
+                          height: '32px',
+                          background: color,
                           flexShrink: 0,
-                          transition: 'background 0.3s',
+                          transition: 'background-color 0.3s',
                         }}
-                      >
-                        <m.Icon
-                          size={17}
-                          color={color}
-                          strokeWidth={2}
-                          style={{ transition: 'color 0.3s' }}
-                        />
-                      </div>
+                      />
                       <span
                         style={{
                           fontSize: '14px',

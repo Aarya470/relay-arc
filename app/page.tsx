@@ -75,32 +75,68 @@ function Split({
   )
 }
 
-// The home screen as it really looks.
+// The home screen as it really looks, in a modern phone frame.
 function PhoneHome() {
-  const row = (label: string, value: string, good = false) => (
-    <div className="ph-row">
-      <span style={{ fontWeight: 600 }}>{label}</span>
-      <span style={{ color: good ? GREEN : INK2, fontWeight: 600 }}>{value}</span>
-    </div>
-  )
   return (
     <div className="phone" data-ui aria-label="The Relay Arc home screen">
       <div className="phone-screen">
         <div className="ph-bar">
           <span>9:41</span>
+          <span className="ph-island" aria-hidden />
+          <span className="ph-batt" aria-hidden>
+            <i />
+          </span>
         </div>
-        <p style={{ fontSize: '13px', color: INK2 }}>Good morning</p>
-        <p style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.03em', margin: '2px 0 18px' }}>
-          Asha
-        </p>
-        <div className="sh-slant ph-sos">
-          <span style={{ fontSize: '30px', fontWeight: 800 }}>SOS</span>
-          <span style={{ fontSize: '12px', opacity: 0.9 }}>Hold to start</span>
+        <div className="ph-body">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <p style={{ fontSize: '12px', color: INK2 }}>Good morning</p>
+              <p style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1 }}>Asha</p>
+            </div>
+            <span className="sh-pill ph-chip">Settings</span>
+          </div>
+          <div className="sh-slant ph-sos">
+            <span style={{ fontSize: '34px', fontWeight: 800, letterSpacing: '-0.03em' }}>SOS</span>
+            <span style={{ fontSize: '11.5px', lineHeight: 1.3, textAlign: 'right' }}>
+              Tap to start
+              <br />
+              Finds a hospital
+            </span>
+          </div>
+          <div className="ph-tiles">
+            <div className="sh-cut ph-tile" style={{ background: INK, color: '#fff' }}>
+              <span style={{ fontSize: '11px', opacity: 0.8 }}>Check in</span>
+              <span style={{ fontSize: '17px', fontWeight: 800 }}>Done</span>
+            </div>
+            <div className="sh-cut ph-tile" style={{ background: PAPER }}>
+              <span style={{ fontSize: '11px', color: INK2 }}>Pulse</span>
+              <span style={{ fontSize: '17px', fontWeight: 800 }}>
+                72 <small style={{ fontSize: '11px', fontWeight: 600 }}>bpm</small>
+              </span>
+            </div>
+          </div>
+          <div className="ph-list">
+            <div className="ph-row">
+              <span>Medicines</span>
+              <span style={{ fontWeight: 700 }}>1 due</span>
+            </div>
+            <div className="ph-row">
+              <span>Emergency card</span>
+              <span style={{ fontWeight: 700, color: GREEN }}>Ready</span>
+            </div>
+            <div className="ph-row">
+              <span>Family to text</span>
+              <span style={{ fontWeight: 700 }}>2 people</span>
+            </div>
+          </div>
         </div>
-        {row('Daily check in', 'Done', true)}
-        {row('Pulse', '72')}
-        {row('Medicines', '1 due')}
-        {row('Emergency card', 'Ready', true)}
+        <div className="ph-tabs" aria-hidden>
+          <span style={{ fontWeight: 700 }}>Home</span>
+          <span>Check in</span>
+          <span className="sh-slant ph-tab-sos">SOS</span>
+          <span>Meds</span>
+          <span>More</span>
+        </div>
       </div>
     </div>
   )
@@ -110,9 +146,8 @@ function PhoneHome() {
 function SosScreen() {
   return (
     <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK }}>
-      <p className="ds-small" style={{ color: INK2 }}>What is happening?</p>
-      <p style={{ fontSize: '20px', fontWeight: 700, margin: '6px 0 22px' }}>
-        My dad has chest pain and he is sweating
+      <p style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 22px' }}>
+        &ldquo;My dad has chest pain and he is sweating&rdquo;
       </p>
       <div style={{ background: MINT, padding: '18px 20px' }}>
         <p style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.02em' }}>
@@ -138,7 +173,6 @@ function HospitalList() {
   ]
   return (
     <div data-ui className="sh-cut frag" style={{ background: MINT, color: INK }}>
-      <p style={{ fontSize: '20px', fontWeight: 800, marginBottom: '14px' }}>Best match for a heart attack</p>
       {rows.map(([name, mins, ok], i) => (
         <div key={name} className="hosp" style={{ background: i === 0 ? PAPER : 'transparent' }}>
           <div>
@@ -159,7 +193,6 @@ function HospitalList() {
 function FamilyText() {
   return (
     <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK, maxWidth: '420px' }}>
-      <p className="ds-small" style={{ color: INK2, marginBottom: '12px' }}>Text message, now</p>
       <div className="bubble">
         Asha pressed SOS. She is going to RWJ University Hospital at Hamilton. Follow her on the
         live map.
@@ -205,8 +238,7 @@ function CardMaker() {
         </button>
       </div>
       <div data-ui className="sh-cut idcard" aria-live="polite">
-        <p className="ds-small" style={{ color: INK2 }}>Emergency card</p>
-        <p style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.03em', margin: '6px 0 20px', minHeight: '34px' }}>
+        <p style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 20px', minHeight: '34px' }}>
           {name || 'Your name'}
         </p>
         <div style={{ display: 'flex', gap: '32px' }}>
@@ -234,7 +266,6 @@ function PulseReadout() {
   ]
   return (
     <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK }}>
-      <p style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>Your check</p>
       {rows.map(([k, v]) => (
         <div key={k} className="hosp">
           <span style={{ fontWeight: 600 }}>{k}</span>
@@ -282,12 +313,23 @@ export default function Home() {
         .frag { padding: 28px; }
         .hosp { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; }
         .bubble { background: ${MINT}; padding: 14px 18px; font-size: 17px; line-height: 1.5; border-radius: 18px 18px 18px 0; }
-        .phone { width: 300px; margin: 0 auto; background: ${INK}; padding: 10px; border-radius: 44px; }
-        .phone-screen { background: ${LEAF}; border-radius: 36px; padding: 18px 20px 30px; }
-        .ph-bar { font-size: 12px; font-weight: 600; height: 28px; }
-        .ph-sos { background: ${SOS}; color: #fff; padding: 18px 26px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .ph-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; }
-        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.12); } /* taste-skill-ignore: app UI row divider */
+        .phone { width: 312px; margin: 0 auto; background: #0B0B0A; padding: 9px; border-radius: 52px; box-shadow: inset 0 0 0 2px #3A3A36; } /* taste-skill-ignore: device frame edge */
+        .phone-screen { background: ${LEAF}; border-radius: 44px; overflow: hidden; display: flex; flex-direction: column; }
+        .ph-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 26px 6px; font-size: 13px; font-weight: 700; height: 46px; }
+        .ph-island { width: 96px; height: 28px; background: #0B0B0A; border-radius: 20px; }
+        .ph-batt { width: 24px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 0 1.5px ${INK}; padding: 2px; display: flex; } /* taste-skill-ignore: battery icon */
+        .ph-batt i { display: block; width: 70%; background: ${INK}; border-radius: 1px; }
+        .ph-body { padding: 12px 20px 22px; flex: 1; }
+        .ph-chip { background: ${PAPER}; font-size: 11px; font-weight: 700; padding: 6px 12px; }
+        .ph-sos { background: ${SOS}; color: #fff; padding: 22px 30px; display: flex; justify-content: space-between; align-items: center; margin: 18px 0 12px; }
+        .ph-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .ph-tile { display: grid; gap: 4px; padding: 14px; --cut: 12px; }
+        .ph-list { margin-top: 12px; background: ${PAPER}; padding: 2px 14px; }
+        .ph-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 13px; }
+        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.1); } /* taste-skill-ignore: app UI row divider */
+        .ph-tabs { display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; background: ${INK}; color: rgba(255,255,255,0.8); font-size: 10.5px; text-align: center; height: 62px; padding: 0 6px 8px; }
+        .ph-tabs span:first-child { color: #fff; }
+        .ph-tab-sos { background: ${SOS}; color: #fff; font-weight: 800; font-size: 12px; padding: 8px 0; --slant: 7px; }
         .nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 0; }
         .nav-links { display: flex; align-items: center; gap: 28px; }
         .nav-links a { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }
@@ -384,14 +426,14 @@ export default function Home() {
       <main>
         <figure style={{ margin: 0, background: LEAF }}>
           <img
-            src="/places/meadowbrook-road.jpg"
-            alt="A quiet tree lined road near Robbinsville and West Windsor, New Jersey"
+            src="/places/wharton-forest.jpg"
+            alt="A sandy trail through pine trees in Wharton State Forest, New Jersey"
             className="band"
             loading="lazy"
           />
           <figcaption className="ch-in ds-small" style={{ padding: '14px 48px 28px', color: INK2 }}>
-            Meadowbrook Road in central New Jersey. Many homes out here are a long drive from a
-            hospital with a heart unit.
+            Wharton State Forest in the Pine Barrens, one of the most remote parts of New Jersey.
+            Out here the nearest hospital is a long drive away.
           </figcaption>
         </figure>
 
@@ -491,8 +533,8 @@ export default function Home() {
           </div>
           <div data-reveal>
             <img
-              src="/places/robbinsville-field.jpg"
-              alt="Open farm field in Robbinsville, New Jersey, under a clear sky"
+              src="/places/pine-barrens-bog.jpg"
+              alt="A cranberry bog and pine forest in the New Jersey Pine Barrens"
               className="sh-cut"
               loading="lazy"
             />
@@ -524,8 +566,8 @@ export default function Home() {
               first. © {new Date().getFullYear()} Relay Arc, a free nonprofit project.
             </p>
             <p className="ds-small" style={{ marginTop: '10px', color: INK2, maxWidth: '640px' }}>
-              Photos of Meadowbrook Road and a Robbinsville farm field by Famartin, CC BY SA 3.0,
-              via Wikimedia Commons.
+              Photos from the Pine Barrens. Wharton State Forest trail by RollerFanatic000, CC BY SA
+              4.0. Cranberry bog by Andrew Leahey, CC BY SA 2.0. Both via Wikimedia Commons.
             </p>
           </div>
           <div className="wordmark" aria-hidden>

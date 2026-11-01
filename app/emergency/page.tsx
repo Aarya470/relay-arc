@@ -370,6 +370,7 @@ export default function Emergency() {
         <motion.a
           href={`tel:${emg.number}`}
           whileTap={{ scale: 0.98 }}
+          className="sh-slant"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -407,11 +408,12 @@ export default function Emergency() {
                   style={{
                     background: on ? T1 : 'transparent',
                     color: on ? '#FFFFFF' : T3,
-                    border: `1px solid ${on ? T1 : BORDER}`,
-                    padding: '5px 11px',
-                    borderRadius: 0,
+                    border: 'none',
+                    boxShadow: on ? 'none' : `inset 0 0 0 1.5px ${T1}`,
+                    padding: '6px 14px',
+                    borderRadius: 999,
                     fontFamily: 'inherit',
-                    fontSize: '11px',
+                    fontSize: '13px',
                     fontWeight: 700,
                     letterSpacing: '0.5px',
                     cursor: 'pointer',
@@ -437,7 +439,8 @@ export default function Emergency() {
               gap: '11px',
               width: '100%',
               background: listening ? RED_DIM : '#FFFFFF',
-              border: `1.5px solid ${listening ? RED : T1}`,
+              border: 'none',
+              boxShadow: `inset 0 0 0 2px ${listening ? RED : T1}`,
               color: listening ? RED : T1,
               padding: '17px',
               borderRadius: 0,
@@ -479,7 +482,8 @@ export default function Emergency() {
             style={{
               flex: 1,
               minWidth: 0,
-              border: `1.5px solid ${T1}`,
+              border: 'none',
+              boxShadow: `inset 0 -2px 0 ${T1}`,
               borderRadius: 0,
               padding: '0 14px',
               minHeight: '54px',

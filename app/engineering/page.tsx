@@ -188,7 +188,7 @@ export default function Engineering() {
             <TriageDemo />
           </div>
 
-          <H2>How we made it</H2>
+          
           <P>
             There are two small models and we average their answers. The first one counts which
             words and word pairs show up. It is simple on purpose, because you can see exactly which
@@ -397,7 +397,7 @@ export default function Engineering() {
             <RiskDemo />
           </div>
 
-          <H2>Two parts, and only one is proven</H2>
+          
           <P>
             NEWS2 uses the same cutoffs for everyone. That works in a hospital but can miss people
             with long-term illness. If your normal resting pulse is 58 and today it&apos;s 76, NEWS2

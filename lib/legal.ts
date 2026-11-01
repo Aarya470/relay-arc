@@ -75,7 +75,7 @@ We use your browser storage rather than tracking cookies. Specifically:
 
 We do not use advertising cookies and we do not run third-party analytics or tracking pixels.
 
-We do count page views, on our own server. One row per page per day, holding a number. No visitor identifier, no session, no IP address, no referrer and no user agent, which means two people opening the same page on the same day are indistinguishable from one person opening it twice. There is nothing in that table that can be traced to you. We honour Do Not Track and Global Privacy Control automatically, and the notice at the bottom of the site lets you switch the counting off. The same settings also switch off Vercel Web Analytics and Speed Insights, which are cookieless and do not identify you across sites.
+We do count page views, on our own server. One row per page per day, holding a number. No visitor identifier, no session, no IP address, no referrer and no user agent, which means two people opening the same page on the same day are indistinguishable from one person opening it twice. There is nothing in that table that can be traced to you. We honour Do Not Track and Global Privacy Control automatically, so turning either on in your browser switches the counting off. The same settings also switch off Vercel Web Analytics and Speed Insights, which are cookieless and do not identify you across sites.
 
 You can clear all of this at any time through your browser settings, which will sign you out.
 

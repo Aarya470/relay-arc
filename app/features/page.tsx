@@ -80,12 +80,20 @@ function Grid({ children }: { children: React.ReactNode }) {
     </div>
   )
 }
-function Panel({ label, children }: { label: string; children: React.ReactNode }) {
+function Panel({
+  label,
+  hide = false,
+  children,
+}: {
+  label: string
+  hide?: boolean
+  children: React.ReactNode
+}) {
   return (
-    <div className="sh-cut" style={{ background: 'rgba(20,20,19,0.05)' }}>
-      <div style={{ padding: '14px 16px 0' }}>
-        <span style={{ color: INK, fontSize: '13px', fontWeight: 700 }}>{label}</span>
-      </div>
+    <div className="sh-cut" style={{ background: 'rgba(20,20,19,0.05)' }} aria-label={label} role="group">
+      {!hide && (
+        <p style={{ padding: '16px 18px 0', color: INK, fontSize: '15px', fontWeight: 700 }}>{label}</p>
+      )}
       <div style={{ padding: '18px 16px' }}>{children}</div>
     </div>
   )
@@ -155,7 +163,7 @@ export default function Features() {
             </Cap>
           </div>
 
-          <Panel label="The decision path">
+          <Panel label="The decision path" hide>
             <Flow
               nodes={[
                 {
@@ -332,7 +340,7 @@ export default function Features() {
             </Cap>
           </div>
 
-          <Panel label="How a hospital gets chosen">
+          <Panel label="How a hospital gets chosen" hide>
             <Flow
               nodes={[
                 {
@@ -547,7 +555,7 @@ export default function Features() {
             person there has confirmed it.
           </P>
 
-          <Panel label="What starts, and what depends on what">
+          <Panel label="What starts, and what depends on what" hide>
             <Flow
               nodes={[
                 { id: 's', col: 0, row: 0, label: 'SOS', sub: 'the press', fill: ORANGE },
@@ -616,7 +624,7 @@ export default function Features() {
             stays on at junctions, and a night mode.
           </P>
 
-          <Panel label="The navigation loop, every GPS tick">
+          <Panel label="The navigation loop, every GPS tick" hide>
             <Flow
               nodes={[
                 { id: 'g', col: 0, row: 0, label: 'GPS fix', sub: 'every ~1s' },

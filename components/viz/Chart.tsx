@@ -82,8 +82,7 @@ export function BarChart({
           <div
             style={{
               height: `${height}px`,
-              background: '#B3DDAC',
-              border: `1px solid ${BORDER}`,
+              background: 'rgba(20,20,19,0.08)',
               position: 'relative',
               overflow: 'hidden',
             }}
@@ -91,10 +90,12 @@ export function BarChart({
             <div
               style={{
                 position: 'absolute',
-                inset: '0 auto 0 0',
-                width: seen ? `${Math.max(0.6, (b.value / top) * 100)}%` : '0%',
+                inset: 0,
+                transformOrigin: 'left center',
+                // Scale rather than width, so the bar animates without relayout.
+                transform: `scaleX(${seen ? Math.max(0.006, b.value / top) : 0})`,
                 background: b.color,
-                transition: 'width 900ms cubic-bezier(0.16,1,0.3,1)',
+                transition: 'transform 900ms cubic-bezier(0.16,1,0.3,1)',
               }}
             />
           </div>

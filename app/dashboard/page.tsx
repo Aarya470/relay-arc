@@ -983,7 +983,6 @@ export default function Dashboard() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              backdropFilter: 'blur(16px)',
             }}
           >
             <div>
@@ -1032,6 +1031,8 @@ export default function Dashboard() {
       >
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-wordmark.png" alt="Relay Arc" style={{ height: '22px', width: 'auto', marginBottom: '18px', display: 'block' }} />
             <p
               style={{
                 color: T3,
@@ -1066,15 +1067,13 @@ export default function Dashboard() {
                 {profile.diagnosis.split(',').map((d: string, i: number) => (
                   <span
                     key={i}
+                    className="sh-pill"
                     style={{
-                      background: ACCENT_DIM,
-                      color: ACCENT,
+                      background: '#1E3A23',
+                      color: '#FFFFFF',
                       fontSize: '13px',
-                      fontWeight: 600,
-                      padding: '3px 8px',
-                      borderRadius: 0,
-                      letterSpacing: '0',
-                      border: `1px solid rgba(86,128,78,0.14)`,
+                      fontWeight: 700,
+                      padding: '4px 12px',
                     }}
                   >
                     {d.trim()}
@@ -1403,8 +1402,7 @@ export default function Dashboard() {
             template. NEWS2 is still shown as a number for a clinician, with
             no colour banding or advice (same framing as /check). */}
         <motion.div variants={fadeUp}>
-          <p style={{ color: T3, fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Today</p>
-          <div style={{ borderTop: `1px solid ${BORDER}` }}>
+          <div className="sh-cut" style={{ background: SURFACE, padding: '0 18px' }}>
             {[
               {
                 label: 'NEWS2 for your clinician',
@@ -1438,7 +1436,7 @@ export default function Dashboard() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '14px',
-                  borderBottom: `1px solid ${BORDER}`,
+                  borderBottom: "1px solid rgba(20,20,19,0.08)",
                   fontFamily: 'inherit',
                 }}
               >
@@ -1474,18 +1472,7 @@ export default function Dashboard() {
 
         {/* Quick nav list */}
         <motion.div variants={fadeUp}>
-          <p
-            style={{
-              color: T3,
-              fontSize: '13px',
-              fontWeight: 600,
-              letterSpacing: '0',
-              marginBottom: '4px',
-            }}
-          >
-            Your data
-          </p>
-          <div style={{ borderTop: `1px solid ${BORDER}` }}>
+          <div className="sh-cut" style={{ background: SURFACE, padding: '0 18px' }}>
             {[
               {
                 label: 'Emergency contacts',
@@ -1540,7 +1527,7 @@ export default function Dashboard() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '14px',
-                  borderBottom: `1px solid ${BORDER}`,
+                  borderBottom: "1px solid rgba(20,20,19,0.08)",
                 }}
               >
                 <div style={{ flex: 1, textAlign: 'left' }}>
@@ -1560,12 +1547,11 @@ export default function Dashboard() {
           <motion.button
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push('/medications')}
+            className="sh-cut"
             style={{
-              background: 'none',
+              background: SURFACE,
               border: 'none',
-              borderTop: `1px solid ${BORDER}`,
-              borderBottom: `1px solid ${BORDER}`,
-              padding: '18px 0',
+              padding: '18px',
               cursor: 'pointer',
               width: '100%',
               textAlign: 'left',

@@ -351,8 +351,7 @@ export default function Medications() {
         style={{
           padding: '56px 20px 16px',
           borderBottom: `1px solid ${BORDER}`,
-          background: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'blur(16px)',
+          background: '#FFFFFF',
         }}
       >
         <div
