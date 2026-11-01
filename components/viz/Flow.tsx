@@ -159,11 +159,8 @@ export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; h
                   strokeLinejoin="round"
                 />
               ) : isEnd ? (
-                // End points are slanted, like the main buttons in the app.
-                <polygon
-                  points={`${p.x + 10},${p.y} ${p.x + CW},${p.y} ${p.x + CW - 10},${p.y + CH} ${p.x},${p.y + CH}`}
-                  fill={n.fill || INK}
-                />
+                // End points are solid dark blocks, like the main buttons in the app.
+                <rect x={p.x} y={p.y} width={CW} height={CH} fill={n.fill || INK} />
               ) : (
                 // Steps have one cut corner, like cards in the app.
                 <polygon

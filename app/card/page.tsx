@@ -322,7 +322,6 @@ export default function EmergencyCard() {
     fontFamily: 'inherit',
     cursor: 'pointer',
     borderRadius: primary ? 0 : 999,
-    clipPath: primary ? 'polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)' : undefined,
   })
 
   return (

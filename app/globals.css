@@ -356,7 +356,8 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
 /* Shapes */
 .sh-square { border-radius: 0 !important; }
 .sh-pill { border-radius: 999px !important; }
-.sh-slant { border-radius: 0 !important; clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%); }
+/* Main actions are plain squares. (Was a slanted parallelogram; removed.) */
+.sh-slant { border-radius: 0 !important; }
 .sh-cut { border-radius: 0 !important; clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%); }
 
 /* Buttons */

@@ -75,67 +75,30 @@ function Split({
   )
 }
 
-// The home screen as it really looks, in a modern phone frame.
+// The home screen, kept simple: greeting, the SOS button, three rows.
 function PhoneHome() {
+  const rows: [string, string, boolean][] = [
+    ['Daily check in', 'Done', true],
+    ['Pulse', '72 bpm', false],
+    ['Emergency card', 'Ready', true],
+  ]
   return (
     <div className="phone" data-ui aria-label="The Relay Arc home screen">
       <div className="phone-screen">
-        <div className="ph-bar">
-          <span>9:41</span>
-          <span className="ph-island" aria-hidden />
-          <span className="ph-batt" aria-hidden>
-            <i />
-          </span>
+        <div className="ph-notch" aria-hidden />
+        <p style={{ fontSize: '13px', color: INK2, marginTop: '34px' }}>Good morning</p>
+        <p style={{ fontSize: '30px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1 }}>Asha</p>
+        <div className="ph-sos">
+          <span style={{ fontSize: '40px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>SOS</span>
+          <span style={{ fontSize: '13px', opacity: 0.9, marginTop: '6px' }}>Tap to start</span>
         </div>
-        <div className="ph-body">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <p style={{ fontSize: '12px', color: INK2 }}>Good morning</p>
-              <p style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1 }}>Asha</p>
+        <div className="ph-list">
+          {rows.map(([k, v, good]) => (
+            <div key={k} className="ph-row">
+              <span>{k}</span>
+              <span style={{ fontWeight: 700, color: good ? GREEN : INK }}>{v}</span>
             </div>
-            <span className="sh-pill ph-chip">Settings</span>
-          </div>
-          <div className="sh-slant ph-sos">
-            <span style={{ fontSize: '34px', fontWeight: 800, letterSpacing: '-0.03em' }}>SOS</span>
-            <span style={{ fontSize: '11.5px', lineHeight: 1.3, textAlign: 'right' }}>
-              Tap to start
-              <br />
-              Finds a hospital
-            </span>
-          </div>
-          <div className="ph-tiles">
-            <div className="sh-cut ph-tile" style={{ background: INK, color: '#fff' }}>
-              <span style={{ fontSize: '11px', opacity: 0.8 }}>Check in</span>
-              <span style={{ fontSize: '17px', fontWeight: 800 }}>Done</span>
-            </div>
-            <div className="sh-cut ph-tile" style={{ background: PAPER }}>
-              <span style={{ fontSize: '11px', color: INK2 }}>Pulse</span>
-              <span style={{ fontSize: '17px', fontWeight: 800 }}>
-                72 <small style={{ fontSize: '11px', fontWeight: 600 }}>bpm</small>
-              </span>
-            </div>
-          </div>
-          <div className="ph-list">
-            <div className="ph-row">
-              <span>Medicines</span>
-              <span style={{ fontWeight: 700 }}>1 due</span>
-            </div>
-            <div className="ph-row">
-              <span>Emergency card</span>
-              <span style={{ fontWeight: 700, color: GREEN }}>Ready</span>
-            </div>
-            <div className="ph-row">
-              <span>Family to text</span>
-              <span style={{ fontWeight: 700 }}>2 people</span>
-            </div>
-          </div>
-        </div>
-        <div className="ph-tabs" aria-hidden>
-          <span style={{ fontWeight: 700 }}>Home</span>
-          <span>Check in</span>
-          <span className="sh-slant ph-tab-sos">SOS</span>
-          <span>Meds</span>
-          <span>More</span>
+          ))}
         </div>
       </div>
     </div>
@@ -313,23 +276,13 @@ export default function Home() {
         .frag { padding: 28px; }
         .hosp { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; }
         .bubble { background: ${MINT}; padding: 14px 18px; font-size: 17px; line-height: 1.5; border-radius: 18px 18px 18px 0; }
-        .phone { width: 312px; margin: 0 auto; background: #0B0B0A; padding: 9px; border-radius: 52px; box-shadow: inset 0 0 0 2px #3A3A36; } /* taste-skill-ignore: device frame edge */
-        .phone-screen { background: ${LEAF}; border-radius: 44px; overflow: hidden; display: flex; flex-direction: column; }
-        .ph-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 26px 6px; font-size: 13px; font-weight: 700; height: 46px; }
-        .ph-island { width: 96px; height: 28px; background: #0B0B0A; border-radius: 20px; }
-        .ph-batt { width: 24px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 0 1.5px ${INK}; padding: 2px; display: flex; } /* taste-skill-ignore: battery icon */
-        .ph-batt i { display: block; width: 70%; background: ${INK}; border-radius: 1px; }
-        .ph-body { padding: 12px 20px 22px; flex: 1; }
-        .ph-chip { background: ${PAPER}; font-size: 11px; font-weight: 700; padding: 6px 12px; }
-        .ph-sos { background: ${SOS}; color: #fff; padding: 22px 30px; display: flex; justify-content: space-between; align-items: center; margin: 18px 0 12px; }
-        .ph-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .ph-tile { display: grid; gap: 4px; padding: 14px; --cut: 12px; }
-        .ph-list { margin-top: 12px; background: ${PAPER}; padding: 2px 14px; }
-        .ph-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 13px; }
+        .phone { width: 300px; margin: 0 auto; background: ${INK}; padding: 10px; border-radius: 48px; }
+        .phone-screen { position: relative; background: ${LEAF}; border-radius: 38px; padding: 22px 22px 28px; }
+        .ph-notch { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 84px; height: 24px; background: ${INK}; border-radius: 14px; }
+        .ph-sos { background: ${SOS}; color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 26px 22px; margin: 20px 0 14px; min-height: 132px; }
+        .ph-list { background: ${PAPER}; padding: 4px 16px; }
+        .ph-row { display: flex; justify-content: space-between; padding: 14px 0; font-size: 14px; }
         .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.1); } /* taste-skill-ignore: app UI row divider */
-        .ph-tabs { display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; background: ${INK}; color: rgba(255,255,255,0.8); font-size: 10.5px; text-align: center; height: 62px; padding: 0 6px 8px; }
-        .ph-tabs span:first-child { color: #fff; }
-        .ph-tab-sos { background: ${SOS}; color: #fff; font-weight: 800; font-size: 12px; padding: 8px 0; --slant: 7px; }
         .nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 0; }
         .nav-links { display: flex; align-items: center; gap: 28px; }
         .nav-links a { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }

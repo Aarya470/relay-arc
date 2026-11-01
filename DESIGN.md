@@ -23,7 +23,7 @@ One face, Plus Jakarta Sans. Five sizes.
 No eyebrows, no uppercase labels, no monospace outside code.
 
 ## Shapes (mixed on purpose)
-- Slant: main action buttons and the SOS. Parallelogram, leans forward.
+- Square: main action buttons and the SOS, solid fill.
 - Cut corner: media frames, the emergency card, app fragments. Top right corner clipped.
 - Pill: small secondary actions, toggles, chips.
 - Square: sections, rows, inputs, everything else.

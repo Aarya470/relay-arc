@@ -233,7 +233,7 @@ export function RelayScene() {
   ]
   return (
     <Frame vb="0 0 620 160" title="What goes out after one press">
-      <polygon points="8,60 74,60 66,94 0,94" fill={CRIT} />
+      <rect x={0} y={60} width={74} height={34} fill={CRIT} />
       <text x={37} y={82} textAnchor="middle" fontSize="13" fontWeight={800} fill={PAPER}>
         SOS
       </text>
