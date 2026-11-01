@@ -62,22 +62,26 @@ export const metadata: Metadata = {
   // split between the domain and the vercel.app subdomain. See lib/site.ts.
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: '/' },
-  title: 'Relay Arc: emergency help for heart and dysautonomia conditions',
+  title: 'Relay Arc: Free Emergency App That Finds the Right Hospital',
   description:
-    'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. It works with no signal, and the emergency card needs no account.',
+    'Press SOS and Relay Arc finds the closest hospital that can treat your emergency, guides you there and alerts your family. Free, works offline, no download.',
+  applicationName: 'Relay Arc',
+  category: 'health',
+  robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
   openGraph: {
     title: 'Relay Arc: the closest hospital is not always the right one',
     description:
-      'A free app that works out what is happening, finds a hospital that can treat it, and sends your medical details ahead. No account needed for the emergency card.',
+      'Press SOS and Relay Arc finds a hospital that can treat your emergency, guides you there and alerts your family. Free, works offline, no download.',
     url: SITE_URL,
     siteName: 'Relay Arc',
     type: 'website',
+    locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Relay Arc: the closest hospital is not always the right one',
     description:
-      'A free app that finds a hospital which can treat your condition and sends your medical details ahead.',
+      'Free emergency app: finds a hospital that can treat you, guides you there and alerts your family.',
   },
   manifest: '/manifest.json',
   appleWebApp: {
@@ -90,10 +94,50 @@ export const metadata: Metadata = {
   },
 }
 
+// Structured data so search engines show the site name, logo and that the app is free.
+const JSON_LD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#org`,
+      name: 'Relay Arc',
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon-512.png`,
+      email: 'relay.arc.org@gmail.com',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: 'Relay Arc',
+      url: SITE_URL,
+      publisher: { '@id': `${SITE_URL}/#org` },
+      inLanguage: 'en-US',
+    },
+    {
+      '@type': 'WebApplication',
+      name: 'Relay Arc',
+      url: SITE_URL,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Any (runs in a web browser)',
+      browserRequirements: 'Requires JavaScript',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description:
+        'Free emergency web app. Press SOS to find the closest hospital that can treat the emergency, get directions, and alert family. Includes a no-account offline emergency medical card.',
+      publisher: { '@id': `${SITE_URL}/#org` },
+    },
+  ],
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD).replace(/</g, '\\u003c') }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}`,

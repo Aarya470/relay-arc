@@ -46,7 +46,7 @@ Withdrawing consent does not undo processing that already happened, and it does 
 5. WHO ELSE RECEIVES YOUR DATA
 We use other companies to run the service. Each of them has its own privacy policy and its own security practices, and we do not control what they do once data reaches them.
 • Supabase. Database, accounts and authentication. Receives everything stored in your account.
-• Vercel. Hosting and content delivery. Receives your IP address and request data.
+• Vercel. Hosting and content delivery. Receives your IP address and request data. Also runs Vercel Web Analytics and Speed Insights, which count visits and measure page speed without cookies; the address of the page is sent without any query string.
 • Groq. Large language model processing, currently openai/gpt-oss-20b. Receives the text of check-ins and symptom notes when a summary or classification is generated.
 • Resend. Sends account email such as the signup confirmation. Receives your email address.
 • Jitsi and 8x8. Video consultations, if you use one. Receives the call itself.
@@ -75,7 +75,7 @@ We use your browser storage rather than tracking cookies. Specifically:
 
 We do not use advertising cookies and we do not run third-party analytics or tracking pixels.
 
-We do count page views, on our own server. One row per page per day, holding a number. No visitor identifier, no session, no IP address, no referrer and no user agent, which means two people opening the same page on the same day are indistinguishable from one person opening it twice. There is nothing in that table that can be traced to you. We honour Do Not Track and Global Privacy Control automatically, and the notice at the bottom of the site lets you switch the counting off.
+We do count page views, on our own server. One row per page per day, holding a number. No visitor identifier, no session, no IP address, no referrer and no user agent, which means two people opening the same page on the same day are indistinguishable from one person opening it twice. There is nothing in that table that can be traced to you. We honour Do Not Track and Global Privacy Control automatically, and the notice at the bottom of the site lets you switch the counting off. The same settings also switch off Vercel Web Analytics and Speed Insights, which are cookieless and do not identify you across sites.
 
 You can clear all of this at any time through your browser settings, which will sign you out.
 

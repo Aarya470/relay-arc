@@ -2,12 +2,12 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Emergency medical ID card. Relay Arc',
+  title: 'Free Emergency Medical ID Card, No Account Needed | Relay Arc',
   description:
     'Make a free emergency medical card in two minutes. Get a lock-screen image a paramedic can read off a locked phone, plus a printable wallet card. No account, and nothing is uploaded.',
   alternates: { canonical: '/card' },
   openGraph: {
-    title: 'Emergency medical ID card. Relay Arc',
+    title: 'Free Emergency Medical ID Card, No Account Needed | Relay Arc',
     description:
       'Make a free emergency medical card in two minutes. Get a lock-screen image a paramedic can read off a locked phone, plus a printable wallet card. No account, and nothing is uploaded.',
     url: '/card',

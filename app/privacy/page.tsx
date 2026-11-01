@@ -3,6 +3,7 @@ import { PRIVACY_POLICY } from '@/lib/legal'
 
 export const metadata = {
   title: 'Privacy policy: Relay Arc',
+  alternates: { canonical: '/privacy' },
   description: 'How Relay Arc collects, uses and protects your medical and location data.',
 }
 

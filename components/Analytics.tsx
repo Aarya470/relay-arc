@@ -2,6 +2,8 @@
 // Page view counting, and the notice that explains it.
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import { Analytics as VercelAnalytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 // window.doNotTrack is the legacy Safari and IE spelling. It is not in the DOM
 // typings, and it is still the only place some browsers expose the signal.
@@ -26,6 +28,16 @@ function optedOut(): boolean {
   if (nav.globalPrivacyControl === true) return true
   if (nav.doNotTrack === '1' || window.doNotTrack === '1') return true
   return false
+}
+
+// Vercel Web Analytics is cookieless. It still honours the same opt-out, GPC and
+// Do Not Track signals, and query strings are dropped so nothing personal is sent.
+function scrub<T extends { url: string }>(event: T): T | null {
+  if (optedOut()) return null
+  const url = new URL(event.url)
+  url.search = ''
+  url.hash = ''
+  return { ...event, url: url.toString() }
 }
 
 export default function Analytics() {
@@ -66,74 +78,84 @@ export default function Analytics() {
     setShowNotice(false)
   }
 
-  if (!showNotice) return null
+  const vercel = (
+    <>
+      <VercelAnalytics beforeSend={scrub} />
+      <SpeedInsights beforeSend={scrub} />
+    </>
+  )
+
+  if (!showNotice) return vercel
 
   return (
-    <div
-      role="region"
-      aria-label="Privacy notice"
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 200,
-        background: '#FFFFFF',
-        borderTop: '1px solid rgba(20,20,19,0.2)',
-        padding: '10px 16px',
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: '14px',
-        justifyContent: 'center',
-      }}
-    >
-      <p
+    <>
+      {vercel}
+      <div
+        role="region"
+        aria-label="Privacy notice"
         style={{
-          color: '#141413',
-          fontSize: '13.5px',
-          lineHeight: 1.55,
-          margin: 0,
-          maxWidth: '640px',
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 200,
+          background: '#FFFFFF',
+          borderTop: '1px solid rgba(20,20,19,0.2)',
+          padding: '10px 16px',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '14px',
+          justifyContent: 'center',
         }}
       >
-        We count page views. No ads, no trackers.{' '}
-        <a href="/privacy" style={{ color: '#141413', fontWeight: 700 }}>
-          Privacy policy
-        </a>
-      </p>
-      <div style={{ display: 'flex', gap: '8px' }}>
-        <button
-          onClick={() => dismiss(false)}
+        <p
           style={{
-            background: 'transparent',
-            border: '1px solid #98C890',
             color: '#141413',
-            fontWeight: 600,
             fontSize: '13.5px',
-            padding: '10px 16px',
-            cursor: 'pointer',
-            fontFamily: 'inherit',
+            lineHeight: 1.55,
+            margin: 0,
+            maxWidth: '640px',
           }}
         >
-          Don&apos;t count me
-        </button>
-        <button
-          onClick={() => dismiss(true)}
-          style={{
-            background: '#D97757',
-            border: 'none',
-            color: '#141413',
-            fontWeight: 700,
-            fontSize: '13.5px',
-            padding: '10px 18px',
-            cursor: 'pointer',
-            fontFamily: 'inherit',
-          }}
-        >
-          OK
-        </button>
+          We count page views. No ads, no trackers.{' '}
+          <a href="/privacy" style={{ color: '#141413', fontWeight: 700 }}>
+            Privacy policy
+          </a>
+        </p>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={() => dismiss(false)}
+            style={{
+              background: 'transparent',
+              border: '1px solid #98C890',
+              color: '#141413',
+              fontWeight: 600,
+              fontSize: '13.5px',
+              padding: '10px 16px',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+            }}
+          >
+            Don&apos;t count me
+          </button>
+          <button
+            onClick={() => dismiss(true)}
+            style={{
+              background: '#D97757',
+              border: 'none',
+              color: '#141413',
+              fontWeight: 700,
+              fontSize: '13.5px',
+              padding: '10px 18px',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+            }}
+          >
+            OK
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
