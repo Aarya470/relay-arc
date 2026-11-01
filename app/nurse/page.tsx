@@ -305,10 +305,10 @@ export default function NurseDashboard() {
             {tab === 'checkins' && (
               <div className="bg-white border border-[#98C890] rounded-2xl p-4">
                 <p className="text-[#5C5A52] font-mono text-xs uppercase tracking-wider mb-3">
-                  Check-in history
+                  Check in history
                 </p>
                 {getCheckins(selected.id).length === 0 && (
-                  <p className="text-[#5C5A52] text-sm">No check-ins yet</p>
+                  <p className="text-[#5C5A52] text-sm">No check ins yet</p>
                 )}
                 {getCheckins(selected.id)
                   .slice(0, 10)

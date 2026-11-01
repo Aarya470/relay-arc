@@ -80,7 +80,7 @@ export default function CareTeamLogin() {
         style={{
           width: '36px',
           height: '36px',
-          borderRadius: '14px',
+          borderRadius: 0,
           background: '#F2F0E8',
           border: 'none',
           cursor: 'pointer',
@@ -257,7 +257,7 @@ export default function CareTeamLogin() {
           whileTap={{ scale: 0.97 }}
           onClick={handleLogin}
           disabled={loading}
-          style={{
+          className="sh-slant" style={{
             background: '#42623C',
             color: 'white',
             fontWeight: 700,

@@ -118,7 +118,7 @@ export default function EmergencyStatus() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               cursor: 'pointer',
@@ -150,7 +150,7 @@ export default function EmergencyStatus() {
             gap: '6px',
             background: 'rgba(163,52,23,0.10)',
             border: '1px solid rgba(163,52,23,0.25)',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '6px 12px',
           }}
         >
@@ -179,7 +179,7 @@ export default function EmergencyStatus() {
               background:
                 action.color === 'green' ? 'rgba(86,128,78,0.05)' : 'rgba(86,128,78,0.05)',
               border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.18)' : 'rgba(86,128,78,0.18)'}`,
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '14px',
               display: 'flex',
               alignItems: 'flex-start',
@@ -210,7 +210,7 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(86,128,78,0.05)',
             border: '1px solid rgba(86,128,78,0.18)',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '14px 16px',
             display: 'flex',
             alignItems: 'center',
@@ -239,7 +239,7 @@ export default function EmergencyStatus() {
               color: '#42623C',
               fontSize: '11px',
               padding: '5px 10px',
-              borderRadius: '4px',
+              borderRadius: 0,
               fontFamily: 'inherit',
               fontWeight: 700,
               flexShrink: 0,
@@ -255,7 +255,7 @@ export default function EmergencyStatus() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '16px',
             }}
           >
@@ -276,7 +276,7 @@ export default function EmergencyStatus() {
                     style={{
                       width: '32px',
                       height: '32px',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       background: 'rgba(86,128,78,0.10)',
                       border: '1px solid rgba(86,128,78,0.20)',
                       display: 'flex',
@@ -315,7 +315,7 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(163,52,23,0.06)',
             border: '1px solid rgba(163,52,23,0.18)',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '16px',
           }}
         >
@@ -335,14 +335,14 @@ export default function EmergencyStatus() {
           </p>
           <motion.button
             whileTap={{ scale: 0.97 }}
-            style={{
+            className="sh-slant" style={{
               width: '100%',
               background: '#A33417',
               color: 'white',
               fontWeight: 700,
               fontSize: '14px',
               padding: '14px',
-              borderRadius: '4px',
+              borderRadius: 0,
               border: 'none',
               cursor: 'pointer',
               display: 'flex',

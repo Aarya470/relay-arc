@@ -450,7 +450,7 @@ export default function PatientDetail() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
                     cursor: 'pointer',
@@ -560,7 +560,7 @@ export default function PatientDetail() {
             style={{
               width: '38px',
               height: '38px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               cursor: 'pointer',
@@ -592,7 +592,7 @@ export default function PatientDetail() {
                   display: 'inline-block',
                   background: 'rgba(86,128,78,0.12)',
                   border: '1px solid rgba(86,128,78,0.25)',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   padding: '2px 9px',
                   color: '#42623C',
                   fontSize: '11px',
@@ -738,7 +738,7 @@ export default function PatientDetail() {
         >
           {[
             { id: 'overview', label: 'Overview' },
-            { id: 'checkins', label: 'Check-ins' },
+            { id: 'checkins', label: 'Check ins' },
             { id: 'notes', label: 'Notes' },
             { id: 'appointments', label: 'Appointments' },
           ].map((t) => (
@@ -769,7 +769,7 @@ export default function PatientDetail() {
                     right: '10px',
                     height: '2px',
                     background: '#42623C',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                   }}
                   transition={{ type: 'spring', stiffness: 400, damping: 34 }}
                 />
@@ -903,7 +903,7 @@ export default function PatientDetail() {
                             display: 'inline-block',
                             background: 'rgba(86,128,78,0.10)',
                             border: '1px solid rgba(86,128,78,0.20)',
-                            borderRadius: '14px',
+                            borderRadius: 0,
                             padding: '2px 8px',
                             color: overdue ? '#A33417' : '#42623C',
                             fontSize: '12px',
@@ -920,7 +920,7 @@ export default function PatientDetail() {
                               color: '#A33417',
                               fontSize: '8px',
                               padding: '2px 6px',
-                              borderRadius: '14px',
+                              borderRadius: 0,
                               fontFamily: 'monospace',
                               textTransform: 'uppercase',
                               letterSpacing: '0.5px',
@@ -946,7 +946,7 @@ export default function PatientDetail() {
                           gap: '6px',
                           background: reminderSent[m.name] ? 'rgba(86,128,78,0.10)' : '#F2F0E8',
                           border: `1px solid ${reminderSent[m.name] ? 'rgba(86,128,78,0.25)' : '#98C890'}`,
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           padding: '6px 12px',
                           cursor: reminderSent[m.name] ? 'default' : 'pointer',
                         }}
@@ -1098,7 +1098,7 @@ export default function PatientDetail() {
                     fontWeight: 600,
                     fontSize: '13px',
                     padding: '10px 18px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     border: 'none',
                     cursor: 'pointer',
                   }}
@@ -1147,7 +1147,7 @@ export default function PatientDetail() {
                       style={{
                         width: '34px',
                         height: '34px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         background: 'rgba(86,128,78,0.12)',
                         border: '1px solid rgba(86,128,78,0.20)',
                         display: 'flex',
@@ -1190,7 +1190,7 @@ export default function PatientDetail() {
                   padding: '40px 0',
                 }}
               >
-                No check-ins yet
+                No check ins yet
               </p>
             )}
             {checkins.map((c, i) => (
@@ -1215,7 +1215,7 @@ export default function PatientDetail() {
                     style={{
                       width: '30px',
                       height: '30px',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       background: 'rgba(86,128,78,0.10)',
                       border: '1px solid rgba(86,128,78,0.22)',
                       display: 'flex',
@@ -1228,7 +1228,7 @@ export default function PatientDetail() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ color: '#141413', fontSize: '12px', fontWeight: 700, margin: 0 }}>
-                      Check-in completed
+                      Check in completed
                     </p>
                     <p
                       style={{
@@ -1248,7 +1248,7 @@ export default function PatientDetail() {
                 <div
                   style={{
                     background: '#FFFFFF',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     padding: '12px',
                     marginTop: '4px',
                   }}
@@ -1342,7 +1342,7 @@ export default function PatientDetail() {
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={addNote}
-                style={{
+                className="sh-slant" style={{
                   width: '100%',
                   background: '#42623C',
                   color: '#ffffff',
@@ -1524,7 +1524,7 @@ export default function PatientDetail() {
                           flex: 1,
                           background: 'rgba(86,128,78,0.10)',
                           border: '1px solid rgba(86,128,78,0.22)',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           padding: '9px',
                           display: 'flex',
                           alignItems: 'center',
@@ -1549,7 +1549,7 @@ export default function PatientDetail() {
                           flex: 1,
                           background: 'rgba(86,128,78,0.08)',
                           border: '1px solid rgba(86,128,78,0.18)',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           padding: '9px',
                           display: 'flex',
                           alignItems: 'center',
@@ -1568,7 +1568,7 @@ export default function PatientDetail() {
                           width: '40px',
                           background: 'rgba(163,52,23,0.08)',
                           border: '1px solid rgba(163,52,23,0.18)',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           padding: '9px',
                           display: 'flex',
                           alignItems: 'center',
@@ -1595,7 +1595,7 @@ export default function PatientDetail() {
                         marginTop: '12px',
                         background: '#F2F0E8',
                         border: '1px solid #D8D4C8',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '8px 14px',
                         display: 'flex',
                         alignItems: 'center',
@@ -1621,7 +1621,7 @@ export default function PatientDetail() {
                         justifyContent: 'center',
                         gap: '8px',
                         background: '#42623C',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '12px',
                         color: '#ffffff',
                         fontWeight: 700,
@@ -1699,7 +1699,7 @@ export default function PatientDetail() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
                     cursor: 'pointer',
@@ -1740,7 +1740,7 @@ export default function PatientDetail() {
                     style={{
                       background: '#F2F0E8',
                       border: '1px solid #D8D4C8',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       cursor: 'pointer',
                       color: '#5C5A52',
                       width: '32px',
@@ -1763,7 +1763,7 @@ export default function PatientDetail() {
                     style={{
                       background: '#F2F0E8',
                       border: '1px solid #D8D4C8',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       cursor: 'pointer',
                       color: '#5C5A52',
                       width: '32px',
@@ -1818,7 +1818,7 @@ export default function PatientDetail() {
                         disabled={isPast}
                         style={{
                           padding: '8px 0',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           border: 'none',
                           cursor: isPast ? 'default' : 'pointer',
                           fontSize: '13px',

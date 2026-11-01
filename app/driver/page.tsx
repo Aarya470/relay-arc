@@ -240,7 +240,7 @@ export default function DriverDashboard() {
           style={{
             width: '36px',
             height: '36px',
-            borderRadius: '14px',
+            borderRadius: 0,
             background: '#F2F0E8',
             border: 'none',
             cursor: 'pointer',

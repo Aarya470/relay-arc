@@ -239,7 +239,7 @@ export function RelayScene() {
     { n: '1', title: 'Shared room opens', sub: 'live location shared', color: CRIT },
     { n: '2', title: 'Hospital is told', sub: 'partner hospitals only', color: GREEN_DEEP },
     { n: '3', title: 'Family notified', sub: 'push alert, live map', color: WARN },
-    { n: '4', title: 'Driver routed', sub: 'turn-by-turn in app', color: INK2 },
+    { n: '4', title: 'Driver routed', sub: 'turn by turn in app', color: INK2 },
   ]
   return (
     <Frame vb="0 0 620 160" title="What goes out after one press">

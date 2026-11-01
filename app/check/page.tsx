@@ -73,7 +73,7 @@ const srcLabel: Record<Source, string> = {
   motion: 'motion sensor',
   taps: 'tapped',
   apple: 'Apple Watch',
-  checkin: 'from your check-in',
+  checkin: 'from your check in',
   typed: 'typed',
   demo: 'DEMO, simulated',
 }
@@ -81,7 +81,7 @@ const srcLabel: Record<Source, string> = {
 const panel: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1px solid rgba(20,20,19,0.14)',
-  borderRadius: '4px',
+  borderRadius: 0,
   padding: '18px',
   marginBottom: '14px',
 }
@@ -101,7 +101,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
   background: primary ? tone : '#FFFFFF',
   color: primary ? '#FFFFFF' : tone,
   border: `1.5px solid ${tone}`,
-  borderRadius: '4px',
+  borderRadius: 0,
   padding: '12px 18px',
   minHeight: '48px',
   fontWeight: 700,
@@ -113,7 +113,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
 const input: React.CSSProperties = {
   width: '100%',
   border: `1px solid ${LINE2}`,
-  borderRadius: '4px',
+  borderRadius: 0,
   padding: '11px 12px',
   minHeight: '48px',
   fontSize: '16px',
@@ -233,7 +233,7 @@ export default function VitalsCheck() {
       await fetch('/api/vitals/log', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content Type': 'application/json',
           Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ ...fields, source }),
@@ -561,7 +561,7 @@ export default function VitalsCheck() {
       : total >= 5
         ? 'medium'
         : redFlag
-          ? 'low-medium (a single parameter scored 3)'
+          ? 'low medium (a single parameter scored 3)'
           : 'low'
 
   const share = async () => {
@@ -652,7 +652,7 @@ export default function VitalsCheck() {
           </h1>
           <p style={{ color: T2, fontSize: '16px', lineHeight: 1.55, margin: 0 }}>
             Your pulse from the camera and your breathing from the motion sensor, 15 seconds each.
-            The NEWS2 table at the bottom also uses your Apple Watch and today&apos;s check-in, and
+            The NEWS2 table at the bottom also uses your Apple Watch and today&apos;s check in, and
             updates by itself.
           </p>
         </div>
@@ -686,7 +686,7 @@ export default function VitalsCheck() {
                   background: '#FFD166',
                   color: '#1A1300',
                   padding: '3px 8px',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                 }}
               >
                 DEMO · simulated reading
@@ -770,7 +770,7 @@ export default function VitalsCheck() {
               display: 'block',
               background: PAPER,
               border: `1px solid ${LINE}`,
-              borderRadius: '4px',
+              borderRadius: 0,
             }}
           />
 
@@ -798,7 +798,7 @@ export default function VitalsCheck() {
               style={{
                 margin: '12px 0 0',
                 padding: '10px 12px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 background: '#FBEDE8',
                 color: '#6B2410',
                 fontSize: '14px',
@@ -921,7 +921,7 @@ export default function VitalsCheck() {
               style={{
                 width: '100%',
                 minHeight: '128px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 border: `2px solid ${T1}`,
                 cursor: 'pointer',
                 fontFamily: 'inherit',
@@ -997,17 +997,17 @@ export default function VitalsCheck() {
             >
               <MessageCircle size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
               <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '15px', fontWeight: 600, color: T1 }}>Daily check-in</p>
+                <p style={{ fontSize: '15px', fontWeight: 600, color: T1 }}>Daily check in</p>
                 <p style={{ fontSize: '14px', color: T2, lineHeight: 1.5 }}>
                   {checkinLast
                     ? `Today at ${checkinLast.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. `
                     : ''}
-                  Anything you tell the check-in, like a temperature, an oxygen reading, feeling
+                  Anything you tell the check in, like a temperature, an oxygen reading, feeling
                   confused or being on oxygen, is added to the score.
                 </p>
                 {!checkinLast && signedIn && (
                   <a href="/checkin" style={{ fontSize: '14px', fontWeight: 700, color: T1 }}>
-                    Do today&apos;s check-in →
+                    Do today&apos;s check in →
                   </a>
                 )}
               </div>
@@ -1090,7 +1090,7 @@ export default function VitalsCheck() {
                       fontWeight: 700,
                       fontSize: '15px',
                       padding: '5px 0',
-                      borderRadius: '4px',
+                      borderRadius: 0,
                       background: c.bg,
                       color: c.fg,
                       fontVariantNumeric: 'tabular-nums',
@@ -1148,7 +1148,7 @@ export default function VitalsCheck() {
               </div>
             )}
             <p style={{ fontSize: '12.5px', color: T3, marginTop: '16px', lineHeight: 1.5 }}>
-              For clinicians: aggregate 0–4 low (low-medium if any single parameter scores 3), 5–6
+              For clinicians: aggregate 0–4 low (low medium if any single parameter scores 3), 5–6
               medium, 7+ high. Royal College of Physicians, NEWS2 (2017). Camera and motion readings
               are phone estimates, not a medical device. Not a diagnosis.
             </p>

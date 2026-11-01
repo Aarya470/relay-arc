@@ -352,7 +352,7 @@ export default function Emergency() {
             style={{
               width: '44px',
               height: '44px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: SURFACE,
               border: `1px solid ${BORDER}`,
               cursor: 'pointer',
@@ -380,7 +380,7 @@ export default function Emergency() {
             // Chamfered: the call control wears the same shape everywhere it
             // appears, so it is recognisable before it is readable.
             padding: '22px',
-            borderRadius: '4px',
+            borderRadius: 0,
             fontWeight: 900,
             fontSize: '22px',
             letterSpacing: '-0.3px',
@@ -409,7 +409,7 @@ export default function Emergency() {
                     color: on ? '#FFFFFF' : T3,
                     border: `1px solid ${on ? T1 : BORDER}`,
                     padding: '5px 11px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     fontFamily: 'inherit',
                     fontSize: '11px',
                     fontWeight: 700,
@@ -440,7 +440,7 @@ export default function Emergency() {
               border: `1.5px solid ${listening ? RED : T1}`,
               color: listening ? RED : T1,
               padding: '17px',
-              borderRadius: '4px',
+              borderRadius: 0,
               fontWeight: 700,
               fontSize: '16px',
               cursor: 'pointer',
@@ -461,7 +461,7 @@ export default function Emergency() {
         )}
 
         {/* Typing works where speaking does not: a loud room, a quiet one, or no
-            microphone. Same on-device classifier as voice. */}
+            microphone. Same on phone classifier as voice. */}
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -480,7 +480,7 @@ export default function Emergency() {
               flex: 1,
               minWidth: 0,
               border: `1.5px solid ${T1}`,
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '0 14px',
               minHeight: '54px',
               fontSize: '16px',
@@ -497,7 +497,7 @@ export default function Emergency() {
             style={{
               width: '54px',
               minHeight: '54px',
-              borderRadius: '4px',
+              borderRadius: 0,
               border: 'none',
               background: typed.trim().length >= 3 ? T1 : '#B9B6AA',
               color: '#FFFFFF',
@@ -517,7 +517,7 @@ export default function Emergency() {
             {heard.evidence.length > 0
               ? `matched: ${heard.evidence.join(' · ')}`
               : 'starting response'}
-            {heard.source === 'device' ? ' · on-device' : ' · assisted'}
+            {heard.source === 'device' ? ' · on phone' : ' · assisted'}
           </p>
         )}
 
@@ -548,7 +548,7 @@ export default function Emergency() {
             {heard && heard.evidence.length > 0 && (
               <p style={{ color: T3, fontSize: '11.5px', fontFamily: 'inherit', marginTop: '3px' }}>
                 heard: {heard.evidence.join(' · ')}
-                {heard.source === 'device' ? ' · on-device' : ' · assisted'}
+                {heard.source === 'device' ? ' · on phone' : ' · assisted'}
               </p>
             )}
             <p style={{ color: T2, fontSize: '12px', lineHeight: 1.5, marginTop: '6px' }}>

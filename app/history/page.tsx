@@ -84,7 +84,7 @@ export default function HistoryPage() {
             key={i}
             style={{
               height: '48px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: '#F2F0E8',
               marginBottom: '8px',
             }}
@@ -157,7 +157,7 @@ export default function HistoryPage() {
         <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #98C890' }}>
           {(
             [
-              ['checkins', 'Check-ins', checkins.length],
+              ['checkins', 'Check ins', checkins.length],
               ['emergencies', 'Emergencies', emergencies.length],
             ] as const
           ).map(([key, label, count]) => (
@@ -214,7 +214,7 @@ export default function HistoryPage() {
               {checkins.length === 0 ? (
                 <div style={{ padding: '48px 0' }}>
                   <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '10px' }}>
-                    No check-ins yet.
+                    No check ins yet.
                   </p>
                   <button
                     onClick={() => router.push('/checkin')}
@@ -229,7 +229,7 @@ export default function HistoryPage() {
                       fontFamily: 'inherit',
                     }}
                   >
-                    Start your first check-in →
+                    Start your first check in →
                   </button>
                 </div>
               ) : (
@@ -288,7 +288,7 @@ export default function HistoryPage() {
                                 whiteSpace: 'nowrap',
                               }}
                             >
-                              {c.summary?.split('\n')[0] || 'Check-in'}
+                              {c.summary?.split('\n')[0] || 'Check in'}
                             </span>
                             <motion.span
                               animate={{ rotate: expanded === c.id ? 180 : 0 }}

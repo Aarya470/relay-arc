@@ -157,7 +157,7 @@ export default function GuardianWatch({
           <div
             style={{
               background: '#FFFFFF',
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '28px 24px',
               width: '100%',
               maxWidth: '360px',
@@ -213,14 +213,14 @@ export default function GuardianWatch({
             </p>
             <button
               onClick={respond}
-              style={{
+              className="sh-slant" style={{
                 width: '100%',
                 background: '#42623C',
                 color: 'white',
                 fontWeight: 800,
                 fontSize: '18px',
                 padding: '18px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 border: 'none',
                 cursor: 'pointer',
                 fontFamily: 'inherit',
@@ -304,7 +304,7 @@ export default function GuardianWatch({
                 fontWeight: 900,
                 fontSize: '19px',
                 padding: '19px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 textDecoration: 'none',
                 minHeight: '62px',
               }}
@@ -325,7 +325,7 @@ export default function GuardianWatch({
                   fontWeight: 700,
                   fontSize: '15.5px',
                   padding: '16px',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   textDecoration: 'none',
                   minHeight: '56px',
                 }}
@@ -346,7 +346,7 @@ export default function GuardianWatch({
                 fontWeight: 700,
                 fontSize: '15.5px',
                 padding: '16px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 cursor: 'pointer',
                 fontFamily: 'inherit',
                 minHeight: '56px',

@@ -14,7 +14,7 @@ const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
   border: '1px solid #D8D4C8',
-  borderRadius: '4px',
+  borderRadius: 0,
   padding: '14px 16px',
   color: '#141413',
   // 16px, not 15 or 14, and it is not a taste decision.
@@ -127,7 +127,7 @@ export default function EmergencyContacts() {
             key={i}
             style={{
               height: '72px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -148,7 +148,7 @@ export default function EmergencyContacts() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               cursor: 'pointer',
@@ -180,7 +180,7 @@ export default function EmergencyContacts() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: 'rgba(86,128,78,0.15)',
               border: '1px solid rgba(86,128,78,0.3)',
               cursor: 'pointer',
@@ -200,7 +200,7 @@ export default function EmergencyContacts() {
           style={{
             background: 'rgba(163,52,23,0.06)',
             border: '1px solid rgba(163,52,23,0.18)',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '12px 14px',
             display: 'flex',
             alignItems: 'flex-start',
@@ -229,7 +229,7 @@ export default function EmergencyContacts() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   padding: '14px 16px',
                   display: 'flex',
                   alignItems: 'center',
@@ -290,7 +290,7 @@ export default function EmergencyContacts() {
                     style={{
                       width: '32px',
                       height: '32px',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       background: '#F2F0E8',
                       border: '1px solid #D8D4C8',
                       cursor: 'pointer',
@@ -322,7 +322,7 @@ export default function EmergencyContacts() {
                 fontWeight: 700,
                 fontSize: '13px',
                 padding: '12px 22px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 border: 'none',
                 cursor: 'pointer',
                 height: '44px',
@@ -342,7 +342,7 @@ export default function EmergencyContacts() {
               width: '100%',
               background: 'transparent',
               border: '1.5px dashed #C9CED6',
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '18px',
               display: 'flex',
               alignItems: 'center',
@@ -369,7 +369,7 @@ export default function EmergencyContacts() {
               style={{
                 background: '#FFFFFF',
                 border: '1px solid rgba(86,128,78,0.2)',
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '20px',
               }}
             >
@@ -388,7 +388,7 @@ export default function EmergencyContacts() {
                   style={{
                     width: '30px',
                     height: '30px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
                     cursor: 'pointer',
@@ -424,7 +424,7 @@ export default function EmergencyContacts() {
                       onClick={() => setNewContact((p) => ({ ...p, relationship: r }))}
                       style={{
                         padding: '6px 12px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         border: '1px solid',
                         fontSize: '12px',
                         fontWeight: 600,
@@ -444,13 +444,13 @@ export default function EmergencyContacts() {
                   whileTap={{ scale: 0.97 }}
                   onClick={addContact}
                   disabled={saving}
-                  style={{
+                  className="sh-slant" style={{
                     background: '#42623C',
                     color: 'white',
                     fontWeight: 700,
                     fontSize: '14px',
                     padding: '0 20px',
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     border: 'none',
                     cursor: saving ? 'not-allowed' : 'pointer',
                     marginTop: '4px',

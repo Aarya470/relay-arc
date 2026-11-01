@@ -103,7 +103,7 @@ export default function MedicalProfile() {
             key={i}
             style={{
               height: '60px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -514,14 +514,14 @@ export default function MedicalProfile() {
         <motion.button
           whileTap={{ scale: 0.98 }}
           onClick={handleShare}
-          style={{
+          className="sh-slant" style={{
             width: '100%',
             background: '#141413',
             color: 'white',
             fontWeight: 600,
             fontSize: '14.5px',
             padding: '0 20px',
-            borderRadius: '4px',
+            borderRadius: 0,
             border: 'none',
             cursor: 'pointer',
             display: 'flex',

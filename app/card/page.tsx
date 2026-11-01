@@ -431,7 +431,7 @@ export default function EmergencyCard() {
             marginBottom: '14px',
           }}
         >
-          Fill this in once. You get a lock-screen image and a printable wallet card. Both work with
+          Fill this in once. You get a lock screen image and a printable wallet card. Both work with
           no signal, no app and no battery on anyone else&apos;s phone, because a locked screen
           shows its wallpaper to whoever picks it up.
         </p>
@@ -608,7 +608,7 @@ export default function EmergencyCard() {
                         border: `1px solid ${INK}`,
                         background: WHITE,
                         color: INK,
-                        borderRadius: '4px',
+                        borderRadius: 0,
                         padding: '8px 12px',
                         fontSize: '14px',
                         fontWeight: 600,
@@ -626,7 +626,7 @@ export default function EmergencyCard() {
                     border: `1px dashed ${INK3}`,
                     background: WHITE,
                     color: INK2,
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     padding: '8px 12px',
                     fontSize: '14px',
                     fontWeight: 600,

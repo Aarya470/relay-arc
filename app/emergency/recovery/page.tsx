@@ -346,7 +346,7 @@ function RecoveryContent() {
 
         {/* Follow-up note */}
         <Card delay={0.2}>
-          <CardLabel>Schedule a follow-up</CardLabel>
+          <CardLabel>Book a follow up visit</CardLabel>
           <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#5C5A52', marginBottom: '16px' }}>
             {protocol.followUpNote}
           </p>
@@ -359,7 +359,7 @@ function RecoveryContent() {
               gap: '8px',
               width: '100%',
               padding: '12px',
-              borderRadius: '4px',
+              borderRadius: 0,
               fontSize: '14px',
               fontWeight: 600,
               textDecoration: 'none',
@@ -383,7 +383,7 @@ function RecoveryContent() {
               justifyContent: 'center',
               gap: '8px',
               padding: '12px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               color: '#5C5A52',
@@ -400,7 +400,7 @@ function RecoveryContent() {
             style={{
               flex: 1,
               padding: '12px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#42623C',
               border: 'none',
               color: '#fff',
@@ -434,7 +434,7 @@ function Card({
       style={{
         background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
         border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
-        borderRadius: '4px',
+        borderRadius: 0,
         padding: '16px',
       }}
     >

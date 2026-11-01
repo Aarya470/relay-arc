@@ -194,7 +194,7 @@ export default function LegalDocument({
                 fontWeight: 700,
                 fontSize: '14px',
                 padding: '11px 18px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 textDecoration: 'none',
               }}
             >

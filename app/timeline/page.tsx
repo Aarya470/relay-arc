@@ -120,7 +120,7 @@ export default function Timeline() {
             key={i}
             style={{
               height: '64px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#F2F0E8',
               marginBottom: '8px',
             }}
@@ -151,7 +151,7 @@ export default function Timeline() {
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 background: '#F2F0E8',
                 border: '1px solid #D8D4C8',
                 cursor: 'pointer',
@@ -187,7 +187,7 @@ export default function Timeline() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: 'rgba(86,128,78,0.10)',
               border: '1px solid rgba(86,128,78,0.20)',
               cursor: 'pointer',
@@ -212,7 +212,7 @@ export default function Timeline() {
             style={{
               background: 'rgba(86,128,78,0.06)',
               border: '1px solid rgba(86,128,78,0.16)',
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
@@ -252,7 +252,7 @@ export default function Timeline() {
               width: '2px',
               background:
                 'linear-gradient(to bottom, rgba(86,128,78,0.5) 0%, rgba(86,128,78,0.2) 50%, rgba(20,20,19,0.05) 100%)',
-              borderRadius: '14px',
+              borderRadius: 0,
               zIndex: 0,
               pointerEvents: 'none',
             }}
@@ -326,7 +326,7 @@ export default function Timeline() {
                     flex: 1,
                     background: cardBg,
                     border: `1px solid ${cardBorder}`,
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     overflow: 'hidden',
                     boxShadow: isCurrent
                       ? '0 6px 24px rgba(86,128,78,0.12)'
@@ -376,7 +376,7 @@ export default function Timeline() {
                               color: '#42623C',
                               fontSize: '9px',
                               padding: '2px 8px',
-                              borderRadius: '14px',
+                              borderRadius: 0,
                               fontWeight: 700,
                               fontFamily: 'inherit',
                               letterSpacing: '0.5px',
@@ -393,7 +393,7 @@ export default function Timeline() {
                               color: '#42623C',
                               fontSize: '9px',
                               padding: '2px 8px',
-                              borderRadius: '14px',
+                              borderRadius: 0,
                               fontWeight: 700,
                               fontFamily: 'inherit',
                               letterSpacing: '0.5px',
@@ -515,7 +515,7 @@ export default function Timeline() {
                 fontWeight: 700,
                 background: 'none',
                 border: '1px solid rgba(86,128,78,0.30)',
-                borderRadius: '14px',
+                borderRadius: 0,
                 padding: '8px 16px',
                 cursor: 'pointer',
               }}

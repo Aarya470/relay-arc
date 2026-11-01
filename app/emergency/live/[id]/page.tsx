@@ -437,7 +437,7 @@ export default function RelayRoomPage() {
               width: '100%',
               background: '#FFFFFF',
               border: `1.5px solid ${BORDER}`,
-              borderRadius: '14px',
+              borderRadius: 0,
               padding: '13px 16px',
               color: T1,
               fontSize: '15px',
@@ -456,7 +456,7 @@ export default function RelayRoomPage() {
               fontWeight: 600,
               fontSize: '15px',
               padding: '15px',
-              borderRadius: '14px',
+              borderRadius: 0,
               border: 'none',
               cursor: name.trim() ? 'pointer' : 'default',
               opacity: name.trim() ? 1 : 0.5,
@@ -504,7 +504,7 @@ export default function RelayRoomPage() {
                   right: '10px',
                   background: 'rgba(255,255,255,0.95)',
                   border: `1px solid ${BORDER}`,
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   padding: '9px 13px',
                   display: 'flex',
                   alignItems: 'center',
@@ -516,7 +516,7 @@ export default function RelayRoomPage() {
                     width: '14px',
                     height: '14px',
                     background: RED,
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     color: 'white',
                     fontSize: '11px',
                     fontWeight: 800,
@@ -565,7 +565,7 @@ export default function RelayRoomPage() {
                     gap: '6px',
                     background: p.role === 'patient' ? 'rgba(163,52,23,0.07)' : '#B3DDAC',
                     border: `1px solid ${p.role === 'patient' ? 'rgba(163,52,23,0.25)' : BORDER}`,
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     padding: '5px 10px',
                   }}
                 >
@@ -683,7 +683,7 @@ export default function RelayRoomPage() {
                     style={{
                       width: '22px',
                       height: '22px',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       flexShrink: 0,
                       background: t.done ? GREEN : 'none',
                       border: `1.5px solid ${t.done ? GREEN : '#C9CED6'}`,
@@ -720,7 +720,7 @@ export default function RelayRoomPage() {
                         fontSize: '12px',
                         fontWeight: 700,
                         padding: '7px 12px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         cursor: 'pointer',
                         fontFamily: 'inherit',
                         flexShrink: 0,
@@ -742,7 +742,7 @@ export default function RelayRoomPage() {
                   flex: 1,
                   background: '#FFFFFF',
                   border: `1.5px solid ${BORDER}`,
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   padding: '12px 14px',
                   color: T1,
                   fontSize: '14px',
@@ -755,7 +755,7 @@ export default function RelayRoomPage() {
                 aria-label="Add task"
                 style={{
                   width: '46px',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   background: T1,
                   border: 'none',
                   cursor: 'pointer',
@@ -783,7 +783,7 @@ export default function RelayRoomPage() {
                   fontWeight: 800,
                   fontSize: '16px',
                   padding: '16px',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   textDecoration: 'none',
                   minHeight: '54px',
                 }}
@@ -815,7 +815,7 @@ export default function RelayRoomPage() {
                     style={{
                       width: '176px',
                       border: `1px solid ${BORDER}`,
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       padding: '10px',
                       background: 'white',
                     }}

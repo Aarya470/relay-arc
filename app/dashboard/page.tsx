@@ -270,7 +270,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           <div
             style={{
               height: '80px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: BORDER,
               width: '40%',
               opacity: 0.5,
@@ -279,7 +279,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           <div
             style={{
               height: '16px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: BORDER,
               width: '80%',
               opacity: 0.4,
@@ -288,7 +288,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           <div
             style={{
               height: '16px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: BORDER,
               width: '65%',
               opacity: 0.3,
@@ -580,7 +580,7 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
                 key={i}
                 style={{
                   height: '14px',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   background: BORDER,
                   opacity: 0.5,
                   marginBottom: '12px',
@@ -650,7 +650,7 @@ function scheduleCheckinReminders(userId: string, checkins: any[]): () => void {
           .limit(1)
         if (data?.length) return
         const reg = await navigator.serviceWorker.ready
-        await reg.showNotification('Daily check-in', {
+        await reg.showNotification('Daily check in', {
           body: "You haven't checked in yet today.",
           icon: '/icon-192.png',
           badge: '/icon-192.png',
@@ -894,7 +894,7 @@ export default function Dashboard() {
             key={i}
             style={{
               height: `${h}px`,
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#98C890',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -934,10 +934,9 @@ export default function Dashboard() {
     <motion.div
       variants={fadeUp}
       onClick={onClick}
-      style={{
+      className="sh-cut" style={{
         background: SURFACE,
-        border: `1px solid ${BORDER}`,
-        borderRadius: '4px',
+        borderRadius: 0,
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
         ...style,
@@ -1010,7 +1009,7 @@ export default function Dashboard() {
                 fontWeight: 700,
                 fontSize: '13px',
                 padding: '9px 16px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
@@ -1073,7 +1072,7 @@ export default function Dashboard() {
                       fontSize: '13px',
                       fontWeight: 600,
                       padding: '3px 8px',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       letterSpacing: '0',
                       border: `1px solid rgba(86,128,78,0.14)`,
                     }}
@@ -1093,7 +1092,7 @@ export default function Dashboard() {
                   gap: '5px',
                   background: 'rgba(168,114,0,0.08)',
                   border: '1px solid rgba(168,114,0,0.14)',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   padding: '5px 10px',
                 }}
               >
@@ -1106,14 +1105,14 @@ export default function Dashboard() {
               </div>
             )}
             <motion.button
-              whileTap={{ scale: 0.9 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => router.push('/settings')}
+              className="sh-pill"
               style={{
-                height: '36px',
-                padding: '0 12px',
-                borderRadius: '4px',
+                height: '40px',
+                padding: '0 18px',
                 background: SURFACE,
-                border: `1px solid ${BORDER}`,
+                border: 'none',
                 color: T1,
                 fontSize: '14px',
                 fontWeight: 600,
@@ -1145,10 +1144,9 @@ export default function Dashboard() {
         {installPrompt && (
           <motion.div
             variants={fadeUp}
-            style={{
+            className="sh-cut" style={{
               background: SURFACE,
-              border: `1px solid ${BORDER}`,
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
@@ -1174,7 +1172,7 @@ export default function Dashboard() {
                 fontWeight: 700,
                 fontSize: '12px',
                 padding: '8px 14px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 border: 'none',
                 cursor: 'pointer',
                 flexShrink: 0,
@@ -1211,32 +1209,19 @@ export default function Dashboard() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => router.push('/emergency')}
+            className="sh-slant"
             style={{
               width: '100%',
               background: RED,
-              // Chamfered rather than rounded.
-              borderRadius: '4px',
-              padding: '28px 24px',
+              padding: '30px 36px',
               border: 'none',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              animation: 'sos-pulse 2.8s ease-in-out infinite',
             }}
           >
             <div style={{ textAlign: 'left' }}>
-              <p
-                style={{
-                  color: 'rgba(255,255,255,0.50)',
-                  fontSize: '13px',
-                  letterSpacing: '0',
-                  marginBottom: '10px',
-                  fontWeight: 600,
-                }}
-              >
-                Emergency Response
-              </p>
               <p
                 style={{
                   color: '#FFFFFF',
@@ -1251,14 +1236,14 @@ export default function Dashboard() {
               </p>
               <p
                 style={{
-                  color: 'rgba(255,255,255,0.50)',
-                  fontSize: '12px',
+                  color: 'rgba(255,255,255,0.92)',
+                  fontSize: '14px',
                   marginTop: '10px',
                   fontWeight: 500,
                   letterSpacing: '0.2px',
                 }}
               >
-                Tap to start · Finds a hospital and prepares your details
+                Tap to start. Finds a hospital and sends your details.
               </p>
             </div>
             <div
@@ -1294,10 +1279,9 @@ export default function Dashboard() {
               initial="hidden"
               animate="show"
               exit={{ opacity: 0, scale: 0.97 }}
-              style={{
+              className="sh-cut" style={{
                 background: SURFACE,
-                border: `1px solid ${BORDER}`,
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '14px 16px',
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -1377,18 +1361,18 @@ export default function Dashboard() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => router.push('/checkin')}
+            className="sh-cut"
             style={{
               background: checkinToday ? SURFACE : T1,
               color: checkinToday ? T1 : '#FFFFFF',
-              border: `1.5px solid ${T1}`,
-              borderRadius: '4px',
-              padding: '16px 14px',
+              border: 'none',
+              padding: '22px 18px',
               textAlign: 'left',
               cursor: 'pointer',
               fontFamily: 'inherit',
             }}
           >
-            <p style={{ fontSize: '16px', fontWeight: 700 }}>Daily check-in</p>
+            <p style={{ fontSize: '16px', fontWeight: 700 }}>Daily check in</p>
             <p style={{ fontSize: '12.5px', opacity: 0.8, marginTop: '3px' }}>
               {checkinToday ? 'Done today ✓' : 'Chat for 2 minutes'}
             </p>
@@ -1396,12 +1380,12 @@ export default function Dashboard() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => router.push('/check')}
+            className="sh-cut"
             style={{
               background: T1,
               color: '#FFFFFF',
-              border: `1.5px solid ${T1}`,
-              borderRadius: '4px',
-              padding: '16px 14px',
+              border: 'none',
+              padding: '22px 18px',
               textAlign: 'left',
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -1613,7 +1597,7 @@ export default function Dashboard() {
                     style={{
                       background: BG,
                       border: `1px solid ${BORDER}`,
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       padding: '6px 11px',
                       display: 'flex',
                       alignItems: 'baseline',

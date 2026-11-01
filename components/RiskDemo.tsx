@@ -96,7 +96,7 @@ export default function RiskDemo() {
       style={{
         border: `1px solid rgba(20,20,19,0.15)`,
         background: '#FFFFFF',
-        borderRadius: '4px',
+        borderRadius: 0,
       }}
     >
       <div

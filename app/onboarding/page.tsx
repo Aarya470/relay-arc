@@ -140,7 +140,7 @@ export default function Onboarding() {
     width: '100%',
     background: '#FFFFFF',
     border: `1.5px solid ${BORDER}`,
-    borderRadius: '14px',
+    borderRadius: 0,
     padding: '13px 16px',
     color: T1,
     // 16px, not 15 or 14, and it is not a taste decision.
@@ -169,7 +169,7 @@ export default function Onboarding() {
     color: 'white',
     fontWeight: 600,
     padding: '15px',
-    borderRadius: '14px',
+    borderRadius: 0,
     border: 'none',
     cursor: 'pointer',
     display: 'flex',
@@ -187,7 +187,7 @@ export default function Onboarding() {
     color: T2,
     fontWeight: 500,
     padding: '15px',
-    borderRadius: '14px',
+    borderRadius: 0,
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
@@ -294,7 +294,7 @@ export default function Onboarding() {
                         onClick={() => update('blood_type', active ? '' : bt)}
                         style={{
                           padding: '12px 0',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           cursor: 'pointer',
                           background: active ? T1 : 'none',
                           border: `1.5px solid ${active ? T1 : BORDER}`,
@@ -394,7 +394,7 @@ export default function Onboarding() {
                         style={{
                           width: '22px',
                           height: '22px',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           flexShrink: 0,
                           background: active ? ACCENT : 'none',
                           border: `1.5px solid ${active ? ACCENT : '#C9CED6'}`,

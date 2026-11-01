@@ -204,7 +204,7 @@ export default function AdminPartners() {
               width: '100%',
               background: '#FFFFFF',
               border: `1.5px solid ${BORDER}`,
-              borderRadius: '14px',
+              borderRadius: 0,
               padding: '13px 16px',
               color: T1,
               fontSize: '15px',
@@ -228,7 +228,7 @@ export default function AdminPartners() {
               fontWeight: 600,
               fontSize: '15px',
               padding: '15px',
-              borderRadius: '14px',
+              borderRadius: 0,
               border: 'none',
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -324,7 +324,7 @@ export default function AdminPartners() {
             flex: 1,
             background: '#FFFFFF',
             border: `1.5px solid ${BORDER}`,
-            borderRadius: '14px',
+            borderRadius: 0,
             padding: '12px 14px',
             color: T1,
             fontSize: '14px',
@@ -338,7 +338,7 @@ export default function AdminPartners() {
           aria-label="Search"
           style={{
             width: '46px',
-            borderRadius: '14px',
+            borderRadius: 0,
             background: T1,
             border: 'none',
             cursor: 'pointer',
@@ -359,7 +359,7 @@ export default function AdminPartners() {
         <div
           style={{
             border: `1px solid ${BORDER}`,
-            borderRadius: '14px',
+            borderRadius: 0,
             overflow: 'hidden',
             marginBottom: '10px',
           }}
@@ -413,7 +413,7 @@ export default function AdminPartners() {
             justifyContent: 'space-between',
             gap: '12px',
             border: `1.5px solid ${ACCENT}`,
-            borderRadius: '14px',
+            borderRadius: 0,
             padding: '12px 14px',
             marginBottom: '10px',
           }}
@@ -436,7 +436,7 @@ export default function AdminPartners() {
               fontWeight: 700,
               fontSize: '13.5px',
               padding: '11px 16px',
-              borderRadius: '14px',
+              borderRadius: 0,
               border: 'none',
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -522,7 +522,7 @@ export default function AdminPartners() {
                     gap: '6px',
                     background: '#B3DDAC',
                     border: `1px solid ${BORDER}`,
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     padding: '7px 11px',
                     cursor: 'pointer',
                     fontFamily: MONO,
@@ -545,7 +545,7 @@ export default function AdminPartners() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     border: `1px solid ${BORDER}`,
                     background: 'none',
                     cursor: 'pointer',
@@ -562,7 +562,7 @@ export default function AdminPartners() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     border: `1px solid rgba(163,52,23,0.3)`,
                     background: 'none',
                     cursor: 'pointer',

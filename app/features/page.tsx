@@ -256,7 +256,7 @@ export default function Features() {
                   format={(v) => (v < 1 ? `${v} ms` : `${v} ms`)}
                 />
                 <Cap>
-                  Both bars are on the same linear scale. The on-device one really is about 1,400
+                  Both bars are on the same linear scale. The on phone one really is about 1,400
                   times shorter.
                 </Cap>
               </Panel>
@@ -282,7 +282,7 @@ export default function Features() {
                     note: 'more accurate than ours on raw classification',
                   },
                   {
-                    label: 'Relay, on-device',
+                    label: 'Relay, on the phone',
                     value: 85.7,
                     color: GREEN,
                     note: 'when it would have been wrong, it handed off instead of guessing',
@@ -327,7 +327,7 @@ export default function Features() {
           <div style={{ marginBottom: '34px' }}>
             <DispatchScene />
             <Cap>
-              An illustrative example. Drive times come from road-network routing. Cath lab and
+              An illustrative example. Drive times come from road network routing. Cath lab and
               diversion status come from what each hospital reports.
             </Cap>
           </div>
@@ -424,8 +424,8 @@ export default function Features() {
           <Head title="How urgent it is" />
           <H2>A single reading tells you less than the trend.</H2>
           <P>
-            When you log vitals, the score is plain arithmetic on published thresholds: the
-            vital-sign parts of NEWS2, the early-warning score hospitals use to spot patients who
+            When you log vitals, the score is plain arithmetic on published thresholds from the
+            vital sign parts of NEWS2, the early warning score hospitals use to spot patients who
             are getting worse. The same numbers always give the same result, and every point can be
             traced back to the reading behind it.
           </P>
@@ -443,7 +443,7 @@ export default function Features() {
 
           <TrendScene />
           <Cap>
-            Real NEWS2 thresholds, made-up readings. Readings 3, 4 and 5 each count as low on their
+            Real NEWS2 thresholds, made up readings. Readings 3, 4 and 5 each count as low on their
             own, but put side by side they are already climbing two readings before the score
             reaches medium.
           </Cap>
@@ -580,7 +580,7 @@ export default function Features() {
                   col: 2,
                   row: 1,
                   label: 'Ride dispatched',
-                  sub: 'turn-by-turn in app',
+                  sub: 'turn by turn in app',
                   color: INK3,
                 },
                 {
@@ -611,8 +611,8 @@ export default function Features() {
           <H2>Directions are built in, so nobody has to switch apps.</H2>
           <P>
             If a frightened family member jumps to a separate maps app, the hospital brief, the
-            arrival time and the shared room get left behind. So turn-by-turn lives inside Relay:
-            vector maps, a camera that follows the car, snap-to-route, a wake lock so the screen
+            arrival time and the shared room get left behind. So turn by turn lives inside Relay:
+            vector maps, a camera that follows the car, snap to-route, a wake lock so the screen
             stays on at junctions, and a night mode.
           </P>
 
@@ -656,7 +656,7 @@ export default function Features() {
               ]}
             />
             <Cap>
-              The re-scan branch is there because of a real bug: after a GPS jump, the old search
+              The re scan branch is there because of a real bug. After a GPS jump, the old search
               locked onto the wrong part of the route and reported about half the real distance.
             </Cap>
           </Panel>

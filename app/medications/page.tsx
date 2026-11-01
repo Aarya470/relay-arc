@@ -308,7 +308,7 @@ export default function Medications() {
   const sheetInputStyle: React.CSSProperties = {
     background: BG,
     border: `1.5px solid ${BORDER}`,
-    borderRadius: '14px',
+    borderRadius: 0,
     padding: '13px 16px',
     color: T1,
     fontSize: '14px',
@@ -325,7 +325,7 @@ export default function Medications() {
             key={i}
             style={{
               height: '112px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#98C890',
               marginBottom: '12px',
               animation: 'pulse 1.5s ease-in-out infinite',
@@ -414,7 +414,7 @@ export default function Medications() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: ACCENT_DIM,
               border: `1px solid rgba(86,128,78,0.14)`,
               cursor: 'pointer',
@@ -486,14 +486,13 @@ export default function Medications() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              style={{
+              className="sh-cut" style={{
                 background: SURFACE,
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '24px 20px 40px',
                 width: '100%',
                 maxHeight: '85dvh',
                 overflowY: 'auto',
-                border: `1px solid ${BORDER}`,
                 borderBottom: 'none',
               }}
             >
@@ -506,7 +505,7 @@ export default function Medications() {
                 }}
               >
                 <div
-                  style={{ width: '36px', height: '4px', borderRadius: '14px', background: BORDER }}
+                  style={{ width: '36px', height: '4px', borderRadius: 0, background: BORDER }}
                 />
               </div>
               <div
@@ -580,11 +579,10 @@ export default function Medications() {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.18, ease: 'easeOut' }}
-                        style={{
+                        className="sh-cut" style={{
                           overflow: 'hidden',
                           background: SURFACE,
-                          border: `1px solid ${BORDER}`,
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           marginTop: '4px',
                         }}
                       >
@@ -651,11 +649,10 @@ export default function Medications() {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.18, ease: 'easeOut' }}
-                        style={{
+                        className="sh-cut" style={{
                           overflow: 'hidden',
                           background: SURFACE,
-                          border: `1px solid ${BORDER}`,
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           marginTop: '4px',
                         }}
                       >
@@ -701,13 +698,13 @@ export default function Medications() {
                   transition={spring}
                   onClick={addMedication}
                   disabled={saving}
-                  style={{
+                  className="sh-slant" style={{
                     background: ACCENT,
                     color: '#FFFFFF',
                     fontWeight: 800,
                     fontSize: '15px',
                     padding: '15px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     border: 'none',
                     cursor: 'pointer',
                     marginTop: '4px',
@@ -729,10 +726,9 @@ export default function Medications() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, ...spring }}
-          style={{
+          className="sh-cut" style={{
             background: SURFACE,
-            border: `1px solid ${BORDER}`,
-            borderRadius: '4px',
+            borderRadius: 0,
             marginBottom: '14px',
             overflow: 'hidden',
             boxShadow: SHADOW,
@@ -843,7 +839,7 @@ export default function Medications() {
                 style={{
                   flex: '0 0 auto',
                   background: BG,
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   padding: '12px 14px',
                   display: 'flex',
                   flexDirection: 'column',
@@ -939,7 +935,7 @@ export default function Medications() {
                 fontSize: '14px',
                 background: ACCENT_DIM,
                 border: `1px solid rgba(86,128,78,0.14)`,
-                borderRadius: '14px',
+                borderRadius: 0,
                 padding: '10px 20px',
                 cursor: 'pointer',
                 fontWeight: 700,
@@ -956,10 +952,9 @@ export default function Medications() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: medIndex * 0.05, ...spring }}
-            style={{
+            className="sh-cut" style={{
               background: SURFACE,
-              border: `1px solid ${BORDER}`,
-              borderRadius: '4px',
+              borderRadius: 0,
               marginBottom: '12px',
               overflow: 'hidden',
               boxShadow: SHADOW,
@@ -986,7 +981,7 @@ export default function Medications() {
                       fontSize: '11px',
                       fontWeight: 700,
                       padding: '2px 8px',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       fontFamily: 'inherit',
                     }}
                   >
@@ -1001,7 +996,7 @@ export default function Medications() {
                   style={{
                     width: '30px',
                     height: '30px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     background: BG,
                     border: `1px solid ${BORDER}`,
                     cursor: 'pointer',
@@ -1017,7 +1012,7 @@ export default function Medications() {
                   style={{
                     width: '30px',
                     height: '30px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     background: RED_DIM,
                     border: `1px solid rgba(163,52,23,0.14)`,
                     cursor: 'pointer',
@@ -1064,7 +1059,7 @@ export default function Medications() {
                           padding: '6px 12px',
                           background: med.times?.includes(t) ? ACCENT_DIM : SURFACE,
                           border: `1px solid ${med.times?.includes(t) ? 'rgba(86,128,78,0.2)' : BORDER}`,
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           color: med.times?.includes(t) ? ACCENT : T2,
                           fontSize: '12px',
                           cursor: 'pointer',
@@ -1129,7 +1124,7 @@ export default function Medications() {
                           color: GREEN,
                           fontSize: '12px',
                           padding: '6px 14px',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           cursor: 'pointer',
                           fontWeight: 700,
                         }}

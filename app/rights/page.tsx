@@ -52,7 +52,7 @@ export default function RightsPage() {
             style={{
               width: 38,
               height: 38,
-              borderRadius: '4px',
+              borderRadius: 0,
               border: `1px solid ${WHITE}`,
               background: WHITE,
               display: 'grid',
@@ -104,7 +104,7 @@ export default function RightsPage() {
                   letterSpacing: 1,
                   fontWeight: 700,
                   padding: '9px 14px',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   cursor: 'pointer',
                   border: `1px solid ${on ? WHITE : RULE}`,
                   background: on ? WHITE : 'transparent',
@@ -176,7 +176,7 @@ export default function RightsPage() {
                 style={{
                   background: TINT,
                   borderLeft: `2px solid ${INK3}`,
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   padding: '12px 14px',
                   marginBottom: r.action ? 12 : 14,
                 }}
@@ -201,7 +201,7 @@ export default function RightsPage() {
                   style={{
                     background: '#F1F3EC',
                     borderLeft: `2px solid ${GREEN_DEEP}`,
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     padding: '12px 14px',
                     marginBottom: 14,
                   }}
@@ -302,7 +302,7 @@ export default function RightsPage() {
             borderTop: `1px solid ${RULE}`,
           }}
         >
-          This is a plain-language summary of published law, not legal advice, and Relay Arc is not
+          This is a plain language summary of published law, not legal advice, and Relay Arc is not
           a law firm. Hospitals set their own eligibility rules within these requirements, so the
           only way to find out what you qualify for is to ask that hospital for its policy in
           writing.

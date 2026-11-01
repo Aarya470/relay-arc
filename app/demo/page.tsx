@@ -202,7 +202,7 @@ export default function DemoLauncher() {
             style={{
               width: '24px',
               height: '24px',
-              borderRadius: '14px',
+              borderRadius: 0,
               flexShrink: 0,
               background: on ? GREEN : 'none',
               border: `1.5px solid ${on ? GREEN : '#C9CED6'}`,
@@ -244,7 +244,7 @@ export default function DemoLauncher() {
         {signedIn === false && (
           <p style={{ color: RED, fontSize: '13px', lineHeight: 1.6, marginTop: '14px' }}>
             You are not signed in. Sign in first so the demo can use a real medical profile, the ER
-            brief and the care-team alert.
+            brief and the care team alert.
           </p>
         )}
 

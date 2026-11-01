@@ -846,7 +846,7 @@ export default function Navigation({
             letterSpacing: '1.4px',
             textTransform: 'uppercase',
             padding: '5px 9px',
-            borderRadius: '14px',
+            borderRadius: 0,
           }}
         >
           Demo · simulated drive
@@ -1007,7 +1007,7 @@ export default function Navigation({
                 background: '#FFFFFF',
                 border: `1.5px solid ${ACCENT}`,
                 color: ACCENT,
-                borderRadius: '14px',
+                borderRadius: 0,
                 padding: '11px 16px',
                 cursor: 'pointer',
                 fontFamily: 'inherit',

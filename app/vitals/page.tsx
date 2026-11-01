@@ -15,7 +15,7 @@ const inputStyle: React.CSSProperties = {
   width: '72px',
   background: '#FFFFFF',
   border: '1.5px solid #D8D4C8',
-  borderRadius: '14px',
+  borderRadius: 0,
   padding: '12px',
   color: '#141413',
   fontSize: '22px',
@@ -237,7 +237,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       style={{
         background: '#FFFFFF',
         border: '1px solid #98C890',
-        borderRadius: '4px',
+        borderRadius: 0,
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
@@ -251,7 +251,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
             style={{
               width: '30px',
               height: '30px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: `${meta.color}18`,
               border: `1px solid ${meta.color}30`,
               display: 'flex',
@@ -275,7 +275,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
             fontSize: '13px',
             fontWeight: 600,
             padding: '3px 9px',
-            borderRadius: '14px',
+            borderRadius: 0,
             letterSpacing: '0',
           }}
         >
@@ -365,7 +365,7 @@ function TimeRangeSelector({
         display: 'flex',
         gap: '3px',
         background: '#F2F0E8',
-        borderRadius: '14px',
+        borderRadius: 0,
         padding: '3px',
         border: '1px solid #98C890',
       }}
@@ -377,7 +377,7 @@ function TimeRangeSelector({
           style={{
             flex: 1,
             padding: '6px 0',
-            borderRadius: '14px',
+            borderRadius: 0,
             border: 'none',
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -484,7 +484,7 @@ export default function VitalsPage() {
       const res = await fetch('/api/vitals/log', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content Type': 'application/json',
           Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify(payload),
@@ -609,7 +609,7 @@ export default function VitalsPage() {
             background: '#141413',
             color: '#FFFFFF',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '16px',
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -632,7 +632,7 @@ export default function VitalsPage() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '16px',
           }}
         >
@@ -852,7 +852,7 @@ export default function VitalsPage() {
                         fontSize: '11px',
                         fontWeight: 700,
                         padding: '5px 11px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         fontFamily: 'inherit',
                       }}
                     >
@@ -870,13 +870,13 @@ export default function VitalsPage() {
           whileTap={{ scale: 0.97 }}
           onClick={handleSave}
           disabled={saving}
-          style={{
+          className="sh-slant" style={{
             background: '#42623C',
             color: '#FFFFFF',
             fontWeight: 800,
             fontSize: '15px',
             padding: '17px',
-            borderRadius: '4px',
+            borderRadius: 0,
             border: 'none',
             cursor: saving ? 'not-allowed' : 'pointer',
             display: 'flex',
@@ -909,7 +909,7 @@ export default function VitalsPage() {
                 key={i}
                 style={{
                   height: '140px',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   background: '#FFFFFF',
                   marginBottom: '10px',
                 }}
@@ -958,7 +958,7 @@ export default function VitalsPage() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #98C890',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   padding: '36px 16px',
                   textAlign: 'center',
                 }}

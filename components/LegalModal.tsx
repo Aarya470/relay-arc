@@ -55,7 +55,7 @@ export default function LegalModal() {
       <div
         style={{
           background: '#FFFFFF',
-          borderRadius: '4px',
+          borderRadius: 0,
           padding: '22px 20px',
           width: '100%',
           maxWidth: '440px',
@@ -78,12 +78,12 @@ export default function LegalModal() {
         </p>
         <button
           onClick={accept}
-          style={{
+          className="sh-slant" style={{
             width: '100%',
             background: '#141413',
             color: '#FFFFFF',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '14px',
             fontSize: '15px',
             fontWeight: 700,

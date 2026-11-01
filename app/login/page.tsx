@@ -140,7 +140,7 @@ export default function Login() {
     width: '100%',
     background: '#FFFFFF',
     border: `1.5px solid ${focused === field ? T1 : BORDER}`,
-    borderRadius: '14px',
+    borderRadius: 0,
     padding: '13px 16px',
     color: T1,
     // 16px, not 15 or 14, and it is not a taste decision.
@@ -222,7 +222,7 @@ export default function Login() {
             <div
               style={{
                 border: `1px solid ${BORDER}`,
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '14px 16px',
                 marginBottom: 22,
               }}
@@ -250,7 +250,7 @@ export default function Login() {
               style={{
                 width: '100%',
                 padding: '14px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 border: `1.5px solid ${BORDER}`,
                 background: '#FFFFFF',
                 color: T1,
@@ -278,7 +278,7 @@ export default function Login() {
                 width: '100%',
                 marginTop: 10,
                 padding: '13px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 border: 'none',
                 background: 'transparent',
                 color: T2,
@@ -305,7 +305,7 @@ export default function Login() {
                 marginBottom: '12px',
               }}
             >
-              {isSignUp ? 'New profile' : 'Patient sign-in'}
+              {isSignUp ? 'New profile' : 'Patient sign in'}
             </p>
             <AnimatePresence mode="wait">
               <motion.h1
@@ -453,7 +453,7 @@ export default function Login() {
                   color: 'white',
                   fontWeight: 600,
                   fontSize: '15px',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   border: 'none',
                   cursor: loading || !canSubmit ? 'not-allowed' : 'pointer',
                   display: 'flex',

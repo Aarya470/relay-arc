@@ -99,7 +99,7 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
       style={{
         position: 'relative',
         height: ITEM_H * 3,
-        borderRadius: '4px',
+        borderRadius: 0,
         background: '#FFFFFF',
         border: '1px solid #D8D4C8',
         overflow: 'hidden',
@@ -114,7 +114,7 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
           height: ITEM_H,
           background: 'rgba(86,128,78,0.10)',
           border: '1px solid rgba(86,128,78,0.22)',
-          borderRadius: '14px',
+          borderRadius: 0,
           pointerEvents: 'none',
           zIndex: 1,
         }}
@@ -274,7 +274,7 @@ function CalendarPicker({
           style={{
             width: '32px',
             height: '32px',
-            borderRadius: '14px',
+            borderRadius: 0,
             background: '#F2F0E8',
             border: '1px solid #D8D4C8',
             cursor: 'pointer',
@@ -296,7 +296,7 @@ function CalendarPicker({
           style={{
             width: '32px',
             height: '32px',
-            borderRadius: '14px',
+            borderRadius: 0,
             background: '#F2F0E8',
             border: '1px solid #D8D4C8',
             cursor: 'pointer',
@@ -340,7 +340,7 @@ function CalendarPicker({
               disabled={past}
               style={{
                 height: '36px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 border: todayFlag && !selected ? '1.5px solid rgba(86,128,78,0.4)' : 'none',
                 background: selected ? '#42623C' : 'transparent',
                 color: past ? '#5C5A52' : selected ? '#FFFFFF' : todayFlag ? '#42623C' : '#141413',
@@ -558,7 +558,7 @@ export default function Appointments() {
     fontSize: '13px' as const,
     letterSpacing: '0',
     padding: '2px 7px',
-    borderRadius: '14px',
+    borderRadius: 0,
   })
 
   const cardBorderColor = (status: string) => {
@@ -624,7 +624,7 @@ export default function Appointments() {
                 fontWeight: 700,
                 fontSize: '12px',
                 padding: '10px 16px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
@@ -661,7 +661,7 @@ export default function Appointments() {
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 background: '#F2F0E8',
                 border: '1px solid #D8D4C8',
                 cursor: 'pointer',
@@ -695,7 +695,7 @@ export default function Appointments() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: 'rgba(86,128,78,0.12)',
               border: '1px solid rgba(86,128,78,0.22)',
               cursor: 'pointer',
@@ -718,7 +718,7 @@ export default function Appointments() {
             width: '100%',
             background: '#42623C',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '18px',
             cursor: 'pointer',
             textAlign: 'left',
@@ -766,7 +766,7 @@ export default function Appointments() {
               style={{
                 background: '#FFFFFF',
                 border: `1px solid ${joinable ? 'rgba(86,128,78,0.30)' : cardBorderColor(a.status)}`,
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '16px',
                 boxShadow: joinable
                   ? '0 4px 20px rgba(86,128,78,0.14)'
@@ -845,7 +845,7 @@ export default function Appointments() {
                     justifyContent: 'center',
                     gap: '8px',
                     background: '#42623C',
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     padding: '13px',
                     color: 'white',
                     fontWeight: 700,
@@ -872,7 +872,7 @@ export default function Appointments() {
                     gap: '8px',
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     padding: '12px',
                     color: '#5C5A52',
                     fontWeight: 700,
@@ -915,7 +915,7 @@ export default function Appointments() {
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
                 background: '#FFFFFF',
-                borderRadius: '4px',
+                borderRadius: 0,
                 width: '100%',
                 maxHeight: '92dvh',
                 overflowY: 'auto',
@@ -929,7 +929,7 @@ export default function Appointments() {
                   style={{
                     width: '36px',
                     height: '4px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     background: '#98C890',
                   }}
                 />
@@ -959,7 +959,7 @@ export default function Appointments() {
                     style={{
                       background: '#F2F0E8',
                       border: '1px solid #D8D4C8',
-                      borderRadius: '14px',
+                      borderRadius: 0,
                       width: '32px',
                       height: '32px',
                       cursor: 'pointer',
@@ -978,7 +978,7 @@ export default function Appointments() {
                     style={{
                       background: '#FFFFFF',
                       border: '1px solid #98C890',
-                      borderRadius: '4px',
+                      borderRadius: 0,
                       padding: '16px',
                       marginBottom: '12px',
                     }}
@@ -1035,7 +1035,7 @@ export default function Appointments() {
                           gap: '8px',
                           background: 'rgba(86,128,78,0.10)',
                           border: '1px solid rgba(86,128,78,0.22)',
-                          borderRadius: '4px',
+                          borderRadius: 0,
                           padding: '10px 14px',
                         }}
                       >
@@ -1058,7 +1058,7 @@ export default function Appointments() {
                     width: '100%',
                     background: '#FFFFFF',
                     border: `1.5px solid ${focused ? 'rgba(86,128,78,0.50)' : '#98C890'}`,
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     padding: '14px 16px',
                     color: '#141413',
                     fontSize: '16px',
@@ -1083,7 +1083,7 @@ export default function Appointments() {
                     fontWeight: 800,
                     fontSize: '15px',
                     padding: '16px',
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     border: 'none',
                     cursor: canSubmit ? 'pointer' : 'default',
                     boxShadow: canSubmit ? '0 8px 24px rgba(86,128,78,0.28)' : 'none',

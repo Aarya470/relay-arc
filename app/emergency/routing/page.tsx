@@ -136,7 +136,7 @@ function CancelConfirmSheet({
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
             style={{
               background: T.card,
-              borderRadius: '4px',
+              borderRadius: 0,
               border: `1px solid ${T.border}`,
               borderBottom: 'none',
               padding: '28px 20px 52px',
@@ -174,7 +174,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: '#F2F0E8',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
                   fontWeight: 700,
@@ -195,7 +195,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: `#A33417`,
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
                   fontWeight: 700,
@@ -485,7 +485,7 @@ function RoutingPage() {
         await fetch('/api/hospital/incoming', {
           method: 'PATCH',
           headers: {
-            'Content-Type': 'application/json',
+            'Content Type': 'application/json',
             Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ id: erIncomingId.current, etaMin }),
@@ -770,7 +770,7 @@ function RoutingPage() {
           fetch('/api/hospital/incoming', {
             method: 'PATCH',
             headers: {
-              'Content-Type': 'application/json',
+              'Content Type': 'application/json',
               Authorization: `Bearer ${session.access_token}`,
             },
             body: JSON.stringify({ id: erIncomingId.current, status: 'cancelled' }),
@@ -865,7 +865,7 @@ function RoutingPage() {
             background: T.red,
             color: 'white',
             padding: '20px',
-            borderRadius: '4px',
+            borderRadius: 0,
             fontWeight: 900,
             fontSize: '20px',
             letterSpacing: '-0.3px',
@@ -941,7 +941,7 @@ function RoutingPage() {
             fontWeight: 800,
             fontSize: '17px',
             padding: '17px 0',
-            borderRadius: '4px',
+            borderRadius: 0,
             textDecoration: 'none',
             boxShadow: T.redGlow,
             width: '100%',
@@ -961,7 +961,7 @@ function RoutingPage() {
               maxWidth: '320px',
               background: '#FFFFFF',
               border: `1px solid ${T.border}`,
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '12px 14px',
             }}
           >
@@ -990,7 +990,7 @@ function RoutingPage() {
                 maxWidth: '320px',
                 background: '#FFFFFF',
                 border: `1px solid ${T.border}`,
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '12px 14px',
               }}
             >
@@ -1052,7 +1052,7 @@ function RoutingPage() {
             fontWeight: 500,
             fontSize: '13px',
             padding: '11px 24px',
-            borderRadius: '4px',
+            borderRadius: 0,
             border: `1px solid #98C890`,
             cursor: 'pointer',
           }}
@@ -1118,7 +1118,7 @@ function RoutingPage() {
                   background: T.textPrimary,
                   color: 'white',
                   padding: '2px 6px',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   marginRight: '7px',
                 }}
               >
@@ -1265,7 +1265,7 @@ function RoutingPage() {
               </p>
             )}
             <p style={{ color: T.textMuted, fontSize: '11.5px', marginTop: '7px' }}>
-              Ranked first: fastest arrival
+              Ranked first for fastest arrival
               {hospital.partner && fresh(hospital.partner) && hospital.partner.accepting
                 ? ' · confirmed accepting'
                 : ''}
@@ -1311,7 +1311,7 @@ function RoutingPage() {
         </div>
 
         {/* ── Far from help ───────────────────────────────────────────────────
-            Built for exactly the situation that started this project: a family
+            Built for exactly the situation that started this project, a family
             out on a rural road, the nearest hospital that can treat the
             emergency 40 minutes away. In that case driving there is not the
             whole answer. Calling 911 first means paramedics start treatment
@@ -1440,7 +1440,7 @@ function RoutingPage() {
             background: T.red,
             color: 'white',
             padding: '17px',
-            borderRadius: '4px',
+            borderRadius: 0,
             border: 'none',
             fontWeight: 800,
             fontSize: '16.5px',
@@ -1502,7 +1502,7 @@ function RoutingPage() {
                     fontWeight: 600,
                     fontSize: '13.5px',
                     padding: '13px 8px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     minHeight: '50px',
@@ -1520,7 +1520,7 @@ function RoutingPage() {
                     fontWeight: 700,
                     fontSize: '13.5px',
                     padding: '13px 8px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     minHeight: '50px',
@@ -1722,7 +1722,7 @@ function RoutingPage() {
                     fontWeight: 700,
                     fontSize: '15px',
                     padding: '16px',
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     textDecoration: 'none',
                     minHeight: '54px',
                   }}
@@ -1791,7 +1791,7 @@ function RoutingPage() {
                             style={{
                               width: '164px',
                               border: `1px solid ${T.border}`,
-                              borderRadius: '14px',
+                              borderRadius: 0,
                               padding: '10px',
                               background: 'white',
                             }}
@@ -2062,7 +2062,7 @@ function RoutingPage() {
               background: T.red,
               color: 'white',
               padding: '17px',
-              borderRadius: '4px',
+              borderRadius: 0,
               fontWeight: 800,
               fontSize: '17px',
               textDecoration: 'none',
@@ -2086,7 +2086,7 @@ function RoutingPage() {
                 background: 'none',
                 color: T.red,
                 padding: '15px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 fontWeight: 700,
                 fontSize: '14.5px',
                 border: `1.5px solid ${T.red}`,
@@ -2112,7 +2112,7 @@ function RoutingPage() {
               background: 'none',
               color: T.textPrimary,
               padding: '15px',
-              borderRadius: '4px',
+              borderRadius: 0,
               fontWeight: 700,
               fontSize: '14.5px',
               border: `1.5px solid ${T.textPrimary}`,
@@ -2212,7 +2212,7 @@ function RoutingPage() {
                   style={{
                     background: '#B3DDAC',
                     border: `1px solid ${T.border}`,
-                    borderRadius: '14px',
+                    borderRadius: 0,
                     width: '36px',
                     height: '36px',
                     display: 'flex',

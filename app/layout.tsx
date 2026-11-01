@@ -127,7 +127,7 @@ const JSON_LD = {
       isAccessibleForFree: true,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       description:
-        'Free emergency web app. Press SOS to find the closest hospital that can treat the emergency, get directions, and alert family. Includes a no-account offline emergency medical card.',
+        'Free emergency web app. Press SOS to find the closest hospital that can treat the emergency, get directions, and alert family. Includes a free offline emergency medical card.',
       publisher: { '@id': `${SITE_URL}/#org` },
     },
   ],

@@ -94,7 +94,7 @@ export default function FlarePage() {
             style={{
               width: 38,
               height: 38,
-              borderRadius: '4px',
+              borderRadius: 0,
               border: `1px solid ${BORDER}`,
               background: WHITE,
               display: 'grid',
@@ -187,7 +187,7 @@ export default function FlarePage() {
                       style={{
                         width: 20,
                         height: 20,
-                        borderRadius: '4px',
+                        borderRadius: 0,
                         flexShrink: 0,
                         marginTop: 2,
                         border: `1.5px solid ${on ? CRIT : BORDER}`,

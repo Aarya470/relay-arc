@@ -25,14 +25,14 @@ const ease = { type: 'spring', stiffness: 300, damping: 28 } as const
 const card: React.CSSProperties = {
   background: '#FFFFFF',
   border: '1px solid #98C890',
-  borderRadius: '4px',
+  borderRadius: 0,
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#FFFFFF',
   border: '1px solid #D8D4C8',
-  borderRadius: '4px',
+  borderRadius: 0,
   padding: '14px 16px',
   color: '#141413',
   // 16px, not 15 or 14, and it is not a taste decision.
@@ -118,7 +118,7 @@ export default function Settings() {
         {[1, 2, 3, 4].map((i) => (
           <Skeleton
             key={i}
-            style={{ height: '56px', borderRadius: '4px', background: '#F2F0E8' }}
+            style={{ height: '56px', borderRadius: 0, background: '#F2F0E8' }}
           />
         ))}
       </div>
@@ -265,14 +265,14 @@ export default function Settings() {
                       whileTap={{ scale: 0.97 }}
                       onClick={saveEdit}
                       disabled={saving}
-                      style={{
+                      className="sh-slant" style={{
                         flex: 1,
                         background: '#141413',
                         color: 'white',
                         fontWeight: 600,
                         fontSize: '13px',
                         padding: '12px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         border: 'none',
                         cursor: 'pointer',
                         height: '44px',
@@ -292,7 +292,7 @@ export default function Settings() {
                         fontWeight: 500,
                         fontSize: '13px',
                         padding: '12px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         cursor: 'pointer',
                         height: '44px',
                         fontFamily: 'inherit',
@@ -352,7 +352,7 @@ export default function Settings() {
         </p>
         <div style={{ borderTop: '1px solid #98C890', marginBottom: '32px' }}>
           {[
-            { label: 'Health history', sub: 'Past check-ins and emergencies', path: '/history' },
+            { label: 'Health history', sub: 'Past check ins and emergencies', path: '/history' },
             { label: 'Vitals check', sub: 'Pulse, breathing and your NEWS2 sheet', path: '/check' },
             {
               label: 'Emergency contacts',

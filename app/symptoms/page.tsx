@@ -155,7 +155,7 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
         style={{
           position: 'relative',
           height: '8px',
-          borderRadius: '14px',
+          borderRadius: 0,
           background: '#EDEAE0',
           cursor: 'pointer',
           touchAction: 'none',
@@ -185,7 +185,7 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
             left: 0,
             top: 0,
             bottom: 0,
-            borderRadius: '14px',
+            borderRadius: 0,
             background: fill,
             transition: 'background 0.3s',
           }}
@@ -273,7 +273,7 @@ function DayCard({ log }: { log: SymptomLog }) {
         width: '80px',
         background: '#FFFFFF',
         border: '1px solid #98C890',
-        borderRadius: '4px',
+        borderRadius: 0,
         padding: '12px 10px',
         display: 'flex',
         flexDirection: 'column',
@@ -454,7 +454,7 @@ export default function SymptomsPage() {
             style={{
               width: '38px',
               height: '38px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: '#FFFFFF',
               border: '1px solid #98C890',
               display: 'flex',
@@ -493,7 +493,7 @@ export default function SymptomsPage() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '20px 20px 16px',
             marginBottom: '16px',
           }}
@@ -535,7 +535,7 @@ export default function SymptomsPage() {
                         style={{
                           width: '36px',
                           height: '36px',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           background: bg,
                           display: 'flex',
                           alignItems: 'center',
@@ -570,7 +570,7 @@ export default function SymptomsPage() {
                       style={{
                         background: bg,
                         border: `1px solid ${color}40`,
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '4px 10px',
                         minWidth: '42px',
                         textAlign: 'center',
@@ -612,7 +612,7 @@ export default function SymptomsPage() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '16px',
             marginBottom: '16px',
           }}
@@ -642,7 +642,7 @@ export default function SymptomsPage() {
             style={{
               width: '100%',
               border: '1.5px solid #98C890',
-              borderRadius: '14px',
+              borderRadius: 0,
               padding: '10px 12px',
               // 16px so mobile Safari does not zoom on focus. See app/login.
               fontSize: '16px',
@@ -671,7 +671,7 @@ export default function SymptomsPage() {
               style={{
                 background: 'rgba(168,114,0,0.12)',
                 border: '1.5px solid rgba(168,114,0,0.3)',
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '12px 14px',
                 marginBottom: '16px',
                 fontSize: '13px',
@@ -695,7 +695,7 @@ export default function SymptomsPage() {
           style={{
             width: '100%',
             height: '54px',
-            borderRadius: '4px',
+            borderRadius: 0,
             background: submitted ? '#42623C' : '#42623C',
             color: '#FFFFFF',
             border: 'none',
@@ -752,7 +752,7 @@ export default function SymptomsPage() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '20px',
               marginBottom: '20px',
             }}
@@ -849,7 +849,7 @@ export default function SymptomsPage() {
                     height: '108px',
                     background: '#FFFFFF',
                     border: '1px solid #EDEAE0',
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     animation: 'pulse 1.5s infinite',
                   }}
                 />
@@ -860,7 +860,7 @@ export default function SymptomsPage() {
               style={{
                 background: '#FFFFFF',
                 border: '1px solid #98C890',
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '28px 20px',
                 textAlign: 'center',
               }}

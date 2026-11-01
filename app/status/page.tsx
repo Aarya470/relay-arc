@@ -218,7 +218,7 @@ export default function StatusPage() {
                       style={{
                         width: '20px',
                         height: '20px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         flexShrink: 0,
                         background: c.ok ? GREEN : c.critical ? RED : AMBER,
                         display: 'flex',

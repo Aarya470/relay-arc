@@ -114,7 +114,7 @@ export default function EmergencyHistoryPage() {
             key={i}
             style={{
               height: '72px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#F2F0E8',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -143,7 +143,7 @@ export default function EmergencyHistoryPage() {
           style={{
             width: '36px',
             height: '36px',
-            borderRadius: '14px',
+            borderRadius: 0,
             background: '#F2F0E8',
             border: '1px solid #D8D4C8',
             display: 'flex',
@@ -206,7 +206,7 @@ export default function EmergencyHistoryPage() {
                 fontWeight: 600,
                 fontSize: '14px',
                 padding: '12px 24px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 border: 'none',
                 cursor: 'pointer',
               }}
@@ -246,7 +246,7 @@ export default function EmergencyHistoryPage() {
                         style={{
                           background: '#FFFFFF',
                           border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(163,52,23,0.20)'}`,
-                          borderRadius: '4px',
+                          borderRadius: 0,
                           boxShadow: resolved ? 'none' : '0 2px 16px rgba(163,52,23,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
@@ -259,7 +259,7 @@ export default function EmergencyHistoryPage() {
                           style={{
                             width: '40px',
                             height: '40px',
-                            borderRadius: '4px',
+                            borderRadius: 0,
                             background: resolved ? '#F2F0E8' : 'rgba(163,52,23,0.12)',
                             display: 'flex',
                             alignItems: 'center',
@@ -305,7 +305,7 @@ export default function EmergencyHistoryPage() {
                                 fontSize: '11px',
                                 fontWeight: 600,
                                 padding: '3px 9px',
-                                borderRadius: '14px',
+                                borderRadius: 0,
                                 border: '1px solid rgba(86,128,78,0.20)',
                               }}
                             >

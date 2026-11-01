@@ -541,7 +541,7 @@ export default function CareTeamDashboard() {
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 background: 'rgba(86,128,78,0.1)',
                 border: '1px solid rgba(86,128,78,0.2)',
                 cursor: 'pointer',
@@ -562,7 +562,7 @@ export default function CareTeamDashboard() {
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '14px',
+                borderRadius: 0,
                 background: '#F2F0E8',
                 border: 'none',
                 cursor: 'pointer',
@@ -744,7 +744,7 @@ export default function CareTeamDashboard() {
                         flex: 1,
                         background: 'rgba(86,128,78,0.12)',
                         border: '1px solid rgba(86,128,78,0.25)',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '9px',
                         display: 'flex',
                         alignItems: 'center',
@@ -765,7 +765,7 @@ export default function CareTeamDashboard() {
                         flex: 1,
                         background: 'rgba(163,52,23,0.08)',
                         border: '1px solid rgba(163,52,23,0.2)',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '9px',
                         display: 'flex',
                         alignItems: 'center',
@@ -855,7 +855,7 @@ export default function CareTeamDashboard() {
                         justifyContent: 'center',
                         gap: '8px',
                         background: '#42623C',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '10px',
                         color: 'white',
                         fontWeight: 700,
@@ -1183,7 +1183,7 @@ export default function CareTeamDashboard() {
                         justifyContent: 'space-between',
                         background: 'rgba(163,52,23,0.06)',
                         border: '1px solid rgba(163,52,23,0.15)',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '10px 14px',
                       }}
                     >
@@ -1255,7 +1255,7 @@ export default function CareTeamDashboard() {
                         justifyContent: 'space-between',
                         background: 'rgba(86,128,78,0.05)',
                         border: '1px solid rgba(86,128,78,0.15)',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '10px 14px',
                       }}
                     >
@@ -1326,7 +1326,7 @@ export default function CareTeamDashboard() {
                           fontWeight: 700,
                           fontSize: '12px',
                           padding: '10px 8px',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           textDecoration: 'none',
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1350,7 +1350,7 @@ export default function CareTeamDashboard() {
                           fontWeight: 700,
                           fontSize: '12px',
                           padding: '10px 8px',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                           textDecoration: 'none',
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1372,7 +1372,7 @@ export default function CareTeamDashboard() {
                           fontWeight: 600,
                           fontSize: '12px',
                           padding: '10px 8px',
-                          borderRadius: '14px',
+                          borderRadius: 0,
                         }}
                       >
                         <Phone size={13} />
@@ -1394,7 +1394,7 @@ export default function CareTeamDashboard() {
                         fontWeight: 700,
                         fontSize: '12px',
                         padding: '10px 8px',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         cursor: 'pointer',
                       }}
                     >
@@ -1453,7 +1453,7 @@ export default function CareTeamDashboard() {
                 style={{
                   width: '32px',
                   height: '32px',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   background: `${color}15`,
                   border: `1px solid ${color}25`,
                   display: 'flex',
@@ -1554,8 +1554,8 @@ export default function CareTeamDashboard() {
                   <p style={{ color: '#5C5A52', fontSize: '12px' }}>
                     {patient.diagnosis?.split(',')[0]} ·{' '}
                     {lastCheckin
-                      ? `Last check-in ${new Date(lastCheckin.created_at).toLocaleDateString()}`
-                      : 'No check-ins yet'}
+                      ? `Last check in ${new Date(lastCheckin.created_at).toLocaleDateString()}`
+                      : 'No check ins yet'}
                   </p>
                 )}
               </div>
@@ -1590,7 +1590,7 @@ export default function CareTeamDashboard() {
                       style={{
                         background: 'rgba(163,52,23,0.12)',
                         border: '1px solid rgba(163,52,23,0.3)',
-                        borderRadius: '14px',
+                        borderRadius: 0,
                         padding: '2px 7px',
                         color: '#A33417',
                         fontSize: '9px',

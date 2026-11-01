@@ -150,7 +150,7 @@ export default function Engineering() {
             what it said.
           </P>
           <P wide>
-            So the parts that matter most in an emergency are ours: figuring out what is wrong, how
+            So the parts that matter most in an emergency are ours. They work out what is wrong, how
             serious it is, which hospital to go to, and the directions to get there. They run on the
             phone and they work without internet. Two of them are running on this page right now, so
             you can try them.
@@ -229,7 +229,7 @@ export default function Engineering() {
             style={{
               border: `1px solid rgba(20,20,19,0.15)`,
               marginBottom: '20px',
-              borderRadius: '4px',
+              borderRadius: 0,
               overflow: 'hidden',
             }}
           >
@@ -348,7 +348,7 @@ export default function Engineering() {
           </div>
 
           <div
-            style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: '4px' }}
+            style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: 0 }}
           >
             <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '10px' }}>
               What went wrong the first time
@@ -382,7 +382,7 @@ export default function Engineering() {
           <SectionHead title="How serious is it" />
           <H2>A warning is only useful if a doctor can check it.</H2>
           <P>
-            This used to be an AI reading your daily check-in and guessing. That was a bad idea. If
+            This used to be an AI reading your daily check in and guessing. That was a bad idea. If
             you show a doctor &ldquo;the app said I was at risk,&rdquo; they need to see which
             reading caused it, and get the same answer if they run it again. An AI can give two
             different answers to the same question.
@@ -418,7 +418,7 @@ export default function Engineering() {
               style={{
                 border: `1px solid ${BORDER}`,
                 padding: '20px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 background: '#fff',
               }}
             >
@@ -438,7 +438,7 @@ export default function Engineering() {
               style={{
                 border: `1px solid ${BORDER}`,
                 padding: '20px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 background: '#fff',
               }}
             >
@@ -491,7 +491,7 @@ export default function Engineering() {
             style={{
               border: `1px solid rgba(20,20,19,0.15)`,
               marginBottom: '26px',
-              borderRadius: '4px',
+              borderRadius: 0,
               overflow: 'hidden',
             }}
           >
@@ -572,13 +572,13 @@ export default function Engineering() {
           <H2>Sending you to another map app loses everything.</H2>
           <P>
             If the app kicks you out to a different map, your hospital info and arrival time get
-            left behind. So directions are built in, with turn-by-turn steps, a screen that stays on
+            left behind. So directions are built in, with turn by turn steps, a screen that stays on
             while you drive, and a night mode.
           </P>
           <P>
-            One bug we caught with our own tests: after the GPS jumped, the app sometimes matched
+            One bug we caught with our own tests. After the GPS jumped, the app sometimes matched
             you to the wrong part of the route and said you had driven 4.9 km when it was really
-            9.7. Now it double-checks the whole route when that happens.
+            9.7. Now it double checks the whole route when that happens.
           </P>
         </div>
       </section>
@@ -612,12 +612,12 @@ export default function Engineering() {
                 'It is careful and limited, but it has not been tested on real patients yet, and it says so.',
               ],
               [
-                'No sitting-vs-standing pulse yet',
+                'No sitting vs-standing pulse yet',
                 'For conditions like POTS, comparing your pulse lying down and standing up matters. We do not collect that yet.',
               ],
               [
                 'Few hospitals are connected',
-                'Drive-time ranking works anywhere. Live "ER is full" updates only work at hospitals that have signed up.',
+                'Drive time ranking works anywhere. Live "ER is full" updates only work at hospitals that have signed up.',
               ],
             ].map(([k, v]) => (
               <div key={k} style={{ borderTop: `1px solid ${BORDER}`, padding: '16px 0' }}>

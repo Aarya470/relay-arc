@@ -163,7 +163,7 @@ export default function AuthCallback() {
               style={{
                 width: '100%',
                 padding: 15,
-                borderRadius: '4px',
+                borderRadius: 0,
                 border: 'none',
                 background: T1,
                 color: '#FFF',
@@ -215,7 +215,7 @@ export default function AuthCallback() {
               style={{
                 width: '100%',
                 padding: 15,
-                borderRadius: '4px',
+                borderRadius: 0,
                 border: 'none',
                 background: T1,
                 color: '#FFF',

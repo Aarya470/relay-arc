@@ -119,11 +119,11 @@ export default function Checkin() {
             .insert({ user_id: user.id, summary: clinicalSummary, flags: 'none' })
           if (saveError) {
             console.error('checkin insert failed:', saveError)
-            toast.error('Your answers could not be saved. Nothing from this check-in was kept.')
+            toast.error('Your answers could not be saved. Nothing from this check in was kept.')
           } else {
-            toast.success('Check-in saved')
+            toast.success('Check in saved')
           }
-          sendPushNotification(user.id, 'Check-in complete', 'Your daily check-in has been saved.')
+          sendPushNotification(user.id, 'Check in complete', 'Your daily check in has been saved.')
 
           // Trigger health intelligence analysis in background (fire-and-forget)
           // This will auto-alert the care team if patterns are dangerous
@@ -143,7 +143,7 @@ export default function Checkin() {
       }
     } catch (err: any) {
       console.error('Checkin AI error:', err)
-      toast.error('Could not reach the check-in assistant. Your answers are still saved.')
+      toast.error('Could not reach the check in assistant. Your answers are still saved.')
       setMessages((prev) => prev.slice(0, -1))
       setInput(userMsg)
     }
@@ -212,7 +212,7 @@ export default function Checkin() {
               margin: 0,
             }}
           >
-            Daily Check-in
+            Daily check in
           </h1>
           <p
             style={{
@@ -237,7 +237,7 @@ export default function Checkin() {
             gap: '5px',
             background: GREEN_DIM,
             border: `1px solid rgba(86,128,78,0.18)`,
-            borderRadius: '14px',
+            borderRadius: 0,
             padding: '4px 10px',
           }}
         >
@@ -273,7 +273,7 @@ export default function Checkin() {
         }}
       >
         You are chatting with an AI, not a person. Your messages are sent to Groq to write the
-        replies. Not for emergencies: call 911.{' '}
+        replies. Not for emergencies. Call 911.{' '}
         <a href="/privacy" style={{ color: T1 }}>
           Privacy
         </a>
@@ -334,12 +334,11 @@ export default function Checkin() {
           >
             <AIAvatar />
             <div
-              style={{
+              className="sh-cut" style={{
                 background: SURFACE,
-                border: `1px solid ${BORDER}`,
                 boxShadow: SHADOW,
                 padding: '13px 16px',
-                borderRadius: '4px',
+                borderRadius: 0,
                 display: 'flex',
                 gap: '5px',
                 alignItems: 'center',
@@ -370,7 +369,7 @@ export default function Checkin() {
             style={{
               background: GREEN_DIM,
               border: `1px solid rgba(86,128,78,0.18)`,
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '28px 20px',
               textAlign: 'center',
               margin: '8px 0',
@@ -399,7 +398,7 @@ export default function Checkin() {
                 letterSpacing: '-0.3px',
               }}
             >
-              Check-in complete
+              Check in complete
             </p>
             <p style={{ color: T2, fontSize: '12px', marginBottom: '20px', lineHeight: 1.5 }}>
               Your responses have been saved. Anything you mentioned about your vitals is now in
@@ -417,7 +416,7 @@ export default function Checkin() {
                   fontWeight: 700,
                   fontSize: '13px',
                   padding: '13px 16px',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   border: `1px solid ${BORDER}`,
                   cursor: 'pointer',
                 }}
@@ -435,7 +434,7 @@ export default function Checkin() {
                   fontWeight: 700,
                   fontSize: '13px',
                   padding: '13px 16px',
-                  borderRadius: '4px',
+                  borderRadius: 0,
                   border: 'none',
                   cursor: 'pointer',
                 }}
@@ -462,7 +461,7 @@ export default function Checkin() {
                 flexShrink: 0,
                 background: SURFACE,
                 border: `1px solid ${BORDER}`,
-                borderRadius: '14px',
+                borderRadius: 0,
                 padding: '8px 15px',
                 color: T2,
                 fontSize: '12px',
@@ -503,7 +502,7 @@ export default function Checkin() {
               flex: 1,
               background: BG,
               border: `1.5px solid ${focused ? ACCENT : BORDER}`,
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '12px 16px',
               color: T1,
               // 16px so mobile Safari does not zoom the page on focus. See the
@@ -528,7 +527,7 @@ export default function Checkin() {
               width: '44px',
               height: '44px',
               background: input.trim() ? ACCENT : BG,
-              borderRadius: '4px',
+              borderRadius: 0,
               border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
               cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex',

@@ -92,7 +92,7 @@ export default function AppointmentSummary() {
             key={i}
             style={{
               height: '80px',
-              borderRadius: '4px',
+              borderRadius: 0,
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -103,7 +103,7 @@ export default function AppointmentSummary() {
 
   const stats = [
     {
-      label: 'Check-ins',
+      label: 'Check ins',
       value: checkins.length,
       color: '#42623C',
       bg: 'rgba(86,128,78,0.07)',
@@ -138,7 +138,7 @@ export default function AppointmentSummary() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '14px',
+              borderRadius: 0,
               background: '#F2F0E8',
               border: '1px solid #98C890',
               cursor: 'pointer',
@@ -179,7 +179,7 @@ export default function AppointmentSummary() {
               style={{
                 background: s.bg,
                 border: `1px solid ${s.border}`,
-                borderRadius: '4px',
+                borderRadius: 0,
                 padding: '16px 12px',
                 textAlign: 'center',
                 boxShadow: '0 4px 16px rgba(20,20,19,0.06)',
@@ -225,7 +225,7 @@ export default function AppointmentSummary() {
               fontWeight: 700,
               fontSize: '15px',
               padding: '20px',
-              borderRadius: '4px',
+              borderRadius: 0,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -248,7 +248,7 @@ export default function AppointmentSummary() {
             style={{
               background: '#FFFFFF',
               border: '1px solid #98C890',
-              borderRadius: '4px',
+              borderRadius: 0,
               padding: '18px',
               boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
             }}
@@ -279,7 +279,7 @@ export default function AppointmentSummary() {
                 style={{
                   width: '28px',
                   height: '28px',
-                  borderRadius: '14px',
+                  borderRadius: 0,
                   background: '#F2F0E8',
                   border: '1px solid #98C890',
                   cursor: 'pointer',
@@ -309,7 +309,7 @@ export default function AppointmentSummary() {
           style={{
             background: '#FFFFFF',
             border: '1px solid #98C890',
-            borderRadius: '4px',
+            borderRadius: 0,
             padding: '18px',
             boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
           }}
@@ -323,10 +323,10 @@ export default function AppointmentSummary() {
               marginBottom: '16px',
             }}
           >
-            Recent check-ins
+            Recent check ins
           </p>
           {checkins.length === 0 && (
-            <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '13px' }}>No check-ins yet</p>
+            <p style={{ color: 'rgba(237,234,224,0.2)', fontSize: '13px' }}>No check ins yet</p>
           )}
           {checkins.slice(0, 5).map((c, i) => (
             <div
