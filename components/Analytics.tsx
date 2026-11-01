@@ -99,9 +99,8 @@ export default function Analytics() {
           left: 0,
           right: 0,
           zIndex: 200,
-          background: '#FFFFFF',
-          borderTop: '1px solid rgba(20,20,19,0.2)',
-          padding: '10px 16px',
+          background: '#141413',
+          padding: '12px 16px',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
@@ -111,28 +110,30 @@ export default function Analytics() {
       >
         <p
           style={{
-            color: '#141413',
-            fontSize: '13.5px',
+            color: '#FFFFFF',
+            fontSize: '14px',
             lineHeight: 1.55,
             margin: 0,
             maxWidth: '640px',
           }}
         >
           We count page views. No ads, no trackers.{' '}
-          <a href="/privacy" style={{ color: '#141413', fontWeight: 700 }}>
+          <a href="/privacy" style={{ color: '#FFFFFF', fontWeight: 700 }}>
             Privacy policy
           </a>
         </p>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
             onClick={() => dismiss(false)}
+            className="sh-pill"
             style={{
               background: 'transparent',
-              border: '1px solid #98C890',
-              color: '#141413',
+              border: 'none',
+              boxShadow: 'inset 0 0 0 2px #FFFFFF',
+              color: '#FFFFFF',
               fontWeight: 600,
-              fontSize: '13.5px',
-              padding: '10px 16px',
+              fontSize: '14px',
+              padding: '10px 18px',
               cursor: 'pointer',
               fontFamily: 'inherit',
             }}
@@ -141,13 +142,14 @@ export default function Analytics() {
           </button>
           <button
             onClick={() => dismiss(true)}
+            className="sh-slant"
             style={{
-              background: '#D97757',
+              background: '#B3DDAC',
               border: 'none',
               color: '#141413',
               fontWeight: 700,
-              fontSize: '13.5px',
-              padding: '10px 18px',
+              fontSize: '14px',
+              padding: '10px 26px',
               cursor: 'pointer',
               fontFamily: 'inherit',
             }}

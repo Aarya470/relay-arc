@@ -55,19 +55,18 @@ export default function VideoEmbed({ id, title }: { id: string; title: string })
             }}
           />
           <span
+            className="sh-slant"
             style={{
               position: 'absolute',
               left: '50%',
               top: '50%',
               transform: 'translate(-50%,-50%)',
-              width: '84px',
-              height: '84px',
-              borderRadius: '50%',
+              width: '120px',
+              height: '72px',
               background: '#A33417',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 6px 24px rgba(0,0,0,0.35)',
             }}
           >
             <svg width="30" height="34" viewBox="0 0 30 34" aria-hidden="true">

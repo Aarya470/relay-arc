@@ -33,7 +33,7 @@ export default function Partners() {
   return (
     <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
       <SiteHeader />
-      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '56px 24px 72px' }} data-reveal>
+      <div style={{ maxWidth: '1168px', margin: '0 auto', padding: '56px 24px 72px' }} data-reveal>
         <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)' }}>
           Partnerships
         </h1>

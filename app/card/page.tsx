@@ -1,9 +1,10 @@
 'use client'
+import SiteHeader from '@/components/SiteHeader'
 // Emergency card — the two-minute version of Relay Arc.
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Download, Printer, Trash2, Check } from '@/lib/plain-icons'
+import { Download, Printer, Trash2 } from '@/lib/plain-icons'
 // The wallet card and the lock-screen image both printed relay-arc.vercel.app, which is the
 // address this site used before the domain existed.
 import { SITE_URL } from '@/lib/site'
@@ -293,36 +294,39 @@ export default function EmergencyCard() {
   }
   const input: CSSProperties = {
     width: '100%',
-    padding: '11px 13px',
-    border: `1px solid ${BORDER}`,
-    background: WHITE,
+    padding: '13px 14px',
+    border: 'none',
+    boxShadow: `inset 0 -2px 0 ${INK}`,
+    background: '#EEF6EC',
     // 16px, not 15 or 14, and it is not a taste decision.
     // Mobile Safari zooms the whole page in when a focused form control has a font size
     // below 16px.
     color: INK,
     fontSize: '16px',
     fontFamily: 'inherit',
-    borderRadius: 20,
-    outline: 'none',
+    borderRadius: 0,
   }
   const btn = (primary = false): CSSProperties => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    padding: '13px 20px',
-    border: primary ? 'none' : `1px solid ${BORDER}`,
-    background: primary ? ORANGE : WHITE,
-    color: INK,
-    fontSize: '14px',
+    minHeight: '50px',
+    padding: '0 26px',
+    border: 'none',
+    boxShadow: primary ? 'none' : `inset 0 0 0 2px ${INK}`,
+    background: primary ? INK : 'transparent',
+    color: primary ? '#FFFFFF' : INK,
+    fontSize: '15px',
     fontWeight: 700,
     fontFamily: 'inherit',
     cursor: 'pointer',
-    borderRadius: 20,
+    borderRadius: primary ? 0 : 999,
+    clipPath: primary ? 'polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)' : undefined,
   })
 
   return (
-    <div style={{ background: WHITE, minHeight: '100dvh' }}>
+    <div style={{ background: WHITE, minHeight: '100dvh' }} className="card-page">
       <span
         ref={fontRef}
         style={{ fontFamily: 'var(--font-sans, system-ui)', position: 'absolute', opacity: 0 }}
@@ -342,77 +346,23 @@ export default function EmergencyCard() {
         @media print { #wallet { display: block; } }
       `}</style>
 
-      <header
-        style={{
-          borderBottom: `1px solid ${BORDER}`,
-          padding: '16px 24px',
-          position: 'sticky',
-          top: 0,
-          background: 'rgba(255,255,255,0.94)',
-          backdropFilter: 'blur(8px)',
-          zIndex: 40,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1080px',
-            margin: '0 auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '12px',
-          }}
-        >
-          <button
-            onClick={() => router.push('/')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'none',
-              border: 'none',
-              color: INK2,
-              fontSize: '13.5px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              padding: '4px 0',
-            }}
-          >
-            <ArrowLeft size={15} /> Relay Arc
-          </button>
-          {saved && hasAnything && (
-            <span
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                color: GREEN_DEEP,
-                fontSize: '13px',
-                fontWeight: 600,
-                letterSpacing: '0',
-              }}
-            >
-              <Check size={13} /> Saved on this device
-            </span>
-          )}
-        </div>
-      </header>
+      <SiteHeader />
 
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '56px 24px 90px' }}>
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-          <span
-            style={{ width: '7px', height: '7px', background: ORANGE, display: 'inline-block' }}
-          />
-          <span style={{ color: INK2, fontSize: '13px', letterSpacing: '0' }}>
-            No account · nothing sent anywhere
-          </span>
-        </div>
+        {saved && hasAnything && (
+          <p
+            className="sh-pill"
+            style={{ display: 'inline-block', background: '#DDEFD9', color: GREEN_DEEP, fontSize: '14px', fontWeight: 700, padding: '6px 14px', marginBottom: '20px' }}
+          >
+            Saved on this phone
+          </p>
+        )}
         <h1
+          className="ds-display"
           style={{
             color: INK,
-            fontSize: 'clamp(34px, 6vw, 62px)',
+            fontSize: 'clamp(40px, 6vw, 80px)',
             fontWeight: 800,
             lineHeight: 1.0,
             letterSpacing: '-0.04em',
@@ -420,7 +370,7 @@ export default function EmergencyCard() {
             maxWidth: '780px',
           }}
         >
-          An emergency card a paramedic can read off your locked phone.
+          A card a paramedic can read on your locked phone
         </h1>
         <p
           style={{
@@ -453,9 +403,9 @@ export default function EmergencyCard() {
         >
           <div>
             <div
-              style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginBottom: '22px' }}
+              style={{ marginBottom: '22px' }}
             >
-              <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+              <span style={{ color: INK, fontSize: '20px', fontWeight: 800 }}>
                 What a responder needs
               </span>
             </div>
@@ -534,13 +484,12 @@ export default function EmergencyCard() {
 
               <div
                 style={{
-                  borderTop: `3px solid ${INK}`,
                   paddingTop: '13px',
                   marginTop: '14px',
                   marginBottom: '4px',
                 }}
               >
-                <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+                <span style={{ color: INK, fontSize: '20px', fontWeight: 800 }}>
                   Personal cards
                 </span>
                 <p style={{ color: INK3, fontSize: '13px', marginTop: '4px' }}>
@@ -640,13 +589,12 @@ export default function EmergencyCard() {
 
               <div
                 style={{
-                  borderTop: `3px solid ${INK}`,
                   paddingTop: '13px',
                   marginTop: '14px',
                   marginBottom: '4px',
                 }}
               >
-                <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+                <span style={{ color: INK, fontSize: '20px', fontWeight: 800 }}>
                   Who to call
                 </span>
               </div>
@@ -690,9 +638,9 @@ export default function EmergencyCard() {
           {/* ── Live preview ──────────────────────────────────────────────── */}
           <div style={{ position: 'sticky', top: '90px' }}>
             <div
-              style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginBottom: '22px' }}
+              style={{ marginBottom: '22px' }}
             >
-              <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+              <span style={{ color: INK, fontSize: '20px', fontWeight: 800 }}>
                 Your card
               </span>
             </div>
@@ -839,7 +787,7 @@ export default function EmergencyCard() {
                   cursor: hasAnything && !busy ? 'pointer' : 'not-allowed',
                 }}
               >
-                <Download size={15} /> {busy ? 'Drawing…' : 'Download lock-screen image'}
+                <Download size={15} /> {busy ? 'Drawing…' : 'Download lock screen image'}
               </button>
               <button
                 onClick={() => window.print()}
@@ -863,8 +811,8 @@ export default function EmergencyCard() {
         </div>
 
         {/* ── Upgrade path, offered rather than demanded ───────────────────── */}
-        <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '13px', marginTop: '80px' }}>
-          <span style={{ color: INK, fontSize: '13px', fontWeight: 600, letterSpacing: '0' }}>
+        <div style={{ marginTop: '80px' }}>
+          <span style={{ color: INK, fontSize: '20px', fontWeight: 800 }}>
             If you want more than a card
           </span>
         </div>
@@ -897,7 +845,6 @@ export default function EmergencyCard() {
 
         <div
           style={{
-            borderTop: `1px solid ${BORDER}`,
             marginTop: '64px',
             paddingTop: '22px',
             display: 'flex',

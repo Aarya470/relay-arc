@@ -33,7 +33,7 @@ export default function Donate() {
   return (
     <div style={{ minHeight: '100dvh', background: '#B3DDAC', color: T1 }}>
       <SiteHeader />
-      <div style={{ ...inner, padding: '56px 24px 80px' }} data-reveal>
+      <div style={{ ...inner, maxWidth: '1168px', padding: '56px 24px 80px' }} data-reveal>
         <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)' }}>
           Keep Relay Arc free
         </h1>
@@ -89,7 +89,7 @@ export default function Donate() {
         </section>
       )}
 
-      <div style={{ ...inner, padding: '56px 24px 96px' }}>
+      <div style={{ ...inner, maxWidth: '1168px', padding: '56px 24px 96px' }}>
         <p className="ds-body">
           Every gift goes to building and hosting Relay Arc. Questions go to relay.arc.org@gmail.com.
         </p>

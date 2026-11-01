@@ -84,7 +84,7 @@ function PhoneHome() {
     </div>
   )
   return (
-    <div className="phone" aria-label="The Relay Arc home screen">
+    <div className="phone" data-ui aria-label="The Relay Arc home screen">
       <div className="phone-screen">
         <div className="ph-bar">
           <span>9:41</span>
@@ -109,7 +109,7 @@ function PhoneHome() {
 // What the SOS screen says after someone types what is happening.
 function SosScreen() {
   return (
-    <div className="sh-cut frag" style={{ background: PAPER, color: INK }}>
+    <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK }}>
       <p className="ds-small" style={{ color: INK2 }}>What is happening?</p>
       <p style={{ fontSize: '20px', fontWeight: 700, margin: '6px 0 22px' }}>
         My dad has chest pain and he is sweating
@@ -137,7 +137,7 @@ function HospitalList() {
     ['A closer emergency room', '12 min', false],
   ]
   return (
-    <div className="sh-cut frag" style={{ background: MINT, color: INK }}>
+    <div data-ui className="sh-cut frag" style={{ background: MINT, color: INK }}>
       <p style={{ fontSize: '20px', fontWeight: 800, marginBottom: '14px' }}>Best match for a heart attack</p>
       {rows.map(([name, mins, ok], i) => (
         <div key={name} className="hosp" style={{ background: i === 0 ? PAPER : 'transparent' }}>
@@ -158,7 +158,7 @@ function HospitalList() {
 // The text the family gets.
 function FamilyText() {
   return (
-    <div className="sh-cut frag" style={{ background: PAPER, color: INK, maxWidth: '420px' }}>
+    <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK, maxWidth: '420px' }}>
       <p className="ds-small" style={{ color: INK2, marginBottom: '12px' }}>Text message, now</p>
       <div className="bubble">
         Asha pressed SOS. She is going to RWJ University Hospital at Hamilton. Follow her on the
@@ -204,7 +204,7 @@ function CardMaker() {
           Make my full card
         </button>
       </div>
-      <div className="sh-cut idcard" aria-live="polite">
+      <div data-ui className="sh-cut idcard" aria-live="polite">
         <p className="ds-small" style={{ color: INK2 }}>Emergency card</p>
         <p style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.03em', margin: '6px 0 20px', minHeight: '34px' }}>
           {name || 'Your name'}
@@ -233,7 +233,7 @@ function PulseReadout() {
     ['NEWS2 score', '0, low risk'],
   ]
   return (
-    <div className="sh-cut frag" style={{ background: PAPER, color: INK }}>
+    <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK }}>
       <p style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>Your check</p>
       {rows.map(([k, v]) => (
         <div key={k} className="hosp">
@@ -273,8 +273,8 @@ export default function Home() {
     <div style={{ background: LEAF, color: INK }}>
       <style>{`
         .ch-in { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
-        .ch { padding: 120px 0; }
-        .ch-tall { min-height: 88svh; display: flex; align-items: center; }
+        .ch { padding: 136px 0; }
+        .ch-tall { display: flex; align-items: center; }
         .ch-tall > .ch-in { width: 100%; }
         .split { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
         .split-flip > :first-child { order: 2; }
@@ -287,7 +287,7 @@ export default function Home() {
         .ph-bar { font-size: 12px; font-weight: 600; height: 28px; }
         .ph-sos { background: ${SOS}; color: #fff; padding: 18px 26px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
         .ph-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; }
-        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.12); }
+        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.12); } /* taste-skill-ignore: app UI row divider */
         .nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 0; }
         .nav-links { display: flex; align-items: center; gap: 28px; }
         .nav-links a { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }
@@ -295,8 +295,8 @@ export default function Home() {
         .hero { display: grid; grid-template-columns: 1.45fr 0.55fr; gap: 64px; align-items: center; padding: 64px 0 120px; }
         .maker { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
         .maker-form { display: grid; gap: 16px; }
-        .fld { display: grid; gap: 6px; font-size: 15px; font-weight: 600; }
-        .fld input, .fld select { height: 52px; padding: 0 16px; border: 0; background: ${PAPER}; font-size: 17px; color: ${INK}; box-shadow: inset 0 -2px 0 ${INK}; }
+        .fld { display: grid; gap: 6px; font-size: 16px; font-weight: 600; }
+        .fld input, .fld select { height: 52px; padding: 0 16px; border: 0; background: ${PAPER}; font-size: 17px; color: ${INK}; box-shadow: inset 0 -2px 0 ${INK}; } /* taste-skill-ignore: form field underline */
         .fld input:focus, .fld select:focus { outline: 3px solid ${INK}; outline-offset: 2px; }
         .idcard { background: ${PAPER}; padding: 32px; }
         .partner { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 40px; padding: 28px 0; }
@@ -305,11 +305,16 @@ export default function Home() {
         .foot-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
         .wordmark { font-size: clamp(64px, 17vw, 260px); font-weight: 800; letter-spacing: -0.06em !important; line-height: 1; margin-top: 72px; padding-bottom: 0.08em; white-space: nowrap; }
         .nav-scroll { display: none; }
+        .band { display: block; width: 100%; height: min(72vh, 720px); object-fit: cover; }
+        .close { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+        .close img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
         @media (max-width: 900px) {
           .ch-in { padding: 0 24px; }
           .ch { padding: 80px 0; }
           .ch-tall { min-height: 0; }
-          .split, .hero, .maker, .partner { grid-template-columns: 1fr; gap: 40px; }
+          .split, .hero, .maker, .partner, .close { grid-template-columns: 1fr; gap: 40px; }
+          .band { height: 46vh; }
+          figcaption.ch-in { padding: 12px 24px 24px !important; }
           .split-flip > :first-child { order: 0; }
           .hero { padding: 24px 0 80px; }
           .nav-links .hide-sm { display: none; }
@@ -377,6 +382,19 @@ export default function Home() {
       </header>
 
       <main>
+        <figure style={{ margin: 0, background: LEAF }}>
+          <img
+            src="/places/meadowbrook-road.jpg"
+            alt="A quiet tree lined road near Robbinsville and West Windsor, New Jersey"
+            className="band"
+            loading="lazy"
+          />
+          <figcaption className="ch-in ds-small" style={{ padding: '14px 48px 28px', color: INK2 }}>
+            Meadowbrook Road in central New Jersey. Many homes out here are a long drive from a
+            hospital with a heart unit.
+          </figcaption>
+        </figure>
+
         <Chapter id="video" bg={INK} fg="#fff" tall={false}>
           <div data-reveal>
             <h2 className="ds-title" style={{ marginBottom: '40px' }}>
@@ -459,6 +477,7 @@ export default function Home() {
 
       <footer style={{ background: LEAF, padding: '120px 0 0', overflow: 'hidden' }}>
         <div className="ch-in">
+          <div className="close">
           <div data-reveal>
             <h2 className="ds-title">Ready when you need it</h2>
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '36px' }}>
@@ -469,6 +488,15 @@ export default function Home() {
                 Sign up free
               </a>
             </div>
+          </div>
+          <div data-reveal>
+            <img
+              src="/places/robbinsville-field.jpg"
+              alt="Open farm field in Robbinsville, New Jersey, under a clear sky"
+              className="sh-cut"
+              loading="lazy"
+            />
+          </div>
           </div>
           <div style={{ marginTop: '96px' }}>
             <div className="foot-links">
@@ -494,6 +522,10 @@ export default function Home() {
             <p className="ds-small" style={{ marginTop: '20px', color: INK2, maxWidth: '640px' }}>
               Relay Arc helps you decide what to do. It does not diagnose. In an emergency, call 911
               first. © {new Date().getFullYear()} Relay Arc, a free nonprofit project.
+            </p>
+            <p className="ds-small" style={{ marginTop: '10px', color: INK2, maxWidth: '640px' }}>
+              Photos of Meadowbrook Road and a Robbinsville farm field by Famartin, CC BY SA 3.0,
+              via Wikimedia Commons.
             </p>
           </div>
           <div className="wordmark" aria-hidden>
