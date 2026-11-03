@@ -43,13 +43,21 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const [profiles, checkins, vitals, emergencies, medLogs] = await Promise.all([
+    const [profiles, checkins, vitals, emergencies, medLogs, pageViews] = await Promise.all([
       admin.from('profiles').select('*'),
       admin.from('checkins').select('user_id, created_at'),
       admin.from('vitals_logs').select('user_id, logged_at'),
       admin.from('emergencies').select('user_id, created_at, status'),
       admin.from('medication_logs').select('user_id, taken, taken_at'),
+      admin.from('page_views').select('day, views'),
     ])
+    const PV = (pageViews.data || []) as { day: string; views: number }[]
+    const cut30 = iso(30).slice(0, 10)
+    const views = {
+      total: PV.reduce((n, r) => n + (r.views || 0), 0),
+      last30: PV.filter((r) => r.day >= cut30).reduce((n, r) => n + (r.views || 0), 0),
+      since: PV.length ? PV.map((r) => r.day).sort()[0] : null,
+    }
 
     const P = profiles.data || []
     const C = checkins.data || []
@@ -77,6 +85,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       generated_at: new Date().toISOString(),
+      views,
 
       // ── the two that matter ────────────────────────────────────────────────
       headline: {
