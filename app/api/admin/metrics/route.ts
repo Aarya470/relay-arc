@@ -38,7 +38,8 @@ export async function GET(req: NextRequest) {
       { status: 503 },
     )
   }
-  if (key !== process.env.ADMIN_PORTAL_KEY) {
+  // Trim both, so a stray space or line break from copy and paste does not lock you out.
+  if ((key || '').trim() !== process.env.ADMIN_PORTAL_KEY.trim()) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
