@@ -15,6 +15,7 @@ const mono = 'var(--font-mono, monospace)'
 
 interface Metrics {
   generated_at: string
+  views?: { total: number; last30: number; since: string | null }
   headline: {
     complete_medical_ids: number
     day30_retained: number
@@ -189,6 +190,23 @@ export default function AdminMetrics() {
             {loading ? 'refreshing…' : 'refresh'}
           </button>
         </div>
+
+        {/* ── views since launch ─────────────────────────────────────────── */}
+        {data.views && (
+          <div style={{ background: INK, color: '#FFFFFF', padding: '28px', marginBottom: '20px' }}>
+            <p style={{ fontSize: '72px', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 }}>
+              {data.views.total.toLocaleString()}
+            </p>
+            <p style={{ fontSize: '18px', fontWeight: 700, marginTop: '10px' }}>Views since launch</p>
+            <p style={{ fontSize: '14px', opacity: 0.85, marginTop: '6px' }}>
+              {data.views.last30.toLocaleString()} in the last 30 days
+              {data.views.since
+                ? `. Counting since ${new Date(data.views.since + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`
+                : ''}
+              . Every page, signed in or not, repeats included.
+            </p>
+          </div>
+        )}
 
         {/* ── the two numbers that matter ─────────────────────────────────── */}
         <div
