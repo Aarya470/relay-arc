@@ -303,9 +303,6 @@ export default function Home() {
             <button onClick={() => router.push('/demo')} style={link} className="hp-hide-sm">
               Demo
             </button>
-            <button onClick={() => router.push('/donate')} style={link} className="hp-hide-sm">
-              Donate
-            </button>
             <button onClick={() => router.push('/login')} style={link}>
               Sign in
             </button>
@@ -447,7 +444,6 @@ export default function Home() {
               ['Engineering', '/engineering'],
               ['Partnerships', '/partners'],
               ['Demo', '/demo'],
-              ['Donate', '/donate'],
               ['Privacy', '/privacy'],
               ['Terms', '/terms'],
               ['Status', '/status'],
