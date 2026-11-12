@@ -20,7 +20,6 @@ const NAV: [string, string][] = [
   ['Features', '/features'],
   ['Engineering', '/engineering'],
   ['Partners', '/partners'],
-  ['Donate', '/donate'],
   ['Sign in', '/login'],
 ]
 
@@ -500,8 +499,7 @@ export default function Home() {
                 ['Engineering', '/engineering'],
                 ['Partners', '/partners'],
                 ['Demo', '/demo'],
-                ['Donate', '/donate'],
-                ['Changelog', '/changelog'],
+                              ['Changelog', '/changelog'],
                 ['Status', '/status'],
                 ['Privacy', '/privacy'],
                 ['Terms', '/terms'],
