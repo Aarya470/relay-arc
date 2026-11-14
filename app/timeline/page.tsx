@@ -109,7 +109,7 @@ export default function Timeline() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: 'transparent',
           padding: '80px 16px 100px',
           maxWidth: '720px',
           margin: '0 auto',
@@ -134,7 +134,7 @@ export default function Timeline() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: 'transparent',
         paddingBottom: '100px',
         maxWidth: '720px',
         margin: '0 auto',

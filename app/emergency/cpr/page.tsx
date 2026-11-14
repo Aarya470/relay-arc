@@ -99,7 +99,7 @@ export default function CprCoach() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: 'transparent',
         maxWidth: '560px',
         margin: '0 auto',
         width: '100%',

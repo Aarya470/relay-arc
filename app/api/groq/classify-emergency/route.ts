@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
     } = await supabase.auth.getUser(token)
     if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { transcript, lang } = await req.json()
+    const { transcript, lang } = ((await readJson<any>(req)) ?? {})
     if (!transcript || typeof transcript !== 'string' || transcript.length > 600) {
       return NextResponse.json({ error: 'Invalid transcript' }, { status: 400 })
     }

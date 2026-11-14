@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { authedClient } from '@/lib/supabase-route'
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
     const { supabase } = auth
     const user = { id: auth.userId }
 
-    const body = await req.json()
+    const body = ((await readJson<any>(req)) ?? {})
     const { heart_rate, systolic, diastolic, oxygen_sat, resp_rate } = body
     // Where the reading came from, so the NEWS2 sheet can say so. Allow-listed.
     const source = ['camera', 'motion', 'taps', 'manual'].includes(body.source)

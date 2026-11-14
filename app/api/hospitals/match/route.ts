@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
   if (!limited.ok) return tooManyRequests(limited)
 
   try {
-    const { candidates } = await req.json()
+    const { candidates } = ((await readJson<any>(req)) ?? {})
     if (!Array.isArray(candidates) || candidates.length > 12) {
       return NextResponse.json({ error: 'Invalid candidates' }, { status: 400 })
     }

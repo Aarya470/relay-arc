@@ -8,6 +8,7 @@ import LegalModal from '@/components/LegalModal'
 import AuthGate from '@/components/AuthGate'
 import Analytics from '@/components/Analytics'
 import Reveal from '@/components/Reveal'
+import CommandPalette from '@/components/CommandPalette'
 import { SITE_URL } from '@/lib/site'
 import Motion from '@/components/Motion'
 
@@ -151,11 +152,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${jakarta.variable} ${mono.variable} ${code.variable} ${jakarta.className}`}
       >
         <Motion>
-          <div className="min-h-[100dvh] w-full relative" style={{ background: 'var(--bg)' }}>
+          <div className="min-h-[100dvh] w-full relative app-bg">
             <AuthGate>{children}</AuthGate>
             <LegalModal />
             <Analytics />
             <Reveal />
+            <CommandPalette />
             <MeetingAlert />
             <Toaster position="top-center" richColors />
           </div>

@@ -61,7 +61,7 @@ export default function EmergencyStatus() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         paddingBottom: '32px',

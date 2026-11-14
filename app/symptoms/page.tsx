@@ -421,8 +421,8 @@ export default function SymptomsPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
-        paddingBottom: '80px',
+        background: 'transparent',
+        paddingBottom: '112px',
       }}
     >
       {/* ── header ── */}

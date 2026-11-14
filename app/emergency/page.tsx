@@ -289,7 +289,7 @@ export default function Emergency() {
     <div
       style={{
         minHeight: '100dvh',
-        background: BG,
+        background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         maxWidth: '560px',

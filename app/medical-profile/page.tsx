@@ -97,7 +97,7 @@ export default function MedicalProfile() {
 
   if (loading)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 20px 100px' }}>
+      <div style={{ minHeight: '100dvh', background: 'transparent', padding: '80px 20px 100px' }}>
         {[1, 2, 3, 4].map((i) => (
           <Skeleton
             key={i}
@@ -136,8 +136,8 @@ export default function MedicalProfile() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
-        paddingBottom: '90px',
+        background: 'transparent',
+        paddingBottom: '112px',
         maxWidth: '640px',
         margin: '0 auto',
         width: '100%',

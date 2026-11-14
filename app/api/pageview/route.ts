@@ -1,4 +1,5 @@
 // POST /api/pageview
+import { readJson } from '@/lib/security'
 import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
 
   let path: unknown
   try {
-    const body = await req.json()
+    const body = ((await readJson<any>(req)) ?? {})
     path = body?.path
   } catch {
     return new Response(null, { status: 204 })

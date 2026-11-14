@@ -1,5 +1,7 @@
 // Private metrics.
 import { NextRequest, NextResponse } from 'next/server'
+import { safeEqual } from '@/lib/security'
+import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
@@ -31,6 +33,9 @@ function isComplete(p: Record<string, unknown>): boolean {
 }
 
 export async function GET(req: NextRequest) {
+  // Slow down key guessing.
+  const limited = rateLimit(clientKey(req, 'admin'), 10, 15 * 60_000)
+  if (!limited.ok) return tooManyRequests(limited)
   const key = req.headers.get('x-admin-key') || new URL(req.url).searchParams.get('key')
   if (!process.env.ADMIN_PORTAL_KEY) {
     return NextResponse.json(
@@ -39,7 +44,7 @@ export async function GET(req: NextRequest) {
     )
   }
   // Trim both, so a stray space or line break from copy and paste does not lock you out.
-  if ((key || '').trim() !== process.env.ADMIN_PORTAL_KEY.trim()) {
+  if (!safeEqual((key || '').trim(), process.env.ADMIN_PORTAL_KEY.trim())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

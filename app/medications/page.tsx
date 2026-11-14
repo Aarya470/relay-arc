@@ -319,7 +319,7 @@ export default function Medications() {
 
   if (loading)
     return (
-      <div style={{ minHeight: '100dvh', background: BG, padding: '80px 16px 100px' }}>
+      <div style={{ minHeight: '100dvh', background: 'transparent', padding: '80px 16px 100px' }}>
         {[1, 2, 3].map((i) => (
           <div
             key={i}
@@ -339,8 +339,8 @@ export default function Medications() {
     <div
       style={{
         minHeight: '100dvh',
-        background: BG,
-        paddingBottom: '80px',
+        background: 'transparent',
+        paddingBottom: '112px',
         maxWidth: '720px',
         margin: '0 auto',
         width: '100%',
@@ -350,8 +350,6 @@ export default function Medications() {
       <div
         style={{
           padding: '56px 20px 16px',
-          borderBottom: `1px solid ${BORDER}`,
-          background: '#FFFFFF',
         }}
       >
         <div
@@ -485,8 +483,7 @@ export default function Medications() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              className="sh-cut" style={{
-                background: SURFACE,
+              className="glass" style={{
                 borderRadius: 0,
                 padding: '24px 20px 40px',
                 width: '100%',
@@ -725,8 +722,7 @@ export default function Medications() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, ...spring }}
-          className="sh-cut" style={{
-            background: SURFACE,
+          className="glass" style={{
             borderRadius: 0,
             marginBottom: '14px',
             overflow: 'hidden',
@@ -951,8 +947,7 @@ export default function Medications() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: medIndex * 0.05, ...spring }}
-            className="sh-cut" style={{
-              background: SURFACE,
+            className="glass" style={{
               borderRadius: 0,
               marginBottom: '12px',
               overflow: 'hidden',

@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
       beds_free,
       incoming_id,
       incoming_status,
-    } = await req.json()
+    } = ((await readJson<any>(req)) ?? {})
     if (!code || typeof code !== 'string')
       return NextResponse.json({ error: 'Invalid code' }, { status: 400 })
     const { data: partner } = await admin

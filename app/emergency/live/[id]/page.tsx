@@ -155,7 +155,7 @@ export default function RelayRoomPage() {
     const ch = supabase.channel(`relay-room-${id}`, {
       config: {
         broadcast: { self: true },
-        presence: { key: `v-${Math.random().toString(36).slice(2, 8)}` },
+        presence: { key: `v-${crypto.randomUUID().slice(0, 8)}` },
       },
     })
     channelRef.current = ch
@@ -259,7 +259,7 @@ export default function RelayRoomPage() {
     if (!taskInput.trim()) return
     broadcastTasks([
       ...tasksRef.current,
-      { id: Math.random().toString(36).slice(2, 9), text: taskInput.trim(), by: name },
+      { id: crypto.randomUUID(), text: taskInput.trim().slice(0, 200), by: name },
     ])
     setTaskInput('')
   }
@@ -294,7 +294,7 @@ export default function RelayRoomPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -311,7 +311,7 @@ export default function RelayRoomPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: 'transparent',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -330,7 +330,7 @@ export default function RelayRoomPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: 'transparent',
         maxWidth: '640px',
         margin: '0 auto',
         width: '100%',

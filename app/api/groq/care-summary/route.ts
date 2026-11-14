@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
       .single()
     if (!member) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
-    const { patient, checkins, emergencies, adherence } = await req.json()
+    const { patient, checkins, emergencies, adherence } = ((await readJson<any>(req)) ?? {})
     if (!patient) return NextResponse.json({ error: 'Missing patient' }, { status: 400 })
 
     const prompt = `You are a clinical AI. Analyze this cardiac patient and return JSON only.

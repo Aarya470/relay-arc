@@ -102,7 +102,7 @@ export default function EmergencyHistoryPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: '#B3DDAC',
+          background: 'transparent',
           padding: '80px 20px 40px',
           display: 'flex',
           flexDirection: 'column',
@@ -125,7 +125,7 @@ export default function EmergencyHistoryPage() {
     )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '40px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', paddingBottom: '40px' }}>
       {/* Header */}
       <div
         style={{

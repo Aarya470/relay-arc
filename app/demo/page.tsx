@@ -30,7 +30,7 @@ export default function DemoLauncher() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', padding: '0 24px' }}>
       <div
         style={{
           position: 'fixed',

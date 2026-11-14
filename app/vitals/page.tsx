@@ -530,7 +530,7 @@ export default function VitalsPage() {
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', paddingBottom: '112px' }}>
       {isDemo && (
         <div
           style={{

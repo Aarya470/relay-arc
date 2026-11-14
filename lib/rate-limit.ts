@@ -1,3 +1,4 @@
+import { clientIp } from '@/lib/security'
 // Request limiting for the public API routes.
 
 type Bucket = { count: number; resetAt: number }
@@ -43,18 +44,15 @@ export function rateLimit(key: string, limit: number, windowMs: number): RateLim
 }
 
 /**
- * Identify the caller. x-forwarded-for is the first entry on Vercel and is the
- * client address. It can be spoofed in general, but not through Vercel's proxy,
- * which is the only path to these routes in production.
+ * Identify the caller from headers the platform sets, not ones a client can
+ * forge. See clientIp() in lib/security.ts.
  *
  * The route name is folded into the key so a burst against one endpoint does
  * not lock a person out of a different one, and an SOS is never blocked because
  * someone was clicking around the dashboard.
  */
 export function clientKey(req: Request, scope: string): string {
-  const fwd = req.headers.get('x-forwarded-for') ?? ''
-  const ip = fwd.split(',')[0].trim() || req.headers.get('x-real-ip') || 'unknown'
-  return `${scope}:${ip}`
+  return `${scope}:${clientIp(req.headers)}`
 }
 
 /** 429 with the headers a well-behaved client will honour. */

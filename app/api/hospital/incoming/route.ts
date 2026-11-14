@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
     } = await anon.auth.getUser(token)
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { hospital, patientName, emergencyType, etaMin, liveUrl } = await req.json()
+    const { hospital, patientName, emergencyType, etaMin, liveUrl } = ((await readJson<any>(req)) ?? {})
     if (!hospital?.lat || !hospital?.lng) return NextResponse.json({ connected: false })
 
     const { data: partners } = await admin.from('hospital_partners').select('id, name, lat, lng')
@@ -76,7 +77,7 @@ export async function PATCH(req: NextRequest) {
     } = await anon.auth.getUser(token)
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { id, etaMin, status } = await req.json()
+    const { id, etaMin, status } = ((await readJson<any>(req)) ?? {})
     if (!id || typeof id !== 'string')
       return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
     const patch: any = {}

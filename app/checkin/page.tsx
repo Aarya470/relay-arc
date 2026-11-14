@@ -161,10 +161,10 @@ export default function Checkin() {
     <div
       style={{
         minHeight: '100dvh',
-        background: BG,
+        background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
-        paddingBottom: '80px',
+        paddingBottom: '112px',
         maxWidth: '720px',
         margin: '0 auto',
         width: '100%',
@@ -284,8 +284,7 @@ export default function Checkin() {
           >
             <AIAvatar />
             <div
-              className="sh-cut" style={{
-                background: SURFACE,
+              className="glass" style={{
                 boxShadow: SHADOW,
                 padding: '13px 16px',
                 borderRadius: 0,

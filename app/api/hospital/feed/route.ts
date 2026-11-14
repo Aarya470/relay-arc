@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
@@ -11,7 +12,7 @@ export async function POST(req: NextRequest) {
   const limited = rateLimit(clientKey(req, 'hospital-code'), 20, 15 * 60_000)
   if (!limited.ok) return tooManyRequests(limited)
   try {
-    const { code } = await req.json()
+    const { code } = ((await readJson<any>(req)) ?? {})
     if (!code || typeof code !== 'string' || code.length > 64) {
       return NextResponse.json({ error: 'Invalid code' }, { status: 400 })
     }

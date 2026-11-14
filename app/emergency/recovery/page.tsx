@@ -182,7 +182,7 @@ function RecoveryContent() {
   const protocol = PROTOCOLS[type] || PROTOCOLS.other
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent' }}>
       {/* Green "You're safe" header */}
       <div
         style={{

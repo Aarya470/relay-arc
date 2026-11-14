@@ -1,5 +1,8 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { safeEqual, randomCode } from '@/lib/security'
+import { rateLimit, clientKey, tooManyRequests } from '@/lib/rate-limit'
 
 const admin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -9,12 +12,11 @@ const admin = createClient(
 function authed(req: NextRequest) {
   const key = process.env.ADMIN_PORTAL_KEY
   if (!key) return false
-  return req.headers.get('x-admin-key') === key
+  return safeEqual(req.headers.get('x-admin-key'), key)
 }
 
 function genCode() {
-  const block = () => Math.random().toString(36).slice(2, 6).toUpperCase()
-  return `RELAY-${block()}-${block()}`
+  return `RELAY-${randomCode(2, 4)}`
 }
 
 async function audit(partner_id: string | null, actor: string, action: string, detail: string) {
@@ -24,9 +26,11 @@ async function audit(partner_id: string | null, actor: string, action: string, d
 }
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(clientKey(req, 'admin'), 20, 15 * 60_000)
+  if (!limited.ok) return tooManyRequests(limited)
   if (!authed(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   try {
-    const body = await req.json()
+    const body = ((await readJson<any>(req)) ?? {})
 
     if (body.op === 'list') {
       const { data: partners } = await admin

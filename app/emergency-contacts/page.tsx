@@ -121,7 +121,7 @@ export default function EmergencyContacts() {
 
   if (loading)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '80px 16px 100px' }}>
+      <div style={{ minHeight: '100dvh', background: 'transparent', padding: '80px 16px 100px' }}>
         {[1, 2, 3].map((i) => (
           <Skeleton
             key={i}
@@ -137,7 +137,7 @@ export default function EmergencyContacts() {
     )
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', paddingBottom: '112px' }}>
       {/* Header */}
       <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #98C890' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

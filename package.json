@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "preflight": "node scripts/preflight.mjs",
-    "test": "node --experimental-strip-types tests/triage.test.ts && node --experimental-strip-types tests/pulse.test.ts && node --experimental-strip-types tests/apple-health.test.ts && node --experimental-strip-types tests/dispatch.test.ts && node --experimental-strip-types tests/risk.test.ts && node --experimental-strip-types tests/autonomic.test.ts && node --experimental-strip-types tests/navigation.test.ts && node --experimental-strip-types tests/claims.test.ts && node --experimental-strip-types tests/fhir.test.ts && node --experimental-strip-types tests/news2-sources.test.ts && node --experimental-strip-types tests/health-ingest.test.ts",
+    "test": "node --experimental-strip-types tests/triage.test.ts && node --experimental-strip-types tests/pulse.test.ts && node --experimental-strip-types tests/apple-health.test.ts && node --experimental-strip-types tests/dispatch.test.ts && node --experimental-strip-types tests/risk.test.ts && node --experimental-strip-types tests/autonomic.test.ts && node --experimental-strip-types tests/navigation.test.ts && node --experimental-strip-types tests/claims.test.ts && node --experimental-strip-types tests/fhir.test.ts && node --experimental-strip-types tests/news2-sources.test.ts && node --experimental-strip-types tests/health-ingest.test.ts && node --experimental-strip-types tests/security.test.ts",
     "verify": "npm run preflight && npm run test",
     "validate:fhir": "node --experimental-strip-types scripts/validate-fhir.mts",
     "test:ui": "node tests/ui.audit.mjs",

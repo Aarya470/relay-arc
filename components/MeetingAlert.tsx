@@ -491,9 +491,9 @@ export default function MeetingAlert() {
     const { hour, min } = parseTime(rescheduleTime)
     const d = new Date(rescheduleDay)
     d.setHours(hour, min, 0, 0)
-    const newRoomId = (([1e7] as any) + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c: any) =>
-      (c ^ ((Math.random() * 16) >> (c / 4))).toString(16),
-    )
+    // Room ids are the only thing protecting a video call, so they come from
+    // the system's random source.
+    const newRoomId = crypto.randomUUID()
 
     await supabase.from('appointments').update({ status: 'cancelled' }).eq('id', upcomingAppt.id)
     const { error } = await supabase.from('appointments').insert({

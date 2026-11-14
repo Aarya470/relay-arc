@@ -569,7 +569,7 @@ export default function Appointments() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', paddingBottom: '100px' }}>
       {/* Meeting notification banner */}
       <AnimatePresence>
         {upcomingMeeting && !activeCall && (

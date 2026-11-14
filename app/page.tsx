@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import FollowLinks from '@/components/FollowLinks'
 import VideoEmbed from '@/components/VideoEmbed'
+import { SearchButton } from '@/components/CommandPalette'
 
 const LEAF = '#B3DDAC'
 const MINT = '#DDEFD9'
@@ -263,7 +264,7 @@ export default function Home() {
   }, [router])
 
   return (
-    <div style={{ background: LEAF, color: INK }}>
+    <div style={{ color: INK }}>
       <style>{`
         .ch-in { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
         .ch { padding: 136px 0; }
@@ -278,12 +279,12 @@ export default function Home() {
         .phone { width: 300px; margin: 0 auto; background: ${INK}; padding: 10px; border-radius: 48px; }
         .phone-screen { position: relative; background: ${LEAF}; border-radius: 38px; padding: 22px 22px 28px; }
         .ph-notch { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 84px; height: 24px; background: ${INK}; border-radius: 14px; }
-        .ph-sos { background: ${SOS}; color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 26px 22px; margin: 20px 0 14px; min-height: 132px; }
-        .ph-list { background: ${PAPER}; padding: 4px 16px; }
+        .ph-sos { background: ${SOS}; color: #fff; border-radius: 20px; box-shadow: 0 12px 28px rgba(163,52,23,0.35); display: flex; flex-direction: column; justify-content: center; padding: 26px 22px; margin: 20px 0 14px; min-height: 132px; }
+        .ph-list { background: rgba(255,255,255,0.6); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); padding: 4px 16px; border-radius: 18px; }
         .ph-row { display: flex; justify-content: space-between; padding: 14px 0; font-size: 14px; }
         .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.1); } /* taste-skill-ignore: app UI row divider */
-        .nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 0; }
-        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav { position: fixed; top: 12px; left: 16px; right: 16px; max-width: 1240px; margin: 0 auto; z-index: 60; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 12px 10px 22px; border-radius: 999px; }
+        .nav-links { display: flex; align-items: center; gap: 22px; }
         .nav-links a { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }
         .nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
         .hero { display: grid; grid-template-columns: 1.45fr 0.55fr; gap: 64px; align-items: center; padding: 64px 0 120px; }
@@ -320,9 +321,9 @@ export default function Home() {
       `}</style>
 
       {/* top bar and opening chapter */}
-      <header style={{ background: LEAF }}>
+      <header style={{ background: 'transparent' }}>
         <div className="ch-in">
-          <nav className="nav" aria-label="Main">
+          <nav className="nav glass" aria-label="Main">
             <a href="/" aria-label="Relay Arc home" style={{ display: 'flex', alignItems: 'center' }}>
               <img src="/logo-wordmark.png" alt="Relay Arc" style={{ height: '32px', width: 'auto' }} />
             </a>
@@ -332,11 +333,13 @@ export default function Home() {
                   {l}
                 </a>
               ))}
-              <a href="/card" className="ds-btn ds-btn-ink sh-slant" style={{ color: '#fff', minHeight: '46px', padding: '0 26px', textDecoration: 'none' }}>
+              <SearchButton />
+              <a href="/card" className="ds-btn ds-btn-ink sh-slant" style={{ color: '#fff', minHeight: '42px', padding: '0 22px', textDecoration: 'none' }}>
                 Make a card
               </a>
             </div>
           </nav>
+          <div style={{ height: '92px' }} aria-hidden />
           <div className="nav-scroll" aria-label="More pages">
             {NAV.map(([l, h]) => (
               <a key={h} href={h}>

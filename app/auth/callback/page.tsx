@@ -76,7 +76,7 @@ export default function AuthCallback() {
   }, [router])
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', padding: '0 24px' }}>
       <div style={{ maxWidth: 380, margin: '0 auto', paddingTop: 88, paddingBottom: 48 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 56 }}>
           <Mark size={26} />

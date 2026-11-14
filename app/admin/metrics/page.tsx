@@ -80,7 +80,7 @@ export default function AdminMetrics() {
       <div
         style={{
           minHeight: '100dvh',
-          background: CREAM,
+          background: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -148,7 +148,7 @@ export default function AdminMetrics() {
   const funnelMax = data.funnel.profiles_created || 1
 
   return (
-    <div style={{ minHeight: '100dvh', background: CREAM, padding: '40px 24px 80px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', padding: '40px 24px 80px' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div
           style={{

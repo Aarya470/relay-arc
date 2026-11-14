@@ -201,7 +201,7 @@ export default function Onboarding() {
   const meta = STEP_META[step - 1]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', padding: '0 24px' }}>
       <div
         style={{ maxWidth: '420px', margin: '0 auto', paddingTop: '56px', paddingBottom: '48px' }}
       >

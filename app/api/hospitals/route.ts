@@ -1,7 +1,8 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const { lat, lng, radius } = await req.json()
+  const { lat, lng, radius } = ((await readJson<any>(req)) ?? {})
 
   // SEC-6: Validate lat/lng ranges before making outbound requests
   if (

@@ -192,7 +192,7 @@ export default function HospitalPortal() {
 
   if (!partner)
     return (
-      <div style={{ minHeight: '100dvh', background: '#B3DDAC', padding: '0 24px' }}>
+      <div style={{ minHeight: '100dvh', background: 'transparent', padding: '0 24px' }}>
         <div style={{ maxWidth: '380px', margin: '0 auto', paddingTop: '96px' }}>
           <p
             style={{
@@ -294,7 +294,7 @@ export default function HospitalPortal() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: 'transparent',
         maxWidth: '720px',
         margin: '0 auto',
         width: '100%',

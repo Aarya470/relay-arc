@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import webpush from 'web-push'
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
   const { supabase } = auth
   const user = { id: auth.userId }
 
-  const { emergencyId, emergencyType, patientName, hospitalName } = await req.json()
+  const { emergencyId, emergencyType, patientName, hospitalName } = ((await readJson<any>(req)) ?? {})
 
   // Fetch all care team members
   const { data: careTeamMembers } = await supabase.from('care_team_members').select('id')

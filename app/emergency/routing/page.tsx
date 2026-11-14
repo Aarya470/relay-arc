@@ -788,7 +788,7 @@ function RoutingPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: T.bg,
+          background: 'transparent',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -891,7 +891,7 @@ function RoutingPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: T.bg,
+          background: 'transparent',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -1075,7 +1075,7 @@ function RoutingPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#B3DDAC',
+        background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         overflowX: 'hidden',
@@ -2309,7 +2309,7 @@ function responderInfo(profile: any): [string, string][] {
 
 export default function RoutingPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#B3DDAC' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100dvh', background: 'transparent' }} />}>
       <RoutingPage />
     </Suspense>
   )

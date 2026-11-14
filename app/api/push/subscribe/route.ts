@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/security'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { authedClient } from '@/lib/supabase-route'
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
     const { supabase } = auth
     const user = { id: auth.userId }
 
-    const body = await req.json()
+    const body = ((await readJson<any>(req)) ?? {})
     const { subscription, userId } = body
 
     if (!subscription || !userId) {

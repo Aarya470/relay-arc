@@ -1,4 +1,5 @@
 'use client'
+import { SearchButton } from '@/components/CommandPalette'
 import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -882,7 +883,7 @@ export default function Dashboard() {
       <div
         style={{
           minHeight: '100dvh',
-          background: BG,
+          background: 'transparent',
           padding: '60px 20px 80px',
           display: 'flex',
           flexDirection: 'column',
@@ -934,8 +935,7 @@ export default function Dashboard() {
     <motion.div
       variants={fadeUp}
       onClick={onClick}
-      className="sh-cut" style={{
-        background: SURFACE,
+      className="glass" style={{
         borderRadius: 0,
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
@@ -947,7 +947,7 @@ export default function Dashboard() {
   )
 
   return (
-    <div style={{ minHeight: '100dvh', background: BG, paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', paddingBottom: '112px' }}>
       {isDemo && (
         <div
           style={{
@@ -1029,10 +1029,10 @@ export default function Dashboard() {
         transition={{ duration: 0.3, ease: 'easeOut' }}
         style={{ padding: '56px 20px 20px', maxWidth: '640px', margin: '0 auto' }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-wordmark.png" alt="Relay Arc" style={{ height: '22px', width: 'auto', marginBottom: '18px', display: 'block' }} />
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '18px 12px' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-wordmark.png" alt="Relay Arc" style={{ height: '20px', width: 'auto', alignSelf: 'center', order: 0, flexShrink: 0 }} />
+          <div style={{ order: 2, width: '100%' }}>
             <p
               style={{
                 color: T3,
@@ -1082,7 +1082,7 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', order: 1, marginLeft: 'auto' }}>
             {streak >= 2 && (
               <div
                 style={{
@@ -1103,15 +1103,14 @@ export default function Dashboard() {
                 </span>
               </div>
             )}
+            <SearchButton />
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => router.push('/settings')}
-              className="sh-pill"
+              className="sh-pill glass"
               style={{
-                height: '40px',
+                height: '42px',
                 padding: '0 18px',
-                background: SURFACE,
-                border: 'none',
                 color: T1,
                 fontSize: '14px',
                 fontWeight: 600,
@@ -1143,8 +1142,7 @@ export default function Dashboard() {
         {installPrompt && (
           <motion.div
             variants={fadeUp}
-            className="sh-cut" style={{
-              background: SURFACE,
+            className="glass" style={{
               borderRadius: 0,
               padding: '14px 16px',
               display: 'flex',
@@ -1278,8 +1276,7 @@ export default function Dashboard() {
               initial="hidden"
               animate="show"
               exit={{ opacity: 0, scale: 0.97 }}
-              className="sh-cut" style={{
-                background: SURFACE,
+              className="glass" style={{
                 borderRadius: 0,
                 padding: '14px 16px',
                 display: 'flex',
@@ -1402,7 +1399,7 @@ export default function Dashboard() {
             template. NEWS2 is still shown as a number for a clinician, with
             no colour banding or advice (same framing as /check). */}
         <motion.div variants={fadeUp}>
-          <div className="sh-cut" style={{ background: SURFACE, padding: '0 18px' }}>
+          <div className="glass" style={{ padding: '0 18px' }}>
             {[
               {
                 label: 'NEWS2 for your clinician',
@@ -1472,7 +1469,7 @@ export default function Dashboard() {
 
         {/* Quick nav list */}
         <motion.div variants={fadeUp}>
-          <div className="sh-cut" style={{ background: SURFACE, padding: '0 18px' }}>
+          <div className="glass" style={{ padding: '0 18px' }}>
             {[
               {
                 label: 'Emergency contacts',
