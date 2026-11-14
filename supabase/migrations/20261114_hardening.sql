@@ -58,3 +58,15 @@ begin
     execute format('alter function %s set search_path = public', f.sig);
   end loop;
 end $$;
+
+-- 5. Device lock for shared emergency links. A link works without an account,
+--    but only on the first few devices that open it (one per emergency contact,
+--    plus spares). After that, a forwarded or leaked link shows nothing.
+create table if not exists public.emergency_viewers (
+  emergency_id uuid not null,
+  device_hash  text not null check (char_length(device_hash) = 64),
+  created_at   timestamptz not null default now(),
+  primary key (emergency_id, device_hash)
+);
+-- No policies on purpose: only the server (service role) reads or writes this.
+alter table public.emergency_viewers enable row level security;

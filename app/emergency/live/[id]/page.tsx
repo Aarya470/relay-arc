@@ -93,7 +93,11 @@ export default function RelayRoomPage() {
     try {
       const res = await fetch(`/api/emergency/live/${id}`)
       if (!res.ok) {
-        setError('This emergency link is invalid or has expired.')
+        setError(
+          res.status === 403
+            ? 'This link is already open on other devices, so it cannot be opened on this one. Ask the person who sent it to share again from their phone.'
+            : 'This emergency link is invalid or has expired.',
+        )
         return
       }
       const json: EmergencyData = await res.json()
