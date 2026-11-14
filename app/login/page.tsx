@@ -13,7 +13,7 @@ const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const ACCENT = '#42623C'
-const RED = '#A33417'
+const RED = '#D33003'
 const BORDER = '#98C890'
 
 const mono = 'var(--font-mono, monospace)'

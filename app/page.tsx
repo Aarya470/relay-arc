@@ -9,12 +9,12 @@ import VideoEmbed from '@/components/VideoEmbed'
 import { SearchButton } from '@/components/CommandPalette'
 
 const LEAF = '#B3DDAC'
-const MINT = '#DDEFD9'
-const PAPER = '#FFFFFF'
+const MINT = '#E6F1E1'
+const PAPER = '#F7F5EE'
 const FOREST = '#1E3A23'
 const INK = '#141413'
 const INK2 = '#3F3D36'
-const SOS = '#A33417'
+const SOS = '#D33003'
 const GREEN = '#42623C'
 
 const NAV: [string, string][] = [
@@ -75,31 +75,72 @@ function Split({
   )
 }
 
-// The home screen, kept simple: greeting, the SOS button, three rows.
+// The real signed in home screen, in a phone frame.
 function PhoneHome() {
-  const rows: [string, string, boolean][] = [
-    ['Daily check in', 'Done', true],
-    ['Pulse', '72 bpm', false],
-    ['Emergency card', 'Ready', true],
-  ]
   return (
-    <div className="phone" data-ui aria-label="The Relay Arc home screen">
+    <div className="phone" data-ui aria-label="The Relay Arc home screen on a phone">
+      <span className="ph-btn ph-btn-l1" aria-hidden />
+      <span className="ph-btn ph-btn-l2" aria-hidden />
+      <span className="ph-btn ph-btn-r" aria-hidden />
       <div className="phone-screen">
-        <div className="ph-notch" aria-hidden />
-        <p style={{ fontSize: '13px', color: INK2, marginTop: '34px' }}>Good morning</p>
-        <p style={{ fontSize: '30px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1 }}>Asha</p>
-        <div className="ph-sos">
-          <span style={{ fontSize: '40px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>SOS</span>
-          <span style={{ fontSize: '13px', opacity: 0.9, marginTop: '6px' }}>Tap to start</span>
+        <div className="ph-status" aria-hidden>
+          <span>9:41</span>
+          <span className="ph-island" />
+          <span className="ph-icons">
+            <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="0.7" /><rect x="4.6" y="5" width="3" height="6" rx="0.7" /><rect x="9.2" y="2.5" width="3" height="8.5" rx="0.7" /><rect x="13.8" y="0" width="3" height="11" rx="0.7" /></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.2" fill="none" stroke="currentColor" opacity="0.4" /><rect x="2" y="2" width="15" height="8" rx="1.8" /><rect x="23" y="4" width="1.6" height="4" rx="0.8" opacity="0.45" /></svg>
+          </span>
         </div>
-        <div className="ph-list">
-          {rows.map(([k, v, good]) => (
-            <div key={k} className="ph-row">
-              <span>{k}</span>
-              <span style={{ fontWeight: 700, color: good ? GREEN : INK }}>{v}</span>
+        <div className="ph-body">
+          <div className="ph-top">
+            <img src="/logo-wordmark.png" alt="" style={{ height: '15px', width: 'auto' }} />
+            <span style={{ display: 'flex', gap: '5px' }}>
+              <span className="ph-chip">Search</span>
+              <span className="ph-chip">Settings</span>
+            </span>
+          </div>
+          <p style={{ fontSize: '10.5px', color: INK2, marginTop: '14px', fontWeight: 600 }}>Good morning · Fri, Nov 13</p>
+          <p style={{ fontSize: '30px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05 }}>Asha</p>
+          <span className="ph-cond">POTS</span>
+          <div className="ph-sos">
+            <span style={{ fontSize: '44px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 0.95 }}>SOS</span>
+            <span style={{ fontSize: '11px', marginTop: '8px', lineHeight: 1.35 }}>Tap to start. Finds a hospital and sends your details.</span>
+          </div>
+          <div className="ph-tiles">
+            <div className="ph-tile">
+              <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Daily check in</span>
+              <span style={{ fontSize: '10px', opacity: 0.85 }}>Chat for 2 minutes</span>
             </div>
-          ))}
+            <div className="ph-tile">
+              <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Vitals check</span>
+              <span style={{ fontSize: '10px', opacity: 0.85 }}>Pulse and breathing</span>
+            </div>
+          </div>
+          <div className="ph-list">
+            <div className="ph-row">
+              <span>
+                <b>Emergency contacts</b>
+                <i>2 contacts ready to text</i>
+              </span>
+              <span aria-hidden>›</span>
+            </div>
+            <div className="ph-row">
+              <span>
+                <b>Medical profile</b>
+                <i>Conditions, medicines and allergies</i>
+              </span>
+              <span aria-hidden>›</span>
+            </div>
+          </div>
         </div>
+        <div className="ph-dock" aria-hidden>
+          <span className="on">Home</span>
+          <span>Check in</span>
+          <span className="ph-dock-sos">SOS</span>
+          <span>Meds</span>
+          <span>Symptoms</span>
+        </div>
+        <span className="ph-homebar" aria-hidden />
       </div>
     </div>
   )
@@ -276,14 +317,32 @@ export default function Home() {
         .frag { padding: 28px; }
         .hosp { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; }
         .bubble { background: ${MINT}; padding: 14px 18px; font-size: 17px; line-height: 1.5; border-radius: 18px 18px 18px 0; }
-        .phone { width: 300px; margin: 0 auto; background: ${INK}; padding: 10px; border-radius: 48px; }
-        .phone-screen { position: relative; background: ${LEAF}; border-radius: 38px; padding: 22px 22px 28px; }
-        .ph-notch { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 84px; height: 24px; background: ${INK}; border-radius: 14px; }
-        .ph-sos { background: ${SOS}; color: #fff; border-radius: 20px; box-shadow: 0 12px 28px rgba(163,52,23,0.35); display: flex; flex-direction: column; justify-content: center; padding: 26px 22px; margin: 20px 0 14px; min-height: 132px; }
-        .ph-list { background: rgba(255,255,255,0.6); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); padding: 4px 16px; border-radius: 18px; }
-        .ph-row { display: flex; justify-content: space-between; padding: 14px 0; font-size: 14px; }
-        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.1); } /* taste-skill-ignore: app UI row divider */
-        .nav { position: fixed; top: 12px; left: 16px; right: 16px; max-width: 1240px; margin: 0 auto; z-index: 60; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 12px 10px 22px; border-radius: 999px; }
+        .phone { position: relative; width: 300px; margin: 0 auto; padding: 11px; border-radius: 52px; background: #1B1B1A; box-shadow: inset 0 0 0 1.5px #55554F, inset 0 0 0 4px #0C0C0B, 0 30px 60px rgba(30,58,35,0.28), 0 8px 18px rgba(20,20,19,0.18); } /* taste-skill-ignore: device frame */
+        .ph-btn { position: absolute; width: 3px; background: #2A2A28; border-radius: 2px; }
+        .ph-btn-l1 { left: -3px; top: 118px; height: 30px; }
+        .ph-btn-l2 { left: -3px; top: 164px; height: 54px; }
+        .ph-btn-r { right: -3px; top: 150px; height: 78px; }
+        .phone-screen { position: relative; overflow: hidden; border-radius: 42px; height: 600px; display: flex; flex-direction: column; background: radial-gradient(260px 260px at 95% -6%, rgba(179,221,172,0.95), transparent 65%), radial-gradient(240px 240px at -10% 40%, rgba(179,221,172,0.8), transparent 65%), radial-gradient(220px 220px at 105% 90%, rgba(86,128,78,0.3), transparent 65%), #F7F5EE; }
+        .ph-status { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 13px 24px 0 28px; font-size: 13.5px; font-weight: 700; color: ${INK}; }
+        .ph-island { width: 86px; height: 25px; border-radius: 16px; background: #0C0C0B; }
+        .ph-icons { display: flex; gap: 5px; justify-content: flex-end; align-items: center; fill: ${INK}; color: ${INK}; }
+        .ph-body { padding: 14px 16px 0; flex: 1; }
+        .ph-top { display: flex; justify-content: space-between; align-items: center; }
+        .ph-chip { font-size: 9.5px; font-weight: 700; padding: 5px 8px; border-radius: 5px; background: rgba(255,253,248,0.7); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8); } /* taste-skill-ignore: app chip */
+        .ph-cond { display: inline-block; margin-top: 7px; font-size: 9.5px; font-weight: 700; color: #fff; background: ${FOREST}; padding: 3px 9px; border-radius: 4px; }
+        .ph-sos { background: ${SOS}; color: #fff; border-radius: 6px; display: flex; flex-direction: column; padding: 18px 18px 16px; margin: 12px 0 9px; }
+        .ph-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .ph-tile { display: grid; gap: 3px; padding: 12px; border-radius: 6px; background: #2F5233; color: #fff; }
+        .ph-list { margin-top: 9px; padding: 2px 12px; border-radius: 6px; background: rgba(255,253,248,0.62); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.75); } /* taste-skill-ignore: app panel */
+        .ph-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: 12px; }
+        .ph-row b { display: block; font-weight: 700; }
+        .ph-row i { display: block; font-style: normal; font-size: 9.5px; color: ${INK2}; margin-top: 1px; }
+        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.08); } /* taste-skill-ignore: app UI row divider */
+        .ph-dock { margin: 0 9px 16px; height: 48px; border-radius: 10px; background: rgba(30,58,35,0.86); color: rgba(255,255,255,0.75); display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 9.5px; padding: 0 4px; }
+        .ph-dock .on { color: #fff; font-weight: 700; }
+        .ph-dock-sos { background: ${SOS}; color: #fff; font-weight: 800; font-size: 11.5px; padding: 9px 0; border-radius: 5px; }
+        .ph-homebar { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 104px; height: 4px; border-radius: 3px; background: ${INK}; opacity: 0.85; }
+        .nav { position: fixed; top: 12px; left: 16px; right: 16px; max-width: 1240px; margin: 0 auto; z-index: 60; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 12px 10px 22px; border-radius: 12px; }
         .nav-links { display: flex; align-items: center; gap: 22px; }
         .nav-links a { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }
         .nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
@@ -392,7 +451,7 @@ export default function Home() {
           </figcaption>
         </figure>
 
-        <Chapter id="video" bg={INK} fg="#fff" tall={false}>
+        <Chapter id="video" bg={FOREST} fg="#fff" tall={false}>
           <div data-reveal>
             <h2 className="ds-title" style={{ marginBottom: '40px' }}>
               A simple demonstration
@@ -401,7 +460,7 @@ export default function Home() {
           </div>
         </Chapter>
 
-        <Chapter bg={SOS} fg="#fff">
+        <Chapter bg={LEAF} fg={INK}>
           <Split
             title="Press SOS and say what is happening"
             body="Type it or say it in English, Spanish, Hindi or Marathi. Your phone works out what kind of emergency it is, even with no signal."
@@ -442,7 +501,7 @@ export default function Home() {
           </div>
         </Chapter>
 
-        <Chapter bg={LEAF} fg={INK}>
+        <Chapter bg={PAPER} fg={INK}>
           <Split
             flip
             title="Check your pulse with your phone"
@@ -452,7 +511,7 @@ export default function Home() {
           </Split>
         </Chapter>
 
-        <Chapter id="partners" bg={INK} fg="#fff" tall={false}>
+        <Chapter id="partners" bg={FOREST} fg="#fff" tall={false}>
           <div data-reveal>
             <h2 className="ds-title" style={{ marginBottom: '40px' }}>
               Who we work with

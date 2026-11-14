@@ -89,7 +89,7 @@ export default function Settings() {
 
   const link = (title: string, sub: string, path: string, badge: string, danger = false) => (
     <button key={path} className="row" onClick={() => router.push(path)}>
-      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(163,52,23,0.12)', color: '#A33417' } : undefined}>
+      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(211,48,3,0.12)', color: '#D33003' } : undefined}>
         {badge}
       </span>
       <span style={{ flex: 1, minWidth: 0 }}>
@@ -105,13 +105,13 @@ export default function Settings() {
       {/* Header: who you are, and search */}
       <div style={{ padding: '52px 20px 20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
-          <button onClick={() => router.push('/dashboard')} className="glass" style={{ height: '42px', padding: '0 16px', borderRadius: '999px', font: 'inherit', fontSize: '14.5px', fontWeight: 600, cursor: 'pointer', color: '#141413' }}>
+          <button onClick={() => router.push('/dashboard')} className="glass" style={{ height: '42px', padding: '0 16px', borderRadius: '8px', font: 'inherit', fontSize: '14.5px', fontWeight: 600, cursor: 'pointer', color: '#141413' }}>
             ← Home
           </button>
           <SearchButton />
         </div>
         <div className="glass" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div aria-hidden style={{ width: '60px', height: '60px', borderRadius: '20px', background: '#1E3A23', color: '#fff', display: 'grid', placeItems: 'center', fontSize: '26px', fontWeight: 800, flexShrink: 0 }}>
+          <div aria-hidden style={{ width: '60px', height: '60px', borderRadius: '8px', background: '#2F5233', color: '#fff', display: 'grid', placeItems: 'center', fontSize: '26px', fontWeight: 800, flexShrink: 0 }}>
             {first.charAt(0).toUpperCase()}
           </div>
           <div style={{ minWidth: 0 }}>
@@ -236,8 +236,8 @@ function SignOutRow() {
   return (
     <>
       <button className="row" onClick={() => setAsk(true)}>
-        <span className="row-badge" aria-hidden style={{ background: 'rgba(163,52,23,0.12)', color: '#A33417' }}>Out</span>
-        <span className="row-title" style={{ color: '#A33417' }}>Sign out</span>
+        <span className="row-badge" aria-hidden style={{ background: 'rgba(211,48,3,0.12)', color: '#D33003' }}>Out</span>
+        <span className="row-title" style={{ color: '#D33003' }}>Sign out</span>
       </button>
       {ask && (
         <div className="cmdk-overlay" style={{ alignItems: 'center', paddingTop: '16px' }} onMouseDown={(e) => e.target === e.currentTarget && setAsk(false)}>

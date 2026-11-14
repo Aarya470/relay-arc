@@ -17,7 +17,7 @@ const CREAM = '#B3DDAC',
   WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757',
-  CRIT = '#A33417'
+  CRIT = '#D33003'
 const mono = 'var(--font-mono, monospace)'
 
 const STORE_KEY = 'relay-arc:card:v1'

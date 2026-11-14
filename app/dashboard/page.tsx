@@ -87,8 +87,8 @@ const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.08)'
-const RED = '#A33417'
-const RED_DIM = 'rgba(163,52,23,0.07)'
+const RED = '#D33003'
+const RED_DIM = 'rgba(211,48,3,0.07)'
 const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER = '#7C5200'
@@ -1199,8 +1199,8 @@ export default function Dashboard() {
         <motion.div variants={fadeUp}>
           <style>{`
             @keyframes sos-pulse {
-              0%, 100% { box-shadow: 0 0 0 0 rgba(163,52,23,0.5); }
-              50% { box-shadow: 0 0 0 14px rgba(163,52,23,0); }
+              0%, 100% { box-shadow: 0 0 0 0 rgba(211,48,3,0.5); }
+              50% { box-shadow: 0 0 0 14px rgba(211,48,3,0); }
             }
           `}</style>
           <motion.button
@@ -1359,7 +1359,7 @@ export default function Dashboard() {
             onClick={() => router.push('/checkin')}
             className="sh-cut"
             style={{
-              background: checkinToday ? SURFACE : T1,
+              background: checkinToday ? SURFACE : '#2F5233',
               color: checkinToday ? T1 : '#FFFFFF',
               border: 'none',
               padding: '22px 18px',
@@ -1378,7 +1378,7 @@ export default function Dashboard() {
             onClick={() => router.push('/check')}
             className="sh-cut"
             style={{
-              background: T1,
+              background: '#2F5233',
               color: '#FFFFFF',
               border: 'none',
               padding: '22px 18px',

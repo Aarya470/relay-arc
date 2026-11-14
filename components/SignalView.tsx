@@ -50,7 +50,7 @@ function drawLine(
   xs.forEach((x, i) => (i ? ctx.lineTo(px(x), py(ys[i])) : ctx.moveTo(px(x), py(ys[i]))))
   ctx.stroke()
   if (opts.marker != null) {
-    ctx.strokeStyle = '#A33417'
+    ctx.strokeStyle = '#D33003'
     ctx.setLineDash([6, 4])
     ctx.beginPath()
     ctx.moveTo(px(opts.marker), 0)
@@ -58,7 +58,7 @@ function drawLine(
     ctx.stroke()
     ctx.setLineDash([])
     if (opts.label) {
-      ctx.fillStyle = '#A33417'
+      ctx.fillStyle = '#D33003'
       ctx.font = `bold 22px monospace`
       ctx.fillText(opts.label, Math.min(px(opts.marker) + 8, W - 160), 26)
     }

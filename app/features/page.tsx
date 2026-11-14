@@ -14,7 +14,7 @@ const BORDER = '#98C890',
 const GREEN = '#56804E',
   GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757',
-  CRIT = '#A33417',
+  CRIT = '#D33003',
   WARN = '#7C5200'
 const mono = 'var(--font-mono, monospace)'
 const WRAP = {
@@ -103,7 +103,7 @@ export default function Features() {
   const router = useRouter()
 
   return (
-    <div className="ds-chapters" style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div className="ds-chapters" style={{ minHeight: '100dvh' }}>
       <SiteHeader />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}

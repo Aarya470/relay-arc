@@ -268,15 +268,15 @@ export default function DriverDashboard() {
         <div
           style={{
             marginLeft: 'auto',
-            background: requests.length > 0 ? 'rgba(163,52,23,0.15)' : '#F2F0E8',
-            border: `1px solid ${requests.length > 0 ? 'rgba(163,52,23,0.3)' : '#98C890'}`,
+            background: requests.length > 0 ? 'rgba(211,48,3,0.15)' : '#F2F0E8',
+            border: `1px solid ${requests.length > 0 ? 'rgba(211,48,3,0.3)' : '#98C890'}`,
             borderRadius: '20px',
             padding: '4px 10px',
           }}
         >
           <p
             style={{
-              color: requests.length > 0 ? '#A33417' : '#5C5A52',
+              color: requests.length > 0 ? '#D33003' : '#5C5A52',
               fontFamily: 'monospace',
               fontSize: '11px',
             }}
@@ -321,7 +321,7 @@ export default function DriverDashboard() {
                   transition={{ delay: i * 0.05 }}
                   style={{
                     background: '#FFFFFF',
-                    border: '1px solid rgba(163,52,23,0.2)',
+                    border: '1px solid rgba(211,48,3,0.2)',
                     borderRadius: '20px',
                     overflow: 'hidden',
                   }}
@@ -340,13 +340,13 @@ export default function DriverDashboard() {
                           width: '8px',
                           height: '8px',
                           borderRadius: '50%',
-                          background: '#A33417',
+                          background: '#D33003',
                           flexShrink: 0,
                         }}
                         animate={{ opacity: [1, 0.3, 1] }}
                         transition={{ duration: 1, repeat: Infinity }}
                       />
-                      <p style={{ color: '#A33417', fontWeight: 600, fontSize: '13px' }}>
+                      <p style={{ color: '#D33003', fontWeight: 600, fontSize: '13px' }}>
                         {req.emergency_type?.replace('_', ' ')} emergency
                       </p>
                       <p

@@ -70,7 +70,7 @@ export default function EmergencyStatus() {
       {/* Alert bar */}
       <div
         style={{
-          background: '#A33417',
+          background: '#D33003',
           padding: '10px 20px',
           display: 'flex',
           alignItems: 'center',
@@ -148,18 +148,18 @@ export default function EmergencyStatus() {
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: 'rgba(163,52,23,0.10)',
-            border: '1px solid rgba(163,52,23,0.25)',
+            background: 'rgba(211,48,3,0.10)',
+            border: '1px solid rgba(211,48,3,0.25)',
             borderRadius: 0,
             padding: '6px 12px',
           }}
         >
           <motion.div
-            style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#A33417' }}
+            style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D33003' }}
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
           />
-          <span style={{ color: '#A33417', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
+          <span style={{ color: '#D33003', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
             Live
           </span>
         </div>
@@ -313,15 +313,15 @@ export default function EmergencyStatus() {
         {/* Warning */}
         <div
           style={{
-            background: 'rgba(163,52,23,0.06)',
-            border: '1px solid rgba(163,52,23,0.18)',
+            background: 'rgba(211,48,3,0.06)',
+            border: '1px solid rgba(211,48,3,0.18)',
             borderRadius: 0,
             padding: '16px',
           }}
         >
           <p
             style={{
-              color: 'rgba(163,52,23,0.70)',
+              color: 'rgba(211,48,3,0.70)',
               fontSize: '13px',
               letterSpacing: '0',
               marginBottom: '8px',
@@ -337,7 +337,7 @@ export default function EmergencyStatus() {
             whileTap={{ scale: 0.97 }}
             className="sh-slant" style={{
               width: '100%',
-              background: '#A33417',
+              background: '#D33003',
               color: 'white',
               fontWeight: 700,
               fontSize: '14px',

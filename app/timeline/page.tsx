@@ -443,8 +443,8 @@ export default function Timeline() {
                             {
                               label: 'Watch out for',
                               items: phase.watchout,
-                              color: '#A33417',
-                              dot: '#A33417',
+                              color: '#D33003',
+                              dot: '#D33003',
                             },
                             {
                               label: 'What to do',

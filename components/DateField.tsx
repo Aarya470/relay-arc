@@ -7,7 +7,7 @@ const INK = '#141413',
   INK3 = '#5C5A52'
 const BORDER = '#98C890',
   WHITE = '#FFFFFF',
-  CRIT = '#A33417'
+  CRIT = '#D33003'
 
 const MONTHS = [
   'January',

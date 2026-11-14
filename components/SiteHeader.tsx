@@ -14,7 +14,7 @@ export default function SiteHeader() {
   return (
     <header style={{ padding: '0 16px', height: '88px' }}>
       <style>{`
-        .sh-bar { position: fixed; top: 12px; left: 16px; right: 16px; max-width: 1168px; margin: 0 auto; z-index: 60; display: flex; justify-content: space-between; align-items: center; gap: 12px 22px; padding: 10px 12px 10px 22px; border-radius: 999px; }
+        .sh-bar { position: fixed; top: 12px; left: 16px; right: 16px; max-width: 1168px; margin: 0 auto; z-index: 60; display: flex; justify-content: space-between; align-items: center; gap: 12px 22px; padding: 10px 12px 10px 22px; border-radius: 12px; }
         @media (max-width: 900px) { .sh-l { display: none; } }
         .sh-links { display: flex; gap: 8px 26px; flex-wrap: wrap; align-items: center; }
         .sh-links a.sh-l { color: #141413; font-size: 16px; font-weight: 600; text-decoration: none; padding: 6px 0; }

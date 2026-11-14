@@ -40,7 +40,7 @@ const VITAL_RANGES = {
     unit: 'bpm',
     label: 'Heart Rate',
     icon: Heart,
-    color: '#A33417',
+    color: '#D33003',
   },
   systolic: {
     low: 70,
@@ -94,7 +94,7 @@ function statusForValue(key: string, val: number | null) {
 
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
   ok: { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
-  high: { bg: 'rgba(163,52,23,0.12)', border: 'rgba(163,52,23,0.28)', text: '#A33417' },
+  high: { bg: 'rgba(211,48,3,0.12)', border: 'rgba(211,48,3,0.28)', text: '#D33003' },
   low: { bg: 'rgba(168,114,0,0.12)', border: 'rgba(168,114,0,0.28)', text: '#7C5200' },
   empty: { bg: '#F2F0E8', border: '#F2F0E8', text: '#5C5A52' },
 }
@@ -203,7 +203,7 @@ function trendArrow(vals: number[]): { symbol: string; color: string } {
   if (prior.length === 0) return { symbol: '→', color: '#5C5A52' }
   const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length
   const delta = ((avg(recent) - avg(prior)) / avg(prior)) * 100
-  if (delta > 2) return { symbol: '↑', color: '#A33417' }
+  if (delta > 2) return { symbol: '↑', color: '#D33003' }
   if (delta < -2) return { symbol: '↓', color: '#42623C' }
   return { symbol: '→', color: '#5C5A52' }
 }
@@ -669,7 +669,7 @@ export default function VitalsPage() {
                 aria-label="Heart rate in beats per minute"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.heart_rate ? 'rgba(163,52,23,0.35)' : '#98C890',
+                  borderColor: vitals.heart_rate ? 'rgba(211,48,3,0.35)' : '#98C890',
                 }}
                 placeholder=". "
                 value={vitals.heart_rate}

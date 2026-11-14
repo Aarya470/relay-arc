@@ -25,7 +25,7 @@ const T1 = '#141413',
 // which measured 2.70:1 and 1.01:1. A light tint of the page restores both.
 const BORDER = '#7EB382',
   BG2 = '#CEE9C9'
-const RED = '#A33417',
+const RED = '#D33003',
   ACCENT = '#42623C'
 const WRAP = {
   maxWidth: '1120px',
@@ -119,7 +119,7 @@ export default function Engineering() {
   const router = useRouter()
 
   return (
-    <div className="ds-chapters" style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div className="ds-chapters" style={{ minHeight: '100dvh' }}>
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
       <SiteHeader />
 

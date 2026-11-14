@@ -118,9 +118,9 @@
 
   /* Emergency / critical — 6.51:1 on cream, 6.86:1 with white on it.
      Still in the orange family, dark enough to read as danger. */
-  --crit:      #A33417;
-  --crit-dim:  #8F2E14;
-  --crit-soft: rgba(163,52,23,0.08);
+  --crit:      #D33003;
+  --crit-dim:  #B02802;
+  --crit-soft: rgba(211,48,3,0.08);
 
   /* Warning / watch.
      --warn is #7C5200, moved down from #A87200 for a reason worth writing out.
@@ -134,7 +134,7 @@
 
      THE THREE STATUS COLOURS ARE NOW THE SAME BRIGHTNESS, AND THAT IS THE
      TRADE, NOT AN OVERSIGHT. To clear 4.5:1 on #B3DDAC a colour has to be
-     about as dark as #7A5300, and --crit (#A33417, 4.53:1) and --green-deep
+     about as dark as #7A5300, and --crit (#D33003, 4.53:1) and --green-deep
      (#42623C, 4.55:1) are already sitting there. Measured against each other
      the three now differ by 1.00:1 and 1.01:1. The note at the top of this file
      warns about exactly that, and it is unavoidable: this background is not
@@ -158,9 +158,9 @@
 
   /* Legacy aliases — older rules still reference these names. Kept pointing at
      the new palette so nothing renders in the old blue-grey/red scheme. */
-  --red:      #A33417;
-  --red-dim:  #8F2E14;
-  --red-soft: rgba(163,52,23,0.08);
+  --red:      #D33003;
+  --red-dim:  #B02802;
+  --red-soft: rgba(211,48,3,0.08);
   --red-glow: none;
   --blue:      #42623C;
   --blue-dim:  #344D2F;
@@ -323,18 +323,18 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 /* ── Relay Arc 2026 system (see DESIGN.md) ─────────────────────────── */
 :root {
   --leaf: #B3DDAC;
-  --paper: #FFFFFF;
-  --mint: #DDEFD9;
+  --paper: #F7F5EE;
+  --mint: #E6F1E1;
   --forest: #1E3A23;
   --ink: #141413;
-  --sos: #A33417;
+  --sos: #D33003;
   --ink-2: #3F3D36;
   --slant: 14px;
   --cut: 18px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-input, select, textarea { border-radius: 14px !important; }
+input, select, textarea { border-radius: 6px !important; }
 
 /* Plain type: no spaced capitals, no code fonts outside code, no gradients. */
 *:not(pre):not(code):not(pre *):not(code *) {
@@ -354,12 +354,12 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
 .ds-small { font-size: 14px; line-height: 1.5; }
 
 /* Shapes */
-.sh-square { border-radius: 14px !important; }
-.sh-pill { border-radius: 999px !important; }
+.sh-square { border-radius: 4px !important; }
+.sh-pill { border-radius: 6px !important; }
 /* Main actions are plain squares. (Was a slanted parallelogram; removed.) */
-.sh-slant { border-radius: 14px !important; }
+.sh-slant { border-radius: 6px !important; }
 /* Cards. (Was a clipped corner; now a soft rounded panel.) */
-.sh-cut { border-radius: 22px !important; }
+.sh-cut { border-radius: 8px !important; }
 
 /* Buttons */
 .ds-btn {
@@ -371,7 +371,7 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
 .ds-btn:active { transform: scale(0.97); }
 .ds-btn:focus-visible { outline: 3px solid currentColor; outline-offset: -6px; }
 .ds-btn-sos { background: var(--sos); color: #fff; }
-.ds-btn-ink { background: var(--ink); color: #fff; }
+.ds-btn-ink { background: #2F5233; color: #fff; }
 .ds-btn-paper { background: var(--paper); color: var(--ink); }
 .ds-btn-line { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px currentColor; }
 .ds-btn-sos:hover, .ds-btn-ink:hover { opacity: 0.9; }
@@ -401,16 +401,16 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
    Depth comes from three things: a soft layered background, frosted panels
    that let it show through, and small motion on anything you can press. */
 :root {
-  --glass: rgba(255, 255, 255, 0.58);
+  --glass: rgba(255, 253, 248, 0.6);
   --glass-strong: rgba(255, 255, 255, 0.78);
-  --glass-dark: rgba(20, 24, 20, 0.72);
+  --glass-dark: rgba(30, 58, 35, 0.82);
   --glass-line: rgba(255, 255, 255, 0.72);
   --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset, 0 12px 32px rgba(30, 58, 35, 0.12);
-  --radius: 22px;
+  --radius: 10px;
 }
 
 /* The layered background behind the signed in app. */
-.app-bg { background: #B3DDAC; isolation: isolate; }
+.app-bg { background: #F7F5EE; isolation: isolate; }
 .app-bg::before {
   content: '';
   position: fixed;
@@ -418,11 +418,11 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(60vmax 60vmax at 88% -12%, rgba(255, 255, 255, 0.85), transparent 62%),
-    radial-gradient(52vmax 52vmax at -12% 28%, rgba(96, 180, 120, 0.55), transparent 62%),
-    radial-gradient(46vmax 46vmax at 104% 78%, rgba(246, 214, 160, 0.55), transparent 62%),
-    radial-gradient(42vmax 42vmax at 18% 112%, rgba(30, 58, 35, 0.28), transparent 62%),
-    #B3DDAC;
+    radial-gradient(58vmax 58vmax at 92% -14%, rgba(179, 221, 172, 0.95), transparent 62%),
+    radial-gradient(52vmax 52vmax at -14% 30%, rgba(179, 221, 172, 0.8), transparent 62%),
+    radial-gradient(46vmax 46vmax at 106% 82%, rgba(86, 128, 78, 0.30), transparent 62%),
+    radial-gradient(40vmax 40vmax at 14% 114%, rgba(179, 221, 172, 0.7), transparent 62%),
+    #F7F5EE;
 }
 
 .glass {
@@ -469,7 +469,7 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
   font: inherit;
   color: var(--ink);
   cursor: pointer;
-  border-radius: 16px;
+  border-radius: 6px;
   transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out);
 }
 .row:hover { background: rgba(255, 255, 255, 0.55); }
@@ -479,7 +479,7 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
 .row-sub { font-size: 13px; color: #3F3D36; margin-top: 2px; }
 .row-end { margin-left: auto; color: #3F3D36; font-size: 14px; flex-shrink: 0; }
 .row-badge {
-  width: 38px; height: 38px; flex-shrink: 0; border-radius: 12px;
+  width: 38px; height: 38px; flex-shrink: 0; border-radius: 6px;
   display: grid; place-items: center; font-size: 14px; font-weight: 800;
   background: rgba(30, 58, 35, 0.1); color: #1E3A23;
 }
@@ -495,7 +495,7 @@ button:active:not(:disabled) { transform: scale(0.97); }
 }
 
 /* Old square corners written inline become soft ones. */
-[style*='border-radius:0;'], [style*='border-radius: 0px'], [style*='border-radius:0px'] { border-radius: 14px !important; }
+[style*='border-radius:0;'], [style*='border-radius: 0px'], [style*='border-radius:0px'] { border-radius: 4px !important; }
 
 /* Accordion: the panel opens by growing a grid row, so no height is measured. */
 .acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 280ms var(--ease-out); }
@@ -512,7 +512,7 @@ button:active:not(:disabled) { transform: scale(0.97); }
 .cmdk-input { width: 100%; border: 0 !important; background: transparent; padding: 18px 20px; font: inherit; font-size: 17px; color: var(--ink); outline: none; border-radius: 0 !important; }
 .cmdk-list { max-height: min(52vh, 420px); overflow-y: auto; padding: 6px 8px 10px; }
 .cmdk-item[data-active='true'] { background: rgba(255, 255, 255, 0.8); }
-.kbd { font: inherit; font-size: 12px; font-weight: 700; padding: 3px 7px; border-radius: 7px; background: rgba(20, 20, 19, 0.08); color: #141413; }
+.kbd { font: inherit; font-size: 12px; font-weight: 700; padding: 3px 7px; border-radius: 4px; background: rgba(20, 20, 19, 0.08); color: #141413; }
 
 @media (prefers-reduced-motion: reduce) {
   button, .row, .lift, .acc-panel, .acc-chevron, .cmdk-panel, .cmdk-overlay { transition: none !important; animation: none !important; }

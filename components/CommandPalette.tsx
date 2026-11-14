@@ -196,7 +196,7 @@ export default function CommandPalette() {
                       style={{ padding: '11px 12px' }}
                     >
                       <span style={{ flex: 1 }}>
-                        <span className="row-title" style={{ color: i.id === 'sos' || i.id === 'call' ? '#A33417' : undefined }}>
+                        <span className="row-title" style={{ color: i.id === 'sos' || i.id === 'call' ? '#D33003' : undefined }}>
                           {i.label}
                         </span>
                         {i.hint ? <span className="row-sub" style={{ display: 'block' }}>{i.hint}</span> : null}
@@ -263,7 +263,7 @@ export function SearchButton({ dark = false }: { dark?: boolean }) {
       onClick={openCommandPalette}
       aria-label="Search. Shortcut Command K"
       className={dark ? 'glass-dark' : 'glass'}
-      style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', height: '42px', padding: '0 8px 0 14px', whiteSpace: 'nowrap', borderRadius: '999px', font: 'inherit', fontSize: '14.5px', fontWeight: 600, cursor: 'pointer', color: dark ? '#fff' : '#141413' }}
+      style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', height: '42px', padding: '0 8px 0 14px', whiteSpace: 'nowrap', borderRadius: '8px', font: 'inherit', fontSize: '14.5px', fontWeight: 600, cursor: 'pointer', color: dark ? '#fff' : '#141413' }}
     >
       Search
       <span className="kbd" style={dark ? { background: 'rgba(255,255,255,0.16)', color: '#fff' } : undefined}>

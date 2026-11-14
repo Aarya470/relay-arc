@@ -16,8 +16,8 @@ const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.08)'
-const RED = '#A33417'
-const RED_DIM = 'rgba(163,52,23,0.07)'
+const RED = '#D33003'
+const RED_DIM = 'rgba(211,48,3,0.07)'
 const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER = '#7C5200'
@@ -1008,7 +1008,7 @@ export default function Medications() {
                     height: '30px',
                     borderRadius: 0,
                     background: RED_DIM,
-                    border: `1px solid rgba(163,52,23,0.14)`,
+                    border: `1px solid rgba(211,48,3,0.14)`,
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',

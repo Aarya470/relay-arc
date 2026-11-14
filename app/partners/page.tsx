@@ -31,7 +31,7 @@ const PARTNERS: Partner[] = [
 
 export default function Partners() {
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
+    <div style={{ minHeight: '100dvh' }}>
       <SiteHeader />
       <div style={{ maxWidth: '1168px', margin: '0 auto', padding: '56px 24px 72px' }} data-reveal>
         <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)' }}>
@@ -44,7 +44,7 @@ export default function Partners() {
       {PARTNERS.map((p, i) => (
         <section
           key={p.name}
-          style={{ background: i % 2 === 0 ? '#FFFFFF' : '#DDEFD9', padding: 'clamp(56px, 8vw, 96px) 24px' }}
+          style={{ background: i % 2 === 0 ? '#F7F5EE' : '#E6F1E1', padding: 'clamp(56px, 8vw, 96px) 24px' }}
         >
           <div
             data-reveal
@@ -62,7 +62,7 @@ export default function Partners() {
               style={{
                 width: '240px',
                 height: '140px',
-                background: i % 2 === 0 ? '#DDEFD9' : '#FFFFFF',
+                background: i % 2 === 0 ? '#E6F1E1' : '#F7F5EE',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

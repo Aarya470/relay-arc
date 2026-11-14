@@ -31,7 +31,7 @@ export default function Donate() {
   const inner: React.CSSProperties = { maxWidth: '1120px', margin: '0 auto' }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#B3DDAC', color: T1 }}>
+    <div style={{ minHeight: '100dvh', color: T1 }}>
       <SiteHeader />
       <div style={{ ...inner, maxWidth: '1168px', padding: '56px 24px 80px' }} data-reveal>
         <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)' }}>
@@ -43,7 +43,7 @@ export default function Donate() {
         </p>
       </div>
 
-      <section style={block('#FFFFFF')}>
+      <section style={block('#F7F5EE')}>
         <div style={inner} data-reveal>
           <h2 className="ds-title" style={{ fontSize: 'clamp(30px, 4vw, 52px)' }}>
             Zelle
@@ -69,7 +69,7 @@ export default function Donate() {
       </section>
 
       {paypalReady && (
-        <section style={block('#DDEFD9')}>
+        <section style={block('#E6F1E1')}>
           <div style={inner} data-reveal>
             <h2 className="ds-title" style={{ fontSize: 'clamp(30px, 4vw, 52px)' }}>
               PayPal or card

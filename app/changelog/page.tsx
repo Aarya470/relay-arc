@@ -11,7 +11,7 @@ const BORDER = '#7EB382',
   CREAM = '#4B8150'
 const GREEN_DEEP = '#42623C',
   ORANGE = '#D97757',
-  CRIT = '#A33417'
+  CRIT = '#D33003'
 const mono = 'var(--font-mono, monospace)'
 
 type Kind = 'shipped' | 'fixed' | 'honest'
@@ -25,7 +25,7 @@ interface Entry {
 
 const KIND: Record<Kind, { label: string; color: string }> = {
   shipped: { label: 'SHIPPED', color: GREEN_DEEP },
-  fixed: { label: 'FIXED', color: '#A33417' },
+  fixed: { label: 'FIXED', color: '#D33003' },
   honest: { label: 'CORRECTION', color: CRIT },
 }
 

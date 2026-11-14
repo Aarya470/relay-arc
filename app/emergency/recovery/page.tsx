@@ -303,7 +303,7 @@ function RecoveryContent() {
         <Card delay={0.15} highlight>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
             <AlertTriangle
-              style={{ width: '16px', height: '16px', flexShrink: 0, color: '#A33417' }}
+              style={{ width: '16px', height: '16px', flexShrink: 0, color: '#D33003' }}
             />
             <CardLabel noMargin danger>
               Watch out for
@@ -319,11 +319,11 @@ function RecoveryContent() {
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    background: '#A33417',
+                    background: '#D33003',
                   }}
                 />
                 <span
-                  style={{ fontSize: '14px', lineHeight: 1.5, color: '#A33417', opacity: 0.88 }}
+                  style={{ fontSize: '14px', lineHeight: 1.5, color: '#D33003', opacity: 0.88 }}
                 >
                   {w}
                 </span>
@@ -334,10 +334,10 @@ function RecoveryContent() {
             style={{
               marginTop: '16px',
               paddingTop: '12px',
-              borderTop: '1px solid rgba(163,52,23,0.20)',
+              borderTop: '1px solid rgba(211,48,3,0.20)',
               fontSize: '14px',
               fontWeight: 600,
-              color: '#A33417',
+              color: '#D33003',
             }}
           >
             Call emergency services immediately if any of these occur.
@@ -432,8 +432,8 @@ function Card({
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 340, damping: 26, delay }}
       style={{
-        background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
+        background: highlight ? 'rgba(211,48,3,0.08)' : '#FFFFFF',
+        border: highlight ? '1px solid rgba(211,48,3,0.22)' : '1px solid #98C890',
         borderRadius: 0,
         padding: '16px',
       }}
@@ -459,7 +459,7 @@ function CardLabel({
         fontWeight: 600,
         letterSpacing: '0',
         marginBottom: noMargin ? '0' : '8px',
-        color: danger ? '#A33417' : '#5C5A52',
+        color: danger ? '#D33003' : '#5C5A52',
       }}
     >
       {children}

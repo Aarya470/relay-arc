@@ -192,7 +192,7 @@ function BriefContent() {
       {/* Red alert header */}
       <div
         className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3"
-        style={{ background: '#A33417' }}
+        style={{ background: '#D33003' }}
       >
         <button
           onClick={() => router.back()}
@@ -225,13 +225,13 @@ function BriefContent() {
       <div
         className="w-full text-center py-3 px-4"
         style={{
-          background: 'rgba(163,52,23,0.10)',
-          borderBottom: '1px solid rgba(163,52,23,0.18)',
+          background: 'rgba(211,48,3,0.10)',
+          borderBottom: '1px solid rgba(211,48,3,0.18)',
         }}
       >
         <p
           className="font-black tracking-widest uppercase"
-          style={{ fontSize: '0.85rem', letterSpacing: '0.20em', color: '#A33417' }}
+          style={{ fontSize: '0.85rem', letterSpacing: '0.20em', color: '#D33003' }}
         >
           SHOW TO HOSPITAL STAFF
         </p>
@@ -261,7 +261,7 @@ function BriefContent() {
           <SectionLabel>BLOOD TYPE</SectionLabel>
           <p
             className="font-black tracking-tight"
-            style={{ color: '#A33417', lineHeight: 1.1, fontSize: '3rem', fontFamily: 'inherit' }}
+            style={{ color: '#D33003', lineHeight: 1.1, fontSize: '3rem', fontFamily: 'inherit' }}
           >
             {profile?.blood_type || '?'}
           </p>
@@ -271,7 +271,7 @@ function BriefContent() {
         <Section highlight={!!profile?.allergies}>
           <SectionLabel>ALLERGIES</SectionLabel>
           {profile?.allergies ? (
-            <p className="font-semibold text-base" style={{ color: '#A33417' }}>
+            <p className="font-semibold text-base" style={{ color: '#D33003' }}>
               {profile.allergies}
             </p>
           ) : (
@@ -311,8 +311,8 @@ function BriefContent() {
         <Section>
           <SectionLabel>EMERGENCY</SectionLabel>
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#A33417' }} />
-            <p className="text-lg font-bold" style={{ color: '#A33417' }}>
+            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#D33003' }} />
+            <p className="text-lg font-bold" style={{ color: '#D33003' }}>
               {emergencyLabel}
             </p>
           </div>
@@ -340,13 +340,13 @@ function BriefContent() {
             <div
               className="mt-3 rounded-xl p-3"
               style={{
-                background: 'rgba(163,52,23,0.07)',
-                border: '1px solid rgba(163,52,23,0.2)',
+                background: 'rgba(211,48,3,0.07)',
+                border: '1px solid rgba(211,48,3,0.2)',
               }}
             >
               <p
                 className="text-xs font-bold uppercase tracking-widest mb-1"
-                style={{ color: '#A33417', letterSpacing: '0.13em' }}
+                style={{ color: '#D33003', letterSpacing: '0.13em' }}
               >
                 Caution
               </p>
@@ -465,8 +465,8 @@ function Section({
       transition={{ type: 'spring', stiffness: 340, damping: 26 }}
       className="rounded-2xl p-4"
       style={{
-        background: highlight ? 'rgba(163,52,23,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(163,52,23,0.22)' : '1px solid #98C890',
+        background: highlight ? 'rgba(211,48,3,0.08)' : '#FFFFFF',
+        border: highlight ? '1px solid rgba(211,48,3,0.22)' : '1px solid #98C890',
         borderRadius: 0,
       }}
     >
