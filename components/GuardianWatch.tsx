@@ -6,7 +6,7 @@ import { emergencyNumber } from '@/lib/emergency-number'
 import { Phone, MessageSquare, HeartPulse, Check } from '@/lib/plain-icons'
 
 const T1 = '#141413'
-const RED = '#D33003'
+const RED = '#8A5A00'
 const MONO = 'var(--font-mono, monospace)'
 
 const FIRST_CHECK_MS = 60_000

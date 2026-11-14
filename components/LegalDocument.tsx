@@ -14,7 +14,7 @@ const T1 = '#141413' // inside the panel
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const BORDER = '#DCE6D6'
-const RED = '#D33003'
+const RED = '#8A5A00'
 
 // A real, reachable address is a legal requirement on both of these documents.
 // It used to be a personal Gmail, which put a private inbox on a public page

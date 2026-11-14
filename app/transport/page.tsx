@@ -228,15 +228,15 @@ export default function TransportRequest() {
                         width: '38px',
                         height: '38px',
                         borderRadius: 0,
-                        background: 'rgba(211,48,3,0.10)',
-                        border: '1px solid rgba(211,48,3,0.20)',
+                        background: 'rgba(255,177,0,0.10)',
+                        border: '1px solid rgba(255,177,0,0.20)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginBottom: '12px',
                       }}
                     >
-                      <type.Icon size={17} color="#D33003" />
+                      <type.Icon size={17} color="#8A5A00" />
                     </div>
                     <p
                       style={{
@@ -428,7 +428,7 @@ export default function TransportRequest() {
                 disabled={!selectedHospital || loading}
                 style={{
                   width: '100%',
-                  background: selectedHospital ? '#D33003' : '#F2F0E8',
+                  background: selectedHospital ? '#8A5A00' : '#F2F0E8',
                   color: selectedHospital ? 'white' : '#5C5A52',
                   fontWeight: 700,
                   fontSize: '15px',
@@ -440,7 +440,7 @@ export default function TransportRequest() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: selectedHospital ? '0 6px 20px rgba(211,48,3,0.45)' : 'none',
+                  boxShadow: selectedHospital ? '0 6px 20px rgba(255,177,0,0.45)' : 'none',
                 }}
               >
                 {loading ? (

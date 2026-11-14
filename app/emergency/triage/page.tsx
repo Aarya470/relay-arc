@@ -13,13 +13,13 @@ type Outcome = 'call911' | 'high' | 'monitor'
 function getPainColor(n: number): string {
   if (n <= 5) return '#42623C'
   if (n <= 8) return '#7C5200'
-  return '#D33003'
+  return '#8A5A00'
 }
 
 function getPainBg(n: number): string {
   if (n <= 5) return 'rgba(86,128,78,0.12)'
   if (n <= 8) return 'rgba(168,114,0,0.12)'
-  return 'rgba(211,48,3,0.12)'
+  return 'rgba(255,177,0,0.12)'
 }
 
 function computeOutcome(pain: number, canMove: boolean, alone: boolean): Outcome {
@@ -78,12 +78,12 @@ export default function TriagePage() {
       {/* Alert bar */}
       <div
         style={{
-          background: '#D33003',
+          background: '#8A5A00',
           padding: '13px 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          boxShadow: '0 2px 20px rgba(211,48,3,0.30)',
+          boxShadow: '0 2px 20px rgba(255,177,0,0.30)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -268,7 +268,7 @@ export default function TriagePage() {
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      background: '#D33003',
+                      background: '#8A5A00',
                     }}
                   />
                   <span style={{ color: '#5C5A52', fontSize: '10px' }}>9–10 severe</span>
@@ -340,14 +340,14 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: 0,
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(211,48,3,0.22)',
+                    border: '1.5px solid rgba(255,177,0,0.22)',
                     cursor: 'pointer',
                     textAlign: 'left',
                   }}
                 >
                   <p
                     style={{
-                      color: '#D33003',
+                      color: '#8A5A00',
                       fontSize: '17px',
                       fontWeight: 800,
                       marginBottom: '4px',
@@ -425,14 +425,14 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: 0,
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(211,48,3,0.22)',
+                    border: '1.5px solid rgba(255,177,0,0.22)',
                     cursor: 'pointer',
                     textAlign: 'left',
                   }}
                 >
                   <p
                     style={{
-                      color: '#D33003',
+                      color: '#8A5A00',
                       fontSize: '17px',
                       fontWeight: 800,
                       marginBottom: '4px',
@@ -459,8 +459,8 @@ export default function TriagePage() {
             >
               <div
                 style={{
-                  background: 'rgba(211,48,3,0.08)',
-                  border: '1.5px solid rgba(211,48,3,0.25)',
+                  background: 'rgba(255,177,0,0.08)',
+                  border: '1.5px solid rgba(255,177,0,0.25)',
                   borderRadius: 0,
                   padding: '24px',
                   marginBottom: '16px',
@@ -481,13 +481,13 @@ export default function TriagePage() {
                       width: '10px',
                       height: '10px',
                       borderRadius: '50%',
-                      background: '#D33003',
+                      background: '#8A5A00',
                       flexShrink: 0,
                     }}
                   />
                   <span
                     style={{
-                      color: '#D33003',
+                      color: '#8A5A00',
                       fontSize: '13px',
                       fontWeight: 600,
                       letterSpacing: '0',
@@ -523,7 +523,7 @@ export default function TriagePage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  background: '#D33003',
+                  background: '#8A5A00',
                   color: 'white',
                   padding: '18px',
                   borderRadius: 0,
@@ -633,7 +633,7 @@ export default function TriagePage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  background: '#D33003',
+                  background: '#8A5A00',
                   color: 'white',
                   padding: '16px',
                   borderRadius: 0,

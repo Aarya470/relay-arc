@@ -39,21 +39,21 @@ function valueColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return '#42623C'
   if (normalized <= 6) return '#7C5200'
-  return '#D33003'
+  return '#8A5A00'
 }
 
 function valueBg(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return 'rgba(86,128,78,0.12)'
   if (normalized <= 6) return 'rgba(168,114,0,0.12)'
-  return 'rgba(211,48,3,0.12)'
+  return 'rgba(255,177,0,0.12)'
 }
 
 function sliderFillColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return 'linear-gradient(90deg, #42623C, #42623C)'
   if (normalized <= 6) return 'linear-gradient(90deg, #42623C, #7C5200)'
-  return 'linear-gradient(90deg, #42623C, #D33003)'
+  return 'linear-gradient(90deg, #42623C, #8A5A00)'
 }
 
 function todayLabel(): string {
@@ -237,7 +237,7 @@ function Sparkline({ values, inverted }: { values: number[]; inverted: boolean }
   const prev = values[values.length - 2]
   const improving = inverted ? last > prev : last < prev
   const same = last === prev
-  const lineColor = same ? '#5C5A52' : improving ? '#42623C' : '#D33003'
+  const lineColor = same ? '#5C5A52' : improving ? '#42623C' : '#8A5A00'
 
   return (
     <svg
@@ -764,7 +764,7 @@ export default function SymptomsPage() {
                 const improving = m.inverted ? latest > prev : latest < prev
                 const same = latest === prev
                 const arrow = same ? '→' : improving ? '↓' : '↑'
-                const arrowColor = same ? '#5C5A52' : improving ? '#42623C' : '#D33003'
+                const arrowColor = same ? '#5C5A52' : improving ? '#42623C' : '#8A5A00'
                 return (
                   <div
                     key={m.key}

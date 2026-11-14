@@ -89,7 +89,7 @@ export default function Settings() {
 
   const link = (title: string, sub: string, path: string, badge: string, danger = false) => (
     <button key={path} className="row" onClick={() => router.push(path)}>
-      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(211,48,3,0.12)', color: '#D33003' } : undefined}>
+      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(255,177,0,0.12)', color: '#8A5A00' } : undefined}>
         {badge}
       </span>
       <span style={{ flex: 1, minWidth: 0 }}>
@@ -236,8 +236,8 @@ function SignOutRow() {
   return (
     <>
       <button className="row" onClick={() => setAsk(true)}>
-        <span className="row-badge" aria-hidden style={{ background: 'rgba(211,48,3,0.12)', color: '#D33003' }}>Out</span>
-        <span className="row-title" style={{ color: '#D33003' }}>Sign out</span>
+        <span className="row-badge" aria-hidden style={{ background: 'rgba(255,177,0,0.12)', color: '#8A5A00' }}>Out</span>
+        <span className="row-title" style={{ color: '#8A5A00' }}>Sign out</span>
       </button>
       {ask && (
         <div className="cmdk-overlay" style={{ alignItems: 'center', paddingTop: '16px' }} onMouseDown={(e) => e.target === e.currentTarget && setAsk(false)}>

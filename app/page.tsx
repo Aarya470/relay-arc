@@ -14,7 +14,8 @@ const PAPER = '#F7F5EE'
 const FOREST = '#1E3A23'
 const INK = '#141413'
 const INK2 = '#3F3D36'
-const SOS = '#D33003'
+const SOS = '#FFB100'
+const SOS_TEXT = '#8A5A00'
 const GREEN = '#42623C'
 
 const NAV: [string, string][] = [
@@ -161,7 +162,7 @@ function SosScreen() {
           Worked out on the phone in under a second. No signal needed.
         </p>
       </div>
-      <div className="sh-slant" style={{ background: SOS, color: '#fff', padding: '16px 24px', marginTop: '16px', fontWeight: 700 }}>
+      <div className="sh-slant" style={{ background: SOS, color: INK, padding: '16px 24px', marginTop: '16px', fontWeight: 700 }}>
         Call 911 now
       </div>
     </div>
@@ -181,7 +182,7 @@ function HospitalList() {
         <div key={name} className="hosp" style={{ background: i === 0 ? PAPER : 'transparent' }}>
           <div>
             <p style={{ fontWeight: 700, fontSize: '16px' }}>{name}</p>
-            <p className="ds-small" style={{ color: ok ? GREEN : SOS, fontWeight: 600 }}>
+            <p className="ds-small" style={{ color: ok ? GREEN : SOS_TEXT, fontWeight: 600 }}>
               {ok ? 'Has a heart unit' : 'No heart unit'}
             </p>
           </div>
@@ -248,7 +249,7 @@ function CardMaker() {
         <div style={{ display: 'flex', gap: '32px' }}>
           <div>
             <p className="ds-small" style={{ color: INK2 }}>Blood type</p>
-            <p style={{ fontSize: '40px', fontWeight: 800, color: SOS, lineHeight: 1.1 }}>{blood || 'Add'}</p>
+            <p style={{ fontSize: '40px', fontWeight: 800, color: SOS_TEXT, lineHeight: 1.1 }}>{blood || 'Add'}</p>
           </div>
           <div>
             <p className="ds-small" style={{ color: INK2 }}>Allergies</p>
@@ -322,7 +323,7 @@ export default function Home() {
         .ph-btn-l1 { left: -3px; top: 118px; height: 30px; }
         .ph-btn-l2 { left: -3px; top: 164px; height: 54px; }
         .ph-btn-r { right: -3px; top: 150px; height: 78px; }
-        .phone-screen { position: relative; overflow: hidden; border-radius: 42px; height: 600px; display: flex; flex-direction: column; background: radial-gradient(260px 260px at 95% -6%, rgba(179,221,172,0.95), transparent 65%), radial-gradient(240px 240px at -10% 40%, rgba(179,221,172,0.8), transparent 65%), radial-gradient(220px 220px at 105% 90%, rgba(86,128,78,0.3), transparent 65%), #F7F5EE; }
+        .phone-screen { position: relative; overflow: hidden; border-radius: 42px; height: 600px; display: flex; flex-direction: column; background: radial-gradient(240px 240px at 95% -8%, rgba(247,245,238,0.85), transparent 65%), radial-gradient(220px 220px at -10% 40%, rgba(126,190,124,0.55), transparent 65%), radial-gradient(220px 220px at 105% 90%, rgba(247,245,238,0.55), transparent 65%), #B3DDAC; }
         .ph-status { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 13px 24px 0 28px; font-size: 13.5px; font-weight: 700; color: ${INK}; }
         .ph-island { width: 86px; height: 25px; border-radius: 16px; background: #0C0C0B; }
         .ph-icons { display: flex; gap: 5px; justify-content: flex-end; align-items: center; fill: ${INK}; color: ${INK}; }
@@ -330,7 +331,7 @@ export default function Home() {
         .ph-top { display: flex; justify-content: space-between; align-items: center; }
         .ph-chip { font-size: 9.5px; font-weight: 700; padding: 5px 8px; border-radius: 5px; background: rgba(255,253,248,0.7); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8); } /* taste-skill-ignore: app chip */
         .ph-cond { display: inline-block; margin-top: 7px; font-size: 9.5px; font-weight: 700; color: #fff; background: ${FOREST}; padding: 3px 9px; border-radius: 4px; }
-        .ph-sos { background: ${SOS}; color: #fff; border-radius: 6px; display: flex; flex-direction: column; padding: 18px 18px 16px; margin: 12px 0 9px; }
+        .ph-sos { background: ${SOS}; color: ${INK}; border-radius: 6px; display: flex; flex-direction: column; padding: 18px 18px 16px; margin: 12px 0 9px; }
         .ph-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .ph-tile { display: grid; gap: 3px; padding: 12px; border-radius: 6px; background: #2F5233; color: #fff; }
         .ph-list { margin-top: 9px; padding: 2px 12px; border-radius: 6px; background: rgba(255,253,248,0.62); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.75); } /* taste-skill-ignore: app panel */
@@ -340,7 +341,7 @@ export default function Home() {
         .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.08); } /* taste-skill-ignore: app UI row divider */
         .ph-dock { margin: 0 9px 16px; height: 48px; border-radius: 10px; background: rgba(30,58,35,0.86); color: rgba(255,255,255,0.75); display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 9.5px; padding: 0 4px; }
         .ph-dock .on { color: #fff; font-weight: 700; }
-        .ph-dock-sos { background: ${SOS}; color: #fff; font-weight: 800; font-size: 11.5px; padding: 9px 0; border-radius: 5px; }
+        .ph-dock-sos { background: ${SOS}; color: ${INK}; font-weight: 800; font-size: 11.5px; padding: 9px 0; border-radius: 5px; }
         .ph-homebar { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 104px; height: 4px; border-radius: 3px; background: ${INK}; opacity: 0.85; }
         .nav { position: fixed; top: 12px; left: 16px; right: 16px; max-width: 1240px; margin: 0 auto; z-index: 60; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 12px 10px 22px; border-radius: 12px; }
         .nav-links { display: flex; align-items: center; gap: 22px; }
@@ -488,7 +489,7 @@ export default function Home() {
           </Split>
         </Chapter>
 
-        <Chapter id="card" bg={MINT} fg={INK}>
+        <Chapter id="card" bg={LEAF} fg={INK}>
           <div data-reveal style={{ marginBottom: '56px' }}>
             <h2 className="ds-title">A card that works with no signal</h2>
             <p className="ds-lead" style={{ marginTop: '28px' }}>

@@ -118,9 +118,9 @@
 
   /* Emergency / critical — 6.51:1 on cream, 6.86:1 with white on it.
      Still in the orange family, dark enough to read as danger. */
-  --crit:      #D33003;
-  --crit-dim:  #B02802;
-  --crit-soft: rgba(211,48,3,0.08);
+  --crit:      #8A5A00;
+  --crit-dim:  #6E4700;
+  --crit-soft: rgba(255,177,0,0.08);
 
   /* Warning / watch.
      --warn is #7C5200, moved down from #A87200 for a reason worth writing out.
@@ -134,7 +134,7 @@
 
      THE THREE STATUS COLOURS ARE NOW THE SAME BRIGHTNESS, AND THAT IS THE
      TRADE, NOT AN OVERSIGHT. To clear 4.5:1 on #B3DDAC a colour has to be
-     about as dark as #7A5300, and --crit (#D33003, 4.53:1) and --green-deep
+     about as dark as #7A5300, and --crit (#8A5A00, 4.53:1) and --green-deep
      (#42623C, 4.55:1) are already sitting there. Measured against each other
      the three now differ by 1.00:1 and 1.01:1. The note at the top of this file
      warns about exactly that, and it is unavoidable: this background is not
@@ -158,9 +158,9 @@
 
   /* Legacy aliases — older rules still reference these names. Kept pointing at
      the new palette so nothing renders in the old blue-grey/red scheme. */
-  --red:      #D33003;
-  --red-dim:  #B02802;
-  --red-soft: rgba(211,48,3,0.08);
+  --red:      #8A5A00;
+  --red-dim:  #6E4700;
+  --red-soft: rgba(255,177,0,0.08);
   --red-glow: none;
   --blue:      #42623C;
   --blue-dim:  #344D2F;
@@ -327,7 +327,8 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   --mint: #E6F1E1;
   --forest: #1E3A23;
   --ink: #141413;
-  --sos: #D33003;
+  --sos: #FFB100;
+  --sos-text: #8A5A00;
   --ink-2: #3F3D36;
   --slant: 14px;
   --cut: 18px;
@@ -370,7 +371,7 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
 }
 .ds-btn:active { transform: scale(0.97); }
 .ds-btn:focus-visible { outline: 3px solid currentColor; outline-offset: -6px; }
-.ds-btn-sos { background: var(--sos); color: #fff; }
+.ds-btn-sos { background: var(--sos); color: #141413; }
 .ds-btn-ink { background: #2F5233; color: #fff; }
 .ds-btn-paper { background: var(--paper); color: var(--ink); }
 .ds-btn-line { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px currentColor; }
@@ -379,9 +380,9 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
 
 /* Chapter pages (features, engineering): full width fields that alternate tone */
 .ds-ch { padding: clamp(64px, 9vw, 120px) 24px; }
-.ds-chapters > .ds-ch:nth-of-type(3n+1) { background: var(--paper); }
-.ds-chapters > .ds-ch:nth-of-type(3n+2) { background: var(--mint); }
-.ds-chapters > .ds-ch:nth-of-type(3n) { background: var(--leaf); }
+.ds-chapters > .ds-ch:nth-of-type(3n+1) { background: var(--leaf); }
+.ds-chapters > .ds-ch:nth-of-type(3n+2) { background: var(--paper); }
+.ds-chapters > .ds-ch:nth-of-type(3n) { background: #9FD097; }
 
 /* Reveal: only hides content once script has marked the page, so nothing stays hidden without JS */
 .js-reveal [data-reveal] > * { opacity: 0; transform: translateY(24px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
@@ -410,7 +411,7 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
 }
 
 /* The layered background behind the signed in app. */
-.app-bg { background: #F7F5EE; isolation: isolate; }
+.app-bg { background: #B3DDAC; isolation: isolate; }
 .app-bg::before {
   content: '';
   position: fixed;
@@ -418,11 +419,11 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(58vmax 58vmax at 92% -14%, rgba(179, 221, 172, 0.95), transparent 62%),
-    radial-gradient(52vmax 52vmax at -14% 30%, rgba(179, 221, 172, 0.8), transparent 62%),
-    radial-gradient(46vmax 46vmax at 106% 82%, rgba(86, 128, 78, 0.30), transparent 62%),
-    radial-gradient(40vmax 40vmax at 14% 114%, rgba(179, 221, 172, 0.7), transparent 62%),
-    #F7F5EE;
+    radial-gradient(54vmax 54vmax at 92% -16%, rgba(247, 245, 238, 0.85), transparent 62%),
+    radial-gradient(48vmax 48vmax at -14% 34%, rgba(126, 190, 124, 0.55), transparent 62%),
+    radial-gradient(44vmax 44vmax at 106% 84%, rgba(247, 245, 238, 0.55), transparent 62%),
+    radial-gradient(40vmax 40vmax at 14% 114%, rgba(86, 128, 78, 0.35), transparent 62%),
+    #B3DDAC;
 }
 
 .glass {

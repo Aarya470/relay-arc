@@ -546,15 +546,15 @@ export default function Appointments() {
         : status === 'completed'
           ? '#5C5A52'
           : status === 'declined' || status === 'missed'
-            ? '#D33003'
+            ? '#8A5A00'
             : '#5C5A52',
     background:
       status === 'confirmed'
         ? 'rgba(86,128,78,0.12)'
         : status === 'declined' || status === 'missed'
-          ? 'rgba(211,48,3,0.12)'
+          ? 'rgba(255,177,0,0.12)'
           : '#F2F0E8',
-    border: `1px solid ${status === 'confirmed' ? 'rgba(86,128,78,0.28)' : status === 'declined' || status === 'missed' ? 'rgba(211,48,3,0.22)' : '#98C890'}`,
+    border: `1px solid ${status === 'confirmed' ? 'rgba(86,128,78,0.28)' : status === 'declined' || status === 'missed' ? 'rgba(255,177,0,0.22)' : '#98C890'}`,
     fontSize: '13px' as const,
     letterSpacing: '0',
     padding: '2px 7px',
@@ -564,7 +564,7 @@ export default function Appointments() {
   const cardBorderColor = (status: string) => {
     if (status === 'confirmed') return 'rgba(86,128,78,0.25)'
     if (status === 'pending') return 'rgba(168,114,0,0.25)'
-    if (status === 'missed' || status === 'declined') return 'rgba(211,48,3,0.20)'
+    if (status === 'missed' || status === 'declined') return 'rgba(255,177,0,0.20)'
     return '#F2F0E8'
   }
 
@@ -783,13 +783,13 @@ export default function Appointments() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   {a.type === 'immediate' ? (
-                    <Clock size={13} color="#D33003" />
+                    <Clock size={13} color="#8A5A00" />
                   ) : (
                     <CalendarCheck size={13} color="#42623C" />
                   )}
                   <span
                     style={{
-                      color: a.type === 'immediate' ? '#D33003' : '#42623C',
+                      color: a.type === 'immediate' ? '#8A5A00' : '#42623C',
                       fontSize: '12px',
                       fontWeight: 700,
                     }}
@@ -1008,7 +1008,7 @@ export default function Appointments() {
                         {scheduledInPast && (
                           <p
                             style={{
-                              color: '#D33003',
+                              color: '#8A5A00',
                               fontSize: '12px',
                               marginTop: '8px',
                               textAlign: 'center',

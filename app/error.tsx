@@ -79,7 +79,7 @@ export default function ErrorBoundary({
           alignItems: 'center',
           justifyContent: 'center',
           gap: '10px',
-          background: '#D33003',
+          background: '#8A5A00',
           color: 'white',
           fontWeight: 800,
           fontSize: '17px',

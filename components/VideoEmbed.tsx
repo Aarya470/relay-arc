@@ -63,7 +63,7 @@ export default function VideoEmbed({ id, title }: { id: string; title: string })
               transform: 'translate(-50%,-50%)',
               width: '120px',
               height: '72px',
-              background: '#D33003',
+              background: '#8A5A00',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

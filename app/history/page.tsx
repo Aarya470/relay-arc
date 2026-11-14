@@ -188,7 +188,7 @@ export default function HistoryPage() {
               </span>
               <span
                 style={{
-                  color: tab === key ? (key === 'emergencies' ? '#D33003' : '#42623C') : '#C4BFB0',
+                  color: tab === key ? (key === 'emergencies' ? '#8A5A00' : '#42623C') : '#C4BFB0',
                   fontSize: '12px',
                   fontFamily: 'inherit',
                   fontWeight: 700,
@@ -405,7 +405,7 @@ export default function HistoryPage() {
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '6px',
-                              color: e.status === 'resolved' ? '#42623C' : '#D33003',
+                              color: e.status === 'resolved' ? '#42623C' : '#8A5A00',
                               fontSize: '13px',
                               fontWeight: 600,
                               letterSpacing: '0' as const,
@@ -417,7 +417,7 @@ export default function HistoryPage() {
                                 width: '6px',
                                 height: '6px',
                                 borderRadius: '50%',
-                                background: e.status === 'resolved' ? '#42623C' : '#D33003',
+                                background: e.status === 'resolved' ? '#42623C' : '#8A5A00',
                               }}
                             />
                             {e.status}

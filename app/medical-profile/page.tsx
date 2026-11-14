@@ -245,7 +245,7 @@ export default function MedicalProfile() {
             </p>
             <p
               style={{
-                color: '#D33003',
+                color: '#8A5A00',
                 fontSize: '52px',
                 fontWeight: 900,
                 letterSpacing: '-0.8px',
@@ -269,7 +269,7 @@ export default function MedicalProfile() {
             </p>
             <p
               style={{
-                color: allergies.length > 0 ? '#D33003' : '#141413',
+                color: allergies.length > 0 ? '#8A5A00' : '#141413',
                 fontSize: '52px',
                 fontWeight: 900,
                 letterSpacing: '-0.8px',
@@ -307,10 +307,10 @@ export default function MedicalProfile() {
 
         {/* Allergies — critical, kept loud */}
         {allergies.length > 0 && (
-          <div style={{ borderLeft: '3px solid #D33003', paddingLeft: '14px', marginTop: '24px' }}>
+          <div style={{ borderLeft: '3px solid #8A5A00', paddingLeft: '14px', marginTop: '24px' }}>
             <p
               style={{
-                color: '#D33003',
+                color: '#8A5A00',
                 fontWeight: 600,
                 fontSize: '13px',
                 letterSpacing: '0',

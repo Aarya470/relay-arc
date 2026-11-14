@@ -9,7 +9,7 @@ const CREAM = '#B3DDAC',
   BORDER = '#98C890'
 const GREEN = '#42623C',
   ORANGE = '#D97757',
-  CRIT = '#D33003',
+  CRIT = '#8A5A00',
   WARN = '#7C5200'
 const mono = 'var(--font-mono, monospace)'
 
