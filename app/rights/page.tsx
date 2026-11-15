@@ -19,7 +19,7 @@ const PAGE = '#B3DDAC'
 const ON = '#141413' // ink, 12.16:1
 const ON_3 = '#5C5A52' // 4.56:1, passes for body text now
 const RULE = '#7EB382' // hairline, non-text
-const CORAL = '#8A5A00' // ORANGE is 2.96:1 on light and unusable as text
+const CORAL = '#8F4A00' // ORANGE is 2.96:1 on light and unusable as text
 
 // A light tint for the block inside each white card. This is the job the old
 // CREAM constant used to do, kept separate now that the page itself is dark.
@@ -155,7 +155,7 @@ export default function RightsPage() {
                     fontFamily: mono,
                     fontSize: 12,
                     fontWeight: 700,
-                    color: '#8A5A00',
+                    color: '#8F4A00',
                     marginTop: 4,
                     flexShrink: 0,
                   }}

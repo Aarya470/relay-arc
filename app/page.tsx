@@ -14,8 +14,8 @@ const PAPER = '#F7F5EE'
 const FOREST = '#1E3A23'
 const INK = '#141413'
 const INK2 = '#3F3D36'
-const SOS = '#FFB100'
-const SOS_TEXT = '#8A5A00'
+const SOS = '#FF8C00'
+const SOS_TEXT = '#8F4A00'
 const GREEN = '#42623C'
 
 const NAV: [string, string][] = [

@@ -245,9 +245,9 @@ export default function EmergencyHistoryPage() {
                         whileTap={{ scale: 0.99 }}
                         style={{
                           background: '#FFFFFF',
-                          border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(255,177,0,0.20)'}`,
+                          border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(255,140,0,0.20)'}`,
                           borderRadius: 0,
-                          boxShadow: resolved ? 'none' : '0 2px 16px rgba(255,177,0,0.08)',
+                          boxShadow: resolved ? 'none' : '0 2px 16px rgba(255,140,0,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
                           alignItems: 'center',
@@ -260,14 +260,14 @@ export default function EmergencyHistoryPage() {
                             width: '40px',
                             height: '40px',
                             borderRadius: 0,
-                            background: resolved ? '#F2F0E8' : 'rgba(255,177,0,0.12)',
+                            background: resolved ? '#F2F0E8' : 'rgba(255,140,0,0.12)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0,
                           }}
                         >
-                          <Icon size={18} color={resolved ? '#5C5A52' : '#8A5A00'} />
+                          <Icon size={18} color={resolved ? '#5C5A52' : '#8F4A00'} />
                         </div>
 
                         {/* Details */}
@@ -326,7 +326,7 @@ export default function EmergencyHistoryPage() {
                                     position: 'absolute',
                                     inset: 0,
                                     borderRadius: '50%',
-                                    background: '#8A5A00',
+                                    background: '#8F4A00',
                                     opacity: 0.4,
                                     animation: 'ping 1.2s cubic-bezier(0,0,0.2,1) infinite',
                                   }}
@@ -336,12 +336,12 @@ export default function EmergencyHistoryPage() {
                                     width: '8px',
                                     height: '8px',
                                     borderRadius: '50%',
-                                    background: '#8A5A00',
+                                    background: '#8F4A00',
                                     display: 'block',
                                   }}
                                 />
                               </span>
-                              <span style={{ color: '#8A5A00', fontSize: '11px', fontWeight: 600 }}>
+                              <span style={{ color: '#8F4A00', fontSize: '11px', fontWeight: 600 }}>
                                 Active
                               </span>
                             </div>

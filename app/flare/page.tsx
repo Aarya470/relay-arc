@@ -20,14 +20,14 @@ const BORDER = '#DCE6D6',
   WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#D97757',
-  CRIT = '#8A5A00'
+  CRIT = '#8F4A00'
 
 // The page, and the few things that sit directly on it.
 const PAGE = '#B3DDAC'
 const ON = '#141413' // ink, 12.16:1 on the light green
 const ON_3 = '#5C5A52' // 4.56:1, the tightest pairing in the system
 const RULE = '#7EB382' // hairline, non-text
-const CORAL = '#8A5A00' // warm accent that is legible on light, 4.53:1
+const CORAL = '#8F4A00' // warm accent that is legible on light, 4.53:1
 const mono = 'var(--font-mono, monospace)'
 
 type Step = 'flags' | 'detail' | 'result'

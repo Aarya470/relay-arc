@@ -24,7 +24,7 @@ const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const BORDER = '#98C890'
 const ACCENT = '#42623C'
-const RED = '#8A5A00'
+const RED = '#8F4A00'
 const mono = 'var(--font-mono, monospace)'
 
 const CONDITIONS = [

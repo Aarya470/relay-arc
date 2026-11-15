@@ -25,7 +25,7 @@ const T1 = '#141413',
 // which measured 2.70:1 and 1.01:1. A light tint of the page restores both.
 const BORDER = '#7EB382',
   BG2 = '#CEE9C9'
-const RED = '#8A5A00',
+const RED = '#8F4A00',
   ACCENT = '#42623C'
 const WRAP = {
   maxWidth: '1120px',

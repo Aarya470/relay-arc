@@ -40,7 +40,7 @@ const PAGE = '#B3DDAC',
 const LINE = '#E4E2DA',
   LINE2 = '#CFCCC1',
   PAPER = '#FBFAF6',
-  RED = '#8A5A00',
+  RED = '#8F4A00',
   GREEN = '#3B5E35',
   AMBER = '#7C5200',
   ORANGE = '#D97757'
@@ -299,7 +299,7 @@ export default function VitalsCheck() {
       ctx.lineTo(gx, c.height)
       ctx.stroke()
     }
-    ctx.strokeStyle = '#8A5A00'
+    ctx.strokeStyle = '#8F4A00'
     ctx.lineWidth = 3.5
     ctx.lineJoin = 'round'
     ctx.beginPath()

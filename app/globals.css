@@ -118,9 +118,9 @@
 
   /* Emergency / critical — 6.51:1 on cream, 6.86:1 with white on it.
      Still in the orange family, dark enough to read as danger. */
-  --crit:      #8A5A00;
-  --crit-dim:  #6E4700;
-  --crit-soft: rgba(255,177,0,0.08);
+  --crit:      #8F4A00;
+  --crit-dim:  #733B00;
+  --crit-soft: rgba(255,140,0,0.08);
 
   /* Warning / watch.
      --warn is #7C5200, moved down from #A87200 for a reason worth writing out.
@@ -134,7 +134,7 @@
 
      THE THREE STATUS COLOURS ARE NOW THE SAME BRIGHTNESS, AND THAT IS THE
      TRADE, NOT AN OVERSIGHT. To clear 4.5:1 on #B3DDAC a colour has to be
-     about as dark as #7A5300, and --crit (#8A5A00, 4.53:1) and --green-deep
+     about as dark as #7A5300, and --crit (#8F4A00, 4.53:1) and --green-deep
      (#42623C, 4.55:1) are already sitting there. Measured against each other
      the three now differ by 1.00:1 and 1.01:1. The note at the top of this file
      warns about exactly that, and it is unavoidable: this background is not
@@ -158,9 +158,9 @@
 
   /* Legacy aliases — older rules still reference these names. Kept pointing at
      the new palette so nothing renders in the old blue-grey/red scheme. */
-  --red:      #8A5A00;
-  --red-dim:  #6E4700;
-  --red-soft: rgba(255,177,0,0.08);
+  --red:      #8F4A00;
+  --red-dim:  #733B00;
+  --red-soft: rgba(255,140,0,0.08);
   --red-glow: none;
   --blue:      #42623C;
   --blue-dim:  #344D2F;
@@ -327,8 +327,8 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   --mint: #E6F1E1;
   --forest: #1E3A23;
   --ink: #141413;
-  --sos: #FFB100;
-  --sos-text: #8A5A00;
+  --sos: #FF8C00;
+  --sos-text: #8F4A00;
   --ink-2: #3F3D36;
   --slant: 14px;
   --cut: 18px;

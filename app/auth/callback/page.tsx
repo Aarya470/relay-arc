@@ -10,7 +10,7 @@ const T1 = '#141413',
   T2 = '#5C5A52',
   T3 = '#5C5A52'
 const ACCENT = '#42623C',
-  RED = '#8A5A00',
+  RED = '#8F4A00',
   BORDER = '#98C890'
 const mono = 'var(--font-mono, monospace)'
 
@@ -189,7 +189,7 @@ export default function AuthCallback() {
                 width: 44,
                 height: 44,
                 borderRadius: 14,
-                background: 'rgba(255,177,0,0.09)',
+                background: 'rgba(255,140,0,0.09)',
                 display: 'grid',
                 placeItems: 'center',
                 marginBottom: 20,

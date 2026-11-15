@@ -3,7 +3,7 @@
 // middle, and one marker that slides to the open tab.
 import { usePathname, useRouter } from 'next/navigation'
 
-const SOS = '#FFB100'
+const SOS = '#FF8C00'
 const LEAF = '#B3DDAC'
 
 // Slot order across the bar. SOS sits in slot 2.
@@ -71,7 +71,7 @@ export default function BottomNav() {
         .bn-tab:focus-visible, .bn-sos:focus-visible { outline: 3px solid ${LEAF}; outline-offset: -4px; }
         .bn-mark { position: absolute; bottom: 7px; left: 6px; width: calc((100% - 12px) / 5); height: 4px; transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1); }
         .bn-mark > span { display: block; width: 22px; margin: 0 auto; height: 100%; background: ${LEAF}; border-radius: 4px; }
-        .bn-sos { align-self: center; justify-self: center; display: flex; align-items: center; justify-content: center; height: 46px; width: calc(100% - 4px); border-radius: 8px; background: ${SOS}; box-shadow: 0 6px 18px rgba(255,177,0,0.45); color: #141413; font-size: 16px; font-weight: 800; text-decoration: none; transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1); }
+        .bn-sos { align-self: center; justify-self: center; display: flex; align-items: center; justify-content: center; height: 46px; width: calc(100% - 4px); border-radius: 8px; background: ${SOS}; box-shadow: 0 6px 18px rgba(255,140,0,0.45); color: #141413; font-size: 16px; font-weight: 800; text-decoration: none; transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1); }
         .bn-sos:active { transform: scale(0.95); }
         @media (prefers-reduced-motion: reduce) { .bn-mark, .bn-tab, .bn-sos { transition: none; } }
       `}</style>

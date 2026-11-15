@@ -37,9 +37,9 @@ const SURFACE = '#B3DDAC'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
-const RED = '#8A5A00'
-const RED_DIM = 'rgba(255,177,0,0.07)'
-const RED_MID = 'rgba(255,177,0,0.14)'
+const RED = '#8F4A00'
+const RED_DIM = 'rgba(255,140,0,0.07)'
+const RED_MID = 'rgba(255,140,0,0.14)'
 const ACCENT = '#42623C'
 const BORDER = '#98C890'
 
@@ -376,7 +376,7 @@ export default function Emergency() {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '12px',
-            background: '#FFB100',
+            background: '#FF8C00',
             color: '#141413',
             // Chamfered: the call control wears the same shape everywhere it
             // appears, so it is recognisable before it is readable.

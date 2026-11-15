@@ -88,8 +88,8 @@ const T = {
   textPrimary: '#141413',
   textSec: '#5C5A52',
   textMuted: '#5C5A52',
-  red: '#8A5A00',
-  redSoft: 'rgba(255,177,0,0.12)',
+  red: '#8F4A00',
+  redSoft: 'rgba(255,140,0,0.12)',
   redGlow: 'none',
   green: '#42623C',
   greenSoft: 'rgba(86,128,78,0.12)',
@@ -194,7 +194,7 @@ function CancelConfirmSheet({
                 style={{
                   flex: 1,
                   padding: '15px',
-                  background: `#8A5A00`,
+                  background: `#8F4A00`,
                   borderRadius: 0,
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
@@ -936,7 +936,7 @@ function RoutingPage() {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '10px',
-            background: `#8A5A00`,
+            background: `#8F4A00`,
             color: 'white',
             fontWeight: 800,
             fontSize: '17px',
@@ -1091,7 +1091,7 @@ function RoutingPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid rgba(255,177,0,0.18)',
+          borderBottom: '1px solid rgba(255,140,0,0.18)',
           flexShrink: 0,
         }}
       >
@@ -2178,7 +2178,7 @@ function RoutingPage() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                borderBottom: '1px solid rgba(255,177,0,0.18)',
+                borderBottom: '1px solid rgba(255,140,0,0.18)',
                 flexShrink: 0,
               }}
             >

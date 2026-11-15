@@ -15,7 +15,7 @@ const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const BORDER = '#98C890'
 const ACCENT = '#42623C'
-const RED = '#8A5A00'
+const RED = '#8F4A00'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -567,8 +567,8 @@ export default function RelayRoomPage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: p.role === 'patient' ? 'rgba(255,177,0,0.07)' : '#B3DDAC',
-                    border: `1px solid ${p.role === 'patient' ? 'rgba(255,177,0,0.25)' : BORDER}`,
+                    background: p.role === 'patient' ? 'rgba(255,140,0,0.07)' : '#B3DDAC',
+                    border: `1px solid ${p.role === 'patient' ? 'rgba(255,140,0,0.25)' : BORDER}`,
                     borderRadius: 0,
                     padding: '5px 10px',
                   }}

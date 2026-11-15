@@ -8,7 +8,7 @@ const T1 = '#141413',
   T3 = '#5C5A52'
 const BORDER = '#98C890',
   BG2 = '#B3DDAC'
-const CRIT = '#8A5A00',
+const CRIT = '#8F4A00',
   ACCENT = '#42623C',
   GREEN = '#42623C'
 

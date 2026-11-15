@@ -7,7 +7,7 @@ const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const BORDER = '#98C890'
 const ACCENT = '#42623C'
-const RED = '#8A5A00'
+const RED = '#8F4A00'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -563,7 +563,7 @@ export default function AdminPartners() {
                     width: '32px',
                     height: '32px',
                     borderRadius: 0,
-                    border: `1px solid rgba(255,177,0,0.3)`,
+                    border: `1px solid rgba(255,140,0,0.3)`,
                     background: 'none',
                     cursor: 'pointer',
                     display: 'flex',

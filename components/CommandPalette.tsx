@@ -196,7 +196,7 @@ export default function CommandPalette() {
                       style={{ padding: '11px 12px' }}
                     >
                       <span style={{ flex: 1 }}>
-                        <span className="row-title" style={{ color: i.id === 'sos' || i.id === 'call' ? '#8A5A00' : undefined }}>
+                        <span className="row-title" style={{ color: i.id === 'sos' || i.id === 'call' ? '#8F4A00' : undefined }}>
                           {i.label}
                         </span>
                         {i.hint ? <span className="row-sub" style={{ display: 'block' }}>{i.hint}</span> : null}

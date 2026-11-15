@@ -110,7 +110,7 @@ export default function NurseDashboard() {
           </div>
           <div className="flex gap-2">
             {emergencies.length > 0 && (
-              <span className="bg-[#8A5A00]/15 border border-[#8A5A00]/25 text-[#8A5A00] text-xs px-2.5 py-1 rounded-full font-mono">
+              <span className="bg-[#8F4A00]/15 border border-[#8F4A00]/25 text-[#8F4A00] text-xs px-2.5 py-1 rounded-full font-mono">
                 {emergencies.length}
               </span>
             )}
@@ -140,16 +140,16 @@ export default function NurseDashboard() {
                   key={i}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-[#8A5A00]/10 border border-[#8A5A00]/25 rounded-2xl p-4 flex items-center gap-3"
+                  className="bg-[#8F4A00]/10 border border-[#8F4A00]/25 rounded-2xl p-4 flex items-center gap-3"
                 >
                   <motion.div
-                    className="w-2 h-2 rounded-full bg-[#8A5A00] flex-shrink-0"
+                    className="w-2 h-2 rounded-full bg-[#8F4A00] flex-shrink-0"
                     animate={{ opacity: [1, 0.3, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   />
                   <div className="flex-1">
                     <p className="text-[#141413] font-semibold text-sm">{patient?.full_name}</p>
-                    <p className="text-[#8A5A00]/70 text-xs">
+                    <p className="text-[#8F4A00]/70 text-xs">
                       {e.emergency_type?.replace('_', ' ')} ·{' '}
                       {new Date(e.created_at).toLocaleTimeString()}
                     </p>
@@ -157,7 +157,7 @@ export default function NurseDashboard() {
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelected(patient)}
-                    className="bg-[#6E4700] text-white text-xs font-semibold px-3 py-1.5 rounded-xl"
+                    className="bg-[#733B00] text-white text-xs font-semibold px-3 py-1.5 rounded-xl"
                   >
                     View
                   </motion.button>
@@ -198,7 +198,7 @@ export default function NurseDashboard() {
                     <div
                       className={`w-2 h-2 rounded-full ${
                         hasEmergency
-                          ? 'bg-[#8A5A00]'
+                          ? 'bg-[#8F4A00]'
                           : patientCheckins.length > 0
                             ? 'bg-[#42623C]'
                             : 'bg-[#D8D4C8]'
@@ -249,7 +249,7 @@ export default function NurseDashboard() {
                       {item.label}
                     </p>
                     <p
-                      className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-[#8A5A00]' : 'text-[#5C5A52]'}`}
+                      className={`text-xs font-medium ${item.red && item.value !== 'None' ? 'text-[#8F4A00]' : 'text-[#5C5A52]'}`}
                     >
                       {item.value}
                     </p>

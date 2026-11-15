@@ -113,9 +113,9 @@ export default function AppointmentSummary() {
     {
       label: 'Emergencies',
       value: emergencies.length,
-      color: '#8A5A00',
-      bg: 'rgba(255,177,0,0.07)',
-      border: 'rgba(255,177,0,0.15)',
+      color: '#8F4A00',
+      bg: 'rgba(255,140,0,0.07)',
+      border: 'rgba(255,140,0,0.15)',
       Icon: AlertTriangle,
     },
     {
