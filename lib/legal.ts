@@ -46,6 +46,7 @@ Withdrawing consent does not undo processing that already happened, and it does 
 5. WHO ELSE RECEIVES YOUR DATA
 We use other companies to run the service. Each of them has its own privacy policy and its own security practices, and we do not control what they do once data reaches them.
 • Supabase. Database, accounts and authentication. Receives everything stored in your account.
+• Google and Apple, only if you choose to sign in with them. They tell us your name and email address so we can create your account. With Apple you can hide your real email, and we then receive a private relay address that forwards to you. We never receive your password, contacts or anything else from those accounts, and we never post anything on your behalf.
 • Vercel. Hosting and content delivery. Receives your IP address and request data. Also runs Vercel Web Analytics and Speed Insights, which count visits and measure page speed without cookies; the address of the page is sent without any query string.
 • Groq. Large language model processing, currently openai/gpt-oss-20b. Receives the text of check-ins and symptom notes when a summary or classification is generated.
 • Resend. Sends account email such as the signup confirmation. Receives your email address.

@@ -330,6 +330,21 @@ export default function Onboarding() {
                     toast.error('Please enter your name')
                     return
                   }
+                  // Accounts are for people 13 and over (Terms and Privacy Policy,
+                  // section 13). The emergency card at /card needs no account.
+                  if (form.date_of_birth) {
+                    const dob = new Date(form.date_of_birth)
+                    const now = new Date()
+                    let age = now.getFullYear() - dob.getFullYear()
+                    const m = now.getMonth() - dob.getMonth()
+                    if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--
+                    if (!isNaN(age) && age < 13) {
+                      toast.error(
+                        'You need to be 13 or older for an account. You can still make an emergency card without one.',
+                      )
+                      return
+                    }
+                  }
                   setStep(2)
                 }}
                 style={{ ...primaryBtn, marginTop: '8px' }}

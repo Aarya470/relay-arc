@@ -50,6 +50,19 @@ export default function AuthCallback() {
         const { data } = await supabase.auth.getSession()
         if (cancelled) return
         if (data.session) {
+          // Google or Apple: someone who already has a profile goes straight to
+          // their dashboard. A new account goes to onboarding.
+          const provider = data.session.user.app_metadata?.provider
+          if (provider === 'google' || provider === 'apple') {
+            const { data: prof } = await supabase
+              .from('profiles')
+              .select('id')
+              .eq('id', data.session.user.id)
+              .maybeSingle()
+            if (cancelled) return
+            router.replace(prof ? '/dashboard' : '/onboarding')
+            return
+          }
           setEmail(data.session.user.email ?? null)
           setState('confirmed')
           // Signed in already, so send them into onboarding rather than making
