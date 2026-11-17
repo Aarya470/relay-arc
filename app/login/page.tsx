@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import SocialSignIn from '@/components/SocialSignIn'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { Loader2, Eye, EyeOff, ArrowRight, MailCheck } from '@/lib/plain-icons'
@@ -332,6 +333,8 @@ export default function Login() {
                 ? 'Blood type, medications and allergies, ready before an emergency needs them.'
                 : 'Sign in to your dashboard.'}
             </p>
+
+            <SocialSignIn isSignUp={isSignUp} />
 
             {/* Form */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
