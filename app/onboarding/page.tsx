@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -64,6 +64,15 @@ export default function Onboarding() {
     medications: [{ name: '', dose: '', frequency: '', times: ['Morning'] }],
   })
   const router = useRouter()
+
+  // Someone who already set up a profile never sees onboarding again.
+  useEffect(() => {
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return
+      const { data } = await supabase.from('profiles').select('id').eq('id', user.id).maybeSingle()
+      if (data) router.replace('/dashboard')
+    })
+  }, [router])
 
   const update = (field: string, value: any) => setForm((prev) => ({ ...prev, [field]: value }))
 
