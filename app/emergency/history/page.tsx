@@ -245,9 +245,9 @@ export default function EmergencyHistoryPage() {
                         whileTap={{ scale: 0.99 }}
                         style={{
                           background: '#FFFFFF',
-                          border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(255,140,0,0.20)'}`,
+                          border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(240,120,0,0.20)'}`,
                           borderRadius: 0,
-                          boxShadow: resolved ? 'none' : '0 2px 16px rgba(255,140,0,0.08)',
+                          boxShadow: resolved ? 'none' : '0 2px 16px rgba(240,120,0,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
                           alignItems: 'center',
@@ -260,7 +260,7 @@ export default function EmergencyHistoryPage() {
                             width: '40px',
                             height: '40px',
                             borderRadius: 0,
-                            background: resolved ? '#F2F0E8' : 'rgba(255,140,0,0.12)',
+                            background: resolved ? '#F2F0E8' : 'rgba(240,120,0,0.12)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',

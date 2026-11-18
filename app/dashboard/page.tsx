@@ -88,7 +88,7 @@ const T3 = '#5C5A52'
 const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.08)'
 const RED = '#8F4A00'
-const RED_DIM = 'rgba(255,140,0,0.07)'
+const RED_DIM = 'rgba(240,120,0,0.07)'
 const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER = '#7C5200'
@@ -951,7 +951,7 @@ export default function Dashboard() {
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#F07800',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',
@@ -1199,8 +1199,8 @@ export default function Dashboard() {
         <motion.div variants={fadeUp}>
           <style>{`
             @keyframes sos-pulse {
-              0%, 100% { box-shadow: 0 0 0 0 rgba(255,140,0,0.5); }
-              50% { box-shadow: 0 0 0 14px rgba(255,140,0,0); }
+              0%, 100% { box-shadow: 0 0 0 0 rgba(240,120,0,0.5); }
+              50% { box-shadow: 0 0 0 14px rgba(240,120,0,0); }
             }
           `}</style>
           <motion.button
@@ -1209,7 +1209,7 @@ export default function Dashboard() {
             className="sh-slant"
             style={{
               width: '100%',
-              background: '#FF8C00',
+              background: '#F07800',
               padding: '30px 36px',
               border: 'none',
               cursor: 'pointer',

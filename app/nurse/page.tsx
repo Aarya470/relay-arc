@@ -68,7 +68,7 @@ export default function NurseDashboard() {
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#F07800',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',

@@ -94,7 +94,7 @@ function statusForValue(key: string, val: number | null) {
 
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
   ok: { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
-  high: { bg: 'rgba(255,140,0,0.12)', border: 'rgba(255,140,0,0.28)', text: '#8F4A00' },
+  high: { bg: 'rgba(240,120,0,0.12)', border: 'rgba(240,120,0,0.28)', text: '#8F4A00' },
   low: { bg: 'rgba(168,114,0,0.12)', border: 'rgba(168,114,0,0.28)', text: '#7C5200' },
   empty: { bg: '#F2F0E8', border: '#F2F0E8', text: '#5C5A52' },
 }
@@ -534,7 +534,7 @@ export default function VitalsPage() {
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#F07800',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',
@@ -669,7 +669,7 @@ export default function VitalsPage() {
                 aria-label="Heart rate in beats per minute"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.heart_rate ? 'rgba(255,140,0,0.35)' : '#98C890',
+                  borderColor: vitals.heart_rate ? 'rgba(240,120,0,0.35)' : '#98C890',
                 }}
                 placeholder=". "
                 value={vitals.heart_rate}

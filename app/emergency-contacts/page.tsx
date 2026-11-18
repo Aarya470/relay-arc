@@ -38,7 +38,7 @@ const RELATIONSHIPS = [
 const AVATAR_COLORS = [
   { bg: 'rgba(86,128,78,0.15)', border: 'rgba(86,128,78,0.3)', text: '#42623C' },
   { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
-  { bg: 'rgba(255,140,0,0.12)', border: 'rgba(255,140,0,0.25)', text: '#8F4A00' },
+  { bg: 'rgba(240,120,0,0.12)', border: 'rgba(240,120,0,0.25)', text: '#8F4A00' },
   { bg: 'rgba(168,114,0,0.12)', border: 'rgba(168,114,0,0.25)', text: '#7C5200' },
   { bg: 'rgba(20,20,19,0.08)', border: 'rgba(20,20,19,0.18)', text: '#141413' },
 ]
@@ -198,8 +198,8 @@ export default function EmergencyContacts() {
         {/* Info banner */}
         <div
           style={{
-            background: 'rgba(255,140,0,0.06)',
-            border: '1px solid rgba(255,140,0,0.18)',
+            background: 'rgba(240,120,0,0.06)',
+            border: '1px solid rgba(240,120,0,0.18)',
             borderRadius: 0,
             padding: '12px 14px',
             display: 'flex',

@@ -1,4 +1,5 @@
 'use client'
+import { Hero } from '@/components/AppKit'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -89,7 +90,7 @@ export default function Settings() {
 
   const link = (title: string, sub: string, path: string, badge: string, danger = false) => (
     <button key={path} className="row" onClick={() => router.push(path)}>
-      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(255,140,0,0.12)', color: '#8F4A00' } : undefined}>
+      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(240,120,0,0.12)', color: '#8F4A00' } : undefined}>
         {badge}
       </span>
       <span style={{ flex: 1, minWidth: 0 }}>
@@ -103,26 +104,29 @@ export default function Settings() {
   return (
     <div style={{ minHeight: '100dvh', paddingBottom: '120px', maxWidth: '640px', margin: '0 auto', width: '100%' }}>
       {/* Header: who you are, and search */}
-      <div style={{ padding: '52px 20px 20px' }}>
+      <div style={{ padding: '48px 20px 22px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
-          <button onClick={() => router.push('/dashboard')} className="glass" style={{ height: '42px', padding: '0 16px', borderRadius: '8px', font: 'inherit', fontSize: '14.5px', fontWeight: 600, cursor: 'pointer', color: '#141413' }}>
+          <button onClick={() => router.push('/dashboard')} className="glass ak-pill">
             ← Home
           </button>
           <SearchButton />
         </div>
-        <div className="glass" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div aria-hidden style={{ width: '60px', height: '60px', borderRadius: '8px', background: '#2F5233', color: '#fff', display: 'grid', placeItems: 'center', fontSize: '26px', fontWeight: 800, flexShrink: 0 }}>
-            {first.charAt(0).toUpperCase()}
+        <h1 className="ak-title" style={{ marginBottom: '16px' }}>Settings</h1>
+        <Hero style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div aria-hidden style={{ width: '62px', height: '62px', borderRadius: '10px', background: '#F07800', color: '#141413', display: 'grid', placeItems: 'center', fontSize: '28px', fontWeight: 900, flexShrink: 0 }}>
+              {first.charAt(0).toUpperCase()}
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontSize: '24px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, margin: 0, overflowWrap: 'anywhere' }}>
+                {profile?.full_name || 'Your profile'}
+              </p>
+              <p style={{ fontSize: '14px', marginTop: '4px', opacity: 0.85 }}>
+                {profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}
+              </p>
+            </div>
           </div>
-          <div style={{ minWidth: 0 }}>
-            <h1 style={{ color: '#141413', fontSize: '26px', fontWeight: 800, letterSpacing: '-0.4px', lineHeight: 1.1, margin: 0, overflowWrap: 'anywhere' }}>
-              {profile?.full_name || 'Your profile'}
-            </h1>
-            <p style={{ color: '#3F3D36', fontSize: '14px', marginTop: '4px' }}>
-              {profile?.diagnosis?.split(',')[0] || 'No diagnosis added'}
-            </p>
-          </div>
-        </div>
+        </Hero>
       </div>
 
       <div style={{ padding: '0 20px', display: 'grid', gap: '26px' }}>
@@ -236,7 +240,7 @@ function SignOutRow() {
   return (
     <>
       <button className="row" onClick={() => setAsk(true)}>
-        <span className="row-badge" aria-hidden style={{ background: 'rgba(255,140,0,0.12)', color: '#8F4A00' }}>Out</span>
+        <span className="row-badge" aria-hidden style={{ background: 'rgba(240,120,0,0.12)', color: '#8F4A00' }}>Out</span>
         <span className="row-title" style={{ color: '#8F4A00' }}>Sign out</span>
       </button>
       {ask && (

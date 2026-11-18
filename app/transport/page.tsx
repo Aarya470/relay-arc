@@ -228,8 +228,8 @@ export default function TransportRequest() {
                         width: '38px',
                         height: '38px',
                         borderRadius: 0,
-                        background: 'rgba(255,140,0,0.10)',
-                        border: '1px solid rgba(255,140,0,0.20)',
+                        background: 'rgba(240,120,0,0.10)',
+                        border: '1px solid rgba(240,120,0,0.20)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -440,7 +440,7 @@ export default function TransportRequest() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: selectedHospital ? '0 6px 20px rgba(255,140,0,0.45)' : 'none',
+                  boxShadow: selectedHospital ? '0 6px 20px rgba(240,120,0,0.45)' : 'none',
                 }}
               >
                 {loading ? (

@@ -208,7 +208,7 @@ export default function AuthCallback() {
                 width: 44,
                 height: 44,
                 borderRadius: 14,
-                background: 'rgba(255,140,0,0.09)',
+                background: 'rgba(240,120,0,0.09)',
                 display: 'grid',
                 placeItems: 'center',
                 marginBottom: 20,

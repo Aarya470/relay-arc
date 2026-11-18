@@ -19,7 +19,7 @@ const INK = '#141413',
 const BORDER = '#DCE6D6',
   WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757',
+const ORANGE = '#F07800',
   CRIT = '#8F4A00'
 
 // The page, and the few things that sit directly on it.

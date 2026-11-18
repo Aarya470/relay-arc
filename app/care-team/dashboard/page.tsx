@@ -416,7 +416,7 @@ export default function CareTeamDashboard() {
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#F07800',
             color: '#141413',
             padding: '9px 14px',
             textAlign: 'center',
@@ -763,8 +763,8 @@ export default function CareTeamDashboard() {
                       onClick={() => declineAppointment(a.id)}
                       style={{
                         flex: 1,
-                        background: 'rgba(255,140,0,0.08)',
-                        border: '1px solid rgba(255,140,0,0.2)',
+                        background: 'rgba(240,120,0,0.08)',
+                        border: '1px solid rgba(240,120,0,0.2)',
                         borderRadius: 0,
                         padding: '9px',
                         display: 'flex',
@@ -913,11 +913,11 @@ export default function CareTeamDashboard() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 style={{
                   background: 'rgba(255,28,28,0.05)',
-                  border: '2px solid rgba(255,140,0,0.55)',
+                  border: '2px solid rgba(240,120,0,0.55)',
                   borderRadius: '20px',
                   marginBottom: '12px',
                   overflow: 'hidden',
-                  boxShadow: '0 0 0 1px rgba(255,140,0,0.15), 0 8px 32px rgba(255,140,0,0.18)',
+                  boxShadow: '0 0 0 1px rgba(240,120,0,0.15), 0 8px 32px rgba(240,120,0,0.18)',
                 }}
               >
                 {/* Header row */}
@@ -1005,8 +1005,8 @@ export default function CareTeamDashboard() {
                       >
                         <span
                           style={{
-                            background: 'rgba(255,140,0,0.15)',
-                            border: '1px solid rgba(255,140,0,0.35)',
+                            background: 'rgba(240,120,0,0.15)',
+                            border: '1px solid rgba(240,120,0,0.35)',
                             color: '#8F4A00',
                             fontSize: '10px',
                             padding: '2px 8px',
@@ -1022,8 +1022,8 @@ export default function CareTeamDashboard() {
                         {patient?.blood_type && (
                           <span
                             style={{
-                              background: 'rgba(255,140,0,0.1)',
-                              border: '1px solid rgba(255,140,0,0.25)',
+                              background: 'rgba(240,120,0,0.1)',
+                              border: '1px solid rgba(240,120,0,0.25)',
                               color: '#8F4A00',
                               fontSize: '10px',
                               padding: '2px 8px',
@@ -1048,7 +1048,7 @@ export default function CareTeamDashboard() {
                   {hasMedInfo && (
                     <div
                       style={{
-                        border: '1px solid rgba(255,140,0,0.2)',
+                        border: '1px solid rgba(240,120,0,0.2)',
                         borderRadius: '20px',
                         overflow: 'hidden',
                       }}
@@ -1067,8 +1067,8 @@ export default function CareTeamDashboard() {
                           justifyContent: 'space-between',
                           padding: '10px 14px',
                           background: isMedExpanded
-                            ? 'rgba(255,140,0,0.08)'
-                            : 'rgba(255,140,0,0.04)',
+                            ? 'rgba(240,120,0,0.08)'
+                            : 'rgba(240,120,0,0.04)',
                           border: 'none',
                           cursor: 'pointer',
                         }}
@@ -1085,7 +1085,7 @@ export default function CareTeamDashboard() {
                         >
                           Medical Card
                         </span>
-                        <span style={{ color: 'rgba(255,140,0,0.5)', fontSize: '10px' }}>
+                        <span style={{ color: 'rgba(240,120,0,0.5)', fontSize: '10px' }}>
                           {isMedExpanded ? 'Hide' : 'Show'}
                         </span>
                       </button>
@@ -1093,7 +1093,7 @@ export default function CareTeamDashboard() {
                         <div
                           style={{
                             padding: '10px 14px',
-                            background: 'rgba(255,140,0,0.05)',
+                            background: 'rgba(240,120,0,0.05)',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '8px',
@@ -1181,8 +1181,8 @@ export default function CareTeamDashboard() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        background: 'rgba(255,140,0,0.06)',
-                        border: '1px solid rgba(255,140,0,0.15)',
+                        background: 'rgba(240,120,0,0.06)',
+                        border: '1px solid rgba(240,120,0,0.15)',
                         borderRadius: 0,
                         padding: '10px 14px',
                       }}
@@ -1388,8 +1388,8 @@ export default function CareTeamDashboard() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '6px',
-                        background: 'rgba(255,140,0,0.12)',
-                        border: '1px solid rgba(255,140,0,0.3)',
+                        background: 'rgba(240,120,0,0.12)',
+                        border: '1px solid rgba(240,120,0,0.3)',
                         color: '#8F4A00',
                         fontWeight: 700,
                         fontSize: '12px',
@@ -1436,8 +1436,8 @@ export default function CareTeamDashboard() {
               onClick={() => router.push(`/care-team/patient/${patient.id}`)}
               style={{
                 width: '100%',
-                background: hasActiveEmergency ? 'rgba(255,140,0,0.06)' : '#FFFFFF',
-                border: `1px solid ${hasActiveEmergency ? 'rgba(255,140,0,0.3)' : score >= 8 ? 'rgba(255,140,0,0.15)' : '#98C890'}`,
+                background: hasActiveEmergency ? 'rgba(240,120,0,0.06)' : '#FFFFFF',
+                border: `1px solid ${hasActiveEmergency ? 'rgba(240,120,0,0.3)' : score >= 8 ? 'rgba(240,120,0,0.15)' : '#98C890'}`,
                 borderRadius: '20px',
                 padding: '14px 16px',
                 marginBottom: '10px',
@@ -1508,7 +1508,7 @@ export default function CareTeamDashboard() {
                       animate={{ opacity: [1, 0.5, 1] }}
                       transition={{ duration: 0.9, repeat: Infinity }}
                       style={{
-                        background: 'rgba(255,140,0,0.25)',
+                        background: 'rgba(240,120,0,0.25)',
                         color: '#8F4A00',
                         fontSize: '9px',
                         padding: '2px 8px',
@@ -1519,7 +1519,7 @@ export default function CareTeamDashboard() {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '4px',
-                        border: '1px solid rgba(255,140,0,0.4)',
+                        border: '1px solid rgba(240,120,0,0.4)',
                       }}
                     >
                       <span
@@ -1568,8 +1568,8 @@ export default function CareTeamDashboard() {
                       animate={{ opacity: [1, 0.55, 1] }}
                       transition={{ duration: 0.9, repeat: Infinity }}
                       style={{
-                        background: 'rgba(255,140,0,0.2)',
-                        border: '1px solid rgba(255,140,0,0.45)',
+                        background: 'rgba(240,120,0,0.2)',
+                        border: '1px solid rgba(240,120,0,0.45)',
                         color: '#8F4A00',
                         fontSize: '10px',
                         padding: '3px 8px',
@@ -1588,8 +1588,8 @@ export default function CareTeamDashboard() {
                         if (em) dismissEmergency(em.id)
                       }}
                       style={{
-                        background: 'rgba(255,140,0,0.12)',
-                        border: '1px solid rgba(255,140,0,0.3)',
+                        background: 'rgba(240,120,0,0.12)',
+                        border: '1px solid rgba(240,120,0,0.3)',
                         borderRadius: 0,
                         padding: '2px 7px',
                         color: '#8F4A00',

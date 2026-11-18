@@ -225,8 +225,8 @@ function BriefContent() {
       <div
         className="w-full text-center py-3 px-4"
         style={{
-          background: 'rgba(255,140,0,0.10)',
-          borderBottom: '1px solid rgba(255,140,0,0.18)',
+          background: 'rgba(240,120,0,0.10)',
+          borderBottom: '1px solid rgba(240,120,0,0.18)',
         }}
       >
         <p
@@ -340,8 +340,8 @@ function BriefContent() {
             <div
               className="mt-3 rounded-xl p-3"
               style={{
-                background: 'rgba(255,140,0,0.07)',
-                border: '1px solid rgba(255,140,0,0.2)',
+                background: 'rgba(240,120,0,0.07)',
+                border: '1px solid rgba(240,120,0,0.2)',
               }}
             >
               <p
@@ -465,8 +465,8 @@ function Section({
       transition={{ type: 'spring', stiffness: 340, damping: 26 }}
       className="rounded-2xl p-4"
       style={{
-        background: highlight ? 'rgba(255,140,0,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(255,140,0,0.22)' : '1px solid #98C890',
+        background: highlight ? 'rgba(240,120,0,0.08)' : '#FFFFFF',
+        border: highlight ? '1px solid rgba(240,120,0,0.22)' : '1px solid #98C890',
         borderRadius: 0,
       }}
     >

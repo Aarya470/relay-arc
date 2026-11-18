@@ -305,7 +305,7 @@ export default function HospitalPortal() {
       {isDemo && (
         <div
           style={{
-            background: '#D97757',
+            background: '#F07800',
             color: T1,
             padding: '9px 14px',
             margin: '0 -20px 0',

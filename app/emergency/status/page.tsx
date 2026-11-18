@@ -148,8 +148,8 @@ export default function EmergencyStatus() {
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: 'rgba(255,140,0,0.10)',
-            border: '1px solid rgba(255,140,0,0.25)',
+            background: 'rgba(240,120,0,0.10)',
+            border: '1px solid rgba(240,120,0,0.25)',
             borderRadius: 0,
             padding: '6px 12px',
           }}
@@ -313,15 +313,15 @@ export default function EmergencyStatus() {
         {/* Warning */}
         <div
           style={{
-            background: 'rgba(255,140,0,0.06)',
-            border: '1px solid rgba(255,140,0,0.18)',
+            background: 'rgba(240,120,0,0.06)',
+            border: '1px solid rgba(240,120,0,0.18)',
             borderRadius: 0,
             padding: '16px',
           }}
         >
           <p
             style={{
-              color: 'rgba(255,140,0,0.70)',
+              color: 'rgba(240,120,0,0.70)',
               fontSize: '13px',
               letterSpacing: '0',
               marginBottom: '8px',

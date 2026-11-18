@@ -334,7 +334,7 @@ function RecoveryContent() {
             style={{
               marginTop: '16px',
               paddingTop: '12px',
-              borderTop: '1px solid rgba(255,140,0,0.20)',
+              borderTop: '1px solid rgba(240,120,0,0.20)',
               fontSize: '14px',
               fontWeight: 600,
               color: '#8F4A00',
@@ -432,8 +432,8 @@ function Card({
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 340, damping: 26, delay }}
       style={{
-        background: highlight ? 'rgba(255,140,0,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(255,140,0,0.22)' : '1px solid #98C890',
+        background: highlight ? 'rgba(240,120,0,0.08)' : '#FFFFFF',
+        border: highlight ? '1px solid rgba(240,120,0,0.22)' : '1px solid #98C890',
         borderRadius: 0,
         padding: '16px',
       }}

@@ -268,8 +268,8 @@ export default function DriverDashboard() {
         <div
           style={{
             marginLeft: 'auto',
-            background: requests.length > 0 ? 'rgba(255,140,0,0.15)' : '#F2F0E8',
-            border: `1px solid ${requests.length > 0 ? 'rgba(255,140,0,0.3)' : '#98C890'}`,
+            background: requests.length > 0 ? 'rgba(240,120,0,0.15)' : '#F2F0E8',
+            border: `1px solid ${requests.length > 0 ? 'rgba(240,120,0,0.3)' : '#98C890'}`,
             borderRadius: '20px',
             padding: '4px 10px',
           }}
@@ -321,7 +321,7 @@ export default function DriverDashboard() {
                   transition={{ delay: i * 0.05 }}
                   style={{
                     background: '#FFFFFF',
-                    border: '1px solid rgba(255,140,0,0.2)',
+                    border: '1px solid rgba(240,120,0,0.2)',
                     borderRadius: '20px',
                     overflow: 'hidden',
                   }}

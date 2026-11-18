@@ -30,6 +30,8 @@ import {
   type LangId,
 } from '@/lib/voice-lang'
 import { notch } from '@/lib/shape'
+import Accordion from '@/components/Accordion'
+import { Hero, Panel } from '@/components/AppKit'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG = '#FFFFFF'
@@ -38,8 +40,8 @@ const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
 const RED = '#8F4A00'
-const RED_DIM = 'rgba(255,140,0,0.07)'
-const RED_MID = 'rgba(255,140,0,0.14)'
+const RED_DIM = 'rgba(240,120,0,0.07)'
+const RED_MID = 'rgba(240,120,0,0.14)'
 const ACCENT = '#42623C'
 const BORDER = '#98C890'
 
@@ -285,147 +287,69 @@ export default function Emergency() {
     }
   }
 
+  const URGENT = new Set(['chest_pain', 'unconscious', 'breathing', 'stroke'])
   return (
-    <div
-      style={{
-        minHeight: '100dvh',
-        background: 'transparent',
-        display: 'flex',
-        flexDirection: 'column',
-        maxWidth: '560px',
-        margin: '0 auto',
-        width: '100%',
-      }}
-    >
-      {/* Status bar — renders instantly, no entrance animation in an emergency */}
-      <div
-        style={{
-          padding: '20px 20px 0',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <motion.div
-            animate={{ opacity: [1, 0.2, 1] }}
-            transition={{ duration: 1.0, repeat: Infinity }}
-            style={{ width: '8px', height: '8px', background: RED }}
-          />
-          <span style={{ color: RED, fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
-            {isDemo ? (es ? ES.demo : 'Demo · emergency mode') : es ? ES.mode : 'Emergency mode'}
+    <div className="app-shell" style={{ maxWidth: '560px', margin: '0 auto', width: '100%', padding: '18px 16px 40px' }}>
+      {/* The one card that matters: status, the question, and the call button. */}
+      <Hero tone="orange" style={{ padding: '18px 18px 20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '9px' }}>
+            <span className="ak-live" style={{ background: '#141413' }} />
+            <span className="ak-kicker">
+              {isDemo ? (es ? ES.demo : 'Demo emergency mode') : es ? ES.mode : 'Emergency mode'}
+            </span>
+          </span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{clock}</span>
+            <button
+              onClick={() => router.push('/dashboard')}
+              aria-label="Close emergency mode"
+              style={{ width: '40px', height: '40px', borderRadius: 8, background: 'rgba(20,20,19,0.12)', border: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <X size={17} color="#141413" />
+            </button>
           </span>
         </div>
-        <span style={{ color: T3, fontFamily: 'inherit', fontSize: '11px' }}>{clock}</span>
-      </div>
-
-      <div
-        style={{
-          flex: 1,
-          padding: '20px 20px 28px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '18px',
-        }}
-      >
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <h1
-              style={{
-                color: T1,
-                fontSize: '34px',
-                fontWeight: 900,
-                letterSpacing: '-1.3px',
-                lineHeight: 1.02,
-              }}
-            >
-              {es ? ES.title : 'What\u2019s happening?'}
-            </h1>
-            <p style={{ color: T2, fontSize: '14.5px', marginTop: '6px', fontWeight: 500 }}>
-              {es ? ES.sub : 'Tap one. Response starts immediately.'}
-            </p>
-          </div>
-          <button
-            onClick={() => router.push('/dashboard')}
-            aria-label="Close emergency mode"
-            style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: 0,
-              background: SURFACE,
-              border: `1px solid ${BORDER}`,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <X size={17} color={T2} />
-          </button>
-        </div>
-
-        {/* Call {emg.label} — always first, always huge */}
+        <h1 style={{ color: '#141413', fontSize: '38px', fontWeight: 900, letterSpacing: '-0.045em', lineHeight: 0.98 }}>
+          {es ? ES.title : 'What’s happening?'}
+        </h1>
+        <p style={{ fontSize: '15px', marginTop: '8px', fontWeight: 600, opacity: 0.85 }}>
+          {es ? ES.sub : 'Tap one. Response starts immediately.'}
+        </p>
         <motion.a
           href={`tel:${emg.number}`}
           whileTap={{ scale: 0.98 }}
-          className="sh-slant"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '12px',
-            background: '#FF8C00',
-            color: '#141413',
-            // Chamfered: the call control wears the same shape everywhere it
-            // appears, so it is recognisable before it is readable.
-            padding: '22px',
-            borderRadius: 0,
-            fontWeight: 900,
-            fontSize: '22px',
-            letterSpacing: '-0.3px',
-            textDecoration: 'none',
-            minHeight: '68px',
+            marginTop: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
+            background: '#141413', color: '#FFFFFF', padding: '20px', borderRadius: 8,
+            fontWeight: 900, fontSize: '21px', letterSpacing: '-0.02em', textDecoration: 'none', minHeight: '66px',
+            boxShadow: '0 10px 24px rgba(20,20,19,0.28)',
           }}
         >
-          <Phone size={24} strokeWidth={2.5} />
+          <Phone size={23} strokeWidth={2.5} />
           {es ? ES.call(emg.label) : `Call ${emg.label} now`}
         </motion.a>
+      </Hero>
 
-        {/* Language first, so the recogniser and the screen are right before they
-            talk. Shown even without speech support, because ES also translates
-            this screen. */}
-        {
-          <div style={{ display: 'flex', gap: '6px', marginBottom: '-4px' }}>
-            {VOICE_LANGS.map((l) => {
-              const on = l.id === lang
-              return (
-                <button
-                  key={l.id}
-                  onClick={() => pickLang(l.id)}
-                  aria-pressed={on}
-                  style={{
-                    background: on ? T1 : 'transparent',
-                    color: on ? '#FFFFFF' : T3,
-                    border: 'none',
-                    boxShadow: on ? 'none' : `inset 0 0 0 1.5px ${T1}`,
-                    padding: '6px 14px',
-                    borderRadius: 6,
-                    fontFamily: 'inherit',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    letterSpacing: '0.5px',
-                    cursor: 'pointer',
-                    minHeight: '30px',
-                  }}
-                >
-                  {l.chip}
-                </button>
-              )
-            })}
-          </div>
-        }
+      {/* Say it or type it. Language first so the recogniser is right. */}
+      <Panel accent="green" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+          <span className="ak-panel-title" style={{ flex: 1, fontSize: '16px' }}>{es ? 'Dígalo' : 'Say it'}</span>
+          {VOICE_LANGS.map((l) => {
+            const on = l.id === lang
+            return (
+              <button
+                key={l.id}
+                onClick={() => pickLang(l.id)}
+                aria-pressed={on}
+                className="ak-chip"
+                style={on ? { background: '#1E3A23', color: '#fff', boxShadow: 'none', cursor: 'pointer', border: 0 } : { cursor: 'pointer', border: 0 }}
+              >
+                {l.chip}
+              </button>
+            )
+          })}
+        </div>
 
         {voiceSupported && (
           <motion.button
@@ -433,38 +357,19 @@ export default function Emergency() {
             onClick={listening ? stopVoice : startVoice}
             disabled={loading}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '11px',
-              width: '100%',
-              background: listening ? RED_DIM : '#FFFFFF',
-              border: 'none',
-              boxShadow: `inset 0 0 0 2px ${listening ? RED : T1}`,
-              color: listening ? RED : T1,
-              padding: '17px',
-              borderRadius: 0,
-              fontWeight: 700,
-              fontSize: '16px',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              minHeight: '58px',
-              transition: 'all 0.15s ease',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '11px', width: '100%',
+              background: listening ? '#F07800' : '#1E3A23', border: 'none', color: listening ? '#141413' : '#FFFFFF',
+              padding: '17px', borderRadius: 8, fontWeight: 750, fontSize: '16px', cursor: 'pointer',
+              fontFamily: 'inherit', minHeight: '58px', transition: 'background-color 0.15s ease',
             }}
           >
-            <motion.span
-              animate={listening ? { scale: [1, 1.25, 1] } : {}}
-              transition={{ duration: 0.9, repeat: Infinity }}
-              style={{ display: 'flex' }}
-            >
+            <motion.span animate={listening ? { scale: [1, 1.25, 1] } : {}} transition={{ duration: 0.9, repeat: Infinity }} style={{ display: 'flex' }}>
               <Mic size={19} strokeWidth={2.2} />
             </motion.span>
             {listening ? (transcript ? `"${transcript.slice(-42)}"` : L.listening) : L.speak}
           </motion.button>
         )}
 
-        {/* Typing works where speaking does not: a loud room, a quiet one, or no
-            microphone. Same on phone classifier as voice. */}
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -480,18 +385,9 @@ export default function Emergency() {
             aria-label={es ? 'Escriba lo que pasa' : 'Type what is happening'}
             placeholder={es ? 'O escriba lo que pasa' : 'Or type what is happening'}
             style={{
-              flex: 1,
-              minWidth: 0,
-              border: 'none',
-              boxShadow: `inset 0 -2px 0 ${T1}`,
-              borderRadius: 0,
-              padding: '0 14px',
-              minHeight: '54px',
-              fontSize: '16px',
-              fontFamily: 'inherit',
-              color: T1,
-              background: '#FFFFFF',
-              outline: 'none',
+              flex: 1, minWidth: 0, border: 'none', boxShadow: 'inset 0 0 0 1.5px rgba(20,20,19,0.18)', borderRadius: 8,
+              padding: '0 14px', minHeight: '54px', fontSize: '16px', fontFamily: 'inherit', color: T1,
+              background: 'rgba(255,253,248,0.85)', outline: 'none',
             }}
           />
           <button
@@ -499,17 +395,9 @@ export default function Emergency() {
             disabled={loading || typed.trim().length < 3}
             aria-label={es ? 'Enviar' : 'Send'}
             style={{
-              width: '54px',
-              minHeight: '54px',
-              borderRadius: 0,
-              border: 'none',
-              background: typed.trim().length >= 3 ? T1 : '#B9B6AA',
-              color: '#FFFFFF',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
+              width: '54px', minHeight: '54px', borderRadius: 8, border: 'none',
+              background: typed.trim().length >= 3 ? '#F07800' : 'rgba(20,20,19,0.12)', color: '#141413',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}
           >
             <ArrowRight size={20} />
@@ -517,160 +405,80 @@ export default function Emergency() {
         </form>
 
         {heard && !pending && (
-          <p style={{ color: T3, fontSize: '12.5px', fontFamily: 'inherit', marginTop: '-6px' }}>
-            {heard.evidence.length > 0
-              ? `matched: ${heard.evidence.join(' · ')}`
-              : 'starting response'}
+          <p style={{ color: T3, fontSize: '12.5px' }}>
+            {heard.evidence.length > 0 ? `matched: ${heard.evidence.join(' · ')}` : 'starting response'}
             {heard.source === 'device' ? ' · on phone' : ' · assisted'}
           </p>
         )}
 
-        {/* The suggestion, stated as a suggestion. Overridable by tapping any type
-            below, which cancels the auto-continue. */}
         {pending && (
           <motion.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            style={{
-              border: `1px solid ${BORDER}`,
-              padding: '11px 13px',
-              marginTop: '-6px',
-            }}
+            style={{ background: '#1E3A23', color: '#fff', borderRadius: 8, padding: '13px 15px' }}
           >
-            <p
-              style={{
-                color: T3,
-                fontSize: '13px',
-                fontWeight: 600,
-                letterSpacing: '0',
-                marginBottom: '4px',
-              }}
-            >
-              {es ? ES.suggested : 'Suggested, starting in a moment'}
-            </p>
-            <p style={{ color: T1, fontSize: '16px', fontWeight: 700 }}>{pending.label}</p>
+            <p className="ak-kicker" style={{ marginBottom: '4px' }}>{es ? ES.suggested : 'Suggested, starting in a moment'}</p>
+            <p style={{ fontSize: '18px', fontWeight: 800 }}>{pending.label}</p>
             {heard && heard.evidence.length > 0 && (
-              <p style={{ color: T3, fontSize: '11.5px', fontFamily: 'inherit', marginTop: '3px' }}>
+              <p style={{ fontSize: '12px', opacity: 0.8, marginTop: '3px' }}>
                 heard: {heard.evidence.join(' · ')}
                 {heard.source === 'device' ? ' · on phone' : ' · assisted'}
               </p>
             )}
-            <p style={{ color: T2, fontSize: '12px', lineHeight: 1.5, marginTop: '6px' }}>
+            <p style={{ fontSize: '12.5px', lineHeight: 1.5, marginTop: '6px', opacity: 0.85 }}>
               {es ? ES.notRight : 'Not right? Pick the correct one below. That overrides this.'}
             </p>
           </motion.div>
         )}
+      </Panel>
 
-        {/* Type list — flat hairline rows, no boxes */}
-        <div style={{ borderTop: `1px solid ${BORDER}` }}>
-          {TYPES.map((type) => {
-            const isSel = selected === type.id
-            return (
-              <motion.button
-                key={type.id}
-                whileTap={{ scale: 0.99 }}
-                onClick={() => handleSelect(type.id)}
-                disabled={loading}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px',
-                  background: isSel ? RED_DIM : 'transparent',
-                  border: 'none',
-                  borderBottom: `1px solid ${BORDER}`,
-                  padding: '17px 4px',
-                  minHeight: '68px',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  transition: 'background 0.15s',
-                  opacity: loading && !isSel ? 0.3 : 1,
-                  width: '100%',
-                }}
-              >
-                <type.Icon
-                  size={20}
-                  color={isSel ? RED : T1}
-                  strokeWidth={2}
-                  style={{ flexShrink: 0 }}
-                />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p
-                    style={{
-                      color: isSel ? RED : T1,
-                      fontWeight: 800,
-                      fontSize: '17px',
-                      letterSpacing: '-0.3px',
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {typeLabel(type.id, type.label)}
-                  </p>
-                  <p style={{ color: T3, fontSize: '13px', lineHeight: 1.4, marginTop: '2px' }}>
-                    {typeDesc(type.id, type.desc)}
-                  </p>
-                </div>
-                {isSel && loading ? (
-                  <span
-                    style={{
-                      color: RED,
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      letterSpacing: '0',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {es ? ES.starting : 'Starting…'}
-                  </span>
-                ) : (
-                  <ChevronRight size={16} color="#C4BFB0" style={{ flexShrink: 0 }} />
-                )}
-              </motion.button>
-            )
-          })}
-        </div>
-
-        {/* Triage link */}
-        <div style={{ textAlign: 'center', paddingTop: '2px' }}>
-          <button
-            onClick={() => router.push('/emergency/triage')}
-            style={{
-              color: T2,
-              fontSize: '13.5px',
-              fontWeight: 500,
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              padding: '10px',
-            }}
-          >
-            {es ? ES.severity : 'Not sure how serious?'}{' '}
-            <span style={{ color: ACCENT, fontWeight: 700 }}>
-              {es ? ES.assess : 'Assess severity →'}
-            </span>
-          </button>
-          <button
-            onClick={() => router.push('/check')}
-            style={{
-              display: 'block',
-              margin: '0 auto',
-              color: T2,
-              fontSize: '13.5px',
-              fontWeight: 500,
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              padding: '6px 10px',
-            }}
-          >
-            {es
-              ? 'Medir pulso y respiración con el teléfono'
-              : 'Check pulse and breathing with your phone'}{' '}
-            <span style={{ color: ACCENT, fontWeight: 700 }}>→</span>
-          </button>
-        </div>
+      {/* Or tap it. Orange edge means life threatening. */}
+      <div className="ak-tiles" style={{ marginBottom: '14px' }}>
+        {TYPES.map((type) => {
+          const isSel = selected === type.id
+          return (
+            <motion.button
+              key={type.id}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => handleSelect(type.id)}
+              disabled={loading}
+              className={`ak-tile${URGENT.has(type.id) ? ' ak-tile-urgent' : ''}`}
+              style={{
+                opacity: loading && !isSel ? 0.35 : 1,
+                ...(isSel ? { background: '#1E3A23', color: '#fff' } : {}),
+                ...(type.id === 'other' ? { gridColumn: '1 / -1' } : {}),
+              }}
+            >
+              <type.Icon size={22} color={isSel ? '#fff' : URGENT.has(type.id) ? '#C25E00' : '#2F5233'} strokeWidth={2.2} />
+              <span className="ak-tile-t" style={{ marginTop: '10px' }}>{typeLabel(type.id, type.label)}</span>
+              <span className="ak-tile-s" style={isSel ? { color: 'rgba(255,255,255,0.8)' } : undefined}>
+                {isSel && loading ? (es ? ES.starting : 'Starting…') : typeDesc(type.id, type.desc)}
+              </span>
+            </motion.button>
+          )
+        })}
       </div>
+
+      <section className="glass" style={{ padding: '4px' }}>
+        <Accordion title={es ? 'Más ayuda' : 'More help'} hint={es ? 'Gravedad y signos vitales' : 'Check how serious it is, or measure vitals'}>
+          <button className="row" onClick={() => router.push('/emergency/triage')}>
+            <span style={{ flex: 1 }}>
+              <span className="row-title" style={{ display: 'block' }}>{es ? ES.assess.replace(' →', '') : 'Assess severity'}</span>
+              <span className="row-sub" style={{ display: 'block' }}>{es ? ES.severity : 'Not sure how serious?'}</span>
+            </span>
+            <ChevronRight size={16} color="#3F3D36" />
+          </button>
+          <button className="row" onClick={() => router.push('/check')}>
+            <span style={{ flex: 1 }}>
+              <span className="row-title" style={{ display: 'block' }}>{es ? 'Signos vitales' : 'Vitals check'}</span>
+              <span className="row-sub" style={{ display: 'block' }}>
+                {es ? 'Medir pulso y respiración con el teléfono' : 'Check pulse and breathing with your phone'}
+              </span>
+            </span>
+            <ChevronRight size={16} color="#3F3D36" />
+          </button>
+        </Accordion>
+      </section>
     </div>
   )
 }

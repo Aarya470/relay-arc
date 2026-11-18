@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowLeft, Plus, Check, X, ChevronDown, Pill } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
+import Accordion from '@/components/Accordion'
+import { AppHeader, Hero } from '@/components/AppKit'
 import BottomNav from '@/components/BottomNav'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
@@ -17,7 +19,7 @@ const T3 = '#5C5A52'
 const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.08)'
 const RED = '#8F4A00'
-const RED_DIM = 'rgba(255,140,0,0.07)'
+const RED_DIM = 'rgba(240,120,0,0.07)'
 const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER = '#7C5200'
@@ -346,117 +348,53 @@ export default function Medications() {
         width: '100%',
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          padding: '56px 20px 16px',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            marginBottom: '18px',
-          }}
-        >
-          <div>
-            <button
-              onClick={() => router.push('/dashboard')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '7px',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                marginBottom: '18px',
-                color: T3,
-                fontSize: '13px',
-                fontWeight: 500,
-                fontFamily: 'inherit',
-              }}
+      <div style={{ padding: '0 16px' }}>
+        <AppHeader
+          title="Medications"
+          right={
+            <motion.button
+              whileTap={{ scale: 0.92 }}
+              transition={spring}
+              onClick={() => setShowAdd(true)}
+              aria-label="Add medication"
+              className="ds-btn ds-btn-sos"
+              style={{ height: '42px', padding: '0 14px', borderRadius: 8, border: 0, display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 800, cursor: 'pointer' }}
             >
-              <ArrowLeft size={14} /> Dashboard
-            </button>
-            <p
-              style={{
-                color: T3,
-                fontSize: '13px',
-                fontWeight: 600,
-                marginBottom: '7px',
-                letterSpacing: '0',
-              }}
-            >
-              {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
-              {totalDoses > 0 && ` · ${takenCount}/${totalDoses} doses`}
-            </p>
-            <h1
-              style={{
-                color: T1,
-                fontWeight: 800,
-                fontSize: '32px',
-                letterSpacing: '-0.4px',
-                lineHeight: 1,
-              }}
-            >
-              Medications
-            </h1>
+              <Plus size={16} color="#141413" /> Add
+            </motion.button>
+          }
+        />
+        <Hero>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '12px' }}>
+            <div>
+              <span className="ak-kicker">{new Date().toLocaleDateString('en-US', { weekday: 'long' })}</span>
+              <div className="ak-metric" style={{ marginTop: '6px' }}>
+                <span className="ak-metric-v">{takenCount}</span>
+                <span className="ak-metric-u">of {totalDoses} doses</span>
+              </div>
+            </div>
+            <span className="ak-chip ak-chip-dark">{adherenceRate}% this month</span>
           </div>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            transition={spring}
-            onClick={() => setShowAdd(true)}
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 0,
-              background: ACCENT_DIM,
-              border: `1px solid rgba(86,128,78,0.14)`,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Plus size={16} color={ACCENT} />
-          </motion.button>
-        </div>
-
-        {/* Progress bar */}
-        <div style={{ borderTop: `1px solid ${BORDER}`, padding: '14px 0 2px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <p style={{ color: T1, fontSize: '13px', fontWeight: 700 }}>
-              {takenCount} of {totalDoses} doses taken
-            </p>
-            <p
-              style={{ color: T3, fontSize: '11px', fontFamily: 'inherit', letterSpacing: '0.5px' }}
-            >
-              {Math.round(progress)}%
-            </p>
+          <div style={{ display: 'flex', gap: '4px', marginTop: '16px' }} aria-hidden>
+            {Array.from({ length: Math.max(totalDoses, 1) }).map((_, k) => (
+              <span
+                key={k}
+                style={{
+                  flex: 1, height: '10px', borderRadius: 3,
+                  background: k < takenCount ? '#F07800' : 'rgba(255,255,255,0.18)',
+                  transition: 'background-color 300ms var(--ease-out)',
+                }}
+              />
+            ))}
           </div>
-          <div
-            style={{
-              height: '5px',
-              background: BG,
-              borderRadius: '99px',
-              overflow: 'hidden',
-              border: `1px solid ${BORDER}`,
-            }}
-          >
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
-              style={{
-                height: '100%',
-                background: progress >= 100 ? GREEN : ACCENT,
-                borderRadius: '99px',
-              }}
-            />
-          </div>
-        </div>
+          <p style={{ fontSize: '13.5px', opacity: 0.85, marginTop: '10px' }}>
+            {totalDoses === 0
+              ? 'Add a medication to start tracking'
+              : progress >= 100
+                ? 'Everything taken today. Nice work.'
+                : `${totalDoses - takenCount} left today`}
+          </p>
+        </Hero>
       </div>
 
       {/* Add medication sheet */}
@@ -483,8 +421,8 @@ export default function Medications() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              className="glass" style={{
-                borderRadius: 0,
+              className="glass-strong glass" style={{
+                borderRadius: "12px 12px 0 0",
                 padding: '24px 20px 40px',
                 width: '100%',
                 maxHeight: '85dvh',
@@ -716,36 +654,22 @@ export default function Medications() {
       </AnimatePresence>
 
       {/* Medication list */}
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: '0 16px 16px' }}>
         {/* Adherence analytics card */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, ...spring }}
-          className="glass" style={{
-            borderRadius: 0,
+          className="glass ak-accent-green" style={{
+            borderRadius: 10,
             marginBottom: '14px',
             overflow: 'hidden',
             boxShadow: SHADOW,
           }}
         >
+          <Accordion title="Adherence" hint={`${adherenceRate}% of the last 28 days`}>
           <div
-            style={{
-              padding: '13px 16px',
-              borderBottom: `1px solid ${BORDER}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <p style={{ color: T1, fontSize: '15px', fontWeight: 700, letterSpacing: '-0.3px' }}>
-              Adherence
-            </p>
-            <span style={{ color: T3, fontSize: '13px', letterSpacing: '0' }}>28 days</span>
-          </div>
-
-          <div
-            style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}
+            style={{ padding: '0 10px 6px', display: 'flex', flexDirection: 'column', gap: '16px' }}
           >
             {/* Week dots */}
             <div>
@@ -916,6 +840,7 @@ export default function Medications() {
               </div>
             </div>
           </div>
+          </Accordion>
         </motion.div>
 
         {medications.length === 0 && (
@@ -947,8 +872,8 @@ export default function Medications() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: medIndex * 0.05, ...spring }}
-            className="glass" style={{
-              borderRadius: 0,
+            className="glass ak-accent-green" style={{
+              borderRadius: 10,
               marginBottom: '12px',
               overflow: 'hidden',
               boxShadow: SHADOW,
@@ -1008,7 +933,7 @@ export default function Medications() {
                     height: '30px',
                     borderRadius: 0,
                     background: RED_DIM,
-                    border: `1px solid rgba(255,140,0,0.14)`,
+                    border: `1px solid rgba(240,120,0,0.14)`,
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',

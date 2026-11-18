@@ -89,7 +89,7 @@ const T = {
   textSec: '#5C5A52',
   textMuted: '#5C5A52',
   red: '#8F4A00',
-  redSoft: 'rgba(255,140,0,0.12)',
+  redSoft: 'rgba(240,120,0,0.12)',
   redGlow: 'none',
   green: '#42623C',
   greenSoft: 'rgba(86,128,78,0.12)',
@@ -1091,7 +1091,7 @@ function RoutingPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid rgba(255,140,0,0.18)',
+          borderBottom: '1px solid rgba(240,120,0,0.18)',
           flexShrink: 0,
         }}
       >
@@ -2178,7 +2178,7 @@ function RoutingPage() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                borderBottom: '1px solid rgba(255,140,0,0.18)',
+                borderBottom: '1px solid rgba(240,120,0,0.18)',
                 flexShrink: 0,
               }}
             >

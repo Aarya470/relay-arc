@@ -14,7 +14,7 @@ const PAPER = '#F7F5EE'
 const FOREST = '#1E3A23'
 const INK = '#141413'
 const INK2 = '#3F3D36'
-const SOS = '#FF8C00'
+const SOS = '#F07800'
 const SOS_TEXT = '#8F4A00'
 const GREEN = '#42623C'
 

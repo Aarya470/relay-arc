@@ -19,7 +19,7 @@ function getPainColor(n: number): string {
 function getPainBg(n: number): string {
   if (n <= 5) return 'rgba(86,128,78,0.12)'
   if (n <= 8) return 'rgba(168,114,0,0.12)'
-  return 'rgba(255,140,0,0.12)'
+  return 'rgba(240,120,0,0.12)'
 }
 
 function computeOutcome(pain: number, canMove: boolean, alone: boolean): Outcome {
@@ -83,7 +83,7 @@ export default function TriagePage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          boxShadow: '0 2px 20px rgba(255,140,0,0.30)',
+          boxShadow: '0 2px 20px rgba(240,120,0,0.30)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -340,7 +340,7 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: 0,
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(255,140,0,0.22)',
+                    border: '1.5px solid rgba(240,120,0,0.22)',
                     cursor: 'pointer',
                     textAlign: 'left',
                   }}
@@ -425,7 +425,7 @@ export default function TriagePage() {
                     padding: '22px 20px',
                     borderRadius: 0,
                     background: '#FFFFFF',
-                    border: '1.5px solid rgba(255,140,0,0.22)',
+                    border: '1.5px solid rgba(240,120,0,0.22)',
                     cursor: 'pointer',
                     textAlign: 'left',
                   }}
@@ -459,8 +459,8 @@ export default function TriagePage() {
             >
               <div
                 style={{
-                  background: 'rgba(255,140,0,0.08)',
-                  border: '1.5px solid rgba(255,140,0,0.25)',
+                  background: 'rgba(240,120,0,0.08)',
+                  border: '1.5px solid rgba(240,120,0,0.25)',
                   borderRadius: 0,
                   padding: '24px',
                   marginBottom: '16px',

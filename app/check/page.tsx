@@ -31,6 +31,8 @@ import {
 } from '@/lib/risk'
 import { emergencyNumber } from '@/lib/emergency-number'
 import SignalView from '@/components/SignalView'
+import Accordion from '@/components/Accordion'
+import { AppHeader, Hero } from '@/components/AppKit'
 
 // ── look ──────────────────────────────────────────────────────────────────────
 const PAGE = '#B3DDAC',
@@ -43,7 +45,7 @@ const LINE = '#E4E2DA',
   RED = '#8F4A00',
   GREEN = '#3B5E35',
   AMBER = '#7C5200',
-  ORANGE = '#D97757'
+  ORANGE = '#F07800'
 const mono = 'var(--font-mono, monospace)'
 
 // 15 seconds per reading. If the pulse is not confirmed by then, the page keeps
@@ -79,18 +81,20 @@ const srcLabel: Record<Source, string> = {
 }
 
 const panel: React.CSSProperties = {
-  background: '#FFFFFF',
-  border: '1px solid rgba(20,20,19,0.14)',
-  borderRadius: 0,
-  padding: '18px',
+  background: 'var(--glass-strong)',
+  WebkitBackdropFilter: 'blur(18px) saturate(1.5)',
+  backdropFilter: 'blur(18px) saturate(1.5)',
+  boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.75), inset 4px 0 0 #2F5233, 0 10px 26px rgba(30,58,35,0.12)',
+  borderRadius: 10,
+  padding: '18px 18px 18px 22px',
   marginBottom: '14px',
 }
 const h2: React.CSSProperties = {
-  fontSize: '19px',
-  fontWeight: 700,
+  fontSize: '20px',
+  fontWeight: 800,
   color: T1,
   margin: 0,
-  letterSpacing: '-0.1px',
+  letterSpacing: '-0.02em',
 }
 const lbl: React.CSSProperties = { fontSize: '14px', color: T2, fontWeight: 600 }
 const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
@@ -101,7 +105,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
   background: primary ? tone : '#FFFFFF',
   color: primary ? '#FFFFFF' : tone,
   border: `1.5px solid ${tone}`,
-  borderRadius: 0,
+  borderRadius: 8,
   padding: '12px 18px',
   minHeight: '48px',
   fontWeight: 700,
@@ -113,7 +117,7 @@ const btn = (primary: boolean, tone: string = T1): React.CSSProperties => ({
 const input: React.CSSProperties = {
   width: '100%',
   border: `1px solid ${LINE2}`,
-  borderRadius: 0,
+  borderRadius: 8,
   padding: '11px 12px',
   minHeight: '48px',
   fontSize: '16px',
@@ -616,53 +620,26 @@ export default function VitalsCheck() {
             : { bg: '#D6EED0', fg: GREEN }
 
   return (
-    <div style={{ background: PAGE, minHeight: '100dvh' }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '16px 16px 64px' }}>
-        <button
-          onClick={() => router.back()}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'none',
-            border: 'none',
-            color: T1,
-            fontWeight: 600,
-            fontSize: '15px',
-            cursor: 'pointer',
-            padding: '6px 0',
-            fontFamily: 'inherit',
-          }}
-        >
-          <ArrowLeft size={17} /> Back
-        </button>
-
-        <div style={{ margin: '14px 0 20px' }}>
-          <h1
-            style={{
-              color: T1,
-              fontSize: '30px',
-              fontWeight: 800,
-              letterSpacing: '-0.4px',
-              lineHeight: 1.15,
-              margin: '0 0 8px',
-            }}
-          >
-            Vitals check
-          </h1>
-          <p style={{ color: T2, fontSize: '16px', lineHeight: 1.55, margin: 0 }}>
-            Your pulse from the camera and your breathing from the motion sensor, 15 seconds each.
-            The NEWS2 table at the bottom also uses your Apple Watch and today&apos;s check in, and
-            updates by itself.
+    <div className="app-shell" style={{ minHeight: '100dvh' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 16px 64px' }}>
+        <AppHeader title="Vitals check" back="/dashboard" />
+        <Hero>
+          <span className="ak-kicker">Phone only, about 30 seconds</span>
+          <p style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.2, margin: '8px 0 14px' }}>
+            Pulse from the camera, breathing from the motion sensor. Your score builds below.
           </p>
-        </div>
-
-        <a
-          href={`tel:${emg.number}`}
-          style={{ ...btn(true, RED), width: '100%', marginBottom: '20px', textDecoration: 'none' }}
-        >
-          <Phone size={18} /> Feeling very unwell? Call {emg.label} first
-        </a>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+            <span className="ak-chip ak-chip-dark">{measuredCount} of 7 measured</span>
+            {assessment ? <span className="ak-chip ak-chip-dark">NEWS2 {total}</span> : null}
+          </div>
+          <a
+            href={`tel:${emg.number}`}
+            className="ds-btn ds-btn-sos"
+            style={{ width: '100%', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', minHeight: '52px', borderRadius: 8, fontWeight: 800 }}
+          >
+            <Phone size={18} /> Feeling very unwell? Call {emg.label} first
+          </a>
+        </Hero>
 
         {/* ── Pulse ─────────────────────────────────────────────────────── */}
         <section style={panel}>
@@ -701,9 +678,9 @@ export default function VitalsCheck() {
           >
             <span
               style={{
-                fontSize: '56px',
-                fontWeight: 700,
-                letterSpacing: '-1px',
+                fontSize: '68px',
+                fontWeight: 800,
+                letterSpacing: '-0.05em',
                 lineHeight: 1,
                 color: bpmShown ? T1 : '#B9B6AA',
                 fontVariantNumeric: 'tabular-nums',
@@ -840,8 +817,10 @@ export default function VitalsCheck() {
               {pulseMsg}
             </p>
           )}
-          <div style={{ marginTop: '14px' }}>
-            <SignalView samples={rawPulseRef.current} kind="pulse" version={sigVersion} />
+          <div style={{ marginTop: '10px', marginLeft: '-10px', marginRight: '-10px' }}>
+            <Accordion title="See the pulse signal" hint="The raw camera trace">
+              <SignalView samples={rawPulseRef.current} kind="pulse" version={sigVersion} />
+            </Accordion>
           </div>
         </section>
 
@@ -958,15 +937,17 @@ export default function VitalsCheck() {
               {breathMsg}
             </p>
           )}
-          <div style={{ marginTop: '14px' }}>
-            <SignalView samples={motionSamples.current} kind="breath" version={sigVersion} />
+          <div style={{ marginTop: '10px', marginLeft: '-10px', marginRight: '-10px' }}>
+            <Accordion title="See the breathing signal" hint="The raw motion trace">
+              <SignalView samples={motionSamples.current} kind="breath" version={sigVersion} />
+            </Accordion>
           </div>
         </section>
 
         {/* ── Also counted ────────────────────────────────────────────── */}
-        <section style={panel}>
-          <h2 style={h2}>Also counted automatically</h2>
-          <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <section style={{ ...panel, padding: '4px 4px 4px 8px' }}>
+          <Accordion title="Also counted automatically" hint={`Apple Watch ${watchLast ? 'connected' : 'not connected'}, daily check in ${checkinLast ? 'done' : 'not done'}`}>
+          <div style={{ padding: '0 10px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
               <Watch size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
               <div style={{ flex: 1 }}>
@@ -1013,32 +994,35 @@ export default function VitalsCheck() {
               </div>
             </div>
           </div>
+          </Accordion>
         </section>
 
         {/* ── NEWS2 ─────────────────────────────────────────────────────── */}
         <section style={{ ...panel, padding: 0, overflow: 'hidden' }}>
           <div
             style={{
-              padding: '18px 18px 12px',
+              padding: '18px',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'flex-end',
               gap: '10px',
-              borderBottom: `2px solid ${T1}`,
+              background: '#1E3A23',
+              color: '#fff',
             }}
           >
             <div>
-              <h2 style={h2}>NEWS2 score</h2>
-              <p style={{ fontSize: '14px', color: T3, margin: '2px 0 0' }}>
+              <h2 style={{ ...h2, color: '#fff' }}>NEWS2 score</h2>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', margin: '2px 0 0' }}>
                 For your doctor, nurse or paramedic. {measuredCount} of 7 measured.
               </p>
             </div>
             <span
               style={{
-                fontSize: '44px',
-                fontWeight: 700,
+                fontSize: '56px',
+                fontWeight: 800,
+                letterSpacing: '-0.05em',
                 lineHeight: 1,
-                color: T1,
+                color: '#FFB860',
                 fontVariantNumeric: 'tabular-nums',
               }}
             >

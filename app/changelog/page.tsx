@@ -10,7 +10,7 @@ const INK = '#141413',
 const BORDER = '#7EB382',
   CREAM = '#4B8150'
 const GREEN_DEEP = '#42623C',
-  ORANGE = '#D97757',
+  ORANGE = '#F07800',
   CRIT = '#8F4A00'
 const mono = 'var(--font-mono, monospace)'
 

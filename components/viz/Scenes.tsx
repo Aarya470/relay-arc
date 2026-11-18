@@ -284,7 +284,7 @@ export function TrendScene() {
   const bands = [
     { from: 0, to: 4.5, fill: 'rgba(86,128,78,0.12)', label: 'Low (0–4)', color: GREEN_DEEP },
     { from: 4.5, to: 6.5, fill: 'rgba(124,82,0,0.13)', label: 'Medium (5–6)', color: WARN },
-    { from: 6.5, to: 10, fill: 'rgba(255,140,0,0.10)', label: 'High (7+)', color: CRIT },
+    { from: 6.5, to: 10, fill: 'rgba(240,120,0,0.10)', label: 'High (7+)', color: CRIT },
   ]
   const dot = (s: number) => (s >= 7 ? CRIT : s >= 5 ? WARN : GREEN_DEEP)
   const path = scores.map((s, i) => `${i ? 'L' : 'M'}${x(i)},${y(s)}`).join(' ')

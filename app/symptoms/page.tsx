@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowLeft, Activity, Wind, Zap, AlertCircle, Battery, Check } from '@/lib/plain-icons'
+import Accordion from '@/components/Accordion'
+import { AppHeader, Hero } from '@/components/AppKit'
 import BottomNav from '@/components/BottomNav'
 
 // ── types ────────────────────────────────────────────────────────────────────
@@ -46,7 +48,7 @@ function valueBg(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return 'rgba(86,128,78,0.12)'
   if (normalized <= 6) return 'rgba(168,114,0,0.12)'
-  return 'rgba(255,140,0,0.12)'
+  return 'rgba(240,120,0,0.12)'
 }
 
 function sliderFillColor(value: number, inverted: boolean): string {
@@ -412,6 +414,7 @@ export default function SymptomsPage() {
 
   // build 7-day trend data per metric
   const last7 = history.slice(0, 7).reverse()
+  const weekCount = history.filter((h) => Date.now() - new Date(h.created_at).getTime() < 7 * 864e5).length
   const trendData = METRICS.map((m) => ({
     ...m,
     values: last7.map((l) => l[m.key] as number),
@@ -425,74 +428,34 @@ export default function SymptomsPage() {
         paddingBottom: '112px',
       }}
     >
-      {/* ── header ── */}
-      <div
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 20,
-          background: 'rgba(244,245,247,0.92)',
-          borderBottom: '1px solid #98C890',
-          padding: '0 20px',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '560px',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            height: '62px',
-            gap: '12px',
-          }}
-        >
-          <motion.button
-            whileTap={{ scale: 0.88 }}
-            onClick={() => router.push('/dashboard')}
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: 0,
-              background: 'transparent',
-              border: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              flexShrink: 0,
-            }}
-          >
-            <ArrowLeft size={18} color="#5C5A52" strokeWidth={2} />
-          </motion.button>
-          <div>
-            <h1
-              style={{
-                fontSize: '28px',
-                fontWeight: 900,
-                color: '#141413',
-                margin: 0,
-                letterSpacing: '-0.4px',
-                lineHeight: 1.1,
-              }}
-            >
-              How are you feeling?
-            </h1>
-            <p style={{ fontSize: '12px', color: '#5C5A52', margin: '2px 0 0' }}>{todayLabel()}</p>
+      <div style={{ maxWidth: '560px', margin: '0 auto', padding: '0 16px' }}>
+        <AppHeader title="How are you feeling?" sub={todayLabel()} />
+        <Hero style={{ padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+            <div>
+              <span className="ak-kicker">This week</span>
+              <div className="ak-metric" style={{ marginTop: '4px' }}>
+                <span className="ak-metric-v" style={{ fontSize: '52px' }}>{weekCount}</span>
+                <span className="ak-metric-u">{weekCount === 1 ? 'log' : 'logs'}</span>
+              </div>
+            </div>
+            <p style={{ fontSize: '14px', opacity: 0.85, maxWidth: '15em', textAlign: 'right', lineHeight: 1.45 }}>
+              Slide each one, then log it. Patterns show up after a few days.
+            </p>
           </div>
-        </div>
+        </Hero>
       </div>
 
-      <div style={{ maxWidth: '560px', margin: '0 auto', padding: '24px 16px 0' }}>
+      <div style={{ maxWidth: '560px', margin: '0 auto', padding: '0 16px' }}>
         {/* ── sliders card ── */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+          className="glass ak-accent-green"
           style={{
-            background: '#FFFFFF',
-            border: '1px solid #98C890',
-            borderRadius: 0,
-            padding: '20px 20px 16px',
+            borderRadius: 10,
+            padding: '20px 20px 16px 24px',
             marginBottom: '16px',
           }}
         >
@@ -737,26 +700,11 @@ export default function SymptomsPage() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 28 }}
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
-              borderRadius: 0,
-              padding: '20px',
-              marginBottom: '20px',
-            }}
+            className="glass"
+            style={{ borderRadius: 10, padding: '4px', marginBottom: '14px' }}
           >
-            <p
-              style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                color: '#5C5A52',
-                letterSpacing: '0',
-                margin: '0 0 18px',
-              }}
-            >
-              7-day trends
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <Accordion title="Seven day trends" hint="How each one moved this week" defaultOpen>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', padding: '4px 10px 6px' }}>
               {trendData.map((m) => {
                 if (m.values.length < 2) return null
                 const latest = m.values[m.values.length - 1]
@@ -810,22 +758,14 @@ export default function SymptomsPage() {
                 )
               })}
             </div>
+            </Accordion>
           </motion.div>
         )}
 
         {/* ── history timeline ── */}
-        <div style={{ marginBottom: '20px' }}>
-          <p
-            style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: '#5C5A52',
-              letterSpacing: '0',
-              margin: '0 0 14px 2px',
-            }}
-          >
-            Recent history
-          </p>
+        <div className="glass" style={{ marginBottom: '20px', borderRadius: 10, padding: '4px' }}>
+          <Accordion title="Recent history" hint={history.length ? `${history.length} entries` : 'Nothing logged yet'}>
+          <div style={{ padding: '0 10px 6px' }}>
           {historyLoading ? (
             <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '8px' }}>
               {Array.from({ length: 5 }).map((_, i) => (
@@ -892,6 +832,8 @@ export default function SymptomsPage() {
               ))}
             </div>
           )}
+          </div>
+          </Accordion>
         </div>
       </div>
 

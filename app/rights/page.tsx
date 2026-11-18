@@ -12,7 +12,7 @@ const INK = '#141413',
   INK3 = '#5C5A52'
 const WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
-const ORANGE = '#D97757'
+const ORANGE = '#F07800'
 
 // The page, and text ON it.
 const PAGE = '#B3DDAC'

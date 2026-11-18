@@ -552,9 +552,9 @@ export default function Appointments() {
       status === 'confirmed'
         ? 'rgba(86,128,78,0.12)'
         : status === 'declined' || status === 'missed'
-          ? 'rgba(255,140,0,0.12)'
+          ? 'rgba(240,120,0,0.12)'
           : '#F2F0E8',
-    border: `1px solid ${status === 'confirmed' ? 'rgba(86,128,78,0.28)' : status === 'declined' || status === 'missed' ? 'rgba(255,140,0,0.22)' : '#98C890'}`,
+    border: `1px solid ${status === 'confirmed' ? 'rgba(86,128,78,0.28)' : status === 'declined' || status === 'missed' ? 'rgba(240,120,0,0.22)' : '#98C890'}`,
     fontSize: '13px' as const,
     letterSpacing: '0',
     padding: '2px 7px',
@@ -564,7 +564,7 @@ export default function Appointments() {
   const cardBorderColor = (status: string) => {
     if (status === 'confirmed') return 'rgba(86,128,78,0.25)'
     if (status === 'pending') return 'rgba(168,114,0,0.25)'
-    if (status === 'missed' || status === 'declined') return 'rgba(255,140,0,0.20)'
+    if (status === 'missed' || status === 'declined') return 'rgba(240,120,0,0.20)'
     return '#F2F0E8'
   }
 

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowLeft, Send, Loader2, Check } from '@/lib/plain-icons'
+import Accordion from '@/components/Accordion'
+import { AppHeader, Hero } from '@/components/AppKit'
 import BottomNav from '@/components/BottomNav'
 import { sendPushNotification } from '@/lib/notifications'
 
@@ -154,91 +156,56 @@ export default function Checkin() {
   const QUICK_REPLIES = ['Feeling good!', 'A bit tired', 'Not great today', 'Some discomfort']
 
   // No avatar picture: the AI's messages are plain bubbles.
-  const AIAvatar = (_p: { size?: number }) => null
-
-
-  return (
-    <div
+  const AIAvatar = (_p: { size?: number }) => (
+    <span
+      aria-hidden
       style={{
-        minHeight: '100dvh',
-        background: 'transparent',
-        display: 'flex',
-        flexDirection: 'column',
-        paddingBottom: '112px',
-        maxWidth: '720px',
-        margin: '0 auto',
-        width: '100%',
+        width: '30px', height: '30px', borderRadius: 7, background: '#1E3A23', color: '#B3DDAC',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900,
+        letterSpacing: '-0.02em', flexShrink: 0,
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          padding: '48px 20px 18px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          background: BG,
-        }}
-      >
-        <button
-          onClick={() => router.push('/dashboard')}
-          aria-label="Back to dashboard"
-          style={{
-            width: '38px',
-            height: '38px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            marginLeft: '-8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          <ArrowLeft size={18} color={T2} />
-        </button>
+      RA
+    </span>
+  )
 
-        <div style={{ flex: 1 }}>
-          <h1
-            style={{
-              color: T1,
-              fontWeight: 800,
-              fontSize: '24px',
-              letterSpacing: '-0.4px',
-              margin: 0,
-            }}
-          >
-            Daily check in
-          </h1>
-          <p
-            style={{
-              color: T3,
-              fontSize: '13px',
-              marginTop: '2px',
-              fontFamily: 'inherit',
-              margin: '2px 0 0',
-              letterSpacing: '0.4px',
-            }}
-          >
-            {new Date()
-              .toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-          </p>
+
+  const asked = messages.filter((m) => m.role === 'ai').length
+  return (
+    <div
+      className="app-shell"
+      style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', paddingBottom: '112px', maxWidth: '720px', margin: '0 auto', width: '100%', padding: '0 16px 112px' }}
+    >
+      <AppHeader
+        title="Daily check in"
+        sub={new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+      />
+
+      <Hero style={{ padding: '18px 18px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+          <div>
+            <span className="ak-kicker">{done ? 'All done' : 'Two minutes, a few questions'}</span>
+            <p style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.2, marginTop: '6px' }}>
+              {done ? 'Saved to your history' : 'Talk like you would to a friend'}
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '4px' }} aria-label={`${Math.min(asked, 5)} of 5 questions`}>
+            {[0, 1, 2, 3, 4].map((k) => (
+              <span
+                key={k}
+                style={{
+                  width: '8px', height: '26px', borderRadius: 3,
+                  background: done || k < asked ? '#F07800' : 'rgba(255,255,255,0.2)',
+                  transition: 'background-color 240ms var(--ease-out)',
+                }}
+              />
+            ))}
+          </div>
         </div>
+      </Hero>
 
-      </div>
-
-
-      {/* Messages */}
       <div
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          padding: '20px 16px 8px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px',
-        }}
+        style={{ flex: 1, overflowY: 'auto', padding: '6px 0 8px', display: 'flex', flexDirection: 'column', gap: '12px' }}
       >
         <AnimatePresence initial={false}>
           {messages.map((m, i) => (
@@ -247,26 +214,21 @@ export default function Checkin() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...bubbleSpring }}
-              style={{
-                display: 'flex',
-                justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start',
-                gap: '8px',
-                alignItems: 'flex-end',
-              }}
+              style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '10px', alignItems: 'flex-start' }}
             >
               {m.role === 'ai' && <AIAvatar />}
               <div
+                className={m.role === 'user' ? undefined : 'glass-strong'}
                 style={{
-                  maxWidth: '78%',
-                  padding: '11px 15px',
-                  borderRadius: m.role === 'user' ? '18px 18px 5px 18px' : '5px 18px 18px 18px',
-                  background: m.role === 'user' ? ACCENT : SURFACE,
-                  border: m.role === 'user' ? 'none' : `1px solid ${BORDER}`,
-                  boxShadow: m.role === 'user' ? 'none' : SHADOW,
+                  maxWidth: '80%',
+                  padding: '12px 16px',
+                  borderRadius: m.role === 'user' ? '10px 10px 3px 10px' : '3px 10px 10px 10px',
+                  background: m.role === 'user' ? '#1E3A23' : undefined,
+                  boxShadow: m.role === 'user' ? '0 8px 20px rgba(30,58,35,0.22)' : 'inset 0 0 0 1px rgba(255,255,255,0.8), 0 6px 18px rgba(30,58,35,0.10)',
                   color: m.role === 'user' ? '#FFFFFF' : T1,
-                  fontSize: '14px',
-                  lineHeight: 1.6,
-                  fontWeight: m.role === 'user' ? 500 : 400,
+                  fontSize: '15px',
+                  lineHeight: 1.55,
+                  fontWeight: m.role === 'user' ? 600 : 450,
                 }}
               >
                 {m.text}
@@ -280,30 +242,16 @@ export default function Checkin() {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={spring}
-            style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}
+            style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}
           >
             <AIAvatar />
-            <div
-              className="glass" style={{
-                boxShadow: SHADOW,
-                padding: '13px 16px',
-                borderRadius: 0,
-                display: 'flex',
-                gap: '5px',
-                alignItems: 'center',
-              }}
-            >
+            <div className="glass-strong" style={{ padding: '14px 16px', borderRadius: '3px 10px 10px 10px', display: 'flex', gap: '5px', alignItems: 'center' }}>
               {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
-                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: T3 }}
+                  style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2F5233' }}
                   animate={{ opacity: [0.25, 1, 0.25], y: [0, -3, 0] }}
-                  transition={{
-                    duration: 0.9,
-                    repeat: Infinity,
-                    delay: i * 0.18,
-                    ease: 'easeInOut',
-                  }}
+                  transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
                 />
               ))}
             </div>
@@ -312,112 +260,43 @@ export default function Checkin() {
 
         {done && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 12 }}
+            initial={{ opacity: 0, scale: 0.96, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ ...spring, bounce: 0.3 }}
-            style={{
-              background: GREEN_DIM,
-              border: `1px solid rgba(86,128,78,0.18)`,
-              borderRadius: 0,
-              padding: '28px 20px',
-              textAlign: 'center',
-              margin: '8px 0',
-            }}
           >
-            <div
-              style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '50%',
-                background: GREEN,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 14px',
-              }}
-            >
-              <Check size={24} color="white" strokeWidth={2.5} />
-            </div>
-            <p
-              style={{
-                color: T1,
-                fontWeight: 800,
-                fontSize: '16px',
-                marginBottom: '5px',
-                letterSpacing: '-0.3px',
-              }}
-            >
-              Check in complete
-            </p>
-            <p style={{ color: T2, fontSize: '12px', marginBottom: '20px', lineHeight: 1.5 }}>
-              Your responses have been saved. Anything you mentioned about your vitals is now in
-              your NEWS2 sheet
-            </p>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <motion.button
-                whileTap={{ scale: 0.97, y: 1 }}
-                transition={spring}
-                onClick={() => router.push('/history')}
-                style={{
-                  flex: 1,
-                  background: SURFACE,
-                  color: T1,
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  padding: '13px 16px',
-                  borderRadius: 0,
-                  border: `1px solid ${BORDER}`,
-                  cursor: 'pointer',
-                }}
-              >
-                View history
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.97, y: 1 }}
-                transition={spring}
-                onClick={() => router.push('/dashboard')}
-                style={{
-                  flex: 1,
-                  background: ACCENT,
-                  color: '#FFFFFF',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  padding: '13px 16px',
-                  borderRadius: 0,
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                Dashboard
-              </motion.button>
-            </div>
+            <Hero style={{ textAlign: 'center', padding: '26px 20px', margin: '8px 0' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: 10, background: '#F07800', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                <Check size={26} color="#141413" strokeWidth={3} />
+              </div>
+              <p style={{ fontWeight: 800, fontSize: '22px', letterSpacing: '-0.03em', marginBottom: '6px' }}>Check in complete</p>
+              <p style={{ fontSize: '14px', opacity: 0.85, marginBottom: '20px', lineHeight: 1.5 }}>
+                Your answers are saved. Anything you said about your vitals is now in your NEWS2 sheet.
+              </p>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button className="ds-btn" onClick={() => router.push('/history')} style={{ flex: 1, background: 'rgba(255,255,255,0.14)', color: '#fff', borderRadius: 8, minHeight: '48px', border: 0, fontWeight: 700, cursor: 'pointer' }}>
+                  View history
+                </button>
+                <button className="ds-btn ds-btn-sos" onClick={() => router.push('/dashboard')} style={{ flex: 1, borderRadius: 8, minHeight: '48px', border: 0, fontWeight: 800, cursor: 'pointer' }}>
+                  Back home
+                </button>
+              </div>
+            </Hero>
           </motion.div>
         )}
 
         <div ref={bottomRef} />
       </div>
 
-      {/* Quick replies */}
       {messages.length === 1 && !done && (
-        <div style={{ padding: '8px 16px 4px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
+        <div style={{ padding: '4px 0 8px', display: 'flex', gap: '6px', overflowX: 'auto' }}>
           {QUICK_REPLIES.map((r) => (
             <motion.button
               key={r}
               whileTap={{ scale: 0.95 }}
               transition={spring}
               onClick={() => setInput(r)}
-              style={{
-                flexShrink: 0,
-                background: SURFACE,
-                border: `1px solid ${BORDER}`,
-                borderRadius: 0,
-                padding: '8px 15px',
-                color: T2,
-                fontSize: '12px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-              }}
+              className="ak-chip"
+              style={{ flexShrink: 0, cursor: 'pointer', border: 0, height: '36px', fontSize: '13.5px', whiteSpace: 'nowrap' }}
             >
               {r}
             </motion.button>
@@ -425,17 +304,13 @@ export default function Checkin() {
         </div>
       )}
 
-      {/* Input */}
       {!done && (
         <div
+          className="glass-strong"
           style={{
-            padding: '8px 16px 14px',
-            borderTop: `1px solid ${focused ? 'rgba(86,128,78,0.2)' : BORDER}`,
-            display: 'flex',
-            gap: '8px',
-            alignItems: 'center',
-            background: '#FFFFFF',
-            transition: 'border-color 0.18s ease',
+            position: 'sticky', bottom: '96px', padding: '8px', borderRadius: 10, display: 'flex', gap: '8px', alignItems: 'center',
+            boxShadow: focused ? 'inset 0 0 0 2px #2F5233, 0 12px 30px rgba(30,58,35,0.18)' : 'inset 0 0 0 1px rgba(255,255,255,0.8), 0 12px 30px rgba(30,58,35,0.14)',
+            transition: 'box-shadow 0.18s ease',
           }}
         >
           <input
@@ -446,52 +321,41 @@ export default function Checkin() {
             onBlur={() => setFocused(false)}
             placeholder="How are you feeling..."
             style={{
-              flex: 1,
-              background: BG,
-              border: `1.5px solid ${focused ? ACCENT : BORDER}`,
-              borderRadius: 0,
-              padding: '12px 16px',
-              color: T1,
-              // 16px so mobile Safari does not zoom the page on focus. See the
-              // note in app/login/page.tsx.
-              fontSize: '16px',
-              outline: 'none',
-              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
-              fontFamily: 'inherit',
-              boxShadow: focused ? `0 0 0 3px ${ACCENT_DIM}` : 'none',
+              flex: 1, minWidth: 0, background: 'transparent', border: 0, padding: '12px 10px', color: T1,
+              // 16px so mobile Safari does not zoom the page on focus.
+              fontSize: '16px', outline: 'none', fontFamily: 'inherit',
             }}
           />
           <motion.button
-            whileTap={{ scale: 0.88 }}
+            whileTap={{ scale: 0.9 }}
             transition={spring}
             onClick={sendMessage}
             disabled={loading || !input.trim()}
-            // The button holds an icon and nothing else, so without this it has
-            // no accessible name at all and a screen reader announces it as
-            // "button". It is the only way to send a message on this page.
             aria-label={loading ? 'Sending your answer' : 'Send'}
             style={{
-              width: '44px',
-              height: '44px',
-              background: input.trim() ? ACCENT : BG,
-              borderRadius: 0,
-              border: `1px solid ${input.trim() ? 'transparent' : BORDER}`,
-              cursor: input.trim() ? 'pointer' : 'default',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              transition: 'background 0.15s ease',
+              width: '46px', height: '46px', background: input.trim() ? '#F07800' : 'rgba(20,20,19,0.08)', borderRadius: 8, border: 0,
+              cursor: input.trim() ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              transition: 'background-color 0.15s ease',
             }}
           >
             {loading ? (
-              <Loader2 size={16} color={input.trim() ? '#FFFFFF' : T3} className="animate-spin" />
+              <Loader2 size={17} color={input.trim() ? '#141413' : T3} className="animate-spin" />
             ) : (
-              <Send size={16} color={input.trim() ? '#FFFFFF' : T3} />
+              <Send size={17} color={input.trim() ? '#141413' : T3} />
             )}
           </motion.button>
         </div>
       )}
+
+      <section className="glass" style={{ padding: '4px', marginTop: '14px' }}>
+        <Accordion title="Where your answers go" hint="Saved to your history and your score">
+          <p style={{ fontSize: '14px', color: T2, lineHeight: 1.55, padding: '0 10px' }}>
+            Each check in is saved to your history so you and your doctor can see patterns. If you mention a
+            temperature, an oxygen reading, new confusion or being on oxygen, it is added to your NEWS2 sheet
+            on the vitals page.
+          </p>
+        </Accordion>
+      </section>
 
       <BottomNav />
     </div>

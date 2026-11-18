@@ -567,8 +567,8 @@ export default function RelayRoomPage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: p.role === 'patient' ? 'rgba(255,140,0,0.07)' : '#B3DDAC',
-                    border: `1px solid ${p.role === 'patient' ? 'rgba(255,140,0,0.25)' : BORDER}`,
+                    background: p.role === 'patient' ? 'rgba(240,120,0,0.07)' : '#B3DDAC',
+                    border: `1px solid ${p.role === 'patient' ? 'rgba(240,120,0,0.25)' : BORDER}`,
                     borderRadius: 0,
                     padding: '5px 10px',
                   }}

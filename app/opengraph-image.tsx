@@ -8,7 +8,7 @@ export const contentType = 'image/png'
 const PAGE = '#57945C'
 const PANEL = '#EDF4EC'
 const INK = '#141413'
-const ORANGE = '#D97757'
+const ORANGE = '#F07800'
 
 export default function OpengraphImage() {
   return new ImageResponse(

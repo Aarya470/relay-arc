@@ -49,7 +49,7 @@ export default function LegalDocument({
           left: 0,
           right: 0,
           height: '3px',
-          background: '#D97757',
+          background: '#F07800',
           zIndex: 10,
         }}
       />
