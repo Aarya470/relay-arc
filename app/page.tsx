@@ -430,6 +430,19 @@ export default function Home() {
               <p className="ds-small" style={{ marginTop: '18px', color: INK2 }}>
                 The card takes two minutes and needs no account.
               </p>
+              <div className="proof glass" aria-label="Used by over 580 people">
+                <span className="proof-faces" aria-hidden>
+                  {['A', 'M', 'J', 'R', 'S'].map((l, i) => (
+                    <span key={l} style={{ background: ['#2F5233', '#F07800', '#7EBE7C', '#1E3A23', '#FFC266'][i], color: i === 1 || i === 4 || i === 2 ? '#141413' : '#fff' }}>
+                      {l}
+                    </span>
+                  ))}
+                </span>
+                <span>
+                  <strong>Used by over 580 people</strong>
+                  <span className="proof-sub">Free for everyone, with no ads and no trackers</span>
+                </span>
+              </div>
             </div>
             <div data-reveal>
               <PhoneHome />

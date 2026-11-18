@@ -72,6 +72,26 @@ const FREQUENCY_OPTIONS = [
   'With meals',
 ]
 
+
+const COMMON_MEDS = [
+  'Fludrocortisone', 'Midodrine', 'Propranolol', 'Ivabradine', 'Metoprolol', 'Pyridostigmine',
+  'Salt tablets', 'Electrolytes', 'Droxidopa', 'Clonidine', 'Ondansetron', 'Magnesium',
+  'Vitamin D', 'Iron', 'Sertraline', 'Albuterol', 'Insulin', 'Levothyroxine',
+]
+const SLOTS = [
+  { id: 'Morning', hint: 'with breakfast' },
+  { id: 'Afternoon', hint: 'around lunch' },
+  { id: 'Evening', hint: 'with dinner' },
+  { id: 'Bedtime', hint: 'before sleep' },
+  { id: 'As needed', hint: 'only when you need it' },
+]
+const CLOCK_TIMES = TIME_OPTIONS.filter((t) => /\d/.test(t))
+function freqFor(times: string[]): string {
+  if (times.includes('As needed') && times.length === 1) return 'As needed'
+  const n = times.filter((t) => t !== 'As needed').length
+  return ['As needed', 'Once daily', 'Twice daily', 'Three times daily', 'Four times daily'][n] || `${n} times daily`
+}
+
 function toDateStr(d: Date): string {
   const y = d.getFullYear()
   const m = String(d.getMonth() + 1).padStart(2, '0')
@@ -184,13 +204,22 @@ export default function Medications() {
     }
   }
 
+  const toggleSlot = (t: string) =>
+    setNewMed((prev) => {
+      let times = prev.times.includes(t) ? prev.times.filter((x) => x !== t) : [...prev.times, t]
+      if (t === 'As needed' && !prev.times.includes(t)) times = ['As needed']
+      else if (t !== 'As needed') times = times.filter((x) => x !== 'As needed')
+      if (times.length === 0) times = ['Morning']
+      return { ...prev, times, frequency: freqFor(times) }
+    })
+
   const addMedication = async () => {
     if (!newMed.name.trim()) {
       toast.error('Enter medication name')
       return
     }
     setSaving(true)
-    const updated = [...medications, { ...newMed }]
+    const updated = [...medications, { ...newMed, name: newMed.name.trim(), frequency: freqFor(newMed.times) }]
     if (await saveMeds(updated)) {
       setMedications(updated)
       setNewMed({ name: '', dose: '', frequency: 'Once daily', times: ['Morning'] })
@@ -308,12 +337,12 @@ export default function Medications() {
   const adherenceColor = adherenceRate >= 80 ? GREEN : adherenceRate >= 50 ? AMBER : RED
 
   const sheetInputStyle: React.CSSProperties = {
-    background: BG,
-    border: `1.5px solid ${BORDER}`,
-    borderRadius: 0,
-    padding: '13px 16px',
+    background: 'rgba(255,255,255,0.75)',
+    border: '1.5px solid rgba(20,20,19,0.14)',
+    borderRadius: 10,
+    padding: '14px 16px',
     color: T1,
-    fontSize: '14px',
+    fontSize: '16px',
     outline: 'none',
     width: '100%',
     fontFamily: 'inherit',
@@ -381,7 +410,7 @@ export default function Medications() {
                 key={k}
                 style={{
                   flex: 1, height: '10px', borderRadius: 3,
-                  background: k < takenCount ? '#F07800' : 'rgba(255,255,255,0.18)',
+                  background: k < takenCount ? '#F07800' : 'rgba(20,20,19,0.1)',
                   transition: 'background-color 300ms var(--ease-out)',
                 }}
               />
@@ -397,21 +426,14 @@ export default function Medications() {
         </Hero>
       </div>
 
-      {/* Add medication sheet */}
+      {/* Add medication sheet: name, dose, when. Three steps on one screen. */}
       <AnimatePresence>
         {showAdd && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              background: 'rgba(20,20,19,0.4)',
-              zIndex: 200,
-              display: 'flex',
-              alignItems: 'flex-end',
-            }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(20,20,19,0.35)', zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
             onClick={(e) => {
               if (e.target === e.currentTarget) setShowAdd(false)
             }}
@@ -420,241 +442,190 @@ export default function Medications() {
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
-              transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-              className="glass-strong glass" style={{
-                borderRadius: "12px 12px 0 0",
-                padding: '24px 20px 40px',
-                width: '100%',
-                maxHeight: '85dvh',
-                overflowY: 'auto',
-                borderBottom: 'none',
+              transition={{ type: 'spring', stiffness: 340, damping: 30 }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Add medication"
+              style={{
+                width: '100%', maxWidth: '640px', maxHeight: '90dvh', overflowY: 'auto', padding: '14px 18px 34px',
+                borderRadius: '16px 16px 0 0', background: 'rgba(255,253,246,0.86)',
+                WebkitBackdropFilter: 'blur(28px) saturate(1.6)', backdropFilter: 'blur(28px) saturate(1.6)',
+                boxShadow: '0 -14px 40px rgba(20,20,19,0.18)',
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginBottom: '20px',
-                  marginTop: '-8px',
-                }}
-              >
-                <div
-                  style={{ width: '36px', height: '4px', borderRadius: 0, background: BORDER }}
-                />
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '20px',
-                }}
-              >
-                <p
-                  style={{ color: T1, fontWeight: 800, fontSize: '18px', letterSpacing: '-0.5px' }}
-                >
-                  Add medication
-                </p>
-                <button
-                  onClick={() => setShowAdd(false)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: T3,
-                    padding: '4px',
-                  }}
-                >
-                  <X size={20} />
+              <div style={{ width: '40px', height: '5px', borderRadius: 3, background: 'rgba(20,20,19,0.18)', margin: '0 auto 14px' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <p style={{ color: T1, fontWeight: 800, fontSize: '22px', letterSpacing: '-0.03em' }}>Add a medication</p>
+                <button onClick={() => setShowAdd(false)} aria-label="Close" style={{ width: '38px', height: '38px', borderRadius: 8, background: 'rgba(20,20,19,0.06)', border: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <X size={18} color={T1} />
                 </button>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <input
-                  placeholder="Medication name"
-                  value={newMed.name}
-                  onChange={(e) => setNewMed((prev) => ({ ...prev, name: e.target.value }))}
-                  style={sheetInputStyle}
-                />
-                <input
-                  placeholder="Dose (e.g. 50mg)"
-                  value={newMed.dose}
-                  onChange={(e) => setNewMed((prev) => ({ ...prev, dose: e.target.value }))}
-                  style={sheetInputStyle}
-                />
-
-                {/* Frequency dropdown */}
-                <div>
-                  <button
-                    onClick={() => {
-                      setShowFreqDropdown(!showFreqDropdown)
-                      setShowTimeDropdown(false)
-                    }}
-                    style={{
-                      ...sheetInputStyle,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <span style={{ color: T1 }}>{newMed.frequency}</span>
-                    <motion.div
-                      animate={{ rotate: showFreqDropdown ? 180 : 0 }}
-                      transition={{ duration: 0.18 }}
-                    >
-                      <ChevronDown size={16} color={T3} />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {showFreqDropdown && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.18, ease: 'easeOut' }}
-                        className="sh-cut" style={{
-                          overflow: 'hidden',
-                          background: SURFACE,
-                          borderRadius: 0,
-                          marginTop: '4px',
-                        }}
-                      >
-                        {FREQUENCY_OPTIONS.map((f) => (
-                          <button
-                            key={f}
-                            onClick={() => {
-                              setNewMed((prev) => ({ ...prev, frequency: f }))
-                              setShowFreqDropdown(false)
-                            }}
-                            style={{
-                              width: '100%',
-                              padding: '12px 16px',
-                              background: 'none',
-                              border: 'none',
-                              color: newMed.frequency === f ? ACCENT : T2,
-                              fontSize: '14px',
-                              cursor: 'pointer',
-                              textAlign: 'left',
-                              fontFamily: 'inherit',
-                              fontWeight: newMed.frequency === f ? 700 : 400,
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              borderBottom: `1px solid ${BORDER}`,
-                            }}
-                          >
-                            {f}
-                            {newMed.frequency === f && <Check size={14} color={ACCENT} />}
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Time dropdown */}
-                <div>
-                  <button
-                    onClick={() => {
-                      setShowTimeDropdown(!showTimeDropdown)
-                      setShowFreqDropdown(false)
-                    }}
-                    style={{
-                      ...sheetInputStyle,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <span style={{ color: T1 }}>{newMed.times.join(', ')}</span>
-                    <motion.div
-                      animate={{ rotate: showTimeDropdown ? 180 : 0 }}
-                      transition={{ duration: 0.18 }}
-                    >
-                      <ChevronDown size={16} color={T3} />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {showTimeDropdown && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.18, ease: 'easeOut' }}
-                        className="sh-cut" style={{
-                          overflow: 'hidden',
-                          background: SURFACE,
-                          borderRadius: 0,
-                          marginTop: '4px',
-                        }}
-                      >
-                        {TIME_OPTIONS.map((t) => (
-                          <button
-                            key={t}
-                            onClick={() => {
-                              const times = newMed.times.includes(t)
-                                ? newMed.times.filter((x) => x !== t)
-                                : [...newMed.times, t]
-                              setNewMed((prev) => ({
-                                ...prev,
-                                times: times.length > 0 ? times : ['Morning'],
-                              }))
-                            }}
-                            style={{
-                              width: '100%',
-                              padding: '12px 16px',
-                              background: 'none',
-                              border: 'none',
-                              color: newMed.times.includes(t) ? ACCENT : T2,
-                              fontSize: '14px',
-                              cursor: 'pointer',
-                              textAlign: 'left',
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              fontFamily: 'inherit',
-                              borderBottom: `1px solid ${BORDER}`,
-                            }}
-                          >
-                            {t}
-                            {newMed.times.includes(t) && <Check size={14} color={ACCENT} />}
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <motion.button
-                  whileTap={{ scale: 0.97, y: 1 }}
-                  transition={spring}
-                  onClick={addMedication}
-                  disabled={saving}
-                  className="sh-slant" style={{
-                    background: ACCENT,
-                    color: '#FFFFFF',
-                    fontWeight: 800,
-                    fontSize: '15px',
-                    padding: '15px',
-                    borderRadius: 0,
-                    border: 'none',
-                    cursor: 'pointer',
-                    marginTop: '4px',
-                    letterSpacing: '-0.2px',
-                  }}
-                >
-                  {saving ? 'Saving...' : 'Add medication'}
-                </motion.button>
+              <p className="med-step"><span>1</span> What is it called?</p>
+              <input
+                autoFocus
+                placeholder="Start typing, or tap one below"
+                value={newMed.name}
+                onChange={(e) => setNewMed((prev) => ({ ...prev, name: e.target.value }))}
+                style={sheetInputStyle}
+              />
+              <div className="med-chips">
+                {COMMON_MEDS.filter((m) => !newMed.name || m.toLowerCase().includes(newMed.name.toLowerCase()))
+                  .slice(0, 8)
+                  .map((m) => (
+                    <button key={m} className="ak-chip" data-on={newMed.name === m} onClick={() => setNewMed((prev) => ({ ...prev, name: m }))}>
+                      {m}
+                    </button>
+                  ))}
               </div>
+
+              <p className="med-step"><span>2</span> How much? <em>optional</em></p>
+              <input
+                placeholder="For example 10 mg"
+                value={newMed.dose}
+                onChange={(e) => setNewMed((prev) => ({ ...prev, dose: e.target.value }))}
+                style={sheetInputStyle}
+              />
+              <div className="med-chips">
+                {['5 mg', '10 mg', '25 mg', '50 mg', '100 mg', '1 tablet', '2 tablets'].map((d) => (
+                  <button key={d} className="ak-chip" data-on={newMed.dose === d} onClick={() => setNewMed((prev) => ({ ...prev, dose: d }))}>
+                    {d}
+                  </button>
+                ))}
+              </div>
+
+              <p className="med-step"><span>3</span> When do you take it?</p>
+              <div className="med-slots">
+                {SLOTS.map((t) => {
+                  const on = newMed.times.includes(t.id)
+                  return (
+                    <button key={t.id} data-on={on} onClick={() => toggleSlot(t.id)}>
+                      <strong>{t.id}</strong>
+                      <span>{t.hint}</span>
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="glass" style={{ padding: '2px', marginTop: '10px' }}>
+                <Accordion title="Pick exact times instead" hint="For example 8:00 AM">
+                  <div className="med-chips" style={{ padding: '0 10px 6px', marginTop: 0 }}>
+                    {CLOCK_TIMES.map((t) => (
+                      <button key={t} className="ak-chip" data-on={newMed.times.includes(t)} onClick={() => toggleSlot(t)}>
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </Accordion>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={addMedication}
+                disabled={saving || !newMed.name.trim()}
+                className="ds-btn ds-btn-sos"
+                style={{ width: '100%', minHeight: '56px', borderRadius: 10, border: 0, fontWeight: 800, fontSize: '17px', marginTop: '18px', cursor: 'pointer', opacity: newMed.name.trim() ? 1 : 0.5 }}
+              >
+                {saving ? 'Saving…' : newMed.name.trim() ? `Add ${newMed.name.trim()}` : 'Add medication'}
+              </motion.button>
+              <p style={{ fontSize: '12.5px', color: T2, textAlign: 'center', marginTop: '8px' }}>
+                {freqFor(newMed.times)}. You can change this later.
+              </p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Medication list */}
       <div style={{ padding: '0 16px 16px' }}>
+        {medications.length === 0 && (
+          <div className="glass" style={{ textAlign: 'center', padding: '34px 20px' }}>
+            <p style={{ color: T1, fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '6px' }}>Nothing here yet</p>
+            <p style={{ color: T2, fontSize: '14px', marginBottom: '18px' }}>Add one and it shows up on your emergency card too.</p>
+            <button className="ds-btn ds-btn-sos" onClick={() => setShowAdd(true)} style={{ minHeight: '50px', padding: '0 22px', borderRadius: 10, border: 0, fontWeight: 800, cursor: 'pointer' }}>
+              Add your first medication
+            </button>
+          </div>
+        )}
+
+        {medications.map((med: any, medIndex: number) => (
+          <motion.div
+            key={medIndex}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: medIndex * 0.04, ...spring }}
+            className="glass"
+            style={{ marginBottom: '12px', overflow: 'hidden', padding: '4px' }}
+          >
+            <div style={{ padding: '12px 12px 8px', display: 'flex', alignItems: 'baseline', gap: '10px', flexWrap: 'wrap' }}>
+              <p style={{ color: T1, fontWeight: 800, fontSize: '19px', letterSpacing: '-0.025em' }}>{med.name}</p>
+              {med.dose ? <span className="ak-chip" style={{ height: '26px', fontSize: '12.5px' }}>{med.dose}</span> : null}
+              <span style={{ color: T2, fontSize: '13px' }}>{med.frequency}</span>
+            </div>
+
+            {/* Each dose is one big button. Tap it when you take it. */}
+            <div style={{ display: 'grid', gap: '6px', padding: '0 4px 4px' }}>
+              {med.times?.map((time: string, timeIndex: number) => {
+                const key = `${medIndex}-${timeIndex}`
+                const isTaken = !!taken[key]
+                return (
+                  <motion.button
+                    key={timeIndex}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => toggleTaken(medIndex, timeIndex)}
+                    className="med-dose"
+                    data-taken={isTaken}
+                    aria-pressed={isTaken}
+                  >
+                    <span className="med-dose-box" aria-hidden>
+                      {isTaken ? <Check size={18} color="#141413" strokeWidth={3} /> : null}
+                    </span>
+                    <span style={{ flex: 1, textAlign: 'left' }}>
+                      <span style={{ display: 'block', fontWeight: 750, fontSize: '16px' }}>{time}</span>
+                      <span style={{ display: 'block', fontSize: '12.5px', opacity: 0.75 }}>{isTaken ? 'Taken today' : 'Tap when you take it'}</span>
+                    </span>
+                  </motion.button>
+                )
+              })}
+            </div>
+
+            <Accordion title="Edit" hint="Change times or remove">
+              <div style={{ padding: '0 10px 6px' }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: T2, margin: '0 0 8px' }}>Times</p>
+                <div className="med-chips" style={{ marginTop: 0 }}>
+                  {med.times?.map((t: string, ti: number) => (
+                    <button key={t} className="ak-chip" data-on onClick={() => removeTime(medIndex, ti)} aria-label={`Remove ${t}`}>
+                      {t} <X size={12} />
+                    </button>
+                  ))}
+                  {[...SLOTS.map((x) => x.id), ...CLOCK_TIMES]
+                    .filter((t) => !med.times?.includes(t))
+                    .slice(0, 6)
+                    .map((t) => (
+                      <button key={t} className="ak-chip" onClick={() => addTime(medIndex, t)}>
+                        + {t}
+                      </button>
+                    ))}
+                </div>
+                <button
+                  onClick={() => removeMedication(medIndex)}
+                  style={{ marginTop: '14px', background: 'none', border: 0, color: RED, fontWeight: 700, fontSize: '14px', cursor: 'pointer', padding: '6px 0', fontFamily: 'inherit' }}
+                >
+                  Remove {med.name}
+                </button>
+              </div>
+            </Accordion>
+          </motion.div>
+        ))}
+
+        {medications.length > 0 && (
+          <button
+            onClick={() => setShowAdd(true)}
+            className="glass"
+            style={{ width: '100%', minHeight: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 750, fontSize: '15px', color: T1, cursor: 'pointer', marginBottom: '14px', fontFamily: 'inherit' }}
+          >
+            <Plus size={16} color={T1} /> Add another
+          </button>
+        )}
+
         {/* Adherence analytics card */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -843,243 +814,6 @@ export default function Medications() {
           </Accordion>
         </motion.div>
 
-        {medications.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <p style={{ color: T2, fontSize: '14px', marginBottom: '16px' }}>
-              No medications added yet
-            </p>
-            <button
-              onClick={() => setShowAdd(true)}
-              style={{
-                color: ACCENT,
-                fontSize: '14px',
-                background: ACCENT_DIM,
-                border: `1px solid rgba(86,128,78,0.14)`,
-                borderRadius: 0,
-                padding: '10px 20px',
-                cursor: 'pointer',
-                fontWeight: 700,
-              }}
-            >
-              Add your first medication
-            </button>
-          </div>
-        )}
-
-        {medications.map((med: any, medIndex: number) => (
-          <motion.div
-            key={medIndex}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: medIndex * 0.05, ...spring }}
-            className="glass ak-accent-green" style={{
-              borderRadius: 10,
-              marginBottom: '12px',
-              overflow: 'hidden',
-              boxShadow: SHADOW,
-            }}
-          >
-            {/* Med header */}
-            <div
-              style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}
-            >
-              <div style={{ flex: 1 }}>
-                <p
-                  style={{ color: T1, fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}
-                >
-                  {med.name}
-                </p>
-                <div
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}
-                >
-                  <span
-                    style={{
-                      background: BG,
-                      border: `1px solid ${BORDER}`,
-                      color: T2,
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      padding: '2px 8px',
-                      borderRadius: 0,
-                      fontFamily: 'inherit',
-                    }}
-                  >
-                    {med.dose}
-                  </span>
-                  <span style={{ color: T3, fontSize: '11px' }}>{med.frequency}</span>
-                </div>
-              </div>
-              <div style={{ display: 'flex', gap: '7px' }}>
-                <button
-                  onClick={() => setAddingTime(addingTime === medIndex ? null : medIndex)}
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: 0,
-                    background: BG,
-                    border: `1px solid ${BORDER}`,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Plus size={13} color={T2} />
-                </button>
-                <button
-                  onClick={() => removeMedication(medIndex)}
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: 0,
-                    background: RED_DIM,
-                    border: `1px solid rgba(240,120,0,0.14)`,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <X size={13} color={RED} />
-                </button>
-              </div>
-            </div>
-
-            {/* Add time panel */}
-            <AnimatePresence>
-              {addingTime === medIndex && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  style={{
-                    overflow: 'hidden',
-                    borderTop: `1px solid ${BORDER}`,
-                    padding: '12px 16px',
-                    background: BG,
-                  }}
-                >
-                  <p
-                    style={{
-                      color: T3,
-                      fontSize: '13px',
-                      letterSpacing: '0',
-                      marginBottom: '10px',
-                    }}
-                  >
-                    Add time
-                  </p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {TIME_OPTIONS.map((t) => (
-                      <button
-                        key={t}
-                        onClick={() => addTime(medIndex, t)}
-                        style={{
-                          padding: '6px 12px',
-                          background: med.times?.includes(t) ? ACCENT_DIM : SURFACE,
-                          border: `1px solid ${med.times?.includes(t) ? 'rgba(86,128,78,0.2)' : BORDER}`,
-                          borderRadius: 0,
-                          color: med.times?.includes(t) ? ACCENT : T2,
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                          fontFamily: 'inherit',
-                        }}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Dose times */}
-            <div style={{ borderTop: `1px solid ${BORDER}` }}>
-              {med.times?.map((time: string, timeIndex: number) => {
-                const key = `${medIndex}-${timeIndex}`
-                const isTaken = taken[key]
-                return (
-                  <div
-                    key={timeIndex}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '11px 16px',
-                      borderBottom: `1px solid ${BORDER}`,
-                      opacity: isTaken ? 0.5 : 1,
-                      transition: 'opacity 0.2s ease',
-                    }}
-                  >
-                    <motion.button
-                      whileTap={{ scale: 0.85 }}
-                      transition={spring}
-                      onClick={() => toggleTaken(medIndex, timeIndex)}
-                      style={{
-                        width: '30px',
-                        height: '30px',
-                        borderRadius: '50%',
-                        border: `2px solid ${isTaken ? GREEN : BORDER}`,
-                        background: isTaken ? GREEN_DIM : 'transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                        transition: 'border-color 0.18s ease, background 0.18s ease',
-                      }}
-                    >
-                      {isTaken && <Check size={14} color={GREEN} />}
-                    </motion.button>
-                    <p style={{ color: T2, fontSize: '13px', flex: 1 }}>{time}</p>
-                    {!isTaken ? (
-                      <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        transition={spring}
-                        onClick={() => toggleTaken(medIndex, timeIndex)}
-                        style={{
-                          background: GREEN_DIM,
-                          border: `1px solid rgba(86,128,78,0.2)`,
-                          color: GREEN,
-                          fontSize: '12px',
-                          padding: '6px 14px',
-                          borderRadius: 0,
-                          cursor: 'pointer',
-                          fontWeight: 700,
-                        }}
-                      >
-                        Take
-                      </motion.button>
-                    ) : (
-                      <span
-                        style={{
-                          color: GREEN,
-                          fontSize: '13px',
-                          fontWeight: 600,
-                          letterSpacing: '0',
-                        }}
-                      >
-                        Done
-                      </span>
-                    )}
-                    <button
-                      onClick={() => removeTime(medIndex, timeIndex)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        color: T3,
-                        padding: '4px',
-                      }}
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                )
-              })}
-            </div>
-          </motion.div>
-        ))}
       </div>
 
       <BottomNav />

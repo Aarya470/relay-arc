@@ -11,7 +11,7 @@ import Accordion from '@/components/Accordion'
 import { SearchButton, openCommandPalette } from '@/components/CommandPalette'
 import { clean } from '@/lib/clean'
 
-const LIMITS: Record<string, number> = { full_name: 80, phone: 24, cardiologist: 80 }
+const LIMITS: Record<string, number> = { full_name: 80, phone: 24, cardiologist: 80, blood_type: 8, allergies: 500, diagnosis: 300 }
 
 export default function Settings() {
   const [profile, setProfile] = useState<any>(null)
@@ -84,6 +84,9 @@ export default function Settings() {
     { key: 'phone', label: 'Phone', value: profile?.phone, inputType: 'tel' },
     { key: 'date_of_birth', label: 'Date of birth', value: profile?.date_of_birth, inputType: 'date' },
     { key: 'cardiologist', label: 'Cardiologist', value: profile?.cardiologist, inputType: 'text' },
+    { key: 'blood_type', label: 'Blood type', value: profile?.blood_type, inputType: 'text' },
+    { key: 'allergies', label: 'Allergies', value: profile?.allergies, inputType: 'text' },
+    { key: 'diagnosis', label: 'Conditions', value: profile?.diagnosis, inputType: 'text' },
   ]
   const filled = fields.filter((f) => f.value).length
   const first = profile?.full_name?.split(' ')[0] || 'Profile'
@@ -155,7 +158,8 @@ export default function Settings() {
                           maxLength={LIMITS[f.key] ?? 80}
                           onChange={(e) => setEditValue(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && saveEdit()}
-                          style={{ width: '100%', background: '#FFFFFF', border: '1px solid rgba(20,20,19,0.18)', padding: '14px 16px', color: '#141413', fontSize: '16px', fontFamily: 'inherit', boxSizing: 'border-box', marginBottom: '10px' }}
+                          placeholder={f.key === 'allergies' || f.key === 'diagnosis' ? 'Separate with commas' : undefined}
+                          style={{ width: '100%', background: 'rgba(255,255,255,0.8)', border: '1.5px solid rgba(20,20,19,0.16)', borderRadius: 10, padding: '14px 16px', color: '#141413', fontSize: '16px', fontFamily: 'inherit', boxSizing: 'border-box', marginBottom: '10px' }}
                         />
                       )}
                       <div style={{ display: 'flex', gap: '8px' }}>
@@ -188,7 +192,7 @@ export default function Settings() {
           <div className="glass" style={{ padding: '6px' }}>
             {link('Emergency contacts', 'Who gets a text when you press SOS', '/emergency-contacts', 'SOS', true)}
             {link('Medical profile', 'Conditions, medicines and allergies', '/medical-profile', 'ID')}
-            {link('Emergency card', 'Works offline, readable on your lock screen', '/card', 'Card')}
+            {link('My emergency card', 'Your details, ready to show a responder', '/my-card', 'Card')}
           </div>
         </section>
 

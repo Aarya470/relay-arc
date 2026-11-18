@@ -100,7 +100,7 @@ export default function Checkin() {
       const clean = response.replace('[CHECKIN_COMPLETE]', '').trim()
       setMessages((prev) => [...prev, { role: 'ai', text: clean }])
 
-      if (response.includes('[CHECKIN_COMPLETE]')) {
+      if (response.includes('[CHECKIN_COMPLETE]') && !done) {
         const fullConvo = [...newMessages, { role: 'ai', text: clean }]
         let clinicalSummary = clean
         try {
@@ -195,7 +195,7 @@ export default function Checkin() {
                 key={k}
                 style={{
                   width: '8px', height: '26px', borderRadius: 3,
-                  background: done || k < asked ? '#F07800' : 'rgba(255,255,255,0.2)',
+                  background: done || k < asked ? '#F07800' : 'rgba(20,20,19,0.1)',
                   transition: 'background-color 240ms var(--ease-out)',
                 }}
               />
@@ -260,27 +260,27 @@ export default function Checkin() {
 
         {done && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ ...spring, bounce: 0.3 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={spring}
+            className="glass"
+            role="status"
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 10px 10px 14px', margin: '4px 0' }}
           >
-            <Hero style={{ textAlign: 'center', padding: '26px 20px', margin: '8px 0' }}>
-              <div style={{ width: '52px', height: '52px', borderRadius: 10, background: '#F07800', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-                <Check size={26} color="#141413" strokeWidth={3} />
-              </div>
-              <p style={{ fontWeight: 800, fontSize: '22px', letterSpacing: '-0.03em', marginBottom: '6px' }}>Check in complete</p>
-              <p style={{ fontSize: '14px', opacity: 0.85, marginBottom: '20px', lineHeight: 1.5 }}>
-                Your answers are saved. Anything you said about your vitals is now in your NEWS2 sheet.
-              </p>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <button className="ds-btn" onClick={() => router.push('/history')} style={{ flex: 1, background: 'rgba(255,255,255,0.14)', color: '#fff', borderRadius: 8, minHeight: '48px', border: 0, fontWeight: 700, cursor: 'pointer' }}>
-                  View history
-                </button>
-                <button className="ds-btn ds-btn-sos" onClick={() => router.push('/dashboard')} style={{ flex: 1, borderRadius: 8, minHeight: '48px', border: 0, fontWeight: 800, cursor: 'pointer' }}>
-                  Back home
-                </button>
-              </div>
-            </Hero>
+            <span style={{ width: '30px', height: '30px', borderRadius: 8, background: '#F07800', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Check size={16} color="#141413" strokeWidth={3} />
+            </span>
+            <span style={{ flex: 1, minWidth: 0 }}>
+              <span style={{ display: 'block', fontWeight: 800, fontSize: '15px', color: T1 }}>Check in complete</span>
+              <span style={{ display: 'block', fontSize: '12.5px', color: T2 }}>Saved. Keep chatting if you want.</span>
+            </span>
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="ds-btn ds-btn-ink"
+              style={{ height: '38px', padding: '0 14px', borderRadius: 8, border: 0, fontWeight: 700, fontSize: '14px', cursor: 'pointer', flexShrink: 0 }}
+            >
+              Go home
+            </button>
           </motion.div>
         )}
 
@@ -304,7 +304,7 @@ export default function Checkin() {
         </div>
       )}
 
-      {!done && (
+      {(
         <div
           className="glass-strong"
           style={{

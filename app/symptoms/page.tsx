@@ -36,6 +36,19 @@ const METRICS: Metric[] = [
   { key: 'energy', label: 'Energy / wellbeing', Icon: Activity, inverted: true },
 ]
 
+const LEVELS = [
+  { label: 'None', v: 0, tone: 'good' },
+  { label: 'Mild', v: 3, tone: 'good' },
+  { label: 'Moderate', v: 6, tone: 'mid' },
+  { label: 'Severe', v: 9, tone: 'bad' },
+]
+const ENERGY_LEVELS = [
+  { label: 'Very low', v: 1, tone: 'bad' },
+  { label: 'Low', v: 4, tone: 'mid' },
+  { label: 'Okay', v: 7, tone: 'good' },
+  { label: 'Great', v: 10, tone: 'good' },
+]
+
 // ── helpers ──────────────────────────────────────────────────────────────────
 function valueColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
@@ -273,9 +286,9 @@ function DayCard({ log }: { log: SymptomLog }) {
       style={{
         flexShrink: 0,
         width: '80px',
-        background: '#FFFFFF',
-        border: '1px solid #98C890',
-        borderRadius: 0,
+        background: 'rgba(255,253,246,0.55)', backdropFilter: 'blur(14px)',
+        border: '1px solid rgba(255,255,255,0.8)',
+        borderRadius: 10,
         padding: '12px 10px',
         display: 'flex',
         flexDirection: 'column',
@@ -326,7 +339,7 @@ export default function SymptomsPage() {
     fatigue: 0,
     dizziness: 0,
     shortness_of_breath: 0,
-    energy: 0,
+    energy: 7,
   })
   const [note, setNote] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -404,7 +417,7 @@ export default function SymptomsPage() {
       toast.success('Symptoms logged!')
       setSubmitted(true)
       setNote('')
-      setValues({ chest_pain: 0, fatigue: 0, dizziness: 0, shortness_of_breath: 0, energy: 0 })
+      setValues({ chest_pain: 0, fatigue: 0, dizziness: 0, shortness_of_breath: 0, energy: 7 })
       setTimeout(() => setSubmitted(false), 2000)
       await loadHistory()
     } finally {
@@ -459,158 +472,88 @@ export default function SymptomsPage() {
             marginBottom: '16px',
           }}
         >
-          <p
-            style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: '#5C5A52',
-              letterSpacing: '0',
-              margin: '0 0 20px',
-            }}
-          >
-            Rate each symptom (0 – 10)
-          </p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+            <p style={{ fontSize: '17px', fontWeight: 800, color: '#141413', letterSpacing: '-0.02em' }}>Tap how each one feels</p>
+            {history[0] && (
+              <button
+                className="ak-chip"
+                style={{ border: 0, cursor: 'pointer', fontFamily: 'inherit' }}
+                onClick={() => {
+                  const h = history[0]
+                  setValues({ chest_pain: h.chest_pain, fatigue: h.fatigue, dizziness: h.dizziness, shortness_of_breath: h.shortness_of_breath, energy: h.energy })
+                }}
+              >
+                Same as last time
+              </button>
+            )}
+          </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-            {METRICS.map((m, i) => {
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            {METRICS.map((m) => {
               const v = values[m.key]
-              const color = valueColor(v, m.inverted)
-              const bg = valueBg(v, m.inverted)
+              const levels = m.inverted ? ENERGY_LEVELS : LEVELS
+              const near = levels.reduce((best, l) => (Math.abs(l.v - v) < Math.abs(best.v - v) ? l : best), levels[0])
               return (
-                <motion.div
-                  key={m.key}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06, type: 'spring', stiffness: 320, damping: 28 }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: '12px',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div
-                        aria-hidden
-                        style={{
-                          width: '5px',
-                          height: '32px',
-                          background: color,
-                          flexShrink: 0,
-                          transition: 'background-color 0.3s',
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontSize: '14px',
-                          fontWeight: 600,
-                          color: '#141413',
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {m.label}
-                      </span>
-                    </div>
-                    <motion.div
-                      key={v}
-                      initial={{ scale: 1.4, opacity: 0.5 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: 'spring', stiffness: 520, damping: 22 }}
-                      style={{
-                        background: bg,
-                        border: `1px solid ${color}40`,
-                        borderRadius: 0,
-                        padding: '4px 10px',
-                        minWidth: '42px',
-                        textAlign: 'center',
-                        transition: 'background 0.3s, border-color 0.3s',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: '22px',
-                          fontWeight: 800,
-                          color: color,
-                          lineHeight: 1,
-                          fontVariantNumeric: 'tabular-nums',
-                          transition: 'color 0.3s',
-                          display: 'block',
-                        }}
-                      >
-                        {v}
-                      </span>
-                    </motion.div>
+                <div key={m.key}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '15px', fontWeight: 750, color: '#141413' }}>{m.label.split(' / ')[0]}</span>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: valueColor(v, m.inverted), fontVariantNumeric: 'tabular-nums' }}>{v} of 10</span>
                   </div>
-                  <SymptomSlider
-                    value={v}
-                    onChange={(val) => handleChange(m.key, val)}
-                    inverted={m.inverted}
-                    label={m.label}
-                  />
-                </motion.div>
+                  <div className="sym-levels" role="radiogroup" aria-label={m.label}>
+                    {levels.map((l) => (
+                      <button
+                        key={l.label}
+                        role="radio"
+                        aria-checked={near.label === l.label && (v !== 0 || l.v === 0)}
+                        data-on={near.label === l.label}
+                        data-tone={l.tone}
+                        onClick={() => handleChange(m.key, l.v)}
+                      >
+                        {l.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )
             })}
+          </div>
+
+          <div className="glass" style={{ padding: '2px', marginTop: '18px' }}>
+            <Accordion title="Fine tune with sliders" hint="Set an exact number from 0 to 10">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '22px', padding: '6px 12px 10px' }}>
+                {METRICS.map((m) => (
+                  <div key={m.key}>
+                    <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#141413', marginBottom: '8px' }}>
+                      {m.label.split(' / ')[0]} <span style={{ color: '#5C5A52' }}>{values[m.key]}</span>
+                    </p>
+                    <SymptomSlider value={values[m.key]} onChange={(val) => handleChange(m.key, val)} inverted={m.inverted} label={m.label} />
+                  </div>
+                ))}
+              </div>
+            </Accordion>
           </div>
         </motion.div>
 
         {/* ── note ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.18, type: 'spring', stiffness: 320, damping: 28 }}
-          style={{
-            background: '#FFFFFF',
-            border: '1px solid #98C890',
-            borderRadius: 0,
-            padding: '16px',
-            marginBottom: '16px',
-          }}
-        >
-          <label
-            style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: '#5C5A52',
-              letterSpacing: '0',
-              display: 'block',
-              marginBottom: '12px',
-            }}
-          >
-            Note (optional)
-          </label>
-          <textarea
-            // The visible "Note (optional)" is a <label> with nothing tying it
-            // to this box, so the only name it had was the placeholder, and a
-            // placeholder disappears the moment anyone starts typing.
-            aria-label="Note, optional. Up to 200 characters."
-            maxLength={200}
-            value={note}
-            onChange={(e) => setNote(e.target.value.slice(0, 200))}
-            placeholder="Any extra detail to share with your doctor…"
-            rows={3}
-            style={{
-              width: '100%',
-              border: '1.5px solid #98C890',
-              borderRadius: 0,
-              padding: '10px 12px',
-              // 16px so mobile Safari does not zoom on focus. See app/login.
-              fontSize: '16px',
-              color: '#141413',
-              background: '#B3DDAC',
-              resize: 'none',
-              outline: 'none',
-              fontFamily: 'inherit',
-              lineHeight: 1.5,
-              boxSizing: 'border-box',
-              caretColor: '#42623C',
-            }}
-          />
-          <div style={{ textAlign: 'right', fontSize: '11px', color: '#5C5A52', marginTop: '4px' }}>
-            {note.length}/200
-          </div>
-        </motion.div>
+        <div className="glass" style={{ padding: '4px', marginBottom: '14px' }}>
+          <Accordion title="Add a note" hint={note ? `${note.length} of 200 characters` : 'Optional, for your doctor'}>
+            <div style={{ padding: '0 10px 6px' }}>
+              <textarea
+                aria-label="Note, optional. Up to 200 characters."
+                maxLength={200}
+                value={note}
+                onChange={(e) => setNote(e.target.value.slice(0, 200))}
+                placeholder="Anything your doctor should know"
+                rows={3}
+                style={{
+                  width: '100%', border: '1.5px solid rgba(20,20,19,0.14)', borderRadius: 10, padding: '10px 12px',
+                  fontSize: '16px', color: '#141413', background: 'rgba(255,255,255,0.7)', resize: 'none', outline: 'none',
+                  fontFamily: 'inherit', lineHeight: 1.5, boxSizing: 'border-box',
+                }}
+              />
+            </div>
+          </Accordion>
+        </div>
 
         {/* ── table missing error ── */}
         <AnimatePresence>
@@ -645,13 +588,12 @@ export default function SymptomsPage() {
           disabled={submitting}
           style={{
             width: '100%',
-            height: '54px',
-            borderRadius: 0,
-            background: submitted ? '#42623C' : '#42623C',
-            color: '#FFFFFF',
+            height: '58px',
+            borderRadius: 10,
+            background: submitted ? '#1E3A23' : '#F07800',
+            color: submitted ? '#FFFFFF' : '#141413',
             border: 'none',
-            fontSize: '15px',
-            fontWeight: 700,
+            fontWeight: 800,
             cursor: submitting ? 'not-allowed' : 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -661,9 +603,8 @@ export default function SymptomsPage() {
             transition: 'background 0.25s',
             letterSpacing: '0.2px',
             opacity: submitting ? 0.7 : 1,
-            boxShadow: submitted
-              ? '0 4px 20px rgba(86,128,78,0.25)'
-              : '0 4px 20px rgba(86,128,78,0.25)',
+            boxShadow: '0 10px 24px rgba(240,120,0,0.28)',
+            fontSize: '17px',
           }}
         >
           <AnimatePresence mode="wait">
@@ -775,7 +716,7 @@ export default function SymptomsPage() {
                     flexShrink: 0,
                     width: '80px',
                     height: '108px',
-                    background: '#FFFFFF',
+                    background: 'rgba(255,253,246,0.45)',
                     border: '1px solid #EDEAE0',
                     borderRadius: 0,
                     animation: 'pulse 1.5s infinite',
@@ -786,7 +727,7 @@ export default function SymptomsPage() {
           ) : history.length === 0 ? (
             <div
               style={{
-                background: '#FFFFFF',
+                background: 'rgba(255,253,246,0.55)',
                 border: '1px solid #98C890',
                 borderRadius: 0,
                 padding: '28px 20px',

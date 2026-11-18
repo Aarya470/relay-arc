@@ -19,7 +19,7 @@ type Item = {
 const ITEMS: Item[] = [
   { id: 'sos', group: 'Emergency', label: 'Start SOS', hint: 'Find a hospital now', words: 'emergency help urgent', run: 'go', href: '/emergency' },
   { id: 'call', group: 'Emergency', label: 'Call 911', hint: 'Opens your phone dialer', words: 'ambulance emergency', run: 'confirm-call' },
-  { id: 'card', group: 'Emergency', label: 'Emergency card', hint: 'Make or edit your card', words: 'medical id lock screen', run: 'go', href: '/card' },
+  { id: 'card', group: 'Emergency', label: 'My emergency card', hint: 'Your details for a responder', words: 'medical id lock screen', run: 'go', href: '/my-card' },
   { id: 'home', group: 'Go to', label: 'Home', auth: true, run: 'go', href: '/dashboard', words: 'dashboard' },
   { id: 'checkin', group: 'Go to', label: 'Daily check in', auth: true, run: 'go', href: '/checkin', words: 'chat feeling' },
   { id: 'vitals', group: 'Go to', label: 'Vitals check', hint: 'Pulse and breathing', auth: true, run: 'go', href: '/check', words: 'heart rate news2' },

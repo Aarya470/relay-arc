@@ -7,14 +7,16 @@ import { toast } from 'sonner'
 import { ArrowLeft, Plus, X, Phone, User, Heart, Edit2 } from '@/lib/plain-icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import BottomNav from '@/components/BottomNav'
+import Accordion from '@/components/Accordion'
+import { AppHeader, Hero } from '@/components/AppKit'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#FFFFFF',
-  border: '1px solid #D8D4C8',
-  borderRadius: 0,
+  background: 'rgba(255,255,255,0.75)',
+  border: '1.5px solid rgba(20,20,19,0.14)',
+  borderRadius: 10,
   padding: '14px 16px',
   color: '#141413',
   // 16px, not 15 or 14, and it is not a taste decision.
@@ -137,85 +139,30 @@ export default function EmergencyContacts() {
     )
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'transparent', paddingBottom: '112px' }}>
-      {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #98C890' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            transition={spring}
-            onClick={() => router.back()}
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 0,
-              background: '#F2F0E8',
-              border: '1px solid #D8D4C8',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <ArrowLeft size={15} color="#5C5A52" />
-          </motion.button>
-          <div style={{ flex: 1 }}>
-            <h1
-              style={{
-                color: '#141413',
-                fontWeight: 900,
-                fontSize: '20px',
-                letterSpacing: '-0.7px',
-              }}
-            >
-              Emergency Contacts
-            </h1>
-            <p style={{ color: '#5C5A52', fontSize: '12px' }}>
-              Notified automatically in an emergency
-            </p>
-          </div>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setShowAdd(true)}
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 0,
-              background: 'rgba(86,128,78,0.15)',
-              border: '1px solid rgba(86,128,78,0.3)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Plus size={17} color="#42623C" />
-          </motion.button>
-        </div>
-      </div>
+    <div style={{ minHeight: '100dvh', paddingBottom: '112px', maxWidth: '640px', margin: '0 auto', padding: '0 16px 112px' }}>
+      <AppHeader
+        title="Emergency contacts"
+        back="/settings"
+        backLabel="Settings"
+        right={
+          contacts.length > 0 ? (
+            <button onClick={() => setShowAdd(true)} className="ds-btn ds-btn-sos" style={{ height: '42px', padding: '0 14px', borderRadius: 8, border: 0, fontWeight: 800, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Plus size={16} color="#141413" /> Add
+            </button>
+          ) : null
+        }
+      />
 
-      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {/* Info banner */}
-        <div
-          style={{
-            background: 'rgba(240,120,0,0.06)',
-            border: '1px solid rgba(240,120,0,0.18)',
-            borderRadius: 0,
-            padding: '12px 14px',
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '10px',
-            marginBottom: '4px',
-          }}
-        >
-          <Heart size={14} color="#8F4A00" style={{ flexShrink: 0, marginTop: '2px' }} />
-          <p style={{ color: '#5C5A52', fontSize: '12px', lineHeight: 1.6 }}>
-            These contacts will receive an automatic notification when you trigger an SOS. Keep this
-            list up to date.
-          </p>
-        </div>
+      <Hero>
+        <span className="ak-kicker">When you press SOS</span>
+        <p style={{ fontSize: '21px', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.2, marginTop: '6px' }}>
+          {contacts.length === 0
+            ? 'Add one person you trust so you can reach them in one tap.'
+            : `One tap texts ${contacts.length === 1 ? 'this person' : `all ${contacts.length} of them`} at once.`}
+        </p>
+      </Hero>
 
-        {/* Contacts list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <AnimatePresence>
           {contacts.map((contact, idx) => {
             const color = AVATAR_COLORS[idx % AVATAR_COLORS.length]
@@ -226,244 +173,82 @@ export default function EmergencyContacts() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
-                  borderRadius: 0,
-                  padding: '14px 16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                }}
+                className="glass"
+                style={{ padding: '14px', display: 'flex', alignItems: 'center', gap: '14px' }}
               >
-                {/* Avatar initial */}
-                <div
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: color.bg,
-                    border: `1.5px solid ${color.border}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                  }}
-                >
-                  <span style={{ color: color.text, fontWeight: 700, fontSize: '16px' }}>
-                    {initial}
-                  </span>
+                <div style={{ width: '46px', height: '46px', borderRadius: 10, background: color.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ color: color.text, fontWeight: 900, fontSize: '19px' }}>{initial}</span>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>
-                    {contact.name}
+                  <p style={{ color: '#141413', fontWeight: 800, fontSize: '17px', letterSpacing: '-0.02em' }}>{contact.name}</p>
+                  <p style={{ color: '#3F3D36', fontSize: '13.5px', marginTop: '2px' }}>
+                    {contact.relationship} · {contact.phone}
                   </p>
-                  <div
-                    style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}
-                  >
-                    <span style={{ color: '#5C5A52', fontSize: '12px' }}>
-                      {contact.relationship}
-                    </span>
-                    <span style={{ color: '#5C5A52', fontSize: '12px' }}>·</span>
-                    <motion.a
-                      href={`tel:${contact.phone}`}
-                      whileTap={{ scale: 0.96 }}
-                      style={{
-                        color: '#42623C',
-                        fontSize: '12px',
-                        textDecoration: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '3px',
-                      }}
-                    >
-                      <Phone size={10} color="#42623C" />
-                      {contact.phone}
-                    </motion.a>
-                  </div>
                 </div>
-                {/* Ghost icon buttons */}
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <motion.button
-                    whileTap={{ scale: 0.88 }}
-                    onClick={() => removeContact(contact.id)}
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: 0,
-                      background: '#F2F0E8',
-                      border: '1px solid #D8D4C8',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <X size={13} color="#5C5A52" />
-                  </motion.button>
-                </div>
+                <a href={`tel:${contact.phone}`} aria-label={`Call ${contact.name}`} style={{ height: '42px', padding: '0 14px', borderRadius: 8, background: '#2F5233', color: '#fff', fontWeight: 750, fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  Call
+                </a>
+                <button onClick={() => removeContact(contact.id)} aria-label={`Remove ${contact.name}`} style={{ width: '42px', height: '42px', borderRadius: 8, background: 'rgba(20,20,19,0.06)', border: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <X size={16} color="#3F3D36" />
+                </button>
               </motion.div>
             )
           })}
         </AnimatePresence>
 
         {contacts.length === 0 && !showAdd && (
-          <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '16px' }}>
-              No emergency contacts yet
-            </p>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setShowAdd(true)}
-              style={{
-                background: '#42623C',
-                color: 'white',
-                fontWeight: 700,
-                fontSize: '13px',
-                padding: '12px 22px',
-                borderRadius: 0,
-                border: 'none',
-                cursor: 'pointer',
-                height: '44px',
-              }}
-            >
-              Add your first contact
-            </motion.button>
-          </div>
+          <button className="ds-btn ds-btn-sos" onClick={() => setShowAdd(true)} style={{ minHeight: '56px', borderRadius: 10, border: 0, fontWeight: 800, fontSize: '16px', cursor: 'pointer' }}>
+            Add your first contact
+          </button>
         )}
 
-        {/* Add contact — full-width dark card with dashed border */}
-        {!showAdd && contacts.length > 0 && (
-          <motion.button
-            whileTap={{ scale: 0.99 }}
-            onClick={() => setShowAdd(true)}
-            style={{
-              width: '100%',
-              background: 'transparent',
-              border: '1.5px dashed #C9CED6',
-              borderRadius: 0,
-              padding: '18px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              cursor: 'pointer',
-              color: '#5C5A52',
-              fontSize: '14px',
-              fontWeight: 500,
-            }}
-          >
-            <Plus size={15} color="#5C5A52" />
-            Add emergency contact
-          </motion.button>
-        )}
-
-        {/* Add contact form */}
         <AnimatePresence>
           {showAdd && (
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              style={{
-                background: '#FFFFFF',
-                border: '1px solid rgba(86,128,78,0.2)',
-                borderRadius: 0,
-                padding: '20px',
-              }}
+              className="glass glass-strong"
+              style={{ padding: '18px' }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '16px',
-                }}
-              >
-                <p style={{ color: '#141413', fontWeight: 700, fontSize: '15px' }}>New contact</p>
-                <motion.button
-                  whileTap={{ scale: 0.88 }}
-                  onClick={() => setShowAdd(false)}
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: 0,
-                    background: '#F2F0E8',
-                    border: '1px solid #D8D4C8',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <X size={13} color="#5C5A52" />
-                </motion.button>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                <p style={{ color: '#141413', fontWeight: 800, fontSize: '19px', letterSpacing: '-0.02em' }}>New contact</p>
+                <button onClick={() => setShowAdd(false)} aria-label="Close" style={{ width: '38px', height: '38px', borderRadius: 8, background: 'rgba(20,20,19,0.06)', border: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <X size={16} color="#141413" />
+                </button>
               </div>
-
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <input
-                  style={inputStyle}
-                  placeholder="Full name"
-                  value={newContact.name}
-                  onChange={(e) => setNewContact((p) => ({ ...p, name: e.target.value }))}
-                  autoFocus
-                />
-                <input
-                  type="tel"
-                  style={inputStyle}
-                  placeholder="Phone number"
-                  value={newContact.phone}
-                  onChange={(e) => setNewContact((p) => ({ ...p, phone: e.target.value }))}
-                />
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                <input style={inputStyle} placeholder="Their name" value={newContact.name} onChange={(e) => setNewContact((p) => ({ ...p, name: e.target.value }))} autoFocus />
+                <input type="tel" inputMode="tel" style={inputStyle} placeholder="Phone number" value={newContact.phone} onChange={(e) => setNewContact((p) => ({ ...p, phone: e.target.value }))} />
+                <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#3F3D36', marginTop: '4px' }}>Who are they to you?</p>
+                <div className="med-chips" style={{ marginTop: 0 }}>
                   {RELATIONSHIPS.map((r) => (
-                    <motion.button
-                      key={r}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setNewContact((p) => ({ ...p, relationship: r }))}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: 0,
-                        border: '1px solid',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        background:
-                          newContact.relationship === r ? 'rgba(86,128,78,0.15)' : '#F2F0E8',
-                        borderColor:
-                          newContact.relationship === r ? 'rgba(86,128,78,0.4)' : '#98C890',
-                        color: newContact.relationship === r ? '#42623C' : '#5C5A52',
-                      }}
-                    >
+                    <button key={r} className="ak-chip" data-on={newContact.relationship === r} onClick={() => setNewContact((p) => ({ ...p, relationship: r }))}>
                       {r}
-                    </motion.button>
+                    </button>
                   ))}
                 </div>
-                <motion.button
-                  whileTap={{ scale: 0.97 }}
+                <button
                   onClick={addContact}
                   disabled={saving}
-                  className="sh-slant" style={{
-                    background: '#42623C',
-                    color: 'white',
-                    fontWeight: 700,
-                    fontSize: '14px',
-                    padding: '0 20px',
-                    borderRadius: 0,
-                    border: 'none',
-                    cursor: saving ? 'not-allowed' : 'pointer',
-                    marginTop: '4px',
-                    height: '52px',
-                    opacity: saving ? 0.7 : 1,
-                  }}
+                  className="ds-btn ds-btn-sos"
+                  style={{ minHeight: '54px', borderRadius: 10, border: 0, fontWeight: 800, fontSize: '16px', cursor: saving ? 'not-allowed' : 'pointer', marginTop: '6px', opacity: saving ? 0.7 : 1 }}
                 >
-                  {saving ? 'Saving…' : 'Add contact'}
-                </motion.button>
+                  {saving ? 'Saving…' : 'Save contact'}
+                </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        <div className="glass" style={{ padding: '4px', marginTop: '4px' }}>
+          <Accordion title="What they get" hint="A text that is already written for you">
+            <p style={{ fontSize: '14px', color: '#3F3D36', lineHeight: 1.55, padding: '0 10px' }}>
+              During SOS, one button opens a text to everyone on this list, already written. It says what is happening
+              and which hospital you are heading to, with directions. You press send. Keep this list up to date.
+            </p>
+          </Accordion>
+        </div>
       </div>
 
       <BottomNav />

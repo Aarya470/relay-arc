@@ -402,8 +402,8 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
    Depth comes from three things: a soft layered background, frosted panels
    that let it show through, and small motion on anything you can press. */
 :root {
-  --glass: rgba(255, 253, 248, 0.6);
-  --glass-strong: rgba(255, 255, 255, 0.78);
+  --glass: rgba(255, 253, 248, 0.42);
+  --glass-strong: rgba(255, 253, 248, 0.6);
   --glass-dark: rgba(30, 58, 35, 0.82);
   --glass-line: rgba(255, 255, 255, 0.72);
   --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset, 0 12px 32px rgba(30, 58, 35, 0.12);
@@ -419,10 +419,12 @@ h2:not(.ds-display):not(.ds-title) { font-size: clamp(20px, 3.4vw, 26px) !import
   z-index: -1;
   pointer-events: none;
   background:
+    radial-gradient(30vmax 30vmax at 88% 8%, rgba(255, 196, 120, 0.55), transparent 70%),
     radial-gradient(54vmax 54vmax at 92% -16%, rgba(247, 245, 238, 0.85), transparent 62%),
-    radial-gradient(48vmax 48vmax at -14% 34%, rgba(126, 190, 124, 0.55), transparent 62%),
-    radial-gradient(44vmax 44vmax at 106% 84%, rgba(247, 245, 238, 0.55), transparent 62%),
-    radial-gradient(40vmax 40vmax at 14% 114%, rgba(86, 128, 78, 0.35), transparent 62%),
+    radial-gradient(34vmax 34vmax at 6% 30%, rgba(74, 130, 72, 0.55), transparent 68%),
+    radial-gradient(26vmax 26vmax at 70% 52%, rgba(247, 245, 238, 0.7), transparent 70%),
+    radial-gradient(30vmax 30vmax at 104% 88%, rgba(255, 184, 96, 0.38), transparent 70%),
+    radial-gradient(40vmax 40vmax at 14% 108%, rgba(56, 100, 56, 0.45), transparent 62%),
     #B3DDAC;
 }
 
@@ -527,15 +529,19 @@ button:active:not(:disabled) { transform: scale(0.97); }
 .ak-title { font-size: 34px !important; font-weight: 800; letter-spacing: -0.035em !important; line-height: 1.02 !important; color: #141413; margin: 0; }
 .ak-sub { font-size: 15px; line-height: 1.5; color: #2E3B2C; margin-top: 8px; max-width: 36em; }
 
-.ak-hero { position: relative; overflow: hidden; border-radius: 10px; padding: 22px 20px; color: #fff; margin-bottom: 14px;
-  background: radial-gradient(120% 140% at 100% 0%, rgba(126, 190, 124, 0.45), transparent 55%), #1E3A23;
-  box-shadow: 0 14px 34px rgba(30, 58, 35, 0.28); }
-.ak-hero-orange { background: radial-gradient(120% 140% at 100% 0%, rgba(255, 210, 150, 0.55), transparent 55%), #F07800; color: #141413; box-shadow: 0 14px 34px rgba(240, 120, 0, 0.32); }
-.ak-hero-grid { position: absolute; inset: 0; pointer-events: none; opacity: 0.16;
-  background-image: linear-gradient(rgba(255,255,255,0.9) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.9) 1px, transparent 1px);
-  background-size: 22px 22px; -webkit-mask-image: linear-gradient(120deg, transparent 35%, #000 100%); mask-image: linear-gradient(120deg, transparent 35%, #000 100%); }
-.ak-hero-orange .ak-hero-grid { opacity: 0.22; }
-.ak-kicker { font-size: 12.5px; font-weight: 750; letter-spacing: 0.06em !important; text-transform: uppercase !important; opacity: 0.85; }
+.ak-hero { position: relative; overflow: hidden; border-radius: 14px; padding: 22px 20px; color: #141413; margin-bottom: 14px;
+  background: rgba(255, 253, 246, 0.5); -webkit-backdrop-filter: blur(24px) saturate(1.6); backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8), 0 14px 34px rgba(30, 58, 35, 0.14); }
+.ak-hero-orange { background: rgba(240, 120, 0, 0.92); box-shadow: 0 14px 34px rgba(240, 120, 0, 0.32); }
+/* Two soft blobs tucked into the corners, like stickers on a notebook. */
+.ak-hero-grid { position: absolute; inset: 0; pointer-events: none; }
+.ak-hero-grid::before, .ak-hero-grid::after { content: ''; position: absolute; border-radius: 50%; filter: blur(2px); }
+.ak-hero-grid::before { width: 150px; height: 150px; right: -46px; top: -56px; background: rgba(240, 120, 0, 0.22); }
+.ak-hero-grid::after { width: 110px; height: 110px; left: -40px; bottom: -54px; background: rgba(86, 140, 80, 0.28); }
+.ak-hero-orange .ak-hero-grid::before { background: rgba(255, 220, 160, 0.4); }
+.ak-hero-orange .ak-hero-grid::after { background: rgba(255, 255, 255, 0.18); }
+.ak-kicker { font-size: 13px; font-weight: 750; color: #2F5233; }
+.ak-hero-orange .ak-kicker { color: #141413; }
 
 .ak-panel { padding: 18px; margin-bottom: 14px; }
 .ak-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
@@ -551,7 +557,7 @@ button:active:not(:disabled) { transform: scale(0.97); }
 
 .ak-chip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px; border-radius: 6px; font-size: 13px; font-weight: 700;
   background: rgba(255, 253, 248, 0.7); color: #141413; box-shadow: inset 0 0 0 1px rgba(20, 20, 19, 0.12); }
-.ak-chip-dark { background: rgba(255,255,255,0.14); color: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22); }
+.ak-chip-dark { background: #141413; color: #fff; box-shadow: none; }
 
 .ak-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .ak-tile { position: relative; text-align: left; padding: 16px 14px 14px; border-radius: 10px; border: 0; cursor: pointer; font: inherit; color: #141413;
@@ -570,3 +576,54 @@ button:active:not(:disabled) { transform: scale(0.97); }
 .ak-live::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #F07800; animation: ak-pulse-ring 1.6s ease-out infinite; }
 @media (prefers-reduced-motion: reduce) { .ak-live::after { animation: none; } .ak-tile { transition: none; } }
 .app-shell { position: relative; }
+
+/* ── Medications: simple add flow and big tappable doses ── */
+.med-step { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; color: #141413; margin: 18px 0 8px; }
+.med-step span { width: 24px; height: 24px; border-radius: 6px; background: #1E3A23; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+.med-step em { font-style: normal; font-weight: 600; font-size: 13px; color: #5C5A52; }
+.med-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.med-chips .ak-chip { border: 0; cursor: pointer; font-family: inherit; height: 34px; }
+.ak-chip[data-on="true"] { background: #1E3A23; color: #fff; box-shadow: none; }
+.med-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.med-slots button { text-align: left; padding: 12px 14px; border-radius: 10px; border: 0; cursor: pointer; font-family: inherit; color: #141413;
+  background: rgba(255,255,255,0.55); box-shadow: inset 0 0 0 1.5px rgba(20,20,19,0.1); transition: background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out); }
+.med-slots button:last-child { grid-column: 1 / -1; }
+.med-slots button strong { display: block; font-size: 16px; font-weight: 800; }
+.med-slots button span { display: block; font-size: 12.5px; color: #5C5A52; margin-top: 2px; }
+.med-slots button[data-on="true"] { background: #F07800; box-shadow: none; }
+.med-slots button[data-on="true"] span { color: #3A1E00; }
+.med-dose { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 62px; padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer;
+  font-family: inherit; color: #141413; background: rgba(255,255,255,0.55); box-shadow: inset 0 0 0 1px rgba(20,20,19,0.08);
+  transition: background-color 180ms var(--ease-out); }
+.med-dose[data-taken="true"] { background: rgba(179, 221, 172, 0.7); }
+.med-dose-box { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 0 0 2px rgba(20,20,19,0.3); transition: background-color 180ms var(--ease-out); }
+.med-dose[data-taken="true"] .med-dose-box { background: #F07800; box-shadow: none; }
+
+/* ── Symptoms: four tap levels instead of a slider ── */
+.sym-levels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.sym-levels button { min-height: 46px; border: 0; border-radius: 9px; font: inherit; font-size: 13.5px; font-weight: 700; color: #141413; cursor: pointer;
+  background: rgba(255,255,255,0.55); box-shadow: inset 0 0 0 1px rgba(20,20,19,0.1); transition: background-color 160ms var(--ease-out), transform 120ms var(--ease-out); }
+.sym-levels button:active { transform: scale(0.96); }
+.sym-levels button[data-on="true"][data-tone="good"] { background: #2F5233; color: #fff; box-shadow: none; }
+.sym-levels button[data-on="true"][data-tone="mid"] { background: #FFC266; box-shadow: none; }
+.sym-levels button[data-on="true"][data-tone="bad"] { background: #F07800; box-shadow: none; }
+
+/* ── My emergency card ── */
+.mycard { border-radius: 14px; overflow: hidden; color: #141413; background: rgba(255, 253, 246, 0.72);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.85), 0 16px 40px rgba(30,58,35,0.16); }
+.mycard[data-big="true"] { background: #FFFFFF; box-shadow: inset 0 0 0 2px #141413; }
+.mycard-top { display: flex; justify-content: space-between; padding: 10px 18px; background: #F07800; font-size: 13.5px; font-weight: 850; }
+.mycard-cell { border-radius: 10px; padding: 10px 12px; background: rgba(179, 221, 172, 0.45); }
+.mycard-cell[data-hot="true"] { background: rgba(240, 120, 0, 0.18); box-shadow: inset 3px 0 0 #F07800; }
+.mycard-call { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; background: #1E3A23; color: #fff; text-decoration: none; }
+
+/* ── Homepage social proof ── */
+.proof { display: inline-flex; align-items: center; gap: 14px; margin-top: 22px; padding: 10px 16px 10px 10px; border-radius: 12px; }
+.proof strong { display: block; font-size: 16px; font-weight: 800; color: #141413; letter-spacing: -0.01em; }
+.proof-sub { display: block; font-size: 13px; color: #3F3D36; }
+.proof-faces { display: inline-flex; }
+.proof-faces span { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800;
+  box-shadow: 0 0 0 2.5px #F7F5EE; margin-left: -9px; }
+.proof-faces span:first-child { margin-left: 0; }

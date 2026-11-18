@@ -23,6 +23,7 @@ const PRIVATE = [
   '/appointments',
   '/appointment',
   '/medical-profile',
+  '/my-card',
   '/emergency-contacts',
   '/connect-health',
   '/onboarding',

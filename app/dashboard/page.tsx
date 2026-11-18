@@ -81,7 +81,7 @@ type CrashRisk = RiskAssessment
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const BG = '#B3DDAC'
-const SURFACE = '#FFFFFF'
+const SURFACE = 'rgba(255,253,246,0.55)'
 const T1 = '#141413'
 const T2 = '#5C5A52'
 const T3 = '#5C5A52'
