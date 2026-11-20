@@ -5,11 +5,11 @@ import { Loader2, Minus, Plus, ExternalLink, Check } from '@/lib/plain-icons'
 import { DEMO_PARTNER, DEMO_INCOMING, DEMO_BANNER } from '@/lib/demo-data'
 
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const T2 = '#48463F'
+const T3 = '#48463F'
+const BORDER = 'rgba(20,20,19,0.1)'
 const ACCENT = '#42623C'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -243,9 +243,9 @@ export default function HospitalPortal() {
             placeholder="LILAVATI-4321"
             style={{
               width: '100%',
-              background: '#FFFFFF',
+              background: 'var(--panel)',
               border: `1.5px solid ${BORDER}`,
-              borderRadius: 0,
+              borderRadius: 8,
               padding: '13px 16px',
               color: T1,
               fontSize: '15px',
@@ -265,7 +265,7 @@ export default function HospitalPortal() {
               fontWeight: 600,
               fontSize: '15px',
               padding: '15px',
-              borderRadius: 0,
+              borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -406,7 +406,7 @@ export default function HospitalPortal() {
             style={{
               width: '120px',
               padding: '11px 0',
-              borderRadius: 0,
+              borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -457,7 +457,7 @@ export default function HospitalPortal() {
                   onClick={() => saveStatus({ [key]: v } as any)}
                   style={{
                     padding: '10px 16px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     fontWeight: 700,
@@ -496,7 +496,7 @@ export default function HospitalPortal() {
               style={{
                 width: '38px',
                 height: '38px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: `1.5px solid ${BORDER}`,
                 background: 'none',
                 cursor: 'pointer',
@@ -525,7 +525,7 @@ export default function HospitalPortal() {
               style={{
                 width: '38px',
                 height: '38px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: `1.5px solid ${BORDER}`,
                 background: 'none',
                 cursor: 'pointer',
@@ -609,7 +609,7 @@ export default function HospitalPortal() {
                       fontWeight: 700,
                       textDecoration: 'none',
                       border: `1.5px solid rgba(86,128,78,0.3)`,
-                      borderRadius: 0,
+                      borderRadius: 8,
                       padding: '8px 12px',
                     }}
                   >
@@ -627,7 +627,7 @@ export default function HospitalPortal() {
                     fontSize: '13px',
                     fontWeight: 700,
                     border: 'none',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     padding: '9px 13px',
                     cursor: 'pointer',
                     fontFamily: 'inherit',

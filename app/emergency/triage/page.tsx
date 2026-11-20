@@ -13,7 +13,7 @@ type Outcome = 'call911' | 'high' | 'monitor'
 function getPainColor(n: number): string {
   if (n <= 5) return '#42623C'
   if (n <= 8) return '#7C5200'
-  return '#8F4A00'
+  return '#7A3D00'
 }
 
 function getPainBg(n: number): string {
@@ -78,7 +78,7 @@ export default function TriagePage() {
       {/* Alert bar */}
       <div
         style={{
-          background: '#8F4A00',
+          background: '#7A3D00',
           padding: '13px 20px',
           display: 'flex',
           alignItems: 'center',
@@ -117,7 +117,7 @@ export default function TriagePage() {
           style={{
             width: '36px',
             height: '36px',
-            borderRadius: 0,
+            borderRadius: 8,
             background: '#F2F0E8',
             border: '1px solid #D8D4C8',
             cursor: 'pointer',
@@ -125,8 +125,9 @@ export default function TriagePage() {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-        >
-          <ArrowLeft size={15} color="#5C5A52" />
+        
+ aria-label="Back">
+          <ArrowLeft size={15} color="#48463F" />
         </motion.button>
 
         {/* Progress bar */}
@@ -135,15 +136,15 @@ export default function TriagePage() {
             flex: 1,
             margin: '0 14px',
             height: '4px',
-            borderRadius: 0,
-            background: '#98C890',
+            borderRadius: 8,
+            background: 'rgba(20,20,19,0.1)',
             overflow: 'hidden',
           }}
         >
           <motion.div
             animate={{ width: `${progressPct}%` }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            style={{ height: '100%', borderRadius: 0, background: '#42623C' }}
+            style={{ height: '100%', borderRadius: 8, background: '#42623C' }}
           />
         </div>
 
@@ -192,15 +193,15 @@ export default function TriagePage() {
               >
                 How severe?
               </h1>
-              <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '32px' }}>
+              <p style={{ color: '#48463F', fontSize: '13px', marginBottom: '32px' }}>
                 Rate your pain or discomfort right now
               </p>
 
               <div
                 style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}
               >
-                <span style={{ color: '#5C5A52', fontSize: '11px' }}>Mild</span>
-                <span style={{ color: '#5C5A52', fontSize: '11px' }}>Worst ever</span>
+                <span style={{ color: '#48463F', fontSize: '11px' }}>Mild</span>
+                <span style={{ color: '#48463F', fontSize: '11px' }}>Worst ever</span>
               </div>
 
               {/* Pain scale */}
@@ -220,7 +221,7 @@ export default function TriagePage() {
                     onClick={() => handlePainSelect(n)}
                     style={{
                       height: '56px',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       background: pain === n ? getPainBg(n) : '#FFFFFF',
                       border: `1.5px solid ${pain === n ? getPainColor(n) : '#F2F0E8'}`,
                       color: getPainColor(n),
@@ -249,7 +250,7 @@ export default function TriagePage() {
                       background: '#42623C',
                     }}
                   />
-                  <span style={{ color: '#5C5A52', fontSize: '10px' }}>1–5 mild</span>
+                  <span style={{ color: '#48463F', fontSize: '10px' }}>1–5 mild</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <div
@@ -260,7 +261,7 @@ export default function TriagePage() {
                       background: '#7C5200',
                     }}
                   />
-                  <span style={{ color: '#5C5A52', fontSize: '10px' }}>6–8 moderate</span>
+                  <span style={{ color: '#48463F', fontSize: '10px' }}>6–8 moderate</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <div
@@ -268,10 +269,10 @@ export default function TriagePage() {
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      background: '#8F4A00',
+                      background: '#7A3D00',
                     }}
                   />
-                  <span style={{ color: '#5C5A52', fontSize: '10px' }}>9–10 severe</span>
+                  <span style={{ color: '#48463F', fontSize: '10px' }}>9–10 severe</span>
                 </div>
               </div>
             </motion.div>
@@ -298,7 +299,7 @@ export default function TriagePage() {
               >
                 Are you conscious and able to move?
               </h1>
-              <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '32px' }}>
+              <p style={{ color: '#48463F', fontSize: '13px', marginBottom: '32px' }}>
                 Can you get up and move around safely?
               </p>
 
@@ -309,8 +310,8 @@ export default function TriagePage() {
                   onClick={() => handleCanMove(true)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: 0,
-                    background: '#FFFFFF',
+                    borderRadius: 8,
+                    background: 'var(--panel)',
                     border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
                     textAlign: 'left',
@@ -327,7 +328,7 @@ export default function TriagePage() {
                   >
                     Yes, I can move
                   </p>
-                  <p style={{ color: '#5C5A52', fontSize: '13px' }}>
+                  <p style={{ color: '#48463F', fontSize: '13px' }}>
                     I am conscious and can get around
                   </p>
                 </motion.button>
@@ -338,8 +339,8 @@ export default function TriagePage() {
                   onClick={() => handleCanMove(false)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: 0,
-                    background: '#FFFFFF',
+                    borderRadius: 8,
+                    background: 'var(--panel)',
                     border: '1.5px solid rgba(240,120,0,0.22)',
                     cursor: 'pointer',
                     textAlign: 'left',
@@ -347,7 +348,7 @@ export default function TriagePage() {
                 >
                   <p
                     style={{
-                      color: '#8F4A00',
+                      color: '#7A3D00',
                       fontSize: '17px',
                       fontWeight: 800,
                       marginBottom: '4px',
@@ -355,7 +356,7 @@ export default function TriagePage() {
                   >
                     No, I need help
                   </p>
-                  <p style={{ color: '#5C5A52', fontSize: '13px' }}>
+                  <p style={{ color: '#48463F', fontSize: '13px' }}>
                     I cannot move or am very disoriented
                   </p>
                 </motion.button>
@@ -384,7 +385,7 @@ export default function TriagePage() {
               >
                 Are you alone?
               </h1>
-              <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '32px' }}>
+              <p style={{ color: '#48463F', fontSize: '13px', marginBottom: '32px' }}>
                 Is there someone nearby who can help you?
               </p>
 
@@ -395,8 +396,8 @@ export default function TriagePage() {
                   onClick={() => handleAlone(false)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: 0,
-                    background: '#FFFFFF',
+                    borderRadius: 8,
+                    background: 'var(--panel)',
                     border: '1.5px solid rgba(86,128,78,0.25)',
                     cursor: 'pointer',
                     textAlign: 'left',
@@ -412,7 +413,7 @@ export default function TriagePage() {
                   >
                     Someone is with me
                   </p>
-                  <p style={{ color: '#5C5A52', fontSize: '13px' }}>
+                  <p style={{ color: '#48463F', fontSize: '13px' }}>
                     A friend, family member, or bystander is here
                   </p>
                 </motion.button>
@@ -423,8 +424,8 @@ export default function TriagePage() {
                   onClick={() => handleAlone(true)}
                   style={{
                     padding: '22px 20px',
-                    borderRadius: 0,
-                    background: '#FFFFFF',
+                    borderRadius: 8,
+                    background: 'var(--panel)',
                     border: '1.5px solid rgba(240,120,0,0.22)',
                     cursor: 'pointer',
                     textAlign: 'left',
@@ -432,7 +433,7 @@ export default function TriagePage() {
                 >
                   <p
                     style={{
-                      color: '#8F4A00',
+                      color: '#7A3D00',
                       fontSize: '17px',
                       fontWeight: 800,
                       marginBottom: '4px',
@@ -440,7 +441,7 @@ export default function TriagePage() {
                   >
                     {"I'm alone"}
                   </p>
-                  <p style={{ color: '#5C5A52', fontSize: '13px' }}>
+                  <p style={{ color: '#48463F', fontSize: '13px' }}>
                     There is no one nearby to help me right now
                   </p>
                 </motion.button>
@@ -461,7 +462,7 @@ export default function TriagePage() {
                 style={{
                   background: 'rgba(240,120,0,0.08)',
                   border: '1.5px solid rgba(240,120,0,0.25)',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '24px',
                   marginBottom: '16px',
                 }}
@@ -481,13 +482,13 @@ export default function TriagePage() {
                       width: '10px',
                       height: '10px',
                       borderRadius: '50%',
-                      background: '#8F4A00',
+                      background: '#7A3D00',
                       flexShrink: 0,
                     }}
                   />
                   <span
                     style={{
-                      color: '#8F4A00',
+                      color: '#7A3D00',
                       fontSize: '13px',
                       fontWeight: 600,
                       letterSpacing: '0',
@@ -508,7 +509,7 @@ export default function TriagePage() {
                 >
                   Call {emg.label} immediately.
                 </h2>
-                <p style={{ color: '#5C5A52', fontSize: '14px', lineHeight: 1.6 }}>
+                <p style={{ color: '#48463F', fontSize: '14px', lineHeight: 1.6 }}>
                   Do not try to drive yourself. Your symptoms require emergency medical services
                   right away.
                 </p>
@@ -523,10 +524,10 @@ export default function TriagePage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  background: '#8F4A00',
+                  background: '#7A3D00',
                   color: 'white',
                   padding: '18px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   fontWeight: 900,
                   fontSize: '18px',
                   letterSpacing: '-0.3px',
@@ -544,10 +545,10 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '14px',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -571,7 +572,7 @@ export default function TriagePage() {
                 style={{
                   background: 'rgba(168,114,0,0.08)',
                   border: '1.5px solid rgba(168,114,0,0.22)',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '24px',
                   marginBottom: '16px',
                 }}
@@ -618,7 +619,7 @@ export default function TriagePage() {
                 >
                   Get to the hospital now.
                 </h2>
-                <p style={{ color: '#5C5A52', fontSize: '14px', lineHeight: 1.6 }}>
+                <p style={{ color: '#48463F', fontSize: '14px', lineHeight: 1.6 }}>
                   Have someone drive you or call an ambulance. Do not drive yourself if your
                   symptoms worsen.
                 </p>
@@ -633,10 +634,10 @@ export default function TriagePage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  background: '#8F4A00',
+                  background: '#7A3D00',
                   color: 'white',
                   padding: '16px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   fontWeight: 800,
                   fontSize: '16px',
                   letterSpacing: '-0.3px',
@@ -654,7 +655,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   background: '#42623C',
                   border: 'none',
                   color: '#B3DDAC',
@@ -682,7 +683,7 @@ export default function TriagePage() {
                 style={{
                   background: 'rgba(86,128,78,0.07)',
                   border: '1.5px solid rgba(86,128,78,0.20)',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '24px',
                   marginBottom: '16px',
                   boxShadow: '0 6px 32px rgba(86,128,78,0.08)',
@@ -728,7 +729,7 @@ export default function TriagePage() {
                 >
                   You may be okay for now.
                 </h2>
-                <p style={{ color: '#5C5A52', fontSize: '14px', lineHeight: 1.6 }}>
+                <p style={{ color: '#48463F', fontSize: '14px', lineHeight: 1.6 }}>
                   You may be able to monitor symptoms at home, but if things worsen, go to the
                   hospital immediately.
                 </p>
@@ -740,7 +741,7 @@ export default function TriagePage() {
                 onClick={() => router.push('/emergency')}
                 style={{
                   padding: '16px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   background: '#42623C',
                   border: 'none',
                   color: '#B3DDAC',
@@ -760,10 +761,10 @@ export default function TriagePage() {
                 onClick={() => router.push('/dashboard')}
                 style={{
                   padding: '16px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '14px',
                   fontWeight: 600,
                   cursor: 'pointer',

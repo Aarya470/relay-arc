@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback } from 'react'
 
 const INK = '#141413',
-  INK2 = '#5C5A52',
-  INK3 = '#5C5A52'
+  INK2 = '#48463F',
+  INK3 = '#48463F'
 const CREAM = '#B3DDAC',
-  BORDER = '#98C890'
+  BORDER = 'rgba(20,20,19,0.1)'
 const GREEN = '#42623C',
   ORANGE = '#F07800',
-  CRIT = '#8F4A00',
+  CRIT = '#7A3D00',
   WARN = '#7C5200'
 const mono = 'var(--font-mono, monospace)'
 

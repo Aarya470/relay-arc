@@ -52,8 +52,9 @@ export function Flow({ nodes, edges, height }: { nodes: Node[]; edges: Edge[]; h
   const byId = Object.fromEntries(nodes.map((n) => [n.id, n]))
 
   return (
-    <div ref={ref} style={{ width: '100%', overflowX: 'auto' }}>
+    <div ref={ref} style={{ width: '100%', overflowX: 'auto' }} tabIndex={0} role="region" aria-label="Diagram, scroll sideways to see all of it">
       <svg
+        aria-label={`Steps: ${nodes.map((n) => n.label).join(', ')}`}
         viewBox={`-8 -8 ${W + 16} ${H + 16}`}
         style={{
           width: '100%',

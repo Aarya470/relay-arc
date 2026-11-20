@@ -13,9 +13,9 @@ const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
 
 const inputStyle: React.CSSProperties = {
   width: '72px',
-  background: '#FFFFFF',
+  background: 'var(--panel)',
   border: '1.5px solid #D8D4C8',
-  borderRadius: 0,
+  borderRadius: 8,
   padding: '12px',
   color: '#141413',
   fontSize: '22px',
@@ -40,7 +40,7 @@ const VITAL_RANGES = {
     unit: 'bpm',
     label: 'Heart Rate',
     icon: Heart,
-    color: '#8F4A00',
+    color: '#7A3D00',
   },
   systolic: {
     low: 70,
@@ -94,9 +94,9 @@ function statusForValue(key: string, val: number | null) {
 
 const STATUS_STYLES: Record<string, { bg: string; border: string; text: string }> = {
   ok: { bg: 'rgba(86,128,78,0.12)', border: 'rgba(86,128,78,0.25)', text: '#42623C' },
-  high: { bg: 'rgba(240,120,0,0.12)', border: 'rgba(240,120,0,0.28)', text: '#8F4A00' },
+  high: { bg: 'rgba(240,120,0,0.12)', border: 'rgba(240,120,0,0.28)', text: '#7A3D00' },
   low: { bg: 'rgba(168,114,0,0.12)', border: 'rgba(168,114,0,0.28)', text: '#7C5200' },
-  empty: { bg: '#F2F0E8', border: '#F2F0E8', text: '#5C5A52' },
+  empty: { bg: '#F2F0E8', border: '#F2F0E8', text: '#48463F' },
 }
 
 // ─── SparklineInner ───────────────────────────────────────────────────────────
@@ -197,15 +197,15 @@ function SparklineInner({ data, color, width, height, normalRange }: SparklineIn
 // ─── Trend arrow ──────────────────────────────────────────────────────────────
 
 function trendArrow(vals: number[]): { symbol: string; color: string } {
-  if (vals.length < 4) return { symbol: '→', color: '#5C5A52' }
+  if (vals.length < 4) return { symbol: '→', color: '#48463F' }
   const recent = vals.slice(-3)
   const prior = vals.slice(-6, -3)
-  if (prior.length === 0) return { symbol: '→', color: '#5C5A52' }
+  if (prior.length === 0) return { symbol: '→', color: '#48463F' }
   const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length
   const delta = ((avg(recent) - avg(prior)) / avg(prior)) * 100
-  if (delta > 2) return { symbol: '↑', color: '#8F4A00' }
+  if (delta > 2) return { symbol: '↑', color: '#7A3D00' }
   if (delta < -2) return { symbol: '↓', color: '#42623C' }
-  return { symbol: '→', color: '#5C5A52' }
+  return { symbol: '→', color: '#48463F' }
 }
 
 // ─── TrendCard ────────────────────────────────────────────────────────────────
@@ -235,9 +235,9 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 280, damping: 22 }}
       style={{
-        background: '#FFFFFF',
-        border: '1px solid #98C890',
-        borderRadius: 0,
+        background: 'var(--panel)',
+        border: '1px solid rgba(20,20,19,0.1)',
+        borderRadius: 8,
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
@@ -251,7 +251,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
             style={{
               width: '30px',
               height: '30px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: `${meta.color}18`,
               border: `1px solid ${meta.color}30`,
               display: 'flex',
@@ -275,7 +275,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
             fontSize: '13px',
             fontWeight: 600,
             padding: '3px 9px',
-            borderRadius: 0,
+            borderRadius: 8,
             letterSpacing: '0',
           }}
         >
@@ -318,7 +318,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
           </span>
           <span
             style={{
-              color: '#5C5A52',
+              color: '#48463F',
               fontSize: '11px',
               marginLeft: '4px',
               fontFamily: 'inherit',
@@ -333,7 +333,7 @@ function TrendCard({ vitalKey, logs }: { vitalKey: VitalKey; logs: any[] }) {
           </div>
           <div
             style={{
-              color: '#5C5A52',
+              color: '#48463F',
               fontSize: '13px',
               marginTop: '3px',
               letterSpacing: '0',
@@ -365,9 +365,9 @@ function TimeRangeSelector({
         display: 'flex',
         gap: '3px',
         background: '#F2F0E8',
-        borderRadius: 0,
+        borderRadius: 8,
         padding: '3px',
-        border: '1px solid #98C890',
+        border: '1px solid rgba(20,20,19,0.1)',
       }}
     >
       {opts.map((opt) => (
@@ -377,14 +377,14 @@ function TimeRangeSelector({
           style={{
             flex: 1,
             padding: '6px 0',
-            borderRadius: 0,
+            borderRadius: 8,
             border: 'none',
             cursor: 'pointer',
             fontFamily: 'inherit',
             fontSize: '11px',
             fontWeight: 700,
             background: value === opt ? '#42623C' : 'transparent',
-            color: value === opt ? '#FFFFFF' : '#5C5A52',
+            color: value === opt ? '#FFFFFF' : '#48463F',
             transition: 'background 0.15s, color 0.15s',
             letterSpacing: '0.3px',
           }}
@@ -559,7 +559,7 @@ export default function VitalsPage() {
             cursor: 'pointer',
             padding: 0,
             marginBottom: '22px',
-            color: '#5C5A52',
+            color: '#48463F',
             fontSize: '13px',
             fontWeight: 500,
             fontFamily: 'inherit',
@@ -569,7 +569,7 @@ export default function VitalsPage() {
         </button>
         <p
           style={{
-            color: '#5C5A52',
+            color: '#48463F',
             fontSize: '13px',
             fontWeight: 600,
             letterSpacing: '0',
@@ -609,7 +609,7 @@ export default function VitalsPage() {
             background: '#141413',
             color: '#FFFFFF',
             border: 'none',
-            borderRadius: 0,
+            borderRadius: 8,
             padding: '16px',
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -630,14 +630,14 @@ export default function VitalsPage() {
         {/* Entry grid */}
         <div
           style={{
-            background: '#FFFFFF',
-            border: '1px solid #98C890',
-            borderRadius: 0,
+            background: 'var(--panel)',
+            border: '1px solid rgba(20,20,19,0.1)',
+            borderRadius: 8,
             padding: '16px',
           }}
         >
           <p
-            style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0', marginBottom: '16px' }}
+            style={{ color: '#48463F', fontSize: '13px', letterSpacing: '0', marginBottom: '16px' }}
           >
             Today's readings
           </p>
@@ -656,7 +656,7 @@ export default function VitalsPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Heart rate</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                <p style={{ color: '#48463F', fontSize: '10px', fontFamily: 'inherit' }}>
                   Normal: 60–100 bpm
                 </p>
               </div>
@@ -669,7 +669,7 @@ export default function VitalsPage() {
                 aria-label="Heart rate in beats per minute"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.heart_rate ? 'rgba(240,120,0,0.35)' : '#98C890',
+                  borderColor: vitals.heart_rate ? 'rgba(240,120,0,0.35)' : 'rgba(20,20,19,0.1)',
                 }}
                 placeholder=". "
                 value={vitals.heart_rate}
@@ -677,7 +677,7 @@ export default function VitalsPage() {
               />
               <span
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '11px',
                   fontFamily: 'inherit',
                   minWidth: '28px',
@@ -704,7 +704,7 @@ export default function VitalsPage() {
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>
                   Blood pressure
                 </p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                <p style={{ color: '#48463F', fontSize: '10px', fontFamily: 'inherit' }}>
                   Normal: 90–140 / 60–90
                 </p>
               </div>
@@ -717,7 +717,7 @@ export default function VitalsPage() {
                 aria-label="Systolic blood pressure"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.systolic ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  borderColor: vitals.systolic ? 'rgba(86,128,78,0.35)' : 'rgba(20,20,19,0.1)',
                   width: '62px',
                   fontSize: '18px',
                 }}
@@ -725,7 +725,7 @@ export default function VitalsPage() {
                 value={vitals.systolic}
                 onChange={(e) => setVitals((p) => ({ ...p, systolic: e.target.value }))}
               />
-              <span style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 300 }}>/</span>
+              <span style={{ color: '#48463F', fontSize: '16px', fontWeight: 300 }}>/</span>
               <input
                 type="number"
                 min="30"
@@ -733,7 +733,7 @@ export default function VitalsPage() {
                 aria-label="Diastolic blood pressure"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.diastolic ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  borderColor: vitals.diastolic ? 'rgba(86,128,78,0.35)' : 'rgba(20,20,19,0.1)',
                   width: '62px',
                   fontSize: '18px',
                 }}
@@ -758,7 +758,7 @@ export default function VitalsPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Oxygen sat.</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                <p style={{ color: '#48463F', fontSize: '10px', fontFamily: 'inherit' }}>
                   Normal: 95–100%
                 </p>
               </div>
@@ -771,7 +771,7 @@ export default function VitalsPage() {
                 aria-label="Oxygen saturation as a percentage"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.oxygen_sat ? 'rgba(86,128,78,0.35)' : '#98C890',
+                  borderColor: vitals.oxygen_sat ? 'rgba(86,128,78,0.35)' : 'rgba(20,20,19,0.1)',
                 }}
                 placeholder=". "
                 value={vitals.oxygen_sat}
@@ -779,7 +779,7 @@ export default function VitalsPage() {
               />
               <span
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '11px',
                   fontFamily: 'inherit',
                   minWidth: '28px',
@@ -795,7 +795,7 @@ export default function VitalsPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div>
                 <p style={{ color: '#141413', fontWeight: 700, fontSize: '13px' }}>Resp. rate</p>
-                <p style={{ color: '#5C5A52', fontSize: '10px', fontFamily: 'inherit' }}>
+                <p style={{ color: '#48463F', fontSize: '10px', fontFamily: 'inherit' }}>
                   Normal: 12–20 /min
                 </p>
               </div>
@@ -808,7 +808,7 @@ export default function VitalsPage() {
                 aria-label="Respiratory rate in breaths per minute"
                 style={{
                   ...inputStyle,
-                  borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : '#98C890',
+                  borderColor: vitals.resp_rate ? 'rgba(168,114,0,0.35)' : 'rgba(20,20,19,0.1)',
                 }}
                 placeholder=". "
                 value={vitals.resp_rate}
@@ -816,7 +816,7 @@ export default function VitalsPage() {
               />
               <span
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '11px',
                   fontFamily: 'inherit',
                   minWidth: '28px',
@@ -852,7 +852,7 @@ export default function VitalsPage() {
                         fontSize: '11px',
                         fontWeight: 700,
                         padding: '5px 11px',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         fontFamily: 'inherit',
                       }}
                     >
@@ -876,7 +876,7 @@ export default function VitalsPage() {
             fontWeight: 800,
             fontSize: '15px',
             padding: '17px',
-            borderRadius: 0,
+            borderRadius: 8,
             border: 'none',
             cursor: saving ? 'not-allowed' : 'pointer',
             display: 'flex',
@@ -896,7 +896,7 @@ export default function VitalsPage() {
           <div>
             <p
               style={{
-                color: '#5C5A52',
+                color: '#48463F',
                 fontSize: '13px',
                 letterSpacing: '0',
                 marginBottom: '12px',
@@ -909,8 +909,8 @@ export default function VitalsPage() {
                 key={i}
                 style={{
                   height: '140px',
-                  borderRadius: 0,
-                  background: '#FFFFFF',
+                  borderRadius: 8,
+                  background: 'var(--panel)',
                   marginBottom: '10px',
                 }}
               />
@@ -928,7 +928,7 @@ export default function VitalsPage() {
             >
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '13px',
                   letterSpacing: '0',
                 }}
@@ -956,17 +956,17 @@ export default function VitalsPage() {
             ) : (
               <div
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
-                  borderRadius: 0,
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
+                  borderRadius: 8,
                   padding: '36px 16px',
                   textAlign: 'center',
                 }}
               >
-                <p style={{ color: '#5C5A52', fontSize: '13px', fontWeight: 700 }}>
+                <p style={{ color: '#48463F', fontSize: '13px', fontWeight: 700 }}>
                   No data for {timeRange} view
                 </p>
-                <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '6px' }}>
+                <p style={{ color: '#48463F', fontSize: '11px', marginTop: '6px' }}>
                   Log at least 2 readings to see trends
                 </p>
               </div>

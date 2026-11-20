@@ -2,10 +2,10 @@
 // Feature diagrams for /features.
 const INK = '#141413',
   INK2 = '#3A392F',
-  INK3 = '#6E6B5D'
+  INK3 = '#504E46'
 const GREEN = '#56804E',
   GREEN_DEEP = '#3A5A34'
-const CRIT = '#8F4A00',
+const CRIT = '#7A3D00',
   WARN = '#7C5200'
 const RULE = 'rgba(20,20,19,0.16)'
 const PAPER = '#FFFFFF'

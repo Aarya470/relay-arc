@@ -54,7 +54,7 @@ function valueColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return '#42623C'
   if (normalized <= 6) return '#7C5200'
-  return '#8F4A00'
+  return '#7A3D00'
 }
 
 function valueBg(value: number, inverted: boolean): string {
@@ -68,7 +68,7 @@ function sliderFillColor(value: number, inverted: boolean): string {
   const normalized = inverted ? 10 - value : value
   if (normalized <= 3) return 'linear-gradient(90deg, #42623C, #42623C)'
   if (normalized <= 6) return 'linear-gradient(90deg, #42623C, #7C5200)'
-  return 'linear-gradient(90deg, #42623C, #8F4A00)'
+  return 'linear-gradient(90deg, #42623C, #7A3D00)'
 }
 
 function todayLabel(): string {
@@ -170,7 +170,7 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
         style={{
           position: 'relative',
           height: '8px',
-          borderRadius: 0,
+          borderRadius: 8,
           background: '#EDEAE0',
           cursor: 'pointer',
           touchAction: 'none',
@@ -200,7 +200,7 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
             left: 0,
             top: 0,
             bottom: 0,
-            borderRadius: 0,
+            borderRadius: 8,
             background: fill,
             transition: 'background 0.3s',
           }}
@@ -216,7 +216,7 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
             width: '22px',
             height: '22px',
             borderRadius: '50%',
-            background: '#FFFFFF',
+            background: 'var(--panel)',
             border: `2.5px solid ${color}`,
             boxSizing: 'border-box',
             pointerEvents: 'none',
@@ -226,7 +226,7 @@ function SymptomSlider({ value, onChange, inverted, label }: SliderProps) {
       {/* tick labels */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
         {[0, 2, 4, 6, 8, 10].map((n) => (
-          <span key={n} style={{ fontSize: '10px', color: '#5C5A52', fontWeight: 500 }}>
+          <span key={n} style={{ fontSize: '10px', color: '#48463F', fontWeight: 500 }}>
             {n}
           </span>
         ))}
@@ -252,7 +252,7 @@ function Sparkline({ values, inverted }: { values: number[]; inverted: boolean }
   const prev = values[values.length - 2]
   const improving = inverted ? last > prev : last < prev
   const same = last === prev
-  const lineColor = same ? '#5C5A52' : improving ? '#42623C' : '#8F4A00'
+  const lineColor = same ? '#48463F' : improving ? '#42623C' : '#7A3D00'
 
   return (
     <svg
@@ -296,7 +296,7 @@ function DayCard({ log }: { log: SymptomLog }) {
         gap: '8px',
       }}
     >
-      <span style={{ fontSize: '10px', fontWeight: 700, color: '#5C5A52', letterSpacing: '0.2px' }}>
+      <span style={{ fontSize: '10px', fontWeight: 700, color: '#48463F', letterSpacing: '0.2px' }}>
         {formatDay(log.created_at)}
       </span>
       <div
@@ -524,7 +524,7 @@ export default function SymptomsPage() {
                 {METRICS.map((m) => (
                   <div key={m.key}>
                     <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#141413', marginBottom: '8px' }}>
-                      {m.label.split(' / ')[0]} <span style={{ color: '#5C5A52' }}>{values[m.key]}</span>
+                      {m.label.split(' / ')[0]} <span style={{ color: '#48463F' }}>{values[m.key]}</span>
                     </p>
                     <SymptomSlider value={values[m.key]} onChange={(val) => handleChange(m.key, val)} inverted={m.inverted} label={m.label} />
                   </div>
@@ -565,7 +565,7 @@ export default function SymptomsPage() {
               style={{
                 background: 'rgba(168,114,0,0.12)',
                 border: '1.5px solid rgba(168,114,0,0.3)',
-                borderRadius: 0,
+                borderRadius: 8,
                 padding: '12px 14px',
                 marginBottom: '16px',
                 fontSize: '13px',
@@ -653,7 +653,7 @@ export default function SymptomsPage() {
                 const improving = m.inverted ? latest > prev : latest < prev
                 const same = latest === prev
                 const arrow = same ? '→' : improving ? '↓' : '↑'
-                const arrowColor = same ? '#5C5A52' : improving ? '#42623C' : '#8F4A00'
+                const arrowColor = same ? '#48463F' : improving ? '#42623C' : '#7A3D00'
                 return (
                   <div
                     key={m.key}
@@ -664,12 +664,12 @@ export default function SymptomsPage() {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                      <m.Icon size={15} color="#5C5A52" strokeWidth={1.8} />
+                      <m.Icon size={15} color="#48463F" strokeWidth={1.8} />
                       <span
                         style={{
                           fontSize: '13px',
                           fontWeight: 500,
-                          color: '#5C5A52',
+                          color: '#48463F',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -718,7 +718,7 @@ export default function SymptomsPage() {
                     height: '108px',
                     background: 'rgba(255,253,246,0.45)',
                     border: '1px solid #EDEAE0',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     animation: 'pulse 1.5s infinite',
                   }}
                 />
@@ -728,13 +728,13 @@ export default function SymptomsPage() {
             <div
               style={{
                 background: 'rgba(255,253,246,0.55)',
-                border: '1px solid #98C890',
-                borderRadius: 0,
+                border: '1px solid rgba(20,20,19,0.1)',
+                borderRadius: 8,
                 padding: '28px 20px',
                 textAlign: 'center',
               }}
             >
-              <p style={{ fontSize: '14px', color: '#5C5A52', margin: 0 }}>
+              <p style={{ fontSize: '14px', color: '#48463F', margin: 0 }}>
                 No logs yet. Tap "Log symptoms" to start tracking.
               </p>
             </div>
@@ -765,8 +765,8 @@ export default function SymptomsPage() {
             <div style={{ display: 'flex', gap: '16px', marginTop: '12px', flexWrap: 'wrap' }}>
               {METRICS.map((m) => (
                 <div key={m.key} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <m.Icon size={12} color="#5C5A52" strokeWidth={1.8} />
-                  <span style={{ fontSize: '11px', color: '#5C5A52', fontWeight: 500 }}>
+                  <m.Icon size={12} color="#48463F" strokeWidth={1.8} />
+                  <span style={{ fontSize: '11px', color: '#48463F', fontWeight: 500 }}>
                     {m.label.split(' / ')[0]}
                   </span>
                 </div>
@@ -785,7 +785,7 @@ export default function SymptomsPage() {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0.3; }
         }
-        textarea::placeholder { color: #5C5A52; }
+        textarea::placeholder { color: #48463F; }
         textarea:focus { border-color: rgba(86,128,78,0.4) !important; box-shadow: 0 0 0 3px rgba(86,128,78,0.08); }
       `}</style>
     </div>

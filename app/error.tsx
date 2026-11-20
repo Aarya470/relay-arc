@@ -45,7 +45,7 @@ export default function ErrorBoundary({
 
       <p
         style={{
-          color: '#5C5A52',
+          color: '#48463F',
           fontFamily: 'var(--font-mono, monospace)',
           fontSize: '10.5px',
           fontWeight: 700,
@@ -68,7 +68,7 @@ export default function ErrorBoundary({
       >
         This screen failed to load.
       </h1>
-      <p style={{ color: '#5C5A52', fontSize: '14.5px', lineHeight: 1.6, marginBottom: '28px' }}>
+      <p style={{ color: '#48463F', fontSize: '14.5px', lineHeight: 1.6, marginBottom: '28px' }}>
         If you are in an emergency right now, do not wait for this app. Call {emg.label}.
       </p>
 
@@ -79,7 +79,7 @@ export default function ErrorBoundary({
           alignItems: 'center',
           justifyContent: 'center',
           gap: '10px',
-          background: '#8F4A00',
+          background: '#7A3D00',
           color: 'white',
           fontWeight: 800,
           fontSize: '17px',
@@ -118,7 +118,7 @@ export default function ErrorBoundary({
         href="/dashboard"
         style={{
           textAlign: 'center',
-          color: '#5C5A52',
+          color: '#48463F',
           fontSize: '13.5px',
           fontWeight: 600,
           textDecoration: 'none',

@@ -1,17 +1,19 @@
 'use client'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
 // Public changelog.
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from '@/lib/plain-icons'
 
 // The page green, and why it is this one.
 const INK = '#141413',
-  INK2 = '#5C5A52',
-  INK3 = '#5C5A52'
+  INK2 = '#48463F',
+  INK3 = '#48463F'
 const BORDER = '#7EB382',
   CREAM = '#4B8150'
 const GREEN_DEEP = '#42623C',
   ORANGE = '#F07800',
-  CRIT = '#8F4A00'
+  CRIT = '#7A3D00'
 const mono = 'var(--font-mono, monospace)'
 
 type Kind = 'shipped' | 'fixed' | 'honest'
@@ -25,7 +27,7 @@ interface Entry {
 
 const KIND: Record<Kind, { label: string; color: string }> = {
   shipped: { label: 'SHIPPED', color: GREEN_DEEP },
-  fixed: { label: 'FIXED', color: '#8F4A00' },
+  fixed: { label: 'FIXED', color: '#7A3D00' },
   honest: { label: 'CORRECTION', color: CRIT },
 }
 
@@ -156,52 +158,8 @@ const ENTRIES: Entry[] = [
 export default function Changelog() {
   const router = useRouter()
   return (
-    <div style={{ background: '#B3DDAC', minHeight: '100dvh' }}>
-      <header style={{ borderBottom: `1px solid ${BORDER}`, padding: '16px 24px' }}>
-        <div
-          style={{
-            maxWidth: '820px',
-            margin: '0 auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <button
-            onClick={() => router.push('/')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'none',
-              border: 'none',
-              color: INK2,
-              fontSize: '13.5px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              padding: '5px 0',
-            }}
-          >
-            <ArrowLeft size={15} /> Relay Arc
-          </button>
-          <button
-            onClick={() => router.push('/engineering')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: INK2,
-              fontSize: '13.5px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              padding: '5px 0',
-            }}
-          >
-            Technology
-          </button>
-        </div>
-      </header>
+    <div style={{ background: 'transparent', minHeight: '100dvh' }}>
+      <SiteHeader />
 
       <section style={{ padding: '72px 24px 90px' }}>
         <div style={{ maxWidth: '820px', margin: '0 auto' }}>
@@ -319,6 +277,7 @@ export default function Changelog() {
           </div>
         </div>
       </section>
+      <SiteFooter />
     </div>
   )
 }

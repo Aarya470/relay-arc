@@ -5,7 +5,7 @@ import { resample, detrend, spectrum, type Sample } from '@/lib/pulse'
 
 const INK = '#141413',
   GRID = '#E4E0D3',
-  MUTED = '#6E6B5D'
+  MUTED = '#504E46'
 const mono = 'var(--font-mono, monospace)'
 
 function drawLine(
@@ -50,7 +50,7 @@ function drawLine(
   xs.forEach((x, i) => (i ? ctx.lineTo(px(x), py(ys[i])) : ctx.moveTo(px(x), py(ys[i]))))
   ctx.stroke()
   if (opts.marker != null) {
-    ctx.strokeStyle = '#8F4A00'
+    ctx.strokeStyle = '#7A3D00'
     ctx.setLineDash([6, 4])
     ctx.beginPath()
     ctx.moveTo(px(opts.marker), 0)
@@ -58,7 +58,7 @@ function drawLine(
     ctx.stroke()
     ctx.setLineDash([])
     if (opts.label) {
-      ctx.fillStyle = '#8F4A00'
+      ctx.fillStyle = '#7A3D00'
       ctx.font = `bold 22px monospace`
       ctx.fillText(opts.label, Math.min(px(opts.marker) + 8, W - 160), 26)
     }

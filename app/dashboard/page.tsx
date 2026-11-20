@@ -83,17 +83,17 @@ type CrashRisk = RiskAssessment
 const BG = '#B3DDAC'
 const SURFACE = 'rgba(255,253,246,0.55)'
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
+const T2 = '#48463F'
+const T3 = '#48463F'
 const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.08)'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 const RED_DIM = 'rgba(240,120,0,0.07)'
 const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER = '#7C5200'
 const AMBER_DIM = 'rgba(168,114,0,0.08)'
-const BORDER = '#98C890'
+const BORDER = 'rgba(20,20,19,0.1)'
 const SHADOW = 'none'
 
 // ── This week types ─────────────────────────────────────────────────────
@@ -271,7 +271,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           <div
             style={{
               height: '80px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: BORDER,
               width: '40%',
               opacity: 0.5,
@@ -280,7 +280,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           <div
             style={{
               height: '16px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: BORDER,
               width: '80%',
               opacity: 0.4,
@@ -289,7 +289,7 @@ function HealthIntelligenceCard({ userId }: { userId: string }) {
           <div
             style={{
               height: '16px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: BORDER,
               width: '65%',
               opacity: 0.3,
@@ -581,7 +581,7 @@ function WeeklyInsightsCard({ userId }: { userId: string }) {
                 key={i}
                 style={{
                   height: '14px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   background: BORDER,
                   opacity: 0.5,
                   marginBottom: '12px',
@@ -895,8 +895,8 @@ export default function Dashboard() {
             key={i}
             style={{
               height: `${h}px`,
-              borderRadius: 0,
-              background: '#98C890',
+              borderRadius: 8,
+              background: 'rgba(20,20,19,0.1)',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
           />
@@ -936,7 +936,7 @@ export default function Dashboard() {
       variants={fadeUp}
       onClick={onClick}
       className="glass" style={{
-        borderRadius: 0,
+        borderRadius: 8,
         boxShadow: SHADOW,
         cursor: onClick ? 'pointer' : 'default',
         ...style,
@@ -1008,7 +1008,7 @@ export default function Dashboard() {
                 fontWeight: 700,
                 fontSize: '13px',
                 padding: '9px 16px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
@@ -1091,7 +1091,7 @@ export default function Dashboard() {
                   gap: '5px',
                   background: 'rgba(168,114,0,0.08)',
                   border: '1px solid rgba(168,114,0,0.14)',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '5px 10px',
                 }}
               >
@@ -1143,7 +1143,7 @@ export default function Dashboard() {
           <motion.div
             variants={fadeUp}
             className="glass" style={{
-              borderRadius: 0,
+              borderRadius: 8,
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
@@ -1169,7 +1169,7 @@ export default function Dashboard() {
                 fontWeight: 700,
                 fontSize: '12px',
                 padding: '8px 14px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: 'none',
                 cursor: 'pointer',
                 flexShrink: 0,
@@ -1277,7 +1277,7 @@ export default function Dashboard() {
               animate="show"
               exit={{ opacity: 0, scale: 0.97 }}
               className="glass" style={{
-                borderRadius: 0,
+                borderRadius: 8,
                 padding: '14px 16px',
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -1580,7 +1580,7 @@ export default function Dashboard() {
                     style={{
                       background: BG,
                       border: `1px solid ${BORDER}`,
-                      borderRadius: 0,
+                      borderRadius: 8,
                       padding: '6px 11px',
                       display: 'flex',
                       alignItems: 'baseline',

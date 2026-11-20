@@ -1,3 +1,5 @@
+import { ACCESS_BOOT } from '@/lib/access'
+import OfflineBanner from '@/components/OfflineBanner'
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
@@ -138,6 +140,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: ACCESS_BOOT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD).replace(/</g, '\\u003c') }}
@@ -152,8 +155,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${jakarta.variable} ${mono.variable} ${code.variable} ${jakarta.className}`}
       >
         <Motion>
+          <a href="#main" className="skip-link">Skip to content</a>
           <div className="min-h-[100dvh] w-full relative app-bg">
-            <AuthGate>{children}</AuthGate>
+            <OfflineBanner />
+            <div id="main" tabIndex={-1}>
+              <AuthGate>{children}</AuthGate>
+            </div>
             <LegalModal />
             <Analytics />
             <Reveal />

@@ -1,7 +1,7 @@
 'use client'
 // Intended-use labelling for clinician-facing surfaces.
-const INK2 = '#5C5A52',
-  INK3 = '#5C5A52'
+const INK2 = '#48463F',
+  INK3 = '#48463F'
 const BORDER = '#98C890',
   CREAM = '#B3DDAC'
 const mono = 'var(--font-mono, monospace)'

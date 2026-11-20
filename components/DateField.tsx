@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const INK = '#141413',
-  INK2 = '#5C5A52',
-  INK3 = '#5C5A52'
+  INK2 = '#48463F',
+  INK3 = '#48463F'
 const BORDER = '#98C890',
   WHITE = '#FFFFFF',
-  CRIT = '#8F4A00'
+  CRIT = '#7A3D00'
 
 const MONTHS = [
   'January',

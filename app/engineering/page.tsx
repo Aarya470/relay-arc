@@ -1,4 +1,5 @@
 'use client'
+import SiteFooter from '@/components/SiteFooter'
 // How we built it. Plain-language write-up with two live demos that run the
 // real app code in the browser.
 import SiteHeader from '@/components/SiteHeader'
@@ -19,13 +20,13 @@ const RiskDemo = dynamic(() => import('@/components/RiskDemo'), {
 // The page green, and why it is this one.
 const T1 = '#141413',
   T2 = '#3F3D36',
-  T3 = '#5C5A52'
+  T3 = '#48463F'
 // BG2 was #3A6440, a dark inner panel built for the dark page. Once the page
 // went light it kept its dark fill while the text on it stayed ink and grey,
 // which measured 2.70:1 and 1.01:1. A light tint of the page restores both.
 const BORDER = '#7EB382',
   BG2 = '#CEE9C9'
-const RED = '#8F4A00',
+const RED = '#7A3D00',
   ACCENT = '#42623C'
 const WRAP = {
   maxWidth: '1120px',
@@ -229,7 +230,7 @@ export default function Engineering() {
             style={{
               border: `1px solid rgba(20,20,19,0.15)`,
               marginBottom: '20px',
-              borderRadius: 0,
+              borderRadius: 8,
               overflow: 'hidden',
             }}
           >
@@ -244,7 +245,7 @@ export default function Engineering() {
                 Our model vs. a big online AI, on 49 sentences neither had seen
               </span>
             </div>
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowX: 'auto' }} tabIndex={0} role="region" aria-label="Table, scroll sideways to see all of it">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '460px' }}>
                 <thead>
                   <tr>
@@ -348,7 +349,7 @@ export default function Engineering() {
           </div>
 
           <div
-            style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: 0 }}
+            style={{ background: BG2, padding: '24px', marginBottom: '20px', borderRadius: 8 }}
           >
             <p style={{ color: T1, fontSize: '15px', fontWeight: 700, marginBottom: '10px' }}>
               What went wrong the first time
@@ -418,8 +419,8 @@ export default function Engineering() {
               style={{
                 border: `1px solid ${BORDER}`,
                 padding: '20px',
-                borderRadius: 0,
-                background: '#fff',
+                borderRadius: 8,
+                background: 'var(--panel)',
               }}
             >
               <p style={{ color: ACCENT, fontSize: '13px', fontWeight: 700, marginBottom: '8px' }}>
@@ -438,8 +439,8 @@ export default function Engineering() {
               style={{
                 border: `1px solid ${BORDER}`,
                 padding: '20px',
-                borderRadius: 0,
-                background: '#fff',
+                borderRadius: 8,
+                background: 'var(--panel)',
               }}
             >
               <p style={{ color: T3, fontSize: '13px', fontWeight: 700, marginBottom: '8px' }}>
@@ -491,7 +492,7 @@ export default function Engineering() {
             style={{
               border: `1px solid rgba(20,20,19,0.15)`,
               marginBottom: '26px',
-              borderRadius: 0,
+              borderRadius: 8,
               overflow: 'hidden',
             }}
           >
@@ -504,7 +505,7 @@ export default function Engineering() {
             >
               <span style={{ color: T1, fontSize: '14px', fontWeight: 700 }}>What it looks at</span>
             </div>
-            <div style={{ padding: '4px 16px 14px', background: '#fff' }}>
+            <div style={{ padding: '4px 16px 14px', background: 'var(--panel)' }}>
               {[
                 [
                   'Real drive time',
@@ -689,6 +690,7 @@ export default function Engineering() {
           </div>
         </div>
       </section>
+      <SiteFooter />
     </div>
   )
 }

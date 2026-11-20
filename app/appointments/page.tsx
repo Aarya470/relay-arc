@@ -99,8 +99,8 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
       style={{
         position: 'relative',
         height: ITEM_H * 3,
-        borderRadius: 0,
-        background: '#FFFFFF',
+        borderRadius: 8,
+        background: 'var(--panel)',
         border: '1px solid #D8D4C8',
         overflow: 'hidden',
       }}
@@ -114,7 +114,7 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
           height: ITEM_H,
           background: 'rgba(86,128,78,0.10)',
           border: '1px solid rgba(86,128,78,0.22)',
-          borderRadius: 0,
+          borderRadius: 8,
           pointerEvents: 'none',
           zIndex: 1,
         }}
@@ -203,7 +203,7 @@ function TimeScrollPicker({ value, onChange }: { value: string; onChange: (t: st
                 style={{
                   fontSize: sel ? '18px' : '14px',
                   fontWeight: sel ? 800 : 400,
-                  color: sel ? '#42623C' : '#5C5A52',
+                  color: sel ? '#42623C' : '#48463F',
                   letterSpacing: sel ? '-0.4px' : 0,
                   transition: 'all 0.15s ease',
                   fontFamily: 'inherit',
@@ -274,7 +274,7 @@ function CalendarPicker({
           style={{
             width: '32px',
             height: '32px',
-            borderRadius: 0,
+            borderRadius: 8,
             background: '#F2F0E8',
             border: '1px solid #D8D4C8',
             cursor: 'pointer',
@@ -283,7 +283,7 @@ function CalendarPicker({
             justifyContent: 'center',
           }}
         >
-          <ChevronLeft size={15} color="#5C5A52" />
+          <ChevronLeft size={15} color="#48463F" />
         </motion.button>
         <p style={{ color: '#141413', fontWeight: 700, fontSize: '14px', letterSpacing: '-0.3px' }}>
           {MONTHS[viewMonth]} {viewYear}
@@ -296,7 +296,7 @@ function CalendarPicker({
           style={{
             width: '32px',
             height: '32px',
-            borderRadius: 0,
+            borderRadius: 8,
             background: '#F2F0E8',
             border: '1px solid #D8D4C8',
             cursor: 'pointer',
@@ -305,7 +305,7 @@ function CalendarPicker({
             justifyContent: 'center',
           }}
         >
-          <ChevronRight size={15} color="#5C5A52" />
+          <ChevronRight size={15} color="#48463F" />
         </motion.button>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '6px' }}>
@@ -316,7 +316,7 @@ function CalendarPicker({
               textAlign: 'center',
               fontSize: '11px',
               fontWeight: 600,
-              color: '#5C5A52',
+              color: '#48463F',
               fontFamily: 'inherit',
               letterSpacing: '0.3px',
             }}
@@ -340,10 +340,10 @@ function CalendarPicker({
               disabled={past}
               style={{
                 height: '36px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: todayFlag && !selected ? '1.5px solid rgba(86,128,78,0.4)' : 'none',
                 background: selected ? '#42623C' : 'transparent',
-                color: past ? '#5C5A52' : selected ? '#FFFFFF' : todayFlag ? '#42623C' : '#141413',
+                color: past ? '#48463F' : selected ? '#FFFFFF' : todayFlag ? '#42623C' : '#141413',
                 fontSize: '13px',
                 fontWeight: selected ? 800 : todayFlag ? 700 : 500,
                 cursor: past ? 'default' : 'pointer',
@@ -544,21 +544,21 @@ export default function Appointments() {
       status === 'confirmed'
         ? '#42623C'
         : status === 'completed'
-          ? '#5C5A52'
+          ? '#48463F'
           : status === 'declined' || status === 'missed'
-            ? '#8F4A00'
-            : '#5C5A52',
+            ? '#7A3D00'
+            : '#48463F',
     background:
       status === 'confirmed'
         ? 'rgba(86,128,78,0.12)'
         : status === 'declined' || status === 'missed'
           ? 'rgba(240,120,0,0.12)'
           : '#F2F0E8',
-    border: `1px solid ${status === 'confirmed' ? 'rgba(86,128,78,0.28)' : status === 'declined' || status === 'missed' ? 'rgba(240,120,0,0.22)' : '#98C890'}`,
+    border: `1px solid ${status === 'confirmed' ? 'rgba(86,128,78,0.28)' : status === 'declined' || status === 'missed' ? 'rgba(240,120,0,0.22)' : 'rgba(20,20,19,0.1)'}`,
     fontSize: '13px' as const,
     letterSpacing: '0',
     padding: '2px 7px',
-    borderRadius: 0,
+    borderRadius: 8,
   })
 
   const cardBorderColor = (status: string) => {
@@ -594,7 +594,7 @@ export default function Appointments() {
             <div>
               <p
                 style={{
-                  color: 'rgba(255,255,255,0.60)',
+                  color: 'rgba(255,255,255,0.9)',
                   fontSize: '13px',
                   letterSpacing: '0',
                   marginBottom: '3px',
@@ -624,7 +624,7 @@ export default function Appointments() {
                 fontWeight: 700,
                 fontSize: '12px',
                 padding: '10px 16px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
@@ -661,7 +661,7 @@ export default function Appointments() {
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: 0,
+                borderRadius: 8,
                 background: '#F2F0E8',
                 border: '1px solid #D8D4C8',
                 cursor: 'pointer',
@@ -669,8 +669,9 @@ export default function Appointments() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-            >
-              <ArrowLeft size={15} color="#5C5A52" />
+            
+ aria-label="Back">
+              <ArrowLeft size={15} color="#48463F" />
             </motion.button>
             <div>
               <h1
@@ -683,7 +684,7 @@ export default function Appointments() {
               >
                 Care Team
               </h1>
-              <p style={{ color: '#5C5A52', fontSize: '12px' }}>Talk to a professional</p>
+              <p style={{ color: '#48463F', fontSize: '12px' }}>Talk to a professional</p>
             </div>
           </div>
           <motion.button
@@ -695,7 +696,7 @@ export default function Appointments() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: 'rgba(86,128,78,0.12)',
               border: '1px solid rgba(86,128,78,0.22)',
               cursor: 'pointer',
@@ -703,7 +704,8 @@ export default function Appointments() {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-          >
+          
+ aria-label="Add">
             <Plus size={15} color="#42623C" />
           </motion.button>
         </div>
@@ -718,7 +720,7 @@ export default function Appointments() {
             width: '100%',
             background: '#42623C',
             border: 'none',
-            borderRadius: 0,
+            borderRadius: 8,
             padding: '18px',
             cursor: 'pointer',
             textAlign: 'left',
@@ -739,19 +741,19 @@ export default function Appointments() {
             >
               Book appointment
             </p>
-            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '11px' }}>
+            <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '11px' }}>
               Schedule a visit with your care team
             </p>
           </div>
         </motion.button>
 
-        <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0', marginTop: '8px' }}>
+        <p style={{ color: '#48463F', fontSize: '13px', letterSpacing: '0', marginTop: '8px' }}>
           Your appointments
         </p>
 
         {appointments.length === 0 && !loading && (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
-            <p style={{ color: '#5C5A52', fontSize: '13px' }}>No appointments yet</p>
+            <p style={{ color: '#48463F', fontSize: '13px' }}>No appointments yet</p>
           </div>
         )}
 
@@ -764,9 +766,9 @@ export default function Appointments() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, ...spring }}
               style={{
-                background: '#FFFFFF',
+                background: 'var(--panel)',
                 border: `1px solid ${joinable ? 'rgba(86,128,78,0.30)' : cardBorderColor(a.status)}`,
-                borderRadius: 0,
+                borderRadius: 8,
                 padding: '16px',
                 boxShadow: joinable
                   ? '0 4px 20px rgba(86,128,78,0.14)'
@@ -783,13 +785,13 @@ export default function Appointments() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   {a.type === 'immediate' ? (
-                    <Clock size={13} color="#8F4A00" />
+                    <Clock size={13} color="#7A3D00" />
                   ) : (
                     <CalendarCheck size={13} color="#42623C" />
                   )}
                   <span
                     style={{
-                      color: a.type === 'immediate' ? '#8F4A00' : '#42623C',
+                      color: a.type === 'immediate' ? '#7A3D00' : '#42623C',
                       fontSize: '12px',
                       fontWeight: 700,
                     }}
@@ -804,7 +806,7 @@ export default function Appointments() {
               {a.scheduled_at && a.type === 'scheduled' && (
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '13px',
                     letterSpacing: '0',
                     marginBottom: '4px',
@@ -825,7 +827,7 @@ export default function Appointments() {
               {a.patient_concern && (
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '12px',
                     marginBottom: joinable ? '12px' : 0,
                   }}
@@ -845,7 +847,7 @@ export default function Appointments() {
                     justifyContent: 'center',
                     gap: '8px',
                     background: '#42623C',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     padding: '13px',
                     color: 'white',
                     fontWeight: 700,
@@ -872,9 +874,9 @@ export default function Appointments() {
                     gap: '8px',
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     padding: '12px',
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontWeight: 700,
                     fontSize: '13px',
                     cursor: 'pointer',
@@ -914,13 +916,13 @@ export default function Appointments() {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
-                background: '#FFFFFF',
-                borderRadius: 0,
+                background: 'var(--panel)',
+                borderRadius: 8,
                 width: '100%',
                 maxHeight: '92dvh',
                 overflowY: 'auto',
                 boxShadow: '0 -8px 40px rgba(20,20,19,0.12)',
-                border: '1px solid #98C890',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderBottom: 'none',
               }}
             >
@@ -929,8 +931,8 @@ export default function Appointments() {
                   style={{
                     width: '36px',
                     height: '4px',
-                    borderRadius: 0,
-                    background: '#98C890',
+                    borderRadius: 8,
+                    background: 'rgba(20,20,19,0.1)',
                   }}
                 />
               </div>
@@ -959,11 +961,11 @@ export default function Appointments() {
                     style={{
                       background: '#F2F0E8',
                       border: '1px solid #D8D4C8',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       width: '32px',
                       height: '32px',
                       cursor: 'pointer',
-                      color: '#5C5A52',
+                      color: '#48463F',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -976,9 +978,9 @@ export default function Appointments() {
                 <div style={{ marginBottom: '20px' }}>
                   <div
                     style={{
-                      background: '#FFFFFF',
-                      border: '1px solid #98C890',
-                      borderRadius: 0,
+                      background: 'var(--panel)',
+                      border: '1px solid rgba(20,20,19,0.1)',
+                      borderRadius: 8,
                       padding: '16px',
                       marginBottom: '12px',
                     }}
@@ -996,7 +998,7 @@ export default function Appointments() {
                       >
                         <p
                           style={{
-                            color: '#5C5A52',
+                            color: '#48463F',
                             fontSize: '13px',
                             letterSpacing: '0',
                             marginBottom: '10px',
@@ -1008,7 +1010,7 @@ export default function Appointments() {
                         {scheduledInPast && (
                           <p
                             style={{
-                              color: '#8F4A00',
+                              color: '#7A3D00',
                               fontSize: '12px',
                               marginTop: '8px',
                               textAlign: 'center',
@@ -1035,7 +1037,7 @@ export default function Appointments() {
                           gap: '8px',
                           background: 'rgba(86,128,78,0.10)',
                           border: '1px solid rgba(86,128,78,0.22)',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           padding: '10px 14px',
                         }}
                       >
@@ -1056,9 +1058,9 @@ export default function Appointments() {
                   placeholder="What would you like to discuss? (optional)"
                   style={{
                     width: '100%',
-                    background: '#FFFFFF',
-                    border: `1.5px solid ${focused ? 'rgba(86,128,78,0.50)' : '#98C890'}`,
-                    borderRadius: 0,
+                    background: 'var(--panel)',
+                    border: `1.5px solid ${focused ? 'rgba(86,128,78,0.50)' : 'rgba(20,20,19,0.1)'}`,
+                    borderRadius: 8,
                     padding: '14px 16px',
                     color: '#141413',
                     fontSize: '16px',
@@ -1079,11 +1081,11 @@ export default function Appointments() {
                   style={{
                     width: '100%',
                     background: !canSubmit ? '#F2F0E8' : '#42623C',
-                    color: !canSubmit ? '#5C5A52' : '#FFFFFF',
+                    color: !canSubmit ? '#48463F' : '#FFFFFF',
                     fontWeight: 800,
                     fontSize: '15px',
                     padding: '16px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     border: 'none',
                     cursor: canSubmit ? 'pointer' : 'default',
                     boxShadow: canSubmit ? '0 8px 24px rgba(86,128,78,0.28)' : 'none',

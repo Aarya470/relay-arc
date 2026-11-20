@@ -14,16 +14,16 @@ import BottomNav from '@/components/BottomNav'
 const BG = '#B3DDAC'
 const SURFACE = '#FFFFFF'
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
+const T2 = '#48463F'
+const T3 = '#48463F'
 const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.08)'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 const RED_DIM = 'rgba(240,120,0,0.07)'
 const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
 const AMBER = '#7C5200'
-const BORDER = '#98C890'
+const BORDER = 'rgba(20,20,19,0.1)'
 const SHADOW = 'none'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
@@ -356,8 +356,8 @@ export default function Medications() {
             key={i}
             style={{
               height: '112px',
-              borderRadius: 0,
-              background: '#98C890',
+              borderRadius: 8,
+              background: 'rgba(20,20,19,0.1)',
               marginBottom: '12px',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -729,7 +729,7 @@ export default function Medications() {
                 style={{
                   flex: '0 0 auto',
                   background: BG,
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '12px 14px',
                   display: 'flex',
                   flexDirection: 'column',

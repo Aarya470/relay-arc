@@ -13,7 +13,7 @@ export default function FollowLinks({ tone = 'dark', variant = 'inline' }: Props
   const links = activeSocial()
   if (links.length === 0) return null
 
-  const fg = tone === 'dark' ? 'rgba(255,255,255,0.72)' : '#5C5A52'
+  const fg = tone === 'dark' ? 'rgba(255,255,255,0.72)' : '#48463F'
   const edge = tone === 'dark' ? 'rgba(255,255,255,0.28)' : '#98C890'
 
   if (variant === 'buttons') {

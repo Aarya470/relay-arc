@@ -80,7 +80,7 @@ export default function CareTeamLogin() {
         style={{
           width: '36px',
           height: '36px',
-          borderRadius: 0,
+          borderRadius: 8,
           background: '#F2F0E8',
           border: 'none',
           cursor: 'pointer',
@@ -89,8 +89,9 @@ export default function CareTeamLogin() {
           justifyContent: 'center',
           marginBottom: '32px',
         }}
-      >
-        <ArrowLeft size={16} color="#5C5A52" />
+      
+ aria-label="Back">
+        <ArrowLeft size={16} color="#48463F" />
       </motion.button>
 
       <div
@@ -110,7 +111,7 @@ export default function CareTeamLogin() {
       <h1 style={{ color: '#141413', fontWeight: 700, fontSize: '28px', marginBottom: '4px' }}>
         Care team portal
       </h1>
-      <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '32px' }}>
+      <p style={{ color: '#48463F', fontSize: '14px', marginBottom: '32px' }}>
         {mode === 'login' ? 'Sign in to your care team account' : 'Create your care team account'}
       </p>
 
@@ -125,7 +126,7 @@ export default function CareTeamLogin() {
                   left: '16px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: '#5C5A52',
+                  color: '#48463F',
                 }}
               />
               <input
@@ -134,8 +135,8 @@ export default function CareTeamLogin() {
                 onChange={(e) => setName(e.target.value)}
                 style={{
                   width: '100%',
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
                   borderRadius: '20px',
                   padding: '16px 16px 16px 44px',
                   color: '#141413',
@@ -149,8 +150,8 @@ export default function CareTeamLogin() {
               onChange={(e) => setRole(e.target.value)}
               style={{
                 width: '100%',
-                background: '#FFFFFF',
-                border: '1px solid #98C890',
+                background: 'var(--panel)',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderRadius: '20px',
                 padding: '16px',
                 color: '#141413',
@@ -174,7 +175,7 @@ export default function CareTeamLogin() {
               left: '16px',
               top: '50%',
               transform: 'translateY(-50%)',
-              color: '#5C5A52',
+              color: '#48463F',
             }}
           />
           <input
@@ -184,8 +185,8 @@ export default function CareTeamLogin() {
             onChange={(e) => setEmail(e.target.value)}
             style={{
               width: '100%',
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
+              background: 'var(--panel)',
+              border: '1px solid rgba(20,20,19,0.1)',
               borderRadius: '20px',
               padding: '16px 16px 16px 44px',
               color: '#141413',
@@ -203,7 +204,7 @@ export default function CareTeamLogin() {
               left: '16px',
               top: '50%',
               transform: 'translateY(-50%)',
-              color: '#5C5A52',
+              color: '#48463F',
             }}
           />
           <input
@@ -213,8 +214,8 @@ export default function CareTeamLogin() {
             onChange={(e) => setPassword(e.target.value)}
             style={{
               width: '100%',
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
+              background: 'var(--panel)',
+              border: '1px solid rgba(20,20,19,0.1)',
               borderRadius: '20px',
               padding: '16px 16px 16px 44px',
               color: '#141413',
@@ -227,7 +228,7 @@ export default function CareTeamLogin() {
         <div style={{ position: 'relative' }}>
           <KeyRound
             size={15}
-            color="#5C5A52"
+            color="#48463F"
             style={{
               position: 'absolute',
               left: '16px',
@@ -242,8 +243,8 @@ export default function CareTeamLogin() {
             onChange={(e) => setCode(e.target.value)}
             style={{
               width: '100%',
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
+              background: 'var(--panel)',
+              border: '1px solid rgba(20,20,19,0.1)',
               borderRadius: '20px',
               padding: '16px 16px 16px 44px',
               color: '#141413',
@@ -287,7 +288,7 @@ export default function CareTeamLogin() {
           style={{
             background: 'none',
             border: 'none',
-            color: '#5C5A52',
+            color: '#48463F',
             fontSize: '13px',
             cursor: 'pointer',
             marginTop: '4px',

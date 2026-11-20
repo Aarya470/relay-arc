@@ -1,4 +1,5 @@
 'use client'
+import { AppHeader } from '@/components/AppKit'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -114,7 +115,7 @@ export default function EmergencyHistoryPage() {
             key={i}
             style={{
               height: '72px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
@@ -126,52 +127,8 @@ export default function EmergencyHistoryPage() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'transparent', paddingBottom: '40px' }}>
-      {/* Header */}
-      <div
-        style={{
-          padding: '56px 20px 16px',
-          maxWidth: '720px',
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: '12px',
-        }}
-      >
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => router.back()}
-          style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: 0,
-            background: '#F2F0E8',
-            border: '1px solid #D8D4C8',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            flexShrink: 0,
-            marginTop: '2px',
-          }}
-        >
-          <ArrowLeft size={16} color="#5C5A52" />
-        </motion.button>
-        <div>
-          <h1
-            style={{
-              color: '#141413',
-              fontSize: '26px',
-              fontWeight: 800,
-              letterSpacing: '-0.6px',
-              lineHeight: 1.1,
-            }}
-          >
-            Emergency History
-          </h1>
-          <p style={{ color: '#5C5A52', fontSize: '13px', marginTop: '4px' }}>
-            Your past SOS events
-          </p>
-        </div>
+      <div style={{ padding: '0 16px', maxWidth: '720px', margin: '0 auto' }}>
+        <AppHeader title="Emergency history" sub="Your past SOS events" back="/settings" backLabel="Settings" />
       </div>
 
       <div style={{ padding: '0 20px', maxWidth: '720px', margin: '0 auto' }}>
@@ -193,7 +150,7 @@ export default function EmergencyHistoryPage() {
             <p style={{ color: '#141413', fontWeight: 700, fontSize: '18px', marginBottom: '8px' }}>
               No emergency history
             </p>
-            <p style={{ color: '#5C5A52', fontSize: '14px', lineHeight: 1.6, maxWidth: '260px' }}>
+            <p style={{ color: '#48463F', fontSize: '14px', lineHeight: 1.6, maxWidth: '260px' }}>
               Your past SOS events will appear here
             </p>
             <motion.button
@@ -206,7 +163,7 @@ export default function EmergencyHistoryPage() {
                 fontWeight: 600,
                 fontSize: '14px',
                 padding: '12px 24px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: 'none',
                 cursor: 'pointer',
               }}
@@ -226,7 +183,7 @@ export default function EmergencyHistoryPage() {
                 {/* Month chip */}
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '13px',
                     fontWeight: 600,
                     letterSpacing: '0',
@@ -244,9 +201,9 @@ export default function EmergencyHistoryPage() {
                         key={em.id}
                         whileTap={{ scale: 0.99 }}
                         style={{
-                          background: '#FFFFFF',
+                          background: 'var(--panel)',
                           border: `1px solid ${resolved ? '#F2F0E8' : 'rgba(240,120,0,0.20)'}`,
-                          borderRadius: 0,
+                          borderRadius: 8,
                           boxShadow: resolved ? 'none' : '0 2px 16px rgba(240,120,0,0.08)',
                           padding: '14px 16px',
                           display: 'flex',
@@ -259,7 +216,7 @@ export default function EmergencyHistoryPage() {
                           style={{
                             width: '40px',
                             height: '40px',
-                            borderRadius: 0,
+                            borderRadius: 8,
                             background: resolved ? '#F2F0E8' : 'rgba(240,120,0,0.12)',
                             display: 'flex',
                             alignItems: 'center',
@@ -267,7 +224,7 @@ export default function EmergencyHistoryPage() {
                             flexShrink: 0,
                           }}
                         >
-                          <Icon size={18} color={resolved ? '#5C5A52' : '#8F4A00'} />
+                          <Icon size={18} color={resolved ? '#48463F' : '#7A3D00'} />
                         </div>
 
                         {/* Details */}
@@ -277,7 +234,7 @@ export default function EmergencyHistoryPage() {
                           </p>
                           <p
                             style={{
-                              color: '#5C5A52',
+                              color: '#48463F',
                               fontSize: '12px',
                               marginTop: '2px',
                               fontFamily: 'inherit',
@@ -305,7 +262,7 @@ export default function EmergencyHistoryPage() {
                                 fontSize: '11px',
                                 fontWeight: 600,
                                 padding: '3px 9px',
-                                borderRadius: 0,
+                                borderRadius: 8,
                                 border: '1px solid rgba(86,128,78,0.20)',
                               }}
                             >
@@ -326,7 +283,7 @@ export default function EmergencyHistoryPage() {
                                     position: 'absolute',
                                     inset: 0,
                                     borderRadius: '50%',
-                                    background: '#8F4A00',
+                                    background: '#7A3D00',
                                     opacity: 0.4,
                                     animation: 'ping 1.2s cubic-bezier(0,0,0.2,1) infinite',
                                   }}
@@ -336,19 +293,19 @@ export default function EmergencyHistoryPage() {
                                     width: '8px',
                                     height: '8px',
                                     borderRadius: '50%',
-                                    background: '#8F4A00',
+                                    background: '#7A3D00',
                                     display: 'block',
                                   }}
                                 />
                               </span>
-                              <span style={{ color: '#8F4A00', fontSize: '11px', fontWeight: 600 }}>
+                              <span style={{ color: '#7A3D00', fontSize: '11px', fontWeight: 600 }}>
                                 Active
                               </span>
                             </div>
                           )}
                           {resolved && (
                             <span
-                              style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit' }}
+                              style={{ color: '#48463F', fontSize: '11px', fontFamily: 'inherit' }}
                             >
                               {durationHint(em.created_at)}
                             </span>

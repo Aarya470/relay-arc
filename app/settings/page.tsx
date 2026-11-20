@@ -1,5 +1,6 @@
 'use client'
 import { Hero } from '@/components/AppKit'
+import AccessPanel from '@/components/AccessPanel'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -93,7 +94,7 @@ export default function Settings() {
 
   const link = (title: string, sub: string, path: string, badge: string, danger = false) => (
     <button key={path} className="row" onClick={() => router.push(path)}>
-      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(240,120,0,0.12)', color: '#8F4A00' } : undefined}>
+      <span className="row-badge" aria-hidden style={danger ? { background: 'rgba(240,120,0,0.12)', color: '#7A3D00' } : undefined}>
         {badge}
       </span>
       <span style={{ flex: 1, minWidth: 0 }}>
@@ -174,7 +175,7 @@ export default function Settings() {
                   ) : (
                     <button className="row" onClick={() => startEdit(f.key, f.value)} style={{ padding: '12px 10px' }}>
                       <span style={{ color: '#3F3D36', fontSize: '14px', width: '112px', flexShrink: 0 }}>{f.label}</span>
-                      <span style={{ flex: 1, color: f.value ? '#141413' : '#6B6960', fontSize: '15px', fontWeight: f.value ? 650 : 400, overflowWrap: 'anywhere' }}>
+                      <span style={{ flex: 1, color: f.value ? '#141413' : '#504E46', fontSize: '15px', fontWeight: f.value ? 650 : 400, overflowWrap: 'anywhere' }}>
                         {f.value || 'Add'}
                       </span>
                       <span className="row-end" style={{ fontSize: '13px', fontWeight: 600 }}>Edit</span>
@@ -205,6 +206,18 @@ export default function Settings() {
               {link('Health history', 'Past check ins and emergencies', '/history', 'Log')}
               {link('Emergency history', 'Past SOS events', '/emergency/history', 'Past')}
               {link('Connect Apple Watch', 'Readings arrive by themselves', '/connect-health', 'Watch')}
+            </Accordion>
+          </div>
+        </section>
+
+        {/* Display and access */}
+        <section aria-labelledby="g-access">
+          <p className="group-label" id="g-access">Display and access</p>
+          <div className="glass" style={{ padding: '6px' }}>
+            <Accordion title="Text size, contrast and motion" hint="Saved on this phone only">
+              <div style={{ padding: '4px 10px 10px' }}>
+                <AccessPanel />
+              </div>
             </Accordion>
           </div>
         </section>
@@ -244,8 +257,8 @@ function SignOutRow() {
   return (
     <>
       <button className="row" onClick={() => setAsk(true)}>
-        <span className="row-badge" aria-hidden style={{ background: 'rgba(240,120,0,0.12)', color: '#8F4A00' }}>Out</span>
-        <span className="row-title" style={{ color: '#8F4A00' }}>Sign out</span>
+        <span className="row-badge" aria-hidden style={{ background: 'rgba(240,120,0,0.12)', color: '#7A3D00' }}>Out</span>
+        <span className="row-title" style={{ color: '#7A3D00' }}>Sign out</span>
       </button>
       {ask && (
         <div className="cmdk-overlay" style={{ alignItems: 'center', paddingTop: '16px' }} onMouseDown={(e) => e.target === e.currentTarget && setAsk(false)}>

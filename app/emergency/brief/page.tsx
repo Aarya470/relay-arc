@@ -192,7 +192,7 @@ function BriefContent() {
       {/* Red alert header */}
       <div
         className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3"
-        style={{ background: '#8F4A00' }}
+        style={{ background: '#7A3D00' }}
       >
         <button
           onClick={() => router.back()}
@@ -231,7 +231,7 @@ function BriefContent() {
       >
         <p
           className="font-black tracking-widest uppercase"
-          style={{ fontSize: '0.85rem', letterSpacing: '0.20em', color: '#8F4A00' }}
+          style={{ fontSize: '0.85rem', letterSpacing: '0.20em', color: '#7A3D00' }}
         >
           SHOW TO HOSPITAL STAFF
         </p>
@@ -242,15 +242,15 @@ function BriefContent() {
         <Section>
           <SectionLabel>PATIENT</SectionLabel>
           <p className="text-xl font-bold" style={{ color: '#141413' }}>
-            {profile?.full_name || <span style={{ color: '#5C5A52' }}>Unknown</span>}
+            {profile?.full_name || <span style={{ color: '#48463F' }}>Unknown</span>}
           </p>
           {profile?.date_of_birth && (
-            <p className="text-sm mt-0.5" style={{ color: '#5C5A52' }}>
+            <p className="text-sm mt-0.5" style={{ color: '#48463F' }}>
               DOB: {profile.date_of_birth}
             </p>
           )}
           {profile?.diagnosis && (
-            <p className="text-sm mt-1" style={{ color: '#5C5A52' }}>
+            <p className="text-sm mt-1" style={{ color: '#48463F' }}>
               {profile.diagnosis}
             </p>
           )}
@@ -261,7 +261,7 @@ function BriefContent() {
           <SectionLabel>BLOOD TYPE</SectionLabel>
           <p
             className="font-black tracking-tight"
-            style={{ color: '#8F4A00', lineHeight: 1.1, fontSize: '3rem', fontFamily: 'inherit' }}
+            style={{ color: '#7A3D00', lineHeight: 1.1, fontSize: '3rem', fontFamily: 'inherit' }}
           >
             {profile?.blood_type || '?'}
           </p>
@@ -271,11 +271,11 @@ function BriefContent() {
         <Section highlight={!!profile?.allergies}>
           <SectionLabel>ALLERGIES</SectionLabel>
           {profile?.allergies ? (
-            <p className="font-semibold text-base" style={{ color: '#8F4A00' }}>
+            <p className="font-semibold text-base" style={{ color: '#7A3D00' }}>
               {profile.allergies}
             </p>
           ) : (
-            <p className="text-base" style={{ color: '#5C5A52' }}>
+            <p className="text-base" style={{ color: '#48463F' }}>
               None known
             </p>
           )}
@@ -295,13 +295,13 @@ function BriefContent() {
                   <span className="text-sm" style={{ color: '#141413' }}>
                     <span className="font-semibold">{m.name}</span>
                     {m.dose && `. ${m.dose}`}
-                    {m.frequency && <span style={{ color: '#5C5A52' }}> · {m.frequency}</span>}
+                    {m.frequency && <span style={{ color: '#48463F' }}> · {m.frequency}</span>}
                   </span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm" style={{ color: '#5C5A52' }}>
+            <p className="text-sm" style={{ color: '#48463F' }}>
               None on file
             </p>
           )}
@@ -311,8 +311,8 @@ function BriefContent() {
         <Section>
           <SectionLabel>EMERGENCY</SectionLabel>
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#8F4A00' }} />
-            <p className="text-lg font-bold" style={{ color: '#8F4A00' }}>
+            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#7A3D00' }} />
+            <p className="text-lg font-bold" style={{ color: '#7A3D00' }}>
               {emergencyLabel}
             </p>
           </div>
@@ -346,11 +346,11 @@ function BriefContent() {
             >
               <p
                 className="text-xs font-bold uppercase tracking-widest mb-1"
-                style={{ color: '#8F4A00', letterSpacing: '0.13em' }}
+                style={{ color: '#7A3D00', letterSpacing: '0.13em' }}
               >
                 Caution
               </p>
-              <p className="text-sm leading-relaxed" style={{ color: '#5C5A52' }}>
+              <p className="text-sm leading-relaxed" style={{ color: '#48463F' }}>
                 {handoff.caution}
               </p>
             </div>
@@ -365,7 +365,7 @@ function BriefContent() {
               <p className="font-semibold" style={{ color: '#141413' }}>
                 {primaryContact.name}
                 {primaryContact.relationship && (
-                  <span className="font-normal text-sm" style={{ color: '#5C5A52' }}>
+                  <span className="font-normal text-sm" style={{ color: '#48463F' }}>
                     {' '}
                     ({primaryContact.relationship})
                   </span>
@@ -376,7 +376,7 @@ function BriefContent() {
               </p>
             </div>
           ) : (
-            <p className="text-sm" style={{ color: '#5C5A52' }}>
+            <p className="text-sm" style={{ color: '#48463F' }}>
               None on file
             </p>
           )}
@@ -388,7 +388,7 @@ function BriefContent() {
           {noteLoading ? (
             <div className="flex items-center gap-2 mt-1" style={{ color: '#42623C' }}>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span className="text-sm" style={{ color: '#5C5A52' }}>
+              <span className="text-sm" style={{ color: '#48463F' }}>
                 Generating note…
               </span>
             </div>
@@ -397,11 +397,11 @@ function BriefContent() {
               {clinicalNote}
             </p>
           ) : (
-            <p className="text-sm" style={{ color: '#5C5A52' }}>
+            <p className="text-sm" style={{ color: '#48463F' }}>
               Note unavailable. Use profile data above.
             </p>
           )}
-          <p className="text-xs mt-2" style={{ color: '#5C5A52' }}>
+          <p className="text-xs mt-2" style={{ color: '#48463F' }}>
             AI-generated · verify with patient or records
           </p>
         </Section>
@@ -414,8 +414,8 @@ function BriefContent() {
             style={{
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
-              color: '#5C5A52',
-              borderRadius: 0,
+              color: '#48463F',
+              borderRadius: 8,
             }}
           >
             Back
@@ -426,7 +426,7 @@ function BriefContent() {
             style={{
               background: copied ? '#42623C' : '#42623C',
               color: copied ? '#B3DDAC' : '#fff',
-              borderRadius: 0,
+              borderRadius: 8,
               border: 'none',
               boxShadow: copied
                 ? '0 4px 20px rgba(86,128,78,0.28)'
@@ -466,8 +466,8 @@ function Section({
       className="rounded-2xl p-4"
       style={{
         background: highlight ? 'rgba(240,120,0,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(240,120,0,0.22)' : '1px solid #98C890',
-        borderRadius: 0,
+        border: highlight ? '1px solid rgba(240,120,0,0.22)' : '1px solid rgba(20,20,19,0.1)',
+        borderRadius: 8,
       }}
     >
       {children}
@@ -479,7 +479,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="text-xs font-bold uppercase tracking-widest mb-1.5"
-      style={{ color: '#5C5A52', letterSpacing: '0.13em' }}
+      style={{ color: '#48463F', letterSpacing: '0.13em' }}
     >
       {children}
     </p>

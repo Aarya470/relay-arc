@@ -14,13 +14,13 @@ import { sendPushNotification } from '@/lib/notifications'
 const BG = '#B3DDAC'
 const SURFACE = '#FFFFFF'
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
+const T2 = '#48463F'
+const T3 = '#48463F'
 const ACCENT = '#42623C'
 const ACCENT_DIM = 'rgba(86,128,78,0.09)'
 const GREEN = '#42623C'
 const GREEN_DIM = 'rgba(86,128,78,0.08)'
-const BORDER = '#98C890'
+const BORDER = 'rgba(20,20,19,0.1)'
 const SHADOW = 'none'
 
 const spring = { type: 'spring', stiffness: 380, damping: 24 } as const
@@ -189,7 +189,7 @@ export default function Checkin() {
               {done ? 'Saved to your history' : 'Talk like you would to a friend'}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '4px' }} aria-label={`${Math.min(asked, 5)} of 5 questions`}>
+          <div style={{ display: 'flex', gap: '4px' }} role="img" aria-label={`${Math.min(asked, 5)} of 5 questions`}>
             {[0, 1, 2, 3, 4].map((k) => (
               <span
                 key={k}

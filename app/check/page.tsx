@@ -38,11 +38,11 @@ import { AppHeader, Hero } from '@/components/AppKit'
 const PAGE = '#B3DDAC',
   T1 = '#141413',
   T2 = '#3F3D36',
-  T3 = '#6E6B5D'
+  T3 = '#504E46'
 const LINE = '#E4E2DA',
   LINE2 = '#CFCCC1',
   PAPER = '#FBFAF6',
-  RED = '#8F4A00',
+  RED = '#7A3D00',
   GREEN = '#3B5E35',
   AMBER = '#7C5200',
   ORANGE = '#F07800'
@@ -123,7 +123,7 @@ const input: React.CSSProperties = {
   fontSize: '16px',
   fontFamily: 'inherit',
   color: T1,
-  background: '#FFFFFF',
+  background: 'var(--panel)',
   boxSizing: 'border-box',
   outline: 'none',
 }
@@ -303,7 +303,7 @@ export default function VitalsCheck() {
       ctx.lineTo(gx, c.height)
       ctx.stroke()
     }
-    ctx.strokeStyle = '#8F4A00'
+    ctx.strokeStyle = '#7A3D00'
     ctx.lineWidth = 3.5
     ctx.lineJoin = 'round'
     ctx.beginPath()
@@ -663,7 +663,7 @@ export default function VitalsCheck() {
                   background: '#FFD166',
                   color: '#1A1300',
                   padding: '3px 8px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                 }}
               >
                 DEMO · simulated reading
@@ -747,7 +747,7 @@ export default function VitalsCheck() {
               display: 'block',
               background: PAPER,
               border: `1px solid ${LINE}`,
-              borderRadius: 0,
+              borderRadius: 8,
             }}
           />
 
@@ -775,7 +775,7 @@ export default function VitalsCheck() {
               style={{
                 margin: '12px 0 0',
                 padding: '10px 12px',
-                borderRadius: 0,
+                borderRadius: 8,
                 background: '#FBEDE8',
                 color: '#6B2410',
                 fontSize: '14px',
@@ -900,11 +900,11 @@ export default function VitalsCheck() {
               style={{
                 width: '100%',
                 minHeight: '128px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: `2px solid ${T1}`,
                 cursor: 'pointer',
                 fontFamily: 'inherit',
-                background: '#FFFFFF',
+                background: 'var(--panel)',
                 color: T1,
                 fontSize: '20px',
                 fontWeight: 700,
@@ -1074,7 +1074,7 @@ export default function VitalsCheck() {
                       fontWeight: 700,
                       fontSize: '15px',
                       padding: '5px 0',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       background: c.bg,
                       color: c.fg,
                       fontVariantNumeric: 'tabular-nums',

@@ -6,10 +6,10 @@ import { Phone, ArrowLeft, Play, Square } from '@/lib/plain-icons'
 import { emergencyNumber } from '@/lib/emergency-number'
 
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
-const BORDER = '#98C890'
-const RED = '#8F4A00'
+const T2 = '#48463F'
+const T3 = '#48463F'
+const BORDER = 'rgba(20,20,19,0.1)'
+const RED = '#7A3D00'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -237,7 +237,7 @@ export default function CprCoach() {
               fontWeight: 700,
               fontSize: '16.5px',
               padding: '17px',
-              borderRadius: 0,
+              borderRadius: 8,
               cursor: 'pointer',
               fontFamily: 'inherit',
               minHeight: '58px',

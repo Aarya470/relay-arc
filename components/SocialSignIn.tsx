@@ -110,7 +110,7 @@ export default function SocialSignIn({ isSignUp = false }: { isSignUp?: boolean 
         )}
       </div>
       {error && (
-        <p role="alert" style={{ color: '#8F4A00', fontSize: '13px', marginTop: '10px' }}>
+        <p role="alert" style={{ color: '#7A3D00', fontSize: '13px', marginTop: '10px' }}>
           {error}
         </p>
       )}

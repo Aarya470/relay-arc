@@ -36,6 +36,7 @@ const ITEMS: Item[] = [
   { id: 'features', group: 'About', label: 'Features', run: 'go', href: '/features' },
   { id: 'engineering', group: 'About', label: 'Engineering', run: 'go', href: '/engineering', words: 'how it works technology' },
   { id: 'partners', group: 'About', label: 'Partners', run: 'go', href: '/partners' },
+  { id: 'access', group: 'Actions', label: 'Text size and contrast', hint: 'Bigger text, less motion', run: 'go', href: '/accessibility', words: 'accessibility zoom font large dyslexia motion' },
   { id: 'privacy', group: 'About', label: 'Privacy policy', run: 'go', href: '/privacy' },
   { id: 'terms', group: 'About', label: 'Terms', run: 'go', href: '/terms' },
 ]
@@ -196,7 +197,7 @@ export default function CommandPalette() {
                       style={{ padding: '11px 12px' }}
                     >
                       <span style={{ flex: 1 }}>
-                        <span className="row-title" style={{ color: i.id === 'sos' || i.id === 'call' ? '#8F4A00' : undefined }}>
+                        <span className="row-title" style={{ color: i.id === 'sos' || i.id === 'call' ? '#7A3D00' : undefined }}>
                           {i.label}
                         </span>
                         {i.hint ? <span className="row-sub" style={{ display: 'block' }}>{i.hint}</span> : null}

@@ -4,11 +4,11 @@ import { useState, useMemo } from 'react'
 import { assessRisk, scoreRespRate, scoreSpo2, scoreSystolic, scorePulse } from '@/lib/risk'
 
 const T1 = '#141413',
-  T2 = '#5C5A52',
-  T3 = '#5C5A52'
+  T2 = '#48463F',
+  T3 = '#48463F'
 const BORDER = '#98C890',
   BG2 = '#B3DDAC'
-const RED = '#8F4A00',
+const RED = '#7A3D00',
   AMBER = '#7C5200',
   GREEN = '#42623C'
 

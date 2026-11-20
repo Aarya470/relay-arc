@@ -1,5 +1,6 @@
 'use client'
 // /connect-health — get Apple Watch readings into Relay Arc with nothing to upload.
+import { AppHeader } from '@/components/AppKit'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Copy, Check, RefreshCw, Watch } from '@/lib/plain-icons'
@@ -10,13 +11,13 @@ import { SITE_URL } from '@/lib/site'
 const PAGE = '#B3DDAC',
   T1 = '#141413',
   T2 = '#3F3D36',
-  T3 = '#6E6B5D',
+  T3 = '#504E46',
   LINE = '#E4E2DA',
   GREEN = '#3B5E35'
 const panel: React.CSSProperties = {
-  background: '#FFFFFF',
+  background: 'var(--panel)',
   border: '1px solid rgba(20,20,19,0.14)',
-  borderRadius: 0,
+  borderRadius: 8,
   padding: '18px',
   marginBottom: '14px',
 }
@@ -29,7 +30,7 @@ const btn = (primary: boolean): React.CSSProperties => ({
   background: primary ? T1 : '#FFFFFF',
   color: primary ? '#FFFFFF' : T1,
   border: `1.5px solid ${T1}`,
-  borderRadius: 0,
+  borderRadius: 8,
   padding: '11px 16px',
   minHeight: '46px',
   fontWeight: 700,
@@ -142,46 +143,11 @@ export default function ConnectHealth() {
   }
 
   return (
-    <div style={{ background: PAGE, minHeight: '100dvh' }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '16px 16px 64px' }}>
-        <button
-          onClick={() => router.back()}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'none',
-            border: 'none',
-            color: T1,
-            fontWeight: 600,
-            fontSize: '15px',
-            cursor: 'pointer',
-            padding: '6px 0',
-            fontFamily: 'inherit',
-          }}
-        >
-          <ArrowLeft size={17} /> Back
-        </button>
-
-        <div style={{ margin: '14px 0 18px' }}>
-          <h1
-            style={{
-              color: T1,
-              fontSize: '30px',
-              fontWeight: 800,
-              letterSpacing: '-0.4px',
-              lineHeight: 1.15,
-              margin: '0 0 8px',
-            }}
-          >
-            Connect Apple Watch
-          </h1>
-          <p style={{ color: T2, fontSize: '16px', lineHeight: 1.55, margin: 0 }}>
-            Set this up once and your watch&apos;s heart rate, breathing rate, blood oxygen and
+    <div style={{ background: 'transparent', minHeight: '100dvh' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 16px 64px' }}>
+        <AppHeader title="Connect Apple Watch" back="/settings" backLabel="Settings" sub={<>Set this up once and your watch&apos;s heart rate, breathing rate, blood oxygen and
             blood pressure arrive in Relay Arc by themselves, about every hour. Nothing to export or
-            upload. They go straight into your NEWS2 sheet.
-          </p>
-        </div>
+            upload. They go straight into your NEWS2 sheet.</>} />
 
         {/* status */}
         <section style={{ ...panel, display: 'flex', gap: '12px', alignItems: 'center' }}>
@@ -211,7 +177,7 @@ export default function ConnectHealth() {
               color: T1,
               background: '#FBFAF6',
               border: `1px solid ${LINE}`,
-              borderRadius: 0,
+              borderRadius: 8,
               padding: '10px 12px',
               wordBreak: 'break-all',
             }}

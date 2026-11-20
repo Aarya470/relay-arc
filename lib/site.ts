@@ -36,6 +36,7 @@ export const PUBLIC_ROUTES: {
   { path: '/changelog', priority: 0.7, changeFrequency: 'weekly' },
   { path: '/donate', priority: 0.5, changeFrequency: 'yearly' },
   { path: '/status', priority: 0.4, changeFrequency: 'daily' },
+  { path: '/accessibility', priority: 0.4, changeFrequency: 'yearly' },
   { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
   { path: '/terms', priority: 0.3, changeFrequency: 'yearly' },
 ]

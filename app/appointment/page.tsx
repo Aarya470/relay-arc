@@ -92,7 +92,7 @@ export default function AppointmentSummary() {
             key={i}
             style={{
               height: '80px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -113,7 +113,7 @@ export default function AppointmentSummary() {
     {
       label: 'Emergencies',
       value: emergencies.length,
-      color: '#8F4A00',
+      color: '#7A3D00',
       bg: 'rgba(240,120,0,0.07)',
       border: 'rgba(240,120,0,0.15)',
       Icon: AlertTriangle,
@@ -138,15 +138,16 @@ export default function AppointmentSummary() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
-              border: '1px solid #98C890',
+              border: '1px solid rgba(20,20,19,0.1)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
-          >
+          
+ aria-label="Back">
             <ArrowLeft size={15} color="rgba(237,234,224,0.5)" />
           </motion.button>
           <div>
@@ -179,7 +180,7 @@ export default function AppointmentSummary() {
               style={{
                 background: s.bg,
                 border: `1px solid ${s.border}`,
-                borderRadius: 0,
+                borderRadius: 8,
                 padding: '16px 12px',
                 textAlign: 'center',
                 boxShadow: '0 4px 16px rgba(20,20,19,0.06)',
@@ -225,7 +226,7 @@ export default function AppointmentSummary() {
               fontWeight: 700,
               fontSize: '15px',
               padding: '20px',
-              borderRadius: 0,
+              borderRadius: 8,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -246,9 +247,9 @@ export default function AppointmentSummary() {
         ) : (
           <div
             style={{
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
-              borderRadius: 0,
+              background: 'var(--panel)',
+              border: '1px solid rgba(20,20,19,0.1)',
+              borderRadius: 8,
               padding: '18px',
               boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
             }}
@@ -279,15 +280,16 @@ export default function AppointmentSummary() {
                 style={{
                   width: '28px',
                   height: '28px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   background: '#F2F0E8',
-                  border: '1px solid #98C890',
+                  border: '1px solid rgba(20,20,19,0.1)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-              >
+              
+ aria-label="Refresh">
                 <RefreshCw size={12} color="rgba(237,234,224,0.3)" />
               </motion.button>
             </div>
@@ -307,9 +309,9 @@ export default function AppointmentSummary() {
         {/* Check-in history */}
         <div
           style={{
-            background: '#FFFFFF',
-            border: '1px solid #98C890',
-            borderRadius: 0,
+            background: 'var(--panel)',
+            border: '1px solid rgba(20,20,19,0.1)',
+            borderRadius: 8,
             padding: '18px',
             boxShadow: '0 4px 20px rgba(20,20,19,0.06)',
           }}

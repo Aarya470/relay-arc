@@ -86,9 +86,9 @@ const T = {
   card2: '#FFFFFF',
   border: '#F2F0E8',
   textPrimary: '#141413',
-  textSec: '#5C5A52',
-  textMuted: '#5C5A52',
-  red: '#8F4A00',
+  textSec: '#48463F',
+  textMuted: '#48463F',
+  red: '#7A3D00',
   redSoft: 'rgba(240,120,0,0.12)',
   redGlow: 'none',
   green: '#42623C',
@@ -136,7 +136,7 @@ function CancelConfirmSheet({
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
             style={{
               background: T.card,
-              borderRadius: 0,
+              borderRadius: 8,
               border: `1px solid ${T.border}`,
               borderBottom: 'none',
               padding: '28px 20px 52px',
@@ -174,7 +174,7 @@ function CancelConfirmSheet({
                   flex: 1,
                   padding: '15px',
                   background: '#F2F0E8',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   border: `1px solid ${T.border}`,
                   cursor: 'pointer',
                   fontWeight: 700,
@@ -194,8 +194,8 @@ function CancelConfirmSheet({
                 style={{
                   flex: 1,
                   padding: '15px',
-                  background: `#8F4A00`,
-                  borderRadius: 0,
+                  background: `#7A3D00`,
+                  borderRadius: 8,
                   border: 'none',
                   cursor: cancelling ? 'default' : 'pointer',
                   fontWeight: 700,
@@ -865,7 +865,7 @@ function RoutingPage() {
             background: T.red,
             color: 'white',
             padding: '20px',
-            borderRadius: 0,
+            borderRadius: 8,
             fontWeight: 900,
             fontSize: '20px',
             letterSpacing: '-0.3px',
@@ -936,12 +936,12 @@ function RoutingPage() {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '10px',
-            background: `#8F4A00`,
+            background: `#7A3D00`,
             color: 'white',
             fontWeight: 800,
             fontSize: '17px',
             padding: '17px 0',
-            borderRadius: 0,
+            borderRadius: 8,
             textDecoration: 'none',
             boxShadow: T.redGlow,
             width: '100%',
@@ -959,9 +959,9 @@ function RoutingPage() {
             style={{
               width: '100%',
               maxWidth: '320px',
-              background: '#FFFFFF',
+              background: 'var(--panel)',
               border: `1px solid ${T.border}`,
-              borderRadius: 0,
+              borderRadius: 8,
               padding: '12px 14px',
             }}
           >
@@ -988,9 +988,9 @@ function RoutingPage() {
               style={{
                 width: '100%',
                 maxWidth: '320px',
-                background: '#FFFFFF',
+                background: 'var(--panel)',
                 border: `1px solid ${T.border}`,
-                borderRadius: 0,
+                borderRadius: 8,
                 padding: '12px 14px',
               }}
             >
@@ -1052,8 +1052,8 @@ function RoutingPage() {
             fontWeight: 500,
             fontSize: '13px',
             padding: '11px 24px',
-            borderRadius: 0,
-            border: `1px solid #98C890`,
+            borderRadius: 8,
+            border: `1px solid rgba(20,20,19,0.1)`,
             cursor: 'pointer',
           }}
         >
@@ -1118,7 +1118,7 @@ function RoutingPage() {
                   background: T.textPrimary,
                   color: 'white',
                   padding: '2px 6px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   marginRight: '7px',
                 }}
               >
@@ -1440,7 +1440,7 @@ function RoutingPage() {
             background: T.red,
             color: 'white',
             padding: '17px',
-            borderRadius: 0,
+            borderRadius: 8,
             border: 'none',
             fontWeight: 800,
             fontSize: '16.5px',
@@ -1502,7 +1502,7 @@ function RoutingPage() {
                     fontWeight: 600,
                     fontSize: '13.5px',
                     padding: '13px 8px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     minHeight: '50px',
@@ -1520,7 +1520,7 @@ function RoutingPage() {
                     fontWeight: 700,
                     fontSize: '13.5px',
                     padding: '13px 8px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     minHeight: '50px',
@@ -1722,7 +1722,7 @@ function RoutingPage() {
                     fontWeight: 700,
                     fontSize: '15px',
                     padding: '16px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     textDecoration: 'none',
                     minHeight: '54px',
                   }}
@@ -1791,7 +1791,7 @@ function RoutingPage() {
                             style={{
                               width: '164px',
                               border: `1px solid ${T.border}`,
-                              borderRadius: 0,
+                              borderRadius: 8,
                               padding: '10px',
                               background: 'white',
                             }}
@@ -2062,7 +2062,7 @@ function RoutingPage() {
               background: T.red,
               color: 'white',
               padding: '17px',
-              borderRadius: 0,
+              borderRadius: 8,
               fontWeight: 800,
               fontSize: '17px',
               textDecoration: 'none',
@@ -2086,7 +2086,7 @@ function RoutingPage() {
                 background: 'none',
                 color: T.red,
                 padding: '15px',
-                borderRadius: 0,
+                borderRadius: 8,
                 fontWeight: 700,
                 fontSize: '14.5px',
                 border: `1.5px solid ${T.red}`,
@@ -2112,7 +2112,7 @@ function RoutingPage() {
               background: 'none',
               color: T.textPrimary,
               padding: '15px',
-              borderRadius: 0,
+              borderRadius: 8,
               fontWeight: 700,
               fontSize: '14.5px',
               border: `1.5px solid ${T.textPrimary}`,
@@ -2167,7 +2167,7 @@ function RoutingPage() {
               position: 'fixed',
               inset: 0,
               zIndex: 150,
-              background: '#FFFFFF',
+              background: 'var(--panel)',
               display: 'flex',
               flexDirection: 'column',
             }}
@@ -2212,7 +2212,7 @@ function RoutingPage() {
                   style={{
                     background: '#B3DDAC',
                     border: `1px solid ${T.border}`,
-                    borderRadius: 0,
+                    borderRadius: 8,
                     width: '36px',
                     height: '36px',
                     display: 'flex',
@@ -2238,7 +2238,7 @@ function RoutingPage() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexShrink: 0,
-                background: '#FFFFFF',
+                background: 'var(--panel)',
               }}
             >
               <a

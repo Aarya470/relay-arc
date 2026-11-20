@@ -1,4 +1,5 @@
 'use client'
+import { AppHeader } from '@/components/AppKit'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -120,7 +121,7 @@ export default function Timeline() {
             key={i}
             style={{
               height: '64px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               marginBottom: '8px',
             }}
@@ -141,53 +142,21 @@ export default function Timeline() {
         width: '100%',
       }}
     >
-      <div style={{ padding: '56px 20px 20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ padding: '0 16px' }}>
+        <AppHeader
+          title="Recovery timeline"
+          sub={cachedDate ? 'Made for you today' : 'Personalised for you'}
+          right={
             <motion.button
-              whileTap={{ scale: 0.9 }}
-              transition={spring}
-              onClick={() => router.push('/dashboard')}
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: 0,
-                background: '#F2F0E8',
-                border: '1px solid #D8D4C8',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <ArrowLeft size={15} color="#5C5A52" />
-            </motion.button>
-            <div>
-              <h1
-                style={{
-                  color: '#141413',
-                  fontWeight: 900,
-                  fontSize: '20px',
-                  letterSpacing: '-0.7px',
-                }}
-              >
-                Recovery Timeline
-              </h1>
-              <p style={{ color: '#5C5A52', fontSize: '12px' }}>
-                {cachedDate ? 'Generated today' : 'Personalized for you'}
-              </p>
-            </div>
-          </div>
-          <motion.button
             whileTap={{ scale: 0.9 }}
             transition={spring}
             onClick={forceRefresh}
             disabled={generating}
             aria-label={generating ? 'Rebuilding your timeline' : 'Rebuild timeline'}
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 0,
+              width: '42px',
+              height: '42px',
+              borderRadius: 8,
               background: 'rgba(86,128,78,0.10)',
               border: '1px solid rgba(86,128,78,0.20)',
               cursor: 'pointer',
@@ -203,7 +172,8 @@ export default function Timeline() {
               <RefreshCw size={14} color="#42623C" />
             </motion.div>
           </motion.button>
-        </div>
+          }
+        />
       </div>
 
       {generating && (
@@ -212,7 +182,7 @@ export default function Timeline() {
             style={{
               background: 'rgba(86,128,78,0.06)',
               border: '1px solid rgba(86,128,78,0.16)',
-              borderRadius: 0,
+              borderRadius: 8,
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
@@ -234,7 +204,7 @@ export default function Timeline() {
                 />
               ))}
             </div>
-            <p style={{ color: '#5C5A52', fontSize: '13px' }}>
+            <p style={{ color: '#48463F', fontSize: '13px' }}>
               Generating your personalized timeline...
             </p>
           </div>
@@ -252,7 +222,7 @@ export default function Timeline() {
               width: '2px',
               background:
                 'linear-gradient(to bottom, rgba(86,128,78,0.5) 0%, rgba(86,128,78,0.2) 50%, rgba(20,20,19,0.05) 100%)',
-              borderRadius: 0,
+              borderRadius: 8,
               zIndex: 0,
               pointerEvents: 'none',
             }}
@@ -326,7 +296,7 @@ export default function Timeline() {
                     flex: 1,
                     background: cardBg,
                     border: `1px solid ${cardBorder}`,
-                    borderRadius: 0,
+                    borderRadius: 8,
                     overflow: 'hidden',
                     boxShadow: isCurrent
                       ? '0 6px 24px rgba(86,128,78,0.12)'
@@ -376,7 +346,7 @@ export default function Timeline() {
                               color: '#42623C',
                               fontSize: '9px',
                               padding: '2px 8px',
-                              borderRadius: 0,
+                              borderRadius: 8,
                               fontWeight: 700,
                               fontFamily: 'inherit',
                               letterSpacing: '0.5px',
@@ -393,7 +363,7 @@ export default function Timeline() {
                               color: '#42623C',
                               fontSize: '9px',
                               padding: '2px 8px',
-                              borderRadius: 0,
+                              borderRadius: 8,
                               fontWeight: 700,
                               fontFamily: 'inherit',
                               letterSpacing: '0.5px',
@@ -403,7 +373,7 @@ export default function Timeline() {
                           </span>
                         )}
                       </div>
-                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit' }}>
+                      <p style={{ color: '#48463F', fontSize: '11px', fontFamily: 'inherit' }}>
                         {phase.week}
                       </p>
                     </div>
@@ -412,7 +382,7 @@ export default function Timeline() {
                       transition={{ duration: 0.2 }}
                       style={{ flexShrink: 0 }}
                     >
-                      <ChevronDown size={15} color="#5C5A52" />
+                      <ChevronDown size={15} color="#48463F" />
                     </motion.div>
                   </motion.button>
                   <AnimatePresence>
@@ -427,7 +397,7 @@ export default function Timeline() {
                         <div
                           style={{
                             padding: '14px 16px 16px',
-                            borderTop: '1px solid #98C890',
+                            borderTop: '1px solid rgba(20,20,19,0.1)',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '14px',
@@ -437,14 +407,14 @@ export default function Timeline() {
                             {
                               label: "What's normal",
                               items: phase.normal,
-                              color: '#5C5A52',
-                              dot: '#5C5A52',
+                              color: '#48463F',
+                              dot: '#48463F',
                             },
                             {
                               label: 'Watch out for',
                               items: phase.watchout,
-                              color: '#8F4A00',
-                              dot: '#8F4A00',
+                              color: '#7A3D00',
+                              dot: '#7A3D00',
                             },
                             {
                               label: 'What to do',
@@ -485,7 +455,7 @@ export default function Timeline() {
                                     }}
                                   />
                                   <p
-                                    style={{ color: '#5C5A52', fontSize: '12px', lineHeight: 1.55 }}
+                                    style={{ color: '#48463F', fontSize: '12px', lineHeight: 1.55 }}
                                   >
                                     {item}
                                   </p>
@@ -504,7 +474,7 @@ export default function Timeline() {
         </div>
         {!generating && timeline.length === 0 && (
           <div style={{ textAlign: 'center', padding: '56px 0' }}>
-            <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '12px' }}>
+            <p style={{ color: '#48463F', fontSize: '14px', marginBottom: '12px' }}>
               Could not generate timeline
             </p>
             <button
@@ -515,7 +485,7 @@ export default function Timeline() {
                 fontWeight: 700,
                 background: 'none',
                 border: '1px solid rgba(86,128,78,0.30)',
-                borderRadius: 0,
+                borderRadius: 8,
                 padding: '8px 16px',
                 cursor: 'pointer',
               }}

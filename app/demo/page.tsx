@@ -1,4 +1,6 @@
 'use client'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Play, ArrowLeft, Check } from '@/lib/plain-icons'
@@ -7,10 +9,10 @@ import { DEMO, setDemo, demoOn } from '@/lib/demo'
 import { supabase } from '@/lib/supabase'
 
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
-const BORDER = '#98C890'
-const RED = '#8F4A00'
+const T2 = '#48463F'
+const T3 = '#48463F'
+const BORDER = 'rgba(20,20,19,0.1)'
+const RED = '#7A3D00'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -31,6 +33,7 @@ export default function DemoLauncher() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'transparent', padding: '0 24px' }}>
+      <SiteHeader />
       <div
         style={{
           position: 'fixed',
@@ -202,7 +205,7 @@ export default function DemoLauncher() {
             style={{
               width: '24px',
               height: '24px',
-              borderRadius: 0,
+              borderRadius: 8,
               flexShrink: 0,
               background: on ? GREEN : 'none',
               border: `1.5px solid ${on ? GREEN : '#C9CED6'}`,
@@ -253,6 +256,7 @@ export default function DemoLauncher() {
           badge, so it can never be mistaken for a real emergency. Close the tab to clear it.
         </p>
       </div>
+      <SiteFooter />
     </div>
   )
 }

@@ -11,11 +11,11 @@ import { SITE_URL } from '@/lib/site'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
+const T2 = '#48463F'
+const T3 = '#48463F'
 const ACCENT = '#42623C'
-const RED = '#8F4A00'
-const BORDER = '#98C890'
+const RED = '#7A3D00'
+const BORDER = 'rgba(20,20,19,0.1)'
 
 const mono = 'var(--font-mono, monospace)'
 
@@ -139,9 +139,9 @@ export default function Login() {
 
   const inputStyle = (field: string): React.CSSProperties => ({
     width: '100%',
-    background: '#FFFFFF',
+    background: 'var(--panel)',
     border: `1.5px solid ${focused === field ? T1 : BORDER}`,
-    borderRadius: 0,
+    borderRadius: 8,
     padding: '13px 16px',
     color: T1,
     // 16px, not 15 or 14, and it is not a taste decision.
@@ -223,7 +223,7 @@ export default function Login() {
             <div
               style={{
                 border: `1px solid ${BORDER}`,
-                borderRadius: 0,
+                borderRadius: 8,
                 padding: '14px 16px',
                 marginBottom: 22,
               }}
@@ -251,9 +251,9 @@ export default function Login() {
               style={{
                 width: '100%',
                 padding: '14px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: `1.5px solid ${BORDER}`,
-                background: '#FFFFFF',
+                background: 'var(--panel)',
                 color: T1,
                 fontWeight: 700,
                 fontSize: '14.5px',
@@ -279,7 +279,7 @@ export default function Login() {
                 width: '100%',
                 marginTop: 10,
                 padding: '13px',
-                borderRadius: 0,
+                borderRadius: 8,
                 border: 'none',
                 background: 'transparent',
                 color: T2,
@@ -417,7 +417,8 @@ export default function Login() {
                   />
                   <button
                     type="button"
-                    tabIndex={-1}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-pressed={showPassword}
                     onClick={() => setShowPassword((p) => !p)}
                     style={{
                       position: 'absolute',
@@ -432,7 +433,7 @@ export default function Login() {
                       display: 'flex',
                     }}
                   >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#141413' }}>{showPassword ? 'Hide' : 'Show'}</span>
                   </button>
                 </div>
                 {passwordError && (
@@ -456,7 +457,7 @@ export default function Login() {
                   color: 'white',
                   fontWeight: 600,
                   fontSize: '15px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   border: 'none',
                   cursor: loading || !canSubmit ? 'not-allowed' : 'pointer',
                   display: 'flex',

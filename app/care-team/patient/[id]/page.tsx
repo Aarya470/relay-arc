@@ -337,7 +337,7 @@ export default function PatientDetail() {
   }
 
   const score = summary?.priority_score || 0
-  const priorityColor = score >= 8 ? '#8F4A00' : score >= 5 ? '#7C5200' : '#42623C'
+  const priorityColor = score >= 8 ? '#7A3D00' : score >= 5 ? '#7C5200' : '#42623C'
   const priorityBg =
     score >= 8
       ? 'rgba(240,120,0,0.12)'
@@ -375,7 +375,7 @@ export default function PatientDetail() {
               />
             ))}
           </div>
-          <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0.02em' }}>
+          <p style={{ color: '#48463F', fontSize: '13px', letterSpacing: '0.02em' }}>
             Loading patient data…
           </p>
         </div>
@@ -420,8 +420,8 @@ export default function PatientDetail() {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 28 }}
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #98C890',
+                background: 'var(--panel)',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderRadius: '20px',
                 padding: '28px 20px 52px',
                 width: '100%',
@@ -450,7 +450,7 @@ export default function PatientDetail() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
                     cursor: 'pointer',
@@ -458,14 +458,15 @@ export default function PatientDetail() {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
-                >
-                  <X size={15} color="#5C5A52" />
+                
+ aria-label="Close">
+                  <X size={15} color="#48463F" />
                 </button>
               </div>
 
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '10px',
                   fontFamily: 'monospace',
                   textTransform: 'uppercase',
@@ -482,7 +483,7 @@ export default function PatientDetail() {
                 min={new Date().toISOString().split('T')[0]}
                 style={{
                   width: '100%',
-                  background: '#FFFFFF',
+                  background: 'var(--panel)',
                   border: '1px solid #D8D4C8',
                   borderRadius: '20px',
                   padding: '13px 16px',
@@ -496,7 +497,7 @@ export default function PatientDetail() {
 
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '10px',
                   fontFamily: 'monospace',
                   textTransform: 'uppercase',
@@ -512,7 +513,7 @@ export default function PatientDetail() {
                 onChange={(e) => setRescheduleTime(e.target.value)}
                 style={{
                   width: '100%',
-                  background: '#FFFFFF',
+                  background: 'var(--panel)',
                   border: '1px solid #D8D4C8',
                   borderRadius: '20px',
                   padding: '13px 16px',
@@ -531,7 +532,7 @@ export default function PatientDetail() {
                 style={{
                   width: '100%',
                   background: rescheduleDate ? '#42623C' : '#F2F0E8',
-                  color: rescheduleDate ? '#ffffff' : '#5C5A52',
+                  color: rescheduleDate ? '#ffffff' : '#48463F',
                   fontWeight: 700,
                   fontSize: '15px',
                   padding: '16px',
@@ -550,7 +551,7 @@ export default function PatientDetail() {
 
       {/* Header */}
       <div
-        style={{ background: '#FFFFFF', borderBottom: '1px solid #98C890', padding: '56px 20px 0' }}
+        style={{ background: 'var(--panel)', borderBottom: '1px solid rgba(20,20,19,0.1)', padding: '56px 20px 0' }}
       >
         {/* Back + name row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
@@ -560,7 +561,7 @@ export default function PatientDetail() {
             style={{
               width: '38px',
               height: '38px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               cursor: 'pointer',
@@ -569,8 +570,9 @@ export default function PatientDetail() {
               justifyContent: 'center',
               flexShrink: 0,
             }}
-          >
-            <ArrowLeft size={16} color="#5C5A52" />
+          
+ aria-label="Back">
+            <ArrowLeft size={16} color="#48463F" />
           </motion.button>
 
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -592,7 +594,7 @@ export default function PatientDetail() {
                   display: 'inline-block',
                   background: 'rgba(86,128,78,0.12)',
                   border: '1px solid rgba(86,128,78,0.25)',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '2px 9px',
                   color: '#42623C',
                   fontSize: '11px',
@@ -663,11 +665,11 @@ export default function PatientDetail() {
                   marginBottom: '14px',
                 }}
               >
-                <AlertTriangle size={18} color="#8F4A00" style={{ flexShrink: 0 }} />
+                <AlertTriangle size={18} color="#7A3D00" style={{ flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
                   <p
                     style={{
-                      color: '#8F4A00',
+                      color: '#7A3D00',
                       fontWeight: 800,
                       fontSize: '13px',
                       letterSpacing: '-0.2px',
@@ -676,7 +678,7 @@ export default function PatientDetail() {
                   >
                     Active Emergency
                   </p>
-                  <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', margin: 0 }}>
+                  <p style={{ color: '#48463F', fontSize: '11px', marginTop: '2px', margin: 0 }}>
                     {typeLabel} ·{' '}
                     {new Date(em.created_at).toLocaleTimeString([], {
                       hour: '2-digit',
@@ -691,7 +693,7 @@ export default function PatientDetail() {
                     width: 9,
                     height: 9,
                     borderRadius: '50%',
-                    background: '#8F4A00',
+                    background: '#7A3D00',
                     flexShrink: 0,
                   }}
                 />
@@ -754,7 +756,7 @@ export default function PatientDetail() {
                 fontSize: '13px',
                 fontWeight: tab === t.id ? 700 : 500,
                 whiteSpace: 'nowrap',
-                color: tab === t.id ? '#42623C' : '#5C5A52',
+                color: tab === t.id ? '#42623C' : '#48463F',
                 transition: 'color 0.15s',
               }}
             >
@@ -769,7 +771,7 @@ export default function PatientDetail() {
                     right: '10px',
                     height: '2px',
                     background: '#42623C',
-                    borderRadius: 0,
+                    borderRadius: 8,
                   }}
                   transition={{ type: 'spring', stiffness: 400, damping: 34 }}
                 />
@@ -787,15 +789,15 @@ export default function PatientDetail() {
             {/* Patient info card */}
             <div
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #98C890',
+                background: 'var(--panel)',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderRadius: '20px',
                 padding: '18px',
               }}
             >
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '10px',
                   fontFamily: 'monospace',
                   textTransform: 'uppercase',
@@ -830,13 +832,13 @@ export default function PatientDetail() {
                       borderBottom: i < arr.length - 1 ? '1px solid #EDEAE0' : 'none',
                     }}
                   >
-                    <span style={{ color: '#5C5A52', fontSize: '12px', flexShrink: 0 }}>
+                    <span style={{ color: '#48463F', fontSize: '12px', flexShrink: 0 }}>
                       {item.label}
                     </span>
                     <span
                       style={{
                         color: (item as any).red
-                          ? '#8F4A00'
+                          ? '#7A3D00'
                           : (item as any).amber
                             ? '#7C5200'
                             : '#141413',
@@ -855,8 +857,8 @@ export default function PatientDetail() {
             {/* Medications card */}
             <div
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #98C890',
+                background: 'var(--panel)',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderRadius: '20px',
                 padding: '18px',
               }}
@@ -867,7 +869,7 @@ export default function PatientDetail() {
                 <Pill size={12} color="#42623C" />
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '10px',
                     fontFamily: 'monospace',
                     textTransform: 'uppercase',
@@ -903,9 +905,9 @@ export default function PatientDetail() {
                             display: 'inline-block',
                             background: 'rgba(86,128,78,0.10)',
                             border: '1px solid rgba(86,128,78,0.20)',
-                            borderRadius: 0,
+                            borderRadius: 8,
                             padding: '2px 8px',
-                            color: overdue ? '#8F4A00' : '#42623C',
+                            color: overdue ? '#7A3D00' : '#42623C',
                             fontSize: '12px',
                             fontWeight: 600,
                           }}
@@ -917,10 +919,10 @@ export default function PatientDetail() {
                             style={{
                               background: 'rgba(240,120,0,0.12)',
                               border: '1px solid rgba(240,120,0,0.30)',
-                              color: '#8F4A00',
+                              color: '#7A3D00',
                               fontSize: '8px',
                               padding: '2px 6px',
-                              borderRadius: 0,
+                              borderRadius: 8,
                               fontFamily: 'monospace',
                               textTransform: 'uppercase',
                               letterSpacing: '0.5px',
@@ -931,7 +933,7 @@ export default function PatientDetail() {
                           </span>
                         )}
                       </div>
-                      <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'monospace' }}>
+                      <span style={{ color: '#48463F', fontSize: '11px', fontFamily: 'monospace' }}>
                         {m.dose} · {m.frequency}
                       </span>
                     </div>
@@ -945,16 +947,16 @@ export default function PatientDetail() {
                           alignItems: 'center',
                           gap: '6px',
                           background: reminderSent[m.name] ? 'rgba(86,128,78,0.10)' : '#F2F0E8',
-                          border: `1px solid ${reminderSent[m.name] ? 'rgba(86,128,78,0.25)' : '#98C890'}`,
-                          borderRadius: 0,
+                          border: `1px solid ${reminderSent[m.name] ? 'rgba(86,128,78,0.25)' : 'rgba(20,20,19,0.1)'}`,
+                          borderRadius: 8,
                           padding: '6px 12px',
                           cursor: reminderSent[m.name] ? 'default' : 'pointer',
                         }}
                       >
-                        <Bell size={11} color={reminderSent[m.name] ? '#42623C' : '#5C5A52'} />
+                        <Bell size={11} color={reminderSent[m.name] ? '#42623C' : '#48463F'} />
                         <span
                           style={{
-                            color: reminderSent[m.name] ? '#42623C' : '#5C5A52',
+                            color: reminderSent[m.name] ? '#42623C' : '#48463F',
                             fontSize: '11px',
                             fontWeight: 600,
                           }}
@@ -968,7 +970,7 @@ export default function PatientDetail() {
               })}
 
               {(!patient.medications || patient.medications.length === 0) && (
-                <p style={{ color: '#5C5A52', fontSize: '13px' }}>No medications on file</p>
+                <p style={{ color: '#48463F', fontSize: '13px' }}>No medications on file</p>
               )}
             </div>
 
@@ -976,7 +978,7 @@ export default function PatientDetail() {
             {emergencies.length > 0 && (
               <div
                 style={{
-                  background: '#FFFFFF',
+                  background: 'var(--panel)',
                   border: '1px solid rgba(240,120,0,0.18)',
                   borderRadius: '20px',
                   padding: '18px',
@@ -1013,15 +1015,15 @@ export default function PatientDetail() {
                           width: '6px',
                           height: '6px',
                           borderRadius: '50%',
-                          background: '#8F4A00',
+                          background: '#7A3D00',
                           flexShrink: 0,
                         }}
                       />
-                      <span style={{ color: '#5C5A52', fontSize: '12px' }}>
+                      <span style={{ color: '#48463F', fontSize: '12px' }}>
                         {e.emergency_type?.replace('_', ' ')}
                       </span>
                     </div>
-                    <span style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'monospace' }}>
+                    <span style={{ color: '#48463F', fontSize: '11px', fontFamily: 'monospace' }}>
                       {new Date(e.created_at).toLocaleDateString()}
                     </span>
                   </div>
@@ -1032,7 +1034,7 @@ export default function PatientDetail() {
             {/* AI Summary card */}
             <div
               style={{
-                background: '#FFFFFF',
+                background: 'var(--panel)',
                 border: '1px solid rgba(86,128,78,0.18)',
                 borderRadius: '20px',
                 padding: '18px',
@@ -1070,7 +1072,7 @@ export default function PatientDetail() {
                       transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
                     />
                   ))}
-                  <p style={{ color: '#5C5A52', fontSize: '12px', marginLeft: '4px' }}>
+                  <p style={{ color: '#48463F', fontSize: '12px', marginLeft: '4px' }}>
                     Generating summary…
                   </p>
                 </div>
@@ -1098,7 +1100,7 @@ export default function PatientDetail() {
                     fontWeight: 600,
                     fontSize: '13px',
                     padding: '10px 18px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     border: 'none',
                     cursor: 'pointer',
                   }}
@@ -1112,15 +1114,15 @@ export default function PatientDetail() {
             {patient.emergency_contacts?.length > 0 && (
               <div
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
                   borderRadius: '20px',
                   padding: '18px',
                 }}
               >
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '10px',
                     fontFamily: 'monospace',
                     textTransform: 'uppercase',
@@ -1147,7 +1149,7 @@ export default function PatientDetail() {
                       style={{
                         width: '34px',
                         height: '34px',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         background: 'rgba(86,128,78,0.12)',
                         border: '1px solid rgba(86,128,78,0.20)',
                         display: 'flex',
@@ -1166,7 +1168,7 @@ export default function PatientDetail() {
                         {c.name}
                       </p>
                       <p
-                        style={{ color: '#5C5A52', fontSize: '11px', margin: 0, marginTop: '2px' }}
+                        style={{ color: '#48463F', fontSize: '11px', margin: 0, marginTop: '2px' }}
                       >
                         {c.relationship} · {c.phone}
                       </p>
@@ -1184,7 +1186,7 @@ export default function PatientDetail() {
             {checkins.length === 0 && (
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '13px',
                   textAlign: 'center',
                   padding: '40px 0',
@@ -1197,8 +1199,8 @@ export default function PatientDetail() {
               <div
                 key={i}
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
                   borderRadius: '20px',
                   padding: '16px',
                 }}
@@ -1215,7 +1217,7 @@ export default function PatientDetail() {
                     style={{
                       width: '30px',
                       height: '30px',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       background: 'rgba(86,128,78,0.10)',
                       border: '1px solid rgba(86,128,78,0.22)',
                       display: 'flex',
@@ -1232,7 +1234,7 @@ export default function PatientDetail() {
                     </p>
                     <p
                       style={{
-                        color: '#5C5A52',
+                        color: '#48463F',
                         fontSize: '10px',
                         fontFamily: 'monospace',
                         margin: 0,
@@ -1247,15 +1249,15 @@ export default function PatientDetail() {
                 {/* Clinical summary lines */}
                 <div
                   style={{
-                    background: '#FFFFFF',
-                    borderRadius: 0,
+                    background: 'var(--panel)',
+                    borderRadius: 8,
                     padding: '12px',
                     marginTop: '4px',
                   }}
                 >
                   <p
                     style={{
-                      color: '#5C5A52',
+                      color: '#48463F',
                       fontSize: '9px',
                       fontFamily: 'monospace',
                       textTransform: 'uppercase',
@@ -1282,7 +1284,7 @@ export default function PatientDetail() {
                           –
                         </span>
                         <p
-                          style={{ color: '#5C5A52', fontSize: '12px', lineHeight: 1.6, margin: 0 }}
+                          style={{ color: '#48463F', fontSize: '12px', lineHeight: 1.6, margin: 0 }}
                         >
                           {line.trim().replace(/^[•\-\*]\s*/, '')}
                         </p>
@@ -1300,15 +1302,15 @@ export default function PatientDetail() {
             {/* Add note input */}
             <div
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #98C890',
+                background: 'var(--panel)',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderRadius: '20px',
                 padding: '16px',
               }}
             >
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '10px',
                   fontFamily: 'monospace',
                   textTransform: 'uppercase',
@@ -1324,7 +1326,7 @@ export default function PatientDetail() {
                 placeholder="Write a clinical note…"
                 style={{
                   width: '100%',
-                  background: '#FFFFFF',
+                  background: 'var(--panel)',
                   border: '1px solid #D8D4C8',
                   borderRadius: '20px',
                   padding: '13px 14px',
@@ -1368,15 +1370,15 @@ export default function PatientDetail() {
               <div
                 key={i}
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
                   borderRadius: '20px',
                   padding: '14px 16px',
                 }}
               >
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '10px',
                     fontFamily: 'monospace',
                     marginBottom: '8px',
@@ -1397,8 +1399,8 @@ export default function PatientDetail() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {appointments.length === 0 && (
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <Calendar size={32} color="#5C5A52" style={{ margin: '0 auto 12px' }} />
-                <p style={{ color: '#5C5A52', fontSize: '13px' }}>No appointments yet</p>
+                <Calendar size={32} color="#48463F" style={{ margin: '0 auto 12px' }} />
+                <p style={{ color: '#48463F', fontSize: '13px' }}>No appointments yet</p>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
                   onClick={() => {
@@ -1428,7 +1430,7 @@ export default function PatientDetail() {
                 appt.status === 'confirmed'
                   ? '#42623C'
                   : appt.status === 'declined'
-                    ? '#8F4A00'
+                    ? '#7A3D00'
                     : appt.status === 'completed'
                       ? '#42623C'
                       : '#7C5200'
@@ -1469,7 +1471,7 @@ export default function PatientDetail() {
                   >
                     <span
                       style={{
-                        color: appt.type === 'immediate' ? '#8F4A00' : '#42623C',
+                        color: appt.type === 'immediate' ? '#7A3D00' : '#42623C',
                         fontSize: '13px',
                         fontWeight: 700,
                       }}
@@ -1490,7 +1492,7 @@ export default function PatientDetail() {
                   </div>
 
                   {appt.scheduled_at && (
-                    <p style={{ color: '#5C5A52', fontSize: '12px', marginBottom: '4px' }}>
+                    <p style={{ color: '#48463F', fontSize: '12px', marginBottom: '4px' }}>
                       {parseTS(appt.scheduled_at).toLocaleString('en-US', {
                         weekday: 'short',
                         month: 'short',
@@ -1504,7 +1506,7 @@ export default function PatientDetail() {
                   {(appt.notes || appt.patient_concern) && (
                     <p
                       style={{
-                        color: '#5C5A52',
+                        color: '#48463F',
                         fontSize: '12px',
                         marginBottom: '12px',
                         lineHeight: 1.5,
@@ -1524,7 +1526,7 @@ export default function PatientDetail() {
                           flex: 1,
                           background: 'rgba(86,128,78,0.10)',
                           border: '1px solid rgba(86,128,78,0.22)',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           padding: '9px',
                           display: 'flex',
                           alignItems: 'center',
@@ -1549,7 +1551,7 @@ export default function PatientDetail() {
                           flex: 1,
                           background: 'rgba(86,128,78,0.08)',
                           border: '1px solid rgba(86,128,78,0.18)',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           padding: '9px',
                           display: 'flex',
                           alignItems: 'center',
@@ -1568,7 +1570,7 @@ export default function PatientDetail() {
                           width: '40px',
                           background: 'rgba(240,120,0,0.08)',
                           border: '1px solid rgba(240,120,0,0.18)',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           padding: '9px',
                           display: 'flex',
                           alignItems: 'center',
@@ -1576,8 +1578,9 @@ export default function PatientDetail() {
                           cursor: 'pointer',
                           flexShrink: 0,
                         }}
-                      >
-                        <X size={13} color="#8F4A00" />
+                      
+ aria-label="Close">
+                        <X size={13} color="#7A3D00" />
                       </motion.button>
                     </div>
                   )}
@@ -1595,7 +1598,7 @@ export default function PatientDetail() {
                         marginTop: '12px',
                         background: '#F2F0E8',
                         border: '1px solid #D8D4C8',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '8px 14px',
                         display: 'flex',
                         alignItems: 'center',
@@ -1603,7 +1606,7 @@ export default function PatientDetail() {
                         cursor: 'pointer',
                       }}
                     >
-                      <span style={{ color: '#5C5A52', fontSize: '12px', fontWeight: 600 }}>
+                      <span style={{ color: '#48463F', fontSize: '12px', fontWeight: 600 }}>
                         Reschedule
                       </span>
                     </motion.button>
@@ -1621,7 +1624,7 @@ export default function PatientDetail() {
                         justifyContent: 'center',
                         gap: '8px',
                         background: '#42623C',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '12px',
                         color: '#ffffff',
                         fontWeight: 700,
@@ -1667,8 +1670,8 @@ export default function PatientDetail() {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', bounce: 0.1 }}
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #98C890',
+                background: 'var(--panel)',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderRadius: '20px',
                 padding: '24px 20px 52px',
                 width: '100%',
@@ -1699,7 +1702,7 @@ export default function PatientDetail() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     background: '#F2F0E8',
                     border: '1px solid #D8D4C8',
                     cursor: 'pointer',
@@ -1707,16 +1710,17 @@ export default function PatientDetail() {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
-                >
-                  <X size={15} color="#5C5A52" />
+                
+ aria-label="Close">
+                  <X size={15} color="#48463F" />
                 </button>
               </div>
 
               {/* Calendar picker */}
               <div
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
                   borderRadius: '20px',
                   padding: '16px',
                   marginBottom: '12px',
@@ -1740,16 +1744,17 @@ export default function PatientDetail() {
                     style={{
                       background: '#F2F0E8',
                       border: '1px solid #D8D4C8',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       cursor: 'pointer',
-                      color: '#5C5A52',
+                      color: '#48463F',
                       width: '32px',
                       height: '32px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
-                  >
+                  
+ aria-label="Previous">
                     <ChevronLeft size={15} />
                   </button>
                   <p style={{ color: '#141413', fontWeight: 600, fontSize: '14px' }}>{monthName}</p>
@@ -1763,16 +1768,17 @@ export default function PatientDetail() {
                     style={{
                       background: '#F2F0E8',
                       border: '1px solid #D8D4C8',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       cursor: 'pointer',
-                      color: '#5C5A52',
+                      color: '#48463F',
                       width: '32px',
                       height: '32px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
-                  >
+                  
+ aria-label="Next">
                     <ChevronRight size={15} />
                   </button>
                 </div>
@@ -1789,7 +1795,7 @@ export default function PatientDetail() {
                     <p
                       key={i}
                       style={{
-                        color: '#5C5A52',
+                        color: '#48463F',
                         fontSize: '11px',
                         textAlign: 'center',
                         fontFamily: 'monospace',
@@ -1818,12 +1824,12 @@ export default function PatientDetail() {
                         disabled={isPast}
                         style={{
                           padding: '8px 0',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           border: 'none',
                           cursor: isPast ? 'default' : 'pointer',
                           fontSize: '13px',
                           background: isSelected ? '#42623C' : 'transparent',
-                          color: isSelected ? '#ffffff' : isPast ? '#5C5A52' : '#141413',
+                          color: isSelected ? '#ffffff' : isPast ? '#48463F' : '#141413',
                           fontWeight: isSelected ? 700 : 400,
                         }}
                       >
@@ -1838,8 +1844,8 @@ export default function PatientDetail() {
               {selectedDate && (
                 <div
                   style={{
-                    background: '#FFFFFF',
-                    border: '1px solid #98C890',
+                    background: 'var(--panel)',
+                    border: '1px solid rgba(20,20,19,0.1)',
                     borderRadius: '20px',
                     padding: '14px',
                     marginBottom: '12px',
@@ -1847,7 +1853,7 @@ export default function PatientDetail() {
                 >
                   <p
                     style={{
-                      color: '#5C5A52',
+                      color: '#48463F',
                       fontSize: '10px',
                       fontFamily: 'monospace',
                       textTransform: 'uppercase',
@@ -1876,14 +1882,14 @@ export default function PatientDetail() {
                           border:
                             selectedTime === t
                               ? '1px solid rgba(86,128,78,0.40)'
-                              : '1px solid #98C890',
+                              : '1px solid rgba(20,20,19,0.1)',
                           cursor: 'pointer',
                           fontSize: '12px',
                           fontWeight: 600,
                           whiteSpace: 'nowrap',
                           flexShrink: 0,
                           background: selectedTime === t ? 'rgba(86,128,78,0.18)' : '#F2F0E8',
-                          color: selectedTime === t ? '#42623C' : '#5C5A52',
+                          color: selectedTime === t ? '#42623C' : '#48463F',
                         }}
                       >
                         {t}
@@ -1900,7 +1906,7 @@ export default function PatientDetail() {
                 placeholder="Reason for appointment…"
                 style={{
                   width: '100%',
-                  background: '#FFFFFF',
+                  background: 'var(--panel)',
                   border: '1px solid #D8D4C8',
                   borderRadius: '20px',
                   padding: '14px 16px',
@@ -1923,7 +1929,7 @@ export default function PatientDetail() {
                 style={{
                   width: '100%',
                   background: selectedDate ? '#42623C' : '#F2F0E8',
-                  color: selectedDate ? '#ffffff' : '#5C5A52',
+                  color: selectedDate ? '#ffffff' : '#48463F',
                   fontWeight: 700,
                   fontSize: '15px',
                   padding: '16px',

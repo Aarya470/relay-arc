@@ -1,5 +1,6 @@
 'use client'
 import { MotionConfig } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 /**
  * Honours the operating system's "reduce motion" setting across the whole app.
@@ -29,5 +30,13 @@ import { MotionConfig } from 'framer-motion'
  * a screenshot means what it looks like it means.
  */
 export default function Motion({ children }: { children: React.ReactNode }) {
-  return <MotionConfig reducedMotion="user">{children}</MotionConfig>
+  // Also honour the in-app "Reduce motion" choice from /accessibility.
+  const [always, setAlways] = useState(false)
+  useEffect(() => {
+    const sync = () => setAlways(document.documentElement.dataset.motion === 'reduce')
+    sync()
+    window.addEventListener('relay-access', sync)
+    return () => window.removeEventListener('relay-access', sync)
+  }, [])
+  return <MotionConfig reducedMotion={always ? 'always' : 'user'}>{children}</MotionConfig>
 }

@@ -1,4 +1,5 @@
 'use client'
+import SiteFooter from '@/components/SiteFooter'
 // Feature-by-feature deep dive.
 import SiteHeader from '@/components/SiteHeader'
 import { useRouter } from 'next/navigation'
@@ -8,13 +9,13 @@ import { BarChart, Donut } from '@/components/viz/Chart'
 
 const INK = '#141413',
   INK2 = '#3F3D36',
-  INK3 = '#5C5A52'
-const BORDER = '#98C890',
+  INK3 = '#48463F'
+const BORDER = 'rgba(20,20,19,0.1)',
   CREAM = '#B3DDAC'
 const GREEN = '#56804E',
   GREEN_DEEP = '#42623C'
 const ORANGE = '#F07800',
-  CRIT = '#8F4A00',
+  CRIT = '#7A3D00',
   WARN = '#7C5200'
 const mono = 'var(--font-mono, monospace)'
 const WRAP = {
@@ -725,6 +726,7 @@ export default function Features() {
           </div>
         </div>
       </section>
+      <SiteFooter />
     </div>
   )
 }

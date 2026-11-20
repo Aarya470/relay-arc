@@ -1,4 +1,5 @@
 'use client'
+import { AppHeader } from '@/components/AppKit'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -84,7 +85,7 @@ export default function HistoryPage() {
             key={i}
             style={{
               height: '48px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               marginBottom: '8px',
             }}
@@ -108,53 +109,11 @@ export default function HistoryPage() {
         width: '100%',
       }}
     >
-      {/* Header */}
-      <div style={{ padding: '56px 20px 0' }}>
-        <button
-          onClick={() => router.push('/dashboard')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '7px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-            marginBottom: '22px',
-            color: '#5C5A52',
-            fontSize: '13px',
-            fontWeight: 500,
-            fontFamily: 'inherit',
-          }}
-        >
-          <ArrowLeft size={14} /> Dashboard
-        </button>
-        <p
-          style={{
-            color: '#5C5A52',
-            fontSize: '13px',
-            fontWeight: 600,
-            letterSpacing: '0',
-            marginBottom: '8px',
-          }}
-        >
-          Health history
-        </p>
-        <h1
-          style={{
-            color: '#141413',
-            fontSize: '32px',
-            fontWeight: 800,
-            letterSpacing: '-0.4px',
-            lineHeight: 1,
-            marginBottom: '24px',
-          }}
-        >
-          Your record
-        </h1>
+      <div style={{ padding: '0 16px' }}>
+        <AppHeader title="Your record" sub="Past check ins and emergencies" back="/settings" backLabel="Settings" />
 
         {/* Tabs — text + underline */}
-        <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #98C890' }}>
+        <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid rgba(20,20,19,0.1)' }}>
           {(
             [
               ['checkins', 'Check ins', checkins.length],
@@ -179,7 +138,7 @@ export default function HistoryPage() {
             >
               <span
                 style={{
-                  color: tab === key ? '#141413' : '#5C5A52',
+                  color: tab === key ? '#141413' : '#48463F',
                   fontSize: '14px',
                   fontWeight: tab === key ? 700 : 500,
                 }}
@@ -188,7 +147,7 @@ export default function HistoryPage() {
               </span>
               <span
                 style={{
-                  color: tab === key ? (key === 'emergencies' ? '#8F4A00' : '#42623C') : '#C4BFB0',
+                  color: tab === key ? (key === 'emergencies' ? '#7A3D00' : '#42623C') : '#C4BFB0',
                   fontSize: '12px',
                   fontFamily: 'inherit',
                   fontWeight: 700,
@@ -213,7 +172,7 @@ export default function HistoryPage() {
             >
               {checkins.length === 0 ? (
                 <div style={{ padding: '48px 0' }}>
-                  <p style={{ color: '#5C5A52', fontSize: '14px', marginBottom: '10px' }}>
+                  <p style={{ color: '#48463F', fontSize: '14px', marginBottom: '10px' }}>
                     No check ins yet.
                   </p>
                   <button
@@ -237,7 +196,7 @@ export default function HistoryPage() {
                   <div key={date} style={{ marginBottom: '28px' }}>
                     <p
                       style={{
-                        color: '#5C5A52',
+                        color: '#48463F',
                         fontSize: '13px',
                         letterSpacing: '0',
                         marginBottom: '4px',
@@ -245,9 +204,9 @@ export default function HistoryPage() {
                     >
                       {date}
                     </p>
-                    <div style={{ borderTop: '1px solid #98C890' }}>
+                    <div style={{ borderTop: '1px solid rgba(20,20,19,0.1)' }}>
                       {(items as Checkin[]).map((c: Checkin) => (
-                        <div key={c.id} style={{ borderBottom: '1px solid #98C890' }}>
+                        <div key={c.id} style={{ borderBottom: '1px solid rgba(20,20,19,0.1)' }}>
                           <button
                             onClick={() => setExpanded(expanded === c.id ? null : c.id)}
                             style={{
@@ -281,7 +240,7 @@ export default function HistoryPage() {
                             <span
                               style={{
                                 flex: 1,
-                                color: '#5C5A52',
+                                color: '#48463F',
                                 fontSize: '13.5px',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -309,7 +268,7 @@ export default function HistoryPage() {
                               >
                                 <div
                                   style={{
-                                    borderLeft: '2px solid #98C890',
+                                    borderLeft: '2px solid rgba(20,20,19,0.1)',
                                     paddingLeft: '14px',
                                     margin: '2px 0 16px 88px',
                                   }}
@@ -317,7 +276,7 @@ export default function HistoryPage() {
                                 >
                                   <p
                                     style={{
-                                      color: '#5C5A52',
+                                      color: '#48463F',
                                       fontSize: '13px',
                                       lineHeight: 1.7,
                                       whiteSpace: 'pre-wrap',
@@ -348,14 +307,14 @@ export default function HistoryPage() {
             >
               {emergencies.length === 0 ? (
                 <div style={{ padding: '48px 0' }}>
-                  <p style={{ color: '#5C5A52', fontSize: '14px' }}>No emergency events. Good.</p>
+                  <p style={{ color: '#48463F', fontSize: '14px' }}>No emergency events. Good.</p>
                 </div>
               ) : (
                 Object.entries(emergencyGroups).map(([date, items]) => (
                   <div key={date} style={{ marginBottom: '28px' }}>
                     <p
                       style={{
-                        color: '#5C5A52',
+                        color: '#48463F',
                         fontSize: '13px',
                         letterSpacing: '0',
                         marginBottom: '4px',
@@ -363,7 +322,7 @@ export default function HistoryPage() {
                     >
                       {date}
                     </p>
-                    <div style={{ borderTop: '1px solid #98C890' }}>
+                    <div style={{ borderTop: '1px solid rgba(20,20,19,0.1)' }}>
                       {(items as Emergency[]).map((e: Emergency) => (
                         <div
                           key={e.id}
@@ -372,7 +331,7 @@ export default function HistoryPage() {
                             alignItems: 'center',
                             gap: '16px',
                             padding: '13px 0',
-                            borderBottom: '1px solid #98C890',
+                            borderBottom: '1px solid rgba(20,20,19,0.1)',
                           }}
                         >
                           <span
@@ -405,7 +364,7 @@ export default function HistoryPage() {
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '6px',
-                              color: e.status === 'resolved' ? '#42623C' : '#8F4A00',
+                              color: e.status === 'resolved' ? '#42623C' : '#7A3D00',
                               fontSize: '13px',
                               fontWeight: 600,
                               letterSpacing: '0' as const,
@@ -417,7 +376,7 @@ export default function HistoryPage() {
                                 width: '6px',
                                 height: '6px',
                                 borderRadius: '50%',
-                                background: e.status === 'resolved' ? '#42623C' : '#8F4A00',
+                                background: e.status === 'resolved' ? '#42623C' : '#7A3D00',
                               }}
                             />
                             {e.status}

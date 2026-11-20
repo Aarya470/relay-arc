@@ -36,50 +36,51 @@ export default function NurseLogin() {
         whileTap={{ scale: 0.9 }}
         onClick={() => router.push('/login')}
         className="w-9 h-9 rounded-xl bg-[#F2F0E8] flex items-center justify-center mb-10 self-start"
-      >
-        <ArrowLeft size={16} className="text-[#5C5A52]" />
+      
+ aria-label="Back">
+        <ArrowLeft size={16} className="text-[#48463F]" />
       </motion.button>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1">
         <div className="w-12 h-12 rounded-2xl bg-[#56804E]/15 border border-[#56804E]/25 flex items-center justify-center mb-6"></div>
 
         <h1 className="text-[#141413] text-3xl font-bold mb-1">Care team login</h1>
-        <p className="text-[#5C5A52] text-sm mb-8">Access requires a valid care team code</p>
+        <p className="text-[#48463F] text-sm mb-8">Access requires a valid care team code</p>
 
         <div className="space-y-3">
           <div className="relative">
-            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5C5A52]" />
+            <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#48463F]" />
             <input
               type="email"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[rgba(20,20,19,0.1)] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#48463F] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
-            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5C5A52]" />
+            <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#48463F]" />
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[rgba(20,20,19,0.1)] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#48463F] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 
           <div className="relative">
             <KeyRound
               size={15}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5C5A52]"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#48463F]"
             />
             <input
               type="password"
               placeholder="Care team access code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full bg-white border border-[#98C890] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#5C5A52] outline-none focus:border-[#56804E]/40 transition text-sm"
+              className="w-full bg-white border border-[rgba(20,20,19,0.1)] rounded-2xl pl-11 pr-4 py-4 text-[#141413] placeholder-[#48463F] outline-none focus:border-[#56804E]/40 transition text-sm"
             />
           </div>
 

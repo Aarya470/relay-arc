@@ -20,11 +20,11 @@ import DateField from '@/components/DateField'
 import Mark from '@/components/Mark'
 
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const T2 = '#48463F'
+const T3 = '#48463F'
+const BORDER = 'rgba(20,20,19,0.1)'
 const ACCENT = '#42623C'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 const mono = 'var(--font-mono, monospace)'
 
 const CONDITIONS = [
@@ -147,9 +147,9 @@ export default function Onboarding() {
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    background: '#FFFFFF',
+    background: 'var(--panel)',
     border: `1.5px solid ${BORDER}`,
-    borderRadius: 0,
+    borderRadius: 8,
     padding: '13px 16px',
     color: T1,
     // 16px, not 15 or 14, and it is not a taste decision.
@@ -178,7 +178,7 @@ export default function Onboarding() {
     color: 'white',
     fontWeight: 600,
     padding: '15px',
-    borderRadius: 0,
+    borderRadius: 8,
     border: 'none',
     cursor: 'pointer',
     display: 'flex',
@@ -196,7 +196,7 @@ export default function Onboarding() {
     color: T2,
     fontWeight: 500,
     padding: '15px',
-    borderRadius: 0,
+    borderRadius: 8,
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
@@ -303,7 +303,7 @@ export default function Onboarding() {
                         onClick={() => update('blood_type', active ? '' : bt)}
                         style={{
                           padding: '12px 0',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           cursor: 'pointer',
                           background: active ? T1 : 'none',
                           border: `1.5px solid ${active ? T1 : BORDER}`,
@@ -418,7 +418,7 @@ export default function Onboarding() {
                         style={{
                           width: '22px',
                           height: '22px',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           flexShrink: 0,
                           background: active ? ACCENT : 'none',
                           border: `1.5px solid ${active ? ACCENT : '#C9CED6'}`,

@@ -383,7 +383,7 @@ export default function CareTeamDashboard() {
   }
 
   const getStatusColor = (score: number) => {
-    if (score >= 8) return '#8F4A00'
+    if (score >= 8) return '#7A3D00'
     if (score >= 5) return '#7C5200'
     return '#42623C'
   }
@@ -513,7 +513,7 @@ export default function CareTeamDashboard() {
       </AnimatePresence>
 
       {/* Header */}
-      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid #98C890' }}>
+      <div style={{ padding: '56px 20px 20px', borderBottom: '1px solid rgba(20,20,19,0.1)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <p
@@ -541,7 +541,7 @@ export default function CareTeamDashboard() {
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: 0,
+                borderRadius: 8,
                 background: 'rgba(86,128,78,0.1)',
                 border: '1px solid rgba(86,128,78,0.2)',
                 cursor: 'pointer',
@@ -562,7 +562,7 @@ export default function CareTeamDashboard() {
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: 0,
+                borderRadius: 8,
                 background: '#F2F0E8',
                 border: 'none',
                 cursor: 'pointer',
@@ -571,7 +571,7 @@ export default function CareTeamDashboard() {
                 justifyContent: 'center',
               }}
             >
-              <LogOut size={15} color="#5C5A52" />
+              <LogOut size={15} color="#48463F" />
             </motion.button>
           </div>
         </div>
@@ -587,7 +587,7 @@ export default function CareTeamDashboard() {
                   activeEmergencies.some((e) => e.user_id === p.id) ||
                   (summaries[p.id]?.priority_score || 0) >= 8,
               ).length,
-              color: '#8F4A00',
+              color: '#7A3D00',
             },
             {
               label: 'Monitor',
@@ -612,8 +612,8 @@ export default function CareTeamDashboard() {
               key={i}
               style={{
                 flex: 1,
-                background: '#FFFFFF',
-                border: '1px solid #98C890',
+                background: 'var(--panel)',
+                border: '1px solid rgba(20,20,19,0.1)',
                 borderRadius: '20px',
                 padding: '10px',
                 textAlign: 'center',
@@ -622,7 +622,7 @@ export default function CareTeamDashboard() {
               <p style={{ color: stat.color, fontWeight: 700, fontSize: '18px' }}>{stat.value}</p>
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '9px',
                   fontFamily: 'monospace',
                   textTransform: 'uppercase',
@@ -716,7 +716,7 @@ export default function CareTeamDashboard() {
                   {a.scheduled_at && (
                     <p
                       style={{
-                        color: '#5C5A52',
+                        color: '#48463F',
                         fontSize: '11px',
                         fontFamily: 'monospace',
                         marginBottom: '10px',
@@ -732,7 +732,7 @@ export default function CareTeamDashboard() {
                     </p>
                   )}
                   {a.patient_concern && (
-                    <p style={{ color: '#5C5A52', fontSize: '12px', marginBottom: '10px' }}>
+                    <p style={{ color: '#48463F', fontSize: '12px', marginBottom: '10px' }}>
                       {a.patient_concern}
                     </p>
                   )}
@@ -744,7 +744,7 @@ export default function CareTeamDashboard() {
                         flex: 1,
                         background: 'rgba(86,128,78,0.12)',
                         border: '1px solid rgba(86,128,78,0.25)',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '9px',
                         display: 'flex',
                         alignItems: 'center',
@@ -765,7 +765,7 @@ export default function CareTeamDashboard() {
                         flex: 1,
                         background: 'rgba(240,120,0,0.08)',
                         border: '1px solid rgba(240,120,0,0.2)',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '9px',
                         display: 'flex',
                         alignItems: 'center',
@@ -773,7 +773,7 @@ export default function CareTeamDashboard() {
                         cursor: 'pointer',
                       }}
                     >
-                      <span style={{ color: '#8F4A00', fontSize: '12px', fontWeight: 600 }}>
+                      <span style={{ color: '#7A3D00', fontSize: '12px', fontWeight: 600 }}>
                         Decline
                       </span>
                     </motion.button>
@@ -830,7 +830,7 @@ export default function CareTeamDashboard() {
                   </div>
                   <p
                     style={{
-                      color: '#5C5A52',
+                      color: '#48463F',
                       fontSize: '11px',
                       fontFamily: 'monospace',
                       marginBottom: joinable ? '10px' : 0,
@@ -855,7 +855,7 @@ export default function CareTeamDashboard() {
                         justifyContent: 'center',
                         gap: '8px',
                         background: '#42623C',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '10px',
                         color: 'white',
                         fontWeight: 700,
@@ -923,7 +923,7 @@ export default function CareTeamDashboard() {
                 {/* Header row */}
                 <div
                   style={{
-                    background: '#8F4A00',
+                    background: '#7A3D00',
                     padding: '12px 16px',
                     display: 'flex',
                     alignItems: 'center',
@@ -938,7 +938,7 @@ export default function CareTeamDashboard() {
                         width: '10px',
                         height: '10px',
                         borderRadius: '50%',
-                        background: '#fff',
+                        background: 'var(--panel)',
                         flexShrink: 0,
                         boxShadow: '0 0 8px rgba(255,255,255,0.6)',
                       }}
@@ -987,7 +987,7 @@ export default function CareTeamDashboard() {
                     <div>
                       <p
                         style={{
-                          color: '#8F4A00',
+                          color: '#7A3D00',
                           fontWeight: 800,
                           fontSize: '17px',
                           marginBottom: '3px',
@@ -1007,7 +1007,7 @@ export default function CareTeamDashboard() {
                           style={{
                             background: 'rgba(240,120,0,0.15)',
                             border: '1px solid rgba(240,120,0,0.35)',
-                            color: '#8F4A00',
+                            color: '#7A3D00',
                             fontSize: '10px',
                             padding: '2px 8px',
                             borderRadius: '20px',
@@ -1024,7 +1024,7 @@ export default function CareTeamDashboard() {
                             style={{
                               background: 'rgba(240,120,0,0.1)',
                               border: '1px solid rgba(240,120,0,0.25)',
-                              color: '#8F4A00',
+                              color: '#7A3D00',
                               fontSize: '10px',
                               padding: '2px 8px',
                               borderRadius: '20px',
@@ -1039,7 +1039,7 @@ export default function CareTeamDashboard() {
                     </div>
                     <AlertTriangle
                       size={22}
-                      color="#8F4A00"
+                      color="#7A3D00"
                       style={{ flexShrink: 0, opacity: 0.8 }}
                     />
                   </div>
@@ -1075,7 +1075,7 @@ export default function CareTeamDashboard() {
                       >
                         <span
                           style={{
-                            color: '#8F4A00',
+                            color: '#7A3D00',
                             fontSize: '11px',
                             fontWeight: 700,
                             fontFamily: 'monospace',
@@ -1103,7 +1103,7 @@ export default function CareTeamDashboard() {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               <span
                                 style={{
-                                  color: '#5C5A52',
+                                  color: '#48463F',
                                   fontSize: '11px',
                                   width: '80px',
                                   flexShrink: 0,
@@ -1113,7 +1113,7 @@ export default function CareTeamDashboard() {
                               </span>
                               <span
                                 style={{
-                                  color: '#8F4A00',
+                                  color: '#7A3D00',
                                   fontWeight: 800,
                                   fontSize: '18px',
                                   fontFamily: 'monospace',
@@ -1127,7 +1127,7 @@ export default function CareTeamDashboard() {
                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                               <span
                                 style={{
-                                  color: '#5C5A52',
+                                  color: '#48463F',
                                   fontSize: '11px',
                                   width: '80px',
                                   flexShrink: 0,
@@ -1152,7 +1152,7 @@ export default function CareTeamDashboard() {
                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                               <span
                                 style={{
-                                  color: '#5C5A52',
+                                  color: '#48463F',
                                   fontSize: '11px',
                                   width: '80px',
                                   flexShrink: 0,
@@ -1161,7 +1161,7 @@ export default function CareTeamDashboard() {
                               >
                                 Medications
                               </span>
-                              <span style={{ color: '#5C5A52', fontSize: '11px', lineHeight: 1.6 }}>
+                              <span style={{ color: '#48463F', fontSize: '11px', lineHeight: 1.6 }}>
                                 {patient.medications
                                   .slice(0, 3)
                                   .map((m: any) => m.name || m)
@@ -1183,7 +1183,7 @@ export default function CareTeamDashboard() {
                         justifyContent: 'space-between',
                         background: 'rgba(240,120,0,0.06)',
                         border: '1px solid rgba(240,120,0,0.15)',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '10px 14px',
                       }}
                     >
@@ -1196,11 +1196,11 @@ export default function CareTeamDashboard() {
                           minWidth: 0,
                         }}
                       >
-                        <MapPin size={13} color="#8F4A00" style={{ flexShrink: 0 }} />
+                        <MapPin size={13} color="#7A3D00" style={{ flexShrink: 0 }} />
                         <div style={{ minWidth: 0 }}>
                           <p
                             style={{
-                              color: '#5C5A52',
+                              color: '#48463F',
                               fontSize: '9px',
                               fontFamily: 'monospace',
                               textTransform: 'uppercase',
@@ -1255,7 +1255,7 @@ export default function CareTeamDashboard() {
                         justifyContent: 'space-between',
                         background: 'rgba(86,128,78,0.05)',
                         border: '1px solid rgba(86,128,78,0.15)',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '10px 14px',
                       }}
                     >
@@ -1264,7 +1264,7 @@ export default function CareTeamDashboard() {
                         <div>
                           <p
                             style={{
-                              color: '#5C5A52',
+                              color: '#48463F',
                               fontSize: '9px',
                               fontFamily: 'monospace',
                               textTransform: 'uppercase',
@@ -1275,7 +1275,7 @@ export default function CareTeamDashboard() {
                             Last known location
                           </p>
                           <p
-                            style={{ color: '#5C5A52', fontFamily: 'monospace', fontSize: '11px' }}
+                            style={{ color: '#48463F', fontFamily: 'monospace', fontSize: '11px' }}
                           >
                             {Number(emergency.patient_lat).toFixed(5)},{' '}
                             {Number(emergency.patient_lng).toFixed(5)}
@@ -1326,7 +1326,7 @@ export default function CareTeamDashboard() {
                           fontWeight: 700,
                           fontSize: '12px',
                           padding: '10px 8px',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           textDecoration: 'none',
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1350,7 +1350,7 @@ export default function CareTeamDashboard() {
                           fontWeight: 700,
                           fontSize: '12px',
                           padding: '10px 8px',
-                          borderRadius: 0,
+                          borderRadius: 8,
                           textDecoration: 'none',
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1367,12 +1367,12 @@ export default function CareTeamDashboard() {
                           justifyContent: 'center',
                           gap: '6px',
                           background: '#F2F0E8',
-                          border: '1px solid #98C890',
-                          color: '#5C5A52',
+                          border: '1px solid rgba(20,20,19,0.1)',
+                          color: '#48463F',
                           fontWeight: 600,
                           fontSize: '12px',
                           padding: '10px 8px',
-                          borderRadius: 0,
+                          borderRadius: 8,
                         }}
                       >
                         <Phone size={13} />
@@ -1390,11 +1390,11 @@ export default function CareTeamDashboard() {
                         gap: '6px',
                         background: 'rgba(240,120,0,0.12)',
                         border: '1px solid rgba(240,120,0,0.3)',
-                        color: '#8F4A00',
+                        color: '#7A3D00',
                         fontWeight: 700,
                         fontSize: '12px',
                         padding: '10px 8px',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         cursor: 'pointer',
                       }}
                     >
@@ -1413,7 +1413,7 @@ export default function CareTeamDashboard() {
       <div style={{ padding: '16px' }}>
         {sortedPatients.length === 0 && (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
-            <p style={{ color: '#5C5A52', fontSize: '14px' }}>No patients yet</p>
+            <p style={{ color: '#48463F', fontSize: '14px' }}>No patients yet</p>
           </div>
         )}
 
@@ -1437,7 +1437,7 @@ export default function CareTeamDashboard() {
               style={{
                 width: '100%',
                 background: hasActiveEmergency ? 'rgba(240,120,0,0.06)' : '#FFFFFF',
-                border: `1px solid ${hasActiveEmergency ? 'rgba(240,120,0,0.3)' : score >= 8 ? 'rgba(240,120,0,0.15)' : '#98C890'}`,
+                border: `1px solid ${hasActiveEmergency ? 'rgba(240,120,0,0.3)' : score >= 8 ? 'rgba(240,120,0,0.15)' : 'rgba(20,20,19,0.1)'}`,
                 borderRadius: '20px',
                 padding: '14px 16px',
                 marginBottom: '10px',
@@ -1453,7 +1453,7 @@ export default function CareTeamDashboard() {
                 style={{
                   width: '32px',
                   height: '32px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   background: `${color}15`,
                   border: `1px solid ${color}25`,
                   display: 'flex',
@@ -1473,7 +1473,7 @@ export default function CareTeamDashboard() {
                   <p
                     style={{
                       color: hasActiveEmergency
-                        ? '#8F4A00'
+                        ? '#7A3D00'
                         : appointments.some(
                               (a) => a.patient_id === patient.id && a.status === 'pending',
                             )
@@ -1509,7 +1509,7 @@ export default function CareTeamDashboard() {
                       transition={{ duration: 0.9, repeat: Infinity }}
                       style={{
                         background: 'rgba(240,120,0,0.25)',
-                        color: '#8F4A00',
+                        color: '#7A3D00',
                         fontSize: '9px',
                         padding: '2px 8px',
                         borderRadius: '20px',
@@ -1527,7 +1527,7 @@ export default function CareTeamDashboard() {
                           width: 5,
                           height: 5,
                           borderRadius: '50%',
-                          background: '#8F4A00',
+                          background: '#7A3D00',
                           display: 'inline-block',
                         }}
                       />
@@ -1539,7 +1539,7 @@ export default function CareTeamDashboard() {
                 {sum?.priority_reason ? (
                   <p
                     style={{
-                      color: '#5C5A52',
+                      color: '#48463F',
                       fontSize: '12px',
                       lineHeight: 1.4,
                       overflow: 'hidden',
@@ -1551,7 +1551,7 @@ export default function CareTeamDashboard() {
                     {sum.priority_reason}
                   </p>
                 ) : (
-                  <p style={{ color: '#5C5A52', fontSize: '12px' }}>
+                  <p style={{ color: '#48463F', fontSize: '12px' }}>
                     {patient.diagnosis?.split(',')[0]} ·{' '}
                     {lastCheckin
                       ? `Last check in ${new Date(lastCheckin.created_at).toLocaleDateString()}`
@@ -1570,7 +1570,7 @@ export default function CareTeamDashboard() {
                       style={{
                         background: 'rgba(240,120,0,0.2)',
                         border: '1px solid rgba(240,120,0,0.45)',
-                        color: '#8F4A00',
+                        color: '#7A3D00',
                         fontSize: '10px',
                         padding: '3px 8px',
                         borderRadius: '20px',
@@ -1590,9 +1590,9 @@ export default function CareTeamDashboard() {
                       style={{
                         background: 'rgba(240,120,0,0.12)',
                         border: '1px solid rgba(240,120,0,0.3)',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '2px 7px',
-                        color: '#8F4A00',
+                        color: '#7A3D00',
                         fontSize: '9px',
                         cursor: 'pointer',
                         fontWeight: 700,
@@ -1618,7 +1618,7 @@ export default function CareTeamDashboard() {
                     {overdueM ? 'Monitor' : sum ? getStatusLabel(score) : '. '}
                   </span>
                 )}
-                <ChevronRight size={14} color="#5C5A52" />
+                <ChevronRight size={14} color="#48463F" />
               </div>
             </motion.button>
           )

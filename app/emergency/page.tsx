@@ -37,13 +37,13 @@ import { Hero, Panel } from '@/components/AppKit'
 const BG = '#FFFFFF'
 const SURFACE = '#B3DDAC'
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
-const RED = '#8F4A00'
+const T2 = '#48463F'
+const T3 = '#48463F'
+const RED = '#7A3D00'
 const RED_DIM = 'rgba(240,120,0,0.07)'
 const RED_MID = 'rgba(240,120,0,0.14)'
 const ACCENT = '#42623C'
-const BORDER = '#98C890'
+const BORDER = 'rgba(20,20,19,0.1)'
 
 const TYPES = [
   {

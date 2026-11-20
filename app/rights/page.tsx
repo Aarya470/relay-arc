@@ -1,4 +1,6 @@
 'use client'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
 // What an emergency room owes you.
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -8,8 +10,8 @@ import { rightsFor, guessCountry, COUNTRIES, type Country } from '@/lib/rights'
 // Ink tones. These are for text INSIDE the white cards, which is most of this
 // page, so they are unchanged.
 const INK = '#141413',
-  INK2 = '#5C5A52',
-  INK3 = '#5C5A52'
+  INK2 = '#48463F',
+  INK3 = '#48463F'
 const WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#F07800'
@@ -17,9 +19,9 @@ const ORANGE = '#F07800'
 // The page, and text ON it.
 const PAGE = '#B3DDAC'
 const ON = '#141413' // ink, 12.16:1
-const ON_3 = '#5C5A52' // 4.56:1, passes for body text now
+const ON_3 = '#48463F' // 4.56:1, passes for body text now
 const RULE = '#7EB382' // hairline, non-text
-const CORAL = '#8F4A00' // ORANGE is 2.96:1 on light and unusable as text
+const CORAL = '#7A3D00' // ORANGE is 2.96:1 on light and unusable as text
 
 // A light tint for the block inside each white card. This is the job the old
 // CREAM constant used to do, kept separate now that the page itself is dark.
@@ -43,7 +45,8 @@ export default function RightsPage() {
   const pack = rightsFor(country)
 
   return (
-    <div style={{ minHeight: '100dvh', background: PAGE, color: INK }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent', color: INK }}>
+      <SiteHeader />
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '20px 20px 120px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
           <Link
@@ -52,9 +55,9 @@ export default function RightsPage() {
             style={{
               width: 38,
               height: 38,
-              borderRadius: 0,
+              borderRadius: 8,
               border: `1px solid ${WHITE}`,
-              background: WHITE,
+              background: 'var(--panel)',
               display: 'grid',
               placeItems: 'center',
               color: INK2,
@@ -104,7 +107,7 @@ export default function RightsPage() {
                   letterSpacing: 1,
                   fontWeight: 700,
                   padding: '9px 14px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   cursor: 'pointer',
                   border: `1px solid ${on ? WHITE : RULE}`,
                   background: on ? WHITE : 'transparent',
@@ -143,7 +146,7 @@ export default function RightsPage() {
             <article
               key={r.id}
               style={{
-                background: WHITE,
+                background: 'var(--panel)',
                 border: `1px solid ${BORDER}`,
                 borderRadius: 18,
                 padding: 20,
@@ -155,7 +158,7 @@ export default function RightsPage() {
                     fontFamily: mono,
                     fontSize: 12,
                     fontWeight: 700,
-                    color: '#8F4A00',
+                    color: '#7A3D00',
                     marginTop: 4,
                     flexShrink: 0,
                   }}
@@ -176,7 +179,7 @@ export default function RightsPage() {
                 style={{
                   background: TINT,
                   borderLeft: `2px solid ${INK3}`,
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '12px 14px',
                   marginBottom: r.action ? 12 : 14,
                 }}
@@ -201,7 +204,7 @@ export default function RightsPage() {
                   style={{
                     background: '#F1F3EC',
                     borderLeft: `2px solid ${GREEN_DEEP}`,
-                    borderRadius: 0,
+                    borderRadius: 8,
                     padding: '12px 14px',
                     marginBottom: 14,
                   }}
@@ -250,7 +253,7 @@ export default function RightsPage() {
                 padding: '15px',
                 borderRadius: 14,
                 border: `1px solid ${WHITE}`,
-                background: WHITE,
+                background: 'var(--panel)',
                 color: INK,
                 fontWeight: 700,
                 fontSize: 15,
@@ -274,7 +277,7 @@ export default function RightsPage() {
                 textDecoration: 'none',
                 color: INK,
                 marginTop: 12,
-                background: WHITE,
+                background: 'var(--panel)',
                 border: `1px solid ${WHITE}`,
                 borderRadius: 14,
                 padding: '15px 16px',
@@ -308,6 +311,7 @@ export default function RightsPage() {
           writing.
         </p>
       </div>
+      <SiteFooter />
     </div>
   )
 }

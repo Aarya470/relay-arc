@@ -1,4 +1,6 @@
 'use client'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Phone } from '@/lib/plain-icons'
 import Mark from '@/components/Mark'
@@ -9,12 +11,12 @@ import { useEffect, useState } from 'react'
 const PAGE = '#B3DDAC'
 const PANEL = '#FFFFFF'
 const ON = '#141413' // ink, 12.16:1 on the light green
-const ON_3 = '#5C5A52'
+const ON_3 = '#48463F'
 const T1 = '#141413' // inside the panel
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
+const T2 = '#48463F'
+const T3 = '#48463F'
 const BORDER = '#DCE6D6'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 
 // A real, reachable address is a legal requirement on both of these documents.
 // It used to be a personal Gmail, which put a private inbox on a public page
@@ -41,7 +43,8 @@ export default function LegalDocument({
   const blocks = body.trim().split(/\n\n+/)
 
   return (
-    <div style={{ minHeight: '100dvh', background: PAGE }}>
+    <div style={{ minHeight: '100dvh', background: 'transparent' }}>
+      <SiteHeader />
       <div
         style={{
           position: 'fixed',
@@ -54,54 +57,7 @@ export default function LegalDocument({
         }}
       />
 
-      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '64px 24px 80px' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '48px',
-          }}
-        >
-          <button
-            onClick={() => router.push('/')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '9px',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '5px 0',
-            }}
-          >
-            <Mark size={26} />
-            <span
-              style={{ color: ON, fontWeight: 800, fontSize: '15.5px', letterSpacing: '-0.4px' }}
-            >
-              Relay Arc
-            </span>
-          </button>
-          <button
-            onClick={() => router.push('/')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '7px',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              color: ON_3,
-              fontSize: '13px',
-              fontWeight: 500,
-              fontFamily: 'inherit',
-            }}
-          >
-            <ArrowLeft size={14} /> Home
-          </button>
-        </div>
-
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '16px 24px 40px' }}>
         <div
           style={{
             borderTop: `3px solid ${ON}`,
@@ -154,7 +110,7 @@ export default function LegalDocument({
         {/* Everything from here down is prose at 14.5px, so it lives on a
             panel. Emergency disclaimer first, stated up front rather than
             buried at the bottom where nobody reads it. */}
-        <div style={{ background: PANEL, borderRadius: '20px', padding: '28px 26px 30px' }}>
+        <div style={{ background: 'var(--panel)', borderRadius: '20px', padding: '28px 26px 30px' }}>
           <div
             style={{ borderLeft: `3px solid ${RED}`, paddingLeft: '16px', marginBottom: '36px' }}
           >
@@ -194,7 +150,7 @@ export default function LegalDocument({
                 fontWeight: 700,
                 fontSize: '14px',
                 padding: '11px 18px',
-                borderRadius: 0,
+                borderRadius: 8,
                 textDecoration: 'none',
               }}
             >
@@ -322,6 +278,7 @@ export default function LegalDocument({
           </div>
         </div>
       </div>
+      <SiteFooter />
     </div>
   )
 }

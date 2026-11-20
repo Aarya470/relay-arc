@@ -1,4 +1,5 @@
 'use client'
+import SiteFooter from '@/components/SiteFooter'
 // /partners: the organisations Relay Arc works with, and exactly where each
 // relationship stands. The East Windsor district is still in discussion, so
 // the page says so plainly rather than implying a signed partnership.
@@ -111,6 +112,7 @@ export default function Partners() {
           </div>
         </section>
       ))}
+      <SiteFooter />
     </div>
   )
 }

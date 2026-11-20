@@ -1,4 +1,5 @@
 'use client'
+import SiteFooter from '@/components/SiteFooter'
 import { useState } from 'react'
 import SiteHeader from '@/components/SiteHeader'
 
@@ -94,6 +95,7 @@ export default function Donate() {
           Every gift goes to building and hosting Relay Arc. Questions go to relay.arc.org@gmail.com.
         </p>
       </div>
+      <SiteFooter />
     </div>
   )
 }

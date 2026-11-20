@@ -7,11 +7,11 @@ import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from '@/lib/plain-icon
 import Mark from '@/components/Mark'
 
 const T1 = '#141413',
-  T2 = '#5C5A52',
-  T3 = '#5C5A52'
+  T2 = '#48463F',
+  T3 = '#48463F'
 const ACCENT = '#42623C',
-  RED = '#8F4A00',
-  BORDER = '#98C890'
+  RED = '#7A3D00',
+  BORDER = 'rgba(20,20,19,0.1)'
 const mono = 'var(--font-mono, monospace)'
 
 type State = 'working' | 'confirmed' | 'error'
@@ -182,7 +182,7 @@ export default function AuthCallback() {
               style={{
                 width: '100%',
                 padding: 15,
-                borderRadius: 0,
+                borderRadius: 8,
                 border: 'none',
                 background: T1,
                 color: '#FFF',
@@ -234,7 +234,7 @@ export default function AuthCallback() {
               style={{
                 width: '100%',
                 padding: 15,
-                borderRadius: 0,
+                borderRadius: 8,
                 border: 'none',
                 background: T1,
                 color: '#FFF',

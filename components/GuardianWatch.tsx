@@ -6,7 +6,7 @@ import { emergencyNumber } from '@/lib/emergency-number'
 import { Phone, MessageSquare, HeartPulse, Check } from '@/lib/plain-icons'
 
 const T1 = '#141413'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 const MONO = 'var(--font-mono, monospace)'
 
 const FIRST_CHECK_MS = 60_000
@@ -166,7 +166,7 @@ export default function GuardianWatch({
           >
             <p
               style={{
-                color: '#5C5A52',
+                color: '#48463F',
                 fontSize: '13px',
                 fontWeight: 600,
                 letterSpacing: '0',
@@ -189,7 +189,7 @@ export default function GuardianWatch({
             </p>
             <p
               style={{
-                color: '#5C5A52',
+                color: '#48463F',
                 fontSize: '13.5px',
                 lineHeight: 1.55,
                 marginBottom: '22px',

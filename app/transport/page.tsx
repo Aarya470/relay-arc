@@ -146,11 +146,11 @@ export default function TransportRequest() {
       <div
         style={{
           padding: '56px 20px 14px',
-          borderBottom: '1px solid #98C890',
+          borderBottom: '1px solid rgba(20,20,19,0.1)',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
-          background: '#FFFFFF',
+          background: 'var(--panel)',
           flexShrink: 0,
         }}
       >
@@ -161,20 +161,21 @@ export default function TransportRequest() {
           style={{
             width: '36px',
             height: '36px',
-            borderRadius: 0,
+            borderRadius: 8,
             background: '#F2F0E8',
-            border: '1px solid #98C890',
+            border: '1px solid rgba(20,20,19,0.1)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
           }}
-        >
-          <ArrowLeft size={16} color="#5C5A52" />
+        
+ aria-label="Back">
+          <ArrowLeft size={16} color="#48463F" />
         </motion.button>
         <div>
-          <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0' }}>Community</p>
+          <p style={{ color: '#48463F', fontSize: '13px', letterSpacing: '0' }}>Community</p>
           <h1
             style={{ color: '#141413', fontWeight: 700, fontSize: '20px', letterSpacing: '-0.4px' }}
           >
@@ -195,7 +196,7 @@ export default function TransportRequest() {
             >
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '13px',
                   marginBottom: '20px',
                   lineHeight: 1.6,
@@ -215,9 +216,9 @@ export default function TransportRequest() {
                       setStep('location')
                     }}
                     style={{
-                      background: '#FFFFFF',
-                      border: '1px solid #98C890',
-                      borderRadius: 0,
+                      background: 'var(--panel)',
+                      border: '1px solid rgba(20,20,19,0.1)',
+                      borderRadius: 8,
                       padding: '18px 16px',
                       textAlign: 'left',
                       cursor: 'pointer',
@@ -227,7 +228,7 @@ export default function TransportRequest() {
                       style={{
                         width: '38px',
                         height: '38px',
-                        borderRadius: 0,
+                        borderRadius: 8,
                         background: 'rgba(240,120,0,0.10)',
                         border: '1px solid rgba(240,120,0,0.20)',
                         display: 'flex',
@@ -236,7 +237,7 @@ export default function TransportRequest() {
                         marginBottom: '12px',
                       }}
                     >
-                      <type.Icon size={17} color="#8F4A00" />
+                      <type.Icon size={17} color="#7A3D00" />
                     </div>
                     <p
                       style={{
@@ -264,9 +265,9 @@ export default function TransportRequest() {
             >
               <div
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
-                  borderRadius: 0,
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
+                  borderRadius: 8,
                   padding: '24px 20px',
                   marginBottom: '16px',
                   textAlign: 'center',
@@ -285,7 +286,7 @@ export default function TransportRequest() {
                 </p>
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '13px',
                     marginBottom: '20px',
                     lineHeight: 1.6,
@@ -306,7 +307,7 @@ export default function TransportRequest() {
                     fontWeight: 700,
                     fontSize: '15px',
                     padding: '15px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     border: 'none',
                     cursor: 'pointer',
                     display: 'flex',
@@ -339,7 +340,7 @@ export default function TransportRequest() {
                 style={{
                   background: 'rgba(86,128,78,0.08)',
                   border: '1px solid rgba(86,128,78,0.15)',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '11px 14px',
                   marginBottom: '16px',
                   display: 'flex',
@@ -353,7 +354,7 @@ export default function TransportRequest() {
 
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '13px',
                   letterSpacing: '0',
                   marginBottom: '10px',
@@ -380,7 +381,7 @@ export default function TransportRequest() {
                       background:
                         selectedHospital?.id === h.id ? 'rgba(86,128,78,0.10)' : '#FFFFFF',
                       border: `1px solid ${selectedHospital?.id === h.id ? 'rgba(86,128,78,0.35)' : '#F2F0E8'}`,
-                      borderRadius: 0,
+                      borderRadius: 8,
                       padding: '14px',
                       textAlign: 'left',
                       cursor: 'pointer',
@@ -400,7 +401,7 @@ export default function TransportRequest() {
                       >
                         {h.name}
                       </p>
-                      <p style={{ color: '#5C5A52', fontSize: '11px' }}>{h.address}</p>
+                      <p style={{ color: '#48463F', fontSize: '11px' }}>{h.address}</p>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '12px' }}>
                       <p
@@ -413,7 +414,7 @@ export default function TransportRequest() {
                       >
                         {Math.round(((h.distance || 0) / 1000 / 50) * 60)} min
                       </p>
-                      <p style={{ color: '#5C5A52', fontSize: '11px', fontFamily: 'inherit' }}>
+                      <p style={{ color: '#48463F', fontSize: '11px', fontFamily: 'inherit' }}>
                         {((h.distance || 0) / 1000).toFixed(1)} km
                       </p>
                     </div>
@@ -428,12 +429,12 @@ export default function TransportRequest() {
                 disabled={!selectedHospital || loading}
                 style={{
                   width: '100%',
-                  background: selectedHospital ? '#8F4A00' : '#F2F0E8',
-                  color: selectedHospital ? 'white' : '#5C5A52',
+                  background: selectedHospital ? '#7A3D00' : '#F2F0E8',
+                  color: selectedHospital ? 'white' : '#48463F',
                   fontWeight: 700,
                   fontSize: '15px',
                   padding: '15px',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   border: 'none',
                   cursor: selectedHospital ? 'pointer' : 'not-allowed',
                   display: 'flex',
@@ -473,7 +474,7 @@ export default function TransportRequest() {
               </h2>
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '14px',
                   marginBottom: '32px',
                   lineHeight: 1.6,
@@ -484,9 +485,9 @@ export default function TransportRequest() {
               </p>
               <div
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
-                  borderRadius: 0,
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
+                  borderRadius: 8,
                   padding: '16px',
                   textAlign: 'left',
                   marginBottom: '24px',
@@ -494,7 +495,7 @@ export default function TransportRequest() {
               >
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '13px',
                     letterSpacing: '0',
                     marginBottom: '8px',
@@ -512,7 +513,7 @@ export default function TransportRequest() {
                 >
                   {request?.hospital_name}
                 </p>
-                <p style={{ color: '#5C5A52', fontSize: '12px' }}>{request?.pickup_address}</p>
+                <p style={{ color: '#48463F', fontSize: '12px' }}>{request?.pickup_address}</p>
               </div>
               <div
                 style={{
@@ -561,9 +562,9 @@ export default function TransportRequest() {
                   marginTop: '24px',
                   background: '#F2F0E8',
                   border: '1px solid #D8D4C8',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '12px 24px',
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontSize: '13px',
                   cursor: 'pointer',
                   width: '100%',
@@ -585,7 +586,7 @@ export default function TransportRequest() {
                 style={{
                   background: 'rgba(86,128,78,0.06)',
                   border: '1px solid rgba(86,128,78,0.18)',
-                  borderRadius: 0,
+                  borderRadius: 8,
                   padding: '24px 20px',
                   textAlign: 'center',
                   marginBottom: '14px',
@@ -602,20 +603,20 @@ export default function TransportRequest() {
                 >
                   Driver found
                 </p>
-                <p style={{ color: '#5C5A52', fontSize: '13px' }}>They are on their way to you</p>
+                <p style={{ color: '#48463F', fontSize: '13px' }}>They are on their way to you</p>
               </div>
               <div
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
-                  borderRadius: 0,
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
+                  borderRadius: 8,
                   padding: '16px',
                   marginBottom: '10px',
                 }}
               >
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '13px',
                     letterSpacing: '0',
                     marginBottom: '12px',
@@ -635,7 +636,7 @@ export default function TransportRequest() {
                     style={{
                       width: '44px',
                       height: '44px',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       background: 'rgba(86,128,78,0.10)',
                       border: '1px solid rgba(86,128,78,0.18)',
                       display: 'flex',
@@ -660,7 +661,7 @@ export default function TransportRequest() {
                     >
                       {request?.driver_name}
                     </p>
-                    <p style={{ color: '#5C5A52', fontSize: '12px' }}>Community driver</p>
+                    <p style={{ color: '#48463F', fontSize: '12px' }}>Community driver</p>
                   </div>
                 </div>
                 {request?.driver_phone && (
@@ -673,7 +674,7 @@ export default function TransportRequest() {
                       gap: '8px',
                       background: 'rgba(86,128,78,0.08)',
                       border: '1px solid rgba(86,128,78,0.16)',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       padding: '12px',
                       color: '#42623C',
                       fontWeight: 600,
@@ -687,15 +688,15 @@ export default function TransportRequest() {
               </div>
               <div
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #98C890',
-                  borderRadius: 0,
+                  background: 'var(--panel)',
+                  border: '1px solid rgba(20,20,19,0.1)',
+                  borderRadius: 8,
                   padding: '16px',
                 }}
               >
                 <p
                   style={{
-                    color: '#5C5A52',
+                    color: '#48463F',
                     fontSize: '13px',
                     letterSpacing: '0',
                     marginBottom: '8px',

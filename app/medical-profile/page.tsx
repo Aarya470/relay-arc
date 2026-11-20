@@ -27,7 +27,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       style={{
-        color: '#5C5A52',
+        color: '#48463F',
         fontSize: '13px',
         fontWeight: 600,
         letterSpacing: '0',
@@ -41,7 +41,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 function Empty({ text }: { text: string }) {
-  return <p style={{ color: '#5C5A52', fontSize: '13px', padding: '14px 0' }}>{text}</p>
+  return <p style={{ color: '#48463F', fontSize: '13px', padding: '14px 0' }}>{text}</p>
 }
 
 export default function MedicalProfile() {
@@ -105,7 +105,7 @@ export default function MedicalProfile() {
             key={i}
             style={{
               height: '60px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               marginBottom: '10px',
             }}
@@ -178,7 +178,7 @@ export default function MedicalProfile() {
       <div ref={cardRef} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {allergies.length > 0 && (
           <section className="glass ak-accent-orange" style={{ padding: '16px 16px 16px 20px' }}>
-            <p style={{ color: '#8F4A00', fontWeight: 800, fontSize: '14px', marginBottom: '6px' }}>Allergies</p>
+            <p style={{ color: '#7A3D00', fontWeight: 800, fontSize: '14px', marginBottom: '6px' }}>Allergies</p>
             <p style={{ color: '#141413', fontSize: '18px', fontWeight: 800, lineHeight: 1.4 }}>{allergies.join(', ')}</p>
           </section>
         )}

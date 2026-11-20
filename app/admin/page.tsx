@@ -3,11 +3,11 @@ import { useState, useRef, useCallback } from 'react'
 import { Loader2, Plus, Trash2, RefreshCw, Copy, Check, Search } from '@/lib/plain-icons'
 
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
-const BORDER = '#98C890'
+const T2 = '#48463F'
+const T3 = '#48463F'
+const BORDER = 'rgba(20,20,19,0.1)'
 const ACCENT = '#42623C'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 
@@ -202,9 +202,9 @@ export default function AdminPartners() {
             onKeyDown={(e) => e.key === 'Enter' && connect()}
             style={{
               width: '100%',
-              background: '#FFFFFF',
+              background: 'var(--panel)',
               border: `1.5px solid ${BORDER}`,
-              borderRadius: 0,
+              borderRadius: 8,
               padding: '13px 16px',
               color: T1,
               fontSize: '15px',
@@ -228,7 +228,7 @@ export default function AdminPartners() {
               fontWeight: 600,
               fontSize: '15px',
               padding: '15px',
-              borderRadius: 0,
+              borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -322,9 +322,9 @@ export default function AdminPartners() {
           placeholder="Search the hospital. 'Lilavati Hospital Mumbai'"
           style={{
             flex: 1,
-            background: '#FFFFFF',
+            background: 'var(--panel)',
             border: `1.5px solid ${BORDER}`,
-            borderRadius: 0,
+            borderRadius: 8,
             padding: '12px 14px',
             color: T1,
             fontSize: '14px',
@@ -338,7 +338,7 @@ export default function AdminPartners() {
           aria-label="Search"
           style={{
             width: '46px',
-            borderRadius: 0,
+            borderRadius: 8,
             background: T1,
             border: 'none',
             cursor: 'pointer',
@@ -359,7 +359,7 @@ export default function AdminPartners() {
         <div
           style={{
             border: `1px solid ${BORDER}`,
-            borderRadius: 0,
+            borderRadius: 8,
             overflow: 'hidden',
             marginBottom: '10px',
           }}
@@ -413,7 +413,7 @@ export default function AdminPartners() {
             justifyContent: 'space-between',
             gap: '12px',
             border: `1.5px solid ${ACCENT}`,
-            borderRadius: 0,
+            borderRadius: 8,
             padding: '12px 14px',
             marginBottom: '10px',
           }}
@@ -436,7 +436,7 @@ export default function AdminPartners() {
               fontWeight: 700,
               fontSize: '13.5px',
               padding: '11px 16px',
-              borderRadius: 0,
+              borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
               fontFamily: 'inherit',
@@ -522,7 +522,7 @@ export default function AdminPartners() {
                     gap: '6px',
                     background: '#B3DDAC',
                     border: `1px solid ${BORDER}`,
-                    borderRadius: 0,
+                    borderRadius: 8,
                     padding: '7px 11px',
                     cursor: 'pointer',
                     fontFamily: MONO,
@@ -545,7 +545,7 @@ export default function AdminPartners() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     border: `1px solid ${BORDER}`,
                     background: 'none',
                     cursor: 'pointer',
@@ -562,7 +562,7 @@ export default function AdminPartners() {
                   style={{
                     width: '32px',
                     height: '32px',
-                    borderRadius: 0,
+                    borderRadius: 8,
                     border: `1px solid rgba(240,120,0,0.3)`,
                     background: 'none',
                     cursor: 'pointer',

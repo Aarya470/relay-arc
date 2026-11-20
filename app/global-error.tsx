@@ -29,7 +29,7 @@ export default function GlobalError({
         >
           <p
             style={{
-              color: '#5C5A52',
+              color: '#48463F',
               fontSize: '11px',
               fontWeight: 700,
               letterSpacing: '1.6px',
@@ -51,7 +51,7 @@ export default function GlobalError({
           >
             The app failed to start.
           </h1>
-          <p style={{ color: '#5C5A52', fontSize: '15px', lineHeight: 1.6, margin: '0 0 26px' }}>
+          <p style={{ color: '#48463F', fontSize: '15px', lineHeight: 1.6, margin: '0 0 26px' }}>
             If this is an emergency, call your local emergency number now. 911 in the US, 108 in
             India, 112 across Europe.
           </p>
@@ -60,7 +60,7 @@ export default function GlobalError({
             style={{
               display: 'block',
               textAlign: 'center',
-              background: '#8F4A00',
+              background: '#7A3D00',
               color: 'white',
               fontWeight: 800,
               fontSize: '17px',

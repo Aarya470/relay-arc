@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 
 const INK = '#141413',
-  INK2 = '#5C5A52',
-  INK3 = '#5C5A52',
+  INK2 = '#48463F',
+  INK3 = '#48463F',
   BORDER = '#98C890'
 const mono = 'var(--font-mono, monospace)'
 
@@ -139,11 +139,12 @@ export function StepChart({
   const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${sx(p.x)},${sy(p.y)}`).join(' ')
 
   return (
-    <div ref={ref} style={{ width: '100%', overflowX: 'auto' }}>
+    <div ref={ref} style={{ width: '100%', overflowX: 'auto' }} tabIndex={0} role="region" aria-label="Chart, scroll sideways to see all of it">
       <svg
         viewBox={`0 0 ${w} ${h}`}
         style={{ width: '100%', minWidth: '420px', display: 'block' }}
         role="img"
+        aria-label={`Step chart with bands: ${bands.map((b) => b.label).join(', ')}`}
       >
         {bands.map((b) => (
           <g key={b.label}>
@@ -280,6 +281,7 @@ export function Donut({
         viewBox={`0 0 ${size} ${size}`}
         style={{ flexShrink: 0 }}
         role="img"
+        aria-label={label}
       >
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={track} strokeWidth={16} />
         <circle

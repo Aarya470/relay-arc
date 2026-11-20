@@ -7,11 +7,11 @@ import { trafficMultiplier } from '@/lib/hospitals'
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const T1 = '#141413'
-const T2 = '#5C5A52'
-const T3 = '#5C5A52'
+const T2 = '#48463F'
+const T3 = '#48463F'
 const BORDER = '#98C890'
 const ACCENT = '#42623C'
-const RED = '#8F4A00'
+const RED = '#7A3D00'
 const GREEN = '#42623C'
 const MONO = 'var(--font-mono, monospace)'
 

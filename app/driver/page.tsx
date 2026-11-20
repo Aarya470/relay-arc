@@ -106,13 +106,13 @@ export default function DriverDashboard() {
           <p style={{ color: '#42623C', fontWeight: 700, fontSize: '22px', marginBottom: '8px' }}>
             Ride accepted
           </p>
-          <p style={{ color: '#5C5A52', fontSize: '14px' }}>You are helping save a life</p>
+          <p style={{ color: '#48463F', fontSize: '14px' }}>You are helping save a life</p>
         </div>
 
         <div
           style={{
-            background: '#FFFFFF',
-            border: '1px solid #98C890',
+            background: 'var(--panel)',
+            border: '1px solid rgba(20,20,19,0.1)',
             borderRadius: '20px',
             padding: '16px',
             marginBottom: '12px',
@@ -120,7 +120,7 @@ export default function DriverDashboard() {
         >
           <p
             style={{
-              color: '#5C5A52',
+              color: '#48463F',
               fontSize: '10px',
               fontFamily: 'monospace',
               textTransform: 'uppercase',
@@ -133,7 +133,7 @@ export default function DriverDashboard() {
           <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>
             {accepted.patient_name}
           </p>
-          <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>
+          <p style={{ color: '#48463F', fontSize: '13px', marginBottom: '12px' }}>
             {accepted.pickup_address}
           </p>
           <motion.button
@@ -164,15 +164,15 @@ export default function DriverDashboard() {
 
         <div
           style={{
-            background: '#FFFFFF',
-            border: '1px solid #98C890',
+            background: 'var(--panel)',
+            border: '1px solid rgba(20,20,19,0.1)',
             borderRadius: '20px',
             padding: '16px',
           }}
         >
           <p
             style={{
-              color: '#5C5A52',
+              color: '#48463F',
               fontSize: '10px',
               fontFamily: 'monospace',
               textTransform: 'uppercase',
@@ -185,7 +185,7 @@ export default function DriverDashboard() {
           <p style={{ color: '#141413', fontWeight: 600, marginBottom: '4px' }}>
             {accepted.hospital_name}
           </p>
-          <p style={{ color: '#5C5A52', fontSize: '13px', marginBottom: '12px' }}>
+          <p style={{ color: '#48463F', fontSize: '13px', marginBottom: '12px' }}>
             Emergency: {accepted.emergency_type?.replace('_', ' ')}
           </p>
           <motion.button
@@ -228,7 +228,7 @@ export default function DriverDashboard() {
       <div
         style={{
           padding: '56px 20px 16px',
-          borderBottom: '1px solid #98C890',
+          borderBottom: '1px solid rgba(20,20,19,0.1)',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
@@ -240,7 +240,7 @@ export default function DriverDashboard() {
           style={{
             width: '36px',
             height: '36px',
-            borderRadius: 0,
+            borderRadius: 8,
             background: '#F2F0E8',
             border: 'none',
             cursor: 'pointer',
@@ -248,13 +248,14 @@ export default function DriverDashboard() {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-        >
-          <ArrowLeft size={16} color="#5C5A52" />
+        
+ aria-label="Back">
+          <ArrowLeft size={16} color="#48463F" />
         </motion.button>
         <div>
           <p
             style={{
-              color: '#5C5A52',
+              color: '#48463F',
               fontFamily: 'monospace',
               fontSize: '10px',
               textTransform: 'uppercase',
@@ -269,14 +270,14 @@ export default function DriverDashboard() {
           style={{
             marginLeft: 'auto',
             background: requests.length > 0 ? 'rgba(240,120,0,0.15)' : '#F2F0E8',
-            border: `1px solid ${requests.length > 0 ? 'rgba(240,120,0,0.3)' : '#98C890'}`,
+            border: `1px solid ${requests.length > 0 ? 'rgba(240,120,0,0.3)' : 'rgba(20,20,19,0.1)'}`,
             borderRadius: '20px',
             padding: '4px 10px',
           }}
         >
           <p
             style={{
-              color: requests.length > 0 ? '#8F4A00' : '#5C5A52',
+              color: requests.length > 0 ? '#7A3D00' : '#48463F',
               fontFamily: 'monospace',
               fontSize: '11px',
             }}
@@ -290,10 +291,10 @@ export default function DriverDashboard() {
         {requests.length === 0 ? (
           <div style={{ textAlign: 'center', paddingTop: '60px' }}>
             <Car size={40} style={{ display: 'block', margin: '0 auto 16px' }} />
-            <p style={{ color: '#5C5A52', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>
+            <p style={{ color: '#48463F', fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>
               No requests nearby
             </p>
-            <p style={{ color: '#5C5A52', fontSize: '13px' }}>
+            <p style={{ color: '#48463F', fontSize: '13px' }}>
               Check back soon. Requests update in real time
             </p>
           </div>
@@ -301,7 +302,7 @@ export default function DriverDashboard() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <p
               style={{
-                color: '#5C5A52',
+                color: '#48463F',
                 fontSize: '12px',
                 fontFamily: 'monospace',
                 textTransform: 'uppercase',
@@ -320,13 +321,13 @@ export default function DriverDashboard() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ delay: i * 0.05 }}
                   style={{
-                    background: '#FFFFFF',
+                    background: 'var(--panel)',
                     border: '1px solid rgba(240,120,0,0.2)',
                     borderRadius: '20px',
                     overflow: 'hidden',
                   }}
                 >
-                  <div style={{ padding: '14px', borderBottom: '1px solid #98C890' }}>
+                  <div style={{ padding: '14px', borderBottom: '1px solid rgba(20,20,19,0.1)' }}>
                     <div
                       style={{
                         display: 'flex',
@@ -340,18 +341,18 @@ export default function DriverDashboard() {
                           width: '8px',
                           height: '8px',
                           borderRadius: '50%',
-                          background: '#8F4A00',
+                          background: '#7A3D00',
                           flexShrink: 0,
                         }}
                         animate={{ opacity: [1, 0.3, 1] }}
                         transition={{ duration: 1, repeat: Infinity }}
                       />
-                      <p style={{ color: '#8F4A00', fontWeight: 600, fontSize: '13px' }}>
+                      <p style={{ color: '#7A3D00', fontWeight: 600, fontSize: '13px' }}>
                         {req.emergency_type?.replace('_', ' ')} emergency
                       </p>
                       <p
                         style={{
-                          color: '#5C5A52',
+                          color: '#48463F',
                           fontSize: '11px',
                           marginLeft: 'auto',
                           fontFamily: 'monospace',
@@ -379,7 +380,7 @@ export default function DriverDashboard() {
                       <div>
                         <p
                           style={{
-                            color: '#5C5A52',
+                            color: '#48463F',
                             fontSize: '10px',
                             fontFamily: 'monospace',
                             textTransform: 'uppercase',
@@ -401,7 +402,7 @@ export default function DriverDashboard() {
                       <div>
                         <p
                           style={{
-                            color: '#5C5A52',
+                            color: '#48463F',
                             fontSize: '10px',
                             fontFamily: 'monospace',
                             textTransform: 'uppercase',

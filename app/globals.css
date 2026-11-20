@@ -92,10 +92,10 @@
      --text-2 at 4.56:1 is the tightest pairing in the system. Anything that
      darkens the page further has to darken this with it. */
   --text:   #141413;
-  --text-2: #5C5A52;
+  --text-2: #48463F;
   /* Kept as an alias so any stylesheet still naming it lands on a value that
      passes, rather than silently falling back to inherited colour. */
-  --text-3: #5C5A52;
+  --text-3: #48463F;
 
   /* Koala green — brand. --green for fills and large text (3.02:1),
      --green-deep for body text and white-on-green buttons (4.55:1 / 6.90:1).
@@ -118,7 +118,7 @@
 
   /* Emergency / critical — 6.51:1 on cream, 6.86:1 with white on it.
      Still in the orange family, dark enough to read as danger. */
-  --crit:      #8F4A00;
+  --crit:      #7A3D00;
   --crit-dim:  #733B00;
   --crit-soft: rgba(240,120,0,0.08);
 
@@ -134,7 +134,7 @@
 
      THE THREE STATUS COLOURS ARE NOW THE SAME BRIGHTNESS, AND THAT IS THE
      TRADE, NOT AN OVERSIGHT. To clear 4.5:1 on #B3DDAC a colour has to be
-     about as dark as #7A5300, and --crit (#8F4A00, 4.53:1) and --green-deep
+     about as dark as #7A5300, and --crit (#7A3D00, 4.53:1) and --green-deep
      (#42623C, 4.55:1) are already sitting there. Measured against each other
      the three now differ by 1.00:1 and 1.01:1. The note at the top of this file
      warns about exactly that, and it is unavoidable: this background is not
@@ -158,7 +158,7 @@
 
   /* Legacy aliases — older rules still reference these names. Kept pointing at
      the new palette so nothing renders in the old blue-grey/red scheme. */
-  --red:      #8F4A00;
+  --red:      #7A3D00;
   --red-dim:  #733B00;
   --red-soft: rgba(240,120,0,0.08);
   --red-glow: none;
@@ -328,7 +328,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   --forest: #1E3A23;
   --ink: #141413;
   --sos: #F07800;
-  --sos-text: #8F4A00;
+  --sos-text: #7A3D00;
   --ink-2: #3F3D36;
   --slant: 14px;
   --cut: 18px;
@@ -580,7 +580,7 @@ button:active:not(:disabled) { transform: scale(0.97); }
 /* ── Medications: simple add flow and big tappable doses ── */
 .med-step { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; color: #141413; margin: 18px 0 8px; }
 .med-step span { width: 24px; height: 24px; border-radius: 6px; background: #1E3A23; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
-.med-step em { font-style: normal; font-weight: 600; font-size: 13px; color: #5C5A52; }
+.med-step em { font-style: normal; font-weight: 600; font-size: 13px; color: #48463F; }
 .med-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .med-chips .ak-chip { border: 0; cursor: pointer; font-family: inherit; height: 34px; }
 .ak-chip[data-on="true"] { background: #1E3A23; color: #fff; box-shadow: none; }
@@ -589,7 +589,7 @@ button:active:not(:disabled) { transform: scale(0.97); }
   background: rgba(255,255,255,0.55); box-shadow: inset 0 0 0 1.5px rgba(20,20,19,0.1); transition: background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out); }
 .med-slots button:last-child { grid-column: 1 / -1; }
 .med-slots button strong { display: block; font-size: 16px; font-weight: 800; }
-.med-slots button span { display: block; font-size: 12.5px; color: #5C5A52; margin-top: 2px; }
+.med-slots button span { display: block; font-size: 12.5px; color: #48463F; margin-top: 2px; }
 .med-slots button[data-on="true"] { background: #F07800; box-shadow: none; }
 .med-slots button[data-on="true"] span { color: #3A1E00; }
 .med-dose { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 62px; padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer;
@@ -637,3 +637,64 @@ button:active:not(:disabled) { transform: scale(0.97); }
 .pref-star { width: 36px; height: 36px; border-radius: 9px; background: #F07800; color: #141413; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
 .pref-k { display: block; font-size: 12.5px; color: #3F3D36; font-weight: 600; }
 .pref-badge strong { display: block; font-size: 15.5px; font-weight: 800; }
+
+/* ══ Accessibility layer ═══════════════════════════════════════════════ */
+.skip-link { position: fixed; left: 12px; top: -80px; z-index: 1000; padding: 12px 18px; border-radius: 10px; background: #141413; color: #fff; font-weight: 800; text-decoration: none; transition: top 160ms var(--ease-out); }
+.skip-link:focus { top: 12px; }
+:focus-visible { outline: 3px solid #F07800; outline-offset: 2px; border-radius: 6px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid #F07800; outline-offset: 1px; }
+::selection { background: rgba(240, 120, 0, 0.3); }
+button, [role="button"], a.ds-btn { touch-action: manipulation; }
+#main:focus { outline: none; }
+
+/* Text size: zoom scales inline px styles too, which rem cannot. */
+html[data-text="lg"] body { zoom: 1.12; }
+html[data-text="xl"] body { zoom: 1.25; }
+html[data-text="lg"] .maplibregl-map { zoom: 0.893; }
+html[data-text="xl"] .maplibregl-map { zoom: 0.8; }
+
+/* High contrast: solid panels, darker text, visible edges. */
+html[data-contrast="high"] { --glass: #FFFFFF; --glass-strong: #FFFFFF; --panel: #FFFFFF; --glass-line: #141413; }
+html[data-contrast="high"] .app-bg::before { opacity: 0.25; }
+html[data-contrast="high"] .glass, html[data-contrast="high"] .ak-hero:not(.ak-hero-orange), html[data-contrast="high"] .mycard { background: #FFFFFF !important; box-shadow: inset 0 0 0 2px #141413 !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
+html[data-contrast="high"] .row-sub, html[data-contrast="high"] .ak-sub, html[data-contrast="high"] .acc-hint, html[data-contrast="high"] .ak-tile-s, html[data-contrast="high"] .pref-k { color: #141413 !important; }
+html[data-contrast="high"] .ak-chip { box-shadow: inset 0 0 0 1.5px #141413; }
+
+/* Reduce motion, on request, regardless of the phone setting. */
+html[data-motion="reduce"] *, html[data-motion="reduce"] *::before, html[data-motion="reduce"] *::after {
+  animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+
+html[data-links="underline"] main a, html[data-links="underline"] a:not(.ds-btn):not(.mycard-call):not(.pref-badge) { text-decoration: underline !important; text-underline-offset: 3px; }
+
+/* Display settings controls */
+.acc-panel-wrap { display: grid; gap: 18px; }
+.acc-title { font-size: 16px; font-weight: 800; color: #141413; }
+.acc-hint { font-size: 13.5px; color: #3F3D36; margin: 2px 0 8px; }
+.seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: rgba(20,20,19,0.07); }
+.seg button { flex: 1; min-height: 44px; border: 0; border-radius: 9px; background: transparent; font: inherit; font-size: 14.5px; font-weight: 700; color: #141413; cursor: pointer; transition: background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out); }
+.seg button[data-on="true"] { background: #FFFFFF; box-shadow: 0 2px 8px rgba(20,20,19,0.14); }
+.acc-reset { justify-self: start; background: none; border: 0; color: #7A3D00; font: inherit; font-weight: 750; cursor: pointer; padding: 8px 0; }
+.acc-list { display: grid; gap: 10px; padding-left: 20px; font-size: 15px; line-height: 1.5; color: #2E3B2C; }
+
+/* Offline banner */
+.offline-banner { position: fixed; left: 50%; top: 12px; transform: translate(-50%, -140%); z-index: 900; max-width: calc(100% - 24px); padding: 10px 16px; border-radius: 12px;
+  background: #141413; color: #fff; font-size: 14px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); transition: transform 240ms var(--ease-out); }
+.offline-banner[data-show="true"] { transform: translate(-50%, 0); }
+.offline-banner:empty { visibility: hidden; }
+
+/* Shared public footer */
+.site-foot { padding: 30px 16px 120px; }
+.site-foot-in { max-width: 1168px; margin: 0 auto; padding: 26px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 26px; }
+@media (max-width: 760px) { .site-foot-in { grid-template-columns: 1fr; } }
+.site-foot-t { font-size: 20px; font-weight: 850; letter-spacing: -0.02em; }
+.site-foot-s { font-size: 14px; color: #3F3D36; margin-top: 6px; max-width: 34em; line-height: 1.5; }
+.site-foot-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 18px; align-content: start; }
+.site-foot-links a { color: #141413; font-weight: 650; font-size: 15px; text-decoration: none; padding: 8px 0; min-height: 40px; }
+.site-foot-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Panel colour used by older pages, swapped in by the frosted pass. */
+:root { --panel: rgba(255, 253, 246, 0.68); }
+@media print { .site-foot, .sh-bar, .offline-banner, .skip-link { display: none !important; } }
+/* Toast text dark enough to read (sonner's rich colours sit near 4.3:1). */
+[data-sonner-toast][data-type="error"] { --error-text: #9B0000; color: #9B0000 !important; }
+[data-sonner-toast][data-type="success"] { color: #1E5A1E !important; }

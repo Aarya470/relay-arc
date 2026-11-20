@@ -261,7 +261,7 @@ function RecoveryContent() {
         {/* What happened */}
         <Card delay={0.05}>
           <CardLabel>What happened</CardLabel>
-          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#5C5A52' }}>
+          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#48463F' }}>
             {protocol.description}
           </p>
         </Card>
@@ -303,7 +303,7 @@ function RecoveryContent() {
         <Card delay={0.15} highlight>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
             <AlertTriangle
-              style={{ width: '16px', height: '16px', flexShrink: 0, color: '#8F4A00' }}
+              style={{ width: '16px', height: '16px', flexShrink: 0, color: '#7A3D00' }}
             />
             <CardLabel noMargin danger>
               Watch out for
@@ -319,11 +319,11 @@ function RecoveryContent() {
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    background: '#8F4A00',
+                    background: '#7A3D00',
                   }}
                 />
                 <span
-                  style={{ fontSize: '14px', lineHeight: 1.5, color: '#8F4A00', opacity: 0.88 }}
+                  style={{ fontSize: '14px', lineHeight: 1.5, color: '#7A3D00', opacity: 0.88 }}
                 >
                   {w}
                 </span>
@@ -337,7 +337,7 @@ function RecoveryContent() {
               borderTop: '1px solid rgba(240,120,0,0.20)',
               fontSize: '14px',
               fontWeight: 600,
-              color: '#8F4A00',
+              color: '#7A3D00',
             }}
           >
             Call emergency services immediately if any of these occur.
@@ -347,7 +347,7 @@ function RecoveryContent() {
         {/* Follow-up note */}
         <Card delay={0.2}>
           <CardLabel>Book a follow up visit</CardLabel>
-          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#5C5A52', marginBottom: '16px' }}>
+          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#48463F', marginBottom: '16px' }}>
             {protocol.followUpNote}
           </p>
           <a
@@ -359,7 +359,7 @@ function RecoveryContent() {
               gap: '8px',
               width: '100%',
               padding: '12px',
-              borderRadius: 0,
+              borderRadius: 8,
               fontSize: '14px',
               fontWeight: 600,
               textDecoration: 'none',
@@ -383,10 +383,10 @@ function RecoveryContent() {
               justifyContent: 'center',
               gap: '8px',
               padding: '12px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
-              color: '#5C5A52',
+              color: '#48463F',
               fontSize: '14px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -400,7 +400,7 @@ function RecoveryContent() {
             style={{
               flex: 1,
               padding: '12px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#42623C',
               border: 'none',
               color: '#fff',
@@ -433,8 +433,8 @@ function Card({
       transition={{ type: 'spring', stiffness: 340, damping: 26, delay }}
       style={{
         background: highlight ? 'rgba(240,120,0,0.08)' : '#FFFFFF',
-        border: highlight ? '1px solid rgba(240,120,0,0.22)' : '1px solid #98C890',
-        borderRadius: 0,
+        border: highlight ? '1px solid rgba(240,120,0,0.22)' : '1px solid rgba(20,20,19,0.1)',
+        borderRadius: 8,
         padding: '16px',
       }}
     >
@@ -459,7 +459,7 @@ function CardLabel({
         fontWeight: 600,
         letterSpacing: '0',
         marginBottom: noMargin ? '0' : '8px',
-        color: danger ? '#8F4A00' : '#5C5A52',
+        color: danger ? '#7A3D00' : '#48463F',
       }}
     >
       {children}

@@ -1,4 +1,5 @@
 'use client'
+import SiteFooter from '@/components/SiteFooter'
 import SiteHeader from '@/components/SiteHeader'
 // Emergency card — the two-minute version of Relay Arc.
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -10,14 +11,14 @@ import { Download, Printer, Trash2 } from '@/lib/plain-icons'
 import { SITE_URL } from '@/lib/site'
 
 const INK = '#141413',
-  INK2 = '#5C5A52',
-  INK3 = '#5C5A52'
+  INK2 = '#48463F',
+  INK3 = '#48463F'
 const CREAM = '#B3DDAC',
-  BORDER = '#98C890',
+  BORDER = 'rgba(20,20,19,0.1)',
   WHITE = '#FFFFFF'
 const GREEN_DEEP = '#42623C'
 const ORANGE = '#F07800',
-  CRIT = '#8F4A00'
+  CRIT = '#7A3D00'
 const mono = 'var(--font-mono, monospace)'
 
 const STORE_KEY = 'relay-arc:card:v1'
@@ -304,7 +305,7 @@ export default function EmergencyCard() {
     color: INK,
     fontSize: '16px',
     fontFamily: 'inherit',
-    borderRadius: 0,
+    borderRadius: 8,
   }
   const btn = (primary = false): CSSProperties => ({
     display: 'inline-flex',
@@ -432,6 +433,7 @@ export default function EmergencyCard() {
                 <div>
                   <span style={label}>Blood type</span>
                   <select
+                    aria-label="Blood type"
                     style={input}
                     value={c.blood}
                     onChange={(e) => set('blood', e.target.value)}
@@ -556,7 +558,7 @@ export default function EmergencyCard() {
                         border: `1px solid ${INK}`,
                         background: WHITE,
                         color: INK,
-                        borderRadius: 0,
+                        borderRadius: 8,
                         padding: '8px 12px',
                         fontSize: '14px',
                         fontWeight: 600,
@@ -574,7 +576,7 @@ export default function EmergencyCard() {
                     border: `1px dashed ${INK3}`,
                     background: WHITE,
                     color: INK2,
-                    borderRadius: 0,
+                    borderRadius: 8,
                     padding: '8px 12px',
                     fontSize: '14px',
                     fontWeight: 600,
@@ -932,6 +934,7 @@ export default function EmergencyCard() {
           CALL EMERGENCY SERVICES FIRST · {SITE_URL.replace(/^https?:\/\//, '')}
         </p>
       </div>
+      <SiteFooter />
     </div>
   )
 }

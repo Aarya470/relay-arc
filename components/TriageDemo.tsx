@@ -4,11 +4,11 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { triage, featurize, MODEL_META, ABSTAIN_THRESHOLD } from '@/lib/triage'
 
 const T1 = '#141413',
-  T2 = '#5C5A52',
-  T3 = '#5C5A52'
+  T2 = '#48463F',
+  T3 = '#48463F'
 const BORDER = '#98C890',
   BG2 = '#B3DDAC'
-const CRIT = '#8F4A00',
+const CRIT = '#7A3D00',
   ACCENT = '#42623C',
   GREEN = '#42623C'
 

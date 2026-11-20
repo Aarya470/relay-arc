@@ -102,7 +102,8 @@ function MiniCalendar({
             alignItems: 'center',
             justifyContent: 'center',
           }}
-        >
+        
+ aria-label="Previous">
           <ChevronLeft size={13} color="rgba(26,40,32,0.5)" />
         </motion.button>
         <p style={{ color: '#1A2820', fontWeight: 700, fontSize: '13px' }}>
@@ -123,7 +124,8 @@ function MiniCalendar({
             alignItems: 'center',
             justifyContent: 'center',
           }}
-        >
+        
+ aria-label="Next">
           <ChevronRight size={13} color="rgba(26,40,32,0.5)" />
         </motion.button>
       </div>
@@ -599,7 +601,8 @@ export default function MeetingAlert() {
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
-                    >
+                    
+ aria-label="Previous">
                       <ChevronLeft size={16} color="rgba(26,40,32,0.5)" />
                     </motion.button>
                     <div>

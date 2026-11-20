@@ -70,7 +70,7 @@ export default function EmergencyStatus() {
       {/* Alert bar */}
       <div
         style={{
-          background: '#8F4A00',
+          background: '#7A3D00',
           padding: '10px 20px',
           display: 'flex',
           alignItems: 'center',
@@ -97,11 +97,11 @@ export default function EmergencyStatus() {
       <div
         style={{
           padding: '14px 20px',
-          borderBottom: '1px solid #98C890',
+          borderBottom: '1px solid rgba(20,20,19,0.1)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: '#FFFFFF',
+          background: 'var(--panel)',
           flexShrink: 0,
         }}
       >
@@ -118,7 +118,7 @@ export default function EmergencyStatus() {
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: 0,
+              borderRadius: 8,
               background: '#F2F0E8',
               border: '1px solid #D8D4C8',
               cursor: 'pointer',
@@ -126,11 +126,12 @@ export default function EmergencyStatus() {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-          >
-            <ArrowLeft size={16} color="#5C5A52" />
+          
+ aria-label="Back">
+            <ArrowLeft size={16} color="#48463F" />
           </motion.button>
           <div>
-            <p style={{ color: '#5C5A52', fontSize: '13px', letterSpacing: '0' }}>Status</p>
+            <p style={{ color: '#48463F', fontSize: '13px', letterSpacing: '0' }}>Status</p>
             <h1
               style={{
                 color: '#141413',
@@ -150,16 +151,16 @@ export default function EmergencyStatus() {
             gap: '6px',
             background: 'rgba(240,120,0,0.10)',
             border: '1px solid rgba(240,120,0,0.25)',
-            borderRadius: 0,
+            borderRadius: 8,
             padding: '6px 12px',
           }}
         >
           <motion.div
-            style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#8F4A00' }}
+            style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#7A3D00' }}
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
           />
-          <span style={{ color: '#8F4A00', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
+          <span style={{ color: '#7A3D00', fontSize: '13px', letterSpacing: '0', fontWeight: 600 }}>
             Live
           </span>
         </div>
@@ -179,7 +180,7 @@ export default function EmergencyStatus() {
               background:
                 action.color === 'green' ? 'rgba(86,128,78,0.05)' : 'rgba(86,128,78,0.05)',
               border: `1px solid ${action.color === 'green' ? 'rgba(86,128,78,0.18)' : 'rgba(86,128,78,0.18)'}`,
-              borderRadius: 0,
+              borderRadius: 8,
               padding: '14px',
               display: 'flex',
               alignItems: 'flex-start',
@@ -188,12 +189,12 @@ export default function EmergencyStatus() {
           >
             <div style={{ flex: 1 }}>
               <p style={{ color: '#141413', fontWeight: 600, fontSize: '13px' }}>{action.label}</p>
-              <p style={{ color: '#5C5A52', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>
+              <p style={{ color: '#48463F', fontSize: '11px', marginTop: '2px', lineHeight: 1.4 }}>
                 {action.detail}
               </p>
               <p
                 style={{
-                  color: '#5C5A52',
+                  color: '#48463F',
                   fontFamily: 'inherit',
                   fontSize: '10px',
                   marginTop: '5px',
@@ -210,7 +211,7 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(86,128,78,0.05)',
             border: '1px solid rgba(86,128,78,0.18)',
-            borderRadius: 0,
+            borderRadius: 8,
             padding: '14px 16px',
             display: 'flex',
             alignItems: 'center',
@@ -223,7 +224,7 @@ export default function EmergencyStatus() {
             </p>
             <p
               style={{
-                color: '#5C5A52',
+                color: '#48463F',
                 fontFamily: 'inherit',
                 fontSize: '11px',
                 marginTop: '2px',
@@ -239,7 +240,7 @@ export default function EmergencyStatus() {
               color: '#42623C',
               fontSize: '11px',
               padding: '5px 10px',
-              borderRadius: 0,
+              borderRadius: 8,
               fontFamily: 'inherit',
               fontWeight: 700,
               flexShrink: 0,
@@ -253,15 +254,15 @@ export default function EmergencyStatus() {
         {profile?.emergency_contacts && (
           <div
             style={{
-              background: '#FFFFFF',
-              border: '1px solid #98C890',
-              borderRadius: 0,
+              background: 'var(--panel)',
+              border: '1px solid rgba(20,20,19,0.1)',
+              borderRadius: 8,
               padding: '16px',
             }}
           >
             <p
               style={{
-                color: '#5C5A52',
+                color: '#48463F',
                 fontSize: '13px',
                 letterSpacing: '0',
                 marginBottom: '12px',
@@ -276,7 +277,7 @@ export default function EmergencyStatus() {
                     style={{
                       width: '32px',
                       height: '32px',
-                      borderRadius: 0,
+                      borderRadius: 8,
                       background: 'rgba(86,128,78,0.10)',
                       border: '1px solid rgba(86,128,78,0.20)',
                       display: 'flex',
@@ -292,7 +293,7 @@ export default function EmergencyStatus() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ color: '#141413', fontSize: '13px', fontWeight: 600 }}>{c.name}</p>
-                    <p style={{ color: '#5C5A52', fontSize: '11px' }}>{c.relationship}</p>
+                    <p style={{ color: '#48463F', fontSize: '11px' }}>{c.relationship}</p>
                   </div>
                   <span
                     style={{
@@ -315,7 +316,7 @@ export default function EmergencyStatus() {
           style={{
             background: 'rgba(240,120,0,0.06)',
             border: '1px solid rgba(240,120,0,0.18)',
-            borderRadius: 0,
+            borderRadius: 8,
             padding: '16px',
           }}
         >
@@ -329,7 +330,7 @@ export default function EmergencyStatus() {
           >
             If anything changes
           </p>
-          <p style={{ color: '#5C5A52', fontSize: '13px', lineHeight: 1.6 }}>
+          <p style={{ color: '#48463F', fontSize: '13px', lineHeight: 1.6 }}>
             If chest pain starts, breathing becomes difficult, or the patient loses consciousness,
             stay on the line with 911.
           </p>
@@ -337,12 +338,12 @@ export default function EmergencyStatus() {
             whileTap={{ scale: 0.97 }}
             className="sh-slant" style={{
               width: '100%',
-              background: '#8F4A00',
+              background: '#7A3D00',
               color: 'white',
               fontWeight: 700,
               fontSize: '14px',
               padding: '14px',
-              borderRadius: 0,
+              borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
               display: 'flex',
