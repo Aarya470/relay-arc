@@ -458,6 +458,22 @@ export default function Home() {
             ))}
           </div>
           <FollowLinks tone="light" variant="inline" />
+          <a
+            href="https://www.google.com/preferences/source?q=relay-arc.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '10px', marginTop: '16px',
+              padding: '9px 16px 9px 9px', border: `1.5px solid ${T1}`, borderRadius: '8px',
+              color: T1, textDecoration: 'none', background: '#FFFFFF',
+            }}
+          >
+            <span aria-hidden style={{ width: '30px', height: '30px', borderRadius: '6px', background: '#A33417', color: '#FFFFFF', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>★</span>
+            <span>
+              <span style={{ display: 'block', fontSize: '12px', color: T2 }}>Get Relay Arc first on Google</span>
+              <strong style={{ display: 'block', fontSize: '14.5px' }}>Add as a preferred source</strong>
+            </span>
+          </a>
           <p style={{ marginTop: '16px' }}>© {new Date().getFullYear()} Relay Arc</p>
         </footer>
       </div>
