@@ -1,0 +1,33 @@
+# Relay Arc
+
+> Relay Arc is a free emergency web app. Press SOS and it works out what kind of emergency it is, picks the closest hospital that can actually treat it (ranked by real drive time and capability, not straight line distance), guides you there, and sends your details to the hospital and your family. It runs in any phone's browser with no download, keeps an offline emergency medical card, and checks pulse and breathing with the phone camera. It is a free nonprofit project with no ads and no trackers. It helps people decide what to do and does not diagnose. In an emergency, call 911 first.
+
+Relay Arc was built in New Jersey for people far from a hospital, and for people with chronic conditions such as POTS and other forms of dysautonomia, where the nearest emergency room is not always the right one. Over 580 people have used it.
+
+## Free tools, no account needed
+
+- [Emergency medical card](https://www.relay-arc.org/card): Make a free emergency medical card in two minutes. You get a lock screen image a paramedic can read off a locked phone, plus a printable wallet card. Nothing is uploaded.
+- [Is this POTS flare an emergency?](https://www.relay-arc.org/flare): A free check for a dysautonomia or POTS episode. It walks the warning signs that need an emergency room, compares the episode against your own normal, and gives the counter manoeuvres that settle most flares.
+- [What an ER owes you if you cannot pay](https://www.relay-arc.org/rights): An emergency room has to examine and stabilise you regardless of ability to pay (EMTALA), and every nonprofit hospital must have a financial assistance policy. What each rule covers and what it does not.
+
+## About the app
+
+- [Home](https://www.relay-arc.org/): What Relay Arc does and how to start.
+- [Features](https://www.relay-arc.org/features): On phone emergency triage with no signal, hospital ranking by drive time and capability, and your medical record sent ahead to the receiving hospital.
+- [Engineering](https://www.relay-arc.org/engineering): How it works. A 153 KB on phone triage model with calibrated abstention, and a deterministic NEWS2 deterioration score that contains no AI. Includes the benchmark where our own model loses.
+- [Partners](https://www.relay-arc.org/partners): Who supports, reviews and shares Relay Arc, and where each relationship stands.
+- [Changelog](https://www.relay-arc.org/changelog): Every change, dated, including mistakes.
+- [Status](https://www.relay-arc.org/status): Live status of routing, the database and the on phone triage model.
+
+## Policies
+
+- [Privacy policy](https://www.relay-arc.org/privacy): What is collected, why, and how medical and location data are protected.
+- [Terms](https://www.relay-arc.org/terms): The rules for using Relay Arc.
+
+## Key facts
+
+- Cost: free. No ads, no trackers, nothing to buy.
+- Platform: any modern phone or computer browser. Can be added to the home screen. Core emergency screens work offline once opened.
+- Main features: SOS with voice or tap, hospital routing with turn by turn directions, family text, emergency medical card, daily check in, medication tracker, symptom log, phone camera pulse and breathing check with a NEWS2 score.
+- Languages for voice SOS: English, Spanish, Hindi and Marathi.
+- Contact: relay.arc.org@gmail.com

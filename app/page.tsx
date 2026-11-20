@@ -588,6 +588,18 @@ export default function Home() {
             <div style={{ marginTop: '20px' }}>
               <FollowLinks tone="light" variant="inline" />
             </div>
+            <a
+              href="https://www.google.com/preferences/source?q=relay-arc.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pref-badge"
+            >
+              <span className="pref-star" aria-hidden>★</span>
+              <span>
+                <span className="pref-k">Get Relay Arc first on Google</span>
+                <strong>Add as a preferred source</strong>
+              </span>
+            </a>
             <p className="ds-small" style={{ marginTop: '20px', color: INK2, maxWidth: '640px' }}>
               Relay Arc helps you decide what to do. It does not diagnose. In an emergency, call 911
               first. © {new Date().getFullYear()} Relay Arc, a free nonprofit project.
