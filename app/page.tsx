@@ -1,10 +1,12 @@
 'use client'
-// Homepage. Each section is a full width colour chapter with one heading, one
-// short paragraph and one real piece of the app. See DESIGN.md.
-import { useEffect, useState } from 'react'
+// Homepage. Layout concepts borrowed from Amplitude's site (split hero, tabbed
+// product showcase, logo row, a live demo beside its claim, a stat chart, a card
+// row, a split close and a big dark footer), in Relay Arc's own colours.
+import { useEffect, useId, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import FollowLinks from '@/components/FollowLinks'
+import type { TriageResult } from '@/lib/triage'
 import VideoEmbed from '@/components/VideoEmbed'
 import { SearchButton } from '@/components/CommandPalette'
 
@@ -150,11 +152,11 @@ function PhoneHome() {
 // What the SOS screen says after someone types what is happening.
 function SosScreen() {
   return (
-    <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK }}>
+    <div data-ui className="frag" style={{ background: PAPER, color: INK }}>
       <p style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 22px' }}>
         &ldquo;My dad has chest pain and he is sweating&rdquo;
       </p>
-      <div style={{ background: MINT, padding: '18px 20px' }}>
+      <div style={{ background: MINT, padding: '18px 20px', borderRadius: 10 }}>
         <p style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.02em' }}>
           This may be a heart attack
         </p>
@@ -162,7 +164,7 @@ function SosScreen() {
           Worked out on the phone in under a second. No signal needed.
         </p>
       </div>
-      <div className="sh-slant" style={{ background: SOS, color: INK, padding: '16px 24px', marginTop: '16px', fontWeight: 700 }}>
+      <div style={{ background: SOS, color: INK, padding: '16px 24px', marginTop: '16px', fontWeight: 800, borderRadius: 999, textAlign: 'center' }}>
         Call 911 now
       </div>
     </div>
@@ -177,7 +179,7 @@ function HospitalList() {
     ['A closer emergency room', '12 min', false],
   ]
   return (
-    <div data-ui className="sh-cut frag" style={{ background: MINT, color: INK }}>
+    <div data-ui className="frag" style={{ background: MINT, color: INK }}>
       {rows.map(([name, mins, ok], i) => (
         <div key={name} className="hosp" style={{ background: i === 0 ? PAPER : 'transparent' }}>
           <div>
@@ -197,7 +199,7 @@ function HospitalList() {
 // The text the family gets.
 function FamilyText() {
   return (
-    <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK, maxWidth: '420px' }}>
+    <div data-ui className="frag" style={{ background: PAPER, color: INK, maxWidth: '420px' }}>
       <div className="bubble">
         Asha pressed SOS. She is going to RWJ University Hospital at Hamilton. Follow her on the
         live map.
@@ -205,7 +207,7 @@ function FamilyText() {
       <div className="bubble" style={{ marginTop: '10px', fontWeight: 700, textDecoration: 'underline' }}>
         relay-arc.org/live
       </div>
-      <div className="sh-pill" style={{ display: 'inline-block', background: MINT, padding: '8px 16px', marginTop: '14px', fontSize: '14px', fontWeight: 600 }}>
+      <div style={{ display: 'inline-block', borderRadius: 999, background: MINT, padding: '8px 16px', marginTop: '14px', fontSize: '14px', fontWeight: 600 }}>
         Hospital has her details
       </div>
     </div>
@@ -238,11 +240,11 @@ function CardMaker() {
           <span>Allergies</span>
           <input value={allergy} onChange={(e) => setAllergy(e.target.value)} placeholder="Penicillin" maxLength={60} />
         </label>
-        <button className="ds-btn ds-btn-ink sh-slant" onClick={() => router.push('/card')} style={{ marginTop: '8px' }}>
+        <button className="pill pill-ink" onClick={() => router.push('/card')} style={{ marginTop: '8px' }}>
           Make my full card
         </button>
       </div>
-      <div data-ui className="sh-cut idcard" aria-live="polite">
+      <div data-ui className="idcard" aria-live="polite">
         <p style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 20px', minHeight: '34px' }}>
           {name || 'Your name'}
         </p>
@@ -270,7 +272,7 @@ function PulseReadout() {
     ['NEWS2 score', '0, low risk'],
   ]
   return (
-    <div data-ui className="sh-cut frag" style={{ background: PAPER, color: INK }}>
+    <div data-ui className="frag" style={{ background: PAPER, color: INK }}>
       {rows.map(([k, v]) => (
         <div key={k} className="hosp">
           <span style={{ fontWeight: 600 }}>{k}</span>
@@ -288,12 +290,304 @@ const PARTNERS: [string, string][] = [
   ['East Windsor Board of Education', 'Talking with us about bringing Relay Arc into the district. This is not a formal partnership yet.'],
 ]
 
+const TRIAGE_LABEL: Record<string, string> = {
+  chest_pain: 'Possible heart attack',
+  breathing: 'Breathing emergency',
+  stroke: 'Possible stroke',
+  unconscious: 'Unconscious',
+  pots: 'POTS or fainting episode',
+  mecfs: 'Severe ME/CFS crash',
+  other: 'Other emergency',
+}
+const TRIAGE_UNIT: Record<string, string> = {
+  chest_pain: 'a heart unit',
+  stroke: 'a stroke unit',
+}
+
+const EXAMPLES = [
+  'My dad has chest pain and he is sweating',
+  'Mi hija no puede respirar',
+  'Her face is drooping on one side',
+  'My heart is racing and I feel faint when I stand',
+]
+
+// The live thing: the real on phone model, loaded only when someone uses it.
+function TryTriage() {
+  const [text, setText] = useState('')
+  const [res, setRes] = useState<TriageResult | null>(null)
+  const [busy, setBusy] = useState(false)
+  const mod = useRef<null | ((t: string) => TriageResult)>(null)
+
+  const run = async (t: string) => {
+    const q = t.trim()
+    if (q.length < 3) return
+    setText(q)
+    setBusy(true)
+    if (!mod.current) mod.current = (await import('@/lib/triage')).triage
+    setRes(mod.current(q))
+    setBusy(false)
+  }
+
+  return (
+    <div className="try">
+      <div className="try-left">
+        <h2 className="h2">Say it however it comes out</h2>
+        <p className="lead">
+          Type what is happening the way you would say it in a panic. The model on your phone
+          decides in under a millisecond, with no signal. Try it, nothing is sent anywhere.
+        </p>
+        <div className="try-chips">
+          {EXAMPLES.map((e) => (
+            <button key={e} className="try-chip" onClick={() => run(e)}>
+              &ldquo;{e}&rdquo;
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="try-panel" data-ui>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            run(text)
+          }}
+          className="try-form"
+        >
+          <label htmlFor="try-in" className="sr-only">Describe an emergency</label>
+          <input
+            id="try-in"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Describe what is happening"
+            maxLength={160}
+          />
+          <button type="submit" className="pill pill-ink" disabled={busy || text.trim().length < 3}>
+            Check
+          </button>
+        </form>
+        <div className="try-out" aria-live="polite">
+          {!res ? (
+            <p className="try-empty">Pick an example or type your own.</p>
+          ) : res.abstain ? (
+            <>
+              <p className="try-k">Not sure enough to decide alone</p>
+              <p className="try-big">Asks for help</p>
+              <p className="try-note">
+                In the app this goes to a second, online check, and you can always tap the right one yourself.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="try-k">Decided on this device in {res.ms.toFixed(2)} ms</p>
+              <p className="try-big">{TRIAGE_LABEL[res.type] || res.type}</p>
+              <div className="try-meter" aria-label={`${Math.round(res.confidence * 100)} percent sure`}>
+                <span style={{ width: `${Math.round(res.confidence * 100)}%` }} />
+              </div>
+              <p className="try-note">
+                {Math.round(res.confidence * 100)}% sure, because of: {res.evidence.slice(0, 4).join(', ')}. Next it
+                would rank hospitals that have {TRIAGE_UNIT[res.type] || 'a full emergency room'} by real drive time.
+              </p>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+type Tab = { id: string; label: string; title: string; body: string; view: React.ReactNode }
+
+// The product, one screen at a time, in a tab strip.
+function Showcase() {
+  const tabs: Tab[] = [
+    { id: 'sos', label: 'Press SOS', title: 'It works out what is wrong', body: 'Speak or type in English, Spanish, Hindi or Marathi. The answer comes from the phone itself, so it works in a dead zone.', view: <SosScreen /> },
+    { id: 'hosp', label: 'Right hospital', title: 'The right hospital, not just the closest', body: 'Hospitals are ranked by real drive time and whether they can treat this emergency. A closer one without a heart unit moves down.', view: <HospitalList /> },
+    { id: 'family', label: 'Family knows', title: 'Your family knows where you are going', body: 'One tap sends a text that is already written, with the hospital and directions. The hospital gets your details before you arrive.', view: <FamilyText /> },
+    { id: 'vitals', label: 'Pulse check', title: 'Pulse and breathing from the phone', body: 'Fingertip on the camera, phone on the chest. Fifteen seconds each, scored with NEWS2, the scale hospitals use.', view: <PulseReadout /> },
+    { id: 'card', label: 'Emergency card', title: 'A card a paramedic can read', body: 'Type below and watch it fill in. The full card works on a locked phone and prints for a wallet. Nothing is uploaded.', view: <CardMaker /> },
+  ]
+  const [on, setOn] = useState(0)
+  const base = useId()
+  const refs = useRef<(HTMLButtonElement | null)[]>([])
+  const move = (i: number) => {
+    const n = (i + tabs.length) % tabs.length
+    setOn(n)
+    refs.current[n]?.focus()
+  }
+  const t = tabs[on]
+  return (
+    <section className="show" aria-label="What Relay Arc does">
+      <div className="tabs" role="tablist" aria-label="Parts of the app">
+        {tabs.map((x, i) => (
+          <button
+            key={x.id}
+            ref={(el) => {
+              refs.current[i] = el
+            }}
+            role="tab"
+            id={`${base}-t-${x.id}`}
+            aria-selected={on === i}
+            aria-controls={`${base}-p-${x.id}`}
+            tabIndex={on === i ? 0 : -1}
+            className="tab"
+            data-on={on === i}
+            onClick={() => setOn(i)}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowRight') move(i + 1)
+              if (e.key === 'ArrowLeft') move(i - 1)
+            }}
+          >
+            {x.label}
+          </button>
+        ))}
+      </div>
+      <div
+        className="show-stage"
+        role="tabpanel"
+        id={`${base}-p-${t.id}`}
+        aria-labelledby={`${base}-t-${t.id}`}
+        key={t.id}
+      >
+        <div className="show-copy">
+          <h3 className="h3">{t.title}</h3>
+          <p className="body">{t.body}</p>
+        </div>
+        <div className="show-view">{t.view}</div>
+      </div>
+    </section>
+  )
+}
+
+// Where it runs, and in which languages.
+function WorksWhere() {
+  const [mode, setMode] = useState<'devices' | 'languages'>('devices')
+  const devices: [string, string][] = [
+    ['iPhone', 'Safari, no download'],
+    ['Android', 'Chrome, no download'],
+    ['Home screen', 'Add it like an app'],
+    ['Apple Watch', 'Readings arrive by themselves'],
+    ['Lock screen', 'Your card as a picture'],
+    ['Wallet', 'A printed card'],
+  ]
+  const langs: [string, string][] = [
+    ['English', 'Voice and typing'],
+    ['Español', 'Voz y texto, y la pantalla de SOS'],
+    ['हिंदी', 'Voice SOS'],
+    ['मराठी', 'Voice SOS'],
+    ['Any language', 'Type it, the online check helps'],
+    ['911 anywhere', 'Shows your local number'],
+  ]
+  const list = mode === 'devices' ? devices : langs
+  return (
+    <section className="sec" aria-labelledby="where-h">
+      <h2 id="where-h" className="h2 center">Works on the phone you already have</h2>
+      <div className="seg-wrap">
+        <div className="pillseg" role="radiogroup" aria-label="Show">
+          {(['devices', 'languages'] as const).map((m) => (
+            <button key={m} role="radio" aria-checked={mode === m} data-on={mode === m} onClick={() => setMode(m)}>
+              {m === 'devices' ? 'Devices' : 'Languages'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="tiles">
+        {list.map(([a, b]) => (
+          <div key={a} className="tile">
+            <span className="tile-a">{a}</span>
+            <span className="tile-b">{b}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+// Real numbers from the engineering page, including where our model loses.
+function Speed() {
+  const bars: [string, number, string][] = [
+    ['On the phone alone', 85.7, 'every sentence, 0.2 ms each'],
+    ['Online AI alone', 89.8, 'needs signal, 467 ms each'],
+    ['Both together', 93.9, 'phone first, online only when unsure'],
+  ]
+  return (
+    <section className="sec speed" aria-labelledby="speed-h">
+      <div className="speed-top">
+        <h2 id="speed-h" className="h2">Fast enough to work with no signal</h2>
+        <p className="lead">
+          The phone model answers in 0.2 ms and is never online. When it is sure, which is 76% of the time, it was
+          right every time in testing. When it is not sure, it hands over. Our own model loses to the online AI on its
+          own, and we say so.
+        </p>
+      </div>
+      <div className="bars" role="img" aria-label="Right answers in testing: phone alone 85.7 percent, online AI alone 89.8 percent, both together 93.9 percent">
+        {bars.map(([k, v, sub], i) => (
+          <div key={k} className="bar-row">
+            <div className="bar-k">
+              <strong>{k}</strong>
+              <span>{sub}</span>
+            </div>
+            <div className="bar-track">
+              <span className="bar-fill" data-best={i === 2} style={{ width: `${v}%` }} />
+            </div>
+            <span className="bar-v">{v}%</span>
+          </div>
+        ))}
+      </div>
+      <a href="/engineering" className="more">How we tested it →</a>
+    </section>
+  )
+}
+
+const TOOLS: [string, string, string, string][] = [
+  ['/card', 'Emergency card', 'Two minutes, no account. A lock screen picture and a wallet card.', 'card'],
+  ['/flare', 'POTS flare check', 'Is this episode an emergency? Compared against your own normal.', 'flare'],
+  ['/rights', 'ER rights', 'What an emergency room owes you, even if you cannot pay.', 'rights'],
+  ['/emergency/cpr', 'CPR coach', 'A beat to press along with, and what to do until help comes.', 'cpr'],
+]
+
+function ToolThumb({ kind }: { kind: string }) {
+  if (kind === 'card')
+    return (
+      <div className="thumb" data-ui>
+        <p className="th-k">Blood type</p>
+        <p className="th-big" style={{ color: SOS_TEXT }}>O+</p>
+        <p className="th-k">Allergies</p>
+        <p className="th-m">Penicillin</p>
+      </div>
+    )
+  if (kind === 'flare')
+    return (
+      <div className="thumb" data-ui>
+        <p className="th-m">Struggling to breathe?</p>
+        <div className="th-yn"><span>No</span><span data-on>Yes</span></div>
+        <p className="th-k" style={{ marginTop: '10px' }}>Call 911 now</p>
+      </div>
+    )
+  if (kind === 'rights')
+    return (
+      <div className="thumb" data-ui>
+        <p className="th-m">They must examine and stabilise you</p>
+        <p className="th-k" style={{ marginTop: '8px' }}>Whether or not you can pay</p>
+      </div>
+    )
+  return (
+    <div className="thumb" data-ui>
+      <p className="th-big">110</p>
+      <p className="th-k">presses a minute</p>
+      <div className="th-beat" aria-hidden><span /><span /><span /><span /></div>
+    </div>
+  )
+}
+
 export default function Home() {
   const router = useRouter()
+  const [bar, setBar] = useState(true)
 
   // Signed in visitors go to their dashboard. The page still renders first so
   // search engines see real content.
   useEffect(() => {
+    try {
+      if (localStorage.getItem('relay-announce') === 'access-1') setBar(false)
+    } catch {}
     const check = async () => {
       const {
         data: { session },
@@ -305,318 +599,399 @@ export default function Home() {
     check()
   }, [router])
 
+  const closeBar = () => {
+    setBar(false)
+    try {
+      localStorage.setItem('relay-announce', 'access-1')
+    } catch {}
+  }
+
   return (
     <div style={{ color: INK }}>
-      <style>{`
-        .ch-in { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
-        .ch { padding: 136px 0; }
-        .ch-tall { display: flex; align-items: center; }
-        .ch-tall > .ch-in { width: 100%; }
-        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
-        .split-flip > :first-child { order: 2; }
-        .split-media > div { width: 100%; }
-        .frag { padding: 28px; }
-        .hosp { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; }
-        .bubble { background: ${MINT}; padding: 14px 18px; font-size: 17px; line-height: 1.5; border-radius: 18px 18px 18px 0; }
-        .phone { position: relative; width: 300px; margin: 0 auto; padding: 11px; border-radius: 52px; background: #1B1B1A; box-shadow: inset 0 0 0 1.5px #55554F, inset 0 0 0 4px #0C0C0B, 0 30px 60px rgba(30,58,35,0.28), 0 8px 18px rgba(20,20,19,0.18); } /* taste-skill-ignore: device frame */
-        .ph-btn { position: absolute; width: 3px; background: #2A2A28; border-radius: 2px; }
-        .ph-btn-l1 { left: -3px; top: 118px; height: 30px; }
-        .ph-btn-l2 { left: -3px; top: 164px; height: 54px; }
-        .ph-btn-r { right: -3px; top: 150px; height: 78px; }
-        .phone-screen { position: relative; overflow: hidden; border-radius: 42px; height: 600px; display: flex; flex-direction: column; background: radial-gradient(240px 240px at 95% -8%, rgba(247,245,238,0.85), transparent 65%), radial-gradient(220px 220px at -10% 40%, rgba(126,190,124,0.55), transparent 65%), radial-gradient(220px 220px at 105% 90%, rgba(247,245,238,0.55), transparent 65%), #B3DDAC; }
-        .ph-status { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 13px 24px 0 28px; font-size: 13.5px; font-weight: 700; color: ${INK}; }
-        .ph-island { width: 86px; height: 25px; border-radius: 16px; background: #0C0C0B; }
-        .ph-icons { display: flex; gap: 5px; justify-content: flex-end; align-items: center; fill: ${INK}; color: ${INK}; }
-        .ph-body { padding: 14px 16px 0; flex: 1; }
-        .ph-top { display: flex; justify-content: space-between; align-items: center; }
-        .ph-chip { font-size: 9.5px; font-weight: 700; padding: 5px 8px; border-radius: 5px; background: rgba(255,253,248,0.7); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8); } /* taste-skill-ignore: app chip */
-        .ph-cond { display: inline-block; margin-top: 7px; font-size: 9.5px; font-weight: 700; color: #fff; background: ${FOREST}; padding: 3px 9px; border-radius: 4px; }
-        .ph-sos { background: ${SOS}; color: ${INK}; border-radius: 6px; display: flex; flex-direction: column; padding: 18px 18px 16px; margin: 12px 0 9px; }
-        .ph-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .ph-tile { display: grid; gap: 3px; padding: 12px; border-radius: 6px; background: #2F5233; color: #fff; }
-        .ph-list { margin-top: 9px; padding: 2px 12px; border-radius: 6px; background: rgba(255,253,248,0.62); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.75); } /* taste-skill-ignore: app panel */
-        .ph-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: 12px; }
-        .ph-row b { display: block; font-weight: 700; }
-        .ph-row i { display: block; font-style: normal; font-size: 9.5px; color: ${INK2}; margin-top: 1px; }
-        .ph-row + .ph-row { box-shadow: inset 0 1px 0 rgba(20,20,19,0.08); } /* taste-skill-ignore: app UI row divider */
-        .ph-dock { margin: 0 9px 16px; height: 48px; border-radius: 10px; background: rgba(30,58,35,0.86); color: rgba(255,255,255,0.75); display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 9.5px; padding: 0 4px; }
-        .ph-dock .on { color: #fff; font-weight: 700; }
-        .ph-dock-sos { background: ${SOS}; color: ${INK}; font-weight: 800; font-size: 11.5px; padding: 9px 0; border-radius: 5px; }
-        .ph-homebar { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 104px; height: 4px; border-radius: 3px; background: ${INK}; opacity: 0.85; }
-        .nav { position: fixed; top: 12px; left: 16px; right: 16px; max-width: 1240px; margin: 0 auto; z-index: 60; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 12px 10px 22px; border-radius: 12px; }
-        .nav-links { display: flex; align-items: center; gap: 22px; }
-        .nav-links a { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }
-        .nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
-        .hero { display: grid; grid-template-columns: 1.45fr 0.55fr; gap: 64px; align-items: center; padding: 64px 0 120px; }
-        .maker { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
-        .maker-form { display: grid; gap: 16px; }
-        .fld { display: grid; gap: 6px; font-size: 16px; font-weight: 600; }
-        .fld input, .fld select { height: 52px; padding: 0 16px; border: 0; background: ${PAPER}; font-size: 17px; color: ${INK}; box-shadow: inset 0 -2px 0 ${INK}; } /* taste-skill-ignore: form field underline */
-        .fld input:focus, .fld select:focus { outline: 3px solid ${INK}; outline-offset: 2px; }
-        .idcard { background: ${PAPER}; padding: 32px; }
-        .partner { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 40px; padding: 28px 0; }
-                .foot-links { display: flex; flex-wrap: wrap; gap: 12px 28px; }
-        .foot-links a { color: ${INK}; font-weight: 600; text-decoration: none; }
-        .foot-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
-        .wordmark { font-size: clamp(64px, 17vw, 260px); font-weight: 800; letter-spacing: -0.06em !important; line-height: 1; margin-top: 72px; padding-bottom: 0.08em; white-space: nowrap; }
-        .nav-scroll { display: none; }
-        .band { display: block; width: 100%; height: min(72vh, 720px); object-fit: cover; }
-        .close { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-        .close img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
-        @media (max-width: 900px) {
-          .ch-in { padding: 0 24px; }
-          .ch { padding: 80px 0; }
-          .ch-tall { min-height: 0; }
-          .split, .hero, .maker, .partner, .close { grid-template-columns: 1fr; gap: 40px; }
-          .band { height: 46vh; }
-          figcaption.ch-in { padding: 12px 24px 24px !important; }
-          .split-flip > :first-child { order: 0; }
-          .hero { padding: 24px 0 80px; }
-          .nav-links .hide-sm { display: none; }
-          .nav-scroll { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 12px; }
-          .nav-scroll a { color: ${INK}; font-weight: 600; white-space: nowrap; text-decoration: none; }
-          .frag { padding: 22px; }
-          .partner { gap: 8px; }
-        }
-      `}</style>
+      <style>{CSS}</style>
 
-      {/* top bar and opening chapter */}
-      <header style={{ background: 'transparent' }}>
-        <div className="ch-in">
-          <nav className="nav glass" aria-label="Main">
-            <a href="/" aria-label="Relay Arc home" style={{ display: 'flex', alignItems: 'center' }}>
-              <img src="/logo-wordmark.png" alt="Relay Arc" style={{ height: '32px', width: 'auto' }} />
+      {bar && (
+        <div className="announce">
+          <span>
+            <strong>New</strong> Bigger text, high contrast and less motion, for every page.
+          </span>
+          <a href="/accessibility" className="announce-cta">Try it</a>
+          <button className="announce-x" onClick={closeBar} aria-label="Close this message">×</button>
+        </div>
+      )}
+
+      <div className="wrap">
+        <nav className="nav glass" aria-label="Main">
+          <div className="nav-l">
+            <a href="/" aria-label="Relay Arc home" className="nav-logo">
+              <img src="/logo-wordmark.png" alt="Relay Arc" />
             </a>
             <div className="nav-links">
-              {NAV.map(([l, h]) => (
-                <a key={h} href={h} className="hide-sm">
-                  {l}
-                </a>
+              {NAV.filter(([l]) => l !== 'Sign in').map(([l, h]) => (
+                <a key={h} href={h}>{l}</a>
               ))}
-              <SearchButton />
-              <a href="/card" className="ds-btn ds-btn-ink sh-slant" style={{ color: '#fff', minHeight: '42px', padding: '0 22px', textDecoration: 'none' }}>
-                Make a card
-              </a>
+              <a href="/accessibility">Accessibility</a>
             </div>
-          </nav>
-          <div style={{ height: '92px' }} aria-hidden />
-          <div className="nav-scroll" aria-label="More pages">
-            {NAV.map(([l, h]) => (
-              <a key={h} href={h}>
-                {l}
+          </div>
+          <div className="nav-r">
+            <a href="/login" className="nav-signin">Sign in</a>
+            <SearchButton />
+            <a href="/card" className="pill pill-line nav-hide">Make a card</a>
+            <a href="/login?signup=1" className="pill pill-ink">Start free</a>
+          </div>
+        </nav>
+
+        <header className="hero">
+          <h1 className="h1" data-reveal>Free help when the hospital is far</h1>
+          <div className="hero-r" data-reveal>
+            <p className="lead">
+              Press SOS and Relay Arc works out what is wrong, picks the closest hospital that can treat it, guides you
+              there and tells your family. Free, in any phone&apos;s browser, and it keeps working with no signal.
+            </p>
+            <div className="ctas">
+              <a href="/login?signup=1" className="pill pill-ink pill-lg">Start free</a>
+              <a href="/card" className="pill pill-line pill-lg">Make an emergency card</a>
+            </div>
+            <div className="proof">
+              <span className="proof-faces" aria-hidden>
+                {['A', 'M', 'J', 'R', 'S'].map((l, i) => (
+                  <span key={l} style={{ background: ['#2F5233', '#F07800', '#7EBE7C', '#1E3A23', '#FFC266'][i], color: i === 1 || i === 2 || i === 4 ? '#141413' : '#fff' }}>{l}</span>
+                ))}
+              </span>
+              <span>
+                <strong>Used by over 580 people</strong>
+                <span className="proof-sub">No ads and no trackers</span>
+              </span>
+            </div>
+          </div>
+        </header>
+
+        <Showcase />
+
+        <section className="sec logos" aria-labelledby="logos-h">
+          <h2 id="logos-h" className="h4">Shared, reviewed and discussed by</h2>
+          <div className="logo-row">
+            {PARTNERS.map(([n, d]) => (
+              <div key={n} className="logo-cell">
+                {n === 'Aerox Labs' ? (
+                  <img src="/partners/aerox.png" alt="Aerox Labs" />
+                ) : n.startsWith('East Windsor') ? (
+                  <img src="/partners/ewrsd.png" alt="East Windsor Regional School District" />
+                ) : (
+                  <span className="logo-word">{n}</span>
+                )}
+                <p>{d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr className="rule" />
+        <section className="sec" aria-label="Try the triage model">
+          <TryTriage />
+        </section>
+        <hr className="rule" />
+
+        <WorksWhere />
+
+        <hr className="rule" />
+        <Speed />
+        <hr className="rule" />
+
+        <section className="sec" aria-labelledby="tools-h">
+          <div className="sec-head">
+            <h2 id="tools-h" className="h2">Free tools for the worst day</h2>
+            <p className="lead">No account needed for any of these. Open one now, before you need it.</p>
+          </div>
+          <div className="cards">
+            {TOOLS.map(([h, t, d, k]) => (
+              <a key={h} href={h} className="tcard">
+                <ToolThumb kind={k} />
+                <span className="card-t">{t}</span>
+                <span className="card-d">{d}</span>
+                <span className="card-more">Open it <span aria-hidden>→</span></span>
               </a>
             ))}
           </div>
+        </section>
 
-          <div className="hero">
-            <div data-reveal>
-              <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 5.6vw, 80px)' }}>
-                Free help when the hospital is far
-              </h1>
-              <p className="ds-lead" style={{ marginTop: '32px' }}>
-                Press SOS and Relay Arc spots the emergency, picks the closest hospital that can
-                treat it, guides you there, and sends your details to the hospital and your family.
-                It also keeps an offline emergency card, checks pulse and breathing, and runs in any
-                phone&apos;s browser.
-              </p>
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '40px' }}>
-                <a href="/card" className="ds-btn ds-btn-sos sh-slant">
-                  Make an emergency card
-                </a>
-                <a href="/login?signup=1" className="ds-btn ds-btn-line sh-pill">
-                  Sign up free
-                </a>
-              </div>
-              <p className="ds-small" style={{ marginTop: '18px', color: INK2 }}>
-                The card takes two minutes and needs no account.
-              </p>
-              <div className="proof glass" aria-label="Used by over 580 people">
-                <span className="proof-faces" aria-hidden>
-                  {['A', 'M', 'J', 'R', 'S'].map((l, i) => (
-                    <span key={l} style={{ background: ['#2F5233', '#F07800', '#7EBE7C', '#1E3A23', '#FFC266'][i], color: i === 1 || i === 4 || i === 2 ? '#141413' : '#fff' }}>
-                      {l}
-                    </span>
-                  ))}
-                </span>
-                <span>
-                  <strong>Used by over 580 people</strong>
-                  <span className="proof-sub">Free for everyone, with no ads and no trackers</span>
-                </span>
-              </div>
-            </div>
-            <div data-reveal>
-              <PhoneHome />
+        <section className="sec" aria-labelledby="why-h">
+          <h2 id="why-h" className="h2">Built for places like these</h2>
+          <div className="places">
+            <figure className="place place-big">
+              <img src="/places/wharton-forest.jpg" alt="A sandy trail through pine trees in Wharton State Forest, New Jersey" loading="lazy" />
+              <figcaption>
+                <strong>Wharton State Forest</strong>
+                <span>The nearest emergency room can be a long drive away.</span>
+              </figcaption>
+            </figure>
+            <figure className="place">
+              <img src="/places/pine-barrens-bog.jpg" alt="A cranberry bog and pine forest in the New Jersey Pine Barrens" loading="lazy" />
+              <figcaption>
+                <strong>The Pine Barrens</strong>
+                <span>Spotty signal, so the important parts run on the phone.</span>
+              </figcaption>
+            </figure>
+            <div className="place place-video">
+              <VideoEmbed id="ozCUg87GAto" title="Relay Arc demonstration" />
+              <p className="place-cap"><strong>See it work</strong> A two minute walk through the app.</p>
             </div>
           </div>
-        </div>
-      </header>
+        </section>
 
-      <main>
-        <figure style={{ margin: 0, background: LEAF }}>
-          <img
-            src="/places/wharton-forest.jpg"
-            alt="A sandy trail through pine trees in Wharton State Forest, New Jersey"
-            className="band"
-            loading="lazy"
-          />
-          <figcaption className="ch-in ds-small" style={{ padding: '14px 48px 28px', color: INK2 }}>
-            Wharton State Forest in the Pine Barrens, one of the most remote parts of New Jersey.
-            Out here the nearest hospital is a long drive away.
-          </figcaption>
-        </figure>
-
-        <Chapter id="video" bg={FOREST} fg="#fff" tall={false}>
-          <div data-reveal>
-            <h2 className="ds-title" style={{ marginBottom: '40px' }}>
-              A simple demonstration
-            </h2>
-            <VideoEmbed id="ozCUg87GAto" title="Relay Arc demonstration" />
-          </div>
-        </Chapter>
-
-        <Chapter bg={LEAF} fg={INK}>
-          <Split
-            title="Press SOS and say what is happening"
-            body="Type it or say it in English, Spanish, Hindi or Marathi. Your phone works out what kind of emergency it is, even with no signal."
-          >
-            <SosScreen />
-          </Split>
-        </Chapter>
-
-        <Chapter bg={PAPER} fg={INK}>
-          <Split
-            flip
-            title="It picks a hospital that can treat you"
-            body="Relay Arc ranks nearby hospitals by real drive time and by what each one can treat, using New Jersey health department data for heart attacks. When help is 25 minutes or more away, it tells you to call 911 first."
-          >
-            <HospitalList />
-          </Split>
-        </Chapter>
-
-        <Chapter bg={FOREST} fg="#fff">
-          <Split
-            title="Your family knows right away"
-            body="One tap texts them the hospital and a live map. The hospital gets your blood type, allergies and medicines before you arrive. Directions open inside the app."
-          >
-            <FamilyText />
-          </Split>
-        </Chapter>
-
-        <Chapter id="card" bg={LEAF} fg={INK}>
-          <div data-reveal style={{ marginBottom: '56px' }}>
-            <h2 className="ds-title">A card that works with no signal</h2>
-            <p className="ds-lead" style={{ marginTop: '28px' }}>
-              Try it here. The full card takes two minutes and needs no account. It stays on your
-              phone, and a paramedic can read it from your lock screen.
+        <section className="close" aria-labelledby="close-h">
+          <h2 id="close-h" className="h1 close-h">Free for everyone, for good</h2>
+          <div>
+            <p className="lead">
+              There is nothing to buy and no ads. Make your card in two minutes, then sign up so SOS knows your conditions,
+              medicines and who to tell.
             </p>
+            <div className="ctas">
+              <a href="/login?signup=1" className="pill pill-ink pill-lg">Start free</a>
+              <a href="/card" className="pill pill-line pill-lg">Make an emergency card</a>
+            </div>
           </div>
-          <div data-reveal>
-            <CardMaker />
-          </div>
-        </Chapter>
+        </section>
+      </div>
 
-        <Chapter bg={PAPER} fg={INK}>
-          <Split
-            flip
-            title="Check your pulse with your phone"
-            body="Hold a finger over the camera for 15 seconds. Breathing comes from the motion sensor. You get a NEWS2 score a doctor can read, and a short daily check in spots changes early."
-          >
-            <PulseReadout />
-          </Split>
-        </Chapter>
-
-        <Chapter id="partners" bg={FOREST} fg="#fff" tall={false}>
-          <div data-reveal>
-            <h2 className="ds-title" style={{ marginBottom: '40px' }}>
-              Who we work with
-            </h2>
+      <footer className="dark-foot">
+        <div className="wrap">
+          <div className="foot-cols">
+            {FOOT.map(([title, links]) => (
+              <nav key={title} aria-label={title}>
+                <p className="foot-h">{title}</p>
+                {links.map(([l, h]) => (
+                  <a key={h} href={h}>{l}</a>
+                ))}
+              </nav>
+            ))}
           </div>
-          {PARTNERS.map(([t, d]) => (
-            <div key={t} className="partner" data-reveal>
-              <p style={{ fontSize: 'clamp(24px, 2.6vw, 34px)', fontWeight: 800, letterSpacing: '-0.02em' }}>{t}</p>
-              <p className="ds-body" style={{ color: 'rgba(255,255,255,0.88)' }}>
-                {d}
-              </p>
-            </div>
-          ))}
-          <a href="/partners" className="ds-btn ds-btn-line sh-pill" style={{ marginTop: '32px', color: '#fff' }}>
-            All partnerships
-          </a>
-        </Chapter>
-      </main>
-
-      <footer style={{ background: LEAF, padding: '120px 0 0', overflow: 'hidden' }}>
-        <div className="ch-in">
-          <div className="close">
-          <div data-reveal>
-            <h2 className="ds-title">Ready when you need it</h2>
-            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '36px' }}>
-              <a href="/card" className="ds-btn ds-btn-ink sh-slant">
-                Make an emergency card
-              </a>
-              <a href="/login?signup=1" className="ds-btn ds-btn-line sh-pill">
-                Sign up free
-              </a>
-            </div>
-          </div>
-          <div data-reveal>
-            <img
-              src="/places/pine-barrens-bog.jpg"
-              alt="A cranberry bog and pine forest in the New Jersey Pine Barrens"
-              className="sh-cut"
-              loading="lazy"
-            />
-          </div>
-          </div>
-          <div style={{ marginTop: '96px' }}>
-            <div className="foot-links">
-              {[
-                ['Features', '/features'],
-                ['Engineering', '/engineering'],
-                ['Partners', '/partners'],
-                ['Demo', '/demo'],
-                              ['Changelog', '/changelog'],
-                ['Status', '/status'],
-                ['Accessibility', '/accessibility'],
-                ['Privacy', '/privacy'],
-                ['Terms', '/terms'],
-              ].map(([l, h]) => (
-                <a key={h} href={h}>
-                  {l}
-                </a>
-              ))}
-            </div>
-            <div style={{ marginTop: '20px' }}>
-              <FollowLinks tone="light" variant="inline" />
-            </div>
-            <a
-              href="https://www.google.com/preferences/source?q=relay-arc.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pref-badge"
-            >
+          <div className="foot-mid">
+            <a href="https://www.google.com/preferences/source?q=relay-arc.org" target="_blank" rel="noopener noreferrer" className="pref-dark">
               <span className="pref-star" aria-hidden>★</span>
               <span>
                 <span className="pref-k">Get Relay Arc first on Google</span>
                 <strong>Add as a preferred source</strong>
               </span>
             </a>
-            <p className="ds-small" style={{ marginTop: '20px', color: INK2, maxWidth: '640px' }}>
-              Relay Arc helps you decide what to do. It does not diagnose. In an emergency, call 911
-              first. © {new Date().getFullYear()} Relay Arc, a free nonprofit project.
-            </p>
-            <p className="ds-small" style={{ marginTop: '10px', color: INK2, maxWidth: '640px' }}>
-              Photos from the Pine Barrens. Wharton State Forest trail by RollerFanatic000, CC BY SA
-              4.0. Cranberry bog by Andrew Leahey, CC BY SA 2.0. Both via Wikimedia Commons.
-            </p>
+            <FollowLinks tone="dark" variant="inline" />
           </div>
-          <div className="wordmark" aria-hidden>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.12em' }}>
-              Relay Arc
-            </span>
-          </div>
+          <p className="foot-small">
+            Relay Arc helps you decide what to do. It does not diagnose. In an emergency, call 911 first. ©{' '}
+            {new Date().getFullYear()} Relay Arc, a free nonprofit project. Photos from the Pine Barrens: Wharton State
+            Forest trail by RollerFanatic000, CC BY SA 4.0. Cranberry bog by Andrew Leahey, CC BY SA 2.0. Both via
+            Wikimedia Commons.
+          </p>
+          <p className="foot-word" aria-hidden>Relay Arc</p>
         </div>
       </footer>
     </div>
   )
 }
+
+const FOOT: [string, [string, string][]][] = [
+  ['The app', [['Start free', '/login?signup=1'], ['Sign in', '/login'], ['Live demo', '/demo'], ['Features', '/features']]],
+  ['Free tools', [['Emergency card', '/card'], ['POTS flare check', '/flare'], ['ER rights', '/rights'], ['CPR coach', '/emergency/cpr']]],
+  ['How it works', [['Engineering', '/engineering'], ['Changelog', '/changelog'], ['Status', '/status'], ['Source code', 'https://github.com/Aarya470/relay-arc']]],
+  ['Project', [['Partners', '/partners'], ['Donate', '/donate'], ['Accessibility', '/accessibility'], ['Contact', 'mailto:relay.arc.org@gmail.com']]],
+  ['Legal', [['Privacy', '/privacy'], ['Terms', '/terms']]],
+]
+
+const CSS = `
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .h1 { font-size: clamp(44px, 5.2vw, 76px); text-wrap: balance; font-weight: 650; letter-spacing: -0.045em !important; line-height: 0.98 !important; margin: 0; }
+  .h2 { font-size: clamp(34px, 3.8vw, 56px); font-weight: 650; letter-spacing: -0.035em !important; line-height: 1.04 !important; margin: 0; }
+  .h3 { font-size: clamp(26px, 2.4vw, 34px); font-weight: 650; letter-spacing: -0.03em !important; line-height: 1.1 !important; margin: 0; }
+  .h4 { font-size: 22px; font-weight: 650; letter-spacing: -0.02em !important; margin: 0; }
+  .lead { font-size: 19px; line-height: 1.55; color: ${INK}; max-width: 36em; }
+  .body { font-size: 17px; line-height: 1.55; color: ${INK}; margin-top: 12px; }
+  .center { text-align: center; }
+
+  .pill { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border-radius: 999px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 0; cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out); }
+  .pill:active { transform: scale(0.97); }
+  .pill-ink { background: ${INK}; color: #fff; }
+  .pill-ink:hover { background: #2E2E2B; }
+  .pill-ink:disabled { opacity: 0.4; cursor: default; }
+  .pill-line { background: rgba(255,253,246,0.55); color: ${INK}; box-shadow: inset 0 0 0 1.5px ${INK}; }
+  .pill-line:hover { background: ${PAPER}; }
+  .pill-lg { min-height: 52px; padding: 0 26px; font-size: 16.5px; }
+
+  .announce { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 10px 48px; background: ${INK}; color: #fff; font-size: 14.5px; position: relative; }
+  .announce strong { font-weight: 800; margin-right: 6px; }
+  .announce-cta { background: ${SOS}; color: ${INK}; font-weight: 800; padding: 5px 12px; border-radius: 999px; text-decoration: none; font-size: 13.5px; }
+  .announce-x { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border: 0; background: none; color: #fff; font-size: 22px; cursor: pointer; }
+
+  .nav { position: sticky; top: 12px; z-index: 60; margin-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 10px 10px 20px; border-radius: 14px; }
+  .nav-l, .nav-r { display: flex; align-items: center; gap: 28px; }
+  .nav-r { gap: 10px; }
+  .nav-logo img { height: 30px; width: auto; display: block; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a, .nav-signin { color: ${INK}; font-weight: 600; font-size: 16px; text-decoration: none; padding: 8px 0; }
+  .nav-links a:hover, .nav-signin:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .nav-signin { padding: 8px 6px; }
+
+  .hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 56px; align-items: start; padding: 88px 0 56px; }
+  .hero-r { padding-top: 10px; }
+  .hero-r .lead { font-size: 18.5px; }
+  .ctas { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+  .proof { display: inline-flex; align-items: center; gap: 14px; margin-top: 22px; }
+  .proof strong { display: block; font-size: 16px; font-weight: 800; }
+
+  .show { margin-bottom: 40px; }
+  .tabs { display: grid; grid-template-columns: repeat(5, 1fr); border-radius: 14px 14px 0 0; overflow: hidden; background: rgba(255,253,246,0.4); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7); }
+  .tab { min-height: 54px; border: 0; background: transparent; font: inherit; font-size: 15.5px; font-weight: 650; color: ${INK}; cursor: pointer; position: relative; transition: background-color 180ms var(--ease-out); }
+  .tab + .tab { box-shadow: inset 1px 0 0 rgba(20,20,19,0.08); }
+  .tab:hover { background: rgba(255,253,246,0.55); }
+  .tab[data-on="true"] { background: rgba(255,253,246,0.92); }
+  .tab[data-on="true"]::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: ${SOS}; }
+  .show-stage { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 48px; align-items: center; padding: 48px; min-height: 460px; border-radius: 0 0 14px 14px;
+    background: rgba(255,253,246,0.72); -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8), 0 24px 60px rgba(30,58,35,0.14);
+    animation: stage-in 320ms var(--ease-out); }
+  @keyframes stage-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .show-view { min-width: 0; }
+  .show-view .frag, .show-view .idcard { box-shadow: 0 12px 30px rgba(30,58,35,0.12); border-radius: 12px; }
+
+  .sec { padding: 112px 0; }
+  .sec-head { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; margin-bottom: 40px; }
+  .rule { border: 0; height: 1px; background: rgba(20,20,19,0.14); margin: 0; }
+
+  .logos { padding: 56px 0 96px; }
+  .logos .h4 { margin-bottom: 26px; }
+  .logo-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .logo-cell { padding: 22px; border-radius: 14px; background: rgba(255,253,246,0.45); }
+  .logo-cell img { height: 40px; width: auto; display: block; object-fit: contain; }
+  .logo-word { display: block; font-size: 30px; font-weight: 900; letter-spacing: -0.04em; line-height: 40px; }
+  .logo-cell p { font-size: 15px; line-height: 1.5; margin-top: 12px; color: ${INK}; }
+
+  .try { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+  .try-left .lead { margin-top: 18px; }
+  .try-chips { display: grid; gap: 10px; margin-top: 26px; }
+  .try-chip { text-align: left; padding: 14px 18px; border-radius: 12px; border: 0; background: rgba(255,253,246,0.55); font: inherit; font-size: 16.5px; color: ${INK}; cursor: pointer;
+    transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out); }
+  .try-chip:hover { background: ${PAPER}; transform: translateX(4px); }
+  .try-chip:active { transform: scale(0.98); }
+  .try-panel { border-radius: 16px; padding: 22px; background: rgba(255,253,246,0.78); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.85), 0 24px 60px rgba(30,58,35,0.14); }
+  .try-form { display: flex; gap: 8px; }
+  .try-form input { flex: 1; min-width: 0; height: 52px; padding: 0 18px; border-radius: 999px; border: 0; background: #fff; box-shadow: inset 0 0 0 1.5px rgba(20,20,19,0.16); font: inherit; font-size: 16px; color: ${INK}; }
+  .try-form .pill { min-height: 52px; }
+  .try-out { margin-top: 18px; min-height: 196px; padding: 22px; border-radius: 12px; background: ${MINT}; }
+  .try-empty { font-size: 17px; color: ${INK2}; }
+  .try-k { font-size: 14px; font-weight: 700; color: ${GREEN}; }
+  .try-big { font-size: clamp(28px, 3vw, 40px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: 6px; }
+  .try-meter { height: 10px; border-radius: 999px; background: rgba(20,20,19,0.1); margin-top: 16px; overflow: hidden; }
+  .try-meter span { display: block; height: 100%; background: ${SOS}; border-radius: 999px; transform-origin: left; animation: grow 600ms var(--ease-out); }
+  @keyframes grow { from { transform: scaleX(0); } to { transform: none; } }
+  .try-note { font-size: 15.5px; line-height: 1.5; margin-top: 14px; color: ${INK}; }
+
+  .seg-wrap { display: flex; justify-content: center; margin: 24px 0 36px; }
+  .pillseg { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(20,20,19,0.08); }
+  .pillseg button { min-height: 40px; padding: 0 18px; border-radius: 999px; border: 0; background: transparent; font: inherit; font-weight: 700; font-size: 15px; color: ${INK}; cursor: pointer; transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out); }
+  .pillseg button[data-on="true"] { background: ${INK}; color: #fff; }
+  .tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+  .tile { display: grid; align-content: center; gap: 6px; min-height: 132px; padding: 18px; border-radius: 14px; background: rgba(255,253,246,0.55); text-align: center; animation: stage-in 280ms var(--ease-out) both; }
+  .tile:nth-child(2) { animation-delay: 30ms; } .tile:nth-child(3) { animation-delay: 60ms; } .tile:nth-child(4) { animation-delay: 90ms; } .tile:nth-child(5) { animation-delay: 120ms; } .tile:nth-child(6) { animation-delay: 150ms; }
+  .tile-a { font-size: 19px; font-weight: 750; letter-spacing: -0.02em; }
+  .tile-b { font-size: 14px; line-height: 1.4; color: ${INK2}; }
+
+  .speed-top { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; }
+  .bars { display: grid; gap: 18px; margin-top: 48px; padding: 32px; border-radius: 16px; background: rgba(255,253,246,0.6); }
+  .bar-row { display: grid; grid-template-columns: 240px 1fr 72px; gap: 20px; align-items: center; }
+  .bar-k strong { display: block; font-size: 16.5px; }
+  .bar-k span { display: block; font-size: 14px; color: ${INK2}; margin-top: 2px; }
+  .bar-track { height: 34px; border-radius: 8px; background: rgba(20,20,19,0.07); overflow: hidden; }
+  .bar-fill { display: block; height: 100%; border-radius: 8px; background: #2F5233; transform-origin: left; }
+  .bar-fill[data-best="true"] { background: ${SOS}; }
+  .bars.is-in .bar-fill, .bars .bar-fill { animation: grow 900ms var(--ease-out) both; }
+  .bar-v { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; }
+  .more { display: inline-block; margin-top: 22px; font-weight: 750; color: ${INK}; text-decoration: none; font-size: 16.5px; }
+  .more:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  .tcard { display: grid; align-content: start; gap: 8px; color: ${INK}; text-decoration: none; }
+  .thumb { aspect-ratio: 4 / 3; border-radius: 14px; padding: 20px; background: rgba(255,253,246,0.7); display: flex; flex-direction: column; justify-content: center; margin-bottom: 8px;
+    transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out); }
+  .tcard:hover .thumb { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(30,58,35,0.16); }
+  .card-t { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; }
+  .card-d { font-size: 15.5px; line-height: 1.5; }
+  .card-more { font-weight: 750; font-size: 15.5px; margin-top: 4px; }
+  .card-more span { display: inline-block; transition: transform 180ms var(--ease-out); }
+  .tcard:hover .card-more span { transform: translateX(4px); }
+  .th-k { font-size: 13px; font-weight: 700; color: ${INK2}; }
+  .th-big { font-size: 44px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin: 2px 0 8px; }
+  .th-m { font-size: 18px; font-weight: 700; line-height: 1.3; }
+  .th-yn { display: flex; gap: 6px; margin-top: 12px; }
+  .th-yn span { flex: 1; text-align: center; padding: 8px; border-radius: 8px; background: rgba(20,20,19,0.08); font-weight: 700; font-size: 14px; }
+  .th-yn span[data-on] { background: ${SOS}; }
+  .th-beat { display: flex; gap: 6px; margin-top: 12px; }
+  .th-beat span { width: 14px; height: 14px; border-radius: 50%; background: ${SOS}; animation: beat 545ms ease-in-out infinite alternate; }
+  .th-beat span:nth-child(2) { animation-delay: 136ms; } .th-beat span:nth-child(3) { animation-delay: 272ms; } .th-beat span:nth-child(4) { animation-delay: 408ms; }
+  @keyframes beat { from { opacity: 0.25; transform: scale(0.8); } to { opacity: 1; transform: none; } }
+
+  .places { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 16px; margin-top: 36px; }
+  .place { position: relative; margin: 0; border-radius: 16px; overflow: hidden; min-height: 440px; background: ${FOREST}; }
+  .place img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1200ms var(--ease-out); }
+  .place:hover img { transform: scale(1.04); }
+  .place figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 60px 22px 22px; color: #fff; background: linear-gradient(transparent, rgba(10,14,10,0.78)); } /* taste-skill-ignore: scrim under text on photo */
+  .place figcaption strong { display: block; font-size: 22px; letter-spacing: -0.02em; }
+  .place figcaption span { display: block; font-size: 15px; margin-top: 4px; line-height: 1.45; }
+  .place-video { display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 18px; background: ${FOREST}; color: #fff; }
+  .place-cap { font-size: 15px; line-height: 1.5; }
+  .place-cap strong { display: block; font-size: 22px; letter-spacing: -0.02em; }
+
+  .close { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; padding: 120px 0 140px; }
+  .close-h { font-size: clamp(40px, 4.4vw, 64px); }
+
+  .dark-foot { background: ${INK}; color: #fff; padding: 80px 0 0; overflow: hidden; }
+  .foot-cols { display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px; }
+  .foot-h { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.72); margin-bottom: 14px; }
+  .foot-cols a { display: block; color: #fff; text-decoration: none; font-size: 16px; font-weight: 600; padding: 7px 0; }
+  .foot-cols a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .foot-mid { display: flex; flex-wrap: wrap; gap: 20px 32px; align-items: center; margin-top: 56px; }
+  .pref-dark { display: inline-flex; align-items: center; gap: 12px; padding: 10px 18px 10px 10px; border-radius: 12px; background: rgba(255,255,255,0.08); color: #fff; text-decoration: none; }
+  .pref-dark .pref-k { color: rgba(255,255,255,0.75); }
+  .pref-dark:hover { background: rgba(255,255,255,0.14); }
+  .foot-small { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.75); max-width: 820px; margin-top: 28px; }
+  .foot-word { font-size: clamp(72px, 17vw, 250px); font-weight: 800; letter-spacing: -0.06em; line-height: 0.85; margin-top: 56px; color: ${LEAF}; white-space: nowrap; transform: translateY(0.12em); }
+
+  @media (max-width: 1000px) {
+    .nav-links, .nav-hide { display: none; }
+    .tiles { grid-template-columns: repeat(3, 1fr); }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .foot-cols { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .wrap { padding: 0 18px; }
+    .nav-signin { display: none; }
+    .hero, .sec-head, .try, .speed-top, .close, .show-stage, .places, .logo-row { grid-template-columns: 1fr; gap: 28px; }
+    .hero { padding: 48px 0 36px; }
+    .tabs { display: flex; overflow-x: auto; border-radius: 14px 14px 0 0; }
+    .tab { flex: 0 0 auto; padding: 0 18px; }
+    .show-stage { padding: 22px; min-height: 0; }
+    .sec { padding: 72px 0; }
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    .bar-row { grid-template-columns: 1fr 64px; }
+    .bar-track { grid-column: 1 / -1; grid-row: 2; }
+    .bars { padding: 20px; }
+    .place { min-height: 320px; }
+    .close { padding: 80px 0; }
+    .foot-cols { grid-template-columns: repeat(2, 1fr); }
+    .announce { justify-content: flex-start; padding: 10px 52px 10px 16px; font-size: 13.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .show-stage, .tile, .try-meter span, .bar-fill, .th-beat span { animation: none !important; }
+  }
+
+  /* fragments shared with the showcase */
+  .frag { padding: 28px; }
+  .hosp { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 8px; }
+  .bubble { background: ${MINT}; padding: 14px 18px; font-size: 17px; line-height: 1.5; border-radius: 18px 18px 18px 4px; }
+  .maker { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 28px; align-items: center; }
+  .maker-form { display: grid; gap: 14px; }
+  .fld { display: grid; gap: 6px; font-size: 15px; font-weight: 600; }
+  .fld input, .fld select { height: 48px; padding: 0 14px; border: 0; border-radius: 10px; background: #fff; font-size: 16px; color: ${INK}; box-shadow: inset 0 0 0 1.5px rgba(20,20,19,0.16); }
+  .idcard { background: ${PAPER}; padding: 28px; }
+  @media (max-width: 760px) { .maker { grid-template-columns: 1fr; } }
+`
