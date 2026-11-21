@@ -81,69 +81,54 @@ function Split({
 // The real signed in home screen, in a phone frame.
 function PhoneHome() {
   return (
-    <div className="phone" data-ui aria-label="The Relay Arc home screen on a phone">
-      <span className="ph-btn ph-btn-l1" aria-hidden />
-      <span className="ph-btn ph-btn-l2" aria-hidden />
-      <span className="ph-btn ph-btn-r" aria-hidden />
-      <div className="phone-screen">
-        <div className="ph-status" aria-hidden>
-          <span>9:41</span>
-          <span className="ph-island" />
-          <span className="ph-icons">
-            <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="0.7" /><rect x="4.6" y="5" width="3" height="6" rx="0.7" /><rect x="9.2" y="2.5" width="3" height="8.5" rx="0.7" /><rect x="13.8" y="0" width="3" height="11" rx="0.7" /></svg>
-            <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.2" fill="none" stroke="currentColor" opacity="0.4" /><rect x="2" y="2" width="15" height="8" rx="1.8" /><rect x="23" y="4" width="1.6" height="4" rx="0.8" opacity="0.45" /></svg>
-          </span>
-        </div>
-        <div className="ph-body">
-          <div className="ph-top">
-            <img src="/logo-wordmark.png" alt="" style={{ height: '15px', width: 'auto' }} />
-            <span style={{ display: 'flex', gap: '5px' }}>
-              <span className="ph-chip">Search</span>
-              <span className="ph-chip">Settings</span>
+    <div className="iph" role="img" aria-label="The Relay Arc home screen on an iPhone: an orange SOS button, daily check in and vitals check, and saved emergency contacts">
+      <span className="iph-btn iph-act" aria-hidden />
+      <span className="iph-btn iph-vu" aria-hidden />
+      <span className="iph-btn iph-vd" aria-hidden />
+      <span className="iph-btn iph-pwr" aria-hidden />
+      <div className="iph-bezel">
+        <div className="iph-screen" aria-hidden>
+          <div className="iph-status">
+            <span className="iph-time">9:41</span>
+            <span className="iph-island"><i /></span>
+            <span className="iph-icons">
+              <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3.2" height="4" rx="0.8" /><rect x="4.8" y="5.5" width="3.2" height="6.5" rx="0.8" /><rect x="9.6" y="3" width="3.2" height="9" rx="0.8" /><rect x="14.4" y="0" width="3.2" height="12" rx="0.8" /></svg>
+              <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.4 10.4 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6a8.6 8.6 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.7 6.7 0 0 0 8 4c-1.8 0-3.4.7-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3ZM8 9.3l1.9-2a2.8 2.8 0 0 0-3.8 0L8 9.3Z" /></svg>
+              <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.6" y="0.6" width="22.8" height="11.8" rx="3.6" fill="none" stroke="currentColor" opacity="0.4" /><rect x="2.2" y="2.2" width="17" height="8.6" rx="2.2" /><rect x="24.8" y="4.3" width="1.6" height="4.4" rx="0.8" opacity="0.45" /></svg>
             </span>
           </div>
-          <p style={{ fontSize: '10.5px', color: INK2, marginTop: '14px', fontWeight: 600 }}>Good morning · Fri, Nov 13</p>
-          <p style={{ fontSize: '30px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05 }}>Asha</p>
-          <span className="ph-cond">POTS</span>
-          <div className="ph-sos">
-            <span style={{ fontSize: '44px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 0.95 }}>SOS</span>
-            <span style={{ fontSize: '11px', marginTop: '8px', lineHeight: 1.35 }}>Tap to start. Finds a hospital and sends your details.</span>
-          </div>
-          <div className="ph-tiles">
-            <div className="ph-tile">
-              <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Daily check in</span>
-              <span style={{ fontSize: '10px', opacity: 0.85 }}>Chat for 2 minutes</span>
+          <div className="iph-body">
+            <div className="iph-top">
+              <img src="/logo-wordmark.png" alt="" />
+              <span className="iph-chips"><span>Search</span><span>Settings</span></span>
             </div>
-            <div className="ph-tile">
-              <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Vitals check</span>
-              <span style={{ fontSize: '10px', opacity: 0.85 }}>Pulse and breathing</span>
+            <p className="iph-greet">Good morning · Fri, Nov 21</p>
+            <p className="iph-name">Asha</p>
+            <span className="iph-cond">POTS</span>
+            <div className="iph-sos">
+              <span className="iph-sos-t">SOS</span>
+              <span className="iph-sos-s">Tap to start. Finds a hospital and sends your details.</span>
             </div>
-          </div>
-          <div className="ph-list">
-            <div className="ph-row">
-              <span>
-                <b>Emergency contacts</b>
-                <i>2 contacts ready to text</i>
-              </span>
-              <span aria-hidden>›</span>
+            <div className="iph-tiles">
+              <div><b>Daily check in</b><i>Chat for 2 minutes</i></div>
+              <div><b>Vitals check</b><i>Pulse and breathing</i></div>
             </div>
-            <div className="ph-row">
-              <span>
-                <b>Medical profile</b>
-                <i>Conditions, medicines and allergies</i>
-              </span>
-              <span aria-hidden>›</span>
+            <div className="iph-list">
+              <div><span><b>NEWS2 for your clinician</b><i>0, low risk · this morning</i></span><em>›</em></div>
+              <div><span><b>Emergency contacts</b><i>2 contacts ready to text</i></span><em>›</em></div>
+              <div><span><b>Medicines</b><i>1 of 2 taken today</i></span><em>›</em></div>
             </div>
           </div>
+          <div className="iph-dock">
+            <span className="on">Home</span>
+            <span>Check in</span>
+            <span className="iph-dock-sos">SOS</span>
+            <span>Meds</span>
+            <span>Symptoms</span>
+          </div>
+          <span className="iph-homebar" />
+          <span className="iph-glare" />
         </div>
-        <div className="ph-dock" aria-hidden>
-          <span className="on">Home</span>
-          <span>Check in</span>
-          <span className="ph-dock-sos">SOS</span>
-          <span>Meds</span>
-          <span>Symptoms</span>
-        </div>
-        <span className="ph-homebar" aria-hidden />
       </div>
     </div>
   )
@@ -642,27 +627,32 @@ export default function Home() {
         </nav>
 
         <header className="hero">
-          <h1 className="h1" data-reveal>Free help when the hospital is far</h1>
-          <div className="hero-r" data-reveal>
-            <p className="lead">
-              Press SOS and Relay Arc works out what is wrong, picks the closest hospital that can treat it, guides you
-              there and tells your family. Free, in any phone&apos;s browser, and it keeps working with no signal.
-            </p>
-            <div className="ctas">
-              <a href="/login?signup=1" className="pill pill-ink pill-lg">Start free</a>
-              <a href="/card" className="pill pill-line pill-lg">Make an emergency card</a>
+          <div className="hero-l">
+            <h1 className="h1" data-reveal>Free help when the hospital is far</h1>
+            <div data-reveal>
+              <p className="lead hero-lead">
+                Press SOS and Relay Arc works out what is wrong, picks the closest hospital that can treat it, guides you
+                there and tells your family. Free, in any phone&apos;s browser, and it keeps working with no signal.
+              </p>
+              <div className="ctas">
+                <a href="/login?signup=1" className="pill pill-ink pill-lg">Start free</a>
+                <a href="/card" className="pill pill-line pill-lg">Make an emergency card</a>
+              </div>
+              <div className="proof">
+                <span className="proof-faces" aria-hidden>
+                  {['A', 'M', 'J', 'R', 'S'].map((l, i) => (
+                    <span key={l} style={{ background: ['#2F5233', '#F07800', '#7EBE7C', '#1E3A23', '#FFC266'][i], color: i === 1 || i === 2 || i === 4 ? '#141413' : '#fff' }}>{l}</span>
+                  ))}
+                </span>
+                <span>
+                  <strong>Used by over 580 people</strong>
+                  <span className="proof-sub">No ads and no trackers</span>
+                </span>
+              </div>
             </div>
-            <div className="proof">
-              <span className="proof-faces" aria-hidden>
-                {['A', 'M', 'J', 'R', 'S'].map((l, i) => (
-                  <span key={l} style={{ background: ['#2F5233', '#F07800', '#7EBE7C', '#1E3A23', '#FFC266'][i], color: i === 1 || i === 2 || i === 4 ? '#141413' : '#fff' }}>{l}</span>
-                ))}
-              </span>
-              <span>
-                <strong>Used by over 580 people</strong>
-                <span className="proof-sub">No ads and no trackers</span>
-              </span>
-            </div>
+          </div>
+          <div className="hero-phone" data-reveal>
+            <PhoneHome />
           </div>
         </header>
 
@@ -832,9 +822,59 @@ const CSS = `
   .nav-links a:hover, .nav-signin:hover { text-decoration: underline; text-underline-offset: 4px; }
   .nav-signin { padding: 8px 6px; }
 
-  .hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 56px; align-items: start; padding: 88px 0 56px; }
-  .hero-r { padding-top: 10px; }
-  .hero-r .lead { font-size: 18.5px; }
+  .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; padding: 56px 0 72px; }
+  .hero-lead { margin-top: 28px; font-size: 19px; }
+  .hero-phone { display: flex; justify-content: center; position: relative; }
+  .hero-phone::before { content: ''; position: absolute; width: 420px; height: 420px; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(247,245,238,0.55); filter: blur(40px); }
+
+  /* A realistic iPhone: titanium band, side buttons, black bezel, Dynamic Island, glass glare. */
+  .iph { position: relative; width: 318px; aspect-ratio: 9 / 19.3; padding: 4px; border-radius: 58px;
+    background: linear-gradient(145deg, #D9D6CF 0%, #8F8C85 18%, #E8E5DE 34%, #77746E 52%, #C9C6BF 70%, #6E6B65 88%, #BDBAB3 100%); /* taste-skill-ignore: titanium band */
+    box-shadow: 0 1px 0 1px rgba(255,255,255,0.35) inset, 0 50px 80px -20px rgba(20,32,22,0.45), 0 22px 36px -12px rgba(20,32,22,0.35), 0 4px 10px rgba(20,20,19,0.18); /* taste-skill-ignore: device shadow */
+    animation: iph-float 7s ease-in-out infinite; }
+  @keyframes iph-float { 0%, 100% { transform: translateY(0) rotate(-1.2deg); } 50% { transform: translateY(-10px) rotate(-0.6deg); } }
+  .iph-bezel { position: relative; height: 100%; border-radius: 54px; padding: 11px; background: #050505; box-shadow: inset 0 0 0 1.5px #2A2A28; }
+  .iph-screen { position: relative; height: 100%; border-radius: 44px; overflow: hidden; display: flex; flex-direction: column; color: #141413;
+    background: radial-gradient(260px 260px at 100% -6%, rgba(247,245,238,0.9), transparent 62%), radial-gradient(240px 240px at -12% 42%, rgba(74,130,72,0.45), transparent 64%), radial-gradient(200px 200px at 100% 92%, rgba(255,184,96,0.35), transparent 66%), #B3DDAC; } /* taste-skill-ignore: app wallpaper */
+  .iph-btn { position: absolute; width: 4px; border-radius: 2px; background: linear-gradient(90deg, #6E6B65, #CFCCC5, #8A8781); } /* taste-skill-ignore: metal */
+  .iph-act { left: -3px; top: 112px; height: 30px; }
+  .iph-vu { left: -3px; top: 166px; height: 56px; }
+  .iph-vd { left: -3px; top: 232px; height: 56px; }
+  .iph-pwr { right: -3px; top: 190px; height: 88px; }
+  .iph-status { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; padding: 14px 24px 0 30px; height: 50px; }
+  .iph-island { width: 92px !important; }
+  .iph-time { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .iph-island { width: 98px; height: 29px; border-radius: 20px; background: #000; display: flex; justify-content: flex-end; align-items: center; padding-right: 12px; }
+  .iph-island i { width: 9px; height: 9px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #2B3550, #0A0D16 70%); } /* taste-skill-ignore: camera lens */
+  .iph-icons { display: flex; gap: 5px; justify-content: flex-end; align-items: center; fill: #141413; color: #141413; }
+  .iph-body { padding: 10px 16px 0; flex: 1; }
+  .iph-top { display: flex; justify-content: space-between; align-items: center; }
+  .iph-top img { height: 15px; width: auto; }
+  .iph-chips { display: flex; gap: 5px; }
+  .iph-chips span { font-size: 10px; font-weight: 700; padding: 5px 9px; border-radius: 7px; background: rgba(255,253,248,0.72); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.85); }
+  .iph-greet { font-size: 11px; font-weight: 600; color: #3F3D36; margin-top: 14px; }
+  .iph-name { font-size: 31px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; }
+  .iph-cond { display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 700; color: #fff; background: #1E3A23; padding: 3px 9px; border-radius: 5px; }
+  .iph-sos { display: flex; flex-direction: column; margin: 12px 0 9px; padding: 18px 18px 16px; border-radius: 14px; background: #F07800; box-shadow: 0 10px 22px rgba(240,120,0,0.35); }
+  .iph-sos-t { font-size: 46px; font-weight: 850; letter-spacing: -0.04em; line-height: 0.92; }
+  .iph-sos-s { font-size: 11.5px; line-height: 1.35; margin-top: 8px; font-weight: 600; }
+  .iph-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .iph-tiles div { display: grid; gap: 3px; padding: 12px; border-radius: 12px; background: #2F5233; color: #fff; }
+  .iph-tiles b { font-size: 12.5px; }
+  .iph-tiles i { font-style: normal; font-size: 10px; opacity: 0.85; }
+  .iph-list { margin-top: 9px; padding: 2px 12px; border-radius: 12px; background: rgba(255,253,248,0.66); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8); }
+  .iph-list > div { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 12px; }
+  .iph-list > div + div { box-shadow: inset 0 1px 0 rgba(20,20,19,0.08); } /* taste-skill-ignore: app row divider */
+  .iph-list b { display: block; font-weight: 700; }
+  .iph-list i { display: block; font-style: normal; font-size: 9.5px; color: #3F3D36; margin-top: 1px; }
+  .iph-list em { font-style: normal; opacity: 0.5; }
+  .iph-dock { margin: 0 10px 22px; height: 50px; border-radius: 16px; background: rgba(30,58,35,0.9); color: rgba(255,255,255,0.75); display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 9.5px; padding: 0 4px; box-shadow: 0 8px 18px rgba(20,32,22,0.25); }
+  .iph-dock .on { color: #fff; font-weight: 700; }
+  .iph-dock-sos { background: #F07800; color: #141413; font-weight: 800; font-size: 11.5px; padding: 10px 0; border-radius: 9px; }
+  .iph-homebar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 118px; height: 5px; border-radius: 3px; background: #141413; opacity: 0.85; }
+  .iph-glare { position: absolute; inset: 0; pointer-events: none; border-radius: 44px; background: linear-gradient(118deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.06) 28%, transparent 42%); } /* taste-skill-ignore: glass glare */
+  @media (prefers-reduced-motion: reduce) { .iph { animation: none; } }
+  html[data-motion="reduce"] .iph { animation: none; }
   .ctas { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
   .proof { display: inline-flex; align-items: center; gap: 14px; margin-top: 22px; }
   .proof strong { display: block; font-size: 16px; font-weight: 800; }
@@ -965,7 +1005,9 @@ const CSS = `
     .wrap { padding: 0 18px; }
     .nav-signin { display: none; }
     .hero, .sec-head, .try, .speed-top, .close, .show-stage, .places, .logo-row { grid-template-columns: 1fr; gap: 28px; }
-    .hero { padding: 48px 0 36px; }
+    .hero { padding: 36px 0 36px; }
+    .iph { width: 280px; }
+    .hero-phone::before { width: 300px; height: 300px; }
     .tabs { display: flex; overflow-x: auto; border-radius: 14px 14px 0 0; }
     .tab { flex: 0 0 auto; padding: 0 18px; }
     .show-stage { padding: 22px; min-height: 0; }
