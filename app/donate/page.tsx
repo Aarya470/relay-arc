@@ -1,6 +1,7 @@
 'use client'
 import SiteFooter from '@/components/SiteFooter'
 import { useState } from 'react'
+import PageHero from '@/components/PageHero'
 import SiteHeader from '@/components/SiteHeader'
 
 const T1 = '#141413'
@@ -34,16 +35,12 @@ export default function Donate() {
   return (
     <div style={{ minHeight: '100dvh', color: T1 }}>
       <SiteHeader />
-      <div style={{ ...inner, maxWidth: '1168px', padding: '56px 24px 80px' }} data-reveal>
-        <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)' }}>
-          Keep Relay Arc free
-        </h1>
-        <p className="ds-lead" style={{ marginTop: '24px' }}>
-          Relay Arc is free for every patient and always will be. Gifts pay for maps, hospital data
-          and the servers that answer when someone presses SOS.
+      <PageHero title="Keep Relay Arc free">
+        <p>
+          Relay Arc is free for every patient and always will be. Gifts pay for maps, hospital data and the servers that
+          answer when someone presses SOS.
         </p>
-      </div>
-
+      </PageHero>
       <section style={block('#F7F5EE')}>
         <div style={inner} data-reveal>
           <h2 className="ds-title" style={{ fontSize: 'clamp(30px, 4vw, 52px)' }}>

@@ -3,6 +3,7 @@ import SiteFooter from '@/components/SiteFooter'
 // /partners: the organisations Relay Arc works with, and exactly where each
 // relationship stands. The East Windsor district is still in discussion, so
 // the page says so plainly rather than implying a signed partnership.
+import PageHero from '@/components/PageHero'
 import SiteHeader from '@/components/SiteHeader'
 
 const T1 = '#141413',
@@ -34,14 +35,9 @@ export default function Partners() {
   return (
     <div style={{ minHeight: '100dvh' }}>
       <SiteHeader />
-      <div style={{ maxWidth: '1168px', margin: '0 auto', padding: '56px 24px 72px' }} data-reveal>
-        <h1 className="ds-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)' }}>
-          Partnerships
-        </h1>
-        <p className="ds-lead" style={{ marginTop: '24px' }}>
-          The groups we work with, and where each one stands.
-        </p>
-      </div>
+      <PageHero title="Partnerships" actions={[{ label: 'Work with us', href: 'mailto:relay.arc.org@gmail.com', primary: true }]}>
+        <p>The groups we work with, and exactly where each one stands. Nothing here is listed as a partnership until it is one.</p>
+      </PageHero>
       {PARTNERS.map((p, i) => (
         <section
           key={p.name}

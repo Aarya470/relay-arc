@@ -344,7 +344,7 @@ input, select, textarea { border-radius: 6px !important; }
 }
 [style*='monospace']:not(pre):not(code) { font-family: inherit !important; }
 [style*='gradient'] { background-image: none !important; }
-h1:not(.ds-display):not(.ds-title):not(.h1):not(.h2) { font-size: clamp(28px, 5vw, 40px) !important; line-height: 1.15 !important; }
+h1:not(.ds-display):not(.ds-title):not(.h1):not(.h2):not(.phero-t) { font-size: clamp(28px, 5vw, 40px) !important; line-height: 1.15 !important; }
 h2:not(.ds-display):not(.ds-title):not(.h1):not(.h2):not(.h3):not(.h4) { font-size: clamp(20px, 3.4vw, 26px) !important; line-height: 1.25 !important; }
 
 /* Type scale */
@@ -721,3 +721,11 @@ html[data-links="underline"] .sf a, html[data-links="underline"] .sh-pill { text
 /* Toast text dark enough to read (sonner's rich colours sit near 4.3:1). */
 [data-sonner-toast][data-type="error"] { --error-text: #9B0000; color: #9B0000 !important; }
 [data-sonner-toast][data-type="success"] { color: #1E5A1E !important; }
+
+/* Split page opening (components/PageHero.tsx) */
+.phero { max-width: 1168px; margin: 0 auto; padding: 72px 24px 64px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: end; }
+h1.phero-t { font-size: clamp(40px, 4.6vw, 68px) !important; font-weight: 650; letter-spacing: -0.045em !important; line-height: 0.98 !important; margin: 0; text-wrap: balance; color: #141413; }
+.phero-r p { font-size: 18.5px; line-height: 1.55; color: #141413; }
+.phero-r p + p { margin-top: 12px; }
+.phero-a { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+@media (max-width: 860px) { .phero { grid-template-columns: 1fr; gap: 22px; padding: 40px 20px 40px; } }

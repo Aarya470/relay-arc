@@ -2,6 +2,7 @@
 import SiteFooter from '@/components/SiteFooter'
 // How we built it. Plain-language write-up with two live demos that run the
 // real app code in the browser.
+import PageHero from '@/components/PageHero'
 import SiteHeader from '@/components/SiteHeader'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
@@ -124,39 +125,21 @@ export default function Engineering() {
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
       <SiteHeader />
 
-      {/* top */}
-      <section className="ds-ch">
+      <PageHero
+        title="We built the important parts ourselves"
+        actions={[{ label: 'Source code', href: 'https://github.com/Aarya470/relay-arc', primary: true }, { label: 'Changelog', href: '/changelog' }]}
+      >
+        <p>
+          A lot of health apps send everything to another company&apos;s server and wait. That breaks with no signal, and
+          nobody can explain why the app said what it said.
+        </p>
+        <p>
+          So the parts that matter most in an emergency are ours, run on the phone and work without internet. Two of them
+          are running on this page right now, so you can try them.
+        </p>
+      </PageHero>
+      <section className="ds-ch" style={{ paddingTop: 0 }}>
         <div style={WRAP}>
-          <p style={{ color: T2, fontSize: '15px', fontWeight: 600, marginBottom: '18px' }}>
-            How we built it
-          </p>
-          <h1
-            className="ds-display"
-            style={{
-              color: T1,
-              fontSize: 'clamp(40px, 6vw, 80px)',
-              fontWeight: 800,
-              lineHeight: 1.02,
-              letterSpacing: '-0.03em',
-              marginBottom: '28px',
-              maxWidth: '900px',
-            }}
-          >
-            We built the important parts ourselves.
-          </h1>
-
-          <P wide>
-            A lot of health apps send everything to another company&apos;s server and wait for an
-            answer. That breaks when there is no signal, and nobody can explain why the app said
-            what it said.
-          </P>
-          <P wide>
-            So the parts that matter most in an emergency are ours. They work out what is wrong, how
-            serious it is, which hospital to go to, and the directions to get there. They run on the
-            phone and they work without internet. Two of them are running on this page right now, so
-            you can try them.
-          </P>
-
           <div
             style={{
               display: 'grid',

@@ -1,4 +1,5 @@
 'use client'
+import PageHero from '@/components/PageHero'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
 // Public changelog.
@@ -161,51 +162,14 @@ export default function Changelog() {
     <div style={{ background: 'transparent', minHeight: '100dvh' }}>
       <SiteHeader />
 
-      <section style={{ padding: '72px 24px 90px' }}>
+      <PageHero title="What changed, including what went wrong" actions={[{ label: 'Source code', href: 'https://github.com/Aarya470/relay-arc' }]}>
+        <p>
+          Corrections are marked and kept. A changelog with only features in it is a marketing page, and this is a medical
+          tool. If you are deciding whether to trust it, the failures are the part worth reading.
+        </p>
+      </PageHero>
+      <section style={{ padding: '0 24px 90px' }}>
         <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-          <div style={{ borderTop: `3px solid ${INK}`, paddingTop: '14px', marginBottom: '26px' }}>
-            <span
-              style={{
-                color: INK,
-                fontFamily: mono,
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '1.8px',
-                textTransform: 'uppercase',
-              }}
-            >
-              Changelog
-            </span>
-          </div>
-
-          <h1
-            style={{
-              color: INK,
-              fontSize: 'clamp(38px, 6.4vw, 68px)',
-              fontWeight: 800,
-              letterSpacing: '-0.045em',
-              lineHeight: 1.0,
-              marginBottom: '26px',
-            }}
-          >
-            What changed, including
-            <br />
-            what went wrong.
-          </h1>
-          <p
-            style={{
-              color: INK2,
-              fontSize: '16.5px',
-              lineHeight: 1.7,
-              marginBottom: '54px',
-              maxWidth: '640px',
-            }}
-          >
-            Corrections are marked and kept. A changelog containing only features is a marketing
-            page, and this is a medical tool. If you are deciding whether to trust it, the failures
-            are the part worth reading.
-          </p>
-
           {ENTRIES.map((e, i) => {
             const k = KIND[e.kind]
             return (

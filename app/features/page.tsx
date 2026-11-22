@@ -1,6 +1,7 @@
 'use client'
 import SiteFooter from '@/components/SiteFooter'
 // Feature-by-feature deep dive.
+import PageHero from '@/components/PageHero'
 import SiteHeader from '@/components/SiteHeader'
 import { useRouter } from 'next/navigation'
 import { DispatchScene, OnDeviceScene, RelayScene, TrendScene } from '@/components/viz/Scenes'
@@ -107,31 +108,17 @@ export default function Features() {
     <div className="ds-chapters" style={{ minHeight: '100dvh' }}>
       <SiteHeader />
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="ds-ch">
+      <PageHero
+        title="What happens after you press SOS"
+        actions={[{ label: 'Try the demo', href: '/demo', primary: true }, { label: 'Make a card', href: '/card' }]}
+      >
+        <p>
+          Five things start at once. The phone works out what is wrong and how urgent it is, picks a hospital, sends that
+          hospital your details, and gets your family and a driver moving. Each section below covers one of them.
+        </p>
+      </PageHero>
+      <section className="ds-ch" style={{ paddingTop: 0 }}>
         <div style={WRAP}>
-          <h1
-            className="ds-display"
-            style={{
-              color: INK,
-              fontSize: 'clamp(40px, 6vw, 80px)',
-              fontWeight: 800,
-              lineHeight: 0.96,
-              letterSpacing: '-0.02em',
-              marginBottom: '28px',
-              maxWidth: '940px',
-            }}
-          >
-            What happens after
-            <br />
-            you press SOS
-          </h1>
-          <P>
-            Five things start at once. The phone works out what is wrong and how urgent it is, picks
-            a hospital, sends that hospital your details, and gets your family and a driver moving.
-            Each section below covers one of them.
-          </P>
-
           <div style={{ marginTop: '44px' }}>
             <RelayScene />
             <Cap>
