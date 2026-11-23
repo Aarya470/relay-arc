@@ -1,4 +1,5 @@
 'use client'
+// Production is the main branch from Nov 2026. The old simple-ui branch is kept as a fallback.
 // Homepage. Layout concepts borrowed from Amplitude's site (split hero, tabbed
 // product showcase, logo row, a live demo beside its claim, a stat chart, a card
 // row, a split close and a big dark footer), in Relay Arc's own colours.
