@@ -104,7 +104,7 @@ function PhoneHome() {
               <span className="iph-chips"><span>Search</span><span>Settings</span></span>
             </div>
             <p className="iph-greet">Good morning · Fri, Nov 21</p>
-            <p className="iph-name">Asha</p>
+            <p className="iph-name">Bhanu</p>
             <span className="iph-cond">POTS</span>
             <div className="iph-sos">
               <span className="iph-sos-t">SOS</span>
@@ -187,7 +187,7 @@ function FamilyText() {
   return (
     <div data-ui className="frag" style={{ background: PAPER, color: INK, maxWidth: '420px' }}>
       <div className="bubble">
-        Asha pressed SOS. She is going to RWJ University Hospital at Hamilton. Follow her on the
+        Bhanu pressed SOS and is going to RWJ University Hospital at Hamilton. Follow along on the
         live map.
       </div>
       <div className="bubble" style={{ marginTop: '10px', fontWeight: 700, textDecoration: 'underline' }}>
@@ -211,7 +211,7 @@ function CardMaker() {
       <div className="maker-form">
         <label className="fld">
           <span>Your name</span>
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Asha Patel" maxLength={40} />
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Bhanu Patel" maxLength={40} />
         </label>
         <label className="fld">
           <span>Blood type</span>
