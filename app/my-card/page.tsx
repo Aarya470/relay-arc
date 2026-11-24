@@ -10,6 +10,7 @@ import BottomNav from '@/components/BottomNav'
 import Accordion from '@/components/Accordion'
 import { AppHeader } from '@/components/AppKit'
 import { Share2 } from '@/lib/plain-icons'
+import { loadProfile, type AutonomicProfile } from '@/lib/autonomic/store'
 
 const CACHE = 'relay_offline_profile'
 const split = (s?: string | null) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : [])
@@ -19,6 +20,10 @@ export default function MyCard() {
   const [p, setP] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [big, setBig] = useState(false)
+  const [auto, setAuto] = useState<AutonomicProfile | null>(null)
+  useEffect(() => {
+    loadProfile().then(setAuto).catch(() => {})
+  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -104,6 +109,19 @@ export default function MyCard() {
             {meds.length ? meds.map((m) => [m.name, m.dose].filter(Boolean).join(' ')).join(', ') : 'None listed'}
           </p>
         </div>
+
+        {auto?.diagnoses?.length ? (
+          <div className="mycard-auto">
+            {label('Autonomic condition')}
+            <p style={{ fontSize: big ? '20px' : '17px', fontWeight: 800 }}>{auto.diagnoses.join(', ')}</p>
+            <p style={{ fontSize: '14.5px', lineHeight: 1.45, marginTop: '6px' }}>
+              A fast pulse on standing is expected for me{auto.baseline?.standingHr ? ` (usually about ${auto.baseline.standingHr} standing, ${auto.baseline.lyingHr ?? '?'} lying)` : ''}. Please check me lying down. It can still be a real emergency.
+            </p>
+            {auto.helps ? <p style={{ fontSize: '14.5px', marginTop: '6px' }}><b>Helps me:</b> {auto.helps}</p> : null}
+            {auto.avoid ? <p style={{ fontSize: '14.5px', marginTop: '4px' }}><b>Makes me worse:</b> {auto.avoid}</p> : null}
+            {auto.doctor?.name ? <p style={{ fontSize: '14.5px', marginTop: '4px' }}><b>My doctor:</b> {auto.doctor.name}{auto.doctor.phone ? `, ${auto.doctor.phone}` : ''}</p> : null}
+          </div>
+        ) : null}
 
         {contacts.length > 0 && (
           <div style={{ marginTop: '16px', display: 'grid', gap: '8px' }}>

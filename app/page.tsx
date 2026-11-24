@@ -111,13 +111,13 @@ function PhoneHome() {
               <span className="iph-sos-s">Tap to start. Finds a hospital and sends your details.</span>
             </div>
             <div className="iph-tiles">
-              <div><b>Daily check in</b><i>Chat for 2 minutes</i></div>
-              <div><b>Vitals check</b><i>Pulse and breathing</i></div>
+              <div><b>Today</b><i>1.4 of 2.5 L fluids</i></div>
+              <div><b>Stand test</b><i>Last rise +34 bpm</i></div>
             </div>
             <div className="iph-list">
-              <div><span><b>NEWS2 for your clinician</b><i>0, low risk · this morning</i></span><em>›</em></div>
+              <div><span><b>I feel faint</b><i>Step by step help</i></span><em>›</em></div>
               <div><span><b>Emergency contacts</b><i>2 contacts ready to text</i></span><em>›</em></div>
-              <div><span><b>Medicines</b><i>1 of 2 taken today</i></span><em>›</em></div>
+              <div><span><b>Doctor report</b><i>Ready for your appointment</i></span><em>›</em></div>
             </div>
           </div>
           <div className="iph-dock">
@@ -125,12 +125,63 @@ function PhoneHome() {
             <span>Check in</span>
             <span className="iph-dock-sos">SOS</span>
             <span>Meds</span>
-            <span>Symptoms</span>
+            <span>Today</span>
           </div>
           <span className="iph-homebar" />
           <span className="iph-glare" />
         </div>
       </div>
+    </div>
+  )
+}
+
+function StandFrag() {
+  const rows: [string, string][] = [['Lying', '68 bpm'], ['1 min standing', '96 bpm'], ['3 min', '101 bpm'], ['5 min', '104 bpm'], ['10 min', '102 bpm']]
+  return (
+    <div data-ui className="frag" style={{ background: PAPER, color: INK }}>
+      {rows.map(([k, v]) => (
+        <div key={k} className="hosp"><span style={{ fontWeight: 600 }}>{k}</span><span style={{ fontWeight: 800, fontSize: '18px' }}>{v}</span></div>
+      ))}
+      <div style={{ background: SOS, borderRadius: 10, padding: '14px 16px', marginTop: '10px' }}>
+        <p style={{ fontSize: '26px', fontWeight: 800 }}>+36 bpm</p>
+        <p style={{ fontSize: '14px', fontWeight: 600 }}>At or above the 30 bpm mark doctors use. Show this to your doctor.</p>
+      </div>
+      <p className="ds-small" style={{ marginTop: '10px', color: INK2 }}>Example reading</p>
+    </div>
+  )
+}
+
+function TodayFrag() {
+  const bar = (k: string, v: string, p: number) => (
+    <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr auto', gap: '10px', alignItems: 'center', padding: '8px 0' }}>
+      <b>{k}</b>
+      <span style={{ height: '12px', borderRadius: 6, background: 'rgba(20,20,19,0.1)', overflow: 'hidden' }}><span style={{ display: 'block', height: '100%', width: `${p}%`, background: SOS, borderRadius: 6 }} /></span>
+      <span style={{ fontWeight: 800 }}>{v}</span>
+    </div>
+  )
+  return (
+    <div data-ui className="frag" style={{ background: PAPER, color: INK }}>
+      {bar('Fluids', '1.4 of 2.5 L', 56)}
+      {bar('Salt', '4 of 6 g', 66)}
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '10px' }}>
+        {['+250 ml', '+500 ml', '+1 g salt', 'Compression'].map((c) => <span key={c} style={{ padding: '8px 12px', borderRadius: 8, background: MINT, fontWeight: 700, fontSize: '14px' }}>{c}</span>)}
+      </div>
+      <p style={{ marginTop: '14px', fontWeight: 700 }}>Lightheaded</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', marginTop: '6px' }}>
+        {['None', 'Mild', 'Moderate', 'Severe'].map((l, i) => <span key={l} style={{ textAlign: 'center', padding: '10px 4px', borderRadius: 8, fontWeight: 700, fontSize: '13px', background: i === 2 ? '#FFC266' : 'rgba(255,255,255,0.7)' }}>{l}</span>)}
+      </div>
+    </div>
+  )
+}
+
+function FaintFrag() {
+  return (
+    <div data-ui className="frag" style={{ background: PAPER, color: INK }}>
+      <p style={{ fontSize: '13px', fontWeight: 700, color: GREEN }}>Step 2 of 6</p>
+      <p style={{ fontSize: '26px', fontWeight: 800, marginTop: '4px' }}>Legs up the wall</p>
+      <p style={{ fontSize: '15px', lineHeight: 1.5, marginTop: '6px' }}>Put your legs up against a wall or over the arm of a sofa, higher than your chest.</p>
+      <p style={{ fontSize: '48px', fontWeight: 800, marginTop: '8px' }}>1:42</p>
+      <div style={{ background: INK, color: '#fff', borderRadius: 999, padding: '14px', textAlign: 'center', fontWeight: 800, marginTop: '8px' }}>Next step</div>
     </div>
   )
 }
@@ -385,10 +436,11 @@ type Tab = { id: string; label: string; title: string; body: string; view: React
 // The product, one screen at a time, in a tab strip.
 function Showcase() {
   const tabs: Tab[] = [
+    { id: 'stand', label: 'Stand test', title: 'A stand test with your phone', body: 'Lie down, then stand. The camera checks your pulse at 1, 3, 5 and 10 minutes and shows the rise doctors look for, ready for your next appointment.', view: <StandFrag /> },
+    { id: 'today', label: 'Daily tracker', title: 'Fluids, salt and symptoms in a few taps', body: 'Targets come from your doctor. Tap as you drink, rate symptoms, note triggers like heat or a hot shower. Heat alerts warn you on hot days.', view: <TodayFrag /> },
+    { id: 'faint', label: 'I feel faint', title: 'Help when you feel faint', body: 'Warning signs first, then lie flat, legs up, salt and fluid, squeeze your legs, with timers. Log it after for your doctor.', view: <FaintFrag /> },
     { id: 'sos', label: 'Press SOS', title: 'It works out what is wrong', body: 'Speak or type in English, Spanish, Hindi or Marathi. The answer comes from the phone itself, so it works in a dead zone.', view: <SosScreen /> },
     { id: 'hosp', label: 'Right hospital', title: 'The right hospital, not just the closest', body: 'Hospitals are ranked by real drive time and whether they can treat this emergency. A closer one without a heart unit moves down.', view: <HospitalList /> },
-    { id: 'family', label: 'Family knows', title: 'Your family knows where you are going', body: 'One tap sends a text that is already written, with the hospital and directions. The hospital gets your details before you arrive.', view: <FamilyText /> },
-    { id: 'vitals', label: 'Pulse check', title: 'Pulse and breathing from the phone', body: 'Fingertip on the camera, phone on the chest. Fifteen seconds each, scored with NEWS2, the scale hospitals use.', view: <PulseReadout /> },
     { id: 'card', label: 'Emergency card', title: 'A card a paramedic can read', body: 'Type below and watch it fill in. The full card works on a locked phone and prints for a wallet. Nothing is uploaded.', view: <CardMaker /> },
   ]
   const [on, setOn] = useState(0)
@@ -527,7 +579,7 @@ const TOOLS: [string, string, string, string][] = [
   ['/card', 'Emergency card', 'Two minutes, no account. A lock screen picture and a wallet card.', 'card'],
   ['/flare', 'POTS flare check', 'Is this episode an emergency? Compared against your own normal.', 'flare'],
   ['/rights', 'ER rights', 'What an emergency room owes you, even if you cannot pay.', 'rights'],
-  ['/emergency/cpr', 'CPR coach', 'A beat to press along with, and what to do until help comes.', 'cpr'],
+  ['/episode', 'I feel faint', 'Warning signs, then step by step help with timers. Works without an account.', 'cpr'],
 ]
 
 function ToolThumb({ kind }: { kind: string }) {
@@ -629,11 +681,12 @@ export default function Home() {
 
         <header className="hero">
           <div className="hero-l">
-            <h1 className="h1" data-reveal>Free help when the hospital is far</h1>
+            <h1 className="h1" data-reveal>Made for POTS and dysautonomia</h1>
             <div data-reveal>
               <p className="lead hero-lead">
-                Press SOS and Relay Arc works out what is wrong, picks the closest hospital that can treat it, guides you
-                there and tells your family. Free, in any phone&apos;s browser, and it keeps working with no signal.
+                Track fluids, salt and symptoms, run a stand test with your phone camera, get step by step help when you
+                feel faint, and bring a clear report to your doctor. And when it is an emergency, SOS finds the hospital
+                that can treat you. Free, in any phone&apos;s browser.
               </p>
               <div className="ctas">
                 <a href="/login?signup=1" className="pill pill-ink pill-lg">Start free</a>
@@ -881,7 +934,7 @@ const CSS = `
   .proof strong { display: block; font-size: 16px; font-weight: 800; }
 
   .show { margin-bottom: 40px; }
-  .tabs { display: grid; grid-template-columns: repeat(5, 1fr); border-radius: 14px 14px 0 0; overflow: hidden; background: rgba(255,253,246,0.4); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7); }
+  .tabs { display: grid; grid-template-columns: repeat(6, 1fr); border-radius: 14px 14px 0 0; overflow: hidden; background: rgba(255,253,246,0.4); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7); }
   .tab { min-height: 54px; border: 0; background: transparent; font: inherit; font-size: 15.5px; font-weight: 650; color: ${INK}; cursor: pointer; position: relative; transition: background-color 180ms var(--ease-out); }
   .tab + .tab { box-shadow: inset 1px 0 0 rgba(20,20,19,0.08); }
   .tab:hover { background: rgba(255,253,246,0.55); }

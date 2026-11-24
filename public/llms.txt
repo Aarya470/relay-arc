@@ -1,10 +1,18 @@
 # Relay Arc
 
-> Relay Arc is a free emergency web app. Press SOS and it works out what kind of emergency it is, picks the closest hospital that can actually treat it (ranked by real drive time and capability, not straight line distance), guides you there, and sends your details to the hospital and your family. It runs in any phone's browser with no download, keeps an offline emergency medical card, and checks pulse and breathing with the phone camera. It is a free nonprofit project with no ads and no trackers. It helps people decide what to do and does not diagnose. In an emergency, call 911 first.
+> Relay Arc is a free web app for people with POTS and other autonomic disorders (dysautonomia), with emergency help built in. It has a guided stand test that uses the phone camera to measure pulse lying and standing, a daily tracker for fluids, salt, compression, symptoms and triggers toward targets set by the person's own doctor, step by step help when someone feels faint, heat alerts, and a printable doctor report. It is also a free emergency web app. Press SOS and it works out what kind of emergency it is, picks the closest hospital that can actually treat it (ranked by real drive time and capability, not straight line distance), guides you there, and sends your details to the hospital and your family. It runs in any phone's browser with no download, keeps an offline emergency medical card, and checks pulse and breathing with the phone camera. It is a free nonprofit project with no ads and no trackers. It helps people decide what to do and does not diagnose. In an emergency, call 911 first.
 
 Relay Arc was built in New Jersey for people far from a hospital, and for people with chronic conditions such as POTS and other forms of dysautonomia, where the nearest emergency room is not always the right one. Over 580 people have used it.
 
+## Autonomic tools (free account)
+
+- [Stand test](https://www.relay-arc.org/stand): Lie down, then stand. Pulse is checked with the phone camera at 1, 3, 5 and 10 minutes and compared with the published POTS mark (a rise of 30 bpm, 40 for ages 12 to 19) and the orthostatic hypotension mark (a 20/10 mmHg fall). Shows numbers for a doctor. It does not diagnose.
+- [Today](https://www.relay-arc.org/today): Fluids, salt, compression, symptoms and triggers. Targets come from the person's own doctor.
+- [Doctor report](https://www.relay-arc.org/report): A one page summary of stand tests, daily tracking and episodes, printable or saved as a PDF.
+
 ## Free tools, no account needed
+
+- [I feel faint](https://www.relay-arc.org/episode): Warning signs that mean call 911, then counter-manoeuvres with timers (lie flat, legs up, salt and fluid, leg squeezes, cool down, rise slowly), then an optional log.
 
 - [Emergency medical card](https://www.relay-arc.org/card): Make a free emergency medical card in two minutes. You get a lock screen image a paramedic can read off a locked phone, plus a printable wallet card. Nothing is uploaded.
 - [Is this POTS flare an emergency?](https://www.relay-arc.org/flare): A free check for a dysautonomia or POTS episode. It walks the warning signs that need an emergency room, compares the episode against your own normal, and gives the counter manoeuvres that settle most flares.

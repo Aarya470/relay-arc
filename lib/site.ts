@@ -29,6 +29,7 @@ export const PUBLIC_ROUTES: {
   { path: '/card', priority: 0.9, changeFrequency: 'monthly' },
   // Both rank high on purpose.
   { path: '/flare', priority: 0.9, changeFrequency: 'monthly' },
+  { path: '/episode', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/rights', priority: 0.9, changeFrequency: 'monthly' },
   { path: '/features', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/partners', priority: 0.6, changeFrequency: 'monthly' },

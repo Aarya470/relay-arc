@@ -1,4 +1,5 @@
 'use client'
+import { saveProfile } from '@/lib/autonomic/store'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -28,13 +29,16 @@ const RED = '#7A3D00'
 const mono = 'var(--font-mono, monospace)'
 
 const CONDITIONS = [
-  { id: 'Post-cardiac surgery', Icon: Heart, desc: 'Bypass, valve, ablation, device' },
   { id: 'POTS', Icon: Zap, desc: 'Postural orthostatic tachycardia' },
-  { id: 'Dysautonomia', Icon: Brain, desc: 'Autonomic nervous system disorder' },
+  { id: 'Orthostatic hypotension', Icon: Brain, desc: 'Blood pressure drops on standing' },
+  { id: 'Reflex syncope', Icon: Activity, desc: 'Vasovagal or neurocardiogenic fainting' },
+  { id: 'Dysautonomia', Icon: Brain, desc: 'Another autonomic nervous system disorder' },
   { id: 'ME/CFS', Icon: Activity, desc: 'Myalgic encephalomyelitis' },
+  { id: 'Post-cardiac surgery', Icon: Heart, desc: 'Bypass, valve, ablation, device' },
   { id: 'General cardiac', Icon: HeartPulse, desc: 'Arrhythmia, CHF, other' },
   { id: 'Other', Icon: Plus, desc: 'Something else' },
 ]
+const AUTONOMIC_IDS = ['POTS', 'Orthostatic hypotension', 'Reflex syncope', 'Dysautonomia', 'ME/CFS']
 
 const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
 
@@ -134,7 +138,13 @@ export default function Onboarding() {
       if (error) toast.error(error.message)
       else {
         toast.success('Profile created')
-        router.push('/dashboard')
+        // Autonomic conditions get the specialty setup next.
+        const auto = form.diagnosis.filter((d) => AUTONOMIC_IDS.includes(d))
+        if (auto.length) {
+          const map: Record<string, string> = { 'Orthostatic hypotension': 'OH', Dysautonomia: 'Other' }
+          await saveProfile({ diagnoses: auto.map((d) => map[d] || d) }).catch(() => false)
+          router.push('/autonomic/setup')
+        } else router.push('/dashboard')
       }
     } catch (e) {
       // Same reason as the login page: without this, a throw leaves the button

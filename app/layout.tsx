@@ -66,9 +66,9 @@ export const metadata: Metadata = {
   // split between the domain and the vercel.app subdomain. See lib/site.ts.
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: '/' },
-  title: 'Relay Arc: Free Emergency App That Finds the Right Hospital',
+  title: 'Relay Arc: Free App for POTS and Dysautonomia, with Emergency SOS',
   description:
-    'Press SOS and Relay Arc finds the closest hospital that can treat your emergency, guides you there and alerts your family. Free, works offline, no download.',
+    'Free app for POTS and other autonomic disorders: a phone camera stand test, fluid, salt and symptom tracking, help when you feel faint, and a doctor report. SOS finds the hospital that can treat you. No download.',
   applicationName: 'Relay Arc',
   category: 'health',
   robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
@@ -130,7 +130,7 @@ const JSON_LD = {
       isAccessibleForFree: true,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       description:
-        'Free emergency web app. Press SOS to find the closest hospital that can treat the emergency, get directions, and alert family. Includes a free offline emergency medical card.',
+        'Free web app for POTS and other autonomic disorders: stand test with the phone camera, daily fluid, salt and symptom tracker, episode coach and doctor report, plus emergency SOS that finds a hospital able to treat the emergency.',
       publisher: { '@id': `${SITE_URL}/#org` },
     },
   ],

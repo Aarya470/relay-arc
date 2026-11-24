@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { registerPushNotifications } from '@/lib/notifications'
 import BottomNav from '@/components/BottomNav'
+import AutonomicToday from '@/components/AutonomicToday'
 import {
   ChevronRight,
   CheckCircle2,
@@ -1393,6 +1394,8 @@ export default function Dashboard() {
             </p>
           </motion.button>
         </motion.div>
+
+        <AutonomicToday />
 
         {/* Today: plain rows, same as "Your data" below. These were four
             coloured tiles; a list is quicker to read and looks less like a

@@ -11,7 +11,7 @@ const tabs = [
   { href: '/dashboard', label: 'Home', slot: 0 },
   { href: '/checkin', label: 'Check in', slot: 1 },
   { href: '/medications', label: 'Meds', slot: 3 },
-  { href: '/symptoms', label: 'Symptoms', slot: 4 },
+  { href: '/today', label: 'Today', slot: 4 },
 ]
 
 const HIDE_ON = ['/login', '/onboarding', '/care-team', '/nurse', '/driver', '/transport']

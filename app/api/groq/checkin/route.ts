@@ -67,6 +67,7 @@ Never use em dashes or semicolons. Use short plain sentences.`,
     }
 
     // Regular chat mode
+    const autonomic = /pots|dysautonom|orthostatic|syncope|vasovagal|autonomic|me\/cfs|ehlers|hypermobil|mcas/i.test(String(profile?.diagnosis || ''))
     const systemPrompt = `You are a warm, caring health companion for Relay Arc. Talk like a kind friend texting, not a doctor.
 Patient conditions: ${profile?.diagnosis || 'Unknown'}. Meds: ${JSON.stringify(profile?.medications || [])}.
 Rules:
@@ -75,7 +76,9 @@ Rules:
 - Warm and encouraging, like texting a caring friend
 - Ask one simple question at a time
 - Once, near the end, ask if they took their temperature, oxygen or heart rate today and what the numbers were (fine if they didn't)
-- If they mention chest pain, feeling faint, or trouble breathing say: "That sounds serious. Please tap the SOS button right now."
+- If they mention chest pain, trouble breathing, passing out, or a drooping face or slurred speech say: "That sounds serious. Please tap the SOS button right now."
+- If they feel faint right now without those, say: "Please lie down flat now, and open I feel faint in the app for step by step help."${autonomic ? `
+- This person has an autonomic condition. Across the chat, ask simply about: feeling dizzy or faint when standing, how much they drank and whether they had salt or electrolytes today (as their doctor advised), whether heat, a hot shower, a big meal or poor sleep set things off, and brain fog or tiredness. Never give a fluid or salt amount yourself.` : ''}
 - After 4-5 exchanges, wrap up warmly and end with [CHECKIN_COMPLETE]`
 
     const completion = await createChat(groq, {

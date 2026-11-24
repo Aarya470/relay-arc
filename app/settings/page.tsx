@@ -192,6 +192,7 @@ export default function Settings() {
           <p className="group-label" id="g-emergency">Emergency</p>
           <div className="glass" style={{ padding: '6px' }}>
             {link('Emergency contacts', 'Who gets a text when you press SOS', '/emergency-contacts', 'SOS', true)}
+            {link('My autonomic setup', 'Diagnoses, normal numbers, targets, heat alerts', '/autonomic/setup', 'Au')}
             {link('Medical profile', 'Conditions, medicines and allergies', '/medical-profile', 'ID')}
             {link('My emergency card', 'Your details, ready to show a responder', '/my-card', 'Card')}
           </div>
@@ -201,7 +202,10 @@ export default function Settings() {
         <section aria-labelledby="g-health">
           <p className="group-label" id="g-health">Health data</p>
           <div className="glass" style={{ padding: '6px' }}>
+            {link('Stand test', 'Lie then stand, for your doctor', '/stand', 'St')}
+            {link('Doctor report', 'Print or save as PDF', '/report', 'Rx')}
             {link('Vitals check', 'Pulse, breathing and your NEWS2 sheet', '/check', 'Vit')}
+            {link('Symptom log', 'The detailed 0 to 10 symptom scales', '/symptoms', 'Sx')}
             <Accordion title="History and devices" hint="Past records and Apple Watch">
               {link('Health history', 'Past check ins and emergencies', '/history', 'Log')}
               {link('Emergency history', 'Past SOS events', '/emergency/history', 'Past')}

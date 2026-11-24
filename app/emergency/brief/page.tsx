@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { AlertCircle, Copy, ChevronLeft, Loader2, CheckCheck, Activity } from '@/lib/plain-icons'
 import { toast } from 'sonner'
 import { autonomicHandoff } from '@/lib/autonomic'
+import { loadProfile, type AutonomicProfile } from '@/lib/autonomic/store'
 
 const EMERGENCY_LABELS: Record<string, string> = {
   chest_pain: 'Chest pain',
@@ -44,10 +45,11 @@ function BriefContent() {
   const emergencyLabel = EMERGENCY_LABELS[type] || 'Emergency'
 
   // Autonomic context for staff, derived from the diagnosis text and the emergency type.
+  const [auto, setAuto] = useState<AutonomicProfile | null>(null)
   const handoff = autonomicHandoff({
-    diagnosis: profile?.diagnosis,
+    diagnosis: `${profile?.diagnosis || ''} ${auto?.diagnoses?.length ? `autonomic ${auto.diagnoses.join(' ')}` : ''}`,
     emergencyType: type,
-    baselineRestingHr: null,
+    baselineRestingHr: auto?.baseline?.lyingHr ?? null,
   })
 
   useEffect(() => {
@@ -60,6 +62,7 @@ function BriefContent() {
         return
       }
       setAuthChecked(true)
+      loadProfile().then(setAuto).catch(() => {})
 
       const { data } = await supabase
         .from('profiles')
